@@ -598,33 +598,57 @@ SCP0100,V-660335ee,판정오류,판정 오류 - 동일하게 동작,G1,조회조
 SCP0100,V-94cedfc7,판정오류,판정 오류 -  DIVISION 선택 시 해당 DIVISON 만 조회 됨.,G1,조회조건 Div,조회조건으로 조회 결과가 걸러지는지: AS-IS 와 같음 (사용자 판정 '판정 오류 - DIVISION 선택 시 해당 DIVI…'),Doc\UI_CHECKLIST\SCP0100_GlobalPsiNew_CheckList_v22.xlsx
 SCP0100,V-c2b5cf3f,판정오류,판정 오류 - 동일하게 동작,G1,조회조건 To Site,조회조건으로 조회 결과가 걸러지는지: AS-IS 와 같음 (사용자 판정 '판정 오류 - 동일하게 동작'),Doc\UI_CHECKLIST\SCP0100_GlobalPsiNew_CheckList_v22.xlsx
 SCP0104,T-228fc738,설명요구,이해 안됨. -  오류에 대해서 이해가 안됩니다. 이해할 수 있도록 설명해주세요,F4,PKG_SCP0104.P_SCP0104_CHECK_NAME_ON_DUMMY_CODE,"[그리드 컬럼 / 입력 제어 / FE] 목록에 없는 품목명을 넣어도 Dummy 코드가 만들어지지 않음
-위치 : Line Assign 탭 그리드 Nickname(ASSEMBLY), Model(ELTR) 칸
-AS-IS : 목록에 없는 품목명을 직접 입력하면 그 자리에서 DMY_ 임시 코드를",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
+ - AS-IS : 목록에 없는 품목명을 직접 입력하면 그 자리에서 DMY_ 임시 코드를 만들어 DB(SCP_MST_CAPA_DUMMY_CODE)에 등록하고, 행은 Dummy=Y 로 저",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
 SCP0104,T-25489c40,판정오류,동일 동작으로 보임 -  오류아님.,X-ROW,SCP0104_CAPA_Line_Assign.Edit_Row_Assign,"[그리드 컬럼 / 기본값 / FE] 추가 행에서 품목을 고를 때 기본값을 다시 넣지 않음
-위치 : Line Assign 탭 그리드 Insert 행, Nickname(Model) 칸 더블클릭 품목 팝업에서 1건 선택
-AS-IS : 추가 행에서 품목을 고르면 기간 칸 1, Active Y ",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
+ - AS-IS : 추가 행에서 품목을 고르면 기간 칸 1, Active Y 를 다시 넣음
+ - TO-BE : 품목만 넣고 이미 바꾼 기간 칸, Active 값은 그대로 둠
+ - GAP : 추가 행",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
 SCP0104,T-261e9e8e,설명요구,이해 안됨. -  오류에 대해서 이해가 안됩니다. 이해할 수 있도록 설명해주세요,X-ROW,SCP0104_CAPA_Line_Assign.RefreshCompanySpread,"[그리드 컬럼 / 순서 / FE] Site Name, Company Name 후보 순서가 다름
-위치 : Line Assign 탭 그리드 Site Name, Company Name 칸 드롭다운
-AS-IS : 코드 순서대로 명칭을 보여 줌. 예: Div 81 Site Name = LGES ",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
+ - AS-IS : 코드 순서대로 명칭을 보여 줌. 예: Div 81 Site Name = LGES Korea(A001), LGES China(A002), LGES USA(A003), LGES",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
 SCP0104,T-2ad5be22,실제오류확인,오류 맞음. DB객체 수정 요청,M4,ITEM_ID / Model,"[팝업 / 로직 / FE] 팝업에서 고른 값이 행에 반영되는지: AS-IS 와 다르게 나왔음
-- 측정 기록 : [정적 판정] AS-IS 는 Item 팝업에서 여러 행을 고르고 OK 하면 고른 건수만큼 Assign 행을 추가함. TO-BE 그리드 셀 경로는 단일 선택이라 1건만 현재 행에",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,T-6c0c417e,판정오류,붙여넣기 잘 됨 - 오류아님,G03-WIRE,SCP0104 화면,G03-WIRE: AS-IS 와 같음 (사용자 판정 '붙여넣기 잘 됨 - 오류아님'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,T-750f3c40,판정오류,TO-BE 도 확인 창 동작 -  오류아님,X-NOTIMPL,"COMMON:UC-02, 데이터 수정 중 다른 데이터 조회 시도 = confirm(MSG00703)","대조표엔 미구현이지만 화면에선 이미 구현됨, 대조표 상태 수정 대상",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
+- 측정 기록 : [정적 판정] AS-IS 는 Item 팝업에서 여러 행을 고르고 OK 하면 고른 건수만큼 Assign 행을 추가함. TO-BE 그리드 셀 경로는 단일 선택이라 1건만 현재 행에",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,T-6c0c417e,판정오류,붙여넣기 잘 됨 - 오류아님,G03-WIRE,SCP0104 화면,G03-WIRE: AS-IS 와 같음 (사용자 판정 '붙여넣기 잘 됨 - 오류아님'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,T-750f3c40,판정오류,TO-BE 도 확인 창 동작 -  오류아님,X-NOTIMPL,"COMMON:UC-02, 데이터 수정 중 다른 데이터 조회 시도 = confirm(MSG00703)","대조표엔 미구현이지만 화면에선 이미 구현됨, 대조표 상태 수정 대상",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
 SCP0104,T-bc2f6848,기타,DB 객체에서 '-' 누락 사유 찾아서 보완 요청,C2,ELTR_LN_TP_CD / Equipment Type,"[조회조건, 그리드 컬럼 / 후보값 / FE] Line Type 후보에서 '-' 빠짐
-위치 : 조회조건 Line Type(Cell 모드), Line Assign 탭 ASSEMBLY 그리드 Line Type 칸
-AS-IS : Line Type 후보에 '-' 포함. Operation A90",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,T-dba78bc7,판정오류,AS-IS 도 동일하게 동작 - 오류 아님,C2,DIVISION_ID / Div,상위 값에 따라 콤보 후보가 다시 만들어지는지: AS-IS 와 같음 (사용자 판정 'AS-IS 도 동일하게 동작 - 오류 아님'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
+ - AS-IS : Line Type 후보에 '-' 포함. Operation A9000, AFFFF, P5500, P9500 은 '-' 1건만 고를 수 있음
+ - TO-BE : '-' 를 후보에서 뺌.",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,T-dba78bc7,판정오류,AS-IS 도 동일하게 동작 - 오류 아님,C2,DIVISION_ID / Div,상위 값에 따라 콤보 후보가 다시 만들어지는지: AS-IS 와 같음 (사용자 판정 'AS-IS 도 동일하게 동작 - 오류 아님'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
 SCP0104,T-f3de1469,실제오류확인,오류 맞음.,M4,NICK_NAME / Nickname,"[팝업 / 로직 / FE] 품목 팝업 다중 선택 불가
-위치 : Line Assign 탭 그리드 Nickname(ASSEMBLY), Model(ELTR) 칸 품목 팝업
-AS-IS : 팝업에서 여러 품목을 고르고 OK 하면 고른 수만큼 행이 추가됨
-TO-BE : 셀에서 연 품목 팝업은 1건",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-24ff60ab,판정오류,TO-BE 의 설정된 권한과 일치하면 오류 아님.,J4,"그룹ID별 메뉴·버튼 권한(MENU AUTH, BTN AUTH) 운영데이터 동기화",공통 점검 항목(권한 없는 기능 차단): 이 화면의 같은 규칙 세부 결과: 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-65c8f9a7,기타,"TO-BE  에서 대소문자에 대해서 필요 시 대소문자 관계없이 조회 가능 하도록 하는 것은 TO-BE RULE 로 처리. 조회조건 에 대해서는 대소문자 무시하고 조회되도록 보완 필요, 필요 시 DB객체 수정 요청",A7,SCP0104_CHECK_NAME_ON_DUMMY_CODE,A7: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-73037cda,판정오류,AS-IS 도 동일하게 동작 - 오류 아님,G5,pop.ShowDialog(),팝업으로 전달되는 조회조건·값: AS-IS 와 같음 (사용자 판정 'AS-IS 도 동일하게 동작 - 오류 아님'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-8c0651f6,실제오류확인,오류 맞음. DB객체 수정 요청,F4,SCP0104 화면,저장 SP 호출·SQL 오류 없음: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-8fba19fc,실제오류확인,오류 맞음. DB객체 수정 요청,G2,조회조건 Material,멀티선택 조회조건(개별·전체 선택) 동작: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-c55acf31,판정오류,총건수 표기 부분으 TO-BE RULE 로 TO-BE 일반과 동일하면 오류 아님.,H8,총 건수 표시,공통 점검 항목(숫자 천단위·소수·날짜 표시 포맷): 이 화면의 같은 규칙 세부 결과: 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-cc74e5aa,기타,확인 필요,F1,SCP0104 컬럼별 저장 왕복,저장이 DB 에 반영되는지: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-e38e474a,판정오류,AS-IS 도 동일하게 동작 - 오류 아님,G5,pop.ShowDialog(),팝업으로 전달되는 조회조건·값: AS-IS 와 같음 (사용자 판정 'AS-IS 도 동일하게 동작 - 오류 아님'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-e44a626b,판정오류,WIDTH = 0 으로 설정되어 있으면 표시하지 않음. 오류 아님.,A5,SCP0104 화면,그리드에 보이는 컬럼 구성이 AS-IS(메타·Division·개인화)와 같은지: AS-IS 와 같음 (사용자 판정 'WIDTH = 0 으로 설정되어 있으면 표시하지 않음…'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
-SCP0104,V-f5a0b46a,판정오류,"오류아님.AS-IS, TO-BE 동일하게 나왔음. 실제 오류이면 정확하게 어떤때에 오류인지 정확하게 확인 요청",B4,조회조건 Plant,"콤보 후보 집합이 AS-IS 원천과 같은지: AS-IS 와 같음 (사용자 판정 '오류아님.AS-IS, TO-BE 동일하게 나왔음. 실…')",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v39.xlsx
+ - AS-IS : 팝업에서 여러 품목을 고르고 OK 하면 고른 수만큼 행이 추가됨
+ - TO-BE : 셀에서 연 품목 팝업은 1건만 고를 수 있고 현재 행에만 반영
+ - GAP : 다중 선택, 행 추가 동작 없음(DB 객체로 고칠 ",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-24ff60ab,판정오류,TO-BE 의 설정된 권한과 일치하면 오류 아님.,J4,"그룹ID별 메뉴·버튼 권한(MENU AUTH, BTN AUTH) 운영데이터 동기화",공통 점검 항목(권한 없는 기능 차단): 이 화면의 같은 규칙 세부 결과: 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-65c8f9a7,기타,"TO-BE  에서 대소문자에 대해서 필요 시 대소문자 관계없이 조회 가능 하도록 하는 것은 TO-BE RULE 로 처리. 조회조건 에 대해서는 대소문자 무시하고 조회되도록 보완 필요, 필요 시 DB객체 수정 요청",A7,SCP0104_CHECK_NAME_ON_DUMMY_CODE,A7: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-73037cda,판정오류,AS-IS 도 동일하게 동작 - 오류 아님,G5,pop.ShowDialog(),"[팝업 / 로직 / FE] CAPA Line 팝업이 메인 조회조건을 받지 않음
+ - AS-IS : 메인 조회조건 Site, Plant, Building, Line 에서 고른 값이 팝업 조회조건에 그대로 들어가고 그 값으로 첫 조회함. 런처 실측: 메인 Site ALL 79행, 메인 Si",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-8c0651f6,실제오류확인,오류 맞음. DB객체 수정 요청,F4,SCP0104 화면,저장 SP 호출·SQL 오류 없음: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-8fba19fc,실제오류확인,오류 맞음. DB객체 수정 요청,G2,조회조건 Material,멀티선택 조회조건(개별·전체 선택) 동작: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-c55acf31,판정오류,총건수 표기 부분으 TO-BE RULE 로 TO-BE 일반과 동일하면 오류 아님.,H8,총 건수 표시,공통 점검 항목(숫자 천단위·소수·날짜 표시 포맷): 이 화면의 같은 규칙 세부 결과: 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-cc74e5aa,기타,확인 필요,F1,SCP0104 컬럼별 저장 왕복,저장이 DB 에 반영되는지: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-e38e474a,판정오류,AS-IS 도 동일하게 동작 - 오류 아님,G5,pop.ShowDialog(),"[팝업 / 로직 / FE] SOP 모델 팝업이 메인 조회조건을 받지 않음
+ - AS-IS : 메인 조회조건 Site, Plant, Building, Line, Operation, Line Type 값이 팝업 조회조건에 들어가고 그 값으로 첫 조회함. 런처 실측: 메인 Site ALL 5",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-e44a626b,판정오류,WIDTH = 0 으로 설정되어 있으면 표시하지 않음. 오류 아님.,A5,SCP0104 화면,그리드에 보이는 컬럼 구성이 AS-IS(메타·Division·개인화)와 같은지: AS-IS 와 같음 (사용자 판정 'WIDTH = 0 으로 설정되어 있으면 표시하지 않음…'),Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0104,V-f5a0b46a,판정오류,"오류아님.AS-IS, TO-BE 동일하게 나왔음. 실제 오류이면 정확하게 어떤때에 오류인지 정확하게 확인 요청",B4,조회조건 Plant,"[조회조건, 그리드 컬럼 / 후보값 / FE] Plant 후보에 전극 외 Plant 표시
+ - AS-IS : Operation group = Electrode 일 때 Plant 후보는 SHOP_GROUP 'E' 인 Plant 만 표시(Div 81 기준 7건)
+ - TO-BE : Oper",Doc\UI_CHECKLIST\SCP0104_LineAssign_CheckList_v50.xlsx
+SCP0111,T-0fed883c,판정오류,"오류 아님 - AS-IS 는 특정 권한으로 사용, TO-BE 는 USER가 가지고 있는 권한의 합집합으로 사용.",D1,ITEM_ID / Model,"컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '오류 아님 - AS-IS 는 특정 권한으로 사용, T…')",Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,T-34703d0c,판정오류,"TO BE RULE 로 오류 아님
+TO-BE 에서는 MODEL/NICKNAME 하나의 선택 처리",G03-WIRE,SCP0111 화면,G03-WIRE: AS-IS 와 같음 (사용자 판정 'TO BE RULE 로 오류 아님 TO-BE 에서는 …'),Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,T-40ab485f,중복,중복 제거,D6,SCP0111 화면,"[화면 공통 / 기본값 / 확인 필요] Insert 한 새 행이 생기는 위치: AS-IS 와 다르게 나왔음
+ - AS-IS : 조회 1259행, 2번째 행 셀 클릭 후 Insert → 신규행 맨 아래(1259), 행 1259→1260, AS-IS SpreadInfo.Insert(): 활",Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-00c2fd58,판정오류,오류 아님 - AS-IS 도 멀티선택 안됨.,G2,조회조건 Cell Model,멀티선택 조회조건(개별·전체 선택) 동작: AS-IS 와 같음 (사용자 판정 '오류 아님 - AS-IS 도 멀티선택 안됨.'),Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-03e0d108,판정오류,오류 아님 - TO-BE RULE,H2,Integration PSI.NICK_NAME (Nick Name),셀 색(편집 가능 노랑·글자색): AS-IS 와 같음 (사용자 판정 '오류 아님 - TO-BE RULE'),Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-28123894,판정오류,오류 아님,G4,SCP0111 스냅샷 조회조건 Div 40,조회조건 순서·구성이 기준표와 같은지: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-2dc9a06a,판정오류,오류 아님 - TO-BE RULE,H2,Integration PSI.ITEM_ID (Model),셀 색(편집 가능 노랑·글자색): AS-IS 와 같음 (사용자 판정 '오류 아님 - TO-BE RULE'),Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-2eed0400,기타,확인 필요,E3,SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0,"[저장 / 메시지 / FE] 빈 신규 행 저장 때 안내 문구가 AS-IS 와 다름
+위치 : Integration PSI 신규 행 Save(F7)
+AS-IS : 빈 신규 행 저장 시 MSG00001 '모든 항목은 필수입력입니다.'(Operation 이 비면 Lookup 확인을 건너뜀, c",Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-55556e17,판정오류,- 오류 아님 - 컬럼 폭 비율 은 오류에서 제외,H4,SCP0111 스냅샷 화면샷 1920,컬럼 폭 비율·가로 스크롤: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-8c320f28,판정오류,"오류 아님 - AS-IS 는 특정 권한으로 사용, TO-BE 는 USER가 가지고 있는 권한의 합집합으로 사용.",D1,Integration PSI.ITEM_ID (Model),"컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '오류 아님 - AS-IS 는 특정 권한으로 사용, T…')",Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-daa3f0ba,기타,"- 확인 필요 - AS-IS 는 선택ROW 의 상단에 INSERT, TO-BE 는 선택ROW 의 하단에 INSERT",D6,SCP0111 시나리오 [자동] 선택 행 위로 Insert,"[화면 공통 / 기본값 / 확인 필요] Insert 한 새 행이 생기는 위치: AS-IS 와 다르게 나왔음
+ - AS-IS : INSERT 시 현재 ROW 의 상단에 INSERT(SpreadInfo.Insert 활성 행 위치)
+ - TO-BE : INSERT 시 현재 ROW 의 하단에 ",Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-e8ca7b9a,판정오류,- 오류 아님 - 컬럼 폭 비율 은 오류에서 제외,H4,SCP0111 스냅샷 화면샷 1366,컬럼 폭 비율·가로 스크롤: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-e9c8ca19,판정오류,오류 아님 - AS-IS 도 멀티선택 안됨.,G9,조회조건 Cell Model,텍스트 조회조건에 콤마로 값을 2개 이상 넣으면 전부 조회되는지: AS-IS 와 같음 (사용자 판정 '오류 아님 - AS-IS 도 멀티선택 안됨.'),Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-f5114028,판정오류,오류 아님 - TO-BE RULE,H6,SCP0111 스냅샷 팝업 Model/Nickname,팝업의 버튼 구성·그리드: AS-IS 와 같음,Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx
+SCP0111,V-fdf6bec9,판정오류,"오류 아님 - AS-IS 는 특정 권한으로 사용, TO-BE 는 USER가 가지고 있는 권한의 합집합으로 사용.",D1,Integration PSI.NICK_NAME (Nick Name),"컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '오류 아님 - AS-IS 는 특정 권한으로 사용, T…')",Doc\UI_CHECKLIST\SCP0111_IntegrationPsi_CheckList_v56.xlsx

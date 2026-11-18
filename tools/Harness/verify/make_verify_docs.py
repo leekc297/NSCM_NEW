@@ -669,10 +669,18 @@ def _summary_text(r):
     same_n = len(r.get('_same') or [])
     tail = (chr(10) + f'같은 원인 {same_n + 1}건 묶음: ' + ', '.join([r['row_id']] + list(r.get('_same') or []))[:300]) if same_n else ''
     if s and (s.get('title') or '').strip():
-        lines = ['[' + _tag(r, s) + '] ' + s['title'].strip().lstrip('○● ').strip(), '위치 : ' + (s.get('where') or '').strip(), 'AS-IS : ' + (s.get('asis') or '').strip(), 'TO-BE : ' + (s.get('tobe') or '').strip(), 'GAP : ' + (s.get('gap') or '').strip()]
-        if (s.get('action') or '').strip(): lines.append('조치 : ' + s['action'].strip())
+        tg = _tag(r, s)
+        if tg.startswith('저장'):  # 2026-11-18 사용자(SCP0111): 저장 항목 설명은 지금 형식 유지
+            lines = ['[' + tg + '] ' + s['title'].strip().lstrip('○● ').strip(), '위치 : ' + (s.get('where') or '').strip(), 'AS-IS : ' + (s.get('asis') or '').strip(), 'TO-BE : ' + (s.get('tobe') or '').strip(), 'GAP : ' + (s.get('gap') or '').strip()]
+            if (s.get('action') or '').strip(): lines.append('조치 : ' + s['action'].strip())
+        else:
+            # 2026-11-18 사용자 지시(SCP0111 설명 형식): '[분류 / 유형 / 판정] 한 줄 요약' 아래 ' - AS-IS : ' · ' - TO-BE : ' · ' - GAP : '(계정 차이는 GAP 에) — 위치·조치 줄 없음
+            lines = ['[' + tg + '] ' + s['title'].strip().lstrip('○● ').strip(), ' - AS-IS : ' + (s.get('asis') or '').strip(), ' - TO-BE : ' + (s.get('tobe') or '').strip(), ' - GAP : ' + (s.get('gap') or '').strip()]
         return chr(10).join(lines) + tail
     return ''
+
+
+_NO_SUMMARY = set()
 
 
 def _explain(r):
@@ -683,8 +691,10 @@ def _explain(r):
     same = (f" (같은 내용 {len(r['_same']) + 1}건: {', '.join(sorted({(t.split('.')[0] if '.' in t else t) for t in r.get('_same_t', [])} | ({r['target'].split('.')[0]} if '.' in r['target'] else set()))[:6])})" if r.get('_same') else '')
     try:
         if r.get('result') in ('FAIL', '판정필요'):
-            t = plain_detail.build(r, short, repro, same, RULE_MEAN.get(r.get('rule_id') or '', '')) + (chr(10) + '· ' + sim.strip() if sim else '')
-            return '[' + _tag(r) + '] ' + t
+            # 2026-11-18 사용자 지시(전 화면 · 이후 전체): 저장 항목은 지금 형식 유지, 그 밖은 ' - AS-IS : ' · ' - TO-BE : ' · ' - GAP : ' 틀(plain_detail.build_gap)
+            tg = _tag(r)
+            t = plain_detail.build(r, short, repro, same, RULE_MEAN.get(r.get('rule_id') or '', ''), keep_old=tg.startswith('저장')) + (chr(10) + '· ' + sim.strip() if sim else '')
+            return '[' + tg + '] ' + t
     except Exception:
         pass
     return short + repro + sim + same
@@ -927,7 +937,18 @@ def main():
     except Exception as _ex:
         print(f'  [WARN] action_items.json 기록 실패: {_ex}')
     write_sheet(wb, '조치 필요', LH, [lrow(i, r) for i, r in enumerate(fails, 1)], LW, result_col=RESULT_COL)
-    write_sheet(wb, '판정 필요', LH, [lrow(i, r) for i, r in enumerate([r for r in rows if r['result'] == '판정필요'], 1)], LW, result_col=RESULT_COL)
+    # 2026-11-18 사용자(중복 제거 · 전 화면): 판정 필요도 정리 파일 group 이 같은 행은 1행으로 묶는다(원본 행은 복사본으로 다뤄 다른 시트에 영향 없음)
+    _rv, _rg = [], {}
+    for r in [r for r in rows if r['result'] == '판정필요']:
+        g = (ACTION_SUMMARY.get(r['row_id']) or {}).get('group', '').strip()
+        if g and g in _rg:
+            _rg[g].setdefault('_same', []).append(r['row_id']); _rg[g].setdefault('_same_t', []).append(r['target']); continue
+        r2 = dict(r); r2['_same'] = list(r.get('_same') or []); r2['_same_t'] = list(r.get('_same_t') or [])
+        if g: _rg[g] = r2
+        _rv.append(r2)
+    write_sheet(wb, '판정 필요', LH, [lrow(i, r) for i, r in enumerate(_rv, 1)], LW, result_col=RESULT_COL)
+    # 2026-11-18 전 화면: 두 시트에 보이는 행 중 정리 파일(action_summary.csv) 문장이 없는 행 = 설명 정리 필요(50_DOC_STYLE.md CheckList 설명 칸 틀)
+    _NO_SUMMARY.update(r['row_id'] for r in list(fails) + _rv if not _summary_text(r))
     base = {(d['src'] + '-' + d['no']): d for d in read_csv(P('Doc', 'verify', 'defects_baseline.csv'))}
     drows = []
     for i, ref in enumerate(dref, 1):
@@ -1067,6 +1088,8 @@ def main():
     if ui_test_msg:
         print(ui_test_msg)
     print('  ' + ' · '.join(f"{LAYER_NAME[k]} {v}" for k, v in Counter(f['layer'] for f in fx).items()) + f' · 기계용 {fl}')
+    # 2026-11-18 사용자 지시(전 화면): 조치 필요·판정 필요 설명은 세션이 Doc/verify/<ID>/action_summary.csv 에 쓴 문장으로 나와야 한다
+    print(f'[설명 정리 필요] {len(_NO_SUMMARY)}건' + (f" — Doc/verify/{mid}/action_summary.csv 에 작성 후 run_verify.py {mid} --resume-docs (틀: tools/VibeManager/rules/50_DOC_STYLE.md 'CheckList 설명 칸 틀') · " + ', '.join(sorted(_NO_SUMMARY)[:40]) if _NO_SUMMARY else ''))
     return 0
 
 

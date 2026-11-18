@@ -1910,3 +1910,45 @@ FE 의 `buildAdminPayl
 2026-11-17T17:43:39+09:00	workbench	start		prompt: 위의 가이드에서 "단위 시험 A1~A4 를 추가" 는 어떤 의미 인가요?
 2026-11-17T17:49:40+09:00	workbench	start		prompt: EXCEL 이나 문서에 자연스러운 단어로 변경하도록 보완하는 것을 적용하였습니다. 
 FE 가이드 생성시에도 이 RULE 적용하도록 해주세요. 그리고 지금의 FE 가이드에 대해서도 보완한 것으로 다시 제공해주세요.
+2026-11-17T18:07:21+09:00	workbench	start		prompt: FE 가이드 알려주세요. 
+2026-11-17T18:08:56+09:00	workbench	start		prompt: 이전의 TEXT 는  아래와 같이 제공했었습니다. 달라진 FE 가이드 알려주세요 .
+
+- G1: ADMIN 계정의 수정행(M)만 AS-IS 방식으로 보내도록 `unfoldAdminModifyCells` 를 추가하고,
+2026-11-17T18:12:10+09:00	workbench	start		prompt: FE 가이드가 아래 내용이 맞나요? 
+자동시험코드, 지금있는 시험 2건 이런 단어가 무었인지 이해가 가지 않습니다.
+
+- G1: ADMIN 계정이 이미 있는 행을 고쳐 저장할 때 보내는 값을 AS-IS 와 같게 바꿉
+2026-11-17T18:14:47+09:00	workbench	start		prompt: 전체 FE 가이드를 다시 제공해주세요. 
+2026-11-17T18:19:34+09:00	workbench	start		prompt: 전체 FE 가이드 가 아니라.. 방금 수정한 저장 관련 FE 가이드 다시 제공해주세요.
+2026-11-17T18:20:40+09:00	workbench	start		prompt: 원래 나왔던 아래 문장을 대체할 문장만 제공해주세요. 
+
+- G1: ADMIN 계정의 수정행(M)만 AS-IS 방식으로 보내도록 `unfoldAdminModifyCells` 를 추가하고, `handleSave` 에서
+2026-11-17T18:29:43+09:00	workbench	start		prompt: 위의 문장을 EXCEL 에 붙이기 했는데 행간 간격이 커지는 경우가 발생합니다. 이유가 무엇인가요? 
+2026-11-17T18:32:05+09:00	workbench	start		prompt: 첨부 이미지의 줄간격 확인해주세요. 
+2026-11-17T18:47:16+09:00	S1.packone	start		S1.packone: pack.ps1 SCP0111
+2026-11-17T18:47:30+09:00	S1.packone	end	0	
+2026-11-17T18:47:31+09:00	workbench	start		quick: 🔬 AS-IS 파싱·분석 (Fact Pack) SCP0111
+2026-11-17T18:48:08+09:00	workbench	start		chain:asislive: SCP0111
+2026-11-17T18:48:09+09:00	S1.liveCheck	start		S1.liveCheck: asis_env_check.py SCP0111
+2026-11-17T18:48:18+09:00	S1.liveCheck	end	0	
+2026-11-17T18:48:19+09:00	S1.liveRuleMap	start		S1.liveRuleMap: asis_live_rule_map.py 
+2026-11-17T18:48:20+09:00	S1.liveRuleMap	end	0	
+2026-11-17T18:48:23+09:00	S1.liveScreen	start		S1.liveScreen: asis_live_screen.py SCP0111
+2026-11-17T19:01:25+09:00	S1.liveScreen	end	0	
+2026-11-17T19:01:27+09:00	S1.liveScen	start		S1.liveScen: asis_live_scen_loop.py SCP0111
+2026-11-17T19:02:06+09:00	S1.liveScen	end	0	
+2026-11-17T19:02:06+09:00	S1.liveScenCov	start		S1.liveScenCov: asis_live_scen_cov.py SCP0111
+2026-11-17T19:02:06+09:00	S1.liveScenCov	end	0	
+2026-11-17T19:02:07+09:00	S1.liveCond	start		S1.liveCond: asis_live_cond.py SCP0111
+2026-11-17T19:02:07+09:00	S1.liveCond	end	0	
+2026-11-17T19:02:07+09:00	S1.liveScenCmp	start		S1.liveScenCmp: asis_live_scen_cmp.py SCP0111
+2026-11-17T19:02:08+09:00	S1.liveScenCmp	end	0	
+2026-11-17T19:02:08+09:00	S1.liveScenMatrix	start		S1.liveScenMatrix: asis_live_scen_matrix.py SCP0111
+2026-11-17T19:02:08+09:00	S1.liveScenMatrix	end	0	
+2026-11-17T19:02:09+09:00	S1.liveScenSpec	start		S1.liveScenSpec: asis_live_scen_spec.py SCP0111
+2026-11-17T19:02:09+09:00	S1.liveScenSpec	end	0	
+2026-11-17T19:02:09+09:00	workbench	start		quick: 🎥 AS-IS 실측 SCP0111
+2026-11-17T19:02:26+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-11-17T19:52:22+09:00	S8.verify	end	0	
+2026-11-17T19:52:23+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-11-17T20:10:28+09:00	workbench	start		prompt: CheckList 전체 건수 현황 알려주세요.

@@ -40,8 +40,21 @@ def main():
             names = [d[0] for d in cur.description]; rows = cur.fetchall()
             if len(rows) > 20000:
                 out['skipped'][t] = f'키 {",".join(keys)} 로 20000행 초과 — 행 단위 비교 불가'; continue
+            # 2026-11-17 SCP0111: 그리드 표시값(OPERATION_GROUP 'Pack')이 DB 코드('P')와 달라 키 조회 0행 → 저장 전후 모두 0행이라 '변화 0' 허위 판정(V-4b9aa2ea)
+            #   → 0행이면 비교하지 않고 사유를 남긴다(skipped = 측정 불가 · 판정은 미검증으로 남는다)
+            dropped = []
+            if not rows and len(keys) > 1:
+                # 표시값과 코드가 다른 키 찾기: 그 키 하나를 뺀 조건으로 행이 나오면(50행 이하) 그 키를 빼고 비교한다 — 저장 전후 같은 조건이라 비교가 성립
+                for k_ in keys:
+                    ks = [k for k in keys if k != k_]
+                    cur.execute(f"SELECT * FROM {t} WHERE {' AND '.join(f'{k} = :{k}' for k in ks)} AND ROWNUM <= 51", {k: _key_value(item[k], k, ctype.get(k, '')) for k in ks})
+                    rr = cur.fetchall()
+                    if 0 < len(rr) <= 50:
+                        names = [d[0] for d in cur.description]; rows = rr; dropped = [k_]; keys = ks; break
+            if not rows:
+                out['skipped'][t] = '키 값으로 0행 — 화면 표시값과 DB 코드가 다를 수 있음(' + ', '.join(f'{k}={str(item[k])[:20]}' for k in keys)[:200] + ')'; continue
             conv = lambda v: v.isoformat() if isinstance(v, (datetime.datetime, datetime.date)) else (None if v is None else str(v))
-            out['tables'][t] = {'keys': keys, 'pk': pk, 'n': len(rows), 'rows': [dict(zip(names, map(conv, r))) for r in rows]}
+            out['tables'][t] = {'keys': keys, 'pk': pk, 'dropped_keys': dropped, 'n': len(rows), 'rows': [dict(zip(names, map(conv, r))) for r in rows]}
     print(json.dumps(out, ensure_ascii=False))
     return 0
 

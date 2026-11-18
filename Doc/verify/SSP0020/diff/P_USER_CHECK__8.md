@@ -1,6 +1,6 @@
 # SSP0020 · UP_FX_GetSSPUserUseInfoList ↔ PKG_SSP0020.P_USER_CHECK
 
-- 실행 2026-11-17 10:05:42 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-18 09:48:12 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 ROWS_ONLY** — 공통행 0(키 UserID+UserName+UseYN+RegtUserID) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키 원천 db_resultsets.csv is_nullable=0 · 키 UserID+UserName+UseYN+RegtUserID · golden 집합 판정 PASS
 - 호출 #8 sheet=Delegate btn=USER_CHECK user=minyonglee1 FE 응답 행 1 · 원천 Doc\verify\SSP0020\calls\_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json
 - TO-BE 인자(FE 본문): `{"search": "ZZNOUSER987X", "language": "KO", "useYn": "Y"}`

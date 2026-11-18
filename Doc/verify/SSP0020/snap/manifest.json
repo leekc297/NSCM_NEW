@@ -53,5 +53,27 @@
   "opinion": "11-17 01:2x 11회차 실측으로 기준본 교체 — 11-13 기준본은 그리드 0행 상태라 데이터 영역 크기가 달랐음(배치 차이 없음). 헤더 Valid 잔존은 CR-092 FAIL(V-d1f0e5dc) — 보완 뒤 재승인 필요",
   "validate": "NA",
   "forced": false
+ },
+ "헤더_Delegate": {
+  "kind": "헤더",
+  "scope": "Delegate",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\헤더_Delegate.txt",
+  "sha8": "b58e33c0",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-18 09:47",
+  "opinion": "CR-092 Active 반영 뒤 수신본(11-17 22:46) snap_validate OK",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_Delegated_List": {
+  "kind": "헤더",
+  "scope": "Delegated List",
+  "golden": "Doc\\verify\\SSP0020\\snap\\golden\\헤더_Delegated_List.txt",
+  "sha8": "d5067ab1",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-18 09:47",
+  "opinion": "CR-092 Active 반영 뒤 수신본(11-17 22:46) snap_validate OK",
+  "validate": "OK",
+  "forced": false
  }
 }

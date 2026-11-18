@@ -56,7 +56,7 @@ STAGES = [('pre', '사전 작업(DB·Fact Pack·메타·스펙·smoke)', None),
           ('e2e', 'E2E 검증엔진(@verify·@trace)', 0),
           ('eg', 'E2E 팝업·권한 검사기(eg_chain)', 1),
           ('diff', '차등 검증(AS-IS↔TO-BE 결과 비교)', 7),  # +asis_live_screen(2026-11-13 · 6 → 7)  # +asis_live_auto(2026-11-13)  # +asis_live_ingest(2026-11-12 · 실제 run() 4 + 1 = 5 — 종전 2 는 sqllog_calls·gen_param_map 추가 때 안 고쳐진 값) · 2026-11-06 플랜 2-4: 포착 call-proc 인자로 AS-IS SP ↔ TO-BE PROC 실행·키 기반 비교 → 원장 ASIS_DIFF 행
-          ('post', '사후 검사·판정·추적', 31),  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
+          ('post', '사후 검사·판정·추적', 33),  # +snap_expect·snap_validate(2026-11-17 SCP0111)  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
           ('docs', '문서 생성·회귀 점검', 4)]  # +precision.py(2026-11-06)
 _PG = {'i': 0, 'j': 0, 'm': 0}
 
@@ -161,6 +161,74 @@ def reachable(url, tries=12, wait=5):
     return False
 
 
+# 2026-11-17 SSP0020 A1 허위 FAIL(V-1caff776 'AS-IS 0행 ↔ TO-BE 26행'): 화면 잠금(runlock verify)은 E2E 단계에서만 잡혀,
+#   같은 화면의 다른 실행(--only H9 · 22:40:20 시작)이 준비 저장으로 만든 검증용 행 26건이 TO-BE 에 있는 동안 이 실행의 golden.py(22:42:06)가 조회해 TO-BE 26행을 기록했다.
+#   → 실행 시작부터 시험 행 정리(restore_touched·cleanup_marker)가 끝날 때까지 '시험 데이터 구간' 잠금을 쥔다. 같은 화면의 다른 실행은 시작 전에 기다린다(30초 간격 · 최대 120분).
+_DBWIN = {'fp': ''}
+
+
+def _pid_alive(pid):
+    """살아있음 판정은 보수적으로(runlock.js 와 같은 규칙) — tasklist 오류는 살아 있는 것으로 본다"""
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return False
+    if pid <= 0:
+        return False
+    try:
+        o = subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/FO', 'CSV', '/NH'], capture_output=True, text=True, timeout=20).stdout or ''
+    except Exception:
+        return True
+    if f'"{pid}"' in o:
+        return True
+    return not any(k in o for k in ('No tasks', '작업이 없습니다', '정보:', 'INFO:')) and bool(o.strip())
+
+
+def dbwin_acquire(mid, max_min=120):
+    fp = os.path.join(ROOT, 'Doc', 'e2e', f'_run.dbwin.{mid}.lock'); waited = 0; told = False
+    while True:
+        try:
+            fd = os.open(fp, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            with os.fdopen(fd, 'w', encoding='utf-8') as f:
+                json.dump({'pid': os.getpid(), 'started': time.strftime('%Y-%m-%d %H:%M:%S'), 'args': ' '.join(sys.argv[1:])}, f, ensure_ascii=False)
+            _DBWIN['fp'] = fp
+            if waited:
+                print(f'[INFO] {mid} 시험 데이터 구간 잠금 획득 — {waited // 60}분 {waited % 60}초 대기 후 시작', flush=True)
+            return True
+        except FileExistsError:
+            try:
+                cur = json.load(open(fp, encoding='utf-8'))
+            except (OSError, ValueError):
+                cur = {}
+            if not cur.get('pid') or not _pid_alive(cur.get('pid')):
+                print(f"[INFO] {mid} 시험 데이터 구간 잠금의 프로세스(PID {cur.get('pid')}) 없음 — 지우고 다시 잡음", flush=True)
+                try:
+                    os.remove(fp)
+                except OSError:
+                    pass
+                continue
+            if not told:
+                print(f"[WAIT] 같은 화면({mid})의 다른 검증 실행이 시험 데이터 구간(시작~시험 행 정리)에 있음 — PID {cur.get('pid')} · 시작 {cur.get('started')} · 인자 '{cur.get('args')}'. 끝나면 시작(최대 {max_min}분)", flush=True); told = True
+            if waited >= max_min * 60:
+                print(f'[FAIL] {mid} 시험 데이터 구간 잠금 대기 {max_min}분 초과 — {fp} 확인', flush=True)
+                return False
+            time.sleep(30); waited += 30
+
+
+def dbwin_release():
+    fp = _DBWIN.get('fp')
+    if not fp:
+        return
+    try:
+        cur = json.load(open(fp, encoding='utf-8'))
+        if int(cur.get('pid') or 0) == os.getpid():
+            os.remove(fp)
+            print(f'[INFO] 시험 데이터 구간 잠금 해제 — {os.path.basename(fp)}', flush=True)
+    except (OSError, ValueError):
+        pass
+    _DBWIN['fp'] = ''
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('menu_id')
@@ -234,6 +302,11 @@ def main():
 
     # 0 사전 작업 점검·선수행(2026-10-28 사용자 요청) — Fact Pack·TO-BE 메타·TO-BE 인덱스·골든 케이스·E2E plan/스펙·smoke 가
     #   없거나 오래되면 생산자를 먼저 실행한다. 대조표·조회조건 기준표처럼 사람이 만드는 것은 MANUAL 로 prereq.json·실행 로그에만 남긴다(정합검증서 미포함)
+    # 2026-11-17 시험 데이터 구간 잠금 — 첫 DB 조회(사전 작업) 전에 잡고 시험 행 정리 뒤 놓는다(위 dbwin_acquire 주석)
+    if not dbwin_acquire(mid):
+        return 4
+    import atexit
+    atexit.register(dbwin_release)
     stage('pre')
     # 2026-11-12 T253(사용자 상시 지시 — DB 실행 5분 이상 알림 · 30분 이상 종료): 감시가 없으면 띄운다. 세부 수에 넣지 않는 보조 호출(실패해도 체인 계속)
     try:
@@ -425,6 +498,7 @@ def main():
             tier_args = ['--grep', 'W4c'] if a.tier == 'slow' else (['--grep', '@verify|@trace|@snap', '--grep-invert', 'W4c'] if a.tier == 'fast' else ['--grep', '@verify|@trace|@snap'])
             spec_files = ['_verify', '_trace', '_snap']
             if only:
+                env['VERIFY_ONLY'] = ','.join(sorted(only))  # 2026-11-17: 부분 재판정 표시 — _formfix 준비가 폼 시나리오 결과 파일을 비우지 않게(이번에 안 도는 시나리오 결과 보존)
                 # 2026-11-08 (b) 부분 재판정: judge.test_ownership(스펙 본문의 rule_id === 'X' 비교)으로 그 규칙을 판정하는 테스트 제목만 골라 --grep · 스냅샷 규칙이면 _snap 포함
                 import re as _re
                 sys.path.insert(0, HERE); import judge as _judge
@@ -471,6 +545,15 @@ def main():
             # 2026-11-16 폼 저장형 화면(Doc/verify/<ID>/form_scenarios.json): E2E 앞에서 검증용 행을 화면 저장으로 만들고(@formsetup) 끝에서 해제한다(@formteardown · finally)
             #   결과 파일은 본 E2E 의 results.json 을 덮지 않도록 별도 폴더(formfix)에 쓴다. 정리는 E2E 가 실패해도 실행한다(검증용 행을 남기지 않는다)
             _form = os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'form_scenarios.json'))
+            if _form:
+                # 2026-11-18 SSP0020 23:58 실행: 준비·검증·정리 사이에 자정이 지나 @TODAY 가 바뀜(F05 FAIL · F13 조건 행 없음) →
+                #   준비 직전 기준 시각을 정해 준비·본 E2E·정리에 같은 값(FORM_BASE_MS)을 넘긴다. 자정 2분 전이면 자정을 넘긴 뒤 정한다(준비 저장 도중 날짜가 바뀌지 않게)
+                _left = 86400 - (time.localtime().tm_hour * 3600 + time.localtime().tm_min * 60 + time.localtime().tm_sec)
+                if _left <= 120:
+                    print(f'[WAIT] 자정까지 {_left}초 — 폼 시나리오 기준일이 준비 도중 바뀌지 않게 자정 뒤 시작', flush=True)
+                    time.sleep(_left + 5)
+                env['FORM_BASE_MS'] = str(int(time.time() * 1000))
+                print(f"[INFO] 폼 시나리오 기준일 {time.strftime('%Y.%m.%d %H:%M:%S')} 고정(FORM_BASE_MS) — 준비·본 E2E·정리 공통", flush=True)
             _fenv = dict(env); _fenv['E2E_RESULTS'] = os.path.join(os.path.dirname(res_json), 'formfix')
             if _form:
                 _frc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_formfix', '--grep', '@formsetup', '--workers', '1', '--retries', '0', '--reporter=list'], env=_fenv, cwd=E2E)
@@ -541,6 +624,13 @@ def main():
         run([py, os.path.join(HERE, 'combo_oracle.py'), mid, '--asis', asis])
     else:
         sub('combo_oracle.py', 'E2E 콤보 덤프 combo_runtime.json 없음')
+    # 2026-11-17 사용자(SCP0111 미검증 250 → 0): 스냅샷 AS-IS 기대 생성·대조를 체인에 연결 — 종전엔 수동(snap_expect → snap_validate)이라
+    #   첫 실행 화면은 조회조건·헤더·버튼 스냅샷이 매번 '골든 없음' 미검증으로 남았다. 대조 결과(snap/snap_validate.csv)는 승인 판단 근거(승인은 snap_approve.py)
+    if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'snap', 'results.json')):
+        run([py, os.path.join(HERE, 'snap_expect.py'), mid])
+        run([py, os.path.join(HERE, 'snap_validate.py'), mid])
+    else:
+        sub('snap_expect.py', '스냅샷 결과 snap/results.json 없음'); sub('snap_validate.py', '스냅샷 결과 snap/results.json 없음')
     # CRUD 실제 저장 마커 행 정리(사내 DB) — 백업·건수 단언·SQL 기록. 정의 없는 화면은 SKIP(2026-10-24 BOD 잔존 행 사고 재발 방지)
     if not a.skip_e2e and not blocked:
         run([py, os.path.join(HERE, 'db_orphan_sessions.py'), mid, '--kill'])  # 2026-11-12 T250: 시간 초과로 끝난 저장 시험이 DB 에 남긴 장시간 세션 종료(SCP0111 5개·6시간 잠금) — 복원보다 먼저(잠금에 걸리지 않게)
@@ -548,6 +638,7 @@ def main():
         run([py, os.path.join(HERE, 'cleanup_marker.py'), mid])
     else:
         sub('db_orphan_sessions.py', 'E2E 미실행'); sub('restore_touched.py', 'E2E 미실행'); sub('cleanup_marker.py', 'E2E 미실행')
+    dbwin_release()  # 2026-11-17 시험 행 정리가 끝났으므로 같은 화면의 다음 실행이 DB 조회를 시작해도 된다
     # F8 감사 필드 · F7 저장 연계 테이블 — 정리 백업(실제 저장이 남긴 행) ↔ AS-IS 저장 SP DML 대상 (2026-10-27)
     run([py, os.path.join(HERE, 'save_audit.py'), mid, '--asis', asis])
     run([py, os.path.join(HERE, 'sp_branch_check.py'), mid])  # 저장 SP 검증 분기 정적 대조(EG161)

@@ -1,0 +1,39 @@
+{
+  "id": "SCP0111",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0111] · Doc/gen/SCP0111/CHECK.md · Doc/gen/SCP0111/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0111/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-17T18:12:10+09:00",
+  "end": "2026-11-17T18:13:29+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\integration-psi",
+      "files": 16
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0111",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "FE 가이드가 아래 내용이 맞나요? \n자동시험코드, 지금있는 시험 2건 이런 단어가 무었인지 이해가 가지 않습니다.\n\n- G1: ADMIN 계정이 이미 있는 행을 고쳐 저장할 때 보내는 값을 AS-IS 와 같게 바꿉니다.\n  - BOH 를 바꾸면 조회 기간 전체 월을 보냅니다. BOH 가 그대로면 값이 바뀐 월만 보냅니다.\n  - BOH 와 월 수량은 화면에 입력한 값 그대로 보냅니다. INV 행과 다른 행을 나누지 않습니다.\n  - 일반 계정 저장은 지금처럼 바뀐 양(바꾼 값 − 원래 값)을 보냅니다.\n  - 코드는 `integrationPsiSave.ts` 에 새 함수 `unfoldAdminModifyCells` 를 추가하고, `IntegrationPsi.tsx` 저장 처리(`handleSave`)에서 저장 구분(`mode`)을 넘깁니다.\n- G2: 자동 시험 코드를 추가합니다. 화면을 띄우지 않고 G1 함수에 화면 행 값을 넣어, 서버로 보낼 값이 AS-IS 규칙과 같은지 비교하는 코드입니다.\n  - 시험 4건(A1~A4)을 추가합니다. INV 행 BOH 변경, 월 수량 1개 변경, 빈 월이 있는 행의 BOH 변경, 월 수량 2개 변경을 각각 확인합니다.\n  - 지금 있는 시험 2건은 일반 계정 규칙을 보는 시험이라 `mode: 'GENERAL'` 을 추가합니다.\n",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-17T18:13:29+09:00",
+  "changed": []
+}

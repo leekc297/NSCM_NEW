@@ -86,15 +86,43 @@ def validate_header(exp, text):
     return missing, [], warn, extra
 
 
-def validate_buttons(exp, text):
+def mapping_text(mid):
+    """화면 대조표(__asis-mapping__.md) 원문 — Doc/tobefacts/screens/_index.csv 의 화면 → features/<feature>/src/pages/<page>"""
+    try:
+        with open(P('Doc', 'tobefacts', 'screens', '_index.csv'), encoding='utf-8-sig', newline='') as f:
+            for r in csv.reader(f):
+                if len(r) > 3 and r[1].upper() == mid.upper():
+                    mp = P('nscm-fe', 'features', r[2], 'src', 'pages', r[3], '__asis-mapping__.md')
+                    return open(mp, encoding='utf-8').read() if os.path.exists(mp) else ''
+    except OSError:
+        pass
+    return ''
+
+
+def validate_buttons(exp, text, mid=''):
     lines = aria_lines(text)
-    names = [nrm(l['name'] or l['text']) for l in lines if l['role'] == 'button']
+    btns = [l for l in lines if l['role'] == 'button']
+    names = [nrm(l['name'] or l['text']) for l in btns]
+    unnamed = sum(1 for nm in names if not nm)
+    mtext = None
     missing, warn = [], []
     for code in exp.get('codes') or []:
         head = nrm(code.split('_')[0])
         if not any(nm.startswith(head) for nm in names):
-            if code.upper() == 'SEARCH':
+            cu = code.upper()
+            if cu == 'SEARCH':
                 warn.append('SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인)')  # 2026-11-06 실측
+            # 2026-11-17 SCP0111 실측: 아래 3종은 버튼이 없어서가 아니라 대조 방식 때문에 누락으로 잡히던 것(검사기 결함)
+            elif cu == 'EDIT':
+                warn.append('EDIT: TO-BE 룰 CR-084·CR-093(편집 버튼 없음 · 조회 즉시 상시 편집) — 누락 아님')
+            elif cu == 'EXCEL' and unnamed:
+                warn.append(f'EXCEL: 공용 SubTitle Excel 은 툴팁만 있는 아이콘 버튼(접근성 이름 없음 · SubTitle.tsx Tooltip title=Excel) — 이름 없는 버튼 {unnamed}개로 확인')
+            elif cu == 'SAVEDETAIL' and any(nm.startswith('save') for nm in names):
+                if mtext is None: mtext = mapping_text(mid)
+                if re.search(r'SAVE\s*/\s*SAVEDETAIL|SAVEDETAIL\s*/\s*SAVE', mtext or ''):
+                    warn.append('SAVEDETAIL: 대조표가 Save 버튼 하나로 매핑(SAVE / SAVEDETAIL · 권한별 SP 분기) — Save 버튼 있음')
+                else:
+                    missing.append(code)
             else:
                 missing.append(code)
     return missing, [], warn, []
@@ -123,7 +151,7 @@ def main():
         fn = {'조회조건': validate_conds, '헤더': validate_header, '버튼': validate_buttons}.get(kind)
         if not fn:
             rows.append({'key': key, 'kind': kind, 'scope': scope, 'status': 'NA', 'missing': '', 'order': '', 'type_warn': '', 'extra': '', 'basis': '검증기 없음'}); continue
-        missing, order, tw, extra = fn(exp, text)
+        missing, order, tw, extra = fn(exp, text, mid) if kind == '버튼' else fn(exp, text)
         rows.append({'key': key, 'kind': kind, 'scope': scope, 'status': 'OK' if not missing and not order else 'MISMATCH', 'missing': ';'.join(missing), 'order': ';'.join(order), 'type_warn': ';'.join(tw)[:300], 'extra': ';'.join(extra)[:300], 'basis': exp.get('src', '')})
     out = os.path.join(sd, 'snap_validate.csv')
     with open(out, 'w', encoding='utf-8-sig', newline='') as f:

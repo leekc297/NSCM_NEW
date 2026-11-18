@@ -128,6 +128,470 @@
   }
  },
  {
+  "eg": "EG382",
+  "screen": "SSP0020",
+  "target": "메뉴 트리",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0020",
+  "target": "Division 후보",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0020",
+  "target": "자동 선택",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 40",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 40 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/40/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0020",
+  "target": "메뉴 트리",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 0개 → 비노출",
+  "actual": "트리에 없음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0020",
+  "target": "직접 접근",
+  "ctx": "SSP/40/SSP Viewer",
+  "result": "PASS",
+  "expected": "메뉴 권한 없는 계정의 URL 직접 접근 차단(문서 GAPSELF-22·DM-65)",
+  "actual": "authorized=false notFound=false",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "라우트 가드 부재는 기존 기록(authcrud gap) — AS-IS 근거(메뉴에 없으면 못 연다)로 FAIL 승격 여부는 사용자 결정 필요",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0020",
+  "target": "메뉴 트리",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0020",
+  "target": "Division 후보",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81_HM",
+  "actual": "후보 81_HM",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0020",
+  "target": "자동 선택",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 81_HM",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 81_HM 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/81/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "SSP0020",
+  "target": "메뉴 트리",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "SSP0020",
+  "target": "Division 후보",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82",
+  "actual": "후보 82",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "SSP0020",
+  "target": "자동 선택",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "후보 1개 → 자동 선택 82",
+  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 82 전부)",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "SSP0020",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "SSP0020",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "SSP/82/SSP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 8613,
+   "req": 0
+  }
+ },
+ {
   "eg": "EG022",
   "screen": "SSP0020",
   "target": "Div 선택",
@@ -636,470 +1100,6 @@
   "mctx": {
    "calls": 0,
    "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SSP0020",
-  "target": "메뉴 트리",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SSP0020",
-  "target": "Division 후보",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
-  "actual": "후보 40",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SSP0020",
-  "target": "자동 선택",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "후보 1개 → 자동 선택 40",
-  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 40 전부)",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SSP/40/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SSP0020",
-  "target": "메뉴 트리",
-  "ctx": "SSP/40/SSP Viewer",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 0개 → 비노출",
-  "actual": "트리에 없음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 5,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SSP0020",
-  "target": "직접 접근",
-  "ctx": "SSP/40/SSP Viewer",
-  "result": "PASS",
-  "expected": "메뉴 권한 없는 계정의 URL 직접 접근 차단(문서 GAPSELF-22·DM-65)",
-  "actual": "authorized=false notFound=false",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "라우트 가드 부재는 기존 기록(authcrud gap) — AS-IS 근거(메뉴에 없으면 못 연다)로 FAIL 승격 여부는 사용자 결정 필요",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SSP0020",
-  "target": "메뉴 트리",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 5,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SSP0020",
-  "target": "Division 후보",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81_HM",
-  "actual": "후보 81_HM",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SSP0020",
-  "target": "자동 선택",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "후보 1개 → 자동 선택 81_HM",
-  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 81_HM 전부)",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SSP/81/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SSP0020",
-  "target": "메뉴 트리",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 4,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SSP0020",
-  "target": "Division 후보",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82",
-  "actual": "후보 82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SSP0020",
-  "target": "자동 선택",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "후보 1개 → 자동 선택 82",
-  "actual": "다중선택 초기값 ALL(필터 없음 = 후보 82 전부)",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SSP0020",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SSP0020",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SSP/82/SSP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 2,
-   "rows": 8613,
    "req": 0
   }
  }

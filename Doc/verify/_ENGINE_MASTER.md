@@ -1393,3 +1393,101 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 
 - 11-17 11:49 SCP0104 사용자의견 반영 마감: DB 보완(PKG_SCP0104 10구간 09:44·09:47 · 메뉴 권한 7행 · 컬럼 정렬 3행 09:47) · 클라우드 패키지 SCP0104_USERFIX_CLOUD_20261117 · 전체 재검증 10:14~11:24 · 결과 3,339행 PASS 1,840 · FAIL 272 · NA 1,227 · 미검증 0 · 판정필요 0 · CheckList v27 조치 필요 14건(전부 FE) · 설명 = action_summary.csv(오류명·위치·AS-IS·TO-BE·GAP·묶음). 검사기 수정: A5 폭 0 · H8 공용 건수(CR-110 · 총 N건) · F1 불일치 앞 배치 · F6 원복 행 식별 실패 = ERROR · EG032 정렬 사실 선택 · eg 직접 접근 새 세션 · openScreen 주소 안정 대기. 시험 부작용: 화면 첫 진입 시 TITLESET_USER 87행 자동 생성(lucky-alex · zhangjiali) → 삭제 261행(백업 logs/titleset_autocreated_deleted.json). 데이터 잔존(보관본 11-16 18:38 대비) 값 변경 0 · 새 행 0.
   - 정정: 칸 설정 삭제 261행 중 백업 파일에 든 것은 10:08 생성분 174행. 11:31 재측정 때 생긴 87행(lucky-alex)은 백업 없이 삭제(그 시험이 만든 행).
+
+## 2026-11-17 20:20 덧붙임 (SCP0111 미검증 250 → 0 착수 · 사용자 지시)
+- 사용자(11-17 20:1x): "CheckList 생성 시 미검증 0 이어야 함 · CheckList 로직 보완 · SCP0111 미검증 제거".
+- 기준: CheckList v30(run_verify 19:02~19:52) 미검증(ERROR) 250 = 원 오류 128 + 집계·상속 122. 분류표 Doc/verify/SCP0111/_unverified_250.csv.
+- 원 오류 분류: F 기계 판정 불가 26(D1 조건부 잠금 GROUP 조건 11) · E 검사기 미실행 23 · B 연쇄 원천 해석 불가 22 · A 대조표 구현 위치 없음 20 · G 측정 경로·코드 없음 10 · J 기타 10(계정 명부 3 포함) · C 스냅샷 승인 전 6 · D 전제 미충족·측정 중단 6 · H 확인 대상 5.
+- 순서: C 스냅샷 대조·승인 → A 대조표 구현 위치 → F/D1 GROUP 조건 계산 → B 연쇄 원천 → D 전제·저장 행 식별 → E·G 검사기 연결 → H 판정 → 재판정(--skip-e2e) → 전체 재실행 1회.
+- 사용자 결정 필요(완료 후 일괄 질의): 비관리자·권한 없는 계정 명부 등록(J3·J4·A6).
+- 2026-11-17 20:34 SCP0111 미검증 보완 1차(재판정 전 · 화면 재실행 없음):
+  - C 스냅샷 6: snap_validate 버튼 대조 결함 수정(EXCEL = SubTitle 아이콘 버튼 · EDIT = CR-084·093 · SAVEDETAIL = 대조표 Save 매핑일 때만) · SCP0111 6건 골든 승격(--no-verdict · 검증엔진세션 · 화면샷 SEQ_FLAG·MEASURE 보임 = AS-IS 편집 모드 표시 cs:1064). 회귀: SCP0104 버튼 행 누락 목록만 줄어듦 · SSP0020 변화 0.
+  - CheckList 흐름: run_verify post 에 snap_expect·snap_validate 연결(세부 31 → 33 · 백업 run_verify.py.bak_20261117_snapchain).
+  - A 대조표 구현 위치 20: mapping_trace X-LOC 에 코드 식별자 실재 확인(loc_by_identifier · hotkeyConfig 키 · '(제거)' · 공용 Excel) → SCP0111 X-LOC 20/20 PASS. SCP0104 X-LOC 92 PASS · 16 NA(일반 단어 근거 제외 뒤).
+  - F/D1 조건부 잠금 11: _trace.spec judgeD1 이 RULES 형식(facts_lockrules v2)을 condeval.evalRules 로 계산(계정 그룹·Div·행 값) · tsc 0 · 백업 _trace.spec.ts.bak_20261117_d1rules · 다음 E2E 에서 확인.
+  - 발견: C2·C3·C6 '연쇄 원천 해석 불가' 22 중 ITEM_ID·CELL_CF·SEQ_FLAG·MEASURE·TO_PRODUCT·VALUE_TYPE 는 AS-IS _defaultDataModel_Changed(cs:1945~) 가 읽기만 함(값 대입 없음) → 연쇄 대상 아님 판정 근거 있음 · 미수정.
+  - 병행: 20:27 다른 세션 run_verify SSP0020 --only D1,H2,E4 실행 중 — 공용 엔진 파일(_trace.spec.ts 등) 추가 수정은 그 실행 종료 뒤.
+- 2026-11-17 21:14 SCP0111 보완 2차 + 전체 재실행 시작:
+  - mapping_trace.py: AS-IS 컬럼 상수 'DefColumns.' 고정 19곳 → 'Def[A-Z]\w*.'(Def* 클래스 전부 · SCP0111 = DefMain). SCP0111 인스턴스 +6(C3 2·E4 2·D3 1·D1 1) · SCP0104·SSP0020 변화 0. 백업 mapping_trace.py.bak_20261117_defcls.
+  - C2·C6 noAssign(이 컬럼에 값·후보를 쓰는 AS-IS 문장 없음 = 읽기만): ITEM_ID·CELL_CF·TO_PRODUCT·VALUE_TYPE·SEQ_FLAG·MEASURE 12 → 검사 엔진 NA(근거 원문 _defaultDataModel_Changed cs:1945~). C2 원천 보강: 같은 메서드에서 읽은 행 값(LINE_ID ← PLANT_ID·OPERATION_GROUP·COMPANY_ID · spdMain_CellClick cs:1770~1790). _trace.spec C2·C6 noAssign 처리 · tsc 0.
+  - 21:1x run_verify SCP0111 전체 실행 시작(로그 scratchpad scp0111_run1.log) — 결과로 3차 범위 결정.
+- 2026-11-17 22:10 SCP0111 v31 결과(21:14:45~22:07:25 · 52.1분): 1,871행 PASS 739 · FAIL 51 · 판정필요 8 · 미검증 171(v30 250) · NA 902. 원 오류 128 → 74(A 구현 위치 0 · C 스냅샷 0 · B 연쇄 22 → 1) · 집계 상속 97. 분류 Doc/verify/SCP0111/_unverified_v31.csv.
+  - 회귀 오라클 위반 5(_regress_report.md): D1 BOH_QTY·월 칸 '놓친 결함(FAIL)' 기대 ↔ 실측 PASS(_verify.spec judgeCond · 그룹 ADMIN 기준 편집 가능) — 10-30 사용자 지적 이후 해소 여부 판정 필요(결정 목록) · F1·F4·G3 는 저장·조건 저장 경로 미측정(ERROR)·PASS.
+  - 3차 보완: _trace.spec judgeD1 RULES 조건이 원장 JSON 에서 400자로 잘려(mapping_trace editExpect [:400]) 옛 분기로 빠지던 것 → 원천 edit_expect.csv 전문 복원(fullCond) · tsc 0.
+  - 계정: gen-e2e.js users.json screens[<메뉴>].extra(화면별 추가 계정) 지원 · SCP0111 extra = lucky-alex(사용자 지정 · SCP Tester · 메뉴 접근 Y · 기대 버튼 SEARCH·EXCEL) → plan 계정 2(jooyong026·lucky-alex). 백업 users.json.bak_20261117_extra.
+  - 남은 원 오류 74: E 검사기 미실행 23(DB-SYN 5 · A7 golden 3 · G1·G2·G5 조회조건 6 · H2 2 · 기타) · F 기계 판정 불가 18 · G 측정 경로 없음 16(저장 시험 '편집 가능 셀 없음' 6 포함) · J 7 · D 5 · H 4 · B 1.
+  - 결정 필요: ① D1 BOH_QTY·월 칸 회귀 오라클(놓친 결함) 해소 인정 여부 ② J4 권한 없는(GUEST 전용) 계정 · A6 Titleset 보유·미보유 계정 쌍(lucky-alex 는 SCP0111 권한 있음 — J4 대상 아님) ③ H4 헤더 글자 잘림 5칸(SCP0016 선례: 오류 아님·판정필요) ④ K4 Delete 버튼 노출(AS-IS 버튼 목록 Search·Insert·Save).
+- 2026-11-17 22:39 SCP0111 4주기 보완(재실행 전):
+  - 저장 시험 묶음: 'Insert 버튼 비활성' 문구 = 실제 원인 cleanup_spec SCP0111 mode=editonly(_verify.spec:966) · 수정 저장 경로 '편집 가능 셀 24개 시도 — 값이 바뀌는 셀 없음' 원인 조사 중(읽기 전용 조사 에이전트).
+  - DB-SYN 5: mapping_trace 에 API 등록 ID → proc_meta api_id → 프로시저 시노님 결과(P_SCP0111_GET·SAVE·SAVE_ADMIN PASS) · sp_pair 수동 짝 SCP0111_SAVE_INTEGRATION_PSI_ADMIN ↔ PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN(cs:1379) PASS · DM0003_GET_BUCKET_TYPE_CODE = TO-BE 대응 없음(AS-IS dtBucketType 미사용 cs:244·62) NA. SCP0104·SSP0020 변화 0. 백업 sp_pair.csv.bak_20261117_scp0111.
+  - A7 golden 3: golden_cases.csv SCP0111 수동 지정(메인 조회 인자 = AS-IS 런처 실측 11-17 19:01:58 Div 81·20260817·202608~202701 · ESS Pack Line tobe_proc · ADMIN 저장 짝) → 22:37 golden: 메인 1712↔1712 공통 1708 DIFF · ESS 32↔50(TO-BE 전용 82 남경 피플웍스 18행) DIFF = 데이터 차이(CR-101 판정필요) · judge.py A7: 짝 표 'TO-BE 대응 없음' = NA. 백업 golden_cases.csv.bak_20261117_scp0111.
+  - A6 주석 코드: facts_sortrules.py C# 파일에 SQL 용 주석 제거(-- 만)를 쓰던 결함 → C# 주석 제거(facts_combosrc) · SCP0111 1행(cs:214)·SCP0104 5행(cs:1397~1449 //DBUtils.Sort) 제거 · SSP0020 0. 백업 facts_sortrules.py.bak_20261117_cscomment.
+- 2026-11-17 22:48 저장 시험 조사 결과(읽기 전용 조사 에이전트 · TO-BE SELECT 만 · 22:46 조회):
+  - edit-save '24셀 값 변화 없음' = 검사기 결함: 고정 칸 18개 폭 1415/1543px(92%) · Wijmo 고정 복제층 아래 DOM 셀을 nth 위치로 클릭 → 시간 초과(시험 271,016ms ≈ 후보 24 × 10s). 보완안 crud.ts edit-save 앞 probe.unfreezeIfNeeded · binding 기준 typeCell.
+  - 저장 세부 'BOH 47→48 재조회 빈 값' = TO-BE 저장 결함(FE_GUIDE_20261117_1759.md G1 미반영): 21:33:26 P_SCP0111_SAVE_PSI_ADMIN(LOG_SEQ 6414880) 이 202610 행 QTY 47→1 · BOH 47→48 로 덮음(22:05~22:10 restore_touched 원복 · AS OF 확인). 가이드 '반영 전 ADMIN 저장 시험 금지' 를 v31 실행이 어김.
+  - 검사기 결함 2 추가: saveprobe.ts:108 행 식별 실패 시 재조회 값 '' 를 판독값처럼 기록 · db_snapshot.py:33~37 OPERATION_GROUP 표시명(Pack)을 코드(P) 대신 WHERE 에 넣어 0행 → '변화 0' 허위.
+  - 조치: 저장 경로 검사기 3건 보완은 FE G1 반영 뒤 저장 시험과 함께. 이번 전체 재실행은 VERIFY_NO_SAVE=1(저장 요청 가짜 응답 · 사내 DB 미기록) — 저장 행은 '[저장 미실행]' 미검증으로 남음.
+  - 22:48 run_verify SCP0111 전체(VERIFY_NO_SAVE=1) 시작 · 로그 scratchpad scp0111_run2.log.
+- 2026-11-17 23:37 SCP0111 v32(22:48~23:32 · VERIFY_NO_SAVE=1 · 43.8분) 미검증 159 · 재판정 v33(23:33~23:36 · --skip-e2e) 미검증 155 · FAIL 55 · 원 오류 61(_unverified_v33.csv).
+  - 반영 확인: D1 대부분 PASS(ITEM_ID 신규행 FAIL) · DB-SYN 전부 PASS/NA · A7 PASS 2·NA 1 · J3 lucky-alex 등 그룹별 편집 실측(BOH 불일치 FAIL).
+  - 사용자 지시(23:3x): 'FE 는 수정 대상 아님 — 오류는 오류로 표기하고 가이드만'. 저장 정적 판정 static_verdicts.csv 6행(F1·F6 FAIL 4 · F4·F6 PASS 2 · 근거 LOG_SEQ 6414880 + AS OF 21:40 직접 재조회) · judge.py 정적 판정 적용 시 실행 측정 전제(mctx rows -1)를 정적 판정 참조로 교체(증거 관문이 FAIL 을 ERROR 로 되돌리던 것).
+  - 남은 원 오류 61: 실저장 필요 약 15(FE G1 반영 전 ADMIN 실저장 금지 — 측정 불가) · Period 칸 찾기 4 · 팝업 SCM0002 6 · LINE_ID 연쇄 2 · 조회조건 G2·G5 3 · 계정(J4 GUEST · A6 Titleset 쌍) 2 · 판정 기준 결정 필요(H4 글자 잘림 · K4 Delete · A2 FCA · F5 · D1 Div) 등.
+- 2026-11-17 23:39 사용자 지시 '실제 저장도 동작': SCP0111 ADMIN 실저장 시험 허용(FE_GUIDE G1 '반영 전 ADMIN 저장 시험 금지' 를 이번 실행에 한해 사용자가 해제). 실행 중 사내 행이 저장 결함으로 일시 변경 → 체인 끝 restore_touched 원복 · 끝난 뒤 원복 여부 직접 확인.
+  - 저장 경로 검사기 보완 3: crud.ts edit-save 앞 고정 폭 85% 초과 시 고정 해제(마지막 칸 기준 unfreezeIfNeeded) · saveprobe.ts 재조회 행 식별 ≠1 이면 got='(판독 안 함)' + 후보 행 값 기록 · db_snapshot.py 키 조회 0행 = skipped(사유: 표시값↔DB 코드). tsc 0 · py_compile OK.
+  - run_verify SCP0111 전체(실저장) 시작 · 로그 scratchpad scp0111_run3.log.
+- 2026-11-18 00:26 SCP0111 v34(실저장 · 23:39:40~00:24:31 · 44.3분): 미검증 153 · FAIL 55 · 판정필요 14. 수정 저장 경로 첫 성공(F2 저장 메시지 PASS · F4 SQL 오류 없음 PASS · 고정 18칸 해제 노트 확인). 저장 호출 2(23:49:31 · 23:51:52 P_SCP0111_SAVE_PSI_ADMIN). restore_touched 2행 원복 · 00:24 조회 SCP_ANL_PSI_INTEGRATION 23:39 이후 수정 행 0.
+  - 보완: db_snapshot 0행이면 키 하나씩 빼고 재조회(표시값≠코드 키 제외 · dropped_keys 기록 · 시험 OPERATION_GROUP=Pack → 13행) · saveprobe 재조회 행 식별 2건 이상 = 그 칸만 판독 불가·다음 칸 계속(0건만 중단). tsc 0. 이어서 실저장 전체 재실행.
+- 2026-11-18 01:11 SCP0111 v35(실저장 · 00:26:12~01:10:34): 미검증 152 · FAIL 55 · 판정필요 14. 저장 호출 4 · restore_touched 3행 원복 · 01:10 조회 00:26 이후 수정 행 0.
+  - F8 수정 감사 컬럼 판정됨 · DB 스냅샷 비교 동작(변경 1). 남은 저장 미검증 7: 빈값·0값·2행(202610 원복 뒤 행 0건 = ADMIN 저장 결함으로 행 값 변경 → 중단) · F7 이력 표 없음 2 · F7 2회 저장 · F8 이력 행 값 · F7·F8 save_audit 미연결 2.
+  - 판단: 남은 저장 행은 대부분 ADMIN 저장 결함(FE G1)의 결과로 측정이 끊김 — G1 반영 뒤 재측정이 정답 경로. 비저장 묶음(Period·팝업 SCM0002·LINE_ID·G2·G5·결정 필요)은 별도 주기.
+- 2026-11-18 05:19 SCP0111 비저장 묶음 보완(재실행 전 · 단독 측정은 조회·Insert 만 · 저장 없음):
+  - Period 칸 찾기: smoke-extra findCond 가 달력 전용 칸(입력칸 없음)에서 target null → 예외 → '칸을 찾지 못함' 허위 ERROR · 월 표시('2026-10') 읽기 실패 '초기 기간 빈값' 허위 FAIL → 수정. gen-e2e: 라벨 '~'(AS-IS cmbToMonth) = 기간 칸에 포함(제외 사유 기록).
+  - G1 Period: _trace 기간 칸 실측 추가(periodShiftEnd: 끝 값 한 달 당김 → 요청 toYyyymm·결과 월 칸 범위 대조). 단독 확인 202703 → 202702 · 요청 toYyyymm 202702 · 월 칸 202610~202702. AS-IS MSG00344(기간 역전) = periodReverseTry(달력이 역전 입력 거부) · G2 Period = 단일 범위 NA.
+  - G8/G9: 기간 칸에서 옆 Model 입력칸을 잡던 결함 수정(칸 종류 먼저) · 재료 값에서 센티널 '-'·'/' 제외(Cell Model G9 '-,ACEF…' 허위 FAIL).
+  - G1 Model/Nickname·Cell Model: _trace 'NA(콤보 아님)' 가 _verify 텍스트 실측을 덮던 결함 수정. judge: 텍스트 다중 칸 G2 ← 같은 칸 G9 실측 상속.
+  - G5: popup_args_check host_label(함수 인자로 넘긴 onItemSearch · 모달 파일 안 setter 만) 보완 → Model/Nickname 연결(SCP0104·SSP0020 popup_args 변화 0). Cell Model = TO-BE 팝업 없음 · AS-IS btnCellItem_Id 이벤트 등록 주석(cs:361) → NA.
+  - H2 SetBGColor2: facts_lockrules 에 color_rules.csv(조건부 배경색 · 가드 정규형 · DBUtils.Filter 존재 검사 → EXISTS) · condeval EXISTS · _trace 'H2 조건부 배경색' 시험 신설(조건 만족 계정·Division 선택 → 값 있는 기간 칸 편집색 대조). 단독 확인 V-48220ccc PASS(lucky-alex · Div 82 · 1,281행 중 93행) · V-51c1bd06 PASS(53행 · 직접 센 53행과 일치). bg_style_check SetBGColor2 누락 수정.
+  - C3 LINE_ID: mapping_trace — 화면 전체에서 값 대입 문장 없음(후보 설정·읽기만) → noAssign NA(근거 원문 5건). C2 LINE_ID: 원천 값이 다른 기존 행에서 Insert → 원천 입력 → 후보 비교(신규행은 표식으로 식별) → PASS(MI00/Pack 15 · WA00/Pack 64 · WA00/Cell 37).
+- 2026-11-18 06:33 SCP0111 v36(실저장 전체 · 05:43:07~06:32 · 49.0분): 미검증 95(v35 152) · FAIL 59 · 판정필요 15 · PASS 804 · NA 902. restore_touched 3행 원복 · 06:33 조회 SCP_ANL_PSI_INTEGRATION 05:43 이후 수정 0행 · 생성 0행. 원 행 목록 Doc/verify/SCP0111/_unverified_v36.csv.
+  - 새 FAIL 후보: ESS Pack Line SP 진입 미호출(AS-IS Form_Load cs:178 · TO-BE IntegrationPsi.tsx:499 essPackLineRows={[]} · SP 직접 실행 50행 오류 0) — FE 가이드 대상.
+  - 결함 발견·수정(06:3x): 새 D3 계정 전환 시험이 동적 월 칸을 펼치지 않아 ASIS D3 10행 '조건 만족 0' ERROR → 월 칸 펼침·COL(SELF) 대입. judge G5 host 라벨 '/' 포함 전체 비교 누락. facts_auth insertStmts 에 프레임워크 siMain.Insert() 포함(EG126). python 치환으로 들어간 백스페이스 문자(\b) 2곳 정정(eg_auth.spec · facts_auth.py).
+  - 결정 목록 Doc/verify/SCP0111/_decisions_20261118.md(판정 기준 8 · 계정 3).
+- 2026-11-18 07:02 SCP0111 eg_chain + --only D3,L1,E3,A2(06:45~07:02 · 실저장 · restore 3행 · 07:02 조회 06:34 이후 수정 0 · 생성 0): 미검증 83 · FAIL 68 · 판정필요 17.
+  - 새 FAIL 검토: EG126 Insert 위치(신규행 r1259 · 선택 r2 · CR-015·CR-074 불일치) + 그 집계 8행 · ESS Pack Line 진입 미호출(T-236699af) · E3 빈 신규 행 저장 안내 'Operation 은 Pack / Cell / Electrode 중 하나로 입력하세요.' ↔ AS-IS MSG00001(SaveData:1237) · G4 스냅샷 Div 40(골든에 Period 빠짐 = 골든 생성 때 검사기 결함 → 07:05 재승인 --no-verdict).
+  - Cell Model G9 FAIL 유지 근거: TO-BE PKG_SCP0111 BODY 301~302 단일 LIKE · AS-IS 도 단일 LIKE(같음) · 그러나 TO-BE 룰 CR-040(텍스트 조회조건 콤마 다중) + 기준표 '텍스트/다중' → FAIL(DB 보완 후보 · 정합검증 단계라 미보완).
+  - 검사기 결함 수정: _verify 콤보 G1 시험이 텍스트 칸(Cell Model)에서 다른 칸 콤보를 잡아 판정필요를 쓰던 것 → 칸 종류 먼저 · judge G2←G9 상속 근거 형식 [V-…] (증거 경로 게이트).
+  - 07:0x --only J2,G1,G2,G8,G9,F1,L1 실행(권한 auth·authcrud 포함 · 실저장).
+- 2026-11-18 07:29 SCP0111 --only J2,G1,G2,G8,G9,F1,L1(07:05~07:28 · 실저장 restore 3행 · 07:29 조회 07:03 이후 수정 0 · 생성 0): 미검증 69 · FAIL 71 · 판정필요 17. G1 Model/Nickname·Cell Model PASS · G2 Model/Nickname PASS(G9 상속) · G2 Cell Model FAIL(CR-040) · G5 Model/Nickname PASS.
+  - J2 미검증 유지: authcrud 마커 행 신규 저장이 화면 검증(Operation 필수)에 막힘 · 버튼 권한 기대 불일치 0 · cleanup_spec editonly 화면이라 신규 행 왕복 방식 부적합 — 검사기 확장 대상.
+  - L1: 판정 코드가 저장 세부 시험 안에 있는데 그 시험 본문에 rule_id 비교가 없어 --only 가 고르지 못함 → 비교문 추가 · 07:3x --only L1 재실행.
+- 2026-11-18 07:51 SCP0111 --only L1(07:41~07:51 · 실저장 restore 2행 · 07:51 조회 07:41 이후 수정 0 · 생성 0): 미검증 65 · FAIL 71 · 판정필요 17 · PASS 818 · NA 904. L1 PASS(저장 3회 105·93·108ms · 기준 3000ms) — 판정 코드를 저장 세부 시험 중단 지점(stopped return) 앞으로 옮김.
+  - judge: 다른 화면 결함 유형 C2·C3·C6 행 중 대상 컬럼(영문 컬럼명)이 이 화면 그리드 COLUMN 행 106개에 하나도 없으면 NA(V-c0dd9dff Team·Owner · V-bad017f3 Team · V-c95a03b1 Team·End Customer·Energy).
+  - 남은 원 행 40(Doc/verify/SCP0111/_unverified_v38.csv): K3 7·E6 1(일부 범위 실측) · 저장 F1/F6/F7/F8 8(ADMIN 저장 결함 G1 · 이력 표 없음) · D1 INCOTERMS T300 3 · J4 3·A6 Titleset·A1(계정) · F4 SAVE 일반 계정 경로 2 · G4 팝업 조건 구성 2·H4·K4·F5·A2·B4·MS1·I1(결정 목록) · J2 · E4 · D3 1 · A6 P_SCP0111_GET 정렬 · G03-WIRE.
+- 2026-11-18 08:0x [공용 검사기 변경 알림] mapping_trace.py: 게이트 G03 'AS-IS 이벤트 … 매핑표 §2 에 없음' WARN → G03-WIRE FAIL(FE __asis-mapping__.md 이벤트 매핑 누락 · CLAUDE.md 절대 금지 ⑪). DMF0042 CHECK.md 에 G03 WARN 23건 — 다음 실행부터 G03-WIRE FAIL 로 나옴(백업 mapping_trace.py.bak_20261118_g03). judge.py: K3 '미포함' 항목을 eg 팝업·K1·동적 칸 정렬·붙여넣기 실측으로 보완 · API 별칭 TRACE 행 → 실제 프로시저 행 상속 · C2/C3/C6 결함 유형 대상 컬럼 부재 NA. _trace W4d INCOTERMS(TO_SITE_CODE PLANT/SALES) 분기는 TO_SITE_CODE 칸이 없고 edit_expect 규칙이 있는 화면에서 판정하지 않음.
+- 2026-11-18 08:22 SCP0111 --only D1(08:00~08:12) + 재판정 2회(08:13 · 08:17 --skip-e2e): 미검증 49 · FAIL 72 · 판정필요 12 · PASS 835. 원 행 24(Doc/verify/SCP0111/_unverified_v43.csv).
+  - 닫힘: K3 7(미포함 항목 eg 팝업·K1·동적 칸·붙여넣기 실측 연결) · A6 P_SCP0111_GET(API 별칭 상속) · D1 INCOTERMS 3(W4d SCP0007 분기 제외 + COLUMN ← TRACE D1 상속) · G03-WIRE FAIL(매핑 문서 이벤트 10개 누락 · FE 가이드 G4) · F7/F8 이력 2 NA(AS-IS 저장 SP 2개 쓰는 표 = SCP_ANL_PSI_INTEGRATION 뿐).
+  - 남음: 결정·계정 14(_decisions_20261118.md) · 저장 결함 연동 6(F1·F6 2·F7 2회 저장·F7/F8 save_audit 2 — FE G1 반영 뒤) · 검사기 확장 4(J2 authcrud editonly · E4 필수 메타 없음 · D3 MULTI_CHILD_ITEM 공통 코드 · E6 IME 해석).
+- 2026-11-18 09:06 SCP0111 검사기 확장 4건(사용자 지시 '검사기 확장 4건 이어서'):
+  - D3 V-a8b7a10e: facts_lockrules 공통 코드 존재 검사(Data.Common(LookupCommon,"TYPE") 반복 비교 cs:622~642) → INLOOKUP(COL(ITEM_ID),"MULTI_CHILD_ITEM","NAME") · lookups.json(TO-BE LookupCommon 조건 SEGMENT2 · 2건) · condeval INLOOKUP + useScreenLookups. 다른 화면 edit_expect 변화 0(SCP0104·SSP0020·DMF0042).
+  - E4 V-7039bfc6: 메타 필수 컬럼 없는 화면 = 기존 행 값을 신규 행 표시 칸에 그대로 입력(동적 기간 칸 제외) → Save(시험 route 가 서버 미전송) → judgeDup.
+  - E6 V-148a468d: IME 항목 NA(CDP 모사 한계 · 사용자 2026-10-28) · '미포함'(붙여넣기) = K3 와 같은 실측 연결.
+  - J2 V-7c5a2756: editonly 화면 — 권한 없는 계정 authcrud 실측(Save·Insert·Delete 비노출·편집기 안 열림) + 버튼 노출 기대 일치 + @verify 실저장 F2 PASS 결합. authcrud 허용 계정 수정 저장 강제(crud.ts)는 시험 계정이 달라 restore_touched 가 원복하지 못하고 ADMIN 저장 결함(G1)으로 원복 저장도 틀릴 수 있어 되돌림(백업 crud.ts.bak_20261118_editonly).
+  - --only D3,E4 실행 시작(시각은 scp0111_only13.log 첫 줄).
+- 2026-11-18 09:25 SCP0111 --only D3,E4(09:06~09:24 · restore 1행 · 09:25 조회 09:06 이후 수정 0 · 생성 0): 미검증 38 · FAIL 72 · 판정필요 14 · PASS 849. J2 PASS · D3 V-a8b7a10e PASS(INLOOKUP) · E6 PASS(IME NA + 붙여넣기 실측). E4 '[차단 사유 확인 필요] Model 값은 필수 입력 항목입니다.' — Model 은 팝업 전용 칸이라 값 복사에서 빠짐 → 필수 안내 칸 팝업·입력 후 재저장(최대 4회) 보완 · --only E4 재실행.
+- 2026-11-18 09:48 [공용 검사기 변경 정정] mapping_trace.py G03 '매핑표 §2 에 없음' WARN: 08:0x 에 FAIL 로 바꾼 것을 사용자 판정(11-18 SCP0111 CheckList 의견 'TO BE RULE 로 오류 아님')으로 NA 로 정정 — DMF0042 도 FAIL 아님(NA). FE 가이드 G4 삭제.
+- 2026-11-18 09:5x SCP0111 사용자의견 15건(CheckList v4x · _user_verdicts.csv 반입) 엔진 보완 — 사용자 지시 '오류아님 제외 · 판정 엔진 보완 · 중복 제거':
+  - D1 ITEM_ID·NICK_NAME 3 · H2 같은 칸 2(오류 아님): 편집기 안 열려도 더블클릭 입력 팝업이 열리면 편집 가능(CR-072) — probe.popupOnDblclick · _trace judgeD1·W5 H2 · _verify D1·H2.
+  - G9·G2 Cell Model 2('AS-IS 도 멀티선택 안됨'): judge — G9 FAIL 이라도 AS-IS 조회 SP 원문이 그 조건 파라미터를 나누지 않으면 PASS(AS-IS 동일) · 매칭 plan 칸 key ↔ @p_<이름> · SCP0111 @p_cellitem_id 단일 · @p_item_id·@p_nick_name split.
+  - G03-WIRE 1(TO-BE RULE): mapping_trace G03 '매핑표 §2 에 없음' WARN → NA(08:0x FAIL 변경 정정) · FE 가이드 G4 삭제.
+  - 스냅샷 4(Div 40·화면샷 2·팝업): snap.ts aria 그리드 데이터 행 접기(collapseGridRows) · '총 N건' 정규화 · _snap 화면샷 mask 에 .wj-colheaders(컬럼 폭 비율 제외) → 재촬영 뒤 골든 승인(사용자 의견).
+  - 중복 제거(T-40ab485f): judge — 같은 화면 Insert 위치 FAIL(D6 TRACE·D6 시나리오·EG126 D4)을 '같은 결함 <시나리오 행>' 으로 묶음.
+  - 확인 필요 2: V-daa3f0ba D6 = FAIL 유지(AS-IS SpreadInfo.Insert 활성 행 위치 · TO-BE 아래·끝 · CR-015) · V-2eed0400 E3 = FAIL 유지(AS-IS 빈 Operation 은 cs:1206 건너뛰고 cs:1237 MSG00001 · TO-BE Operation 무효 문구) → FE 가이드 G5.
+  - E4 정적 판정 근거에 AS-IS MSG00260 화면 차단(cs:1226~1230) 추가.
+- 2026-11-18 10:17 SCP0111 사용자 지시 '설명 형식'(저장 항목은 현재 유지): make_verify_docs _summary_text — 저장 외 행 = '[분류 / 유형 / 판정] 요약' + ' - AS-IS : ' · ' - TO-BE : ' · ' - GAP : '(위치·조치 줄 없음, 계정 차이는 GAP) · 저장 분류 행은 종전 형식. Doc/verify/SCP0111/action_summary.csv 신설(묶음 BOH_EDIT_PIADMIN 12행 · INSERT_POS 4행 · ESS_PACK_LINE · L2 재렌더 · E3 문구).
+  - 10:08 --only D1,H2,H4,H6,G4(09:52~10:08 · restore 1행 · 10:09 조회 09:52 이후 수정 0 · 생성 0): D1 ITEM_ID·NICK_NAME 3·H2 2 = 엔진 보완만으로 PASS(더블클릭 'Material by Division' 팝업 · CR-072) · Div 40 스냅샷 PASS. 팝업·화면샷 3 골든 승인(사용자 의견 · snap_approve --force). 재판정 10:15: 미검증 37 · FAIL 51 · 판정필요 13.
+  - BOH 편집 12행(SCM PI Admin · EG123/124/377/378 · Div 40·81): AS-IS cs:560~567·652 와 TO-BE integrationPsiEditLock.ts:24·140 모두 SCM PI Admin BOH 편집 허용인데 실측 편집 불가 — FAIL 유지(원인 미확인 · 계정 그룹 판정 경로 확인 필요).
+
+- 2026-11-18 10:48 SCP0111 v50(--only H10 10:31~10:41): V-0184021b H10 FAIL → 해당없음(_verify.spec.ts 확인창 경로 판정: ADMIN 가드 else·action I 전용 확인창 제외, 공용 동작 변경 · 다른 화면 H10 도 같은 기준). 봉투 FAIL 40 · 판정필요 16 · 미검증 38. 판정필요 증가 1 = EG-b8d1f0aa B7 DATE_WEEKLY1_SCP_ALL 응답 23 ↔ DB 24(20261116): SCM_MST_PLAN 981116·991116 CREATED_BY CLONE_PLAN_VER 11-18 10:42:03 생성(이 세션 아님, 실행 중 데이터 변경) · 결함 아님 판정 대기. SCP_ANL_PSI_INTEGRATION 10:30 이후 변경 0.
+- 2026-11-18 10:52 공용 변경(다른 세션 알림): 권한 검사 계정을 화면별로 지정하는 설정 추가. tools/E2E/users.json screens.<ID>.accounts {역할: 계정} 이 있으면 영역 명부 대신 그 계정만 씀(key SCR/<ID>/<역할>). 반영 파일 facts_auth.py(account_facts·btn_auth_div), facts_auth_combo.py(uid_of), lib/authprobe.ts(accountId). 설정 없는 화면은 기존과 같음. SCP0111 = SYSTEM ADMIN minyonglee1, SCM PI Admin dwhong1012, SCP Planner bottle(사용자 지정). 백업 *.bak_20261118_scracct.
+- 2026-11-18 11:09 정정: 11-18 10:17 기록 'TO-BE integrationPsiEditLock.ts 도 SCM PI Admin BOH 편집 허용 · 원인 미확인' 은 호출부를 안 본 판단. 원인 = IntegrationPsi.tsx:182~183 isPiAdmin·isPlanner false 고정. FE_GUIDE_20261118_0636.md G6 추가(FE 수정 안 함 · DB MODE). 11-17 FE_GUIDE_20261117_1759 G1(ADMIN 저장)도 FE 미반영(integrationPsiSave.ts 수정 시각 11-03 10:18 · unfoldAdminModifyCells 0건).
+- 2026-11-18 11:23 공용 변경(다른 세션 필독): CheckList 설명 칸 = SCP0104 틀 전 화면 적용(사용자 지시). ① 규칙 tools/VibeManager/rules/50_DOC_STYLE.md 'CheckList 설명 칸 틀' 신설(작성 절차 1~5: 조치 필요·판정 필요 행 전부 Doc/verify/<ID>/action_summary.csv 작성 → --resume-docs → '[설명 정리 필요] 0건' 확인). ② make_verify_docs.py 끝에 '[설명 정리 필요] N건 · 행 ID' 출력, 판정 필요 시트도 group 묶음. ③ plain_detail.build_gap: 정리 파일 없는 행도 ' - AS-IS / - TO-BE / - GAP' 틀로 채움(임시). 저장 분류 행은 종전 틀(위치·AS-IS·TO-BE·GAP·조치). 백업 *.bak_20261118_gapfmt, 50_DOC_STYLE.md.bak_20261118_cldesc. SCP0111 v56 설명 정리 필요 0건.

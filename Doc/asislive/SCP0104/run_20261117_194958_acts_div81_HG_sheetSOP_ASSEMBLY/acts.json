@@ -1,0 +1,224 @@
+{
+ "id": "SCP0104",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "81_HG",
+ "sheet": "SOP_ASSEMBLY",
+ "acts": [
+  {
+   "control": "(조회)",
+   "kind": "find",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE",
+    "SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY"
+   ],
+   "rows": [
+    [
+     "SCM_SYS_GET_SPREAD_TITLE",
+     20
+    ],
+    [
+     "SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY",
+     36
+    ]
+   ],
+   "asis_timeout": [],
+   "scenarios": []
+  },
+  {
+   "control": "OnClickInsertButton",
+   "ok": false,
+   "error": "InvalidOperationException: click:OnClickInsertButton failed: InvalidOperationException: control not found: OnClickInsertButton",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "OnClickSaveButton",
+   "ok": false,
+   "error": "InvalidOperationException: click:OnClickSaveButton failed: InvalidOperationException: control not found: OnClickSaveButton",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnColumn",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM002_CAPAColumnPopup",
+     "title": "User Column Setting",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_TITLESET_POPUP"
+   ],
+   "scenarios": [
+    "SCP0104-S228de0",
+    "SCP0104-S449fc9",
+    "SCP0104-Saa86fe",
+    "SCP0104-Sc5133f",
+    "SCP0104-S5dd269",
+    "SCP0104-Sac510b"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItem",
+   "ok": false,
+   "error": "InvalidOperationException: click:btnItem failed: InvalidOperationException: control not found: btnItem",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "scenarios": [
+    "SCP0104-Sf9ae0a",
+    "SCP0104-S6dd7e2"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnItemId",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "SCM0002_CAPAItemPopup",
+     "title": "Item by DivisionPopup",
+     "modal": true,
+     "grid_rows": 11,
+     "closed": true
+    }
+   ],
+   "dialogs": [],
+   "calls": [
+    "SCM0002_GET_CAPA_ITEM_POPUP"
+   ],
+   "scenarios": [
+    "SCP0104-Sf9ae0a",
+    "SCP0104-S6dd7e2"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [
+  {
+   "control": "btnAddVersion",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  },
+  {
+   "control": "btnSopNew",
+   "why": "상태 변경·실행 가능성(이름 규칙) — 확인 후 실행",
+   "scenarios": 2
+  }
+ ],
+ "at": "2026-11-17 19:48:17.029",
+ "division_control": {
+  "kind": "combo",
+  "name": "cboDivision",
+  "items": [
+   "81",
+   "40",
+   "82",
+   "81_UC",
+   "81_HM",
+   "81_ST",
+   "81_HD",
+   "81_HG"
+  ]
+ },
+ "division_set": {
+  "ok": true,
+  "applied": "combo:7:81_HG Automotive Battery(HG)",
+  "error": null
+ },
+ "fills": 0,
+ "fill_left": [],
+ "sheet_target": {
+  "sheet": "SOP_ASSEMBLY",
+  "grid": "spdSOP",
+  "sheet_index": 0,
+  "tabs": [
+   {
+    "control": "tbcAll",
+    "index": 1,
+    "page": "tabSOP",
+    "pages": [
+     "tabAssign",
+     "tabSOP"
+    ],
+    "src": "SCP0104_CAPA_Line_Assign.Designer.cs:76",
+    "live": "Doc\\asislive\\SCP0104\\run_20261117_161814\\controls.json"
+   }
+  ],
+  "note": "",
+  "done": [
+   {
+    "set": {
+     "act": {
+      "tab": "tbcAll",
+      "index": 1,
+      "wait": 3
+     }
+    },
+    "ok": true,
+    "applied": "tab:tbcAll:1",
+    "error": null,
+    "why": "sheet SOP_ASSEMBLY 탭 tabSOP(SCP0104_CAPA_Line_Assign.Designer.cs:76)"
+   },
+   {
+    "set": {
+     "name": "rgrpDivisionType",
+     "prop": "SelectedIndex",
+     "value": "1"
+    },
+    "ok": true,
+    "applied": "prop:SelectedIndex",
+    "error": null,
+    "why": "sheet SOP_ASSEMBLY 조건(SCP0104_CAPA_Line_Assign.cs:2044~2056(_sheet_idx: Cell·Module/Pack=0, 그 밖=1) · :271(rgrpDivisionType.SelectedIndex) · Designer.cs:637~640(Electrode=0, Cell=1, Module/Pack=2))"
+   }
+  ]
+ },
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

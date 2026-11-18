@@ -271,9 +271,11 @@ function checkStatic(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k:
   put('NO_WIDTH', ['EG342'], noCols === 0 ? 'NA' : g.rows <= 0 ? 'NA' : noW >= need ? 'PASS' : 'FAIL', `No. 폭 ≥ 행수 자릿수 표시 폭(${need}px, ${g.rows}행)`, `행머리 폭 ${g.rowHeaderW}px · No 컬럼 폭 ${noColW}px`, '문서 DM-179');
   put('COUNT', ['EG342', 'EG384'], m.countText ? 'PASS' : g.rows <= 0 ? '판정필요' : 'FAIL', '조회 건수 표시', m.countText ? `'${m.countText}'` : `건수 문구 없음 · 팝업 글자 '${m.rawText.slice(0, 120).replace(/\s+/g, ' ')}'`, '문서 DM-C8');
   // 병합 — AS-IS 병합 사실
-  const merged = g.allowMerging !== 0 || g.cols.some(x => x.allowMerging);
+  // 2026-11-18 SCP0111 EG-0a9a69b8: Wijmo AllowMerging 은 비트값(Cells=1 · ColumnHeaders=2 · RowHeaders=4) — 머리글만 병합(2)을 셀 병합으로 보아 'AS-IS 병합 없음 ↔ TO-BE 병합' 판정필요로 남겼다 → 셀 병합 비트만 본다
+  //   셀 병합은 그리드 allowMerging 에 Cells 비트가 있고 컬럼 allowMerging 이 켜진 칸에서만 일어난다(컬럼 표시만으로는 병합 안 됨)
+  const merged = (Number(g.allowMerging) & 1) !== 0 && (g.cols.some(x => x.allowMerging) || !g.cols.length);
   if ((k.merge || []).length) put('MERGE', ['EG316'], merged ? 'PASS' : 'FAIL', 'AS-IS 병합 있음 → 팝업 그리드 병합', `allowMerging=${g.allowMerging} · 컬럼 병합 ${g.cols.filter(x => x.allowMerging).map(x => x.binding).join(',') || '없음'}`, (k.merge || [])[0].ref);
-  else put('MERGE', ['EG316'], merged ? '판정필요' : 'NA', 'AS-IS 병합 호출 facts', `AS-IS 병합 호출 없음(${k.in_pack ? '원문 확인' : '원문 없음'}) · TO-BE allowMerging=${g.allowMerging}`, '');
+  else put('MERGE', ['EG316'], merged ? '판정필요' : k.in_pack ? 'PASS' : 'NA', 'AS-IS 병합 호출 facts', `AS-IS 병합 호출 없음(${k.in_pack ? '원문 확인' : '원문 없음'}) · TO-BE allowMerging=${g.allowMerging}(셀 병합 ${merged ? '있음' : '없음'})${!merged && k.in_pack ? ' — 양쪽 셀 병합 없음(같음)' : ''}`, '');
 }
 
 const condMultiWant = new Map<string, { want: boolean; type: string; ref: string }>();
@@ -634,7 +636,23 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
     // 2026-11-06(SCP0016 EG-1b7c9ab9 허위 FAIL): 조회 1회에 call-proc 가 여러 개(spreadTitle 캘린더 + main) — 첫 호출만 보면 선택값이 안 실린 것으로 오판 → 이번 조회의 모든 SEARCH 호출 중 값이 실린 것을 본다
     const calls = nscm.calls.slice(b0).filter(x => /SEARCH/i.test(x.btn)); const n2 = await probe.rowCount(p); const key0 = afterOk.split(',')[0]; const call = calls.find(x => (x.body || '').includes(key0)) || calls[0]; const body = call?.body || '';
     const carried = calls.some(x => (x.body || '').includes(key0)); const paren = /"[^"]*\([^"]*\)[^"]*"/.test(body.replace(/"[^"]*(date|name)[^"]*"\s*:\s*"[^"]*"/ig, ''));
-    put('PICK_SEARCH', ['EG251', 'EG004'], !call ? 'ERROR' : carried && !paren ? (n2 > 0 ? 'PASS' : '판정필요') : 'FAIL', '선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0', `요청 값 포함 ${carried} · 괄호 ${paren} · 행 ${n2} · 본문 ${body.slice(0, 240)}`, '문서 GAP-439');
+    // 2026-11-18 SCP0111 EG-b4bcb088·7eb717ef: 팝업 첫 행 품목은 메인 데이터에 없을 수 있다(행 0 = 판정필요로 남음) → 대조군: 기본 조회 결과에 있는 같은 칸 값으로 다시 조회
+    //   대조군이 행 > 0 이면 칸 연동·조회 정상(선택 품목 데이터 없음) = PASS · 대조군도 0행이면 이 칸 조건이 조회를 깨뜨림 = FAIL · 대조군 값을 못 구하면 판정필요 유지
+    let ctl = ''; let ctlRes: '' | 'PASS' | 'FAIL' = '';
+    if (call && carried && !paren && n2 <= 0 && o1.condIdx != null) {
+      const root = mainPopRoot(p, o1.condIdx); const inp = root.locator('input:not([type="hidden"]), textarea').first();
+      const lab = ((await root.locator(':scope > *').first().innerText().catch(() => '')) || '').replace(/[*\r\n]/g, ' ').trim();
+      await inp.fill('').catch(() => undefined); await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+      let b = ''; for (const h of [lab, ...lab.split(/\s*\/\s*/)].filter(Boolean)) { b = (await probe.bindingByHeader(p, h)) || ''; if (b) break; }
+      const v = b ? (((await probe.columnValues(p, b)) || []).map(x => String(x).trim()).find(x => x && !/^[-\/]+$/.test(x) && !x.includes(',')) || '') : '';
+      if (v) {
+        await inp.fill(v).catch(() => undefined); const b1 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+        const nC = await probe.rowCount(p); const sentC = nscm.calls.slice(b1).some(x => /SEARCH/i.test(x.btn) && (x.body || '').includes(v));
+        ctlRes = sentC ? (nC > 0 ? 'PASS' : 'FAIL') : ''; ctl = ` · 대조군 '${lab}'='${v}'(기본 조회 ${b} 값) 조회 → 요청 값 포함 ${sentC} · ${nC}행${ctlRes === 'PASS' ? ' — 칸 연동·조회 정상(선택 품목은 이 조건 데이터 없음)' : ctlRes === 'FAIL' ? ' — 결과에 있던 값으로도 0행(조건 처리 오류)' : ''}`;
+        await inp.fill('').catch(() => undefined);
+      } else ctl = ` · 대조군 값 없음(칸 '${lab}' 결과 컬럼 ${b || '못 찾음'})`;
+    }
+    put('PICK_SEARCH', ['EG251', 'EG004'], !call ? 'ERROR' : carried && !paren ? (n2 > 0 ? 'PASS' : ctlRes || '판정필요') : 'FAIL', '선택값으로 메인 조회 — 본문 키에 표시용 괄호 없음 · 행 > 0', `요청 값 포함 ${carried} · 괄호 ${paren} · 행 ${n2}${ctl} · 본문 ${body.slice(0, 240)}`, '문서 GAP-439');
     // AS-IS 재조회·정렬 후처리
     if (c.after.length) put('AFTER_SORT', ['EG033'], '판정필요', `AS-IS 팝업 후 ${c.after[0].raw.slice(0, 80)}(${c.after[0].ref})`, `조회 ${n2}행 — 후처리 재현 대조 미구현`, c.after[0].ref);
     else put('AFTER_SORT', ['EG033'], 'NA', 'AS-IS 팝업 후 재조회·재정렬', 'AS-IS 후처리 facts 없음', '');

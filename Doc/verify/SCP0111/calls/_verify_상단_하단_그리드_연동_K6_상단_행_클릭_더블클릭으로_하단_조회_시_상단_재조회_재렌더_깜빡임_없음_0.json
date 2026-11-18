@@ -4,11 +4,11 @@
   "sheet": "main",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
-  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20260907\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202609\",\"toYyyymm\":\"202702\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20261026\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202610\",\"toYyyymm\":\"202703\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
   "status": 200,
-  "rows": 1715,
-  "dur": 930,
-  "at": "2026-11-14T07:30:57.385Z",
+  "rows": 1262,
+  "dur": 827,
+  "at": "2026-11-17T21:17:17.335Z",
   "user": "minyonglee1",
   "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
  }

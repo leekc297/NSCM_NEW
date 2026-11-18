@@ -1,9 +1,9 @@
 ﻿key,kind,scope,status,missing,order,type_warn,extra,basis
 조회조건_Div_40,조회조건,Div 40,MISMATCH,,시각 순서 operationgroup > division > site > plant > building > line ≠ 기준표 division > operationgroup > site > plant > building > line,DOM 순서≠기준표(경고): Ver.→Operation group;Line→Material,,
-버튼_Div_40,버튼,Div 40,MISMATCH,CHECK_NAME_ON_DUMMY_CODE;EXCEL;EDIT,,SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
+버튼_Div_40,버튼,Div 40,MISMATCH,CHECK_NAME_ON_DUMMY_CODE,,EXCEL: 공용 SubTitle Excel 은 툴팁만 있는 아이콘 버튼(접근성 이름 없음 · SubTitle.tsx Tooltip title=Excel) — 이름 없는 버튼 1개로 확인;EDIT: TO-BE 룰 CR-084·CR-093(편집 버튼 없음 · 조회 즉시 상시 편집) — 누락 아님;SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
 헤더_ASSEMBLY,헤더,ASSEMBLY,OK,,,,01;02;03;04;05;06;07;08;09;10;11;12;2026;2027;2028;2029;2030;2031,PR_GET_SHEET_COLUMN_LIST(user=minyonglee1 · div=40 · 개인화 16행 · SHEET_PRSL_YN=Y) — TO-BE BE 와 같은 SP 출력(DISPLAY_FLAG=Y 순)
-화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(NEW)
-화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(NEW)
+화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(MATCH)
+화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(MATCH)
 헤더_ELTR,헤더,ELTR,OK,,,,01;02;03;04;05;06;07;08;09;10;11;12;2026;2027;2028;2029;2030;2031,PR_GET_SHEET_COLUMN_LIST(user=minyonglee1 · div=40 · 개인화 17행 · SHEET_PRSL_YN=Y) — TO-BE BE 와 같은 SP 출력(DISPLAY_FLAG=Y 순)
 헤더_LINE,헤더,LINE,OK,,,,,plan.json expectedCols[LINE][40](SHEET_COLUMNS)
 헤더_SOP_ASSEMBLY,헤더,SOP_ASSEMBLY,MISMATCH,Site Name;Company Name;Operation,,META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): Site;META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): Company;META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): Plant;META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): Building;META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): Line,,PR_GET_SHEET_COLUMN_LIST(user=minyonglee1 · div=40 · 개인화 22행 · SHEET_PRSL_YN=Y) — TO-BE BE 와 같은 SP 출력(DISPLAY_FLAG=Y 순)

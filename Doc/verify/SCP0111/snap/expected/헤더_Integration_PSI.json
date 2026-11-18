@@ -1,0 +1,37 @@
+{
+ "kind": "헤더",
+ "scope": "Integration PSI",
+ "columns": [
+  "Plan Type",
+  "Div",
+  "Operation",
+  "Cell Model Nick Name",
+  "Cell Model",
+  "Nick Name",
+  "Model",
+  "Cell Coversion Factor",
+  "Company",
+  "Plant",
+  "Measure",
+  "To Product",
+  "Valuation Type",
+  "Line",
+  "To Site",
+  "Incoterms",
+  "BOH",
+  "UOM",
+  "SEQ_FLAG",
+  "MEASURE",
+  "Plant",
+  "To Site"
+ ],
+ "meta_hidden": [
+  "MEASURE_COLOR",
+  "MEASURE_ORDER_NO"
+ ],
+ "headerSpec": null,
+ "dynamicHeader": true,
+ "src": "plan.json expectedCols[Integration PSI][40](SHEET_COLUMNS)",
+ "personalized": null,
+ "note": "동적 기간 컬럼은 {YM}/{YMD}/{W} 토큰 · TO-BE 추가 컬럼(이름 컬럼 등)은 extra 로 보고(결함 아님 · 사람 확인)"
+}

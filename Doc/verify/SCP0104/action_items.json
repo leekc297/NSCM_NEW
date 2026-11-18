@@ -1,9 +1,11 @@
 [
  {
-  "row_id": "T-96d7cbbb",
-  "rule_id": "X-ROW",
-  "target": "SCP0104_CAPA_Line_Assign.RefreshPlantSpread",
-  "same": []
+  "row_id": "V-f5a0b46a",
+  "rule_id": "B4",
+  "target": "조회조건 Plant",
+  "same": [
+   "T-96d7cbbb"
+  ]
  },
  {
   "row_id": "T-bc2f6848",
@@ -82,22 +84,24 @@
   ]
  },
  {
-  "row_id": "T-79cc3699",
+  "row_id": "V-73037cda",
   "rule_id": "G5",
-  "target": "SCP0104_CAPA_Line_Assign_Model",
+  "target": "pop.ShowDialog()",
   "same": []
  },
  {
-  "row_id": "V-912ca6bd",
-  "rule_id": "E2",
-  "target": "SCP0104 시나리오 [자동] SOP_DT 없는 날짜 저장 차단",
-  "same": []
+  "row_id": "V-e38e474a",
+  "rule_id": "G5",
+  "target": "pop.ShowDialog()",
+  "same": [
+   "T-79cc3699"
+  ]
  },
  {
-  "row_id": "V-33c71af8",
-  "rule_id": "E2",
-  "target": "SCP0104 시나리오 [자동] LAST_UPDATE_DATE 없는 날짜 저장 차단",
-  "same": []
+  "row_id": "T-96d7cbbb",
+  "rule_id": "B4",
+  "target": "",
+  "folded_into": "V-f5a0b46a"
  },
  {
   "row_id": "T-4ae38c68",
@@ -224,5 +228,11 @@
   "rule_id": "M4",
   "target": "",
   "folded_into": "T-f3de1469"
+ },
+ {
+  "row_id": "T-79cc3699",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-e38e474a"
  }
 ]

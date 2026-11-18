@@ -15,7 +15,7 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 COLS = ['method', 'api', 'color', 'guard', 'tobe_hits', 'result', 'why']
-API_RE = re.compile(r'\.(SetBGColor|SetFontColor|SetForeColor|SetCellColor|SetBackColor)$')
+API_RE = re.compile(r'\.(SetBGColor2?|SetFontColor|SetForeColor|SetCellColor|SetBackColor)$')  # 2026-11-18 SCP0111 SetBGColor2(cs:757·782) 누락 → '색 규칙 없음' NA 오판
 TOBE_RE = re.compile(r"formatItem|backgroundColor|setProperty\('background|setProperty\('color|paintNegativeText|cell\.style\.(background|color)|classList\.(add|toggle)\([^)]*(color|bg|invalid|valid|lock|current)", re.I)
 
 

@@ -1,0 +1,12 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+,L2,기호,Sheet — Check,줄표 삭제 — 문장을 나누거나 쉼표로,"UI 테스트 Sheet — CheckList '조치 필요' 시트를 Doc/UI_TEST(SCP&SSP) 의 화면별 테스트 Excel 로 옮긴다 (2026-11-16 사용자 요청: ""Checklist 생성 후 Doc/UI_TEST(SCP&SSP) 폴더 내에 Test Excel 문서도 같이 생성"")    python tools/Harness/verify/make_ui_test_sheet.py <MENU_ID> [--checklist <CheckList xlsx>]   make_verify_docs.py 가 CheckList 저장 직후 "
+,L2,기호,ID…]} — 사람이 행,줄표 삭제 — 문장을 나누거나 쉼표로,"UI 테스트 Sheet — CheckList '조치 필요' 시트를 Doc/UI_TEST(SCP&SSP) 의 화면별 테스트 Excel 로 옮긴다 (2026-11-16 사용자 요청: ""Checklist 생성 후 Doc/UI_TEST(SCP&SSP) 폴더 내에 Test Excel 문서도 같이 생성"")    python tools/Harness/verify/make_ui_test_sheet.py <MENU_ID> [--checklist <CheckList xlsx>]   make_verify_docs.py 가 CheckList 저장 직후 "
+,L2,기호,&SSP)/☆NSCME_,이모지·장식 기호 삭제,"UI 테스트 Sheet — CheckList '조치 필요' 시트를 Doc/UI_TEST(SCP&SSP) 의 화면별 테스트 Excel 로 옮긴다 (2026-11-16 사용자 요청: ""Checklist 생성 후 Doc/UI_TEST(SCP&SSP) 폴더 내에 Test Excel 문서도 같이 생성"")    python tools/Harness/verify/make_ui_test_sheet.py <MENU_ID> [--checklist <CheckList xlsx>]   make_verify_docs.py 가 CheckList 저장 직후 "
+,L87,기호,시트 없음 — {os.p,줄표 삭제 — 문장을 나누거나 쉼표로,'조치 필요' 시트 없음 — {os.path.basename(path)}
+,L163,기호,내용' 칸 — [영역],줄표 삭제 — 문장을 나누거나 쉼표로,'테스트 내용' 칸 — [영역] 대상 / CheckList 설명 / AS-IS 근거
+,L224,기호,시트 없음 — {os.p,줄표 삭제 — 문장을 나누거나 쉼표로,'{SHEET}' 시트 없음 — {os.path.basename(path)}
+,L255,기호,양식 없음 — {os.p,줄표 삭제 — 문장을 나누거나 쉼표로,"UI 테스트 Sheet: ERROR 양식 없음 — {os.path.relpath(TEMPLATE, ROOT)}"
+,L268,기호,필요 0행 — 기록할 행,줄표 삭제 — 문장을 나누거나 쉼표로,UI 테스트 Sheet: 조치 필요 0행 — 기록할 행 없음({src})
+,L271,기호,미 기록) — {os.p,줄표 삭제 — 문장을 나누거나 쉼표로,"UI 테스트 Sheet: 추가 0행(조치 필요 {len(rows)}행 이미 기록) — {os.path.relpath(tgt, ROOT)}{note}"
+,L287,기호,미지 포함 — 덧붙이면,줄표 삭제 — 문장을 나누거나 쉼표로,"UI 테스트 Sheet: ERROR 원본·추가항목 파일 둘 다 이미지 포함 — 덧붙이면 이미지가 지워짐, 기록 안 함({os.path.basename(target)})"
+,L297,기호,려 있음) — {os.p,줄표 삭제 — 문장을 나누거나 쉼표로,UI 테스트 Sheet: ERROR 저장 불가(Excel 로 열려 있음) — {os.path.basename(target)} 닫은 뒤 python tools/Harness/verify/make_ui_test_sheet.py {mid}

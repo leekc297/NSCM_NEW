@@ -32,6 +32,55 @@ def ts(t):
     return datetime.datetime.fromtimestamp(t).strftime('%m-%d %H:%M:%S') if t else '-'
 
 
+def asis_of(mid):
+    """AS-IS 화면 ID(run_verify.asis_of 와 같은 map_screen.csv) · 없으면 같은 ID"""
+    import csv
+    try:
+        with open(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv'), encoding='utf-8-sig', newline='') as f:
+            for r in csv.DictReader(f):
+                if (r.get('tobe_id') or '').upper() == mid and r.get('asis_id'):
+                    return r['asis_id'].upper()
+    except OSError:
+        pass
+    return mid
+
+
+def file_changes(mid, done_at):
+    """2026-11-18 사용자 지시: DB·FE 밖의 판정 입력이 직전 CheckList 뒤에 바뀌었는지.
+    기준 시각 done_at = fixlist.csv 시각(문서 단계 끝). 체인 안에서 쓰는 사실 파일은 그보다 앞서 쓰여 걸리지 않는다.
+      ① 사용자 판정(_user_verdicts_direct.csv) 이 화면 행 = 원장 결과와 다르면 반영 전(날짜만 있는 파일이라 시각 대신 내용 대조)
+      ② 정적 판정(static_verdicts.csv) 수정 시각
+      ③ CheckList Excel 을 문서 생성 뒤 저장(사용자의견 열 입력)
+      ④ AS-IS 파싱 결과(Doc/asisfacts/screens/<AS-IS ID>) 수정 시각"""
+    import csv, glob
+    vd = os.path.join(ROOT, 'Doc', 'verify', mid)
+    why = []
+    try:
+        with open(os.path.join(vd, 'verify_ledger.csv'), encoding='utf-8-sig', newline='') as f:
+            led = {r['row_id']: (r.get('result') or '').strip() for r in csv.DictReader(f)}
+        with open(os.path.join(ROOT, 'Doc', 'verify', '_user_verdicts_direct.csv'), encoding='utf-8-sig', newline='') as f:
+            diff = [r['row_id'] for r in csv.DictReader(f)
+                    if (r.get('menu_id') or '').strip().upper() == mid and r.get('row_id') in led
+                    and led[r['row_id']] != (r.get('verdict') or '').strip()]
+        if diff:
+            why.append(f"사용자 판정 {len(diff)}건 원장 미반영({', '.join(diff[:5])}{' 외' if len(diff) > 5 else ''})")
+    except OSError:
+        pass
+    sv = os.path.join(vd, 'static_verdicts.csv')
+    if os.path.exists(sv) and os.path.getmtime(sv) > done_at:
+        why.append(f'정적 판정 변경 {ts(os.path.getmtime(sv))} > CheckList {ts(done_at)}')
+    xs = glob.glob(os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', f'{mid}_*_CheckList_v*.xlsx'))
+    if xs:
+        xm = max(os.path.getmtime(x) for x in xs)
+        if xm > done_at + 120:  # 문서 생성 직후 저장 여유 2분
+            why.append(f'CheckList Excel 저장 {ts(xm)} > CheckList {ts(done_at)} (사용자의견 입력 반영 필요)')
+    fd = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', asis_of(mid))
+    fm = max((os.path.getmtime(x) for x in glob.glob(os.path.join(fd, '**', '*'), recursive=True) if os.path.isfile(x)), default=0)
+    if fm > done_at:
+        why.append(f'AS-IS 파싱 결과 변경 {ts(fm)} > CheckList {ts(done_at)} ({os.path.relpath(fd, ROOT)})')
+    return why
+
+
 def staleness(mid):
     """(최신 여부, 사유 목록)"""
     vd = os.path.join(ROOT, 'Doc', 'verify', mid)
@@ -55,6 +104,7 @@ def staleness(mid):
     pdir = page_dir(mid)
     if pdir and newest(pdir) > at:
         why.append(f'FE 소스 변경 {ts(newest(pdir))} > CheckList {ts(at)} ({os.path.relpath(pdir, ROOT)})')
+    why += file_changes(mid, os.path.getmtime(fl))
     try:
         from dbconn import connect
         with connect('tobe') as cx:

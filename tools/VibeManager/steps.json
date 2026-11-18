@@ -1989,7 +1989,7 @@
         },
         {
           "id": "S8.report",
-          "title": "테스트결과서 — 직전 UI CheckList 결과를 그룹(영역 → 검사 규칙 → 항목)별 테스트 내역·결과 Excel 로(실패 상세·캡처·실행 테스트 포함 · 새로 측정하지 않음)",
+          "title": "TestResultList — 직전 UI CheckList 결과를 그룹(영역 → 검사 규칙 → 항목)별 테스트 내역·결과 Excel 로(실패 상세·캡처·실행 테스트 포함 · 새로 측정하지 않음)",
           "kind": "python",
           "script": "${harnessDir}/verify/make_test_report.py",
           "splitArgs": true,

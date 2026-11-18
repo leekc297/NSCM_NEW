@@ -12144,10 +12144,10 @@ SCP0104,SOP_ASSEMBLY,FACTORY_NAME,Building Name,110,Y,Y,Y,Y,,IO,FPTextBox,120,-
 SCP0104,SOP_ASSEMBLY,LINE_ID,Line*,120,Y,Y,Y,Y,,S,FPTextBox,120,-
 SCP0104,SOP_ASSEMBLY,LINE_NAME,Line Name,130,Y,Y,Y,Y,,IO,FPTextBox,120,-
 SCP0104,SOP_ASSEMBLY,OPERATION_ID,Operation*,140,Y,Y,Y,Y,,S,FPTextBox,120,-
+SCP0104,SOP_ASSEMBLY,ELTR_LN_TP_CD,Line Type*,150,Y,Y,Y,Y,,IO,FPTextBox,100,Y
 SCP0104,SOP_ASSEMBLY,OPERATION_NAME,Operation Name,150,Y,Y,Y,Y,,IO,FPTextBox,120,-
-SCP0104,SOP_ASSEMBLY,SOP_DT,SOP,200,Y,Y,Y,Y,,O,FPDateText,100,-
+SCP0104,SOP_ASSEMBLY,SOP_DT,SOP,190,Y,Y,Y,Y,,O,FPDateText,100,-
 SCP0104,SOP_ASSEMBLY,SOP_YM,SOP_YM,200,N,Y,Y,Y,,S,FPTextBox,80,-
-SCP0104,SOP_ASSEMBLY,ELTR_LN_TP_CD,Line Type*,200,Y,Y,Y,Y,,IO,FPTextBox,100,Y
 SCP0104,SOP_ASSEMBLY,SOP_DDN,SOP_DDN,210,N,Y,Y,Y,,S,FPTextBox,80,-
 SCP0104,SOP_ASSEMBLY,LAST_UPDATED_BY,Last Updated By,220,Y,Y,Y,Y,,IO,FPTextBox,100,-
 SCP0104,SOP_ASSEMBLY,LAST_UPDATE_DATE,Last Update Date,230,Y,Y,Y,Y,,IO,FPTextBox,180,-
@@ -12168,10 +12168,10 @@ SCP0104,SOP_ELTR,LINE_NAME,Line Name,130,Y,Y,Y,Y,,IO,FPTextBox,120,-
 SCP0104,SOP_ELTR,OPERATION_ID,Operation*,140,Y,Y,Y,Y,,S,FPTextBox,120,-
 SCP0104,SOP_ELTR,OPERATION_NAME,Operation Name,150,Y,Y,Y,Y,,IO,FPTextBox,120,-
 SCP0104,SOP_ELTR,ELTR_LN_TP_CD,Equipment Type,160,Y,Y,Y,Y,,IO,FPTextBox,100,Y
+SCP0104,SOP_ELTR,SOP_DT,SOP,170,Y,Y,Y,Y,,O,FPDate,100,-
 SCP0104,SOP_ELTR,SOP_YM,SOP_YM,180,N,Y,Y,Y,,S,FPTextBox,100,-
 SCP0104,SOP_ELTR,SOP_DDN,SOP_DDN,190,N,Y,Y,Y,,S,FPTextBox,80,-
 SCP0104,SOP_ELTR,LAST_UPDATED_BY,Last Updated By,200,Y,Y,Y,Y,,IO,FPTextBox,100,-
-SCP0104,SOP_ELTR,SOP_DT,SOP,200,Y,Y,Y,Y,,O,FPDate,100,-
 SCP0104,SOP_ELTR,LAST_UPDATE_DATE,Last Update Date,210,Y,Y,Y,Y,,IO,FPTextBox,180,-
 SCP0104,SOP_ELTR,VALID_YN,Active,1000,Y,Y,Y,Y,,O,FPComboBox,50,-
 SCP0104,SOP_MODEL_ASSEMBLY,CHK,V,1,Y,Y,-,Y,,O,FPCheckBox,40,-
@@ -12626,7 +12626,7 @@ SCP0111,Integration PSI,BOH_QTY,BOH,160,Y,Y,-,Y,,O,FPNumber,70,-
 SCP0111,Integration PSI,UOM,UOM,170,Y,Y,-,Y,,S,,40,Y
 SCP0111,Integration PSI,SEQ_FLAG,SEQ_FLAG,180,Y,Y,-,Y,,S,,60,-
 SCP0111,Integration PSI,MEASURE_COLOR,MEASURE_COLOR,190,N,Y,-,Y,,S,,80,-
-SCP0111,Integration PSI,MEASURE,MEASURE,200,Y,Y,-,Y,,S,,80,Y
+SCP0111,Integration PSI,MEASURE,MEASURE,200,Y,Y,-,Y,,S,,80,-
 SCP0111,Integration PSI,MEASURE_ORDER_NO,MEASURE_ORDER_NO,210,N,Y,-,Y,,S,,80,-
 SCP0111,Integration PSI,PLANT_ID,Plant,220,Y,Y,-,Y,,S,,65,-
 SCP0111,Integration PSI,TO_SITE,To Site,230,Y,Y,-,Y,,S,,75,-
@@ -13375,7 +13375,7 @@ SCP0130,Scheduled Reciept Information,ITEM_ID_CHILD,Item*,40,Y,Y,N,Y,,M,FPComboB
 SCP0130,Scheduled Reciept Information,TO_YYYYMMDD,Arrival Date*,50,Y,Y,N,Y,,M,FPDateText,80,-
 SCP0130,Scheduled Reciept Information,TO_EXPC_QTY,Qty*,60,Y,Y,N,Y,,O,,100,-
 SCP0130,Scheduled Reciept Information,VALUE_DESCRIPTION,Description,70,Y,Y,-,Y,,O,,300,-
-SCP0130,Scheduled Reciept Information,VALID_YN,Active,80,Y,Y,-,Y,,O,FPComboBox,50,-
+SCP0130,Scheduled Reciept Information,VALID_YN,Active,80,Y,Y,-,Y,,M,FPComboBox,50,-
 SCP0130,Scheduled Reciept Information,CREATED_BY,Create By,100,Y,Y,-,Y,,S,,100,-
 SCP0130,Scheduled Reciept Information,CREATION_DATE,Creation Date,110,Y,Y,-,Y,,S,,180,-
 SCP0130,Scheduled Reciept Information,LAST_UPDATED_BY,Last Update By,120,Y,Y,-,Y,,S,,120,-
@@ -13385,11 +13385,11 @@ SCP0130,Virtual Bom,DIVISION_ID,Div*,10,Y,Y,N,Y,,M,,60,-
 SCP0130,Virtual Bom,OPMZ_PLAN_GR_ID,Plan Group*,20,Y,Y,N,Y,,M,FPComboBox,120,-
 SCP0130,Virtual Bom,PLANT_SITE_ID,Plant Site*,30,Y,Y,N,Y,,M,FPComboBox,120,-
 SCP0130,Virtual Bom,ITEM_ID,Parent Item*,40,Y,Y,N,Y,,M,FPTextModal,170,-
-SCP0130,Virtual Bom,ITEM_ID_CHILD,Child Item*,50,Y,Y,N,Y,,M,,120,-
+SCP0130,Virtual Bom,ITEM_ID_CHILD,Material*,50,Y,Y,N,Y,,M,,120,-
 SCP0130,Virtual Bom,TO_EXPC_QTY,Consume Qty*,60,Y,Y,N,Y,,M,,100,-
-SCP0130,Virtual Bom,TO_YYYYMMDD,Valid To,70,Y,Y,N,Y,,O,FPDateText,100,-
+SCP0130,Virtual Bom,TO_YYYYMMDD,Valid To,70,Y,Y,N,Y,,M,FPDateText,100,-
 SCP0130,Virtual Bom,VALUE_DESCRIPTION,Description,80,Y,Y,-,Y,,O,,300,-
-SCP0130,Virtual Bom,VALID_YN,Active,90,Y,Y,-,Y,,O,FPComboBox,50,-
+SCP0130,Virtual Bom,VALID_YN,Active,90,Y,Y,-,Y,,M,FPComboBox,50,-
 SCP0130,Virtual Bom,CREATED_BY,Create By,100,Y,Y,-,Y,,S,,120,-
 SCP0130,Virtual Bom,CREATION_DATE,Creation Date,110,Y,Y,-,Y,,S,,180,-
 SCP0130,Virtual Bom,LAST_UPDATED_BY,Last Update By,120,Y,Y,-,Y,,S,,120,-
@@ -14994,7 +14994,7 @@ SSP0020,Delegate,DIVISION_ID,Div,2,Y,Y,-,Y,,S,,50,-
 SSP0020,Delegate,FROM_DATE,From,3,Y,Y,-,Y,,S,FPDate,100,-
 SSP0020,Delegate,TO_DATE,To,4,Y,Y,-,Y,,S,FPDate,100,-
 SSP0020,Delegate,DELEGATEE,Delegatee,5,Y,Y,-,Y,,S,,150,-
-SSP0020,Delegate,VALID,Valid,6,Y,Y,-,Y,,S,,60,-
+SSP0020,Delegate,VALID,Active,6,Y,Y,-,Y,,S,,60,-
 SSP0020,Delegate,LAST_UPDATED_BY,Last Updated By,7,Y,Y,-,Y,,S,,150,-
 SSP0020,Delegate,LAST_UPDATE_DATE,Last Update Date,8,Y,Y,-,Y,,S,FPDateTime,150,-
 SSP0020,Delegated List,CHK,ALL,1,N,N,-,Y,,S,FPCheckBox,25,-
@@ -15002,7 +15002,7 @@ SSP0020,Delegated List,DIVISION_ID,Div,2,Y,Y,-,Y,,S,,50,-
 SSP0020,Delegated List,FROM_DATE,From,3,Y,Y,-,Y,,S,FPDate,100,-
 SSP0020,Delegated List,TO_DATE,To,4,Y,Y,-,Y,,S,FPDate,100,-
 SSP0020,Delegated List,DELEGATOR,Delegator,5,Y,Y,-,Y,,S,,100,-
-SSP0020,Delegated List,VALID,Valid,6,Y,Y,-,Y,,S,,60,-
+SSP0020,Delegated List,VALID,Active,6,Y,Y,-,Y,,S,,60,-
 SSP0020,Delegated List,LAST_UPDATED_BY,Last Updated By,7,Y,Y,-,Y,,S,,100,-
 SSP0020,Delegated List,LAST_UPDATE_DATE,Last Update Date,8,Y,Y,-,Y,,S,FPDateTime,150,-
 SSP0021,Hold stock,DIVISION_ID,Div,1,Y,Y,-,Y,,S,FPComboBox,50,-
@@ -15054,7 +15054,7 @@ SSP0021,MES Stock Detail,QMS_UNHOLD_SCHD_DATE,QMS Unhold Sched Date,13,Y,Y,-,Y,,
 SSP0021,Shipment Plan,DIVISION_ID,Div,1,Y,Y,-,Y,,S,,50,-
 SSP0021,Shipment Plan,FROM_SITE,Site,2,N,N,-,Y,,S,,30,-
 SSP0021,Shipment Plan,FROM_SITE_DESCRIPTION,From Site,3,Y,Y,-,Y,,S,,120,-
-SSP0021,Shipment Plan,ITEM_ID,Model,4,Y,Y,-,Y,,S,,120,-
+SSP0021,Shipment Plan,ITEM_ID,Model,4,Y,Y,-,Y,,S,,140,-
 SSP0021,Shipment Plan,NICK_NAME,Nick Name,5,Y,Y,-,Y,,S,,50,-
 SSP0021,Shipment Plan,BOH_TYPE,BOH,6,Y,Y,-,Y,,S,,100,-
 SSP0021,Shipment Plan,BOH_QTY,BOH,7,Y,Y,-,Y,,S,FPNumber,70,-
@@ -16721,9 +16721,9 @@ SSP0201,Change Request,NEW_BASE_CONFIRM_YN,NEW_BASE_CONFIRM_YN,58,N,-,-,Y,,S,,10
 SSP0201,Shipment Change Request,DIVISION_ID,Div,1,Y,Y,-,Y,,S,,50,-
 SSP0201,Shipment Change Request,ERP_SO_NO,SO No,2,N,Y,-,Y,,S,,0,-
 SSP0201,Shipment Change Request,SHIPMENT_STATUS,Status,3,Y,Y,-,Y,,S,FPComboBox,70,Y
-SSP0201,Shipment Change Request,ITEM_ID,Model*,4,Y,Y,N,Y,,IM,FPModal,120,-
+SSP0201,Shipment Change Request,ITEM_ID,Model*,4,Y,Y,N,Y,,IM,FPTextModal,120,-
 SSP0201,Shipment Change Request,NICK_NAME,Nick Name,5,Y,Y,-,Y,,S,,100,-
-SSP0201,Shipment Change Request,PROJECT_CODE,Project Code*,6,Y,Y,N,Y,,IM,FPModal,100,-
+SSP0201,Shipment Change Request,PROJECT_CODE,Project Code*,6,Y,Y,N,Y,,IM,FPTextModal,100,-
 SSP0201,Shipment Change Request,PROJECT_NAME,Project Name,6,Y,Y,-,Y,,S,,180,-
 SSP0201,Shipment Change Request,END_CUSTOMER,End Customer*,7,Y,Y,N,Y,,IM,,80,-
 SSP0201,Shipment Change Request,FCST_TYPE,FCST Type*,8,Y,Y,N,Y,,IM,FPComboBox,100,-
@@ -16787,9 +16787,9 @@ SSP0202,Shipment Change Request Confirm,DIVISION_ID,Div,1,Y,Y,-,Y,,S,,50,-
 SSP0202,Shipment Change Request Confirm,FROM_SITE,From Site,2,Y,Y,-,Y,,S,,80,-
 SSP0202,Shipment Change Request Confirm,TO_SITE,To Site,3,Y,Y,-,Y,,S,,100,-
 SSP0202,Shipment Change Request Confirm,CHANGE_TYPE,Change Type,4,Y,Y,-,Y,,S,FPComboBox,60,-
-SSP0202,Shipment Change Request Confirm,CHANGE_REQ_NO,Request No,5,Y,Y,-,Y,,S,,110,-
+SSP0202,Shipment Change Request Confirm,CHANGE_REQ_NO,Request No,5,Y,Y,-,Y,,S,,130,-
 SSP0202,Shipment Change Request Confirm,SHIPMENT_STATUS,Status,6,Y,Y,-,Y,,S,FPComboBox,110,Y
-SSP0202,Shipment Change Request Confirm,ITEM_ID,Model,7,Y,Y,-,Y,,S,,100,-
+SSP0202,Shipment Change Request Confirm,ITEM_ID,Model,7,Y,Y,-,Y,,S,,120,-
 SSP0202,Shipment Change Request Confirm,NICK_NAME,Nick Name,8,Y,Y,-,Y,,S,,120,-
 SSP0202,Shipment Change Request Confirm,REQUEST_TITLE,Title,9,Y,Y,-,Y,,S,,130,-
 SSP0202,Shipment Change Request Confirm,CHANGE_REASON_CODE,Change Reason,10,Y,Y,-,Y,,S,FPComboBox,130,-

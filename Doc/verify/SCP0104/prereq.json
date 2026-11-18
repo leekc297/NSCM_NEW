@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0104",
  "asis_id": "SCP0104",
- "generated": "2026-11-17 17:28:59",
+ "generated": "2026-11-18 10:49:25",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "9.5시간 전 export(기준 12시간)"
+   "evidence": "2.8시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -54,25 +54,11 @@
    "evidence": "2건 있음"
   },
   {
-   "key": "e2e_plan",
-   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
-   "status": "OK",
-   "producer": "tools/Harness/gen.js",
-   "evidence": "있음"
-  },
-  {
-   "key": "e2e_spec",
-   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
-   "status": "OK",
-   "producer": "tools/E2E/gen-e2e.js",
-   "evidence": "최신"
-  },
-  {
-   "key": "smoke",
-   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
-   "status": "OK",
-   "producer": "tools/E2E/run-e2e.cmd smoke",
-   "evidence": "3건 · 마지막 smoke 11-17 16:34 (FE 소스·smoke 엔진보다 최신)"
+   "key": "e2e",
+   "what": "E2E 사전(plan·스펙·smoke)",
+   "status": "SKIP",
+   "producer": "-",
+   "evidence": "--skip-e2e"
   }
  ]
 }

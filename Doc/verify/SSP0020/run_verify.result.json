@@ -1,13 +1,25 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-17T10:07:45+09:00",
+ "ts": "2026-11-18T11:52:09+09:00",
  "producer": "run_verify",
  "id": "SSP0020",
- "skip_e2e": true,
- "started": "2026-11-17 10:04:59",
+ "skip_e2e": false,
+ "started": "2026-11-18 09:47:26",
  "state": "completed",
  "verdict": "fail",
  "issues": [
+  {
+   "id": "V-9e99f124",
+   "class": "H11",
+   "msg": "SSP0020 저장 중 로딩",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(CheckList)"
+    }
+   ],
+   "grade": "hard"
+  },
   {
    "id": "V-3e374103",
    "class": "E4",
@@ -15,43 +27,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @form @11-17 10:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-d1f0e5dc",
-   "class": "H5",
-   "msg": "SCP·SSP 컬럼·조회조건 라벨 Valid→Active",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "META+E2E CR-092 라벨 잔존"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-db5fae91",
-   "class": "A5",
-   "msg": "SSP0020 스냅샷 헤더 Delegate",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "정적 판정(원문 대조)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-52d828e2",
-   "class": "A5",
-   "msg": "SSP0020 스냅샷 헤더 Delegated List",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "정적 판정(원문 대조)"
+     "ref": "E2E @form @11-18 09:52"
     }
    ],
    "grade": "hard"
@@ -63,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @form @11-17 10:07"
+     "ref": "E2E @form @11-18 09:52"
     }
    ],
    "grade": "hard"
@@ -99,7 +75,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @form @11-17 10:07"
+     "ref": "E2E @form @11-18 09:52"
     }
    ],
    "grade": "hard"
@@ -108,36 +84,40 @@
  "warnings": [],
  "summary": {
   "rows": 1468,
-  "PASS": 468,
-  "FAIL": 8,
+  "PASS": 479,
+  "FAIL": 6,
   "판정필요": 0,
   "미검증": 0,
-  "해당없음": 992,
+  "해당없음": 983,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1240,
-   "사람": 2,
-   "기계(상속·집계)": 224,
+   "기계": 1268,
+   "사람": 3,
+   "기계(상속·집계)": 195,
    "출처 미기록": 2
   },
-  "fail_listed": 8,
+  "fail_listed": 6,
   "coverage": {
    "rules": 84,
-   "measured": 269,
+   "measured": 273,
    "not_run_error": 0,
-   "na": 264,
+   "na": 258,
    "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/UI_CHECKLIST/SSP0020_Delegate_CheckList_v33.xlsx",
-  "ActionItemList": "Doc/UI_CHECKLIST/SSP0020_Delegate_ActionItemList_v33.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SSP0020_Delegate_CheckList_v55.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SSP0020_Delegate_ActionItemList_v55.xlsx"
  },
  "evidence": [
   {
    "kind": "exec",
    "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0020/e2e_results.json"
   }
  ],
- "note": "E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증"
+ "note": "문서 단계 재개(--resume-docs 2026-11-18 11:50:42) — E2E·판정은 원 실행 2026-11-18 09:47:26 결과"
 }

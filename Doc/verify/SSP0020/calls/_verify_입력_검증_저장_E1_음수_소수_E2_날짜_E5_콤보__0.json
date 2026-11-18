@@ -8,7 +8,7 @@
   "status": 200,
   "rows": 27,
   "dur": 100,
-  "at": "2026-11-16T17:48:34.913Z",
+  "at": "2026-11-17T13:54:38.480Z",
   "user": "minyonglee1",
   "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
  },
@@ -20,8 +20,21 @@
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
   "rows": 8613,
-  "dur": 261,
-  "at": "2026-11-16T17:48:35.021Z",
+  "dur": 264,
+  "at": "2026-11-17T13:54:38.580Z",
+  "user": "minyonglee1",
+  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+ },
+ {
+  "menu": "SSP0020",
+  "sheet": "Delegate",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
+  "postData": "{\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 27,
+  "dur": 97,
+  "at": "2026-11-17T13:54:41.768Z",
   "user": "minyonglee1",
   "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
  },
@@ -34,20 +47,7 @@
   "status": 200,
   "rows": 27,
   "dur": 98,
-  "at": "2026-11-16T17:48:36.213Z",
-  "user": "minyonglee1",
-  "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
- },
- {
-  "menu": "SSP0020",
-  "sheet": "Delegate",
-  "btn": "SEARCH",
-  "url": "http://127.0.0.1:5173/api/SSP0020/Delegate/SEARCH/call-proc",
-  "postData": "{\"language\":\"KO\"}",
-  "status": 200,
-  "rows": 27,
-  "dur": 99,
-  "at": "2026-11-16T17:48:38.239Z",
+  "at": "2026-11-17T13:54:43.515Z",
   "user": "minyonglee1",
   "test": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
  }

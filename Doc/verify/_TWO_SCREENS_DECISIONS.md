@@ -117,3 +117,50 @@ action_summary.csv 쉼표 미인용으로 칸 밀림 7행(11-17 오전 v27 설�
 | 7(재) | T-228fc738, T-dacd5310 | 11-17 15:5x '오류로 판정' | FAIL 확정. AS-IS 입력 즉시 DMY_ 코드 생성 + Dummy=Y 저장, TO-BE 목록 밖 입력 차단(실측 15:27) |
 | 6(재) | 붙여넣기 묶음 10행 | 11-17 '오류 아님' 2회 | PASS. 범위 붙여넣기 실측 정상, 1칸 명칭 붙여넣기 코드 빈 값은 사용자 판단으로 오류 아님 |
 | 10(재) | T-25489c40 | 11-17 16:1x '오류로 판정' | FAIL 확정(_user_verdicts_direct.csv). regress.py 가 직접 판정을 CheckList 옛 의견보다 우선하도록 보완 |
+
+## SOP 탭 실측 (11-17 19:36 v46)
+- 데이터 조건(sheet_data_cond.json 15:53): SOP_ASSEMBLY 81_HG 27·81_ST 12, SOP_ELTR 81_HG 6·81_ST 6, 그 밖 Division 0. 새 행 조건 Div 81(SOP 행 0, 팝업 미배정 모델 ELTR 50·ASSEMBLY 168) → sheet_nav.json new_row_cond.
+- 검사기 보완: 시나리오 근거 시트로 이동(_verify.spec.ts) · Insert 선택 팝업 확정(첫·마지막·가운데) · 신규 행 미생성 시 측정 경로 없음 · 새 행 조건 시 ensureRows 생략 · 감사 컬럼 날짜 칸 제외(gen_expect.py) · 달력 입력 단계 차단 = 기대 충족(scenario.ts).
+- 결과: V-120002fd·V-aa928a0d·V-18b4a0c6 PASS(Div 81 새 행 실측), V-912ca6bd PASS(입력 단계 차단), V-e3504cd4 정적 PASS(데이터 조건상 재현 불가 · V-120002fd 연결), V-cc6cf8fa NA.
+- 미해결: --only 실행 뒤 ASIS_DIFF 180행 원장 소실(원인 미확인) → --only 뒤 --skip-e2e 재판정으로 복원.
+- AS-IS 런처 SOP 실측(11-17 19:48~19:50, asis_live_scen_run.py --division sheet:SOP_ELTR,sheet:SOP_ASSEMBLY): SOP_ELTR 81_ST AS-IS 6 = TO-BE 6. SOP_ASSEMBLY 81_HG AS-IS 36, TO-BE 27 → 차이 9행 = Line Type '-' 행(AS-IS SP 에서 '-' 빼면 27). 조치 필요 2번(T-bc2f6848) 영향으로 설명 추가.
+- 부분 실행 ASIS_DIFF 소실은 v36 1회만(이후 --only 4회 정상, 180~184행). 원인 미확인.
+
+## SSP0020 시험 잔존 위임 행 삭제 (11-17 21:37, 사용자 승인 '백업 후 삭제')
+- TO-BE 사내 SSP_MST_DELEGATE: CREATED_BY·USER_ID minyonglee1, VALID_YN N, DELEGATEE_ID jiangguoping·jinqianhuanj, CREATION_DATE ≥ 11-10 → 535행 삭제(1,234 → 699행). 백업 Doc/verify/SSP0020/applied/SSP_MST_DELEGATE_test_residue_deleted_20261117_213753.csv.
+- 원인: SSP0020 저장 시험(실행 1회 26행)이 위임 생성 뒤 해제(N)만 하고 행을 지우지 않음 — 시험 정리 단계(restore_touched) 결함, 미보완.
+- SSP0020 v40(21:32): FAIL 7 · 판정필요 1(V-22b7adc8 로딩 표시 시험 검사) · 미검증 1(V-7c0fa6e6 LAST_UPDATED_BY 폭 메타 100 / 화면 150, 사람 판정 대상).
+
+## 2026-11-18 08:14 SSP0020 v51 (I2 재측정 · K3 연결 허위 FAIL 보완)
+- I2 언어 전환 EG-0e8e3e72·EG-152a8aa6: 다른 화면 E2E 잠금이 빈 뒤 `--only I2` 재측정(08:08) → PASS(KO 10건·EN 11건 일치).
+- K3 4행(V-edf7d866·V-b7b32337·V-de1d21a6·V-e04faf92) 허위 FAIL: judge.py K3 '미포함 항목' 연결(11-18 추가분)이 정적 판정 반영 전 원 판정(EG-5f17da99 FAIL, eg 팝업 GRID_FILTER_COUNT FAIL)을 읽음. 연결 대상 판정을 static_verdicts 반영값으로 읽도록 judge.py `_k3_eff`·`_k3_pop_fail` 추가 → 4행 PASS.
+- 결과 v51: FAIL 7(MSG00219 3, Valid 라벨 2, 집계 2) · 판정필요 1(V-9e99f124 H11 시험 검사) · 미검증 0 · regress 위반 0.
+
+## 2026-11-18 09:08 SSP0020 v52 (H11 사용자 판정 FAIL)
+- V-9e99f124 저장 중 로딩 표시 없음: 사용자 판정 '오류로 판정해주세요' → `_user_verdicts_direct.csv` FAIL 기록. 근거 AS-IS SaveData ProgressForm(cs:482~483·517·524), UnSet(cs:582·586), TO-BE Delegate.tsx 249·343 저장·해제 호출에 로딩 표시 없음.
+- FE 가이드 `Doc/verify/SSP0020/FE_GUIDE_20261118_0910.md`(DB MODE · FE 미수정).
+- 결과 v52: FAIL 8 · 판정필요 0 · 미검증 0 · regress 위반 0.
+
+## 2026-11-18 09:55 SSP0020 v53 (헤더 Valid FAIL 해소 · MSG00219 FE 가이드)
+- V-db5fae91·V-52d828e2: 11-16 23:00 수신본 'Valid' 기준 정적 FAIL 이 남아 있었음. 11-17 22:46 수신본 헤더 2건 'Active', snap_validate 11-18 OK → static_verdicts PASS 로 갱신(백업 .bak_20261118_a5) · 헤더 골든 2건 임시 승인(--no-verdict, 결정 34 '보완 뒤 승인' 이행). 화면샷 골든(11-17 00:57)은 재승인 안 함, 비교 PASS 유지.
+- MSG00219 3행: 사내 SCM_ADM_MSG_M 에 MSG00219 없음(09:45 조회). AS-IS MSG00219 문구 = TO-BE MSG01230 문구. 메시지 표 규칙(같은 문구 코드 재사용)에 따라 DB 신규 등록 안 함 → FE 가이드 G2(PERIOD_REVERSED MSG00219 → MSG01230).
+- 결과 v53: FAIL 6(H11 1 · MSG00219 3 · 집계 2, 전부 FE 수정 대상) · 판정필요 0 · 미검증 0 · regress 위반 0.
+
+## 2026-11-18 10:30 SCP0104 보완 단계 (DB 보완 대상 없음 · FE 가이드 13항목)
+- FAIL 195 = 조치 필요 묶음 10건 + 연결 109 + 집계 55 + 같은 결함 다른 칸 13. DB 원인 ORA-01840(V-8c0651f6)은 11-17 보완 뒤 PASS. 남은 원인 전부 FE → DB MODE 라 `Doc/verify/SCP0104/FE_GUIDE_20261118_1030.md`(G1~G10 수정, G11~G13 원장 PASS 라 수정 안 함 · 문장 규칙 위반 0).
+- 사용자 재확인 필요 2건: G1 조회조건 Plant(V-f5a0b46a 사용자 PASS ↔ 그리드 T-96d7cbbb FAIL, Electrode·Div 81·MI03 조건에서 AS-IS 7 / TO-BE 8), G10 팝업 메인 조건 전달(V-e38e474a·V-73037cda 사용자 PASS ↔ T-79cc3699 FAIL).
+
+## 2026-11-18 11:01 SCP0104 v50 (G1·G10 사용자 판정 FAIL)
+- 사용자 답 '둘 다 오류' → _user_verdicts_direct.csv FAIL 3행(V-f5a0b46a, V-e38e474a, V-73037cda). 집계 행 12건이 따라 FAIL.
+- 10:24 재판정에서 H4 T-333db77e 가 '검사 조건 바뀐 뒤 미재실행' ERROR(다른 세션의 검사 변경) → `--only H4`(10:32~10:49) 재측정 PASS → `--skip-e2e`(10:49~11:01).
+- 결과 v50: 3,342행 · FAIL 210 · 판정필요 0 · 미검증 0 · regress 위반 0. v47 대비 NA 행 5 줄고 NA→PASS 48(다른 세션 엔진 변경분, 원인 행별 미대조).
+- FE 가이드 G1·G10 원장 상태 문구 갱신(문장 규칙 위반 0).
+
+## 2026-11-18 11:3x CheckList '미검증' 시트 행(보류)
+- 원장 ERROR·판정필요 0 이지만 CheckList '미검증' 시트에 NA 이면서 직접 실측 없는 행이 SCP0104 v50 467건(직접 실측 없음 367 · 대상 일치 요소 없음 50 · 기타 50), SSP0020 v53 401건(직접 실측 없음 371). 앞선 '미검증 0' 보고 정정.
+- 사용자 답 '지금은 두기' → 재분류(측정 대상 ↔ 근거 있는 NA) 미착수.
+
+## 2026-11-18 11:52 용어 '대조표' → 'GAP' · SSP0020 CheckList 문구 정리 · 테스트 Excel 재생성
+- 사용자: '대조표' 는 일반 사용자에게 낯섦 → AS-IS↔TO-BE 대조 의미라 'GAP'. 문서 저장 직전 정리(tools/Docs/doc_style.py PLAIN_TERMS · clean_workbook)와 테스트 Excel 생성기(make_ui_test_sheet.py _AREA_PLAIN)에서 바꿈. 원장·검사 엔진 원문은 그대로. 따옴표 안 인용은 그대로.
+- SSP0020 Doc/verify/SSP0020/action_summary.csv 신설(SCP0104 형식, 2묶음 4행) → CheckList v55 조치 필요 2건 '[위치 / 성격 / 수정 대상] 오류명' 형식. '대조표' 잔존 0.
+- 테스트 Excel 재생성: SCP0104 11행(11:41), SSP0020 2행(11:52 · 이전 파일 18행은 ui_test_backup/…_20261118_115220_재생성전.xlsx).

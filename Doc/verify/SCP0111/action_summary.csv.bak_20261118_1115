@@ -1,0 +1,18 @@
+﻿row_id,group,title,tag,where,asis,tobe,gap,action
+V-d16dccae,BOH_EDIT_PIADMIN,BOH 편집 권한 없음,메뉴·권한 / 로직 / 확인 필요,Integration PSI 그리드 BOH 칸(INV 행),BOH 편집 권한 있음(편집 권한 그룹 ADMIN·SCM PI Admin·SCP Planner · cs:560~567·652),"편집 권한 없음(INV 행 BOH 칸 편집기 안 열림, 원인 IntegrationPsi.tsx:182~183 SCM PI Admin, SCP Planner 권한 false 고정)","SCM PI Admin 계정(dwhong1012), SCP Planner 계정(bottle)으로 확인 시 편집 권한 차이 발생. SYSTEM ADMIN 계정(minyonglee1)은 편집 가능",FE 가이드 FE_GUIDE_20261118_0636.md G6
+V-cac24638,BOH_EDIT_PIADMIN,,,,,,,
+EG-a5c7c913,BOH_EDIT_PIADMIN,,,,,,,
+EG-0a94c395,BOH_EDIT_PIADMIN,,,,,,,
+EG-5a7d02bf,BOH_EDIT_PIADMIN,,,,,,,
+EG-f48097ef,BOH_EDIT_PIADMIN,,,,,,,
+EG-9e78a0e2,BOH_EDIT_PIADMIN,,,,,,,
+EG-e501d086,BOH_EDIT_PIADMIN,,,,,,,
+EG-f2d39e3e,BOH_EDIT_PIADMIN,,,,,,,
+EG-c9ab9660,BOH_EDIT_PIADMIN,,,,,,,
+V-daa3f0ba,INSERT_POS,Insert 한 새 행이 생기는 위치: AS-IS 와 다르게 나왔음,화면 공통 / 기본값 / 확인 필요,Integration PSI 그리드 Insert(F8),INSERT 시 현재 ROW 의 상단에 INSERT(SpreadInfo.Insert 활성 행 위치),INSERT 시 현재 ROW 의 하단에 INSERT(실측 선택 r3 → 새 행 맨 아래 r1261) (TO-BE RULE 이면 PASS),상/하단으로 INSERT ROW 위치 다름,
+T-40ab485f,INSERT_POS,,,,,,,
+EG-9b53a22e,INSERT_POS,,,,,,,
+EG-08f72f25,INSERT_POS,,,,,,,
+T-236699af,ESS_PACK_LINE,Division 82 Pack 신규 행 Line 후보에 외주 Line 이 나오지 않음,그리드 / 로직 / 확인 필요,Integration PSI 그리드 신규 행 Line 칸(Division 82 · Operation Group Pack),화면을 열 때 외주 Line 목록을 불러와 그 행 Company 의 외주 Line 을 후보로 보여줌(cs:178·490·1756~1765),외주 Line 목록을 불러오지 않아 후보가 '-' 1건뿐(IntegrationPsi.tsx:499),Division 82 Pack 신규 행에서 외주 Line 선택 불가,
+V-d2511df5,,조회조건 입력 중 그리드가 다시 그려짐,조회조건 / 동작 / 확인 필요,조회조건 텍스트 칸 입력 중,조회조건을 입력해도 그리드 변화 없음,글자 입력 중 그리드 화면 변경 2935회(입력 없을 때 0회),조회조건 입력만으로 그리드가 다시 그려짐,
+V-2eed0400,,빈 신규 행 저장 때 안내 문구가 AS-IS 와 다름,저장 / 메시지 / FE,Integration PSI 신규 행 Save(F7),빈 신규 행 저장 시 MSG00001 '모든 항목은 필수입력입니다.'(Operation 이 비면 Lookup 확인을 건너뜀 · cs:1206·1237),'Operation 은 Pack / Cell / Electrode 중 하나로 입력하세요.',빈 값을 필수 누락이 아니라 무효 값으로 안내,FE 가이드 FE_GUIDE_20261118_0636.md G5

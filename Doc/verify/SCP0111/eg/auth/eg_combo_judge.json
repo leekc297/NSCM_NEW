@@ -3,87 +3,7 @@
 "eg": "EG367",
 "screen": "SCP0111",
 "target": "Div",
-"ctx": "SCP/40/SCP Planner · Div 40",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Plan Date",
-"ctx": "SCP/40/SCP Planner · Div 40",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Div",
-"ctx": "SCP/40/SCP Tester · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 8개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Plan Date",
-"ctx": "SCP/40/SCP Tester · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Div.",
-"ctx": "SCP/40/SCM Viewer · Div 40",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Plan Date",
-"ctx": "SCP/40/SCM Viewer · Div 40",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Div",
-"ctx": "SCP/40/ADMIN · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 13개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Plan Date",
-"ctx": "SCP/40/ADMIN · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Div",
-"ctx": "SCP/40/SCM PI Admin · Div 81",
+"ctx": "SCR/SCP0111/SYSTEM ADMIN · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
@@ -93,90 +13,50 @@
 "eg": "EG367",
 "screen": "SCP0111",
 "target": "Plan Date",
-"ctx": "SCP/40/SCM PI Admin · Div 81",
+"ctx": "SCR/SCP0111/SYSTEM ADMIN · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 310개"
 },
 {
 "eg": "EG367",
 "screen": "SCP0111",
 "target": "Div",
-"ctx": "SCP/81/SCP Planner · Div 81",
+"ctx": "SCR/SCP0111/SCM PI Admin · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 7개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
 },
 {
 "eg": "EG367",
 "screen": "SCP0111",
 "target": "Plan Date",
-"ctx": "SCP/81/SCP Planner · Div 81",
+"ctx": "SCR/SCP0111/SCM PI Admin · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Div.",
-"ctx": "SCP/81/SCM Viewer · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Plan Date",
-"ctx": "SCP/81/SCM Viewer · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Div.",
-"ctx": "SCP/81/SCM PI Admin · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
-},
-{
-"eg": "EG367",
-"screen": "SCP0111",
-"target": "Plan Date",
-"ctx": "SCP/81/SCM PI Admin · Div 81",
-"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
-"result": "판정필요",
-"expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 310개"
 },
 {
 "eg": "EG367",
 "screen": "SCP0111",
 "target": "Div",
-"ctx": "SCP/82/SCM Viewer · Div 82",
+"ctx": "SCR/SCP0111/SCP Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 14개"
 },
 {
 "eg": "EG367",
 "screen": "SCP0111",
 "target": "Plan Date",
-"ctx": "SCP/82/SCM Viewer · Div 82",
+"ctx": "SCR/SCP0111/SCP Planner · Div 81",
 "asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
 "result": "판정필요",
 "expected": "AS-IS 원천 실행 경로",
-"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 321개"
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 310개"
 }
 ]

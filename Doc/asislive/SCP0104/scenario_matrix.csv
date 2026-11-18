@@ -1,16 +1,16 @@
 ﻿control,group,division,mode,ok,popups,dialogs,calls,asis_timeout,grid_cells,varies,run
-(조회),ADMIN,81_HG,,실행,,,SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY=36,,,조건에 따라 다름,run_20261117_162939_acts_div81_HG_sheetSOP_ASSEMBLY
-(조회),ADMIN,81_ST,,실행,,,SCP0104_GET_CAPA_LINE_SOP_ELTR=6,,,조건에 따라 다름,run_20261117_163117_acts_div81_ST_sheetSOP_ELTR
-OnClickInsertButton,ADMIN,81_HG,,실패: InvalidOperationException: click:OnClickInsertButton failed: InvalidOperationExc,,,,,,같음,run_20261117_162939_acts_div81_HG_sheetSOP_ASSEMBLY
-OnClickInsertButton,ADMIN,81_ST,,실패: InvalidOperationException: click:OnClickInsertButton failed: InvalidOperationExc,,,,,,같음,run_20261117_163117_acts_div81_ST_sheetSOP_ELTR
-OnClickSaveButton,ADMIN,81_HG,,실패: InvalidOperationException: click:OnClickSaveButton failed: InvalidOperationExcep,,,,,,같음,run_20261117_162939_acts_div81_HG_sheetSOP_ASSEMBLY
-OnClickSaveButton,ADMIN,81_ST,,실패: InvalidOperationException: click:OnClickSaveButton failed: InvalidOperationExcep,,,,,,같음,run_20261117_163117_acts_div81_ST_sheetSOP_ELTR
+(조회),ADMIN,81_HG,,실행,,,SCP0104_GET_CAPA_LINE_SOP_ASSEMBLY=36,,,조건에 따라 다름,run_20261117_194958_acts_div81_HG_sheetSOP_ASSEMBLY
+(조회),ADMIN,81_ST,,실행,,,SCP0104_GET_CAPA_LINE_SOP_ELTR=6,,,조건에 따라 다름,run_20261117_194816_acts_div81_ST_sheetSOP_ELTR
+OnClickInsertButton,ADMIN,81_HG,,실패: InvalidOperationException: click:OnClickInsertButton failed: InvalidOperationExc,,,,,,같음,run_20261117_194958_acts_div81_HG_sheetSOP_ASSEMBLY
+OnClickInsertButton,ADMIN,81_ST,,실패: InvalidOperationException: click:OnClickInsertButton failed: InvalidOperationExc,,,,,,같음,run_20261117_194816_acts_div81_ST_sheetSOP_ELTR
+OnClickSaveButton,ADMIN,81_HG,,실패: InvalidOperationException: click:OnClickSaveButton failed: InvalidOperationExcep,,,,,,같음,run_20261117_194958_acts_div81_HG_sheetSOP_ASSEMBLY
+OnClickSaveButton,ADMIN,81_ST,,실패: InvalidOperationException: click:OnClickSaveButton failed: InvalidOperationExcep,,,,,,같음,run_20261117_194816_acts_div81_ST_sheetSOP_ELTR
 btnColumn,ADMIN,(기본),,실행,SCM002_CAPAColumnPopup(행 0),,SCM0002_GET_TITLESET_POPUP=17,,,같음,run_20261117_162751_acts
-btnColumn,ADMIN,81_HG,,실행,SCM002_CAPAColumnPopup(행 0),,SCM0002_GET_TITLESET_POPUP=16,,,같음,run_20261117_162939_acts_div81_HG_sheetSOP_ASSEMBLY
-btnColumn,ADMIN,81_ST,,실행,SCM002_CAPAColumnPopup(행 0),,SCM0002_GET_TITLESET_POPUP=17,,,같음,run_20261117_163117_acts_div81_ST_sheetSOP_ELTR
+btnColumn,ADMIN,81_HG,,실행,SCM002_CAPAColumnPopup(행 0),,SCM0002_GET_TITLESET_POPUP=16,,,같음,run_20261117_194958_acts_div81_HG_sheetSOP_ASSEMBLY
+btnColumn,ADMIN,81_ST,,실행,SCM002_CAPAColumnPopup(행 0),,SCM0002_GET_TITLESET_POPUP=17,,,같음,run_20261117_194816_acts_div81_ST_sheetSOP_ELTR
 btnItem,ADMIN,(기본),,실패: InvalidOperationException: click:btnItem failed: InvalidOperationException: cont,,,,,,같음,run_20261117_162751_acts
-btnItem,ADMIN,81_HG,,실패: InvalidOperationException: click:btnItem failed: InvalidOperationException: cont,,,,,,같음,run_20261117_162939_acts_div81_HG_sheetSOP_ASSEMBLY
-btnItem,ADMIN,81_ST,,실패: InvalidOperationException: click:btnItem failed: InvalidOperationException: cont,,,,,,같음,run_20261117_163117_acts_div81_ST_sheetSOP_ELTR
+btnItem,ADMIN,81_HG,,실패: InvalidOperationException: click:btnItem failed: InvalidOperationException: cont,,,,,,같음,run_20261117_194958_acts_div81_HG_sheetSOP_ASSEMBLY
+btnItem,ADMIN,81_ST,,실패: InvalidOperationException: click:btnItem failed: InvalidOperationException: cont,,,,,,같음,run_20261117_194816_acts_div81_ST_sheetSOP_ELTR
 btnItemId,ADMIN,(기본),,실행,SCM0002_CAPAItemPopup(행 3177),,SCM0002_GET_CAPA_ITEM_POPUP=9612,,,같음,run_20261117_162751_acts
-btnItemId,ADMIN,81_HG,,실행,SCM0002_CAPAItemPopup(행 11),,SCM0002_GET_CAPA_ITEM_POPUP=36,,,같음,run_20261117_162939_acts_div81_HG_sheetSOP_ASSEMBLY
-btnItemId,ADMIN,81_ST,,실행,SCM0002_CAPAItemPopup(행 36),,SCM0002_GET_CAPA_ITEM_POPUP=98,,,같음,run_20261117_163117_acts_div81_ST_sheetSOP_ELTR
+btnItemId,ADMIN,81_HG,,실행,SCM0002_CAPAItemPopup(행 11),,SCM0002_GET_CAPA_ITEM_POPUP=36,,,같음,run_20261117_194958_acts_div81_HG_sheetSOP_ASSEMBLY
+btnItemId,ADMIN,81_ST,,실행,SCM0002_CAPAItemPopup(행 36),,SCM0002_GET_CAPA_ITEM_POPUP=98,,,같음,run_20261117_194816_acts_div81_ST_sheetSOP_ELTR

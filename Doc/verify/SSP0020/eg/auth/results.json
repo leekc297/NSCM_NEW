@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 78324,
+                      "duration": 80836,
                       "errors": [],
                       "stdout": [
                         {
@@ -148,7 +148,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T17:57:04.645Z",
+                      "startTime": "2026-11-17T14:18:56.253Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -179,35 +179,26 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 70310,
+                      "duration": 72904,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SSP/40/SSP Planner 15s\n"
+                          "text": "[eg_auth] SSP/40/SSP Planner 17s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0020 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/40/SSP Viewer 35s\n"
+                          "text": "[직접 접근 새 세션] SSP0020 kijung03.kim url=http://127.0.0.1:5173/view/home grid=false\n"
                         },
                         {
-                          "text": "[eg_auth] SSP0020 {\"EG382 PASS\":1,\"EG382 판정필요\":1,\"EG366 ERROR\":1,\"EG365 ERROR\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SSP/81/SSP Planner 32s\n"
                         },
                         {
-                          "text": "  EG366 ERROR Division 후보 [SSP/40/SSP Viewer] 기대 후보 = 메뉴 권한 그룹의 부문 권한 (없음) · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' ·  \n"
+                          "text": "[eg_auth] SSP0020 {\"EG382 PASS\":3,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "  EG365 ERROR 자동 선택 [SSP/40/SSP Viewer] 기대 후보 안의 값 · 실측 [측정 경로 없음] Division 콤보 후보를 읽지 못함(0개) · 선택값 '' · DM-65 \n"
-                        },
-                        {
-                          "text": "[eg_auth] SSP/81/SSP Planner 15s\n"
-                        },
-                        {
-                          "text": "[eg_auth] SSP0020 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
-                        },
-                        {
-                          "text": "[eg_auth] SSP/82/SSP Planner 5s\n"
+                          "text": "[eg_auth] SSP/82/SSP Planner 7s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0020 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -218,7 +209,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T17:58:25.738Z",
+                      "startTime": "2026-11-17T14:20:19.816Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -249,7 +240,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 78813,
+                      "duration": 80094,
                       "errors": [],
                       "stdout": [
                         {
@@ -297,7 +288,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T17:59:38.565Z",
+                      "startTime": "2026-11-17T14:21:35.290Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -307,7 +298,7 @@
               ],
               "id": "fce9d8edbd378244cae8-44db66d8aad0ffd09888",
               "file": "eg_auth.spec.ts",
-              "line": 366,
+              "line": 380,
               "column": 7
             },
             {
@@ -328,7 +319,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 14027,
+                      "duration": 15489,
                       "errors": [],
                       "stdout": [
                         {
@@ -337,7 +328,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:00:59.817Z",
+                      "startTime": "2026-11-17T14:22:57.864Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -347,7 +338,7 @@
               ],
               "id": "fce9d8edbd378244cae8-d38c26598b6fb0aee190",
               "file": "eg_auth.spec.ts",
-              "line": 417,
+              "line": 431,
               "column": 7
             },
             {
@@ -368,7 +359,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 258,
+                      "duration": 146,
                       "errors": [],
                       "stdout": [
                         {
@@ -377,7 +368,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:01:16.286Z",
+                      "startTime": "2026-11-17T14:23:15.713Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -387,7 +378,7 @@
               ],
               "id": "fce9d8edbd378244cae8-62f23add32846d890d6e",
               "file": "eg_auth.spec.ts",
-              "line": 495,
+              "line": 509,
               "column": 7
             },
             {
@@ -408,7 +399,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3233,
+                      "duration": 5220,
                       "errors": [],
                       "stdout": [
                         {
@@ -417,7 +408,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:01:19.083Z",
+                      "startTime": "2026-11-17T14:23:18.313Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -427,7 +418,7 @@
               ],
               "id": "fce9d8edbd378244cae8-aaf120db0732bfd3374e",
               "file": "eg_auth.spec.ts",
-              "line": 565,
+              "line": 579,
               "column": 7
             },
             {
@@ -448,7 +439,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 176,
+                      "duration": 185,
                       "errors": [],
                       "stdout": [
                         {
@@ -460,7 +451,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:01:24.793Z",
+                      "startTime": "2026-11-17T14:23:25.990Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -470,7 +461,7 @@
               ],
               "id": "fce9d8edbd378244cae8-de50d9cb572523679bdf",
               "file": "eg_auth.spec.ts",
-              "line": 581,
+              "line": 595,
               "column": 7
             },
             {
@@ -491,7 +482,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3217,
+                      "duration": 5228,
                       "errors": [],
                       "stdout": [
                         {
@@ -500,7 +491,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:01:27.447Z",
+                      "startTime": "2026-11-17T14:23:28.467Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -510,7 +501,7 @@
               ],
               "id": "fce9d8edbd378244cae8-32a357142c4e95e0338b",
               "file": "eg_auth.spec.ts",
-              "line": 611,
+              "line": 635,
               "column": 7
             },
             {
@@ -531,7 +522,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 168,
+                      "duration": 167,
                       "errors": [],
                       "stdout": [
                         {
@@ -543,7 +534,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:01:33.210Z",
+                      "startTime": "2026-11-17T14:23:36.057Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -553,7 +544,7 @@
               ],
               "id": "fce9d8edbd378244cae8-4a1b4dac5912ec5f222e",
               "file": "eg_auth.spec.ts",
-              "line": 636,
+              "line": 660,
               "column": 7
             }
           ]
@@ -563,8 +554,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-16T17:57:04.206Z",
-    "duration": 271919.947,
+    "startTime": "2026-11-17T14:18:55.726Z",
+    "duration": 283103.893,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

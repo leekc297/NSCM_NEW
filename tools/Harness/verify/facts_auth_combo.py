@@ -25,6 +25,8 @@ def key_norm(s):
 
 def uid_of(uj, key):
     area, dv, role = key.split('/', 2)
+    if area == 'SCR':  # 화면별 지정 계정(users.json screens[<ID>].accounts · 2026-11-18)
+        return uj['screens'][dv]['accounts'][role]
     return uj['areas'][area]['divisions'][dv][role]
 
 

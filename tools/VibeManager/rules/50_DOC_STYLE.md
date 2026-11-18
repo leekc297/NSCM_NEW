@@ -51,6 +51,46 @@
 17. 화면ID, 컬럼명, SP명, 건수, 일자를 적는다. '일부 컬럼', '여러 건', '특정 조건'이라고 쓰지 않는다.
 18. 다 쓴 뒤 담당자가 회의에서 말하는 문장인지 본다. 아니면 고친다.
 
+## 규칙 19 — 개발 용어 대신 업무 단어 (사용자 2026-11-17)
+
+목적: Excel·문서를 처음 보는 담당자가 개발 용어를 몰라도 읽게 한다. 정본 예 = `tools/Harness/verify/plain_detail.py` `_GLOSS`(CheckList 설명 칸).
+
+- 문장에는 업무 단어를 쓴다. 코드 이름(함수·변수·파일·컬럼·SP)은 백틱 안에 원문대로 두고, 처음 나올 때 업무 단어를 앞에 붙인다(`저장값 만드는 함수 \`unfoldSaveCells\``).
+- 코드 블록 안 코드와 주석 원문은 고치지 않는다(원문 인용).
+- 행 번호는 사람이 세는 번호로 쓴다(`r0` → `1번째 행`).
+
+| 쓰지 않는 말 | 이렇게 쓴다 |
+|---|---|
+| unfold, 펼친다 | 저장할 셀 목록을 만든다 |
+| payload | 서버로 보내는 값 |
+| 가감값, 차이값, delta | 바뀐 양(바꾼 값 − 원래 값) |
+| 절대값 | 화면에 입력한 값 그대로 |
+| 스텁, stub, mock | 시험용 가짜 값 |
+| 단위 시험, unit test, 자동 시험 코드 | 테스트 코드, 테스트 케이스(테스트 파일명과 줄 함께 적기 · 사용자 2026-11-17 18:1x) |
+| call-proc | 서버 호출 |
+| 폴백, fallback | 대신 쓰는 값 |
+| 토큰 | 칸 값 |
+| 편집=false, 편집=true | 입력 불가(잠김), 입력 가능 |
+| SHEET_COLUMNS | 컬럼 메타 |
+| VISIBLE=N, VISIBLE=Y | 표시 안 함, 표시 |
+| SP(처음 1회) | 조회·저장 프로그램(SP) |
+| mode, 분기 | 구분, 경우 |
+
+검출 표현은 `doc_style_rules.csv` kind=`용어` 에 둔다. 백틱·따옴표 안은 검사하지 않는다.
+
+## FE·BE 가이드 문서 틀 (DB MODE `FE_GUIDE_<YYYYMMDD_HHMM>.md` · 사용자 2026-11-17)
+
+규칙 1~19 를 같이 적용한다. 받는 사람 = FE 담당자. 항목마다 아래 순서로 쓴다.
+
+1. 무엇이 문제인지: 화면에서 하는 동작과 결과 1~2문장(`ADMIN 계정이 INV 행 월 수량을 고치고 저장하면 저장되지 않음`).
+2. AS-IS 동작: 화면 소스 줄과 SP 줄, 보내는 값.
+3. 고칠 곳: 파일:줄.
+4. 변경 전 / 변경 후: 코드 블록. 코드 주석도 업무 단어로 쓴다.
+5. 확인 방법: 자동 시험 코드(무엇을 넣고 무엇이 나와야 하는지), 화면에서 할 동작과 기대 결과.
+
+- 문서 첫머리에 DB 쪽 적용 사실(객체, 적용 시각)과 FE 반영 전 주의(오동작 예 1건)를 적는다.
+- 셀·목록 문장은 개조식(규칙 7)으로 쓴다.
+
 ### 생성기가 저장 직전에 고치는 것 (`doc_style.before_save`)
 | 원문 | 저장되는 글 |
 |---|---|
@@ -78,6 +118,36 @@
 - 화살표는 순서·변경 전후 표기(`조회 → 저장` · `Center → Left`)에 둔다.
 - **구분이 필요한 주어**는 남긴다: 주체가 둘 이상 나와 헷갈릴 때(`AS-IS 는 … · TO-BE 는 …`).
 
+## CheckList 설명 칸 틀 (사용자 2026-11-17 SCP0104 · 2026-11-18 전 화면 적용)
+
+조치 필요·판정 필요 행의 `설명` 칸은 아래 틀로 쓴다. 저장 분류(머리표가 `[저장`)로 시작하는 행은 종전 틀(위치 · AS-IS · TO-BE · GAP · 조치)을 유지한다.
+
+```
+[위치 / 성격 / 수정 대상] 오류 한 줄 요약
+ - AS-IS : AS-IS 동작과 값(조건, 건수, 화면 소스 줄)
+ - TO-BE : TO-BE 실측 동작과 값(조건, 건수, 파일:줄)
+ - GAP : 무엇이 다른지 한 줄. 계정·Division 차이, 같은 동작인 다른 조건
+같은 원인 N건 묶음: 검증 ID 목록
+```
+
+예(SCP0104):
+```
+[조회조건, 그리드 컬럼 / 후보값 / FE] Plant 후보에 전극 외 Plant 표시
+ - AS-IS : Operation group = Electrode 일 때 Plant 후보는 SHOP_GROUP 'E' 인 Plant 만 표시(Div 81 기준 7건)
+ - TO-BE : Operation group = Electrode 일 때 SHOP_GROUP 조건이 없어 MI03 MI Michigan HP Auto Prod 1건이 더 보임(8건)
+ - GAP : Electrode 모드 Plant 후보 필터 누락. Cell, Module/Pack 모드는 7건 같음
+같은 원인 2건 묶음: V-f5a0b46a, T-96d7cbbb
+```
+
+작성 절차(CheckList 를 만든 세션이 매번 한다):
+1. run_verify 가 끝나면 `조치 필요` 행 전부를 증거·AS-IS 소스·TO-BE 소스로 확인하고 `Doc/verify/<ID>/action_summary.csv`(열 row_id, group, title, tag, where, asis, tobe, gap, action)에 한 행씩 쓴다. 판정 필요 행도 같은 틀로 쓴다.
+2. 같은 원인 행은 group 을 같게 하고 첫 행에만 문장을 쓴다(생성기가 '같은 원인 N건 묶음' 으로 합친다).
+3. 문장에는 검사기 표기(규칙 9컬럼, 평가 불가 0, r1, EG377 같은 엔진 내부 값)를 쓰지 않는다. 화면 이름, 컬럼 이름, 조건 값, 건수, 계정, 소스 줄을 쓴다.
+4. `python tools/Harness/verify/run_verify.py <ID> --resume-docs` 로 문서만 다시 만든다(판정은 바뀌지 않음).
+5. 생성기 로그 `[설명 정리 필요] N건` 이 0 인지 본다. 0 이 아니면 그 행을 1번부터 다시 한다.
+
+정리 파일이 없는 행은 생성기(`plain_detail.build_gap`)가 같은 틀로 증거 원문을 나눠 채운다. 이것은 임시 문장이라 1~5번을 대신하지 않는다.
+
 ## 지키게 하는 장치
 | 대상 | 장치 |
 |---|---|
@@ -86,6 +156,8 @@
 | 문서 초안 Agent(분석서 5종 · 업무분석서 · 화면설계서 · 단위테스트) | `tools/AsisFacts/src/Agent.cs` 프롬프트 2종에 규칙 삽입 |
 | 단위테스트 커맨드 | `.claude/commands/단위테스트.md` |
 | Doc 폴더 문서 작업 | `.claude/rules/03-analysis-docs.md §F` (경로 자동 로드) |
+| DB MODE FE·BE 가이드(`Doc/verify/<ID>/FE_GUIDE_*.md`) | workbench.js `workModePrefix` 문단에 규칙 19·가이드 틀 지시 · 작성 뒤 `doc_style.py` 로 위반 0 확인 |
+| CheckList 설명 칸 틀 | 위 절차 · `make_verify_docs.py` 가 정리 파일 없는 조치 필요·판정 필요 행 수를 `[설명 정리 필요] N건` 으로 출력 · 정리 파일 없는 행은 `plain_detail.build_gap` 이 같은 틀로 채움 |
 | Excel 생성기 고정 문장 | `make_verify_docs.py` · `plain_detail.py` · `make_test_report.py` · `asis_live_doc.py` · `make_docs.py` · `make_testcases.py` · `md2xlsx.py` — 저장 직후 `doc_style.after_save()` 가 위반 수를 출력하고 `Doc/_doc_style/<파일>.style.csv` 에 기록 |
 
 ## 검사

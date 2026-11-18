@@ -258,10 +258,43 @@ def to_gaejo(s):
     return _back(gaejo_core(t), keep)
 
 
+# 2026-11-18 사용자: 일반 사용자에게 낯선 내부 용어를 문서에 쓰지 않는다. 대조표(mapping_trace) = AS-IS 동작 ↔ TO-BE 구현 대조 → 'GAP'.
+#   검사 엔진·원장 원문은 그대로 두고 Excel 에 쓰는 마지막 단계에서만 바꾼다(생성기가 원문 문구로 글을 자르고 분류함). 따옴표 안 인용은 그대로.
+PLAIN_TERMS = (('대조표', 'GAP'),)
+
+
+def plain_terms(s):
+    if not isinstance(s, str) or not any(k in s for k, _ in PLAIN_TERMS) or s.startswith('='):
+        return s
+    t, keep = _hold(s)
+    for k, v in PLAIN_TERMS:
+        t = t.replace(k, v)
+    return _back(t, keep)
+
+
 def clean_workbook(wb, skip=SKIP_HEADERS, gaejo=GAEJO_HEADERS, free=False):
     """openpyxl Workbook 의 문장 셀을 정리한다 — 저장 직전에 부른다. → 바꾼 셀 수
     gaejo = 개조식으로 바꿀 칸 이름 · free=True 면 표 밖 안내문(머리글 위 · 머리글 없는 시트)도 개조식"""
     n = 0
+    for ws in wb.worksheets:   # 용어 바꾸기는 한 단어 칸(영역 '대조표')까지 — 사람이 쓰는 칸은 제외
+        hdr = {}; hrow = 0
+        for row in ws.iter_rows(min_row=1, max_row=min(6, ws.max_row or 1)):
+            names = {c.column: str(c.value).strip() for c in row if isinstance(c.value, str)}
+            if any(any(k in v for k in skip) for v in names.values()):
+                hdr = names; hrow = row[0].row; break
+        for row in ws.iter_rows():
+            for c in row:
+                if not isinstance(c.value, str):
+                    continue
+                h = hdr.get(c.column, '') if hdr and c.row > hrow else ''
+                if h and any(k in h for k in skip):
+                    continue
+                w = plain_terms(c.value)
+                if w != c.value:
+                    try:
+                        c.value = w; n += 1
+                    except AttributeError:
+                        pass
     for ws in wb.worksheets:
         hdr = {}; hrow = 0
         for row in ws.iter_rows(min_row=1, max_row=min(6, ws.max_row or 1)):

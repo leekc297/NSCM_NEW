@@ -1,4 +1,4 @@
 ﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
 SSP0020,Delegate|같은 사용자,SSP0020_GET_DELEGATE,ERROR,0,26,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
 SSP0020,Delegate,SSP0020_GET_DELEGATE,REVIEW,0,26,"AS-IS 0행 · TO-BE 26행 · 키 ['DIVISION_ID', 'DELEGATEE', 'VALID'] AS-IS 전용 0 · TO-BE 전용 13",미대응 인자 ['p_user_id']
-SSP0020,Delegate · AS-IS 실구동,SSP0020_GET_DELEGATE,NA,1,0,"판정 제외 — SSP0020_GET_DELEGATE 의 입력 인자가 전부 세션·언어류(@p_user_id, @p_language)라 조회 결과가 로그인 계정에 달려 있음. AS-IS 실구동 계정과 TO-BE 시험 계정이 달라 같은 조건이 아님 · 원 대조: AS-IS 를 실제로 띄워 조회한 결과 1건 ↔ TO-BE 같은 조건 조회 결과 0건 — TO-BE 에 데이터가 없음(조치 필요) · 키 대조: 공통 0 · AS-IS 에만 0 · TO-BE 에만 0",AS-IS 실구동 run_20261116_105931 · SP SSP0020_GET_DELEGATE · 조건 같음(인자 1개 일치)
+SSP0020,Delegate · AS-IS 실구동,SSP0020_GET_DELEGATE,NA,1,0,"판정 제외 — SSP0020_GET_DELEGATE 의 입력 인자가 전부 세션·언어류(@p_user_id, @p_language)라 조회 결과가 로그인 계정에 달려 있음. AS-IS 실구동 계정과 TO-BE 시험 계정이 달라 같은 조건이 아님 · 원 대조: AS-IS 를 실제로 띄워 조회한 결과 1건 ↔ TO-BE 같은 조건 조회 결과 0건 — TO-BE 에 데이터가 없음(조치 필요) · 키 대조: 공통 0 · AS-IS 에만 0 · TO-BE 에만 0",AS-IS 실구동 run_20261117_200235 · SP SSP0020_GET_DELEGATE · 조건 같음(인자 1개 일치)

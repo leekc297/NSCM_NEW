@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SSP0020",
  "asis_id": "SSP0020",
- "generated": "2026-11-17T10:07:21",
+ "generated": "2026-11-18T09:53:36",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\delegate\\__asis-mapping__.md",
  "rows": 464,
  "fe_rows": 43,
@@ -16,14 +16,14 @@
  },
  "instances": 224,
  "instance_result": {
-  "PASS": 151,
-  "NA": 68,
+  "PASS": 156,
+  "NA": 63,
   "FAIL": 5
  },
  "by_layer": {
   "동적 생성·조회": {
-   "PASS": 50,
-   "NA": 27,
+   "PASS": 55,
+   "NA": 22,
    "FAIL": 2
   },
   "CRUD": {
@@ -179,8 +179,8 @@
    "PASS": 2
   },
   "X-LOC": {
-   "PASS": 18,
-   "NA": 6
+   "PASS": 23,
+   "NA": 1
   },
   "X-REASON": {
    "PASS": 3,

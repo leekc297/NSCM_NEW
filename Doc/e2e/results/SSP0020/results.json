@@ -151,7 +151,7 @@
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"Delegate\",\"SEARCH\",200,1,821]]"
+                      "description": "[[\"Delegate\",\"SEARCH\",200,1,846]]"
                     },
                     {
                       "type": "i18n",
@@ -166,7 +166,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 14061,
+                      "duration": 16950,
                       "error": {
                         "message": "Error: 조회조건 'All' (Checkbox) — 후보 [All | ALL]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: 조회조건 'All' (Checkbox) — 후보 [All | ALL]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0020.smoke.spec.ts:31:110",
@@ -190,7 +190,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:07:53.651Z",
+                      "startTime": "2026-11-17T22:57:31.510Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -210,7 +210,7 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"Delegate\",\"SEARCH\",200,1,791]]"
+                          "description": "[[\"Delegate\",\"SEARCH\",200,1,853]]"
                         },
                         {
                           "type": "i18n",
@@ -244,7 +244,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 14123,
+                      "duration": 17062,
                       "error": {
                         "message": "Error: 조회조건 'All' (Checkbox) — 후보 [All | ALL]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: 조회조건 'All' (Checkbox) — 후보 [All | ALL]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0020.smoke.spec.ts:31:110",
@@ -268,7 +268,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-16T18:08:10.656Z",
+                      "startTime": "2026-11-17T22:57:51.526Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -288,7 +288,7 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"Delegate\",\"SEARCH\",200,1,821]]"
+                          "description": "[[\"Delegate\",\"SEARCH\",200,1,846]]"
                         },
                         {
                           "type": "i18n",
@@ -374,7 +374,7 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 20904,
+                      "duration": 23268,
                       "error": {
                         "message": "Error: 조회조건 동작 FAIL 1: Period\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
                         "stack": "Error: 조회조건 동작 FAIL 1: Period\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0020.smoke.spec.ts:112:123",
@@ -406,7 +406,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:08:27.746Z",
+                      "startTime": "2026-11-17T22:58:11.760Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -464,7 +464,7 @@
                       "workerIndex": 3,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 25950,
+                      "duration": 23794,
                       "error": {
                         "message": "Error: 조회조건 동작 FAIL 1: Period\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
                         "stack": "Error: 조회조건 동작 FAIL 1: Period\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SSP0020.smoke.spec.ts:112:123",
@@ -496,7 +496,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-16T18:08:51.801Z",
+                      "startTime": "2026-11-17T22:58:38.226Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -607,7 +607,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'Delegate_20261117_030946.xlsx' 6410B"
+                      "description": "[OK] Excel 다운로드(common) — 'Delegate_20261118_075936.xlsx' 6411B"
                     },
                     {
                       "type": "common",
@@ -634,12 +634,12 @@
                       "workerIndex": 4,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 27124,
+                      "duration": 32105,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-16T18:09:21.038Z",
+                      "startTime": "2026-11-17T22:59:05.315Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -679,7 +679,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'Delegate_20261117_030946.xlsx' 6410B"
+                          "description": "[OK] Excel 다운로드(common) — 'Delegate_20261118_075936.xlsx' 6411B"
                         },
                         {
                           "type": "common",
@@ -716,8 +716,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-16T18:07:53.035Z",
-    "duration": 117727.861,
+    "startTime": "2026-11-17T22:57:30.966Z",
+    "duration": 129173.437,
     "expected": 1,
     "skipped": 0,
     "unexpected": 2,

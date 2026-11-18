@@ -459,7 +459,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -547,9 +547,9 @@
   "eg": "EG382",
   "screen": "SCP0111",
   "target": "메뉴 트리",
-  "ctx": "SCP/40/SCP Planner",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
-  "expected": "그룹 1개 중 메뉴 권한 1개 → 노출",
+  "expected": "그룹 9개 중 메뉴 권한 3개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
   "note": "",
@@ -563,727 +563,7 @@
   "eg": "EG366",
   "screen": "SCP0111",
   "target": "Division 후보",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,82",
-  "actual": "후보 40,82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "자동 선택",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "후보 안의 값(40,82)",
-  "actual": "40",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG368",
-  "screen": "SCP0111",
-  "target": "조회 행 범위",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "행 Division ⊆ 권한 40,82",
-  "actual": "1898행 Division 40",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG007",
-  "screen": "SCP0111",
-  "target": "권한 범위 조회",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(40,82)",
-  "actual": "1898행 · Division 40",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Planner",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SCP0111",
-  "target": "메뉴 트리",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "그룹 8개 중 메뉴 권한 2개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SCP0111",
-  "target": "Division 후보",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HM,81_UC,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(SCP0111_IntegrationPSI.cs:235 ← SCP0111_IntegrationPSI.cs:55) 로 EE,EE_HM,EE_UC 제외",
-  "actual": "후보 81,40,82,81_UC,81_HM",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "자동 선택",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "후보 안의 값(81,40,82,81_UC,81_HM)",
-  "actual": "81",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG368",
-  "screen": "SCP0111",
-  "target": "조회 행 범위",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "행 Division ⊆ 권한 40,81,81_HM,81_UC,82,EE,EE_HM,EE_UC",
-  "actual": "1260행 Division 81",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG007",
-  "screen": "SCP0111",
-  "target": "권한 범위 조회",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(40,81,81_HM,81_UC,82,EE,EE_HM,EE_UC)",
-  "actual": "1260행 · Division 81",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCP Tester",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SCP0111",
-  "target": "메뉴 트리",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SCP0111",
-  "target": "Division 후보",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
-  "actual": "후보 40",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "자동 선택",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "단일 권한 → 40",
-  "actual": "40",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "이전 세션 잔존",
-  "ctx": "SCP/40/SCP Tester→SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "이전 계정 Div 잔존 0",
-  "actual": "이전 81 · 이번 40",
-  "asis": "",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG368",
-  "screen": "SCP0111",
-  "target": "조회 행 범위",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "행 Division ⊆ 권한 40",
-  "actual": "1898행 Division 40",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG007",
-  "screen": "SCP0111",
-  "target": "권한 범위 조회",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(40)",
-  "actual": "1898행 · Division 40",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SCP0111",
-  "target": "메뉴 트리",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "그룹 3개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SCP0111",
-  "target": "Division 후보",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(SCP0111_IntegrationPSI.cs:235 ← SCP0111_IntegrationPSI.cs:55) 로 EE_HD,EE_HG,EE_HM,EE_ST,EE_UC 제외",
-  "actual": "후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "자동 선택",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG)",
-  "actual": "81",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG368",
-  "screen": "SCP0111",
-  "target": "조회 행 범위",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
-  "actual": "1260행 Division 81",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG007",
-  "screen": "SCP0111",
-  "target": "권한 범위 조회",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC)",
-  "actual": "1260행 · Division 81",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/ADMIN",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SCP0111",
-  "target": "메뉴 트리",
-  "ctx": "SCP/40/SCM PI Admin",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SCP0111",
-  "target": "Division 후보",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(SCP0111_IntegrationPSI.cs:235 ← SCP0111_IntegrationPSI.cs:55) 로 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC 제외",
   "actual": "후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
@@ -1299,7 +579,7 @@
   "eg": "EG365",
   "screen": "SCP0111",
   "target": "자동 선택",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG)",
   "actual": "81",
@@ -1315,15 +595,15 @@
   "eg": "EG368",
   "screen": "SCP0111",
   "target": "조회 행 범위",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
-  "actual": "1260행 Division 81",
+  "actual": "1259행 Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1331,15 +611,15 @@
   "eg": "EG007",
   "screen": "SCP0111",
   "target": "권한 범위 조회",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC)",
-  "actual": "1260행 · Division 81",
+  "actual": "1259행 · Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "건수 = 원장 대조는 facts_auth_db 후처리",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1347,7 +627,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1355,7 +635,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1363,7 +643,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1371,7 +651,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1379,7 +659,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1387,7 +667,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1395,7 +675,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1403,7 +683,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1411,7 +691,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1419,7 +699,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1427,7 +707,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/40/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1435,7 +715,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1443,15 +723,15 @@
   "eg": "EG382",
   "screen": "SCP0111",
   "target": "메뉴 트리",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "expected": "그룹 6개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1459,10 +739,10 @@
   "eg": "EG366",
   "screen": "SCP0111",
   "target": "Division 후보",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC,82",
-  "actual": "후보 81,82,81_UC,81_HM,81_ST,81_HD,81_HG",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(SCP0111_IntegrationPSI.cs:235 ← SCP0111_IntegrationPSI.cs:55) 로 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC 제외",
+  "actual": "후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
   "note": "",
   "mctx": {
@@ -1475,9 +755,9 @@
   "eg": "EG365",
   "screen": "SCP0111",
   "target": "자동 선택",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
-  "expected": "후보 안의 값(81,82,81_UC,81_HM,81_ST,81_HD,81_HG)",
+  "expected": "후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG)",
   "actual": "81",
   "asis": "DM-65",
   "note": "",
@@ -1491,15 +771,15 @@
   "eg": "EG368",
   "screen": "SCP0111",
   "target": "조회 행 범위",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
-  "expected": "행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC,82",
-  "actual": "1260행 Division 81",
+  "expected": "행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+  "actual": "1259행 Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1507,15 +787,15 @@
   "eg": "EG007",
   "screen": "SCP0111",
   "target": "권한 범위 조회",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC,82)",
-  "actual": "1260행 · Division 81",
+  "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC)",
+  "actual": "1259행 · Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "건수 = 원장 대조는 facts_auth_db 후처리",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1523,7 +803,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1531,7 +811,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1539,7 +819,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1547,7 +827,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1555,7 +835,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1563,7 +843,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1571,7 +851,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1579,7 +859,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1587,7 +867,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1595,7 +875,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1603,7 +883,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/81/SCP Planner",
+  "ctx": "SCR/SCP0111/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1611,7 +891,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1619,15 +899,15 @@
   "eg": "EG382",
   "screen": "SCP0111",
   "target": "메뉴 트리",
-  "ctx": "SCP/81/SCM Viewer",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "expected": "그룹 5개 중 메뉴 권한 2개 → 노출",
   "actual": "트리에 있음",
   "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1635,10 +915,10 @@
   "eg": "EG366",
   "screen": "SCP0111",
   "target": "Division 후보",
-  "ctx": "SCP/81/SCM Viewer",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81",
-  "actual": "후보 81",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(SCP0111_IntegrationPSI.cs:235 ← SCP0111_IntegrationPSI.cs:55) 로 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC 제외",
+  "actual": "후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
   "note": "",
   "mctx": {
@@ -1651,9 +931,9 @@
   "eg": "EG365",
   "screen": "SCP0111",
   "target": "자동 선택",
-  "ctx": "SCP/81/SCM Viewer",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
-  "expected": "단일 권한 → 81",
+  "expected": "후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG)",
   "actual": "81",
   "asis": "DM-65",
   "note": "",
@@ -1667,15 +947,15 @@
   "eg": "EG368",
   "screen": "SCP0111",
   "target": "조회 행 범위",
-  "ctx": "SCP/81/SCM Viewer",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
-  "expected": "행 Division ⊆ 권한 81",
-  "actual": "1260행 Division 81",
+  "expected": "행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC",
+  "actual": "1259행 Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1683,15 +963,15 @@
   "eg": "EG007",
   "screen": "SCP0111",
   "target": "권한 범위 조회",
-  "ctx": "SCP/81/SCM Viewer",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(81)",
-  "actual": "1260행 · Division 81",
+  "expected": "조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC)",
+  "actual": "1259행 · Division 81",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "건수 = 원장 대조는 facts_auth_db 후처리",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1699,183 +979,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/81/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/81/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/81/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/81/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/81/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/81/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SCP0111",
-  "target": "메뉴 트리",
-  "ctx": "SCP/81/SCM PI Admin",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SCP0111",
-  "target": "Division 후보",
-  "ctx": "SCP/81/SCM PI Admin",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(SCP0111_IntegrationPSI.cs:235 ← SCP0111_IntegrationPSI.cs:55) 로 EE 제외",
-  "actual": "후보 81,82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "자동 선택",
-  "ctx": "SCP/81/SCM PI Admin",
-  "result": "PASS",
-  "expected": "후보 안의 값(81,82)",
-  "actual": "81",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG368",
-  "screen": "SCP0111",
-  "target": "조회 행 범위",
-  "ctx": "SCP/81/SCM PI Admin",
-  "result": "PASS",
-  "expected": "행 Division ⊆ 권한 81,82,EE",
-  "actual": "1260행 Division 81",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG007",
-  "screen": "SCP0111",
-  "target": "권한 범위 조회",
-  "ctx": "SCP/81/SCM PI Admin",
-  "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(81,82,EE)",
-  "actual": "1260행 · Division 81",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/81/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1883,7 +987,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1891,7 +995,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/81/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1899,7 +1003,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1907,7 +1011,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/81/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1915,7 +1019,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1923,7 +1027,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/81/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1931,7 +1035,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1939,7 +1043,7 @@
   "eg": "EG374",
   "screen": "SCP0111",
   "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/81/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1947,7 +1051,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -1955,7 +1059,7 @@
   "eg": "EG411",
   "screen": "SCP0111",
   "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/81/SCM PI Admin",
+  "ctx": "SCR/SCP0111/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
   "actual": "조회 전 노출 · 조회 후 노출",
@@ -1963,199 +1067,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG382",
-  "screen": "SCP0111",
-  "target": "메뉴 트리",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
-  "actual": "트리에 있음",
-  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG366",
-  "screen": "SCP0111",
-  "target": "Division 후보",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82",
-  "actual": "후보 82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "자동 선택",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "단일 권한 → 82",
-  "actual": "82",
-  "asis": "DM-65",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG365",
-  "screen": "SCP0111",
-  "target": "이전 세션 잔존",
-  "ctx": "SCP/81/SCM PI Admin→SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "이전 계정 Div 잔존 0",
-  "actual": "이전 81 · 이번 82",
-  "asis": "",
-  "note": "",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "eg": "EG368",
-  "screen": "SCP0111",
-  "target": "조회 행 범위",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "행 Division ⊆ 권한 82",
-  "actual": "1281행 Division 82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG007",
-  "screen": "SCP0111",
-  "target": "권한 범위 조회",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "조회 결과 = 권한 Div 범위(82)",
-  "actual": "1281행 · Division 82",
-  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
-  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "SAVE 버튼 조회 전",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "INSERT 버튼 조회 전",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG374",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG411",
-  "screen": "SCP0111",
-  "target": "DELETE 버튼 조회 전",
-  "ctx": "SCP/82/SCM Viewer",
-  "result": "PASS",
-  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
-  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2246,12 +1158,12 @@
   "ctx": "병합 PLAN_TYPE r0~36 · 선택 r1",
   "result": "FAIL",
   "expected": "신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15",
-  "actual": "신규행 r1714 · 메시지 -",
+  "actual": "신규행 r1259 · 메시지 -",
   "asis": "SCP0111_IntegrationPSI.cs:533",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1715,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2262,28 +1174,44 @@
   "ctx": "병합 PLAN_TYPE r0~36 · 선택 r1",
   "result": "FAIL",
   "expected": "신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15",
-  "actual": "신규행 r1714 · 메시지 -",
+  "actual": "신규행 r1259 · 메시지 -",
   "asis": "SCP0111_IntegrationPSI.cs:533",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1715,
+   "rows": 1260,
    "req": 0
   }
  },
  {
   "eg": "EG126",
   "screen": "SCP0111",
-  "target": "Sort 상태 Insert",
-  "ctx": "SCP0111",
-  "result": "ERROR",
-  "expected": "헤더 클릭 정렬",
-  "actual": "헤더 20칸 클릭 후 정렬 상태 없음 — 측정 경로 없음",
-  "asis": "",
+  "target": "Sort 유지 Insert",
+  "ctx": "정렬 DIVISION_ID asc · 선택 r2",
+  "result": "PASS",
+  "expected": "Insert 후 정렬 유지 — DM-32",
+  "actual": "정렬 전 DIVISION_ID asc → 후 DIVISION_ID asc · 신규행 r1259",
+  "asis": "SCP0111_IntegrationPSI.cs:533",
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1715,
+   "rows": 1260,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG126",
+  "screen": "SCP0111",
+  "target": "선택 행 위 Insert",
+  "ctx": "선택 r2",
+  "result": "FAIL",
+  "expected": "AS-IS 선택 행 기준 삽입(프레임워크 SpreadInfo.Insert() = 활성 행 위치 · SpreadInfo.cs:8460) → 신규행 ≤ r2(맨 위 r0 은 CR-074)",
+  "actual": "신규행 r1259 — 선택 행 아래·끝에 삽입(CR-015 선택 행 위 · CR-074 맨 위 어느 쪽도 아님)",
+  "asis": "SCP0111_IntegrationPSI.cs:533,SCP0111_IntegrationPSI.cs:967",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2339,199 +1267,7 @@
   "eg": "EG377",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Planner · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG124",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Planner · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG378",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Planner · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG123",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Planner · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG377",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Tester · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG124",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Tester · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG378",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Tester · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG123",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCP Tester · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG377",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM Viewer · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG124",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM Viewer · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG378",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM Viewer · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG123",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM Viewer · Div 40",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1899,
-   "req": 0
-  }
- },
- {
-  "eg": "EG377",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/ADMIN · Div 81",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN · Div 81",
   "result": "PASS",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 18셀 · 불일치 0",
@@ -2539,7 +1275,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2547,7 +1283,7 @@
   "eg": "EG124",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/ADMIN · Div 81",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN · Div 81",
   "result": "PASS",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 18셀 · 불일치 0",
@@ -2555,7 +1291,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2563,7 +1299,7 @@
   "eg": "EG378",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/ADMIN · Div 81",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN · Div 81",
   "result": "PASS",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 18셀 · 불일치 0",
@@ -2571,7 +1307,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2579,7 +1315,7 @@
   "eg": "EG123",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/ADMIN · Div 81",
+  "ctx": "SCR/SCP0111/SYSTEM ADMIN · Div 81",
   "result": "PASS",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 18셀 · 불일치 0",
@@ -2587,7 +1323,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2595,7 +1331,7 @@
   "eg": "EG377",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM PI Admin · Div 81",
+  "ctx": "SCR/SCP0111/SCM PI Admin · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2603,7 +1339,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2611,7 +1347,7 @@
   "eg": "EG124",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM PI Admin · Div 81",
+  "ctx": "SCR/SCP0111/SCM PI Admin · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2619,7 +1355,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2627,7 +1363,7 @@
   "eg": "EG378",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM PI Admin · Div 81",
+  "ctx": "SCR/SCP0111/SCM PI Admin · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2635,7 +1371,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2643,7 +1379,7 @@
   "eg": "EG123",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/40/SCM PI Admin · Div 81",
+  "ctx": "SCR/SCP0111/SCM PI Admin · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2651,7 +1387,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2659,7 +1395,7 @@
   "eg": "EG377",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCP Planner · Div 81",
+  "ctx": "SCR/SCP0111/SCP Planner · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2667,7 +1403,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2675,7 +1411,7 @@
   "eg": "EG124",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCP Planner · Div 81",
+  "ctx": "SCR/SCP0111/SCP Planner · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2683,7 +1419,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2691,7 +1427,7 @@
   "eg": "EG378",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCP Planner · Div 81",
+  "ctx": "SCR/SCP0111/SCP Planner · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2699,7 +1435,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2707,7 +1443,7 @@
   "eg": "EG123",
   "screen": "SCP0111",
   "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCP Planner · Div 81",
+  "ctx": "SCR/SCP0111/SCP Planner · Div 81",
   "result": "FAIL",
   "expected": "규칙 9컬럼 · 평가 불가 0",
   "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
@@ -2715,199 +1451,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG377",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM Viewer · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG124",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM Viewer · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG378",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM Viewer · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG123",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM Viewer · Div 81",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG377",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM PI Admin · Div 81",
-  "result": "FAIL",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG124",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM PI Admin · Div 81",
-  "result": "FAIL",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG378",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM PI Admin · Div 81",
-  "result": "FAIL",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG123",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/81/SCM PI Admin · Div 81",
-  "result": "FAIL",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" && DIV!=\"40\" &)",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1261,
-   "req": 0
-  }
- },
- {
-  "eg": "EG377",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/82/SCM Viewer · Div 82",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG124",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/82/SCM Viewer · Div 82",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG378",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/82/SCM Viewer · Div 82",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
-   "req": 0
-  }
- },
- {
-  "eg": "EG123",
-  "screen": "SCP0111",
-  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
-  "ctx": "SCP/82/SCM Viewer · Div 82",
-  "result": "PASS",
-  "expected": "규칙 9컬럼 · 평가 불가 0",
-  "actual": "대조 6셀 · 불일치 0",
-  "asis": "edit_expect.csv",
-  "note": "",
-  "mctx": {
-   "calls": 1,
-   "rows": 1282,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2923,7 +1467,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1715,
+   "rows": 1260,
    "req": 0
   }
  },
@@ -2955,7 +1499,7 @@
   "note": "",
   "mctx": {
    "calls": 1,
-   "rows": 1715,
+   "rows": 1260,
    "req": 0
   }
  },

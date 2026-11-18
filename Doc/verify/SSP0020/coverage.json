@@ -148,14 +148,14 @@
    "rule_id": "D1",
    "rows": 31,
    "measured": 8,
-   "inherited": 8,
+   "inherited": 9,
    "not_run_error": 0,
    "review": 0,
-   "na": 15,
-   "na_pct": 48.4,
+   "na": 14,
+   "na_pct": 45.2,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "AS-IS 그리드 읽기 전용 — 전 컬럼 기존행 잠×7 | 기대 AS-IS GROUP·행 값 잠금 규칙 · 실×2 | 조회 결과에 병합 칸 없음×1 | Insert 버튼 비노출×1"
+   "na_reasons": "AS-IS 그리드 읽기 전용 — 전 컬럼 기존행 잠×6 | 기대 AS-IS GROUP·행 값 잠금 규칙 · 실×2 | 조회 결과에 병합 칸 없음×1 | Insert 버튼 비노출×1"
   },
   {
    "rule_id": "D3",
@@ -1005,15 +1005,15 @@
   {
    "rule_id": "X-LOC",
    "rows": 24,
-   "measured": 13,
+   "measured": 18,
    "inherited": 5,
    "not_run_error": 0,
    "review": 0,
-   "na": 6,
-   "na_pct": 25.0,
+   "na": 1,
+   "na_pct": 4.2,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "대조표 기록 보강 대상(화면 오류 아님): 상태 구×6"
+   "na_reasons": "대조표 기록 보강 대상(화면 오류 아님): 상태 구×1"
   },
   {
    "rule_id": "MS1",
@@ -1057,8 +1057,8 @@
   {
    "rule_id": "H11",
    "rows": 2,
-   "measured": 2,
-   "inherited": 0,
+   "measured": 1,
+   "inherited": 1,
    "not_run_error": 0,
    "review": 0,
    "na": 0,

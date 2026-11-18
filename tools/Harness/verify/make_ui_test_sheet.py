@@ -144,20 +144,53 @@ def recorded_ids(mid, paths):
     return out
 
 
+# 2026-11-18 사용자: '대조표'는 일반 사용자에게 익숙하지 않음. 대조표(mapping_trace) = AS-IS 동작 ↔ TO-BE 구현 대조 → 'GAP' 으로 표기
+_AREA_PLAIN = {'대조표': 'GAP'}
+
+
+def _plain(s):
+    s = str(s or '')
+    for k, v in _AREA_PLAIN.items():
+        s = s.replace(k, v)
+    return s
+
+
+def area_text(r):
+    return _plain(r.get('영역', ''))
+
+
 def test_text(r):
     """'테스트 내용' 칸 — [영역] 대상 / CheckList 설명 / AS-IS 근거"""
-    lines = [f"[{r.get('영역', '')}] {r.get('대상', '')}".strip()]
+    lines = [f"[{area_text(r)}] {r.get('대상', '')}".strip()]
     desc = (r.get('설명') or '').strip()
     if desc:
         lines.append(desc)
     if r.get('AS-IS 근거') and 'O1' in (r.get('정답') or ''):  # O2·O3 행의 근거 칸은 규칙 정의라 AS-IS 근거로 적지 않는다
         lines.append(f"- AS-IS 근거 : {r['AS-IS 근거']}")
-    return '\n'.join(lines)
+    return _plain('\n'.join(lines))
 
 
 def kind_text(r):
     how = r.get('판정 방법') or ''
-    return f"{'동적' if 'E2E' in how else '정적'}-{r.get('영역') or r.get('규칙') or ''}"
+    return f"{'동적' if 'E2E' in how else '정적'}-{area_text(r) or r.get('규칙') or ''}"
+
+
+_RULE_NAMES = None
+
+
+def rule_name(rid):
+    """detect_rules.csv 의 규칙 이름. 괄호 부연은 뗀다('처리 중 로딩 표시(스피너)' → '처리 중 로딩 표시')."""
+    global _RULE_NAMES
+    if _RULE_NAMES is None:
+        import csv
+        _RULE_NAMES = {}
+        try:
+            with open(os.path.join(HERE, 'detect_rules.csv'), encoding='utf-8-sig', newline='') as f:
+                for x in csv.DictReader(f):
+                    _RULE_NAMES[(x.get('rule_id') or '').strip()] = re.sub(r'\s*\(.*?\)\s*$', '', (x.get('name') or '').strip())
+        except OSError:
+            pass
+    return _RULE_NAMES.get(rid, '')
 
 
 def request_text(r):
@@ -168,7 +201,11 @@ def request_text(r):
         return 'asis 와 동일하게 수정'
     if o == 'O2':
         cr = CR_RX.search((r.get('AS-IS 근거') or '') + ' ' + (r.get('기대 원천') or ''))
-        return f"TO-BE 확정 규칙({cr.group(0)})으로 수정" if cr else f"TO-BE 규칙({r.get('규칙') or ''})으로 수정"
+        if cr:
+            return f"TO-BE 확정 규칙({cr.group(0)})으로 수정"
+        # 규칙 코드(H11 등)는 현업이 모르는 기호라 detect_rules.csv 규칙 이름으로 적는다(11-18)
+        rid = (r.get('규칙') or '').strip()
+        return f"TO-BE 규칙({rule_name(rid) or rid})으로 수정"
     if o == 'O3':
         return '오류 수정'
     return ''

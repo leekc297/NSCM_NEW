@@ -145,6 +145,8 @@ for (const id0 of planDirs) {
     // 조회조건 기준표 To-Be 명칭(예: Unit (Qty) → Scale, 라디오 NoName → Search Mode) 을 최우선 후보로 — 구 카탈로그(v0.4)보다 앞
     { const scr = scRowOf.get(f); if (scr && scr.tobe_name && scr.tobe_name !== '-') cands.unshift(scr.tobe_name); }
     if (!ex && f.asis && hidden[f.asis]) ex = `As-is 숨김: ${hidden[f.asis]}.Visibility = Never (designer.cs)`;
+    // 2026-11-18 SCP0111 cmbToMonth(라벨 ' ~'): AS-IS 기간 끝 월 콤보 — 라벨이 구분 기호뿐이고 같은 화면에 기간 칸(Period·From)이 있으면 TO-BE 는 그 칸 하나(기간 범위 달력)에서 측정한다 → 따로 찾으면 '칸 없음' 허위 ERROR
+    if (!ex && /^[~\-–]$/.test(asisLabel)) { const per = (P.fields || []).find(g => g !== f && /period|기간|from/i.test(String(g.label || '') + ' ' + String(g.asis || ''))); if (per) ex = `기간 끝 칸(AS-IS ${f.asis || asisLabel}) — TO-BE 는 기간 칸 '${String(per.label || '').trim()}' 하나에서 범위 선택(그 칸에서 측정)`; }
     return Object.assign({}, f, { tobeLabel: tobe, catalog, labels: [...new Set(cands.filter(Boolean))], excluded: ex ? true : false, excludedWhy: ex });
   });
   // 메타 기대 컬럼(화면×시트×DIV) — 없으면 Fact Pack 라벨
@@ -241,6 +243,14 @@ for (const id0 of planDirs) {
     const noAuth = accsAll.find(x => !x.adminAlso && !roleAccs.includes(x) && truthAll.get(x.id).menuAccess === 'N') || null;
     accs = roleAccs.concat(admin1 ? [Object.assign({}, admin1, { roleNote: 'ADMIN' })] : []).concat(noAuth ? [Object.assign({}, noAuth, { divisions: [sample['DIV'] || cfg.defaultDivision], roleNote: '권한 없음 대표' })] : []);
     if (!roleAccs.length) console.error(`  ⚠ ${MENU}: 명부(users.json divisions)에 ${area ? area.replace(' ADMIN', '') + ' 계열' : ''} 역할 계정이 없음 — ADMIN/권한없음만 검증`);
+  }
+  // 2026-11-17 사용자(SCP0111 J3 권한별 편집 구간 · '권한 계정은 lucky-alex'): 화면별 추가 계정 users.json screens[<메뉴>].extra = [계정ID, …]
+  //   모드와 무관하게 명부(로그인 확인된 계정)에 있으면 덧붙인다 — 명부에 없거나 로그인 불가면 경고만
+  for (const xid of ((saved && saved.extra) || [])) {
+    if (accs.some(y => y.id === xid)) continue;
+    const xa = accsAll.find(y => y.id === xid);
+    if (!xa) { console.error(`  ⚠ ${MENU}: users.json screens.extra '${xid}' 가 명부(로그인 확인 계정)에 없음 — 추가 안 함`); continue; }
+    accs.push(Object.assign({}, xa, { divisions: [sample['DIV'] || cfg.defaultDivision], roleNote: xa.adminAlso ? 'ADMIN' : '지정 계정(권한별 검사)' }));
   }
   console.log(`  ${id} 테스트 모드 ${mode} (${modeSource}) → 계정 ${accs.length}: ${accs.map(x => x.id).join(', ')}`);
   // 2026-10-23 조회조건 동작 검사: 조회조건 기준표(tools/Harness/rules/search_cond.csv — 룰 E11) 의 MAIN 영역 To-Be 순서 · 제외(삭제/Sun-Set/버튼영역 이동 등) 조건

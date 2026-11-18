@@ -23,7 +23,10 @@ export function loadFormScen(root: string, id: string): { scenarios: FScen[]; va
   try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return null; }
 }
 
-const today = (off = 0) => { const d = new Date(Date.now() + off * 86400000); const z = (n: number) => String(n).padStart(2, '0'); return `${d.getFullYear()}.${z(d.getMonth() + 1)}.${z(d.getDate())}`; };
+// 2026-11-18 SSP0020 23:58 실행: 준비(F09)·검증(F05)·정리(F13) 사이에 자정이 지나 @TODAY 가 바뀌어 F05 FAIL · F13 조건 행 없음 →
+//   run_verify.py 가 준비 직전 기준 시각(FORM_BASE_MS)을 정해 세 단계에 같은 값을 넘긴다. 없으면 현재 시각
+const baseMs = () => { const b = Number(process.env.FORM_BASE_MS || ''); return Number.isFinite(b) && b > 0 ? b : Date.now(); };
+const today = (off = 0) => { const d = new Date(baseMs() + off * 86400000); const z = (n: number) => String(n).padStart(2, '0'); return `${d.getFullYear()}.${z(d.getMonth() + 1)}.${z(d.getDate())}`; };
 /** 값 토큰: @TODAY · @TODAY+n · @TODAY-n → YYYY.MM.DD */
 let VARS: Record<string, string> = {};
 const LAST_CLICK: { ms: number; loading: boolean | null } = { ms: -1, loading: null };

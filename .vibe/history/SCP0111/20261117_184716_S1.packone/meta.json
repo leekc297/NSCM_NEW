@@ -1,0 +1,29 @@
+{
+  "id": "SCP0111",
+  "task": "S1.packone",
+  "scope": "docs",
+  "note": "pack.ps1 SCP0111",
+  "start": "2026-11-17T18:47:16+09:00",
+  "end": "2026-11-17T18:47:30+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "menu",
+  "label": "Fact Pack 1화면 재생성 — 화면ID (pack.ps1 <ID>, 수 초)",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-17T18:47:30+09:00",
+  "changed": []
+}

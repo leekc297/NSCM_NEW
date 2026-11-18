@@ -105,7 +105,10 @@ export async function cellRoundTrip(nscm: Nscm, row: number, b: string, value?: 
   if (s1.err) { t.got = ''; t.ok = false; t.restored = true; t.note += ' · 저장 실패라 DB 변화 없음(원복 불필요)'; return t; }
   let h1 = await probe.findRowsByIdentity(p, ident, [b]); let sideEffect = '';
   if (h1.length !== 1) { const near = await probe.findRowNear(p, ident, [b]); if (near) { h1 = [near.row]; sideEffect = near.diff.join(', '); if (sideEffect) t.note += ` · ⚠ 저장이 다른 칸도 바꿈(restore_touched 가 DB 복원): ${sideEffect}`; } }
-  if (h1.length !== 1) { t.note += ` 재조회 행 식별 ${h1.length}건`; t.stop = true; return t; }
+  // 2026-11-17 SCP0111: 행 식별이 1건이 아니면 t.got 은 초기값 '' 로 남아 판정이 "재조회 '' NG" 로 읽은 값처럼 찍혔다 — 판독 안 함으로 적고 후보 행들의 그 칸 값을 남긴다
+  if (h1.length !== 1) { const cand = await Promise.all(h1.slice(0, 4).map(async r => `r${r}=${(await probe.displayText(p, r, b).catch(() => null)) ?? '?'}`)); t.got = '(판독 안 함)'; t.note += ` 재조회 행 식별 ${h1.length}건${cand.length ? ` — 후보 ${b} 값 ${cand.join(' · ')}` : ''}`;
+    // 0건 = 행을 잃음(이후 칸도 같은 행을 못 찾음) → 중단. 2건 이상 = 저장이 행을 나눔(SCP0111 BOH 값별 조회 행 분리) → 이 칸만 판독 불가로 두고 다음 칸·다음 시험 계속(DB 는 체인 끝 restore_touched 가 복원 — 11-18 00:22 실측 잔존 0)
+    t.stop = h1.length === 0; if (h1.length > 1) t.note += ' · 다음 칸 계속(DB 복원은 restore_touched)'; return t; }
   t.got = (await probe.displayText(p, h1[0], b)) ?? ''; t.ok = !s1.err && same(t.got, nv);
   if (same(t.got, orig)) { t.restored = true; t.newRow = h1[0]; return t; }  // 저장이 값을 바꾸지 않음 — 원복 불필요
   if (!(await typeCell(nscm, h1[0], b, orig)).ok) { t.note += ' 원복 입력 실패'; t.stop = true; return t; }

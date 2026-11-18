@@ -60,7 +60,11 @@
      }
     ],
     "src": "SCP0104_CAPA_Line_Assign.cs:2044~2056(_sheet_idx: Cell·Module/Pack=0, 그 밖=1) · :271(rgrpDivisionType.SelectedIndex) · Designer.cs:637~640(Electrode=0, Cell=1, Module/Pack=2)"
-   }
+   },
+   "new_row_cond": {
+    "Div": "81 Automotive Battery"
+   },
+   "new_row_why": "2026-11-17 sheet_data_cond.json(15:53 조회 SP 재실행): Div 81 = SOP 행 0 · SOP 모델 팝업 SOP_MODEL_ELTR 50 / SOP_MODEL_ASSEMBLY 168(미배정 모델 있음). 81_HG·81_ST 는 팝업 모델이 전부 배정돼 Insert 로 새 행이 생기지 않음"
   },
   "SOP_ASSEMBLY": {
    "cond": {
@@ -81,7 +85,11 @@
      }
     ],
     "src": "SCP0104_CAPA_Line_Assign.cs:2044~2056(_sheet_idx: Cell·Module/Pack=0, 그 밖=1) · :271(rgrpDivisionType.SelectedIndex) · Designer.cs:637~640(Electrode=0, Cell=1, Module/Pack=2)"
-   }
+   },
+   "new_row_cond": {
+    "Div": "81 Automotive Battery"
+   },
+   "new_row_why": "2026-11-17 sheet_data_cond.json(15:53 조회 SP 재실행): Div 81 = SOP 행 0 · SOP 모델 팝업 SOP_MODEL_ELTR 50 / SOP_MODEL_ASSEMBLY 168(미배정 모델 있음). 81_HG·81_ST 는 팝업 모델이 전부 배정돼 Insert 로 새 행이 생기지 않음"
   },
   "LINE": {
    "popup": "P03 CAPA Line",

@@ -1,3 +1,41 @@
+## (판 번호 없음, VM 저장소 + 설치 폴더) 자동 보완 = CheckList 기준으로만: 사전 단계 실패 시 중단, 최신 판단 보강, 같은 원인 묶음 (2026-11-18 13:11, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "보완 > 자동보완, 자동보완 반복 의 경우에 CheckList을 확인해서 보완을 진행할 수 있도록 하는 Rule" 점검 후 "1,2,3,4 의 추천안으로 진행".
+- 1) workbench.js quick 실행: 메뉴 속성 preTaskRequired 가 있으면 사전 단계(S8.verifyIfStale) 종료코드≠0(4 = 같은 화면 CheckList 실행 중) 또는 Doc/verify/<ID>/fixlist.csv 없음일 때 보완을 실행하지 않고 사유 표시. 🧯 자동 보완에만 설정. 🔗·🩺·🧾 는 종전대로 경고 후 계속.
+  - 🚒 자동보완 반복(autofix-full): S8.verifyIfStale 선택 → 필수, fixlist.csv 있음 확인 추가.
+  - 🚀·🧩·📏 생성 전체 체인: 생성 후 첫 CheckList 선택 → 필수, fixlist.csv 있음 확인 추가(뒤 🧯 단계의 기준).
+- 2) 🧯 지시문: 'fixlist.csv 없으면 기존 방식대로 진행' → '보완을 시작하지 않고 멈춘 뒤 CheckList 먼저 실행 필요로 보고'.
+- 3) tools/Harness/verify/verify_if_stale.py file_changes(): fixlist.csv 시각 기준으로 ① _user_verdicts_direct.csv 의 이 화면 행이 원장 결과와 다름(날짜만 있는 파일이라 내용 대조) ② static_verdicts.csv 수정 ③ CheckList Excel 저장(사용자의견 입력, 2분 여유) ④ Doc/asisfacts/screens/<AS-IS ID> 수정이면 최신 아님.
+- 4) 🧯 지시문: Doc/verify/<ID>/action_summary.csv 의 같은 group 행은 한 번에 고치고 결과는 행마다 기록, 사용자가 오류 아님으로 판정한 행은 고치지 않음.
+- 확인(13:0x~13:11): node --check 통과, JSON 파싱 통과, verify_if_stale --check SSP0020·SCP0104·SCP0111 = 최신(rc 0). 시험 A 기준 시각 1일 전 = ②③④ 3종 검출, 시험 B 임시 사본 원장에서 V-9e99f124 결과 변경 = ① 검출. 설치 폴더 cmp 일치. VM 실화면 실행 미확인.
+- 되돌리기: workbench.js.bak_20261118_fixgate(저장소, 설치 폴더), quick.json.bak_20261118_fixgate, CHANGELOG.md.bak_20261118_fixgate. verify_if_stale.py 는 백업 없음(git HEAD 기준 비교).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 생성 전체 체인 3종: 파싱, 실측, TestResultList 단계 보강 (2026-11-18 13:1x)
+- 사용자(11-18): "생성 > ID하나로 전체 의 경우에도 파싱,실측,와 생성 후 CheckList, Test 의 전 과정이 누락되지 않도록", "TestResultList 결과파일은 현재와 동일하게 유지".
+- 🚀 ID 하나로 전체(full) 18 → 24단계, 🧩 새 화면 from AS-IS(new-asis-full) 16 → 23단계, 📏 새 화면 from 설계서(new-design-full) 14 → 15단계.
+  - full, new-asis-full 앞: AS-IS 파싱(S1.packone, 매번. new-asis-full 에는 없었음) → S1.liveCheck → S1.liveRuleMap → S1.liveScreen. 종전 S1.live(결과 파일 없을 때만, 기본 실측만) 제거. S1.liveScreen 은 24시간 안의 정상 실측을 재사용.
+  - full, new-asis-full 첫 CheckList 뒤: S1.liveScen(TO-BE 호출 기록 있을 때), S1.liveSaveDry, S1.liveSave(save_scenario.json 있을 때, 연습 통과 때만). 🎥 AS-IS 실측 체인과 같은 정의를 복사함.
+  - 3종 모두 최종 CheckList 재판정 뒤 S8.report(TestResultList) 추가. 결과 파일 이름, 폴더(Doc/테스트결과서)는 그대로.
+  - label, label_en, hint 를 바뀐 단계에 맞춤. 상단 아이콘 접두 '🚀 ID 하나로 전체' 유지.
+- 확인: JSON 파싱 통과, 설치 폴더 cmp 일치. 체인 실제 실행, VS Code 실화면 미확인.
+- 되돌리기: quick.json.bak_20261118_full.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 분석·문서 메뉴 정리: Excel 폴더 삭제, 테스트결과서 → TestResultList (2026-11-18 13:05)
+- 사용자(11-18): "분석,문서 아래의 EXCEL 폴더 는 메뉴 삭제", "테스트결과서는 TestResultList 로 명칭 변경".
+- quick.json: '🗂️ Excel 폴더'(S3.xlsxopen) 항목 삭제. 작업 정의 S3.xlsxopen 은 steps.json 에 남김. 테스트결과서 메뉴 label, label_en, hint, 마지막 단계 제목을 TestResultList 로 변경. chainId(testreport), 산출 폴더 Doc/테스트결과서, 파일 이름은 그대로.
+- steps.json: S8.report 제목 '테스트결과서' → 'TestResultList'.
+- 설치 폴더 steps.json 은 저장소보다 S1.liveScenEvent 1개가 적었음(다른 세션 추가분 미반영). 저장소본으로 덮어써 함께 반영. 설치본 이전 파일 steps.json.bak_20261118_menu.
+- 확인: JSON 파싱 2개 통과, 설치 폴더 cmp 일치 2개. VS Code 실화면 미확인(창 다시 로드 필요).
+- 되돌리기: quick.json.bak_20261118_menu, steps.json.bak_20261118_menu, CHANGELOG.md.bak_20261118_menu.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) DB MODE FE 가이드 = 문장 규칙 19 업무 단어 + 가이드 문서 틀 (2026-11-17 18:0x, VS Code 창 다시 로드 필요)
+- 사용자(11-17): "EXCEL 이나 문서에 자연스러운 단어로 변경하도록 보완하는 것을 적용하였습니다. FE 가이드 생성시에도 이 RULE 적용".
+- rules/50_DOC_STYLE.md: 규칙 19(개발 용어 대신 업무 단어 표, 정본 예 plain_detail.py _GLOSS) · FE·BE 가이드 문서 틀(문제, AS-IS 동작, 고칠 곳, 변경 전/후, 확인 방법) · 지키게 하는 장치 표에 FE 가이드 행.
+- workbench.js workModePrefix: DB MODE 문단에 "가이드 문장은 50_DOC_STYLE.md 규칙 19 와 가이드 문서 틀을 따르고 doc_style.py 로 위반 0 확인" 1문장 추가.
+- tools/Docs/doc_style_rules.csv: kind=용어 4행(unfold·payload·fallback·stub·mock·delta / 가감값·차이값·스텁·폴백 / call-proc / 단위 시험). 백틱·따옴표 안 제외.
+- rules/10_RULES_KEEP.md 0번: 규칙 19 와 FE·BE 가이드 적용 대상 추가.
+- 확인: node --check · workModePrefix 출력에 '규칙 19' 포함 · 설치 폴더 cmp 일치 · doc_style.py: 옛 가이드 FE_GUIDE_20261117_1736.md 용어 6건 검출, 새 가이드 FE_GUIDE_20261117_1759.md 용어 0(남은 1건 = 기존 코드 인용 줄표). VS Code 실화면 미확인.
+- 되돌리기: *.bak_20261117_feguide(workbench.js 저장소·설치 폴더, CHANGELOG.md) · *.bak_20261117_plainword(50_DOC_STYLE.md, 10_RULES_KEEP.md, doc_style_rules.csv).
+
 ## (판 번호 없음 · VM 저장소 + 설치 폴더) Source Backup — 폴더 묶음별 add · 수정 중 파일만 제외 (2026-11-17 17:26 · VS Code 창 다시 로드 필요)
 - 사용자(11-17): "Source Backup 오류 다시 발생 · 원인 확인 및 보완 · 폴더로 분할 · 수정 중 파일 때문이면 그 파일만 제외하고 나머지는 올림".
 - 원인(측정): git add -A 중 git.exe 2.56.0.4 비정상 종료 0xC0000005 · 오프셋 0x15dcd6 (Windows 이벤트 로그 Application 1000 · 11-11 20:50 · 11-11 21:26 · 11-17 16:23) → .git/index.lock 잔존 → 다음 실행 'File exists'. 11-17 15:5x VM 세션의 '강제 종료' 판단은 이벤트 로그와 다름. 충돌 원인 자체는 미확인.

@@ -498,6 +498,36 @@ def main():
         k = (x['class'], x['method']); ln = int(x['line'] or 0)
         lo, hi = spans.get(k, (ln, ln)); spans[k] = (min(lo, ln), max(hi, ln))
     R = Resolver(src_lines, spans, acts)
+    # 2026-11-18 SCP0111 D3(cs:622~642): 'V = Data.Common(Data.Type.LookupCommon, false, "TYPE"); for (…) { b = V.Rows[i]["NAME"]…; if (a == b) flag = true }' 존재 검사가
+    #   RAW(V != null) && RAW(V.Rows.Count > 0) && RAW(a == b) 로 남아 평가 불가였다 → INLOOKUP(<a 의 정규형>,"TYPE","NAME") 원자(condeval · lookups.json 값 목록)
+    lookup_types = set()
+
+    def lookup_fix(key, cond, ln0):
+        for V in sorted(set(re.findall(r'RAW\((\w+) != null\)', cond))):
+            m = re.search(r'RAW\(' + re.escape(V) + r' != null\) && RAW\(' + re.escape(V) + r'\.Rows\.Count > 0\) && RAW\((\w+) == (\w+)\)', cond)
+            if not m:
+                continue
+            dv = [d for d in R.var_defs(key, V) if d[0] < ln0] or [(i_, re.sub(r'^\s*DataTable\s+' + re.escape(V) + r'\s*=\s*', '', l_).rstrip(';').strip()) for i_, l_ in R.method_lines(key) if re.match(r'^\s*DataTable\s+' + re.escape(V) + r'\s*=', l_) and i_ < ln0]
+            ml = re.search(r'Data\.Common\(\s*Data\.Type\.LookupCommon\w*\s*,\s*\w+\s*,\s*"([^"]+)"', dv[-1][1]) if dv else None
+            if not ml:
+                continue
+            a_, b_ = m.group(1), m.group(2)
+            fld = None
+            for x_, y_ in ((a_, b_), (b_, a_)):
+                for i_, l_ in R.method_lines(key):
+                    mm = re.search(r'\b' + re.escape(y_) + r'\s*=\s*' + re.escape(V) + r'\.Rows\[\w+\]\["(\w+)"\]', l_)
+                    if mm:
+                        fld = (x_, mm.group(1)); break
+                if fld: break
+            if not fld:
+                continue
+            e_ = R.expr(key, f'{fld[0]} == "__Z__"', '')
+            mc_ = re.match(r'^(COL\(\w+\))=="__Z__"$', e_ or '')
+            if not mc_:
+                continue
+            lookup_types.add(ml.group(1))
+            cond = cond.replace(m.group(0), f'INLOOKUP({mc_.group(1)},"{ml.group(1)}","{fld[1]}")')
+        return cond
     # 진입점 경로(actions_entries): EditButton 경로 메서드 = 기존행 규칙 · InsertButton 경로 메서드 = 신규행 규칙
     ents = read_csv(os.path.join(sdir, 'actions_entries.csv'))
     chain = lambda entry: {r['method'] for r in ents if r.get('entry') == entry and r.get('class') == main_cls} | {entry}
@@ -633,6 +663,7 @@ def main():
             scope = 'NEW_ROW' if m in insert_chain or row_arg == 'insCell' else 'ROW_COND'
         self_col = cols[0] if how == 'DYNAMIC' else ''
         cond = R.guard(key, x['guard'], self_col, line=int(x['line'] or 0))
+        cond = lookup_fix(key, cond, int(x['line'] or 0))
         locks.append({'method': m, 'line': x['line'], 'api': tgt.split('.')[-1], 'scope': scope, 'locked': locked, 'lock_expr': lock_expr, 'columns': ';'.join(cols), 'expand': how,
                       'cond': cond, 'guard': x['guard'], 'control': ctl, 'raw': tgt + val})
 
@@ -741,8 +772,81 @@ def main():
                 peers = [o for o in order if o != c and sort_no.get(o) == sort_no.get(c)]
                 r['ambiguous'] = f"정렬번호 {sort_no.get(c)} 동률({','.join(peers)}) — 범위 경계 포함 여부 확정 불가" if peers and sort_no.get(c) in bounds else ''
                 w.writerow(r)
+    # 2026-11-18 SCP0111 H2 SetBGColor2 미검증: 조건부 배경색 문장도 잠금과 같은 가드 정규형으로 전개 → color_rules.csv(E2E _trace 'H2 조건부 배경색' 이 행 값·계정 그룹·Division 으로 계산해 대조)
+    #   색 인자가 변수면 같은 메서드에서 문장 앞 마지막 대입 묶음을 읽는다 — 'if (… IsEditMode …)' 쪽 대입 = 편집 모드 색(TO-BE 는 상시 편집 모드 · CR-084/093), else 쪽 = 조회 모드 색
+    color_rows = []
+    rx_col = re.compile(r'Color\.FromArgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)|Color\.(\w+)')
+    for x in sorted((x for x in acts if x['kind'] == 'GRID_STYLE' and x['class'] == main_cls and re.search(r'\.(SetBGColor2?|SetBackColor|SetCellColor)$', x['target'] or '')), key=lambda x: int(x['line'] or 0)):
+        key = (x['class'], x['method']); ln0 = int(x['line'] or 0); R.control = x['target'].split('.')[0]; R.line = ln0
+        _args = [a_.strip() for a_ in Resolver._split(x['value'].strip()[1:-1] if x['value'].strip().startswith('(') else x['value'], ',')]
+        carg = _args[-1] if _args else ''
+        edit_c = view_c = ''
+        m0 = rx_col.search(carg)
+        if m0:
+            edit_c = view_c = (f'rgb({m0.group(1)},{m0.group(2)},{m0.group(3)})' if m0.group(1) else m0.group(4))
+        elif re.fullmatch(r'\w+', carg):
+            mode = ''
+            for i, ln in R.method_lines(key):
+                if i >= ln0: break
+                kw, ctext = R._cond_text(i)
+                if kw in ('if', 'else if'): mode = 'edit' if re.search(r'IsEditMode\s*(==\s*true)?\s*$', ctext) else ('view' if re.search(r'IsEditMode\s*==\s*false|!\s*[\w.]*IsEditMode', ctext) else '')
+                elif re.match(r'\s*(\}\s*)?else\b(?!\s+if)', ln): mode = {'edit': 'view', 'view': 'edit'}.get(mode, '')
+                ma = re.search(r'\b' + re.escape(carg) + r'\s*=(?!=)\s*([^;]+);', ln)
+                if ma:
+                    mc = rx_col.search(ma.group(1)); cv = (f'rgb({mc.group(1)},{mc.group(2)},{mc.group(3)})' if mc and mc.group(1) else (mc.group(4) if mc else f'RAW({ma.group(1).strip()[:40]})'))
+                    if re.match(r'\s*\w+\s+' + re.escape(carg) + r'\s*=', ln): edit_c = view_c = cv  # 선언(기본값) — 뒤의 분기 대입이 덮는다
+                    elif mode == 'edit': edit_c = cv
+                    elif mode == 'view': view_c = cv
+                    else: edit_c = view_c = cv
+        cols, how = expand(key, x['value'], api_hint='SetBGColor')
+        cond = R.guard(key, x['guard'], cols[0] if how == 'DYNAMIC' else '', line=ln0)
+        cond = lookup_fix(key, cond, ln0)
+        # 존재 검사 'V = DBUtils.Filter(T, "A = '" + v + "' AND B = 'lit'", …); if (V != null && V.Rows.Count > 0)' — T 가 조회 결과 전체(T = ds.Tables[0])면 EXISTS(A==COL(..) && B=="lit") 로 바꾼다(condeval EXISTS)
+        for V in sorted(set(re.findall(r'RAW\((\w+) != null\)', cond))):
+            if f'RAW({V}.Rows.Count > 0)' not in cond: continue
+            dv = [d for d in R.var_defs(key, V) if d[0] < ln0]
+            mf = re.match(r'DBUtils\.Filter\(\s*(\w+)\s*,\s*(.+?)\s*(?:,\s*true\s*)?\)$', dv[-1][1]) if dv else None
+            if not mf or not any(re.search(r'\b(?:this\.)?' + re.escape(mf.group(1)) + r'\s*=\s*\w+\.Tables\[0\]', l_) for l_ in src_lines): continue
+            txt = ''; ok_ = True
+            for tok in [t_.strip() for t_ in Resolver._split(mf.group(2), '+')]:
+                if re.fullmatch(r'"[^"]*"', tok): txt += tok[1:-1]
+                elif re.fullmatch(r'\w+', tok):
+                    e_ = R.expr(key, f'{tok} == "__Z__"', '')
+                    mc_ = re.match(r'^(COL\(\w+\))=="__Z__"$', e_ or '')
+                    if not mc_: ok_ = False; break
+                    txt += '\x00' + mc_.group(1) + '\x00'
+                else: ok_ = False; break
+            cls_ = [re.match(r"^\s*(\w+)\s*=\s*'(?:\x00(COL\(\w+\))\x00|([^'\x00]*))'\s*$", c_) for c_ in re.split(r'\s+AND\s+', txt.strip(), flags=re.I)] if ok_ else []
+            if not cls_ or not all(cls_): continue
+            ex_ = 'EXISTS(' + ' && '.join(f'{c_.group(1)}=={c_.group(2)}' if c_.group(2) else f'{c_.group(1)}=="{c_.group(3)}"' for c_ in cls_) + ')'
+            cond = cond.replace(f'RAW({V} != null) && RAW({V}.Rows.Count > 0)', ex_)
+        color_rows.append({'method': x['method'], 'line': x['line'], 'api': x['target'].split('.')[-1], 'columns': ';'.join(cols), 'expand': how, 'color_edit': edit_c, 'color_view': view_c,
+                           'cond': cond, 'ref': f"{fbase({'method': x['method'], 'line': x['line']})}:{x['line']}", 'raw': x['raw'][:300]})
+    out3 = os.path.join(sdir, 'color_rules.csv')
+    with open(out3, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=['method', 'line', 'api', 'columns', 'expand', 'color_edit', 'color_view', 'cond', 'ref', 'raw'])
+        w.writeheader(); w.writerows(color_rows)
     nres = sum(1 for l in locks if l['expand'] in ('UNRESOLVED', ''))
     print(f'{sid}: 잠금 규칙 {len(locks)}건(미해석 {nres}) → {out1}')
+    print(f'  조건부 배경색 규칙 {len(color_rows)}건 → {out3}')
+    # INLOOKUP 원자가 쓰는 공통 코드 값 — TO-BE LookupCommon 콤보 SQL(SCM_ADM_CMBO_SQL_M 'LookupCommon': CODE=SEGMENT1 · NAME=SEGMENT2 · VALID_YN='Y')과 같은 조건으로 읽는다
+    if lookup_types:
+        lk = {}
+        try:
+            sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+            from dbconn import connect
+            with connect('tobe') as cx:
+                cur = cx.cursor()
+                for t in sorted(lookup_types):
+                    cur.execute("SELECT B.SEGMENT1, B.SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER A JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B ON A.LOOKUP_TYPE = B.LOOKUP_TYPE AND B.VALID_YN = 'Y' WHERE A.LOOKUP_TYPE = :t AND A.VALID_YN = 'Y' ORDER BY B.DISPLAY_SEQ", t=t)
+                    rs = cur.fetchall()
+                    lk[t] = {'CODE': [str(r[0] or '').strip() for r in rs], 'NAME': [str(r[1] or '').strip() for r in rs]}
+        except Exception as e:  # noqa: BLE001 — DB 접속 실패는 값 없음(INLOOKUP 평가 불가 = 미검증)으로 남긴다
+            print(f'  [경고] 공통 코드 값 조회 실패({e}) — INLOOKUP 평가 불가')
+        if lk:
+            out4 = os.path.join(sdir, 'lookups.json')
+            json.dump({'source': 'TO-BE SCM_ADM_LOOKUP_MASTER_DETAIL(LookupCommon: CODE=SEGMENT1 · NAME=SEGMENT2 · VALID_YN=Y)', 'types': lk}, open(out4, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+            print('  공통 코드 ' + ', '.join(k + ' ' + str(len(v['NAME'])) + '건' for k, v in lk.items()) + f' → {out4}')
     print(f'  편집 기대 {len(exp)}컬럼 → {out2} (메인 시트 {main_sheet}, 클래스 {main_cls}, Insert 경로 .Insert {"있음" if insert_unlocks_row else "없음"}, 기존행 기본 {exp[order[0]]["existing_row"] if order and order[0] in exp else "-"})')
     if R.unresolved:
         print('  평가 불가 원자(RAW): ' + ' · '.join(sorted(set(R.unresolved))[:8]))

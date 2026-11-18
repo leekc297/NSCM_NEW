@@ -1,7 +1,7 @@
 ﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
-V-b54fc2d6,G4,SSP0020 스냅샷 조회조건 Div 40,PASS,[재실측 스냅샷 조회조건] 기준 Doc\verify\SSP0020\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 일치 · ,2026-11-17 01:21,,,checker
-V-f4b3cfe7,K4,SSP0020 스냅샷 버튼 Div 40,PASS,[재실측 스냅샷 버튼] 기준 Doc\verify\SSP0020\snap\golden\버튼_Div_40.aria.yml ↔ 실측 일치 · 골든 D,2026-11-17 01:21,,,checker
-V-db5fae91,A5,SSP0020 스냅샷 헤더 Delegate,FAIL,[정적 판정] 헤더 라벨 'Valid' 잔존 — TO-BE 룰 CR-092(Valid→Active) 미반영. 수신본 헤더(snap/receive,2026-11-17 01:21,,,checker
-V-52d828e2,A5,SSP0020 스냅샷 헤더 Delegated List,FAIL,[정적 판정] 헤더 라벨 'Valid' 잔존 — TO-BE 룰 CR-092(Valid→Active) 미반영. 수신본 헤더(snap/receive,2026-11-17 01:21,,,checker
-V-7aab4c05,H4,SSP0020 스냅샷 화면샷 1920,FAIL,[재실측 스냅샷 화면샷] 기준 Doc\verify\SSP0020\snap\golden\화면샷_1920.png ↔ 실측 C:\Projects\NS,2026-11-17 01:21,,,checker
-V-6b3a581f,H4,SSP0020 스냅샷 화면샷 1366,FAIL,[재실측 스냅샷 화면샷] 기준 Doc\verify\SSP0020\snap\golden\화면샷_1366.png ↔ 실측 C:\Projects\NS,2026-11-17 01:21,,,checker
+V-b54fc2d6,G4,SSP0020 스냅샷 조회조건 Div 40,PASS,[재실측 스냅샷 조회조건] 기준 Doc\verify\SSP0020\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 일치 · ,2026-11-18 09:47,,,checker
+V-f4b3cfe7,K4,SSP0020 스냅샷 버튼 Div 40,PASS,[재실측 스냅샷 버튼] 기준 Doc\verify\SSP0020\snap\golden\버튼_Div_40.aria.yml ↔ 실측 일치 · 골든 D,2026-11-18 09:47,,,checker
+V-db5fae91,A5,SSP0020 스냅샷 헤더 Delegate,FAIL,[정적 판정] 헤더 라벨 'Valid' 잔존 — TO-BE 룰 CR-092(Valid→Active) 미반영. 수신본 헤더(snap/receive,2026-11-18 09:47,,,checker
+V-52d828e2,A5,SSP0020 스냅샷 헤더 Delegated List,FAIL,[정적 판정] 헤더 라벨 'Valid' 잔존 — TO-BE 룰 CR-092(Valid→Active) 미반영. 수신본 헤더(snap/receive,2026-11-18 09:47,,,checker
+V-7aab4c05,H4,SSP0020 스냅샷 화면샷 1920,PASS,[재실측 스냅샷 화면샷] 기준 Doc\verify\SSP0020\snap\golden\화면샷_1920.png ↔ 실측 일치 · 골든 화면샷과 일,2026-11-18 09:47,,,checker
+V-6b3a581f,H4,SSP0020 스냅샷 화면샷 1366,PASS,[재실측 스냅샷 화면샷] 기준 Doc\verify\SSP0020\snap\golden\화면샷_1366.png ↔ 실측 일치 · 골든 화면샷과 일,2026-11-18 09:47,,,checker

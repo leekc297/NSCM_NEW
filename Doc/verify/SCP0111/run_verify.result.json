@@ -1,13 +1,25 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-14T17:09:00+09:00",
+ "ts": "2026-11-18T11:22:56+09:00",
  "producer": "run_verify",
  "id": "SCP0111",
  "skip_e2e": false,
- "started": "2026-11-14 15:41:13",
+ "started": "2026-11-18 11:00:20",
  "state": "completed",
  "verdict": "fail",
  "issues": [
+  {
+   "id": "V-3937cc87",
+   "class": "F1",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
   {
    "id": "V-02e2f75a",
    "class": "F5",
@@ -15,7 +27,19 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 17:07"
+     "ref": "E2E @trace @11-18 11:03"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-64f29823",
+   "class": "F6",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
     }
    ],
    "grade": "hard"
@@ -27,7 +51,19 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 레이아웃 묶음 @11-14 17:07"
+     "ref": "E2E @verify 레이아웃 묶음 @11-18 11:03"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-daa3f0ba",
+   "class": "D6",
+   "msg": "SCP0111 시나리오 [자동] 선택 행 위로 Insert",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-18 11:03"
     }
    ],
    "grade": "hard"
@@ -39,7 +75,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-14 17:07"
+     "ref": "E2E @verify 시나리오 @11-18 11:03"
     }
    ],
    "grade": "hard"
@@ -51,75 +87,27 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 저장 세부 @11-14 17:07"
+     "ref": "정적 판정(원문 대조)"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-0184021b",
-   "class": "H10",
-   "msg": "SCP0111 저장 취소 요청 없음",
+   "id": "V-2ee9fe2e",
+   "class": "D4",
+   "msg": "[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 저장 경로 @11-14 17:07"
+     "ref": "규칙 판정 상속"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-a19f5cc5",
-   "class": "F4",
-   "msg": "SCP0111 경계값 저장",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify 저장 세부 @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e9c8ca19",
-   "class": "G9",
-   "msg": "조회조건 Cell Model",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-fdf6bec9",
-   "class": "D1",
-   "msg": "Integration PSI.NICK_NAME (Nick Name)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-8c320f28",
-   "class": "D1",
-   "msg": "Integration PSI.ITEM_ID (Model)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-549d7b72",
-   "class": "D1",
-   "msg": "[DMF0020 결함 유형] Team·End Customer 컬럼",
+   "id": "V-309492cc",
+   "class": "D6",
+   "msg": "[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
    "evidence": [
     {
      "kind": "exec",
@@ -153,9 +141,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-3e0a70d1",
-   "class": "D1",
-   "msg": "[DMF0049 결함 유형] Cell Model·Cell Model Info 컬럼",
+   "id": "V-7d827909",
+   "class": "D4",
+   "msg": "[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드",
    "evidence": [
     {
      "kind": "exec",
@@ -165,9 +153,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-ed251427",
-   "class": "D1",
-   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "id": "V-54aee855",
+   "class": "D6",
+   "msg": "[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼",
    "evidence": [
     {
      "kind": "exec",
@@ -177,9 +165,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-48ed3894",
-   "class": "D1",
-   "msg": "[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더",
+   "id": "V-8e3cf116",
+   "class": "D4",
+   "msg": "[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 팝업 타이틀",
    "evidence": [
     {
      "kind": "exec",
@@ -189,9 +177,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-70873fca",
-   "class": "G9",
-   "msg": "[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPPER) · 쉼표 다중 입력",
+   "id": "V-0cc6ae6f",
+   "class": "D4",
+   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
    "evidence": [
     {
      "kind": "exec",
@@ -201,13 +189,85 @@
    "grade": "hard"
   },
   {
-   "id": "V-5f029e26",
-   "class": "G9",
-   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
+   "id": "V-f14b1541",
+   "class": "D6",
+   "msg": "[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹",
    "evidence": [
     {
      "kind": "exec",
      "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9cd21228",
+   "class": "D4",
+   "msg": "[SYS0017 결함 유형] 하단 메시지설정 탭 Insert",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-39ca7a8d",
+   "class": "D4",
+   "msg": "[SCM0007 결함 유형] 하단 메시지설정 탭 Insert",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1f2c6057",
+   "class": "D4",
+   "msg": "Insert 시 Project 컬럼 · Sort",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f98ed28d",
+   "class": "D4",
+   "msg": "Insert 행 Div · Div 변경 시 그리드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a60e7f28",
+   "class": "D6",
+   "msg": "그리드 Insert 신규행 위치",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-236699af",
+   "class": "F4",
+   "msg": "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-18 11:03"
     }
    ],
    "grade": "hard"
@@ -219,51 +279,15 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 17:07"
+     "ref": "E2E @trace @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-8def1c4a",
-   "class": "D1",
-   "msg": "EditButton · (제거)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-af8c4046",
-   "class": "D1",
-   "msg": "대상 행 미선택 · (제거 — 편집모드 없음, INSERT 는 SAVE 권한으로 게이트)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-eaed97cd",
-   "class": "D1",
-   "msg": "SCP0111_IntegrationPSI.EditButton",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-23c13d55",
+   "id": "T-6cbc2db4",
    "class": "X-ROW",
-   "msg": "SCP0111_IntegrationPSI.EditButton",
+   "msg": "SCP0111_IntegrationPSI.GetEssPackLineAll",
    "evidence": [
     {
      "kind": "exec",
@@ -297,208 +321,157 @@
    "grade": "hard"
   },
   {
-   "id": "EG-65640b9a",
-   "class": "D4",
-   "msg": "SCP0111 EG140 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "EG-08f72f25",
    "class": "D4",
    "msg": "SCP0111 EG319 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-82d30dcc",
+   "id": "EG-9b53a22e",
+   "class": "D4",
+   "msg": "SCP0111 EG126 선택 행 위 Insert 선택 r2",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-18 11:03"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a5c7c913",
    "class": "J3",
-   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCM PI Admin · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-2e8307c0",
+   "id": "EG-0a94c395",
    "class": "D1",
-   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCM PI Admin · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-d13c141b",
+   "id": "EG-5a7d02bf",
    "class": "J3",
-   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCM PI Admin · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-b31053bd",
+   "id": "EG-f48097ef",
    "class": "D1",
-   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCM PI Admin · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-d3e4b9b4",
+   "id": "EG-9e78a0e2",
    "class": "J3",
-   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCP Planner · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-6ca2bc0c",
+   "id": "EG-e501d086",
    "class": "D1",
-   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCP Planner · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-cf3316d3",
+   "id": "EG-f2d39e3e",
    "class": "J3",
-   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCP Planner · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "EG-9657323f",
+   "id": "EG-c9ab9660",
    "class": "D1",
-   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCP Planner · Div 81",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-08e7a01b",
-   "class": "J3",
-   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 81",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-f25a8cdd",
-   "class": "D1",
-   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 81",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-e9209992",
-   "class": "J3",
-   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 81",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "EG-9ec64ea6",
-   "class": "D1",
-   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div 81",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @eg-auth @11-14 17:07"
+     "ref": "E2E @eg-auth @11-18 11:03"
     }
    ],
    "grade": "hard"
   }
  ],
  "warnings": [
-  "검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)",
-  "커버리지 게이트 SUSPECT_NA100 D2 — Doc/verify/SCP0111/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md 확인(검사기 결함 재발 가능성)"
  ],
  "summary": {
-  "rows": 1863,
-  "PASS": 622,
-  "FAIL": 38,
-  "판정필요": 18,
-  "미검증": 322,
-  "해당없음": 863,
+  "rows": 1783,
+  "PASS": 791,
+  "FAIL": 36,
+  "판정필요": 14,
+  "미검증": 38,
+  "해당없음": 904,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 978,
-   "없음(미검증)": 322,
-   "사람": 3,
-   "없음(판정 대기)": 18,
-   "기계(상속·집계)": 539,
-   "출처 미기록": 3
+   "기계": 1222,
+   "없음(판정 대기)": 14,
+   "없음(미검증)": 38,
+   "사람": 11,
+   "기계(상속·집계)": 494,
+   "출처 미기록": 4
   },
-  "fail_listed": 38,
+  "fail_listed": 36,
   "coverage": {
    "rules": 90,
-   "measured": 514,
-   "not_run_error": 217,
-   "na": 254,
-   "suspect_na100": [
-    "D2"
-   ]
+   "measured": 527,
+   "not_run_error": 25,
+   "na": 285,
+   "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0111_IntegrationPsi_CheckList_v29.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0111_IntegrationPsi_ActionItemList_v29.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_CheckList_v56.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_ActionItemList_v56.xlsx"
  },
  "evidence": [
   {
@@ -510,5 +483,5 @@
    "ref": "Doc/verify/SCP0111/e2e_results.json"
   }
  ],
- "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음) / 커버리지 게이트 SUSPECT_NA100 D2 — Doc/verify/SCP0111/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ "note": "문서 단계 재개(--resume-docs 2026-11-18 11:21:09) — E2E·판정은 원 실행 2026-11-18 11:00:20 결과⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md 확인(검사기 결함 재발 가능성)"
 }

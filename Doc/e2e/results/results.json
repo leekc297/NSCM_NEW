@@ -4,7 +4,7 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "_tmp_sop_scp0104",
+      "_tmp_w_ssp0020",
       "--retries=0"
     ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
@@ -110,18 +110,18 @@
   },
   "suites": [
     {
-      "title": "_tmp_sop_scp0104.spec.ts",
-      "file": "_tmp_sop_scp0104.spec.ts",
+      "title": "_tmp_w_ssp0020.spec.ts",
+      "file": "_tmp_w_ssp0020.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "SCP0104 SOP rows",
+          "title": "SSP0020 width",
           "ok": true,
           "tags": [],
           "tests": [
             {
-              "timeout": 400000,
+              "timeout": 180000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "chromium",
@@ -131,25 +131,16 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13402,
+                  "duration": 25333,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[SOP_ELTR] nav=true rows=6 calls=[\"SOP_ELTR/SEARCH:7\"]\n"
-                    },
-                    {
-                      "text": "[SOP_ELTR conds] [\"Operation group​=Electrode\",\"Material​=\",\"Active​=ALL\",\"Div​=81_HG Automotive Battery(HG)\",\"Plan Month​=202610\",\"Ver.​​=1|RP\",\"Site​=\",\"Plant​=\",\"Building​=\",\"Line​=\"]\n"
-                    },
-                    {
-                      "text": "[SOP_ASSEMBLY] nav=true rows=27 calls=[\"SOP_ASSEMBLY/SEARCH:28\"]\n"
-                    },
-                    {
-                      "text": "[SOP_ASSEMBLY conds] [\"Operation group​=Cell\",\"Basic Nickname​=\",\"Active​=ALL\",\"Div​=81_HG Automotive Battery(HG)\",\"Plan Month​=202610\",\"Ver.​​=1|RP\",\"Site​=\",\"Plant​=\",\"Building​=\",\"Line​=\",\"Operation​=\",\"Line Type​=\"]\n"
+                      "text": "[W] [{\"visible\":true,\"rows\":0,\"cols\":\"DIVISION_ID,FROM_DATE,TO_DATE,DELEGATEE,VALID,LAST_UPDATED_BY,LAST_UPDATE_DATE\",\"w\":150,\"rw\":150}]\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T06:28:48.466Z",
+                  "startTime": "2026-11-17T13:37:18.745Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -157,9 +148,9 @@
               "status": "expected"
             }
           ],
-          "id": "9f4eb5f63c97ff242d28-0ea63684cdfa6c4ed6ae",
-          "file": "_tmp_sop_scp0104.spec.ts",
-          "line": 5,
+          "id": "43b69e5639c06dd0b0a3-6f6fba3ad716f665a470",
+          "file": "_tmp_w_ssp0020.spec.ts",
+          "line": 4,
           "column": 5
         }
       ]
@@ -167,8 +158,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-17T06:28:48.029Z",
-    "duration": 16433.121,
+    "startTime": "2026-11-17T13:37:18.188Z",
+    "duration": 28594.039,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

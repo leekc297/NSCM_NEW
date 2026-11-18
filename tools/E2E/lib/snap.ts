@@ -22,13 +22,30 @@ export function normDynamic(t: string): string {
     .replace(/\b20\d{2}-(0[1-9]|1[0-2])(-(0[1-9]|[12]\d|3[01]))?\b/g, '{DATE}')
     .replace(/\bW\s?\d{1,2}\b/g, '{W}')
     .replace(/\b(Total|총)\s*[:：]?\s*[\d,]+(\s*건)?/gi, '{TOTAL}')
-    .replace(/\b\d{1,3}(,\d{3})+\b/g, '{N}');
+    .replace(/\b\d{1,3}(,\d{3})+\b/g, '{N}')
+    .replace(/총\s*[:：]?\s*([\d,]+|\{N\})\s*건/g, '{TOTAL}');  // 2026-11-18: '총' 앞 \b 는 한글에 걸리지 않는다(SCP0111 팝업 '총9,616건')
 }
 
 /** aria 스냅샷 텍스트(YAML) — 값(value)·건수는 정규화. Playwright ≥1.49 locator.ariaSnapshot() */
 export async function ariaOf(loc: Locator): Promise<string> {
   const raw = await loc.ariaSnapshot({ timeout: 10_000 });
-  return normDynamic(raw).replace(/\r/g, '').trimEnd() + '\n';
+  return collapseGridRows(normDynamic(raw).replace(/\r/g, '')).trimEnd() + '\n';
+}
+
+/** 2026-11-18 SCP0111 사용자 판정(V-f5114028 팝업 스냅샷 'TO-BE RULE'): 그리드 본문 데이터 행(gridcell 을 가진 row)은 조회 시점·데이터에 따라 바뀌어 형상이 아니다 —
+ *  연속한 데이터 행을 한 줄 '- row {데이터 행}' 으로 접는다(머리글 columnheader 행은 그대로) */
+export function collapseGridRows(y: string): string {
+  const L = y.split('\n'); const out: string[] = []; const ind = (s: string) => s.length - s.trimStart().length;
+  for (let i = 0; i < L.length; i++) {
+    const m = /^(\s*)- row\b/.exec(L[i]);
+    if (m && i + 1 < L.length && /^\s*- gridcell\b/.test(L[i + 1])) {
+      const d = ind(L[i]); let j = i + 1; while (j < L.length && (ind(L[j]) > d || !L[j].trim())) j++;
+      const ph = `${m[1]}- row {데이터 행}`; if (out[out.length - 1] !== ph) out.push(ph);
+      i = j - 1; continue;
+    }
+    out.push(L[i]);
+  }
+  return out.join('\n');
 }
 
 /** Wijmo 그리드 헤더 텍스트(가상화 무관 · $WJ-CTRL 모델) — 줄 = 헤더 행, 칸 = ' | ' 구분. 동적 토큰 정규화 */

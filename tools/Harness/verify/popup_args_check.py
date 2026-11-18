@@ -259,7 +259,8 @@ def host_label(srcs, usage):
     setter = 'set' + var[0].upper() + var[1:]
     pats = [re.escape(setter) + r'\(\s*(true|[A-Z_.]+|\w+\.\w+)\s*\)']
     rx_lab = r"t\(\s*(?:LBL\.\w+|'[^']*'|\"[^\"]*\")\s*,\s*'_?([^']+)'\s*\)"
-    for f, src in srcs.items():
+    # 2026-11-18 SCP0111: open 상태(useState)는 모달을 그린 컴포넌트 파일 안에서만 유효 — 다른 파일의 같은 이름 setter(그리드·화면 모두 setOpenItemModal)를 잡아 그리드 셀 팝업에 조회조건 라벨이 붙던 결함
+    for f, src in [(f, s) for f, s in srcs.items() if f == usage.get('file')] or list(srcs.items()):
         for pm in re.finditer(pats[0], src):
             before = src[max(0, pm.start() - 120):pm.start()]
             pn = re.search(r'(\w+)\s*=\s*\{\s*\(\)\s*=>\s*$', before)
@@ -272,8 +273,9 @@ def host_label(srcs, usage):
                 for f2, s2 in srcs.items():
                     if not re.search(r'<SearchArea\b|<FormItem\b', s2):
                         continue
-                    for um in re.finditer(r'[={(]\s*' + re.escape(prop) + r'\b(?!\s*[:,]\s*\(?\s*\))', s2):
-                        if re.match(r'\s*[}),]', s2[um.end():um.end() + 2]) or s2[um.end():um.end() + 1] in ('}', ')', ' '):
+                    # 2026-11-18 SCP0111: 함수 인자로 넘기는 형태 popupField(…,\n  onItemSearch\n)(앞 ',' · 뒤 줄바꿈 + ')')도 여는 위치로 본다(host_label 빈값 → SEARCH G5 행 미연결 · 미검증)
+                    for um in re.finditer(r'[={(,]\s*' + re.escape(prop) + r'\b(?!\s*[:,]\s*\(?\s*\))', s2):
+                        if re.match(r'\s*[}),]', s2[um.end():um.end() + 40]) or s2[um.end():um.end() + 1] in ('}', ')', ' '):
                             labs = re.findall(rx_lab, s2[max(0, um.start() - 900):um.start()])
                             if labs and 'interface' not in s2[max(0, um.start() - 40):um.start()]:
                                 return labs[-1].strip()

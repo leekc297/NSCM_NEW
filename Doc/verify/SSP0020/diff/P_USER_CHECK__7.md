@@ -1,6 +1,6 @@
 # SSP0020 · UP_FX_GetSSPUserUseInfoList ↔ PKG_SSP0020.P_USER_CHECK
 
-- 실행 2026-11-17 10:05:42 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-18 09:48:12 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 DIFF** — 공통 7223행 중 불일치 셀 1 — diff/P_USER_CHECK__7.csv · 키 원천 db_resultsets.csv is_nullable=0 · 키 UserID+UserName+UseYN+RegtUserID · golden 집합 판정 DIFF
 - 호출 #7 sheet=Delegate btn=USER_CHECK user=minyonglee1 FE 응답 행 7282 · 원천 Doc\verify\SSP0020\calls\_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json
 - TO-BE 인자(FE 본문): `{"search": "", "language": "KO", "useYn": "Y"}`
@@ -37,4 +37,4 @@
 ## 불일치 셀(≤50) — diff/P_USER_CHECK__7.csv
 | 키 | 컬럼 | AS-IS | TO-BE |
 |---|---|---|---|
-| jaeuk.shin|신재욱|Y|REQ | LastLoginDateTime | 2026-11-16 16:19:15 | 2026-10-30 15:58:33 |
+| jaeuk.shin|신재욱|Y|REQ | LastLoginDateTime | 2026-11-17 20:03:08 | 2026-10-30 15:58:33 |

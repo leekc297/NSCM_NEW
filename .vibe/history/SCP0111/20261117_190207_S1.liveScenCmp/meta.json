@@ -1,0 +1,17 @@
+{
+  "id": "SCP0111",
+  "task": "S1.liveScenCmp",
+  "scope": "none",
+  "note": "asis_live_scen_cmp.py SCP0111",
+  "start": "2026-11-17T19:02:07+09:00",
+  "end": "2026-11-17T19:02:08+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "chain",
+  "label": "분기별 AS-IS↔TO-BE 대조 — 소스 분기마다 AS-IS 실행 결과와 TO-BE 대조표 판정을 맞대고, TO-BE 룰로 정의된 차이는 오류 아님으로 표시",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "changed": []
+}

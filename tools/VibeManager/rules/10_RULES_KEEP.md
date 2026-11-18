@@ -5,7 +5,7 @@
 > 전문이 필요하면 `Doc/_rules_v2/hooks/<name>.md` 를 연다(포인터 인덱스 방식 — 본문 복제 없음). 제외한 룰과 이유는 `20_RULES_SKIP.md`, 전수 처분표는 `30_HOOK_DISPOSITION.csv`.
 
 ## A. 최상위 원칙 (모든 단계)
-0. **문장 규칙 18개** — 수식어 금지 · 문맥으로 아는 주어 생략 · 번역투 금지 + 사람이 쓴 업무 문서처럼(줄표·장식 기호 금지 · 셀은 개조식 · 'A가 아니라 B' 틀 금지 · 접속 부사 시작 금지 · 소개·맺음 문장 금지 · 추측 어미 금지 · 추상어 대신 대상과 값). 답변·보고·문서(Excel 전부)·생성기 고정 문장에 적용. — (사용자 2026-11-13, `50_DOC_STYLE.md`) — 검사 `python tools/Docs/doc_style.py <파일>` · 생성기 저장 직후 자동 보고(`Doc/_doc_style/`).
+0. **문장 규칙 18개** — 수식어 금지 · 문맥으로 아는 주어 생략 · 번역투 금지 + 사람이 쓴 업무 문서처럼(줄표·장식 기호 금지 · 셀은 개조식 · 'A가 아니라 B' 틀 금지 · 접속 부사 시작 금지 · 소개·맺음 문장 금지 · 추측 어미 금지 · 추상어 대신 대상과 값) + 규칙 19 개발 용어 대신 업무 단어(사용자 2026-11-17 · unfold/payload/가감값/스텁 등 → 표). 답변·보고·문서(Excel 전부)·DB MODE FE·BE 가이드(FE_GUIDE_*.md · 문서 틀 50_DOC_STYLE.md)·생성기 고정 문장에 적용. — (사용자 2026-11-13, `50_DOC_STYLE.md`) — 검사 `python tools/Docs/doc_style.py <파일>` · 생성기 저장 직후 자동 보고(`Doc/_doc_style/`).
 1. **anti-simplification** — 속도·편의를 위한 단순화 금지. "전체/정밀" = 다중 패턴 + cross-check, 자동화 1회 통과 채택 금지, 추출 한계 명시. — (`Doc/_rules_v2/anti-simplification.md`) — AsisFacts 교차검증 `crosscheck_report.csv` 0건, Recon 대조표 confidence, `G:G01~G04/M04`.
 2. **AS-IS 한 줄도 누락 없음** — Event/API/Validation/Expression 4축 + 셀 EVENT 전수 + 버튼 + 시트 + SP 가 `__asis-mapping__.md` 에 행 단위로 있고 상태가 구현/제외(사유) 중 하나. — (#2 asis-coverage-check, #146 asis-grid-cell-event-full-extraction, #1 asis-button-mapping, 절대금지 ⑪) — `T:` 매핑표 자동 생성 `G:M01~M05` `DoD:B01~B21`.
 3. **디자인 그대로 → 한 사람이 개발한 것처럼(DMF0004~0006 패턴 100%) → 공용으로 끌어올리기(shared default 변경 금지)**. — (CLAUDE.md §1-2, #47 screen-conventions, #41 regression-zero) — `T:` 골격 = 실측 패턴, `G:D01` 카탈로그 밖 컴포넌트 BLOCK, `P:` 예제 7종.

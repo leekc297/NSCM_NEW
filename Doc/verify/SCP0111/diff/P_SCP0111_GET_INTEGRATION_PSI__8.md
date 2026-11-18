@@ -1,6 +1,6 @@
 # SCP0111 · SCP0111_GET_INTEGRATION_PSI ↔ PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI
 
-- 실행 2026-11-14 16:46:11 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-18 11:01:32 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 27행 전 컬럼 일치 · 키 원천 auto · 키 LINE_ID+ITEM_ID+CELL_MODEL_NICK_NAME+NICK_NAME+CELL_ITEM_ID+MEASURE · golden 집합 판정 PASS
 - 호출 #8 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 28 · 원천 Doc\verify\SCP0111\calls\_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "81_UC", "planStartYyyymmdd": "20261026", "planType": "", "seq": "", "fromYyyymm": "202610", "toYyyymm": "202703", "nickName": "", "cellItemId": "", "itemId": "", "qtyYn": "N"}`

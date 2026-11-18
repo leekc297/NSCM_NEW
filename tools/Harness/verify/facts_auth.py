@@ -206,7 +206,7 @@ def asis_facts(sid):
     for r in live:
         if r['method'] in ins_methods and r['kind'] in ('MESSAGE', 'RETURN', 'FLOW') and re.search(r'NowGroupID|GROUP', r['guard'] or ''):
             ins.append({'kind': r['kind'], 'raw': r['raw'][:220], 'cond': norm_guard(r['guard'], cases.get((r['class'], r['method']), {})), 'value': (r['value'] or '')[:120], 'ref': f"{os.path.basename(r['file'])}:{r['line']}"})
-    ins_stmts = [{'kind': r['kind'], 'raw': r['raw'][:160], 'ref': f"{os.path.basename(r['file'])}:{r['line']}", 'method': r['method']} for r in live if r['method'] in ins_methods and re.search(r'(?i)ActiveRow|AddRow|AddRows|InsertRow|Rows\.Add|GetSelection', r['raw'])]
+    ins_stmts = [{'kind': r['kind'], 'raw': r['raw'][:160], 'ref': f"{os.path.basename(r['file'])}:{r['line']}", 'method': r['method']} for r in live if r['method'] in ins_methods and re.search(r'(?i)ActiveRow|AddRow|AddRows|InsertRow|Rows\.Add|GetSelection|\bsi\w*\.Insert\(\s*\d*\s*\)', r['raw'])]  # 2026-11-18 SCP0111: 프레임워크 siMain.Insert()(cs:967·986) 포함
     # 2026-11-06(SCP0016 EG315 허위 FAIL): ColumnHeaderSpan(row, col, 1, 1, …) 처럼 rowSpan·colSpan 이 모두 1인 문장은 병합이 아니다 → 기대에서 제외
     def _is_1x1(raw):
         m = re.search(r'ColumnHeaderSpan\s*\(\s*[^,]+,\s*[^,]+,\s*(\d+)\s*,\s*(\d+)', raw)
@@ -241,9 +241,15 @@ def account_facts(cx, mid, sid):
     uj = json.load(open(os.path.join(ROOT, 'tools', 'E2E', 'users.json'), encoding='utf-8-sig'))
     area = 'SCP' if sid.startswith('SCP') else 'SSP' if sid.startswith('SSP') else 'DM'
     pool, out = {}, []
-    for dv, roles in (uj['areas'][area].get('divisions') or {}).items():
-        for role, uid in roles.items():
-            if uid: pool.setdefault(uid, []).append(f'{area}/{dv}/{role}')
+    # 2026-11-18 사용자 지정(SCP0111 권한 확인 계정 3개): users.json screens[<ID>].accounts {역할: 계정} 이 있으면 영역 명부 대신 그 계정만 쓴다 · key = SCR/<ID>/<역할>
+    scr_acc = ((uj.get('screens') or {}).get(mid) or {}).get('accounts') or {}
+    if scr_acc:
+        for role, uid in scr_acc.items():
+            if uid: pool.setdefault(uid, []).append(f'SCR/{mid}/{role}')
+    else:
+        for dv, roles in (uj['areas'][area].get('divisions') or {}).items():
+            for role, uid in roles.items():
+                if uid: pool.setdefault(uid, []).append(f'{area}/{dv}/{role}')
     c = cx.cursor()
     for uid, keys in pool.items():
         c.execute("SELECT USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M WHERE USER_ID=:u AND USE_YN='Y'", u=uid); groups = sorted(r[0] for r in c.fetchall())
@@ -276,7 +282,7 @@ def btn_auth_div(cx, mid, acc):
         return res
     out['__default__'] = call(cfg.get('defaultAccount'), alld)
     for a in acc:
-        area, dv, role = a['key'].split('/', 2); uid = uj['areas'][area]['divisions'][dv][role]
+        area, dv, role = a['key'].split('/', 2); uid = uj['screens'][dv]['accounts'][role] if area == 'SCR' else uj['areas'][area]['divisions'][dv][role]
         out[a['key']] = call(uid, a['divsMenu'] or [])
     return out
 

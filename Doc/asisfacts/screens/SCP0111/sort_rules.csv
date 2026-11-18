@@ -12,4 +12,3 @@ SCP0111,SQL,SCP0111_SAVE_INTEGRATION_PSI,Doc\asisfacts\db\modules\dbo.SCP0111_SA
 SCP0111,SQL,SCP0111_SAVE_INTEGRATION_PSI,Doc\asisfacts\db\modules\dbo.SCP0111_SAVE_INTEGRATION_PSI.sql,160,,PLANT_ID,order by	 es.plant_id)	as elec_plant_priority_4TH,1,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
 SCP0111,SQL,SCP0111_SAVE_INTEGRATION_PSI,Doc\asisfacts\db\modules\dbo.SCP0111_SAVE_INTEGRATION_PSI.sql,184,,SCM_SITE_ID,order by cs.scm_site_id) as cell_plant_priority,1,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
 SCP0111,SQL,SCP0111_SAVE_INTEGRATION_PSI,Doc\asisfacts\db\modules\dbo.SCP0111_SAVE_INTEGRATION_PSI.sql,859,,DISPLAY_SEQ,ORDER BY B.DISPLAY_SEQ,0,정적
-SCP0111,CODE,,06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs,214,,CODE,"//    tmpDivision.DefaultView.Sort = ""CODE Asc"";",0,화면 코드 정렬

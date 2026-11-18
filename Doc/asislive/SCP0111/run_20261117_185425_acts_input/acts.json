@@ -1,0 +1,297 @@
+{
+ "id": "SCP0111",
+ "group": "ADMIN",
+ "cellrun": true,
+ "inputrun": true,
+ "edit": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "BOH_QTY",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[BOH_QTY]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 '' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "202608",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[202608]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "202609",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[202609]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "202610",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[202610]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "202611",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[202611]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "202612",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[202612]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Integration PSI",
+     "rows_before": 1712,
+     "rows_after": 1712,
+     "cells": [
+      {
+       "row": 0,
+       "col": "202701",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[202701]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 2 → 3(수정 모드) · 입력 뒤 값 3 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "2",
+    "after": "3",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  }
+ ],
+ "skipped": [
+  {
+   "control": "spdMain[DIVISION_ID]",
+   "why": "편집 상태로 들어가지 않음()",
+   "scenarios": [
+    "SCP0111-Sd4b5fe",
+    "SCP0111-S991a9e",
+    "SCP0111-S3a6f77"
+   ]
+  }
+ ],
+ "at": "2026-11-17 18:52:44",
+ "edit_mode": true,
+ "plan": {
+  "grid": "spdMain",
+  "sheet": "Integration PSI",
+  "named_cols": [
+   "DIVISION_ID"
+  ],
+  "branches": 3,
+  "branches_without_col_name": 0,
+  "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 8개까지"
+ }
+}

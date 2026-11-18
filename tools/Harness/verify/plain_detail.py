@@ -248,13 +248,35 @@ def build_core(r):
     return d
 
 
-def build(r, short, repro='', same='', mean=''):
-    """조치 필요·판정 필요 행의 설명. short = 종전 한 줄 설명(제목을 못 만들 때 대신 쓴다)"""
+def build_gap(r, d, title, repro='', same=''):
+    """2026-11-18 사용자 지시(전 화면 · 이후 전체 적용): 저장 외 조치 필요·판정 필요 행 설명 =
+         [분류 / 유형 / 판정] 한 줄 요약      ← 머리표는 make_verify_docs 가 붙인다
+          - AS-IS : AS-IS 동작(없으면 기대값 · AS-IS 실행 기록이 있으면 덧붙임)
+          - TO-BE : TO-BE 실측(없으면 측정 기록 원문)
+          - GAP : 무엇이 다른지(없으면 판정으로 정한 한 줄)
+       증거에 없는 값을 지어내지 않는다 — 비면 기대값·증거 원문, 그것도 없으면 '미확인'/'미측정'."""
+    res = r.get('result') or ''
+    agg = (d.get('title') or '').startswith('묶음 요약')
+    asis = d.get('asis') or ('세부 항목 줄 참조' if agg else soft(r.get('expected'), 220)) or '미확인'
+    if d.get('live'): asis = asis.rstrip('. ') + '. AS-IS 실행 기록: ' + d['live']
+    tobe = d.get('tobe') or d.get('raw') or ('세부 항목 줄 참조' if agg else soft(_prefix(r.get('evidence'))[0], 300)) or '미측정'
+    gap = ' '.join(x for x in [d.get('why') or ''] + (d.get('notes') or []) if x).strip()
+    if not gap: gap = 'AS-IS 기대와 TO-BE 실측 결과 다름' if res == 'FAIL' else '기계가 결론을 내지 못함, 사람 확인 필요'
+    if '1회 실측' in (repro or '') and '재현 2회' not in (repro or ''): gap = gap.rstrip('. ') + '. 이번 실행에서 처음 나온 결과임, 다시 실행해 같은 결과인지 확인 필요'
+    out = [title, ' - AS-IS : ' + asis, ' - TO-BE : ' + tobe, ' - GAP : ' + gap]
+    if same: out.append(re.sub(r'^\s*\(같은 내용 (\d+)건: (.*)\)\s*$', r'같은 문제 \1곳: \2', same.strip()))
+    return '\n'.join(out)
+
+
+def build(r, short, repro='', same='', mean='', keep_old=False):
+    """조치 필요·판정 필요 행의 설명. short = 종전 한 줄 설명(제목을 못 만들 때 대신 쓴다)
+    keep_old = 저장 항목(2026-11-18 사용자: 저장 설명은 지금 형식 유지) — 그 밖은 build_gap 형식(AS-IS / TO-BE / GAP)"""
     res = r.get('result') or ''
     if res not in ('FAIL', '판정필요'): return short + repro + same
     d = build_core(r)
-    head = '[오류]' if res == 'FAIL' else '[확인 필요]'
     title = d.get('title') or ((mean + (' — AS-IS 와 다르게 나왔습니다' if res == 'FAIL' else ' — 기계가 결론을 내지 못했습니다')) if mean else (soft(re.sub(r"^\[[^\]]*\]\s*", '', r.get('target') or ''), 80) + (' — AS-IS 와 다르게 나왔습니다' if res == 'FAIL' else ' — 기계가 결론을 내지 못했습니다')) if re.match(r'^(사람 확인 필요|[A-Z]+\d*: )', short or '') else soft(short, 200))
+    if not keep_old:
+        return build_gap(r, d, title, repro, same)
     out = [f"{title}" + ('' if res == 'FAIL' else ' (확인 필요)')]   # 2026-11-17 사용자 지시: 첫 줄 = [위치 / 성격 / 수정 대상](make_verify_docs 가 앞에 붙임) + 오류명
     if d.get('asis'): out.append('· AS-IS : ' + d['asis'])
     if d.get('tobe'): out.append('· TO-BE : ' + d['tobe'])

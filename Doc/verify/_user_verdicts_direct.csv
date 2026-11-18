@@ -110,7 +110,7 @@ SSP0025,V-f743fe58,NA,6번 Plant Site 후보 표시 중복(LGESOC Cell HQ07×3) 
 SSP0024,V-b1b7474e,PASS,4번 BOX_PER_CUT 신규행 편집(편집기 'Number expected') — 조치필요 아님 · TO-BE 룰(사용자 판정),사용자(대화),2026-11-10
 SSP0024,V-dbabc274,PASS,5번 STEELRACK_PER_CUT 신규행 편집(편집기 'Number expected') — 조치필요 아님 · TO-BE 룰(사용자 판정),사용자(대화),2026-11-10
 SSP0024,EG-d0226ed7,PASS,8번 ItembyDivision 팝업 No. 컬럼 — 조치필요 아님(사용자 판정) · 측정이 다른 실행의 언어 CHN 전환 중 이뤄짐('序号') · 엔진 T189 언어 잠금,사용자(대화),2026-11-10
-SSP0024,EG-adebf53e,PASS,9번 ItembyDivision 팝업 Material 필터 — 조치필요 아님(사용자 판정) · CHN 화면에서 행 번호 '9,616' 을 검색값으로 씀 · 엔진 T189,사용자(대화),2026-11-10
+SSP0024,EG-adebf53e,PASS,9번 ItembyDivision 팝업 Material 필터 — 조치필요 아님(사용자 판정) · CHN 화면에서 행 번호 '9,616' 을 검색값으로 씀 · 엔진 T189,사용자(대화)
 SSP0024,EG-4b51091e,PASS,10번 ItembyDivision 팝업 콤마 다중 — 조치필요 아님(사용자 판정) · CHN 화면에서 행 번호를 검색값으로 씀 · 엔진 T189,사용자(대화),2026-11-10
 SSP0024,EG-e2b063c3,PASS,8번과 같은 내용(Model 조건 팝업 No. 컬럼) — 조치필요 아님(사용자 판정) · CHN 전환 중 측정 · 엔진 T189,사용자(대화),2026-11-10
 SSP0024,EG-601097e2,PASS,9번과 같은 내용(Model 조건 팝업 필터) — 조치필요 아님(사용자 판정) · CHN 전환 중 측정 · 엔진 T189,사용자(대화),2026-11-10
@@ -120,3 +120,10 @@ SSP0024,V-d0c4b0a6,PASS,5번과 같은 내용(총 건수 표시) — 오류 아�
 SCP0108,T-1bd9839e,PASS,3번 Delete 버튼 누락 — 결함 아님(사용자 판정) · AS-IS Delete 신규 행 전용(cs:1302-1304)·Insert 빈 본문(cs:1284-1286) → 지울 행 없음 · 엔진 T193,사용자(대화),2026-11-10
 SCP0104,T-25489c40,FAIL,추가 행 품목 선택 때 기본값 재설정 없음 — 오류(사용자 판정 '오류로 판정') · 추가 행 기간 칸·Active 를 먼저 바꾼 뒤 품목 1건 선택 시 AS-IS 1·Y 로 되돌림(cs:5292~5310) · TO-BE 유지,사용자(대화),2026-11-17
 SCP0104,T-228fc738,FAIL,목록 밖 품목명 Dummy 코드 생성 불가 — 오류(사용자 판정 '오류로 판정해주세요') · AS-IS 입력 즉시 DMY_ 코드 생성 + Dummy=Y 저장 · TO-BE 입력 차단(실측 11-17 15:27),사용자(대화),2026-11-17
+SSP0020,V-9e99f124,FAIL,저장 중 로딩 표시 없음 — 오류(사용자 판정 '오류로 판정해주세요') · AS-IS SaveData 진행 창 ProgressForm Show/Close(cs:482~483·517·524) · TO-BE Delegate.tsx:249-254 저장 호출에 로딩 표시 없음(실측 11-18 08:13 응답 지연 1500ms),사용자(대화),2026-11-18
+SCP0111,V-f5114028,PASS,스냅샷 승인 Doc\verify\SCP0111\snap\golden\팝업_Model_Nickname.aria.yml@c73fb4f8 — 오류 아님 — 화면샷: 컬럼 폭 비율 은 오류에서 제외 · 팝업: TO-BE RULE(골든은 팝업 조회 전 0건 시점 촬영) · 11-18 검사기 보완(데이터 행 접기·머리글 가림) 뒤 재촬영본,사용자(CheckList 의견 11-18),2026-11-18 10:08
+SCP0111,V-55556e17,PASS,스냅샷 승인 Doc\verify\SCP0111\snap\golden\화면샷_1920.png@83216492 — 오류 아님 — 화면샷: 컬럼 폭 비율 은 오류에서 제외 · 팝업: TO-BE RULE(골든은 팝업 조회 전 0건 시점 촬영) · 11-18 검사기 보완(데이터 행 접기·머리글 가림) 뒤 재촬영본,사용자(CheckList 의견 11-18),2026-11-18 10:08
+SCP0111,V-e8ca7b9a,PASS,스냅샷 승인 Doc\verify\SCP0111\snap\golden\화면샷_1366.png@151ebc19 — 오류 아님 — 화면샷: 컬럼 폭 비율 은 오류에서 제외 · 팝업: TO-BE RULE(골든은 팝업 조회 전 0건 시점 촬영) · 11-18 검사기 보완(데이터 행 접기·머리글 가림) 뒤 재촬영본,사용자(CheckList 의견 11-18),2026-11-18 10:08
+SCP0104,V-f5a0b46a,FAIL,Electrode 모드 Plant 후보 SHOP_GROUP 'E' 조건 누락 — 오류(사용자 판정 11-18 '둘 다 오류' · 11-17 '오류아님' 대체) · Division 81 AS-IS 7건 TO-BE 8건(MI03 추가) · AS-IS ScpCapaBL.cs:201 · 가이드 FE_GUIDE_20261118_1030 G1,사용자(대화),2026-11-18
+SCP0104,V-e38e474a,FAIL,SOP 모델 팝업이 메인 조회조건을 받지 않음 — 오류(사용자 판정 11-18 '둘 다 오류' · 11-17 '오류 아님' 대체) · AS-IS 메인 Site·Plant·Building·Line·Operation·Line Type 을 팝업 조건으로 넘김 · 가이드 G10,사용자(대화),2026-11-18
+SCP0104,V-73037cda,FAIL,CAPA Line 팝업이 메인 조회조건을 받지 않음 — 오류(사용자 판정 11-18 '둘 다 오류' · 11-17 '오류 아님' 대체) · AS-IS 런처 메인 Site ALL 79행 / A001 17행 · 가이드 G10,사용자(대화),2026-11-18

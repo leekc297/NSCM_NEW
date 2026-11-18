@@ -1,6 +1,6 @@
 # SSP0020 · UP_FX_GetSSPUserUseInfoList ↔ PKG_SSP0020.P_USER_CHECK
 
-- 실행: 2026-11-17 10:05:27
+- 실행: 2026-11-18 09:47:53
 - 파라미터: `{"Search": "jiangguoping", "Language": "KO", "UseYN": "Y"}`
 - 종류: GET
 

@@ -6,7 +6,7 @@ import * as path from 'node:path';
 //   규칙 목록은 AS-IS 원문 순서대로 적용한 마지막 상태가 정답(기본 = 편집 가능). 한 규칙이라도 RAW 를 평가해야 결론이 갈리면 '평가 불가'.
 //   화면 리터럴 없음 — GROUP 은 계정 속성(plan.json accounts: admin·groups·tobeGroups), DIV 는 조회 요청의 divisionId, COL 은 그 행의 dataItem.
 export type Rule = { g: string; lock: 'Y' | 'N'; ref: string };
-export type CondCtx = { group: string[]; admin: boolean; div: string; col: (name: string) => string | null; self: string; /** 2026-11-12 T264: 이 계정이 이 화면의 편집 권한자인가(모르면 생략 → AUTH 는 평가 불가) */ auth?: boolean; /** 지금 재는 그리드의 시트 이름(모르면 생략 → SHEET 는 평가 불가) */ sheet?: string };
+export type CondCtx = { group: string[]; admin: boolean; div: string; col: (name: string) => string | null; self: string; /** 2026-11-12 T264: 이 계정이 이 화면의 편집 권한자인가(모르면 생략 → AUTH 는 평가 불가) */ auth?: boolean; /** 지금 재는 그리드의 시트 이름(모르면 생략 → SHEET 는 평가 불가) */ sheet?: string; /** 2026-11-18 SCP0111 H2: 조회 결과 전체 행(EXISTS 원자 — AS-IS DBUtils.Filter(조회 결과 전체, …) 존재 검사) · 모르면 생략 → 평가 불가 */ rows?: Record<string, unknown>[]; /** 2026-11-18: 공통 코드 값(lookups.json types — INLOOKUP 원자) · 모르면 생략 → 평가 불가 */ lookups?: Record<string, Record<string, string[]>> };
 export type EvalResult = { editable: boolean; by: string } | { error: string };
 
 const nrm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -19,11 +19,32 @@ export function parseRules(cond: string): Rule[] | null {
 
 class Unknown extends Error { }
 
+// 2026-11-18: 화면 공통 코드 값(Doc/asisfacts/screens/<ID>/lookups.json · facts_lockrules) — 문맥에 lookups 가 없을 때 쓰는 화면 기본값
+let DEFAULT_LOOKUPS: Record<string, Record<string, string[]>> | undefined;
+export function useScreenLookups(id: string): void {
+  try { const ROOT = path.resolve(__dirname, '..', '..', '..'); const j = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', id, 'lookups.json'), 'utf8')) as { types?: Record<string, Record<string, string[]>> }; DEFAULT_LOOKUPS = j.types; } catch { DEFAULT_LOOKUPS = undefined; }
+}
+
 function evalAtom(a: string, ctx: CondCtx): boolean {
   a = a.trim();
   if (a === 'TRUE') return true;
   if (a === 'FALSE') return false;
   if (/^RAW\(/.test(a)) throw new Unknown(a);
+  // 2026-11-18 SCP0111 D3(cs:622~642): INLOOKUP(COL(X),"TYPE","FIELD") = 그 행 X 값이 공통 코드 TYPE 의 FIELD 목록에 있는가(AS-IS Data.Common(LookupCommon) 반복 비교)
+  const mlk = /^INLOOKUP\(COL\((\w+)\)\s*,\s*"([^"]+)"\s*,\s*"(\w+)"\)$/.exec(a);
+  if (mlk) {
+    const list = (ctx.lookups || DEFAULT_LOOKUPS)?.[mlk[2]]?.[mlk[3]];
+    if (!list) throw new Unknown(`${a} — 공통 코드 값 문맥 없음(lookups.json)`);
+    const v = ctx.col(mlk[1]); if (v == null) throw new Unknown(`COL(${mlk[1]}) 없음`);
+    return list.includes(v);
+  }
+  // 2026-11-18 SCP0111 H2(cs:767·782): EXISTS(NAME==COL(X) && NAME=="lit") = 조회 결과 전체 행 중 조건에 맞는 행이 있는가(AS-IS dtPSI = DBUtils.Filter(dtPSIAll, …); dtPSI.Rows.Count > 0)
+  const mex = /^EXISTS\((.*)\)$/s.exec(a);
+  if (mex) {
+    if (!ctx.rows) throw new Unknown(`${a} — 조회 결과 전체 행 문맥 없음`);
+    const preds = split(mex[1], '&&').map(c => { const q = /^\s*(\w+)\s*(==|!=)\s*(?:COL\((\w+)\)|"([^"]*)")\s*$/.exec(c); if (!q) throw new Unknown(`EXISTS 절 해석 불가: ${c}`); const want = q[3] !== undefined ? ctx.col(q[3]) : q[4]; if (want == null) throw new Unknown(`COL(${q[3]}) 없음`); return { k: q[1], eq: q[2] === '==', want }; });
+    return ctx.rows.some(r => preds.every(pr => { const key = Object.keys(r).find(z => z.toUpperCase() === pr.k.toUpperCase()); const v = key ? String(r[key] ?? '') : ''; return pr.eq ? v === pr.want : v !== pr.want; }));
+  }
   // 2026-11-12 T264: AUTH = AS-IS 편집 권한 플래그(bEdit_Auth) — 문맥에 권한 여부가 있을 때만 평가
   if (a === 'AUTH') { if (ctx.auth === undefined) throw new Unknown('AUTH(계정 편집 권한 문맥 없음)'); return ctx.auth; }
   // SHEET=="이름" = AS-IS 다중 시트 컨트롤의 활성 시트 조건 — 지금 재는 시트를 알 때만 평가(공백·기호 무시 비교)

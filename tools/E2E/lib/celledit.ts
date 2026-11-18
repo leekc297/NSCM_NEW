@@ -1,10 +1,12 @@
 // 셀 편집 표시·값 유지 판정(2026-11-02 엔진 갭 EG012·EG227). 순수 함수 — celledit.selftest.js
-export type J = { result: 'PASS' | 'FAIL' | 'ERROR'; why: string };
+export type J = { result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string };
 
-/** 콤보 셀 편집기 — samples: 값(코드)·표시값·편집기 입력값. 코드와 표시값이 다른 칸만 판정 재료 */
-export function judgeEditorText(samples: { b: string; raw: string; disp: string; editor: string | null }[]): J {
+/** 콤보 셀 편집기 — samples: 값(코드)·표시값·편집기 입력값 · mapDiff = 그 칸 후보 목록(DataMap)에서 코드≠표시인 쌍 수(모르면 생략). 코드와 표시값이 다른 칸만 판정 재료 */
+export function judgeEditorText(samples: { b: string; raw: string; disp: string; editor: string | null; mapDiff?: number; mapN?: number }[]): J {
   const use = samples.filter(s => s.editor != null && s.raw && s.disp && s.raw !== s.disp);
-  if (!use.length) return { result: 'ERROR', why: `[측정 경로 없음] 코드·표시값이 다른 편집 가능 콤보 칸 없음(시도 ${samples.length})` };
+  // 2026-11-18 SCP0111 V-10c15272: 편집 가능한 콤보 칸의 후보 목록 전체가 코드=표시(LINE_ID 코드 표시 · AS-IS cs:1779 NAME=CODE 등)면 '코드 비노출' 검사 대상이 없다 — 근거(칸별 후보 수)와 함께 NA
+  if (!use.length && samples.length && samples.every(s => s.mapDiff === 0)) return { result: 'NA', why: `편집 가능한 콤보 ${samples.length}칸의 후보 목록이 전부 코드=표시(${samples.map(s => `${s.b} 후보 ${s.mapN ?? '?'}건`).join(', ')}) — 편집기 코드 노출 검사 대상 없음` };
+  if (!use.length) return { result: 'ERROR', why: `[측정 경로 없음] 코드·표시값이 다른 편집 가능 콤보 칸 없음(시도 ${samples.length}${samples.some(s => (s.mapDiff || 0) > 0) ? ` · 후보에 코드≠표시 쌍 있는 칸 ${samples.filter(s => (s.mapDiff || 0) > 0).map(s => s.b).join(',')}` : ''})` };
   const bad = use.filter(s => s.editor === s.raw);
   if (bad.length) return { result: 'FAIL', why: `편집기에 코드 노출 ${bad.length}/${use.length}: ${bad.slice(0, 4).map(s => `${s.b} '${s.raw}'(표시 '${s.disp}')`).join(', ')}` };
   return { result: 'PASS', why: `편집기 표시 ${use.length}칸 코드 비노출: ${use.slice(0, 4).map(s => `${s.b} '${s.editor}'`).join(', ')}` };

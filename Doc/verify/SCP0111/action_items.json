@@ -1,14 +1,37 @@
 [
  {
-  "row_id": "V-02e2f75a",
-  "rule_id": "F5",
-  "target": "SCP0111 화면",
-  "same": []
+  "row_id": "EG-a5c7c913",
+  "rule_id": "J3",
+  "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCM PI Admin · Div 81",
+  "same": [
+   "EG-0a94c395",
+   "EG-5a7d02bf",
+   "EG-f48097ef",
+   "EG-9e78a0e2",
+   "EG-e501d086",
+   "EG-f2d39e3e",
+   "EG-c9ab9660"
+  ]
  },
  {
   "row_id": "V-d2511df5",
   "rule_id": "L2",
   "target": "SCP0111 조건 입력 중 재렌더",
+  "same": []
+ },
+ {
+  "row_id": "V-3937cc87",
+  "rule_id": "F1",
+  "target": "SCP0111 화면",
+  "same": [
+   "V-64f29823",
+   "V-bded1ccf"
+  ]
+ },
+ {
+  "row_id": "V-02e2f75a",
+  "rule_id": "F5",
+  "target": "SCP0111 화면",
   "same": []
  },
  {
@@ -18,143 +41,91 @@
   "same": []
  },
  {
-  "row_id": "V-bded1ccf",
-  "rule_id": "F1",
-  "target": "SCP0111 컬럼별 저장 왕복",
-  "same": []
- },
- {
-  "row_id": "V-0184021b",
-  "rule_id": "H10",
-  "target": "SCP0111 저장 취소 요청 없음",
-  "same": []
- },
- {
-  "row_id": "V-a19f5cc5",
+  "row_id": "T-236699af",
   "rule_id": "F4",
-  "target": "SCP0111 경계값 저장",
+  "target": "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE",
   "same": []
  },
  {
-  "row_id": "V-e9c8ca19",
-  "rule_id": "G9",
-  "target": "조회조건 Cell Model",
-  "same": []
- },
- {
-  "row_id": "V-fdf6bec9",
-  "rule_id": "D1",
-  "target": "Integration PSI.NICK_NAME (Nick Name)",
-  "same": []
- },
- {
-  "row_id": "V-8c320f28",
-  "rule_id": "D1",
-  "target": "Integration PSI.ITEM_ID (Model)",
-  "same": []
- },
- {
-  "row_id": "T-40ab485f",
+  "row_id": "V-daa3f0ba",
   "rule_id": "D6",
-  "target": "SCP0111 화면",
-  "same": []
- },
- {
-  "row_id": "EG-65640b9a",
-  "rule_id": "D4",
-  "target": "SCP0111 EG140 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
+  "target": "SCP0111 시나리오 [자동] 선택 행 위로 Insert",
   "same": [
+   "T-40ab485f",
+   "EG-9b53a22e",
    "EG-08f72f25"
   ]
  },
  {
-  "row_id": "EG-82d30dcc",
+  "row_id": "EG-0a94c395",
   "rule_id": "J3",
-  "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
-  "same": [
-   "EG-2e8307c0",
-   "EG-d13c141b",
-   "EG-b31053bd",
-   "EG-d3e4b9b4",
-   "EG-6ca2bc0c",
-   "EG-cf3316d3",
-   "EG-9657323f",
-   "EG-08e7a01b",
-   "EG-f25a8cdd",
-   "EG-e9209992",
-   "EG-9ec64ea6"
-  ]
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "EG-5a7d02bf",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "EG-f48097ef",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "EG-9e78a0e2",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "EG-e501d086",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "EG-f2d39e3e",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "EG-c9ab9660",
+  "rule_id": "J3",
+  "target": "",
+  "folded_into": "EG-a5c7c913"
+ },
+ {
+  "row_id": "V-64f29823",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-3937cc87"
+ },
+ {
+  "row_id": "V-bded1ccf",
+  "rule_id": "F1",
+  "target": "",
+  "folded_into": "V-3937cc87"
+ },
+ {
+  "row_id": "T-40ab485f",
+  "rule_id": "D6",
+  "target": "",
+  "folded_into": "V-daa3f0ba"
+ },
+ {
+  "row_id": "EG-9b53a22e",
+  "rule_id": "D6",
+  "target": "",
+  "folded_into": "V-daa3f0ba"
  },
  {
   "row_id": "EG-08f72f25",
-  "rule_id": "D4",
+  "rule_id": "D6",
   "target": "",
-  "folded_into": "EG-65640b9a"
- },
- {
-  "row_id": "EG-2e8307c0",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-d13c141b",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-b31053bd",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-d3e4b9b4",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-6ca2bc0c",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-cf3316d3",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-9657323f",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-08e7a01b",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-f25a8cdd",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-e9209992",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
- },
- {
-  "row_id": "EG-9ec64ea6",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-82d30dcc"
+  "folded_into": "V-daa3f0ba"
  }
 ]

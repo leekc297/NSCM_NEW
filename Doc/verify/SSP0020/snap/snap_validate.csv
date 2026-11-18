@@ -1,8 +1,8 @@
 ﻿key,kind,scope,status,missing,order,type_warn,extra,basis
 조회조건_Div_40,조회조건,Div 40,MISMATCH,All,,"Div:체크박스≠combobox,paragraph,text",,
 버튼_Div_40,버튼,Div 40,MISMATCH,USER_CHECK,,SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
-헤더_Delegate,헤더,Delegate,MISMATCH,Active,,META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): ALL,valid,plan.json expectedCols[Delegate][40](SHEET_COLUMNS)
+헤더_Delegate,헤더,Delegate,OK,,,META 숨김(VISIBLE_FLAG=N · 설계 결정 확인): ALL,,plan.json expectedCols[Delegate][40](SHEET_COLUMNS)
 팝업_Delegatee,팝업,Delegatee,NA,,,,,AS-IS 유래 기대 없음(팝업·화면샷) — 사람 확인
-화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(NEW)
-화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(NEW)
-헤더_Delegated_List,헤더,Delegated List,MISMATCH,Active,,,valid,plan.json expectedCols[Delegated List][40](SHEET_COLUMNS)
+화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(MATCH)
+화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(MATCH)
+헤더_Delegated_List,헤더,Delegated List,OK,,,,,plan.json expectedCols[Delegated List][40](SHEET_COLUMNS)

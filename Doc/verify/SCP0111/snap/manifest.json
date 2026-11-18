@@ -1,0 +1,68 @@
+{
+ "조회조건_Div_40": {
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SCP0111\\snap\\golden\\조회조건_Div_40.aria.yml",
+  "sha8": "8f6d9974",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-18 07:03",
+  "opinion": "골든(11-17 19:05) 생성 때 검사기가 Period 칸(달력 전용)을 못 찾아 순서에서 빠짐 — smoke-extra findCond 수정(11-18) 뒤 수신본이 실제 화면 순서(Div > Model/Nickname > Cell Model > Plan Date > Period > Qty < 0, DOM 실측 11-18 04:5x)",
+  "validate": "OK",
+  "forced": false
+ },
+ "헤더_Integration_PSI": {
+  "kind": "헤더",
+  "scope": "Integration PSI",
+  "golden": "Doc\\verify\\SCP0111\\snap\\golden\\헤더_Integration_PSI.txt",
+  "sha8": "ed5e02e9",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-17 20:28",
+  "opinion": "snap_validate OK(SHEET_COLUMNS 기대 칸 누락 0) · 추가 칸 date = 기간 월 동적 칸",
+  "validate": "OK",
+  "forced": false
+ },
+ "버튼_Div_40": {
+  "kind": "버튼",
+  "scope": "Div 40",
+  "golden": "Doc\\verify\\SCP0111\\snap\\golden\\버튼_Div_40.aria.yml",
+  "sha8": "757a887e",
+  "approved_by": "검증엔진세션",
+  "approved_at": "2026-11-17 20:28",
+  "opinion": "snap_validate OK · EDIT=CR-084·093 · EXCEL=SubTitle 아이콘 버튼 · SAVEDETAIL=대조표 Save 매핑",
+  "validate": "OK",
+  "forced": false
+ },
+ "팝업_Model_Nickname": {
+  "kind": "팝업",
+  "scope": "Model/Nickname",
+  "golden": "Doc\\verify\\SCP0111\\snap\\golden\\팝업_Model_Nickname.aria.yml",
+  "sha8": "c73fb4f8",
+  "approved_by": "사용자(CheckList 의견 11-18)",
+  "approved_at": "2026-11-18 10:08",
+  "opinion": "오류 아님 — 화면샷: 컬럼 폭 비율 은 오류에서 제외 · 팝업: TO-BE RULE(골든은 팝업 조회 전 0건 시점 촬영) · 11-18 검사기 보완(데이터 행 접기·머리글 가림) 뒤 재촬영본",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1920": {
+  "kind": "화면샷",
+  "scope": "1920",
+  "golden": "Doc\\verify\\SCP0111\\snap\\golden\\화면샷_1920.png",
+  "sha8": "83216492",
+  "approved_by": "사용자(CheckList 의견 11-18)",
+  "approved_at": "2026-11-18 10:08",
+  "opinion": "오류 아님 — 화면샷: 컬럼 폭 비율 은 오류에서 제외 · 팝업: TO-BE RULE(골든은 팝업 조회 전 0건 시점 촬영) · 11-18 검사기 보완(데이터 행 접기·머리글 가림) 뒤 재촬영본",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1366": {
+  "kind": "화면샷",
+  "scope": "1366",
+  "golden": "Doc\\verify\\SCP0111\\snap\\golden\\화면샷_1366.png",
+  "sha8": "151ebc19",
+  "approved_by": "사용자(CheckList 의견 11-18)",
+  "approved_at": "2026-11-18 10:08",
+  "opinion": "오류 아님 — 화면샷: 컬럼 폭 비율 은 오류에서 제외 · 팝업: TO-BE RULE(골든은 팝업 조회 전 0건 시점 촬영) · 11-18 검사기 보완(데이터 행 접기·머리글 가림) 뒤 재촬영본",
+  "validate": "NA",
+  "forced": false
+ }
+}

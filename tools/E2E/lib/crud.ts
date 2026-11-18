@@ -59,6 +59,10 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     if (rows === 0) { out.notes.push('조회 행 0 — 편집/저장 검증 불가'); countSave(); annotate(info, out); return out; }
     // 편집 후보 = 화면이 편집 가능으로 표시한 셀(.wj-cell-editable). SCP0096 처럼 컬럼 정의 isReadOnly 가 전부 false 인 화면에서는 이것만이 신호다.
     //   값이 있는 셀 우선(빈 행은 입력이 막힌 화면이 많다), 같은 컬럼이면 위 행 우선. 없으면 컬럼 정의(readOnly 아님)로 보조
+    // 2026-11-17 SCP0111(고정 18칸 1415/1543px = 92%): 고정 칸은 Wijmo 복제층(wj-frozen-clone)이 덮어 DOM nth 클릭이 시간 초과(시험 271s · 후보 24 × 약 10s)
+    //   → 고정 폭이 가시 폭의 85% 를 넘으면 측정 동안 고정 해제(probe.unfreezeIfNeeded · 저장 세부 _verify.spec:1559 와 같은 처리). 기준 칸 = 마지막 칸(고정 영역 밖)
+    { const metaU = await nscm.gridColumnsMeta(0).catch(() => null); const lastB = metaU && metaU.length ? metaU[metaU.length - 1].binding : '';
+      if (lastB) { const uf = await probe.unfreezeIfNeeded(nscm.page, lastB).catch(() => null); if (uf?.did) { out.notes.push(`고정 ${uf.n}칸(${uf.fw}px) ≥ 가시 폭 ${uf.cw}px 의 85% → 측정 동안 고정 해제`); await nscm.page.waitForTimeout(300); } } }
     const headers = await nscm.gridHeaders(0);
     let ecs = await nscm.editableCells(0, 40);
     // 2026-11-06(SCP0084 조치 필요 1·2·3·16번 허위 FAIL 원인 실측): 편집 칸(MEMO)이 그리드 오른쪽 끝이라 가로 가상화로 DOM 에 안 그려져 후보 0개 →

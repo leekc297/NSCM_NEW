@@ -8,7 +8,7 @@
 영역2 조회조건 S01~S15,FE 대조표,G6,G6|ROW:영역2 조회조건 S01~S15,NA
 영역2 조회조건 S01~S15,FE 대조표,H6,H6|ROW:영역2 조회조건 S01~S15,PASS
 영역2 조회조건 S01~S15,FE 대조표,G5,G5|ROW:영역2 조회조건 S01~S15,FAIL
-영역2 조회조건 S01~S15,FE 대조표,M4,M4|ROW:영역2 조회조건 S01~S15,FAIL
+영역2 조회조건 S01~S15,FE 대조표,M4,M4|ROW:영역2 조회조건 S01~S15,ERROR
 영역2 조회조건 S01~S15,FE 대조표,A1,A1|ROW:영역2 조회조건 S01~S15,NA
 영역2 조회조건 S01~S15,FE 대조표,J2,J2|SCREEN,PASS
 영역2 콤보 D01~D10,FE 대조표,X-LOC,X-LOC|ROW:영역2 콤보 D01~D10,NA
@@ -23,24 +23,24 @@ buttonGuards B01~B38,FE 대조표,X-ROW,X-ROW|ENTRY:buttonGuards B01~B38,NA
 팝업 P01~P04,FE 대조표,X-LOC,X-LOC|ROW:팝업 P01~P04,NA
 팝업 P01~P04,FE 대조표,H6,H6|ROW:팝업 P01~P04,PASS
 팝업 P01~P04,FE 대조표,G5,G5|ROW:팝업 P01~P04,FAIL
-팝업 P01~P04,FE 대조표,M4,M4|ROW:팝업 P01~P04,FAIL
+팝업 P01~P04,FE 대조표,M4,M4|ROW:팝업 P01~P04,ERROR
 R-01,FE 대조표,X-LOC,X-LOC|ROW:R-01,PASS
 R-01,FE 대조표,X-ROW,X-ROW|ENTRY:R-01,NA
-R-02·R-03,FE 대조표,X-LOC,X-LOC|ROW:R-02·R-03,NA
+R-02·R-03,FE 대조표,X-LOC,X-LOC|ROW:R-02·R-03,PASS
 R-02·R-03,FE 대조표,A5,A5|ROW:R-02·R-03,PASS
 R-02·R-03,FE 대조표,H5,H5|ROW:R-02·R-03,PASS
 R-02·R-03,FE 대조표,H2,H2|ROW:R-02·R-03,PASS
 R-04,FE 대조표,X-LOC,X-LOC|ROW:R-04,PASS
 R-04,FE 대조표,A5,A5|ROW:R-04,PASS
-R-05,FE 대조표,X-LOC,X-LOC|ROW:R-05,NA
+R-05,FE 대조표,X-LOC,X-LOC|ROW:R-05,PASS
 R-05,FE 대조표,A5,A5|ROW:R-05,PASS
-R-06,FE 대조표,X-LOC,X-LOC|ROW:R-06,NA
+R-06,FE 대조표,X-LOC,X-LOC|ROW:R-06,PASS
 R-06,FE 대조표,X-ROW,X-ROW|ENTRY:R-06,NA
 R-07,FE 대조표,X-LOC,X-LOC|ROW:R-07,NA
 R-07,FE 대조표,X-ROW,X-ROW|ENTRY:R-07,NA
-R-08,FE 대조표,X-LOC,X-LOC|ROW:R-08,NA
+R-08,FE 대조표,X-LOC,X-LOC|ROW:R-08,PASS
 R-08,FE 대조표,X-ROW,X-ROW|ENTRY:R-08,NA
-R-09,FE 대조표,X-LOC,X-LOC|ROW:R-09,NA
+R-09,FE 대조표,X-LOC,X-LOC|ROW:R-09,PASS
 R-09,FE 대조표,X-ROW,X-ROW|ENTRY:R-09,NA
 R-10,FE 대조표,X-LOC,X-LOC|ROW:R-10,NA
 R-10,FE 대조표,D1,D1|ROW:R-10,PASS
@@ -52,11 +52,11 @@ R-11,FE 대조표,X-LOC,X-LOC|ROW:R-11,NA
 R-11,FE 대조표,G1,G1|ROW:R-11,PASS
 R-11,FE 대조표,A1,A1|ROW:R-11,NA
 R-11,FE 대조표,J2,J2|SCREEN,PASS
-R-12,FE 대조표,X-LOC,X-LOC|ROW:R-12,NA
+R-12,FE 대조표,X-LOC,X-LOC|ROW:R-12,PASS
 R-12,FE 대조표,D1,D1|ROW:R-12,PASS
 R-12,FE 대조표,D3,D3|ROW:R-12,PASS
 R-12,FE 대조표,J2,J2|SCREEN,PASS
-R-13,FE 대조표,X-LOC,X-LOC|ROW:R-13,NA
+R-13,FE 대조표,X-LOC,X-LOC|ROW:R-13,PASS
 R-13,FE 대조표,D4,D4|ROW:R-13,PASS
 R-13,FE 대조표,D6,D6|SCREEN,PASS
 R-13,FE 대조표,J2,J2|SCREEN,PASS
@@ -88,7 +88,7 @@ R-19·R-20·R-21,FE 대조표,D6,D6|SCREEN,PASS
 R-19·R-20·R-21,FE 대조표,E4,E4|MSG:MSG00109,NA
 R-19·R-20·R-21,FE 대조표,I1,I1|SCREEN,PASS
 R-19·R-20·R-21,FE 대조표,H10,H10|SCREEN,PASS
-R-22,FE 대조표,X-LOC,X-LOC|ROW:R-22,NA
+R-22,FE 대조표,X-LOC,X-LOC|ROW:R-22,PASS
 R-22,FE 대조표,G4,G4|ROW:R-22,PASS
 R-22,FE 대조표,SC1,SC1|SCREEN,NA
 R-22,FE 대조표,G1,G1|ROW:R-22,PASS
@@ -99,7 +99,7 @@ R-22,FE 대조표,E4,E4|MSG:MSG00667,NA
 R-22,FE 대조표,E4,E4|MSG:MSG00097,NA
 R-22,FE 대조표,I1,I1|SCREEN,PASS
 R-22,FE 대조표,H10,H10|SCREEN,PASS
-R-23,FE 대조표,X-LOC,X-LOC|ROW:R-23,NA
+R-23,FE 대조표,X-LOC,X-LOC|ROW:R-23,PASS
 R-23,FE 대조표,A5,A5|ROW:R-23,PASS
 R-23,FE 대조표,E4,E4|MSG:MSG00096,NA
 R-23,FE 대조표,I1,I1|SCREEN,PASS
@@ -110,7 +110,7 @@ R-27,FE 대조표,X-LOC,X-LOC|ROW:R-27,NA
 R-27,FE 대조표,G1,G1|ROW:R-27,PASS
 R-27,FE 대조표,A1,A1|ROW:R-27,NA
 R-27,FE 대조표,J2,J2|SCREEN,PASS
-R-28·R-30,FE 대조표,X-LOC,X-LOC|ROW:R-28·R-30,NA
+R-28·R-30,FE 대조표,X-LOC,X-LOC|ROW:R-28·R-30,PASS
 R-28·R-30,FE 대조표,K-SA,K-SA|SCREEN,PASS
 R-28·R-30,FE 대조표,G3,G3|SCREEN,PASS
 R-29,FE 대조표,X-REASON,X-REASON|ROW:R-29,PASS
@@ -118,21 +118,21 @@ R-31,FE 대조표,X-REASON,X-REASON|ROW:R-31,NA
 R-32,FE 대조표,X-REASON,X-REASON|ROW:R-32,NA
 R-33,FE 대조표,X-LOC,X-LOC|ROW:R-33,NA
 R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
-`cboDivision`(S01),FE 대조표,X-LOC,X-LOC|ROW:`cboDivision`(S01),NA
+`cboDivision`(S01),FE 대조표,X-LOC,X-LOC|ROW:`cboDivision`(S01),PASS
 `cboDivision`(S01),FE 대조표,G4,G4|COND:cboDivision,PASS
 `cboDivision`(S01),FE 대조표,SC1,SC1|SCREEN,NA
 `cboDivision`(S01),FE 대조표,G1,G1|COND:cboDivision,PASS
 `cboDivision`(S01),FE 대조표,G6,G6|COND:cboDivision,PASS
 `cboDivision`(S01),FE 대조표,A1,A1|ROW:`cboDivision`(S01),NA
 `cboDivision`(S01),FE 대조표,J2,J2|SCREEN,PASS
-`cboVersion`(S02),FE 대조표,X-LOC,X-LOC|ROW:`cboVersion`(S02),NA
+`cboVersion`(S02),FE 대조표,X-LOC,X-LOC|ROW:`cboVersion`(S02),PASS
 `cboVersion`(S02),FE 대조표,G4,G4|COND:cboVersion,PASS
 `cboVersion`(S02),FE 대조표,SC1,SC1|SCREEN,NA
 `cboVersion`(S02),FE 대조표,G1,G1|COND:cboVersion,PASS
 `cboVersion`(S02),FE 대조표,G6,G6|COND:cboVersion,PASS
 `cboVersion`(S02),FE 대조표,A1,A1|ROW:`cboVersion`(S02),NA
 `cboVersion`(S02),FE 대조표,J2,J2|SCREEN,PASS
-`cboVersionSeq`(S03),FE 대조표,X-LOC,X-LOC|ROW:`cboVersionSeq`(S03),NA
+`cboVersionSeq`(S03),FE 대조표,X-LOC,X-LOC|ROW:`cboVersionSeq`(S03),PASS
 `cboVersionSeq`(S03),FE 대조표,G4,G4|COND:cboVersionSeq,PASS
 `cboVersionSeq`(S03),FE 대조표,SC1,SC1|SCREEN,NA
 `cboVersionSeq`(S03),FE 대조표,G1,G1|COND:cboVersionSeq,PASS
@@ -141,35 +141,35 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 `cboVersionSeq`(S03),FE 대조표,D6,D6|SCREEN,PASS
 `cboVersionSeq`(S03),FE 대조표,J2,J2|SCREEN,PASS
 `cboVersionSeq`(S03),FE 대조표,A1,A1|ROW:`cboVersionSeq`(S03),NA
-`txtPlanType`(S04),FE 대조표,X-LOC,X-LOC|ROW:`txtPlanType`(S04),NA
+`txtPlanType`(S04),FE 대조표,X-LOC,X-LOC|ROW:`txtPlanType`(S04),PASS
 `txtPlanType`(S04),FE 대조표,G4,G4|COND:txtPlanType,PASS
 `txtPlanType`(S04),FE 대조표,SC1,SC1|SCREEN,NA
 `txtPlanType`(S04),FE 대조표,G1,G1|COND:txtPlanType,NA
 `txtPlanType`(S04),FE 대조표,G6,G6|COND:txtPlanType,NA
 `txtPlanType`(S04),FE 대조표,A1,A1|ROW:`txtPlanType`(S04),NA
 `txtPlanType`(S04),FE 대조표,J2,J2|SCREEN,PASS
-`rgrpDivisionType`(S05),FE 대조표,X-LOC,X-LOC|ROW:`rgrpDivisionType`(S05),NA
+`rgrpDivisionType`(S05),FE 대조표,X-LOC,X-LOC|ROW:`rgrpDivisionType`(S05),PASS
 `rgrpDivisionType`(S05),FE 대조표,G4,G4|COND:rgrpDivisionType,PASS
 `rgrpDivisionType`(S05),FE 대조표,SC1,SC1|SCREEN,NA
 `rgrpDivisionType`(S05),FE 대조표,G1,G1|COND:rgrpDivisionType,PASS
 `rgrpDivisionType`(S05),FE 대조표,G6,G6|COND:rgrpDivisionType,PASS
 `rgrpDivisionType`(S05),FE 대조표,A1,A1|ROW:`rgrpDivisionType`(S05),NA
 `rgrpDivisionType`(S05),FE 대조표,J2,J2|SCREEN,PASS
-`clbSite`(S06),FE 대조표,X-LOC,X-LOC|ROW:`clbSite`(S06),NA
+`clbSite`(S06),FE 대조표,X-LOC,X-LOC|ROW:`clbSite`(S06),PASS
 `clbSite`(S06),FE 대조표,G4,G4|COND:clbSite,PASS
 `clbSite`(S06),FE 대조표,SC1,SC1|SCREEN,NA
 `clbSite`(S06),FE 대조표,G1,G1|COND:clbSite,PASS
 `clbSite`(S06),FE 대조표,G6,G6|COND:clbSite,PASS
 `clbSite`(S06),FE 대조표,A1,A1|ROW:`clbSite`(S06),NA
 `clbSite`(S06),FE 대조표,J2,J2|SCREEN,PASS
-`clbPlant`(S07),FE 대조표,X-LOC,X-LOC|ROW:`clbPlant`(S07),NA
+`clbPlant`(S07),FE 대조표,X-LOC,X-LOC|ROW:`clbPlant`(S07),PASS
 `clbPlant`(S07),FE 대조표,G4,G4|COND:clbPlant,PASS
 `clbPlant`(S07),FE 대조표,SC1,SC1|SCREEN,NA
 `clbPlant`(S07),FE 대조표,G1,G1|COND:clbPlant,PASS
 `clbPlant`(S07),FE 대조표,G6,G6|COND:clbPlant,PASS
 `clbPlant`(S07),FE 대조표,A1,A1|ROW:`clbPlant`(S07),NA
 `clbPlant`(S07),FE 대조표,J2,J2|SCREEN,PASS
-`clbFactory`(S08),FE 대조표,X-LOC,X-LOC|ROW:`clbFactory`(S08),NA
+`clbFactory`(S08),FE 대조표,X-LOC,X-LOC|ROW:`clbFactory`(S08),PASS
 `clbFactory`(S08),FE 대조표,G4,G4|COND:clbFactory,PASS
 `clbFactory`(S08),FE 대조표,SC1,SC1|SCREEN,NA
 `clbFactory`(S08),FE 대조표,G1,G1|COND:clbFactory,PASS
@@ -183,21 +183,21 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 `clbLine`(S09),FE 대조표,G6,G6|COND:clbLine,PASS
 `clbLine`(S09),FE 대조표,A1,A1|ROW:`clbLine`(S09),NA
 `clbLine`(S09),FE 대조표,J2,J2|SCREEN,PASS
-`clbOperation`(S10),FE 대조표,X-LOC,X-LOC|ROW:`clbOperation`(S10),NA
+`clbOperation`(S10),FE 대조표,X-LOC,X-LOC|ROW:`clbOperation`(S10),PASS
 `clbOperation`(S10),FE 대조표,G4,G4|COND:clbOperation,PASS
 `clbOperation`(S10),FE 대조표,SC1,SC1|SCREEN,NA
 `clbOperation`(S10),FE 대조표,G1,G1|COND:clbOperation,NA
 `clbOperation`(S10),FE 대조표,G6,G6|COND:clbOperation,NA
 `clbOperation`(S10),FE 대조표,A1,A1|ROW:`clbOperation`(S10),NA
 `clbOperation`(S10),FE 대조표,J2,J2|SCREEN,PASS
-`clbElectrodeType`(S11),FE 대조표,X-LOC,X-LOC|ROW:`clbElectrodeType`(S11),NA
+`clbElectrodeType`(S11),FE 대조표,X-LOC,X-LOC|ROW:`clbElectrodeType`(S11),PASS
 `clbElectrodeType`(S11),FE 대조표,G4,G4|COND:clbElectrodeType,PASS
 `clbElectrodeType`(S11),FE 대조표,SC1,SC1|SCREEN,NA
 `clbElectrodeType`(S11),FE 대조표,G1,G1|COND:clbElectrodeType,NA
 `clbElectrodeType`(S11),FE 대조표,G6,G6|COND:clbElectrodeType,NA
 `clbElectrodeType`(S11),FE 대조표,A1,A1|ROW:`clbElectrodeType`(S11),NA
 `clbElectrodeType`(S11),FE 대조표,J2,J2|SCREEN,PASS
-`txtItem`(S12)+`btnItemId`(S13),FE 대조표,X-LOC,X-LOC|ROW:`txtItem`(S12)+`btnItemId`(S13),NA
+`txtItem`(S12)+`btnItemId`(S13),FE 대조표,X-LOC,X-LOC|ROW:`txtItem`(S12)+`btnItemId`(S13),PASS
 `txtItem`(S12)+`btnItemId`(S13),FE 대조표,G4,G4|COND:txtItem,PASS
 `txtItem`(S12)+`btnItemId`(S13),FE 대조표,G4,G4|BTN:btnItemId,PASS
 `txtItem`(S12)+`btnItemId`(S13),FE 대조표,SC1,SC1|SCREEN,NA
@@ -211,7 +211,7 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 `txtItem`(S12)+`btnItemId`(S13),FE 대조표,M4,M4|BTN:btnItemId,PASS
 `txtItem`(S12)+`btnItemId`(S13),FE 대조표,A1,A1|ROW:`txtItem`(S12)+`btnItemId`(S13),NA
 `txtItem`(S12)+`btnItemId`(S13),FE 대조표,J2,J2|SCREEN,PASS
-(조회조건 Reset),FE 대조표,X-LOC,X-LOC|ROW:(조회조건 Reset),NA
+(조회조건 Reset),FE 대조표,X-LOC,X-LOC|ROW:(조회조건 Reset),PASS
 (조회조건 Reset),FE 대조표,K-SA,K-SA|SCREEN,PASS
 (조회조건 Reset),FE 대조표,G3,G3|SCREEN,PASS
 (조회조건 Reset),FE 대조표,G4,G4|ROW:(조회조건 Reset),PASS
@@ -223,14 +223,14 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 (조회조건 Reset),FE 대조표,H2,H2|ROW:(조회조건 Reset),PASS
 (조회조건 Reset),FE 대조표,A1,A1|ROW:(조회조건 Reset),NA
 (조회조건 Reset),FE 대조표,J2,J2|SCREEN,PASS
-`cboValid`(S14),FE 대조표,X-LOC,X-LOC|ROW:`cboValid`(S14),NA
+`cboValid`(S14),FE 대조표,X-LOC,X-LOC|ROW:`cboValid`(S14),PASS
 `cboValid`(S14),FE 대조표,G4,G4|COND:cboValid,PASS
 `cboValid`(S14),FE 대조표,SC1,SC1|SCREEN,NA
 `cboValid`(S14),FE 대조표,G1,G1|COND:cboValid,PASS
 `cboValid`(S14),FE 대조표,G6,G6|COND:cboValid,PASS
 `cboValid`(S14),FE 대조표,A1,A1|ROW:`cboValid`(S14),NA
 `cboValid`(S14),FE 대조표,J2,J2|SCREEN,PASS
-`btnColumn`(S15),FE 대조표,X-LOC,X-LOC|ROW:`btnColumn`(S15),NA
+`btnColumn`(S15),FE 대조표,X-LOC,X-LOC|ROW:`btnColumn`(S15),PASS
 `btnColumn`(S15),FE 대조표,G4,G4|BTN:btnColumn,PASS
 `btnColumn`(S15),FE 대조표,SC1,SC1|SCREEN,NA
 `btnColumn`(S15),FE 대조표,G1,G1|ROW:`btnColumn`(S15),PASS
@@ -240,11 +240,11 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 `btnColumn`(S15),FE 대조표,H2,H2|ROW:`btnColumn`(S15),PASS
 `btnColumn`(S15),FE 대조표,A1,A1|ROW:`btnColumn`(S15),NA
 `btnColumn`(S15),FE 대조표,J2,J2|SCREEN,PASS
-컬럼셋,FE 대조표,X-LOC,X-LOC|ROW:컬럼셋,NA
+컬럼셋,FE 대조표,X-LOC,X-LOC|ROW:컬럼셋,PASS
 컬럼셋,FE 대조표,A5,A5|ROW:컬럼셋,PASS
 컬럼셋,FE 대조표,H5,H5|ROW:컬럼셋,PASS
 컬럼셋,FE 대조표,H2,H2|ROW:컬럼셋,PASS
-동적 기간컬럼,FE 대조표,X-LOC,X-LOC|ROW:동적 기간컬럼,NA
+동적 기간컬럼,FE 대조표,X-LOC,X-LOC|ROW:동적 기간컬럼,PASS
 동적 기간컬럼,FE 대조표,A5,A5|COL:DUMMY_YN,PASS
 동적 기간컬럼,FE 대조표,H5,H5|COL:DUMMY_YN,NA
 동적 기간컬럼,FE 대조표,H2,H2|COL:DUMMY_YN,NA
@@ -275,7 +275,7 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 헤더 단수,FE 대조표,G5,G5|COL:FACTORY_NAME,NA
 헤더 단수,FE 대조표,G5,G5|COL:LINE_NAME,NA
 헤더 단수,FE 대조표,G5,G5|COL:OPERATION_NAME,NA
-헤더 단수,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
+헤더 단수,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
 헤더 단수,FE 대조표,M4,M4|COL:SITE_NAME,PASS
 헤더 단수,FE 대조표,M4,M4|COL:PLANT_NAME,PASS
 헤더 단수,FE 대조표,M4,M4|COL:FACTORY_NAME,PASS
@@ -288,7 +288,7 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 편집잠금,FE 대조표,H2,H2|COL:NICK_NAME,PASS
 편집잠금,FE 대조표,H6,H6|COL:NICK_NAME,PASS
 편집잠금,FE 대조표,G5,G5|COL:NICK_NAME,NA
-편집잠금,FE 대조표,M4,M4|COL:NICK_NAME,FAIL
+편집잠금,FE 대조표,M4,M4|COL:NICK_NAME,REVIEW
 편집잠금,FE 대조표,D1,D1|COL:NICK_NAME,PASS
 편집잠금,FE 대조표,D3,D3|COL:NICK_NAME,PASS
 편집잠금,FE 대조표,F1,F1|SCREEN,PASS
@@ -296,7 +296,7 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 편집잠금,FE 대조표,J2,J2|SCREEN,PASS
 편집잠금,FE 대조표,D4,D4|COL:NICK_NAME,PASS
 편집잠금,FE 대조표,D6,D6|SCREEN,PASS
-셀 콤보 16종,FE 대조표,X-LOC,X-LOC|ROW:셀 콤보 16종,NA
+셀 콤보 16종,FE 대조표,X-LOC,X-LOC|ROW:셀 콤보 16종,PASS
 셀 콤보 16종,FE 대조표,A5,A5|ROW:셀 콤보 16종,PASS
 셀 콤보 16종,FE 대조표,H5,H5|ROW:셀 콤보 16종,PASS
 셀 콤보 16종,FE 대조표,H2,H2|ROW:셀 콤보 16종,PASS
@@ -304,22 +304,22 @@ R-33,FE 대조표,X-ROW,X-ROW|ENTRY:R-33,NA
 셀 콤보 16종,FE 대조표,B2,B2|ROW:셀 콤보 16종,PASS
 셀 콤보 16종,FE 대조표,B4,B4|ROW:셀 콤보 16종,FAIL
 셀 콤보 16종,FE 대조표,D5,D5|ROW:셀 콤보 16종,PASS
-셀 콤보 16종,FE 대조표,E5,E5|ROW:셀 콤보 16종,FAIL
+셀 콤보 16종,FE 대조표,E5,E5|ROW:셀 콤보 16종,NA
 셀 콤보 16종,FE 대조표,D1,D1|ROW:셀 콤보 16종,PASS
 셀 콤보 16종,FE 대조표,D3,D3|ROW:셀 콤보 16종,PASS
 셀 콤보 16종,FE 대조표,J2,J2|SCREEN,PASS
-코드↔명칭 동기,FE 대조표,X-LOC,X-LOC|ROW:코드↔명칭 동기,NA
+코드↔명칭 동기,FE 대조표,X-LOC,X-LOC|ROW:코드↔명칭 동기,PASS
 코드↔명칭 동기,FE 대조표,A5,A5|ROW:코드↔명칭 동기,PASS
 코드↔명칭 동기,FE 대조표,H5,H5|ROW:코드↔명칭 동기,PASS
 코드↔명칭 동기,FE 대조표,H2,H2|ROW:코드↔명칭 동기,PASS
 코드↔명칭 동기,FE 대조표,C2,C2|ROW:코드↔명칭 동기,FAIL
 코드↔명칭 동기,FE 대조표,C3,C3|ROW:코드↔명칭 동기,PASS
 코드↔명칭 동기,FE 대조표,C6,C6|ROW:코드↔명칭 동기,FAIL
-하위 cascade 클리어,FE 대조표,X-LOC,X-LOC|ROW:하위 cascade 클리어,NA
+하위 cascade 클리어,FE 대조표,X-LOC,X-LOC|ROW:하위 cascade 클리어,PASS
 하위 cascade 클리어,FE 대조표,A5,A5|ROW:하위 cascade 클리어,PASS
 하위 cascade 클리어,FE 대조표,H5,H5|ROW:하위 cascade 클리어,PASS
 하위 cascade 클리어,FE 대조표,H2,H2|ROW:하위 cascade 클리어,PASS
-Dummy 마킹,FE 대조표,X-LOC,X-LOC|ROW:Dummy 마킹,NA
+Dummy 마킹,FE 대조표,X-LOC,X-LOC|ROW:Dummy 마킹,PASS
 Dummy 마킹,FE 대조표,A5,A5|ROW:Dummy 마킹,PASS
 Dummy 마킹,FE 대조표,H5,H5|ROW:Dummy 마킹,PASS
 Dummy 마킹,FE 대조표,H2,H2|ROW:Dummy 마킹,PASS
@@ -327,14 +327,14 @@ Dummy 코드 채번,FE 대조표,X-LOC,X-LOC|ROW:Dummy 코드 채번,PASS
 Dummy 코드 채번,FE 대조표,A5,A5|ROW:Dummy 코드 채번,PASS
 Dummy 코드 채번,FE 대조표,H5,H5|ROW:Dummy 코드 채번,PASS
 Dummy 코드 채번,FE 대조표,H2,H2|ROW:Dummy 코드 채번,PASS
-편집모드 컬럼 노출,FE 대조표,X-LOC,X-LOC|ROW:편집모드 컬럼 노출,NA
+편집모드 컬럼 노출,FE 대조표,X-LOC,X-LOC|ROW:편집모드 컬럼 노출,PASS
 편집모드 컬럼 노출,FE 대조표,A5,A5|ROW:편집모드 컬럼 노출,PASS
 편집모드 컬럼 노출,FE 대조표,H5,H5|ROW:편집모드 컬럼 노출,PASS
 편집모드 컬럼 노출,FE 대조표,H2,H2|ROW:편집모드 컬럼 노출,PASS
 편집모드 컬럼 노출,FE 대조표,D1,D1|ROW:편집모드 컬럼 노출,PASS
 편집모드 컬럼 노출,FE 대조표,D3,D3|ROW:편집모드 컬럼 노출,PASS
 편집모드 컬럼 노출,FE 대조표,J2,J2|SCREEN,PASS
-병합,FE 대조표,X-LOC,X-LOC|ROW:병합,NA
+병합,FE 대조표,X-LOC,X-LOC|ROW:병합,PASS
 병합,FE 대조표,A5,A5|ROW:병합,PASS
 병합,FE 대조표,H5,H5|ROW:병합,PASS
 병합,FE 대조표,H2,H2|ROW:병합,PASS
@@ -342,24 +342,24 @@ Dummy 코드 채번,FE 대조표,H2,H2|ROW:Dummy 코드 채번,PASS
 병합,FE 대조표,G1,G1|ROW:병합,PASS
 병합,FE 대조표,A1,A1|ROW:병합,NA
 병합,FE 대조표,J2,J2|SCREEN,PASS
-컬럼 표시 순서,FE 대조표,X-LOC,X-LOC|ROW:컬럼 표시 순서,NA
+컬럼 표시 순서,FE 대조표,X-LOC,X-LOC|ROW:컬럼 표시 순서,PASS
 컬럼 표시 순서,FE 대조표,A5,A5|COL:OPERATION_NAME,PASS
 컬럼 표시 순서,FE 대조표,A5,A5|COL:ELTR_LN_TP_CD,PASS
 컬럼 표시 순서,FE 대조표,H5,H5|COL:OPERATION_NAME,PASS
 컬럼 표시 순서,FE 대조표,H5,H5|COL:ELTR_LN_TP_CD,PASS
 컬럼 표시 순서,FE 대조표,H2,H2|COL:OPERATION_NAME,PASS
 컬럼 표시 순서,FE 대조표,H2,H2|COL:ELTR_LN_TP_CD,PASS
-행 추가,FE 대조표,X-LOC,X-LOC|ROW:행 추가,NA
+행 추가,FE 대조표,X-LOC,X-LOC|ROW:행 추가,PASS
 행 추가,FE 대조표,A5,A5|ROW:행 추가,PASS
 행 추가,FE 대조표,H5,H5|ROW:행 추가,PASS
 행 추가,FE 대조표,H2,H2|ROW:행 추가,PASS
 행 추가,FE 대조표,H6,H6|ROW:행 추가,PASS
 행 추가,FE 대조표,G5,G5|ROW:행 추가,FAIL
-행 추가,FE 대조표,M4,M4|ROW:행 추가,FAIL
+행 추가,FE 대조표,M4,M4|ROW:행 추가,ERROR
 행 추가,FE 대조표,D4,D4|ROW:행 추가,PASS
 행 추가,FE 대조표,D6,D6|SCREEN,PASS
 행 추가,FE 대조표,J2,J2|SCREEN,PASS
-셀 더블클릭 라우팅,FE 대조표,X-LOC,X-LOC|ROW:셀 더블클릭 라우팅,NA
+셀 더블클릭 라우팅,FE 대조표,X-LOC,X-LOC|ROW:셀 더블클릭 라우팅,PASS
 셀 더블클릭 라우팅,FE 대조표,A5,A5|COL:NICK_NAME,PASS
 셀 더블클릭 라우팅,FE 대조표,A5,A5|COL:ITEM_ID,PASS
 셀 더블클릭 라우팅,FE 대조표,H5,H5|COL:NICK_NAME,PASS
@@ -371,7 +371,7 @@ Dummy 코드 채번,FE 대조표,H2,H2|ROW:Dummy 코드 채번,PASS
 셀 더블클릭 라우팅,FE 대조표,D3,D3|COL:NICK_NAME,PASS
 셀 더블클릭 라우팅,FE 대조표,D3,D3|COL:ITEM_ID,NA
 셀 더블클릭 라우팅,FE 대조표,J2,J2|SCREEN,PASS
-삭제,FE 대조표,X-LOC,X-LOC|ROW:삭제,NA
+삭제,FE 대조표,X-LOC,X-LOC|ROW:삭제,PASS
 삭제,FE 대조표,A5,A5|ROW:삭제,PASS
 삭제,FE 대조표,H5,H5|ROW:삭제,PASS
 삭제,FE 대조표,H2,H2|ROW:삭제,PASS
@@ -435,11 +435,11 @@ V05,FE 대조표,E4,E4|MSG:MSG00004,PASS
 V05,FE 대조표,I1,I1|SCREEN,PASS
 V05,FE 대조표,H10,H10|SCREEN,PASS
 V05,FE 대조표,E3,E3|ROW:V05,NA
-B01~B03,FE 대조표,X-LOC,X-LOC|ROW:B01~B03,NA
+B01~B03,FE 대조표,X-LOC,X-LOC|ROW:B01~B03,PASS
 B01~B03,FE 대조표,D4,D4|ROW:B01~B03,PASS
 B01~B03,FE 대조표,D6,D6|SCREEN,PASS
 B01~B03,FE 대조표,J2,J2|SCREEN,PASS
-B04~B09,FE 대조표,X-LOC,X-LOC|ROW:B04~B09,NA
+B04~B09,FE 대조표,X-LOC,X-LOC|ROW:B04~B09,PASS
 B04~B09,FE 대조표,C2,C2|ROW:B04~B09,FAIL
 B04~B09,FE 대조표,C3,C3|ROW:B04~B09,PASS
 B04~B09,FE 대조표,C6,C6|ROW:B04~B09,FAIL
@@ -450,7 +450,7 @@ B10,FE 대조표,J2,J2|SCREEN,PASS
 B11~B13,FE 대조표,X-LOC,X-LOC|ROW:B11~B13,PASS
 B11~B13,FE 대조표,H6,H6|ROW:B11~B13,PASS
 B11~B13,FE 대조표,G5,G5|ROW:B11~B13,FAIL
-B11~B13,FE 대조표,M4,M4|ROW:B11~B13,FAIL
+B11~B13,FE 대조표,M4,M4|ROW:B11~B13,ERROR
 B11~B13,FE 대조표,D4,D4|ROW:B11~B13,PASS
 B11~B13,FE 대조표,D6,D6|SCREEN,PASS
 B11~B13,FE 대조표,J2,J2|SCREEN,PASS
@@ -460,22 +460,22 @@ B14~B18,FE 대조표,X-LOC,X-LOC|ROW:B14~B18,NA
 B14~B18,FE 대조표,D1,D1|ROW:B14~B18,PASS
 B14~B18,FE 대조표,D3,D3|ROW:B14~B18,PASS
 B14~B18,FE 대조표,J2,J2|SCREEN,PASS
-B19~B25,FE 대조표,X-LOC,X-LOC|ROW:B19~B25,NA
+B19~B25,FE 대조표,X-LOC,X-LOC|ROW:B19~B25,PASS
 B19~B25,FE 대조표,F1,F1|SCREEN,PASS
 B19~B25,FE 대조표,F5,F5|SCREEN,PASS
 B19~B25,FE 대조표,J2,J2|SCREEN,PASS
-B26~B33,FE 대조표,X-LOC,X-LOC|ROW:B26~B33,NA
+B26~B33,FE 대조표,X-LOC,X-LOC|ROW:B26~B33,PASS
 B26~B33,FE 대조표,B1,B1|ROW:B26~B33,PASS
 B26~B33,FE 대조표,B2,B2|ROW:B26~B33,PASS
 B26~B33,FE 대조표,B4,B4|ROW:B26~B33,FAIL
 B26~B33,FE 대조표,D5,D5|ROW:B26~B33,PASS
-B26~B33,FE 대조표,E5,E5|ROW:B26~B33,FAIL
+B26~B33,FE 대조표,E5,E5|ROW:B26~B33,NA
 B26~B33,FE 대조표,D1,D1|ROW:B26~B33,PASS
 B26~B33,FE 대조표,D3,D3|ROW:B26~B33,PASS
 B26~B33,FE 대조표,J2,J2|SCREEN,PASS
-B34,FE 대조표,X-LOC,X-LOC|ROW:B34,NA
+B34,FE 대조표,X-LOC,X-LOC|ROW:B34,PASS
 B34,FE 대조표,X-ROW,X-ROW|ENTRY:B34,NA
-B35~B38,FE 대조표,X-LOC,X-LOC|ROW:B35~B38,NA
+B35~B38,FE 대조표,X-LOC,X-LOC|ROW:B35~B38,PASS
 B35~B38,FE 대조표,F1,F1|SCREEN,PASS
 B35~B38,FE 대조표,F2,F2|SCREEN,PASS
 B35~B38,FE 대조표,J2,J2|SCREEN,PASS
@@ -509,10 +509,10 @@ K-20-c,FE 대조표,G5,G5|COL:DUMMY_YN,NA
 K-20-c,FE 대조표,G5,G5|COL:VER_ID,NA
 K-20-c,FE 대조표,G5,G5|COL:VER_SEQ,NA
 K-20-c,FE 대조표,M4,M4|COL:DIVISION_ID,PASS
-K-20-c,FE 대조표,M4,M4|COL:NICK_NAME,FAIL
+K-20-c,FE 대조표,M4,M4|COL:NICK_NAME,REVIEW
 K-20-c,FE 대조표,M4,M4|COL:ELTR_LN_TP_CD,PASS
 K-20-c,FE 대조표,M4,M4|COL:VALID_YN,PASS
-K-20-c,FE 대조표,M4,M4|COL:ITEM_ID,FAIL
+K-20-c,FE 대조표,M4,M4|COL:ITEM_ID,REVIEW
 K-20-c,FE 대조표,M4,M4|COL:DUMMY_YN,PASS
 K-20-c,FE 대조표,M4,M4|COL:VER_ID,PASS
 K-20-c,FE 대조표,M4,M4|COL:VER_SEQ,PASS
@@ -530,15 +530,15 @@ K-20-c,FE 대조표,J2,J2|SCREEN,PASS
 K-20-c,FE 대조표,D6,D6|SCREEN,PASS
 메뉴 가시화,FE 대조표,X-LOC,X-LOC|ROW:메뉴 가시화,PASS
 메뉴 가시화,FE 대조표,X-ROW,X-ROW|ENTRY:메뉴 가시화,NA
-그룹→메뉴,FE 대조표,X-LOC,X-LOC|ROW:그룹→메뉴,NA
+그룹→메뉴,FE 대조표,X-LOC,X-LOC|ROW:그룹→메뉴,PASS
 그룹→메뉴,FE 대조표,X-ROW,X-ROW|ENTRY:그룹→메뉴,NA
-버튼 노출,FE 대조표,X-LOC,X-LOC|ROW:버튼 노출,NA
+버튼 노출,FE 대조표,X-LOC,X-LOC|ROW:버튼 노출,PASS
 버튼 노출,FE 대조표,A5,A5|ROW:버튼 노출,PASS
 버튼 노출,FE 대조표,H5,H5|ROW:버튼 노출,PASS
 버튼 노출,FE 대조표,H2,H2|ROW:버튼 노출,PASS
 버튼 노출,FE 대조표,H6,H6|ROW:버튼 노출,PASS
 버튼 노출,FE 대조표,G5,G5|ROW:버튼 노출,FAIL
-버튼 노출,FE 대조표,M4,M4|ROW:버튼 노출,FAIL
+버튼 노출,FE 대조표,M4,M4|ROW:버튼 노출,ERROR
 버튼 노출,FE 대조표,F1,F1|SCREEN,PASS
 버튼 노출,FE 대조표,F2,F2|SCREEN,PASS
 버튼 노출,FE 대조표,J2,J2|SCREEN,PASS
@@ -553,7 +553,7 @@ K-20-c,FE 대조표,D6,D6|SCREEN,PASS
 버튼 권한,FE 대조표,D4,D4|ROW:버튼 권한,PASS
 버튼 권한,FE 대조표,D6,D6|SCREEN,PASS
 버튼 권한,FE 대조표,J2,J2|SCREEN,PASS
-Division 권한,FE 대조표,X-LOC,X-LOC|ROW:Division 권한,NA
+Division 권한,FE 대조표,X-LOC,X-LOC|ROW:Division 권한,PASS
 Division 권한,FE 대조표,K-SA,K-SA|SCREEN,PASS
 Division 권한,FE 대조표,G3,G3|SCREEN,PASS
 Division 권한,FE 대조표,G1,G1|ROW:Division 권한,PASS
@@ -566,16 +566,16 @@ API 메타,FE 대조표,X-LOC,X-LOC|ROW:API 메타,NA
 API 메타,FE 대조표,G1,G1|ROW:API 메타,PASS
 API 메타,FE 대조표,A1,A1|ROW:API 메타,NA
 API 메타,FE 대조표,J2,J2|SCREEN,PASS
-PROC 메타,FE 대조표,X-LOC,X-LOC|ROW:PROC 메타,NA
+PROC 메타,FE 대조표,X-LOC,X-LOC|ROW:PROC 메타,PASS
 PROC 메타,FE 대조표,F1,F1|SCREEN,PASS
 PROC 메타,FE 대조표,F2,F2|SCREEN,PASS
 PROC 메타,FE 대조표,J2,J2|SCREEN,PASS
 PROC 메타,FE 대조표,G1,G1|ROW:PROC 메타,PASS
 PROC 메타,FE 대조표,A1,A1|ROW:PROC 메타,NA
-~~6-1~~,FE 대조표,X-LOC,X-LOC|ROW:~~6-1~~,FAIL
+~~6-1~~,FE 대조표,X-LOC,X-LOC|ROW:~~6-1~~,PASS
 ~~6-1~~,FE 대조표,H6,H6|ROW:~~6-1~~,PASS
 ~~6-1~~,FE 대조표,G5,G5|ROW:~~6-1~~,FAIL
-~~6-1~~,FE 대조표,M4,M4|ROW:~~6-1~~,FAIL
+~~6-1~~,FE 대조표,M4,M4|ROW:~~6-1~~,ERROR
 ~~6-1~~,FE 대조표,D4,D4|ROW:~~6-1~~,PASS
 ~~6-1~~,FE 대조표,D6,D6|SCREEN,PASS
 ~~6-1~~,FE 대조표,J2,J2|SCREEN,PASS
@@ -604,7 +604,7 @@ PROC 메타,FE 대조표,A1,A1|ROW:PROC 메타,NA
 6-6,FE 대조표,G5,G5|COL:VALID_YN,NA
 6-6,FE 대조표,G5,G5|COL:LANE_QTY,NA
 6-6,FE 대조표,G5,G5|COL:DUMMY_YN,NA
-6-6,FE 대조표,M4,M4|COL:NICK_NAME,FAIL
+6-6,FE 대조표,M4,M4|COL:NICK_NAME,REVIEW
 6-6,FE 대조표,M4,M4|COL:VALID_YN,PASS
 6-6,FE 대조표,M4,M4|COL:LANE_QTY,NA
 6-6,FE 대조표,M4,M4|COL:DUMMY_YN,PASS
@@ -709,7 +709,7 @@ PROC 메타,FE 대조표,A1,A1|ROW:PROC 메타,NA
 6-11,FE 대조표,H2,H2|ROW:6-11,PASS
 6-11,FE 대조표,H6,H6|ROW:6-11,PASS
 6-11,FE 대조표,G5,G5|ROW:6-11,FAIL
-6-11,FE 대조표,M4,M4|ROW:6-11,FAIL
+6-11,FE 대조표,M4,M4|ROW:6-11,ERROR
 ~~6-12~~,FE 대조표,X-LOC,X-LOC|ROW:~~6-12~~,PASS
 ~~6-12~~,FE 대조표,H6,H6|COL:LINE_ID,PASS
 ~~6-12~~,FE 대조표,G5,G5|COL:LINE_ID,NA
@@ -754,7 +754,7 @@ PROC 메타,FE 대조표,A1,A1|ROW:PROC 메타,NA
 6-10,FE 대조표,B2,B2|COL:ELTR_LN_TP_CD,NA
 6-10,FE 대조표,B4,B4|COL:ELTR_LN_TP_CD,NA
 6-10,FE 대조표,D5,D5|COL:ELTR_LN_TP_CD,NA
-6-10,FE 대조표,E5,E5|COL:ELTR_LN_TP_CD,FAIL
+6-10,FE 대조표,E5,E5|COL:ELTR_LN_TP_CD,NOPATH
 6-10,FE 대조표,D1,D1|COL:ELTR_LN_TP_CD,PASS
 6-10,FE 대조표,D3,D3|COL:ELTR_LN_TP_CD,NA
 6-10,FE 대조표,J2,J2|SCREEN,PASS
@@ -782,12 +782,12 @@ MODAL:CapaLineAssignModelModal,FE 대조표,X-LOC,X-LOC|ROW:MODAL:CapaLineAssign
 MODAL:CapaLineAssignModelModal,FE 대조표,A5,A5|ROW:MODAL:CapaLineAssignModelModal,PASS
 MODAL:CapaLineAssignModelModal,FE 대조표,H5,H5|ROW:MODAL:CapaLineAssignModelModal,PASS
 MODAL:CapaLineAssignModelModal,FE 대조표,H2,H2|ROW:MODAL:CapaLineAssignModelModal,PASS
-MODAL:CapaLineAssignModelModal,FE 대조표,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
 MODAL:CapaLineAssignModelModal,FE 대조표,H6,H6|POPUP:SCP0104_CAPA_Line_Assign_Model,PASS
-MODAL:CapaLineAssignModelModal,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
-MODAL:CapaLineAssignModelModal,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line_Assign_Model,FAIL
-MODAL:CapaLineAssignModelModal,FE 대조표,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
+MODAL:CapaLineAssignModelModal,FE 대조표,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
+MODAL:CapaLineAssignModelModal,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line_Assign_Model,NOPATH
+MODAL:CapaLineAssignModelModal,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
 MODAL:CapaLineAssignModelModal,FE 대조표,M4,M4|POPUP:SCP0104_CAPA_Line_Assign_Model,PASS
+MODAL:CapaLineAssignModelModal,FE 대조표,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
 MODAL:CapaLineAssignModelModal,FE 대조표,D4,D4|ROW:MODAL:CapaLineAssignModelModal,PASS
 MODAL:CapaLineAssignModelModal,FE 대조표,D6,D6|SCREEN,PASS
 MODAL:CapaLineAssignModelModal,FE 대조표,J2,J2|SCREEN,PASS
@@ -810,7 +810,7 @@ MODAL:CapaLineModal,FE 대조표,H6,H6|COND:rgrpDivisionType,PASS
 MODAL:CapaLineModal,FE 대조표,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
 MODAL:CapaLineModal,FE 대조표,G5,G5|COND:cboDivision,PASS
 MODAL:CapaLineModal,FE 대조표,G5,G5|COND:rgrpDivisionType,PASS
-MODAL:CapaLineModal,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
+MODAL:CapaLineModal,FE 대조표,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
 MODAL:CapaLineModal,FE 대조표,M4,M4|COND:cboDivision,PASS
 MODAL:CapaLineModal,FE 대조표,M4,M4|COND:rgrpDivisionType,NA
 MODAL:CapaLineModal,FE 대조표,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
@@ -830,7 +830,7 @@ MODAL:CustomDialog,FE 대조표,H5,H5|ROW:MODAL:CustomDialog,PASS
 MODAL:CustomDialog,FE 대조표,H2,H2|ROW:MODAL:CustomDialog,PASS
 MODAL:CustomDialog,FE 대조표,H6,H6|ROW:MODAL:CustomDialog,PASS
 MODAL:CustomDialog,FE 대조표,G5,G5|ROW:MODAL:CustomDialog,FAIL
-MODAL:CustomDialog,FE 대조표,M4,M4|ROW:MODAL:CustomDialog,FAIL
+MODAL:CustomDialog,FE 대조표,M4,M4|ROW:MODAL:CustomDialog,ERROR
 MODAL:CustomDialog,FE 대조표,D4,D4|ROW:MODAL:CustomDialog,PASS
 MODAL:CustomDialog,FE 대조표,D6,D6|SCREEN,PASS
 MODAL:CustomDialog,FE 대조표,J2,J2|SCREEN,PASS
@@ -838,7 +838,7 @@ MODAL:CustomDialog,FE 대조표,A1,A1|ROW:MODAL:CustomDialog,NA
 MODAL:ShowDialog,FE 대조표,X-LOC,X-LOC|ROW:MODAL:ShowDialog,PASS
 MODAL:ShowDialog,FE 대조표,H6,H6|ROW:MODAL:ShowDialog,PASS
 MODAL:ShowDialog,FE 대조표,M3,M3|ROW:MODAL:ShowDialog,PASS
-MODAL:ShowDialog,FE 대조표,M4,M4|ROW:MODAL:ShowDialog,FAIL
+MODAL:ShowDialog,FE 대조표,M4,M4|ROW:MODAL:ShowDialog,ERROR
 MODAL:ShowDialog,FE 대조표,F1,F1|SCREEN,PASS
 MODAL:ShowDialog,FE 대조표,F2,F2|SCREEN,PASS
 MODAL:ShowDialog,FE 대조표,J2,J2|SCREEN,PASS
@@ -877,7 +877,7 @@ COMMON:UC-04,FE 대조표,J2,J2|SCREEN,PASS
 COMMON:UC-04,FE 대조표,E4,E4|MSG:MSG00672,NA
 COMMON:UC-04,FE 대조표,E4,E4|MSG:MSG00004,PASS
 COMMON:UC-04,FE 대조표,I1,I1|SCREEN,PASS
-COMMON:UC-05,FE 대조표,X-LOC,X-LOC|ROW:COMMON:UC-05,NA
+COMMON:UC-05,FE 대조표,X-LOC,X-LOC|ROW:COMMON:UC-05,PASS
 COMMON:UC-05,FE 대조표,K4,K4|SCREEN,PASS
 COMMON:UC-05,FE 대조표,H10,H10|SCREEN,PASS
 COMMON:UC-05,FE 대조표,G3,G3|SCREEN,PASS
@@ -911,7 +911,7 @@ COMMON:UC-05,FE 대조표,B4,B4|COL:DUMMY_YN,NA
 COMMON:UC-05,FE 대조표,D5,D5|COL:ELTR_LN_TP_CD,NA
 COMMON:UC-05,FE 대조표,D5,D5|COL:VALID_YN,PASS
 COMMON:UC-05,FE 대조표,D5,D5|COL:DUMMY_YN,NA
-COMMON:UC-05,FE 대조표,E5,E5|COL:ELTR_LN_TP_CD,FAIL
+COMMON:UC-05,FE 대조표,E5,E5|COL:ELTR_LN_TP_CD,NOPATH
 COMMON:UC-05,FE 대조표,E5,E5|COL:VALID_YN,PASS
 COMMON:UC-05,FE 대조표,E5,E5|COL:DUMMY_YN,NA
 COMMON:UC-05,FE 대조표,D1,D1|COL:ELTR_LN_TP_CD,PASS
@@ -934,7 +934,7 @@ COMMON:UC-06,FE 대조표,G1,G1|ROW:COMMON:UC-06,PASS
 COMMON:UC-06,FE 대조표,G6,G6|ROW:COMMON:UC-06,NA
 COMMON:UC-06,FE 대조표,H6,H6|ROW:COMMON:UC-06,PASS
 COMMON:UC-06,FE 대조표,G5,G5|ROW:COMMON:UC-06,FAIL
-COMMON:UC-06,FE 대조표,M4,M4|ROW:COMMON:UC-06,FAIL
+COMMON:UC-06,FE 대조표,M4,M4|ROW:COMMON:UC-06,ERROR
 COMMON:UC-06,FE 대조표,A1,A1|ROW:COMMON:UC-06,NA
 COMMON:UC-06,FE 대조표,J2,J2|SCREEN,PASS
 COMMON:UC-07,FE 대조표,X-LOC,X-LOC|ROW:COMMON:UC-07,PASS
@@ -1505,16 +1505,16 @@ ACT:SCP0104_CAPA_Line.getLine:288:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_
 ACT:SCP0104_CAPA_Line.getLine:290:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getLine,PASS
 ACT:SCP0104_CAPA_Line.getLine:292:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getLine,PASS
 ACT:SCP0104_CAPA_Line.getLine:299:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getLine,PASS
-ACT:SCP0104_CAPA_Line.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line.getPlant,AS-IS 액션,B3,B3|COND:clbPlant,PASS
 ACT:SCP0104_CAPA_Line.getPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line.getPlant:226:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,PASS
-ACT:SCP0104_CAPA_Line.getPlant:230:2,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line.getPlant:226:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,FAIL
+ACT:SCP0104_CAPA_Line.getPlant:230:2,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line.getPlant:230:2,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line.getPlant:230:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,PASS
-ACT:SCP0104_CAPA_Line.getPlant:232:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,PASS
-ACT:SCP0104_CAPA_Line.getPlant:234:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,PASS
-ACT:SCP0104_CAPA_Line.getPlant:241:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,PASS
+ACT:SCP0104_CAPA_Line.getPlant:230:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,FAIL
+ACT:SCP0104_CAPA_Line.getPlant:232:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,FAIL
+ACT:SCP0104_CAPA_Line.getPlant:234:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,FAIL
+ACT:SCP0104_CAPA_Line.getPlant:241:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getPlant,FAIL
 ACT:SCP0104_CAPA_Line.getShopGroup,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getShopGroup,PASS
 ACT:SCP0104_CAPA_Line.getShopGroup,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line.getShopGroup:212:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.getShopGroup,PASS
@@ -1534,14 +1534,14 @@ ACT:SCP0104_CAPA_Line.spdAssign_CellClick,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104
 ACT:SCP0104_CAPA_Line.spdAssign_CellClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line.spdAssign_CellClick:685:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellClick,PASS
 ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,AS-IS 액션,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
 ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:897:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:898:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:900:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:901:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:904:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,PASS
+ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:897:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:898:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:900:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:901:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line.spdAssign_CellDoubleClick:904:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_CellDoubleClick,FAIL
 ACT:SCP0104_CAPA_Line.spdAssign_Change,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_Change,PASS
 ACT:SCP0104_CAPA_Line.spdAssign_Change,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line.spdAssign_Change:641:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line.spdAssign_Change,PASS
@@ -3007,11 +3007,11 @@ ACT:SCP0104_CAPA_Line_Assign.RefreshCompanyAll:1404:1,AS-IS 액션,X-ROW,X-ROW|E
 ACT:SCP0104_CAPA_Line_Assign.RefreshCompanyAll:1406:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanyAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshCompanyAll:1408:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanyAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshCompanyAll:1412:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanyAll,PASS
-ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1822:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1826:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1827:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1829:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,FAIL
+ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1822:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1826:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1827:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshCompanySpread:1829:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshCompanySpread,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.RefreshDivision,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshDivision:1534:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshDivision:1534:1,AS-IS 액션,C1,C1|COND:cboDivision,PASS
@@ -3072,11 +3072,11 @@ ACT:SCP0104_CAPA_Line_Assign.RefreshFactoryAll:1430:1,AS-IS 액션,X-ROW,X-ROW|E
 ACT:SCP0104_CAPA_Line_Assign.RefreshFactoryAll:1432:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactoryAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshFactoryAll:1434:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactoryAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshFactoryAll:1438:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactoryAll,PASS
-ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1844:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1846:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1847:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1849:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,FAIL
+ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1844:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1846:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1847:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshFactorySpread:1849:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshFactorySpread,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.RefreshLine,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLine,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshLine:1644:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLine,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshLine:1646:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLine,PASS
@@ -3117,11 +3117,11 @@ ACT:SCP0104_CAPA_Line_Assign.RefreshLineAll:1443:1,AS-IS 액션,X-ROW,X-ROW|ENTR
 ACT:SCP0104_CAPA_Line_Assign.RefreshLineAll:1445:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshLineAll:1447:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshLineAll:1451:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineAll,PASS
-ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1854:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1856:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1857:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1859:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,FAIL
+ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1854:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1856:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1857:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshLineSpread:1859:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshLineSpread,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.RefreshNicknameSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshNicknameSpread,NA
 ACT:SCP0104_CAPA_Line_Assign.RefreshNicknameSpread:1881:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshNicknameSpread,NA
 ACT:SCP0104_CAPA_Line_Assign.RefreshNicknameSpread:1883:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshNicknameSpread,NA
@@ -3158,11 +3158,11 @@ ACT:SCP0104_CAPA_Line_Assign.RefreshPlantAll:1417:1,AS-IS 액션,X-ROW,X-ROW|ENT
 ACT:SCP0104_CAPA_Line_Assign.RefreshPlantAll:1419:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshPlantAll:1421:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshPlantAll:1425:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantAll,PASS
-ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1834:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1836:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1837:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1839:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,FAIL
+ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1834:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1836:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1837:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshPlantSpread:1839:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshPlantSpread,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.RefreshProgressStatus,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshProgressStatus,NA
 ACT:SCP0104_CAPA_Line_Assign.RefreshProgressStatus:1592:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshProgressStatus,NA
 ACT:SCP0104_CAPA_Line_Assign.RefreshProgressStatus:1597:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshProgressStatus,NA
@@ -3192,11 +3192,11 @@ ACT:SCP0104_CAPA_Line_Assign.RefreshSiteAll:1391:1,AS-IS 액션,X-ROW,X-ROW|ENTR
 ACT:SCP0104_CAPA_Line_Assign.RefreshSiteAll:1393:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshSiteAll:1395:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteAll,PASS
 ACT:SCP0104_CAPA_Line_Assign.RefreshSiteAll:1399:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteAll,PASS
-ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1811:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1814:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1815:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,FAIL
-ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1817:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,FAIL
+ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1811:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1814:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1815:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.RefreshSiteSpread:1817:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSiteSpread,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.RefreshSpreadAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSpreadAll,NA
 ACT:SCP0104_CAPA_Line_Assign.RefreshSpreadAll:2019:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSpreadAll,NA
 ACT:SCP0104_CAPA_Line_Assign.RefreshSpreadAll:2020:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.RefreshSpreadAll,NA
@@ -4875,44 +4875,44 @@ ACT:SCP0104_CAPA_Line_Assign.ShowItem:5868:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0
 ACT:SCP0104_CAPA_Line_Assign.ShowItem:5872:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowItem,PASS
 ACT:SCP0104_CAPA_Line_Assign.ShowItem:5874:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowItem,PASS
 ACT:SCP0104_CAPA_Line_Assign.ShowItem:5881:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowItem,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5948:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5954:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5955:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5956:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5957:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5958:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5960:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5977:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5979:9,AS-IS 액션,G5,G5|LEDGER:V-73037cda,PASS
+ACT:SCP0104_CAPA_Line_Assign.ShowLine,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5948:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5954:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5955:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5956:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5957:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5958:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5960:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5977:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5979:9,AS-IS 액션,G5,G5|LEDGER:V-73037cda,FAIL
 ACT:SCP0104_CAPA_Line_Assign.ShowLine:5979:9,AS-IS 액션,H6,H6|LEDGER:V-d289af4c,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5979:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5982:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowLine:5990:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5886:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5892:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5893:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5894:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5895:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5896:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5897:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5898:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5900:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5901:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5902:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5903:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5904:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5905:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5906:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5907:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5910:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5930:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5932:19,AS-IS 액션,G5,G5|LEDGER:V-e38e474a,PASS
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5979:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5982:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowLine:5990:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowLine,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5886:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5892:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5893:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5894:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5895:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5896:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5897:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5898:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5900:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5901:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5902:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5903:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5904:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5905:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5906:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5907:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5910:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5930:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5932:19,AS-IS 액션,G5,G5|LEDGER:V-e38e474a,FAIL
 ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5932:19,AS-IS 액션,H6,H6|LEDGER:V-593e4909,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5932:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5935:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
-ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5943:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,PASS
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5932:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5935:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
+ACT:SCP0104_CAPA_Line_Assign.ShowSopAssignModel:5943:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.ShowSopAssignModel,FAIL
 ACT:SCP0104_CAPA_Line_Assign.TestIF,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.TestIF,NA
 ACT:SCP0104_CAPA_Line_Assign.TestIF:6070:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.TestIF,NA
 ACT:SCP0104_CAPA_Line_Assign.TestIFAssign,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.TestIFAssign,NA
@@ -5511,13 +5511,13 @@ ACT:SCP0104_CAPA_Line_Assign.getDivisionType:271:2,AS-IS 액션,B4,B4|COND:rgrpD
 ACT:SCP0104_CAPA_Line_Assign.getDivisionType:271:2,AS-IS 액션,B3,B3|COND:rgrpDivisionType,PASS
 ACT:SCP0104_CAPA_Line_Assign.getDivisionType:277:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getDivisionType,PASS
 ACT:SCP0104_CAPA_Line_Assign.getDivisionType:277:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getDivisionType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
 ACT:SCP0104_CAPA_Line_Assign.getElectrodeType,AS-IS 액션,B3,B3|COND:clbElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:741:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:741:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getElectrodeType,NA
 ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:741:1,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:745:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:745:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
 ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:745:2,AS-IS 액션,B3,B3|COND:clbElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:751:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:751:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getElectrodeType,NA
 ACT:SCP0104_CAPA_Line_Assign.getElectrodeType:751:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getElectrodeType,PASS
 ACT:SCP0104_CAPA_Line_Assign.getFactory,AS-IS 액션,B4,B4|COND:clbFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign.getFactory,AS-IS 액션,B3,B3|COND:clbFactory,PASS
@@ -5574,13 +5574,13 @@ ACT:SCP0104_CAPA_Line_Assign.getOriDivision:319:2,AS-IS 액션,B4,B4|COND:cboDiv
 ACT:SCP0104_CAPA_Line_Assign.getOriDivision:319:2,AS-IS 액션,B3,B3|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriDivision:325:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriDivision:325:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getOriDivision,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
 ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType,AS-IS 액션,B3,B3|COND:clbElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:765:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:765:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriElectrodeType,NA
 ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:765:1,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getOriElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:769:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:769:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
 ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:769:2,AS-IS 액션,B3,B3|COND:clbElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:775:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:775:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriElectrodeType,NA
 ACT:SCP0104_CAPA_Line_Assign.getOriElectrodeType:775:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getOriElectrodeType,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriFactory,AS-IS 액션,B4,B4|COND:clbFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriFactory,AS-IS 액션,B3,B3|COND:clbFactory,PASS
@@ -5606,13 +5606,13 @@ ACT:SCP0104_CAPA_Line_Assign.getOriOperation:697:2,AS-IS 액션,B4,B4|COND:clbOp
 ACT:SCP0104_CAPA_Line_Assign.getOriOperation:697:2,AS-IS 액션,B3,B3|COND:clbOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriOperation:703:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriOperation:703:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getOriOperation,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriPlant,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getOriPlant,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getOriPlant,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriPlant:534:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getOriPlant:534:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getOriPlant:534:1,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getOriPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriPlant:538:2,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getOriPlant:538:2,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getOriPlant:538:2,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getOriPlant:544:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getOriPlant:544:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getOriPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getOriPlant:544:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getOriPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriSite,AS-IS 액션,B4,B4|COND:clbSite,PASS
 ACT:SCP0104_CAPA_Line_Assign.getOriSite,AS-IS 액션,B3,B3|COND:clbSite,PASS
@@ -5625,17 +5625,17 @@ ACT:SCP0104_CAPA_Line_Assign.getOriSite:477:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_C
 ACT:SCP0104_CAPA_Line_Assign.getPlanType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.getPlanType,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlanType:413:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlanType,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlanType:413:1,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getPlanType,PASS
-ACT:SCP0104_CAPA_Line_Assign.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlant,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getPlant:505:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getPlant:505:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlant:505:1,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getPlant:509:2,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getPlant:509:2,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlant:509:2,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getPlant:511:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getPlant:511:3,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlant:511:3,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getPlant:513:4,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getPlant:513:4,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlant:513:4,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign.getPlant:520:5,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign.getPlant:520:5,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getPlant:520:5,AS-IS 액션,B3,B3|ENTRY:SCP0104_CAPA_Line_Assign.getPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign.getProgressStatus,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.getProgressStatus,FAIL
 ACT:SCP0104_CAPA_Line_Assign.getProgressStatus:427:1,AS-IS 액션,B4,B4|ENTRY:SCP0104_CAPA_Line_Assign.getProgressStatus,FAIL
@@ -5796,57 +5796,57 @@ ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellClick:5835:39,AS-IS 액션,C2,C2|COL:
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellClick:5835:39,AS-IS 액션,C2,C2|COL:COMPANY_ID,PASS
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellClick:5835:39,AS-IS 액션,C2,C2|COL:ELTR_LN_TP_CD,FAIL
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,AS-IS 액션,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5699:1,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5699:1,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5699:1,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5699:1,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5699:1,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,ERROR
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5700:2,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5700:2,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5700:2,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5700:2,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5700:2,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,ERROR
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5702:3,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5702:3,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5702:3,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5702:3,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5702:3,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,ERROR
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5703:4,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5703:4,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5703:4,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5703:4,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5703:4,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,ERROR
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5705:5,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5705:5,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5705:5,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5705:5,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5705:5,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,ERROR
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5706:6,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5706:6,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5706:6,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5709:7,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5710:8,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5712:9,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5714:10,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5714:10,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5716:11,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5716:11,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5719:12,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5719:12,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5721:13,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5721:13,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5723:14,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5723:14,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5725:15,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5725:15,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5730:16,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5730:16,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5737:17,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5737:17,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5706:6,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5706:6,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick,ERROR
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5709:7,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5710:8,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5712:9,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5714:10,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5714:10,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5716:11,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5716:11,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5719:12,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5719:12,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5721:13,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5721:13,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5723:14,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5723:14,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5725:15,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5725:15,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5730:16,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5730:16,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5737:17,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5737:17,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5737:17,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5738:18,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5738:18,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5738:18,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5738:18,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5738:18,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5742:19,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5742:19,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5746:20,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5746:20,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5742:19,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5742:19,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5746:20,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5746:20,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5746:20,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5747:21,AS-IS 액션,M4,M4|COL:NICK_NAME,FAIL
-ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5747:21,AS-IS 액션,M4,M4|COL:ITEM_ID,FAIL
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5747:21,AS-IS 액션,M4,M4|COL:NICK_NAME,REVIEW
+ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5747:21,AS-IS 액션,M4,M4|COL:ITEM_ID,REVIEW
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_CellDoubleClick:5747:21,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_Change,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_Change,PASS
 ACT:SCP0104_CAPA_Line_Assign.spdAssign_Change:3865:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.spdAssign_Change,PASS
@@ -6000,7 +6000,7 @@ ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellClick:5842:2,AS-IS 액션,X-ROW,X-ROW|EN
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellClick:5845:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.spdSOP_CellClick,NA
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellClick:5846:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign.spdSOP_CellClick,NA
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,AS-IS 액션,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,AS-IS 액션,M4,M4|COL:SOP_DT,NA
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,AS-IS 액션,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick:2489:1,AS-IS 액션,H6,H6|ENTRY:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,NA
@@ -6027,8 +6027,8 @@ ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick:2502:9,AS-IS 액션,H6,H6|EN
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick:2502:9,AS-IS 액션,G5,G5|ENTRY:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,NA
 ACT:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick:2502:9,AS-IS 액션,M4,M4|ENTRY:SCP0104_CAPA_Line_Assign.spdSOP_CellDoubleClick,NA
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model..ctor,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model..ctor,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor:448:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor:448:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model..ctor,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor:451:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
@@ -6078,8 +6078,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model..ctor:475:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:S
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor:476:24,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model..ctor:476:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model..ctor,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn:678:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn:678:1,AS-IS 액션,A5,A5|COL:CHK,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn:678:1,AS-IS 액션,H5,H5|COL:CHK,PASS
@@ -6092,8 +6092,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn:687:5,AS-IS 액션,C3,C3
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn:688:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AddSelectCheckColumn:688:6,AS-IS 액션,C3,C3|COL:CHK,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AfterFindData,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData:1034:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AfterFindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData:1036:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AfterFindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData:1036:2,AS-IS 액션,A1,A1|ENTRY:SCP0104_CAPA_Line_Assign_Model.AfterFindData,NA
@@ -6110,25 +6110,25 @@ ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData:1064:11,AS-IS 액션,X-ROW,X-RO
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData:1066:12,AS-IS 액션,D3,D3|LEDGER:V-3907dab3,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.AfterFindData:1066:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.AfterFindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.BeforeFindData:1027:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.BeforeFindData:1029:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.BeforeFindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CancelButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CancelButton,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.CancelButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CancelButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.CancelButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CancelButton:897:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CancelButton,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CancelButton:899:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CancelButton,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName:488:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName:490:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName:493:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName:495:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ChangeColumnNameToCodeName,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB:835:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB:839:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB:841:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,FAIL
@@ -6152,8 +6152,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB:861:15,AS-IS 액션,X-
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB:863:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB:872:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CheckNameOnDummyCodeDB,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearEvent,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent:783:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearEvent,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent:783:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent:784:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearEvent,NA
@@ -6175,21 +6175,21 @@ ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent:797:9,AS-IS 액션,G03-WIRE,G03-WI
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent:799:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearEvent,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearEvent:799:10,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList:641:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList:643:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList:644:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.ClearUsrCheckedList,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CreateSpread,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread:667:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CreateSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread:668:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CreateSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread:670:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CreateSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.CreateSpread:672:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.CreateSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.Dispose,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Dispose,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.Dispose,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Dispose:16:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.Dispose,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
@@ -6200,8 +6200,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,A1,A1|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindButton,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,A6,A6|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindButton,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,F4,F4|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindButton,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.FindButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton:881:1,AS-IS 액션,E3,E3|LEDGER:V-300b65f0,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton:881:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindButton,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.FindButton:882:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindButton,FAIL
@@ -6210,15 +6210,15 @@ ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP01
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,A1,A1|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindData,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,A6,A6|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,F4,F4|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindData,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.FindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData:1107:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindData,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData:1109:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindData,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.FindData:1109:2,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0104_CAPA_Line_Assign_Model.FindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.Form_Load,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load:522:1,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load:522:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.Form_Load,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load:523:2,AS-IS 액션,A10,A10|SCREEN,PASS
@@ -6238,16 +6238,16 @@ ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load:533:8,AS-IS 액션,X-ROW,X-ROW|ENTR
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load:535:9,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.Form_Load:535:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.Form_Load,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx:919:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx:922:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx:924:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx:926:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx:929:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditStartColIdx,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType:904:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType:908:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType:914:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetCurrEditType,PASS
@@ -6279,8 +6279,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,B3,B3|COL:LINE
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,B3,B3|COL:OPERATION_ID,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,B3,B3|COL:OPERATION_NAME,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,B3,B3|COL:ELTR_LN_TP_CD,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex:1246:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex:1248:2,AS-IS 액션,B4,B4|COL:DIVISION_ID,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex:1248:2,AS-IS 액션,B3,B3|COL:DIVISION_ID,NA
@@ -6342,8 +6342,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex:1283:30,AS-IS 액션,X-ROW,
 ACT:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex:1289:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetDataByRowIndex,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,AS-IS 액션,B4,B4|COL:CHK,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,AS-IS 액션,B3,B3|COL:CHK,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked:1336:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked:1340:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked:1342:3,AS-IS 액션,B4,B4|COL:CHK,NA
@@ -6360,8 +6360,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked:1361:11,AS-IS 액�
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked:1361:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked:1368:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByChecked,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange:1294:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange:1298:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange:1300:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.GetSelectedValuesByRange,PASS
@@ -6382,8 +6382,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,G6,G6|COND:rgrpDivi
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,G4,G4|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,G4,G4|COND:rgrpDivisionType,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.InitControls,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls:622:1,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls:622:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitControls,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitControls:625:2,AS-IS 액션,A10,A10|SCREEN,PASS
@@ -6421,8 +6421,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,G4,G4|COND:clbFactory,
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,G4,G4|COND:clbLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,G4,G4|COND:clbOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,G4,G4|COND:rgrpDivisionType,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent:725:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent:725:1,AS-IS 액션,G6,G6|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent:725:1,AS-IS 액션,A10,A10|SCREEN,PASS
@@ -6466,14 +6466,14 @@ ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent:741:9,AS-IS 액션,G4,G4|COND:rgrpD
 ACT:SCP0104_CAPA_Line_Assign_Model.InitEvent:741:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitEvent,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics:481:1,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitQueryDics:481:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitQueryDics,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread:696:1,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread:696:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread:698:2,AS-IS 액션,A10,A10|SCREEN,PASS
@@ -6492,13 +6492,13 @@ ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread:711:8,AS-IS 액션,D1,D1|LEDGER:V-
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread:711:8,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.InitSpread:711:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.InitSpread,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.OkButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.OkButton,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.OkButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.OkButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.OkButton,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.OkButton:890:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.OkButton,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.OkButton:892:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.OkButton,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshAll,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll:550:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll:551:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll:552:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshAll,PASS
@@ -6506,57 +6506,57 @@ ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll:553:4,AS-IS 액션,X-ROW,X-ROW|ENT
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll:554:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshAll:555:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshDivision,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshDivision,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshDivision,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshDivision,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshDivision,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshDivision:545:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshDivision:545:1,AS-IS 액션,C1,C1|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType:611:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType:613:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType:615:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshElectrodeType:615:3,AS-IS 액션,C1,C1|COND:clbElectrodeType,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory:581:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory:583:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory:585:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory:586:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshFactory:586:4,AS-IS 액션,C1,C1|COND:clbFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshLine,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine:592:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine:594:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine:596:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine:597:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshLine:597:4,AS-IS 액션,C1,C1|COND:clbLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation:602:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation:604:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation:606:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshOperation:606:3,AS-IS 액션,C1,C1|COND:clbOperation,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant:571:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant:573:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant:575:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant:576:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshPlant:576:4,AS-IS 액션,C1,C1|COND:clbPlant,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader:718:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader:718:1,AS-IS 액션,A5,A5|COL:VALID_YN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSheetHeader:718:1,AS-IS 액션,H5,H5|COL:VALID_YN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshSite,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite:560:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite:563:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.RefreshSite:565:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.RefreshSite,PASS
@@ -6569,8 +6569,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,E4,E4|COND:clbF
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,E4,E4|COND:clbLine,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,E4,E4|COND:clbOperation,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,E4,E4|COND:clbElectrodeType,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions:505:1,AS-IS 액션,E4,E4|COND:clbSite,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions:505:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions:506:2,AS-IS 액션,E4,E4|COND:clbPlant,NA
@@ -6584,8 +6584,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions:509:5,AS-IS 액션,X-ROW,X-R
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions:512:6,AS-IS 액션,E4,E4|COND:clbElectrodeType,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetDefConditions:512:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetDefConditions,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumns,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumns,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumns,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumns,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumns,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumns:934:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumns,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,C3,C3|COL:VALID_YN,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,C3,C3|COL:LANE_QTY,NA
@@ -6593,8 +6593,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,C3,C3|COL:DUMM
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,E4,E4|COL:VALID_YN,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,E4,E4|COL:LANE_QTY,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,E4,E4|COL:DUMMY_YN,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll:939:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll:941:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll:945:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,PASS
@@ -6636,8 +6636,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll:1003:23,AS-IS 액션,X-ROW,
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll:1005:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll:1008:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetLockColumnsAll,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet:1074:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet:1076:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet:1079:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet,PASS
@@ -6663,8 +6663,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.SetQueryInfoGet:1102:22,AS-IS 액션,X-ROW,X-
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,AS-IS 액션,H2,H2|COL:CHK,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,AS-IS 액션,C3,C3|COL:CHK,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,AS-IS 액션,E4,E4|COL:CHK,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor:746:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor:747:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor:749:3,AS-IS 액션,H2,H2|COL:CHK,NA
@@ -6681,19 +6681,19 @@ ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor:761:10,AS-IS 액션,X-ROW,X-
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor:766:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor:768:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSelectedColor,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge:1014:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge:1016:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge:1017:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.SetSheetMerge,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model._FindData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model._FindData,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model._FindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model._FindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model._FindData,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model._FindData:1115:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model._FindData,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,AS-IS 액션,J2,J2|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected:804:1,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected:804:1,AS-IS 액션,J2,J2|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected:804:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,PASS
@@ -6716,34 +6716,34 @@ ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected:81
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected:814:7,AS-IS 액션,J2,J2|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected:814:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.btnButtonList_UsrButtonList_Click_Detected,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged:1122:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.cboDivision_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged:1164:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged:1165:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged:1166:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbFactory_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged:1171:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged:1172:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbLine_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged:1177:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbOperation_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged:1156:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged:1157:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged:1158:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged:1159:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbPlant_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged:1147:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged:1148:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged:1149:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,PASS
@@ -6751,26 +6751,26 @@ ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged:1150:4,AS-IS 액
 ACT:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged:1151:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.clbSite_SelectedIndexChanged,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision,AS-IS 액션,B4,B4|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision,AS-IS 액션,B3,B3|COND:cboDivision,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getDivision,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getDivision,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision:172:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision:176:2,AS-IS 액션,B4,B4|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision:176:2,AS-IS 액션,B3,B3|COND:cboDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision:176:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getDivision,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getDivision:182:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getDivision,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
 ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,AS-IS 액션,B3,B3|COND:clbElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:378:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:382:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:378:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:382:2,AS-IS 액션,B4,B4|COND:clbElectrodeType,NOPATH
 ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:382:2,AS-IS 액션,B3,B3|COND:clbElectrodeType,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:382:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:388:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:382:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getElectrodeType:388:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getElectrodeType,NA
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory,AS-IS 액션,B4,B4|COND:clbFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory,AS-IS 액션,B3,B3|COND:clbFactory,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getFactory,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getFactory,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory:267:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory:271:2,AS-IS 액션,B4,B4|COND:clbFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory:271:2,AS-IS 액션,B3,B3|COND:clbFactory,PASS
@@ -6780,8 +6780,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.getFactory:275:4,AS-IS 액션,X-ROW,X-ROW|ENT
 ACT:SCP0104_CAPA_Line_Assign_Model.getFactory:282:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getFactory,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine,AS-IS 액션,B4,B4|COND:clbLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine,AS-IS 액션,B3,B3|COND:clbLine,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getLine,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getLine,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine:296:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine:300:2,AS-IS 액션,B4,B4|COND:clbLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine:300:2,AS-IS 액션,B3,B3|COND:clbLine,PASS
@@ -6791,8 +6791,8 @@ ACT:SCP0104_CAPA_Line_Assign_Model.getLine:304:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:
 ACT:SCP0104_CAPA_Line_Assign_Model.getLine:311:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getLine,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation,AS-IS 액션,B4,B4|COND:clbOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation,AS-IS 액션,B3,B3|COND:clbOperation,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getOperation,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getOperation,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:325:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:329:2,AS-IS 액션,B4,B4|COND:clbOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:329:2,AS-IS 액션,B3,B3|COND:clbOperation,PASS
@@ -6800,33 +6800,33 @@ ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:329:2,AS-IS 액션,X-ROW,X-ROW|E
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:331:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:333:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getOperation,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getOperation:340:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getOperation,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.getPlant,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:238:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:242:2,AS-IS 액션,B4,B4|COND:clbPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:238:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:242:2,AS-IS 액션,B4,B4|COND:clbPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:242:2,AS-IS 액션,B3,B3|COND:clbPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:242:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:244:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:246:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:253:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:242:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:244:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:246:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,FAIL
+ACT:SCP0104_CAPA_Line_Assign_Model.getPlant:253:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getPlant,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.getShopGroup,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getShopGroup,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getShopGroup,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getShopGroup,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getShopGroup,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getShopGroup:224:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getShopGroup,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite,AS-IS 액션,B4,B4|COND:clbSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite,AS-IS 액션,B3,B3|COND:clbSite,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.getSite,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.getSite,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite:200:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite:204:2,AS-IS 액션,B4,B4|COND:clbSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite:204:2,AS-IS 액션,B3,B3|COND:clbSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite:204:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.getSite:210:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.getSite,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged:1127:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged:1129:2,AS-IS 액션,C2,C2|COL:NICK_NAME,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged:1129:2,AS-IS 액션,C3,C3|COL:NICK_NAME,NA
@@ -6835,31 +6835,31 @@ ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged:1129:2,
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged:1134:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged:1141:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.rgrpDivisionType_SelectedIndexChanged,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick:820:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellClick,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,H6,H6|POPUP:SCP0104_CAPA_Line_Assign_Model,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line_Assign_Model,FAIL
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,H6,H6|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line_Assign_Model,NOPATH
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,G5,G5|POPUP:SCP0104_CAPA_Line,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|POPUP:SCP0104_CAPA_Line_Assign_Model,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,M4,M4|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick:1189:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick:1190:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick:1192:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick:1193:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick:1196:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_CellDoubleClick,FAIL
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change:775:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change:776:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_Change,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,AS-IS 액션,H4,H4|SCREEN,PASS
-ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line_Assign_Model,NA
+ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,AS-IS 액션,M3,M3|POPUP:SCP0104_CAPA_Line,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange:825:1,AS-IS 액션,H4,H4|SCREEN,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange:825:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange,PASS
 ACT:SCP0104_CAPA_Line_Assign_Model.spdAssign_TopChange:827:2,AS-IS 액션,H4,H4|SCREEN,PASS

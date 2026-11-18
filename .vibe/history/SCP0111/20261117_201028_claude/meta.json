@@ -1,0 +1,39 @@
+{
+  "id": "SCP0111",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0111] · Doc/gen/SCP0111/CHECK.md · Doc/gen/SCP0111/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0111/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-17T20:10:28+09:00",
+  "end": "2026-11-17T20:14:03+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\integration-psi",
+      "files": 16
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0111",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "CheckList 전체 건수 현황 알려주세요.",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-17T20:14:03+09:00",
+  "changed": []
+}

@@ -8,6 +8,7 @@ import * as path from 'node:path';
 import { test } from '../../../tools/E2E/fixtures/test';
 import { combine, countRows, coverRows, loadFormScen, loadResults, runFormScen, saveResult, scenariosOfRow, setVars, type FRes } from '../../../tools/E2E/lib/formscen';
 import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
+import { recordTouched } from '../../../tools/E2E/lib/saveprobe';
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
 const ROOT = path.resolve(__dirname, '..', '..', '..');
@@ -42,7 +43,11 @@ test.describe(`폼 저장형 준비·정리 ${ID}`, () => {
   test('준비 — 검증용 행 저장 @formsetup', async ({ nscm }) => {
     test.skip(!FSN || !FSN.scenarios.some(s => s.phase === 'setup'), '폼 저장형 시나리오(setup) 없음');
     test.setTimeout(300_000);
-    const rs = await runPhase(nscm, 'setup'); let first = true;
+    // 2026-11-17 SSP0020 위임 표 잔존 535행(11-10~11-17): 준비 저장이 만든 행을 정리(teardown)가 해제(VALID_YN N)만 하고 남겼다 —
+    //   저장 전 시작 시각을 touched_rows 에 남겨 체인 끝 restore_touched 가 이 시각 뒤 시험 계정이 만든 행을 백업 후 삭제하게 한다
+    recordTouched({ __since: 'formsetup', run: process.env.E2E_RUN_ID || '', ts: Date.now() }, new Date(Date.now() - 3_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 19));
+    // 2026-11-17 SSP0020 --only A1(23:52): 부분 재판정에서도 결과 파일을 비워 이번에 안 돈 폼 시나리오(P01·F02·B01·B02 등) 원장 행 10건이 '미실행' 미검증으로 바뀌었다 → 부분 재판정이면 병합
+    const rs = await runPhase(nscm, 'setup'); let first = !process.env.VERIFY_ONLY;
     for (const fr of rs) { saveResult(ROOT, ID, fr, first); first = false; console.log(`[formfix setup] ${fr.id} ${fr.result} ${fr.why.slice(0, 220)}`); }
   });
   test('정리 — 검증용 행 해제·합산 기록 @formteardown', async ({ nscm }) => {

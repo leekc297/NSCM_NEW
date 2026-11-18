@@ -94,13 +94,13 @@
   },
   {
    "rule_id": "B4",
-   "rows": 106,
-   "measured": 7,
+   "rows": 104,
+   "measured": 5,
    "inherited": 61,
    "not_run_error": 0,
    "review": 0,
    "na": 38,
-   "na_pct": 35.8,
+   "na_pct": 36.5,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "진입점 집계 — 대조표 SCP0104_CAPA_Li×14 | 검사 대상 아님 — AS-IS 진입점 미연결 — S×4 | 실측: ELTR_LN_TP_CD 은 콤보 검사 대상×1 | 실측T-82e56a56: 정적 판정 DUMM×1"
@@ -250,13 +250,13 @@
   },
   {
    "rule_id": "E2",
-   "rows": 4,
-   "measured": 2,
+   "rows": 3,
+   "measured": 1,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 2,
-   "na_pct": 50.0,
+   "na_pct": 66.7,
    "feature_present": "N",
    "suspect_na100": "",
    "na_reasons": "기간 조회조건 없음×1 | From·To 기간 조회조건 없음×1"
@@ -329,8 +329,8 @@
   {
    "rule_id": "F3",
    "rows": 7,
-   "measured": 5,
-   "inherited": 0,
+   "measured": 4,
+   "inherited": 1,
    "not_run_error": 0,
    "review": 0,
    "na": 2,
@@ -810,15 +810,15 @@
   {
    "rule_id": "I3",
    "rows": 1,
-   "measured": 0,
+   "measured": 1,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 1,
-   "na_pct": 100.0,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "정적 판정 명칭 컬럼(SITE_NAME·COMP×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "J1",
@@ -913,16 +913,16 @@
   },
   {
    "rule_id": "A6",
-   "rows": 63,
+   "rows": 58,
    "measured": 35,
    "inherited": 11,
    "not_run_error": 0,
    "review": 0,
-   "na": 17,
-   "na_pct": 27.0,
+   "na": 12,
+   "na_pct": 20.7,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "정적 판정 AS-IS 원문에서 이 문장은 주석×5 | ORDER 차등 검증 #6 SOP_MODEL×1 | ORDER 차등 검증 #10 SOP_ELTR×1 | ORDER 차등 검증 #12 SOP_ASSE×1"
+   "na_reasons": "ORDER 차등 검증 #7 SOP_MODEL×1 | ORDER 차등 검증 #10 SOP_ELTR×1 | ORDER 차등 검증 #12 SOP_ASSE×1 | ORDER 차등 검증 #23 ELTR/SEA×1"
   },
   {
    "rule_id": "A7",
@@ -939,8 +939,8 @@
   },
   {
    "rule_id": "B7",
-   "rows": 24,
-   "measured": 23,
+   "rows": 20,
+   "measured": 19,
    "inherited": 1,
    "not_run_error": 0,
    "review": 0,
@@ -987,7 +987,7 @@
    "na_pct": 33.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "정적 판정 이력 표 없음. 쓰기 대상 표 대조(×1"
+   "na_reasons": "AS-IS 저장 SP SCP0104_ADD_CAPA×1"
   },
   {
    "rule_id": "F8",
@@ -1000,7 +1000,7 @@
    "na_pct": 33.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "정적 판정 이력 표가 양쪽 다 없어 이력 행 값×1"
+   "na_reasons": "AS-IS 저장 SP SCP0104_ADD_CAPA×1"
   },
   {
    "rule_id": "G7",
@@ -1096,15 +1096,15 @@
   {
    "rule_id": "X-LOC",
    "rows": 108,
-   "measured": 33,
+   "measured": 80,
    "inherited": 12,
    "not_run_error": 0,
    "review": 0,
-   "na": 63,
-   "na_pct": 58.3,
+   "na": 16,
+   "na_pct": 14.8,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "대조표 기록 보강 대상(화면 오류 아님): 상태 구×57 | 실측T-73dd2961: 정적 판정 요약 행×1 | 실측T-aa775cc6: 정적 판정 요약 행×1 | 실측T-7630be9c: 정적 판정 요약 행×1"
+   "na_reasons": "대조표 기록 보강 대상(화면 오류 아님): 상태 구×10 | 실측T-73dd2961: 정적 판정 요약 행×1 | 실측T-aa775cc6: 정적 판정 요약 행×1 | 실측T-7630be9c: 정적 판정 요약 행×1"
   },
   {
    "rule_id": "MS1",

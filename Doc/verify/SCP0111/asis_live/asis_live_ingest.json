@@ -1,15 +1,15 @@
 {
  "id": "SCP0111",
- "run_dir": "Doc/asislive/SCP0111/run_20261113_054922",
- "live_at": "2026-11-13 05:49:22.823",
+ "run_dir": "Doc/asislive/SCP0111/run_20261117_190144",
+ "live_at": "2026-11-17 19:01:44.968",
  "user": "jaeuk.shin",
  "find": {
   "signaled": true,
-  "time_status": "DB : 0.357s, UI : 0.016s",
+  "time_status": "DB : 0.344s, UI : 0.095s",
   "total": "Total : 1,712",
   "how": "status"
  },
- "mixed_risk": true,
+ "mixed_risk": false,
  "live_calls": 22,
  "live_sp_distinct": 12,
  "static_vs_live": {
@@ -24,8 +24,8 @@
  },
  "diff_gap": {
   "LIVE_ONLY": 2,
-  "BOTH": 1,
-  "NONE": 2
+  "NONE": 2,
+  "BOTH": 1
  },
  "param_hints": 0,
  "limits": [

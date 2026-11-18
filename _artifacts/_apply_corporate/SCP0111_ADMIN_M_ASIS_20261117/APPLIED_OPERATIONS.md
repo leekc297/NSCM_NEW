@@ -4,7 +4,7 @@
 - 대상: `SCM_MGR.PKG_SCP0111` PACKAGE BODY `P_SCP0111_SAVE_PSI_ADMIN`
 - 지시: 2026-11-17 사용자. FE `buildAdminPayload` 를 AS-IS 절대값 전송으로 바꾸는 전제로 SP 'M' 분기를 AS-IS UPDATE 1문으로 되돌림
 - AS-IS 근거: `Doc/asisfacts/db/modules/dbo.SCP0111_SAVE_INTEGRATION_PSI_ADMIN.sql` L191~214, `GSCM/06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0111_IntegrationPSI/SCP0111_IntegrationPSI.cs` L1283~1368
-- FE 가이드: `Doc/verify/SCP0111/FE_GUIDE_20261117_1736.md`
+- FE 가이드: `Doc/verify/SCP0111/FE_GUIDE_20261117_1759.md`
 
 | # | 시각 | 작업 | 결과 |
 |---:|---|---|---|

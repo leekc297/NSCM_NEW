@@ -210,12 +210,12 @@ Received: false
                   - grid [ref=f2e299]:
                     - rowgroup [ref=f2e300]:
                       - generic:
-                        - row "Div From To Delegatee Valid Last Updated By Last Update Date Deselect All Rows":
+                        - row "Div From To Delegatee Active Last Updated By Last Update Date Deselect All Rows":
                           - columnheader "Div" [ref=f2e301]
                           - columnheader "From" [ref=f2e302]
                           - columnheader "To" [ref=f2e303]
                           - columnheader "Delegatee" [ref=f2e304]
-                          - columnheader "Valid" [ref=f2e305]
+                          - columnheader "Active" [ref=f2e305]
                           - columnheader "Last Updated By" [ref=f2e306]
                           - columnheader "Last Update Date" [ref=f2e307]
                           - gridcell [ref=f2e308]:
@@ -231,46 +231,46 @@ Received: false
                     - generic [ref=f2e317]: "0"
                   - generic:
                     - generic [ref=f2e320]:
-                      - combobox "InputDate Input" [ref=f2e321]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e321]: 2026-11-18
                       - button "Choose Date" [ref=f2e323] [cursor=pointer]
                     - generic [ref=f2e327]:
-                      - combobox "InputDate Input" [ref=f2e328]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e328]: 2026-11-18
                       - button "Choose Date" [ref=f2e330] [cursor=pointer]
                     - generic [ref=f2e334]:
-                      - combobox "InputDateTime Input" [ref=f2e335]: 2026-11-17 03:08:13
+                      - combobox "InputDateTime Input" [ref=f2e335]: 2026-11-18 07:57:54
                       - generic [ref=f2e336]:
                         - button "Toggle Calendar" [ref=f2e337] [cursor=pointer]
                         - button "Toggle Time List" [ref=f2e339] [cursor=pointer]
                     - generic [ref=f2e343]:
-                      - combobox "InputDate Input" [ref=f2e344]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e344]: 2026-11-18
                       - button "Choose Date" [ref=f2e346] [cursor=pointer]
                     - generic [ref=f2e350]:
-                      - combobox "InputDate Input" [ref=f2e351]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e351]: 2026-11-18
                       - button "Choose Date" [ref=f2e353] [cursor=pointer]
                     - generic [ref=f2e357]:
-                      - combobox "InputDateTime Input" [ref=f2e358]: 2026-11-17 03:08:13
+                      - combobox "InputDateTime Input" [ref=f2e358]: 2026-11-18 07:57:54
                       - generic [ref=f2e359]:
                         - button "Toggle Calendar" [ref=f2e360] [cursor=pointer]
                         - button "Toggle Time List" [ref=f2e362] [cursor=pointer]
                     - generic [ref=f2e366]:
-                      - combobox "InputDate Input" [ref=f2e367]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e367]: 2026-11-18
                       - button "Choose Date" [ref=f2e369] [cursor=pointer]
                     - generic [ref=f2e373]:
-                      - combobox "InputDate Input" [ref=f2e374]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e374]: 2026-11-18
                       - button "Choose Date" [ref=f2e376] [cursor=pointer]
                     - generic [ref=f2e380]:
-                      - combobox "InputDateTime Input" [ref=f2e381]: 2026-11-17 03:08:13
+                      - combobox "InputDateTime Input" [ref=f2e381]: 2026-11-18 07:57:54
                       - generic [ref=f2e382]:
                         - button "Toggle Calendar" [ref=f2e383] [cursor=pointer]
                         - button "Toggle Time List" [ref=f2e385] [cursor=pointer]
                     - generic [ref=f2e389]:
-                      - combobox "InputDate Input" [ref=f2e390]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e390]: 2026-11-18
                       - button "Choose Date" [ref=f2e392] [cursor=pointer]
                     - generic [ref=f2e396]:
-                      - combobox "InputDate Input" [ref=f2e397]: 2026-11-17
+                      - combobox "InputDate Input" [ref=f2e397]: 2026-11-18
                       - button "Choose Date" [ref=f2e399] [cursor=pointer]
                     - generic [ref=f2e403]:
-                      - combobox "InputDateTime Input" [ref=f2e404]: 2026-11-17 03:08:13
+                      - combobox "InputDateTime Input" [ref=f2e404]: 2026-11-18 07:57:54
                       - generic [ref=f2e405]:
                         - button "Toggle Calendar" [ref=f2e406] [cursor=pointer]
                         - button "Toggle Time List" [ref=f2e408] [cursor=pointer]
@@ -283,7 +283,7 @@ Received: false
 # Test source
 
 ```ts
-  1   | // 자동 생성 — tools/E2E/gen-e2e.js (2026-11-16) · 원천: Doc/gen/SSP0020/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+  1   | // 자동 생성 — tools/E2E/gen-e2e.js (2026-11-17) · 원천: Doc/gen/SSP0020/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
   2   | import { test, expect } from '../../../tools/E2E/fixtures/test';
   3   | import * as fs from 'node:fs';
   4   | const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SSP0020.plan.json', 'utf8'));

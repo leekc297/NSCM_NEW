@@ -83,10 +83,31 @@ def selftest():
     return 1 if bad else 0
 
 
-def keyless(mid, fp, tables, at):
-    """키 없는 복원 — 감사 칸(LAST_UPDATED_BY·LAST_UPDATE_DATE / CREATED_BY·CREATION_DATE)으로 시험 계정 변경 행만 특정"""
+def backup_rows(cur, t, rids, mid, tag):
+    """2026-11-17 SSP0020 위임 표 잔존 535행: 지우기 전 행 전체를 CSV 로 남긴다 — 반환 = 백업 경로(행 0 이면 '')"""
+    if not rids:
+        return ''
+    cur.execute(f'SELECT * FROM {t} WHERE ROWNUM = 0'); names = [d[0] for d in cur.description]; rows = []
+    for rid in rids:
+        cur.execute(f'SELECT * FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); r1 = cur.fetchone()
+        if r1:
+            rows.append(r1)
+    d = os.path.join(ROOT, 'Doc', 'verify', mid, 'applied'); os.makedirs(d, exist_ok=True)
+    fp = os.path.join(d, f"{t.split('.')[-1]}_{tag}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
+    with open(fp, 'a', encoding='utf-8-sig', newline='') as f:
+        w = csv.writer(f)
+        if f.tell() == 0:
+            w.writerow(names)
+        w.writerows(['' if v is None else v for v in r] for r in rows)
+    return os.path.relpath(fp, ROOT).replace(os.sep, '/')
+
+
+def keyless(mid, fp, tables, at, why='키 없는 복원'):
+    """키 없는 복원 — 감사 칸(LAST_UPDATED_BY·LAST_UPDATE_DATE / CREATED_BY·CREATION_DATE)으로 시험 계정 변경 행만 특정
+    fp=None 이면 기록 파일을 옮기지 않는다(키 있는 화면에서 시작 기록 처리 뒤 키 복원이 이어질 때)"""
     from dbconn import connect
     bad = 0; left = []
+    print(f'[restore_touched] {mid}: {why} · 기준 시각 {at} · 계정 {ACCOUNT}')
     with connect('tobe', write=True) as cx:
         cur = cx.cursor()
         for t in tables:
@@ -104,14 +125,22 @@ def keyless(mid, fp, tables, at):
             # 2026-11-09 T175(SSP0024 ORA-01555): 이력 표(_H)는 키 있는 복원과 같은 규칙 — 시험 계정·기록 시각 이후 행은 시험이 만든 이력이므로 flashback 없이 삭제
             #   (undo_retention 900초 · 체인 끝 복원은 저장 30분 뒤라 flashback 이 실패해 이력 행이 남았다)
             if t.upper().endswith('_H'):
+                bk = backup_rows(cur, t, rids, mid, 'test_hist_deleted')
                 cur.execute(f"DELETE FROM {t} WHERE {' OR '.join(conds)}", u=ACCOUNT, a=at); n_del = cur.rowcount
-                print(f'[restore_touched] {t}: 키 없는 복원 · 이력 표 시험 계정 행 {len(rids)} → 삭제 {n_del}(flashback 불필요)'); continue
+                print(f'[restore_touched] {t}: 키 없는 복원 · 이력 표 시험 계정 행 {len(rids)} → 삭제 {n_del}(flashback 불필요) · 백업 {bk}'); continue
+            # 2026-11-09 T175: 시험 계정이 기록 시각 뒤 '생성'한 행 = 시험이 만든 새 행 — flashback 결과와 무관하게 삭제(AS OF 부재와 같은 결론)
+            # 2026-11-17: 지우기 전 백업 CSV · 삭제 건수와 백업 경로를 로그에 남긴다
+            made = []
+            if {'CREATED_BY', 'CREATION_DATE'} <= cols:
+                cur.execute(f"SELECT ROWIDTOCHAR(ROWID) FROM {t} WHERE LOWER(CREATED_BY)=:u AND CREATION_DATE>=:a", u=ACCOUNT, a=at); made = [x[0] for x in cur.fetchall()]
+            bk = backup_rows(cur, t, made, mid, 'test_created_deleted')
+            for rid in made:
+                cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); n_del += cur.rowcount
+            if made:
+                print(f'[restore_touched] {t}: 시험 계정이 {at} 뒤 생성한 행 {len(made)} → 삭제 {n_del} · 백업 {bk}')
             for rid in rids:
-                # 2026-11-09 T175: 시험 계정이 기록 시각 뒤 '생성'한 행 = 시험이 만든 새 행 — flashback 결과와 무관하게 삭제(AS OF 부재와 같은 결론)
-                if {'CREATED_BY', 'CREATION_DATE'} <= cols:
-                    cur.execute(f'SELECT LOWER(CREATED_BY), CREATION_DATE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); cr = cur.fetchone()
-                    if cr and cr[0] == ACCOUNT and cr[1] is not None and cr[1] >= at:
-                        cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); n_del += 1; continue
+                if rid in made:
+                    continue
                 try:
                     cur.execute(f'SELECT * FROM {t} AS OF TIMESTAMP :a WHERE ROWID = CHARTOROWID(:r)', a=at, r=rid); o1 = cur.fetchone()
                 except Exception as ex:
@@ -120,7 +149,9 @@ def keyless(mid, fp, tables, at):
                 if not c1:
                     continue
                 if not o1:
-                    cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); n_del += 1; continue
+                    bk1 = backup_rows(cur, t, [rid], mid, 'test_created_deleted')
+                    cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); n_del += 1
+                    print(f'[restore_touched] {t} {rid}: 기록 시각에 행 없음(AS OF) → 삭제 · 백업 {bk1}'); continue
                 o, c = dict(zip(names, o1)), dict(zip(names, c1)); ch = [k for k in names if str(c[k]) != str(o[k])]
                 if ch:
                     cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); n_up += 1
@@ -129,7 +160,8 @@ def keyless(mid, fp, tables, at):
     print(f'[restore_touched] {mid}: 한계 — 저장이 지운 행(감사 칸으로 못 찾음)은 복원 대상 밖 · save_residue 와 별도 확인 필요')
     for t, why in left:
         print(f'[restore_touched] 미복원 {t}: {why}')
-    os.replace(fp, fp.replace('.json', '.done.json'))
+    if fp:
+        os.replace(fp, fp.replace('.json', '.done.json'))
     return 1 if bad or left else 0
 
 
@@ -142,8 +174,20 @@ def main(mid):
     keys = spec.get('keys') or []; tables = spec.get('tables') or []
     if not tables:
         print(f'[restore_touched] {mid}: ERROR cleanup_spec 표 없음 — 수동 복원 필요: {entries[:3]}'); return 1
+    # 2026-11-17 SSP0020 위임 표 잔존 535행: 폼 저장형 준비(_formfix @formsetup)처럼 행 키 없이 '시작 시각'만 남긴 기록(item.__since)
+    #   → 그 시각 뒤 시험 계정이 만든 행 삭제 · 고친 행 flashback 복원(키 없는 복원과 같은 규칙). 키 있는 화면이면 그 뒤 키 복원을 이어서 한다
+    since = [e for e in entries if isinstance(e.get('item'), dict) and e['item'].get('__since')]
+    rest = [e for e in entries if e not in since]
+    tag = ','.join(sorted({str(e['item']['__since']) for e in since})); rc0 = 0
     if not keys:
-        return keyless(mid, fp, tables, min(datetime.datetime.fromisoformat(e['at']) for e in entries))
+        return keyless(mid, fp, tables, min(datetime.datetime.fromisoformat(e['at']) for e in entries), '키 없는 복원' + (f' · 시작 기록 {tag}' if since else ''))
+    if since:
+        rc0 = keyless(mid, None if rest else fp, tables, min(datetime.datetime.fromisoformat(e['at']) for e in since), f'시작 기록 복원({tag})')
+        if not rest:
+            return rc0
+        entries = rest
+        if rc0:
+            print(f'[restore_touched] {mid}: 시작 기록 복원 ERROR — 키 복원은 계속')
     from dbconn import connect
     bad = 0; audit = []
     with connect('tobe', write=True) as cx:
@@ -199,8 +243,9 @@ def main(mid):
                             if not o1 and c1:
                                 cn = dict(zip(names, c1))
                                 if str(cn.get('CREATED_BY') or '').lower() == ACCOUNT and cn.get('CREATION_DATE') and cn['CREATION_DATE'] >= at:
+                                    bk1 = backup_rows(cur, t, [rid], mid, 'test_created_deleted')
                                     cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); okn += 1
-                                    print(f'[restore_touched] {t} {list(kv.values())} ROWID {rid}: DELETE 시험 계정이 기록 시각 뒤 생성한 행'); continue
+                                    print(f'[restore_touched] {t} {list(kv.values())} ROWID {rid}: DELETE 시험 계정이 기록 시각 뒤 생성한 행 · 백업 {bk1}'); continue
                             if not o1 or not c1:
                                 print(f'[restore_touched] {t} {rid}: ERROR flashback 행 없음 — 수동 확인'); bad += 1; continue
                             o, c = dict(zip(names, o1)), dict(zip(names, c1)); act, why = decide(c, o, at)
@@ -227,7 +272,7 @@ def main(mid):
     with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'save_audit_cols.csv'), 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, ['target', 'result', 'why']); w.writeheader(); w.writerows(audit)
     os.replace(fp, fp.replace('.json', '.done.json'))
-    return 1 if bad else 0
+    return 1 if bad or rc0 else 0
 
 
 if __name__ == '__main__':

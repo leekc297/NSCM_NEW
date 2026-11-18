@@ -107,6 +107,19 @@ export const probe = {
       try { ed.value = ${J(text)}; c.finishEditing(false); } catch (e) { (window.__e2eEditorErr = window.__e2eEditorErr || []).push(${J(binding)} + ': ' + String((e && e.message) || e).slice(0, 120)); try { c.finishEditing(true); } catch (e2) { /* 무시 */ } return false; }
       return true; })()`) as Promise<boolean>,
   /** 셀을 화면에 스크롤해 화면 좌표 중심점 반환(더블클릭 프로브용) */
+  /** 2026-11-18 SCP0111 사용자 판정(신규행 Model·Nick Name 'TO-BE RULE'): 편집기가 안 열려도 더블클릭으로 입력 팝업(대화상자)이 열리는 칸 = 사용자가 값을 바꿀 수 있는 칸(CR-072).
+   *  더블클릭 → 대화상자 열림 여부 → 닫기(선택 없음). 돌려줌: 열린 대화상자 제목(없으면 '') */
+  popupOnDblclick: async (p: Page, row: number, binding: string): Promise<string> => {
+    const before = await p.locator('[role="dialog"]:visible').count().catch(() => 0);
+    const pt = await probe.cellCenter(p, row, binding); if (!pt) return '';
+    await p.mouse.dblclick(pt.x, pt.y); await p.waitForTimeout(1_200);
+    const dlg = p.locator('[role="dialog"]:visible').last();
+    if ((await p.locator('[role="dialog"]:visible').count().catch(() => 0)) <= before) { await p.keyboard.press('Escape').catch(() => undefined); return ''; }
+    const title = ((await dlg.innerText().catch(() => '')) || '').split(/\r?\n/)[0].trim().slice(0, 40) || '(제목 없음)';
+    const cl = dlg.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first();
+    if (await cl.isVisible().catch(() => false)) await cl.click({ timeout: 3_000 }).catch(() => undefined); else await p.keyboard.press('Escape').catch(() => undefined);
+    await p.waitForTimeout(400); return title;
+  },
   cellCenter: (p: Page, row: number, binding: string) =>
     // 스크롤 직후에는 셀이 아직 다시 그려지지 않아 null 이 나온다(2026-10-23 실측) → 최대 10회(약 2초) 재시도
     p.evaluate(`(async () => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index);

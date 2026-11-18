@@ -152,7 +152,8 @@ test.describe('@snap 스냅샷 형상 검사', () => {
       const expected = path.join(ROOT, 'Doc', 'verify', ID, 'snap', 'golden', `${key}.png`);
       if (path.resolve(sp) !== path.resolve(expected)) { put('화면샷', scope, { key, kind: '화면샷', scope, status: 'ERROR', golden: '', received: '', diff: '', lines: 0, detail: `playwright.config snapshotPathTemplate 미설정(현재 ${sp})`, at: '' }, { viewport: w }); continue; }
       // 마스크: 기간 input · 그리드 셀 · 건수 · Wijmo 평가판 배너(개발환경 정상 문구 · 깜빡여 1366 diff 1,484px 원인 2026-11-06 실측)
-      const mask = [nscm.page.locator('input[placeholder*="YYYY" i], [class*="dateBox" i], .wj-cells'), nscm.page.getByText(/Total\s*[:：]?\s*[\d,]+|총\s*[\d,]+\s*건/i), nscm.page.getByText(/Wijmo Evaluation/i)];
+      // 2026-11-18 SCP0111 사용자 판정(V-55556e17·V-e8ca7b9a '컬럼 폭 비율은 오류에서 제외'): 그리드 머리글(.wj-colheaders)도 가린다 — 머리글 문구·순서는 '헤더' 스냅샷이 따로 비교
+      const mask = [nscm.page.locator('input[placeholder*="YYYY" i], [class*="dateBox" i], .wj-cells, .wj-colheaders'), nscm.page.getByText(/Total\s*[:：]?\s*[\d,]+|총\s*[\d,]+\s*건/i), nscm.page.getByText(/Wijmo Evaluation/i)];
       const clip = await (async () => { const tg = await searchAreaTagged(nscm.page); const sa = tg ? await tg.boundingBox().catch(() => null) : await nscm.searchArea().boundingBox().catch(() => null); const g = await nscm.grid(0).boundingBox().catch(() => null); const top = sa ? sa.y : 0; const bottom = g ? Math.min(g.y + 120, 1080) : Math.min((sa ? sa.y + sa.height : 0) + 300, 1080); return { x: 0, y: Math.max(0, top - 8), width: w, height: Math.max(80, bottom - Math.max(0, top - 8)) }; })();
       const exists = fs.existsSync(expected);
       // 2026-11-07 T142 ②: 화면샷 골든 png 는 Playwright 가 첫 실행에 자동 생성한다 → 파일 존재 ≠ 승인. snap/manifest.json 에 그 key 의 승인 기록(snap_approve.py)이 있어야 MATCH/DIFF 판정,

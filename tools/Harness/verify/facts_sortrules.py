@@ -15,6 +15,8 @@
   사용처: ledger.py A6 행(조회 SP 마다 1행, 분기별 기대) · sort_check.py(TO-BE PKG ORDER BY 정적 대조) · _trace.spec @trace A6(결과 행 순서 실측)
 """
 import csv, os, re, sys, collections
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from facts_combosrc import strip_comments as cs_strip_comments  # C# 주석 제거(2026-11-17)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live import dead_methods, dead_sps, sp_base  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 DOC = os.path.join(ROOT, 'Doc')
@@ -106,7 +108,8 @@ def code_rules(screen):
         if not rel.endswith('.cs') or rel.endswith('.Designer.cs'): continue
         p = next((q for q in (os.path.join(ROOT, 'GSCM', rel), os.path.join(ROOT, 'GSCM_20260512', rel)) if os.path.exists(q)), '')
         if not p: continue
-        src = strip_comments(open(p, encoding='utf-8', errors='ignore').read())
+        # 2026-11-17 사용자(SCP0111): C# 파일은 C# 주석(// · /* */) 제거 — 종전 SQL 용 strip_comments(-- 만)를 써서 주석 줄 '//    tmpDivision.DefaultView.Sort' 가 정렬 사실로 들어갔다(cs:214)
+        src = cs_strip_comments(open(p, encoding='utf-8', errors='ignore').read())
         for ln, line in enumerate(src.split('\n'), 1):
             if RX_CODE.search(line):
                 out.append({'screen_id': screen, 'kind': 'GRID' if re.search(r'(?i)spd|sheet|SortRange|AutoSort', line) else 'CODE', 'sp': '', 'file': rel, 'line': ln, 'guard': '', 'keys': ','.join(norm_keys((re.search(r'"([^"]+)"', line) or [None, ''])[1])), 'raw': line.strip()[:240], 'depth': 0, 'note': '화면 코드 정렬'})

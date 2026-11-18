@@ -59,8 +59,10 @@ export function judgeTextDelete(s: { where: string; key: string; full: string; w
 }
 
 /** Insert 행 Division 변경 전후 콤보 후보 — divs 시험한 Div 값 · changed 후보가 바뀐 칸 · same 그대로인 칸 (EG108) */
-export function judgeDivCands(s: { divEditable: boolean; divs: string[]; changed: string[]; same: string[]; why?: string }): J {
+export function judgeDivCands(s: { divEditable: boolean; divs: string[]; changed: string[]; same: string[]; why?: string; asis?: { editable: boolean; by: string } | null }): J {
   if (s.why) return { result: 'ERROR', why: `[측정 경로 없음] ${s.why}` };
+  // 2026-11-18 SCP0111 V-625fadbe: AS-IS 신규행 Division 편집 기대(edit_expect · 계정 그룹으로 계산)가 있으면 그것과 대조한다 — 둘 다 잠금이면 변경 시나리오 자체가 없음(같음)
+  if (!s.divEditable && s.asis) return s.asis.editable ? { result: 'FAIL', why: `Insert 행 Division 칸 편집 불가 ↔ AS-IS 편집 가능(${s.asis.by})` } : { result: 'PASS', why: `Insert 행 Division 칸 편집 불가 = AS-IS 신규행 Division 잠금(${s.asis.by}) — Division 변경 후보 재구성 시나리오 대상 아님` };
   if (!s.divEditable) return { result: 'ERROR', why: `[확인 대상] Insert 행 Division 칸 편집 불가 — AS-IS 편집 여부와 대조 필요(문서는 SCP·SSP 사례)` };
   if (s.divs.length < 2) return { result: 'ERROR', why: `[측정 경로 없음] Division 후보 ${s.divs.length}건 — 변경 시험 불가` };
   if (!s.changed.length) return { result: 'ERROR', why: `[확인 대상] Div ${s.divs.join('→')} 변경 뒤 콤보 칸 ${s.same.length}개 후보 변화 없음(${s.same.slice(0, 5).join(',')}) — 하위 후보 재구성 여부 확인` };

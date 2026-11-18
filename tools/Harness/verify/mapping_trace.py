@@ -133,6 +133,59 @@ def file_text(f, srcs):
     return None
 
 
+_IDF_STOP = {'callProc', 'useState', 'useEffect', 'useCallback', 'useMemo', 'useRef', 'setState', 'onClick', 'undefined', 'false', 'true', 'null'}
+
+
+def loc_by_identifier(text, srcs):
+    """대조표 행 서술의 코드 식별자 → 화면 소스(파일:라인)·TO-BE 프로시저 목록에서 실재 확인(2026-11-17 SCP0111 X-LOC).
+    반환 (찾음 ['이름→파일:라인' …], 못 찾음 ['이름' …]) · 식별자가 없으면 None"""
+    t = str(text or '')
+    toks = []
+    for m in re.findall(r'`([^`]+)`', t):
+        toks += re.findall(r'[A-Za-z_][A-Za-z0-9_]{4,}', m)
+    toks += re.findall(r'\b[a-z]+[A-Z][A-Za-z0-9]{2,}\b', t)  # camelCase(handleSave · isDuplicateInsertRow · callSaveIntegrationPsi)
+    toks += re.findall(r'\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+){1,}\b', t)  # 상수·프로시저(INSERT_KEY_COLS · P_SCP0111_SAVE_PSI_ADMIN)
+    seen, ids = set(), []
+    for k in toks:
+        if k in seen or k in _IDF_STOP or len(k) < 5: continue
+        # 코드 식별자 모양만(일반 단어 return·current·Record·Basic·Visible 등이 근거로 잡히던 것 — SCP0104 R-18 실측 2026-11-17):
+        #   camelCase · 밑줄 포함 · 대문자 2개 이상 PascalCase(TabWrapper·MainTitle) · JS/TS 예약어·기본 타입 제외
+        if not (re.search(r'[a-z][A-Z]', k) or '_' in k or len(re.findall(r'[A-Z]', k)) >= 2): continue
+        if k in ('return', 'Partial', 'Record', 'Promise', 'ReadonlyArray', 'string', 'number', 'boolean'): continue
+        seen.add(k); ids.append(k)
+    found, miss = [], []
+    allsrc = list((srcs or {}).items())
+    def where(rx):
+        for fp, body in allsrc:
+            m = re.search(rx, body) if isinstance(body, str) else None
+            if m: return f"{fp.split('/')[-1]}:{body.count(chr(10), 0, m.start()) + 1}"
+        return None
+    # 버튼 표: TO-BE hotkeyConfig 키(search= · save= · delete= …) → 화면 소스의 'key:' 위치 · '(제거)' = 그 키가 화면 hotkeyConfig 에 없음 · '(공용) Excel' = SubTitle excelFileName
+    for k in dict.fromkeys(re.findall(r'\b(search|save|insert|delete|excel|edit)\s*=', t)):
+        w = where(rf'\b{k}\s*:')
+        (found if w else miss).append(f'{k}:→{w}' if w else f'{k}:')
+    if re.search(r'\(제거\)', t):
+        for b in dict.fromkeys(re.findall(r'\b([A-Z][a-z]+)Button\b', t)):
+            k = b.lower()
+            w = where(rf'\b{k}\s*:\s*(?!false)')
+            if w: miss.append(f'{k}: 제거라 했으나 {w} 에 있음')
+            else: found.append(f'{b}Button 제거 확인(화면 hotkeyConfig 에 {k}: 없음)')
+    if re.search(r'\(공용\)\s*Excel', t, re.I):
+        w = where(r'excelFileName\s*=')
+        (found if w else miss).append(f'공용 SubTitle Excel(excelFileName)→{w}' if w else '공용 SubTitle excelFileName')
+    if not ids and not found and not miss: return None
+    procs = known_procs()
+    for k in ids:
+        if re.match(r'^(PKG_|P_|UP_|SP_)', k) and (k.upper() in procs or k.upper().split('.')[-1] in procs):
+            found.append(f'{k}→TO-BE 프로시저(proc_meta)'); continue
+        hit = None
+        for fp, body in (srcs or {}).items():
+            i = body.find(k) if isinstance(body, str) else -1
+            if i >= 0: hit = f"{k}→{fp.split('/')[-1]}:{body.count(chr(10), 0, i) + 1}"; break
+        (found if hit else miss).append(hit or k)
+    return found, miss
+
+
 _KNOWN_PROCS = None
 
 
@@ -310,9 +363,9 @@ def asis_fpmerge():
             kind = 'popup' if re.search(r'popup', os.path.basename(rel), re.I) else 'main'
             for ln in src.splitlines():
                 if ln.strip().startswith('//'): continue
-                mm = re.search(r'Add\w*Column\(\s*"[^"]*"\s*,\s*DefColumns\.([A-Z0-9_]+)\s*,\s*FPMerge\.(\w+)', ln)
+                mm = re.search(r'Add\w*Column\(\s*"[^"]*"\s*,\s*Def[A-Z]\w*\.([A-Z0-9_]+)\s*,\s*FPMerge\.(\w+)', ln)
                 if mm: out[kind].setdefault(mm.group(1), mm.group(2))
-                mc = re.search(r'AddComboColumn\(\s*"[^"]*"\s*,\s*DefColumns\.([A-Z0-9_]+)', ln)
+                mc = re.search(r'AddComboColumn\(\s*"[^"]*"\s*,\s*Def[A-Z]\w*\.([A-Z0-9_]+)', ln)
                 if mc: out['combo_' + kind].add(mc.group(1))
     except Exception as ex:
         print(f'[WARN] FPMerge 원문 읽기 실패: {ex}')
@@ -409,11 +462,15 @@ class Elems:
             if ct_: self.cols[ct_[0]] = ct_[1]
         for rs in acts.values():
             for r in rs:
-                for m in re.finditer(r'DefColumns\.([A-Z0-9_]+)(?![A-Za-z0-9_…])', r['raw'] + ' ' + r['value']): self.cols.setdefault(m.group(1), '')  # '…' = 추출기 말줄임(잘린 이름 제외)
+                for m in re.finditer(r'Def[A-Z]\w*\.([A-Z0-9_]+)(?![A-Za-z0-9_…])', r['raw'] + ' ' + r['value']): self.cols.setdefault(m.group(1), '')  # '…' = 추출기 말줄임(잘린 이름 제외)
         self.main_cls = collections.Counter(r['class'] for rs in acts.values() for r in rs).most_common(1)[0][0] if acts else ''
         self.popups = {c for c, _ in acts} - {self.main_cls} if acts else set()
         # W5(2026-10-26): 검증 엔진이 컬럼 대상 검사에 쓰는 AS-IS·TO-BE 사실 — 라벨·표시(Division 별)·편집 기대·셀 규칙·TO-BE 메타
         self.tobe = {r['column_name']: r for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'sheet_columns.csv')) if r.get('program_id', '').upper() == MENU}
+        # 2026-11-17(SSP0020 H9 허위 이탈: Delegate LAST_UPDATED_BY 150 ↔ Delegated List 100 이 한 사전에 덮임): 시트별 메타 폭 — 검사기가 보이는 그리드의 컬럼 구성으로 시트를 골라 대조한다
+        self.tobe_w_sheet = {}
+        for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'sheet_columns.csv')):
+            if r.get('program_id', '').upper() == MENU and r.get('column_width'): self.tobe_w_sheet.setdefault(r.get('sheet_name', ''), {})[r['column_name']] = r['column_width']
         # grid_effective·grid_rule 은 시트별 행 — 같은 컬럼명이 팝업 시트(Distribution Route)에도 있어 뒤 행이 메인 시트 행을 덮어썼다(2026-10-26 FROM_CITY 'City' 오판) → 메인 시트(TO-BE 메타와 가장 많이 겹치는 시트) 우선
         def by_main(rows):
             cnt = collections.Counter(r.get('sheet', '') for r in rows if r.get('column') in self.tobe)
@@ -432,7 +489,7 @@ class Elems:
         by_cls = collections.defaultdict(set)
         for rs in acts.values():
             for r in rs:
-                for m in re.finditer(r'DefColumns\.([A-Z0-9_]+)(?![A-Za-z0-9_…])', r['raw'] + ' ' + r['value']): by_cls[r['class']].add(m.group(1))
+                for m in re.finditer(r'Def[A-Z]\w*\.([A-Z0-9_]+)(?![A-Za-z0-9_…])', r['raw'] + ' ' + r['value']): by_cls[r['class']].add(m.group(1))
         main_cols = by_cls.get(self.main_cls, set()) | set(self.tobe) | {c for c in self.cols if self.cols.get(c)}
         self.popup_cols = {c for cls, cs in by_cls.items() if cls != self.main_cls for c in cs} - main_cols
         # 팝업을 여는 셀(트리거) = POPUP 문장이 있는 메서드의 guard 'e.Column == …DefColumns.X' — G5·H6 는 이 컬럼에만 붙는다(인자 컬럼 전체에 붙이던 과대귀속 수정)
@@ -440,7 +497,7 @@ class Elems:
         for (cls, meth), rs in acts.items():
             if cls != self.main_cls or not any(r['kind'] == 'POPUP' for r in rs): continue
             for r in rs:
-                for m in re.finditer(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)', r['guard'] + ' ' + r['raw']): self.trigger_cols.add(m.group(1))
+                for m in re.finditer(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*Def[A-Z]\w*\.([A-Z0-9_]+)', r['guard'] + ' ' + r['raw']): self.trigger_cols.add(m.group(1))
         # 콤보 SQL ID(plan.json comboId) → 조회조건 컨트롤 — FE 대조표 행이 SQL_ID 만 적은 경우 조건 요소로 잇는다
         self.combo_of = {}
         if os.path.exists(pf):
@@ -750,7 +807,19 @@ def main():
             # 이 화면 syn_check 에 없는 SP(공용 팝업 — 타 화면 PKG)는 다른 화면의 syn_check.csv 에서 찾는다
             syn_x = syn if any(tail(s['name']) == tail(d['name']) for s in syn) else [s for f in glob.glob(os.path.join(DOC, 'verify', '*', 'syn_check.csv')) for s in rdcsv(f) if s.get('kind') == 'PROC' and tail(s['name']) == tail(d['name'])]
             # 2026-11-12 T273: AS-IS SP 이름 → 짝 표의 TO-BE PROC 로 다시 찾는다(이 화면 짝 우선 · 없으면 다른 화면의 같은 AS-IS SP 짝)
+            # 2026-11-17 사용자(SCP0111 미검증 → 0): 대조표의 'API `P_SCP0111_SAVE`' 같은 API 등록 ID 는 프로시저가 아니다 — proc_meta api_id → 그 API 의 프로시저 시노님 결과
+            done_ = False
             if not any(tail(s['name']) == tail(d['name']) for s in syn_x):
+                api_p = [r['proc'] for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if (r.get('api_id') or '').upper() == d['name'].split('.')[-1].upper() and r.get('proc')]
+                if api_p:
+                    for s in [s for s in syn if s.get('kind') == 'PROC' and tail(s['name']) == tail(api_p[0])][:1]:
+                        d['hits'].append(('PASS' if s['verdict'] == 'OK' else 'FAIL' if s['verdict'] in ('SYN_MISSING', 'PRIV_MISSING', 'TARGET_MISSING', 'INVALID') else 'REVIEW', f"시노님검사 {s['verdict']} (API {d['name']} → {api_p[0]} · proc_meta)"))
+                    syn_x = []; done_ = True
+                # AS-IS SP 인데 짝 표가 'TO-BE 대응 없음'(manual · tobe_proc 빈 값)으로 정한 경우 — TO-BE 가 부르지 않으므로 시노님 검사 대상 아님(근거 = 짝 표 비고의 원문 위치)
+                none_ = [r for r in rdcsv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'sp_pair.csv')) if (r.get('menu_id') or '').upper() == MENU and (r.get('asis_sp') or '').upper() == d['name'].split('.')[-1].upper() and (r.get('source') or '') == 'manual' and not r.get('tobe_proc') and 'TO-BE 대응 없음' in (r.get('note') or '')]
+                if none_ and not api_p:
+                    d['hits'].append(('NA', f"시노님 검사 대상 아님 — 짝 표: {none_[0]['note'][:140]}")); syn_x = []; done_ = True
+            if not any(tail(s['name']) == tail(d['name']) for s in syn_x) and not done_:
                 tb_ = sp_pair_tobe(d['name'])
                 if tb_:
                     syn_p = [s for s in syn if s.get('kind') == 'PROC' and tail(s['name']) == tail(tb_)] or [s for f in glob.glob(os.path.join(DOC, 'verify', '*', 'syn_check.csv')) for s in rdcsv(f) if s.get('kind') == 'PROC' and tail(s['name']) == tail(tb_)][:1]
@@ -765,7 +834,9 @@ def main():
             d['hits'].append(('FAIL' if bad else 'PASS', f'시노님검사 {len(syn)}건 중 문제 {len(bad)}'))
         if d['et'] == 'SCREEN':
             for c, lv, src, msg in gates:
-                if c == d['check']: d['hits'].append(('FAIL' if lv == 'BLOCK' else 'WARN' if lv == 'WARN' else 'PASS', f'{src} {msg[:40]}'))
+                # 2026-11-18 SCP0111 T-34703d0c: G03 'AS-IS 이벤트 … 매핑표 §2 에 없음' 경고 = FE 매핑 문서의 이벤트 목록 누락 — 사용자 판정(11-18 CheckList 의견 'TO BE RULE 로 오류 아님')으로
+                #   판정 대상 아님(NA). 이벤트 동작 자체는 X-ROW 진입점 행에서 판정한다. (같은 날 FAIL 로 바꿨던 것을 사용자 판정으로 되돌림)
+                if c == d['check']: d['hits'].append(('FAIL' if lv == 'BLOCK' else 'NA' if (c == 'G03-WIRE' and lv == 'WARN' and '매핑표' in msg) else 'WARN' if lv == 'WARN' else 'PASS', f'{src} {msg[:60]}' + (' — 매핑 문서 이벤트 누락은 판정 제외(사용자 판정 2026-11-18 SCP0111 · 동작은 X-ROW 행)' if c == 'G03-WIRE' and lv == 'WARN' and '매핑표' in msg else '')))
             if d['check'] == 'G03-WIRE' and not any(c == 'G03-WIRE' for c, _, _, _ in gates) and os.path.exists(os.path.join(DOC, 'gen', MENU, 'CHECK.md')): d['hits'].append(('PASS', '게이트 G03 경고 0 — AS-IS 이벤트(this.Load·spdMain.* 등) 전부 매핑표 §2 에 연결(check.js 실행 결과 CHECK.md)'))
 
     # ── 정적 검사기(이 스크립트) ──
@@ -798,8 +869,13 @@ def main():
         elif c == 'X-LOC':
             r = rmap[d['name']]; loc = r.get('loc', '') or r['text']  # 위치 열이 없는 표는 행 전체에서 파일 참조를 찾는다
             files = re.findall(r'([A-Za-z0-9_.\-/@]+\.(?:tsx?|scss|sql|java|xml))(?::(\d+)(?:\s*[-~]\s*(\d+))?)?', loc)
-            if not files:
-                d['static'] = ('NA', '대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정') if r.get('has_loc') else                               ('REVIEW', '이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요')
+            # 2026-11-17 사용자(SCP0111 미검증 250 → 0): 파일 참조가 없어도 행에 적힌 코드 식별자(handleSave · isDuplicateInsertRow · INSERT_KEY_COLS ·
+            #   P_SCP0111_SAVE_PSI_ADMIN 등)를 화면 소스·TO-BE 프로시저 목록에서 실제로 찾아 구현 위치를 확인한다(SCP0111 X-LOC 20행이 '기입 필요' 미검증이던 것)
+            idf = loc_by_identifier(r['text'] + ' ' + (r.get('loc') or ''), srcs) if not files else None
+            if not files and idf and idf[0]:
+                d['static'] = ('PASS', f"구현 식별자 확인 {len(idf[0])}/{len(idf[0]) + len(idf[1])}: " + ', '.join(idf[0])[:150] + (f" · 못 찾음 {', '.join(idf[1])[:60]}" if idf[1] else ''))
+            elif not files:
+                d['static'] = ('NA', '대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정') if r.get('has_loc') else                               ('REVIEW', '이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요' + (f" (행의 식별자 {', '.join(idf[1])[:80]} 를 화면 소스·프로시저 목록에서 못 찾음)" if idf and idf[1] else ''))
             else:
                 bad = []; moved = []
                 for f, l1, l2 in files:
@@ -1003,8 +1079,8 @@ def msg_mapper():
         return lambda mid: ('', '')
 
 
-RX_ECOL = re.compile(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)')
-RX_ICOL = re.compile(r'\b\w+\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)')
+RX_ECOL = re.compile(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*Def[A-Z]\w*\.([A-Z0-9_]+)')
+RX_ICOL = re.compile(r'\b\w+\s*==\s*\w+\.GetColumnIndex\(\s*Def[A-Z]\w*\.([A-Z0-9_]+)')
 
 
 def cascade_src(r, rmap, depth=0):
@@ -1019,8 +1095,8 @@ def cascade_src(r, rmap, depth=0):
     same = [x for x in rmap.values() if x.get('src') == 'AS-IS 액션' and x.get('kind') != 'ENTRY' and x.get('cls') == r.get('cls') and x.get('meth') == r.get('meth')]
     for v in set(re.findall(r'\bstr[A-Z_][A-Za-z0-9_]*\b', r.get('guard') or '')):
         for x in same:
-            if re.match(r'^' + re.escape(v) + r'\s*=', x.get('raw', '')) and 'DefColumns.' in x.get('raw', ''):
-                m = re.search(r'DefColumns\.([A-Z0-9_]+)', x['raw'])
+            if re.match(r'^' + re.escape(v) + r'\s*=', x.get('raw', '')) and re.search(r'Def[A-Z]\w*\.', x.get('raw', '')):  # 2026-11-17: DefColumns 고정 → Def* 클래스 전부(SCP0111 DefMain)
+                m = re.search(r'Def[A-Z]\w*\.([A-Z0-9_]+)', x['raw'])
                 if m: return m.group(1)
     if depth < 2:
         callers = [x for x in rmap.values() if x.get('src') == 'AS-IS 액션' and x.get('kind') == 'CALL_LOCAL' and x.get('cls') == r.get('cls') and re.match(r'^' + re.escape(r.get('meth', '')) + r'\s*\(', x.get('raw', ''))]
@@ -1095,7 +1171,7 @@ def m4_popups(acts, main_cls):
         own = [y for y in acts if y['method'] == h]
         calls = {y['target'] for y in own if y['kind'] == 'CALL_LOCAL'}
         body = own + [y for y in acts if y['method'] in calls]
-        tg = sorted({(m.group(1) or m.group(2)) for y in body if y['kind'] in ('GRID_SET', 'DATA_OP') for m in re.finditer(r'(?:SetValue|SetText)\([^;]*?DefColumns\.([A-Z0-9_]+)|dr\[DefColumns\.([A-Z0-9_]+)', y['raw'])})
+        tg = sorted({(m.group(1) or m.group(2)) for y in body if y['kind'] in ('GRID_SET', 'DATA_OP') for m in re.finditer(r'(?:SetValue|SetText)\([^;]*?Def[A-Z]\w*\.([A-Z0-9_]+)|dr\[Def[A-Z]\w*\.([A-Z0-9_]+)', y['raw'])})
         seen = set()
         for y in own:
             if y['kind'] != 'POPUP':
@@ -1374,7 +1450,7 @@ def engine_condition(d, rmap):
         j['asisVisible'] = {k: v for k, v in ge.items() if re.fullmatch(r'[0-9A-Z_]{2,6}', k or '')} if ge else {}
         if ee: j['editExpect'] = {k: ee.get(k, '') for k in ('new_row', 'existing_row', 'new_row_cond', 'existing_cond', 'ambiguous')}
         if cr: j['cellRule'] = {k: cr.get(k, '') for k in ('cell_type', 'decimals', 'min', 'max', 'max_length')}
-        own = [r for r in srows if re.search(r'DefColumns\.' + re.escape(col) + r'(?![A-Z0-9_])', r.get('raw', ''))]
+        own = [r for r in srows if re.search(r'Def[A-Z]\w*\.' + re.escape(col) + r'(?![A-Z0-9_])', r.get('raw', ''))]
         j['raws'] = [f"{r.get('meth', '')}:{r['line']} {r.get('raw', '')[:140]}" + (f" [{r.get('guard', '')[:120]}]" if r.get('guard') else '') for r in own[:6]]
         j['asisRequired'] = '*' in (gr.get('label') or ''); j['tobeRequired'] = '*' in (tb.get('column_label_name') or '') or tb.get('input_tp_cd') == 'IM'
         if c == 'H3':
@@ -1385,16 +1461,36 @@ def engine_condition(d, rmap):
             j['asisWidth'] = gr.get('width', '')
         if c in ('C2', 'C3', 'C6'):
             srcs = []
-            assign = [r for r in own if re.search(r'SetValue\(|SetText\(|dr\[DefColumns\.' + re.escape(col) + r'[^\]]*\]\s*=|\[DefColumns\.' + re.escape(col) + r'\]\s*=', r.get('raw', ''))] if c == 'C3' else own
+            assign = [r for r in own if re.search(r'SetValue\(|SetText\(|dr\[Def[A-Z]\w*\.' + re.escape(col) + r'[^\]]*\]\s*=|\[Def[A-Z]\w*\.' + re.escape(col) + r'\]\s*=', r.get('raw', ''))] if c == 'C3' else own
             for r in assign:
                 s = cascade_src(r, rmap)
                 if s and s != col: srcs.append(s)
             j['src'] = list(dict.fromkeys(srcs))[:3]
             if c == 'C3' and not assign and own: j['noAssign'] = True  # 값 대입 문장이 없다(잠금·스타일만) — 연쇄 채움 검사 대상 아님
+            if c == 'C3' and not own:
+                # 2026-11-18 SCP0111 LINE_ID C3(cs:1781 'dtLine = DBUtils.Filter(…)' — 이 컬럼 상수가 없는 문장에서 만든 행): 화면 전체 AS-IS 문장 중 이 컬럼에 값을 대입하는 문장이 없고
+                #   후보 설정(SetCombo*)·읽기만 있으면 연쇄 채움 대상 아님 → noAssign(근거 = 그 문장들)
+                _all = [x for x in rmap.values() if x.get('src') == 'AS-IS 액션' and re.search(r'Def[A-Z]\w*\.' + re.escape(col) + r'(?![A-Z0-9_])', x.get('raw', ''))]
+                _asg = [x for x in _all if re.search(r'SetValue\(|SetText\(|dr\[Def[A-Z]\w*\.' + re.escape(col) + r'[^\]]*\]\s*=(?!=)|\[Def[A-Z]\w*\.' + re.escape(col) + r'\]\s*=(?!=)', x.get('raw', ''))]
+                if _all and not _asg:
+                    j['noAssign'] = True
+                    j['raws'] = [f"{x.get('meth', '')}:{x.get('line', '')} {x.get('raw', '')[:140]}" for x in _all[:6]]
+            # 2026-11-17 사용자(SCP0111 미검증 → 0): C2(후보 재구성)·C6(무변경 종료 시 연쇄 미발동)도 AS-IS 가 이 컬럼에 값·후보를 쓰는 문장이 하나도 없으면
+            #   (GetValue/GetText 로 읽기만 — _defaultDataModel_Changed 수량 검증 등) 연쇄 대상이 아니다 → noAssign(검사 엔진 NA · 근거 = 아래 raws 원문)
+            wr_rx = re.compile(r'(?:SetValue|SetText)\([^;]*?Def[A-Z]\w*\.' + re.escape(col) + r'\)\s*\)?\s*,|SetCombo\w*\([^;]*?Def[A-Z]\w*\.' + re.escape(col) + r'\b|\[Def[A-Z]\w*\.' + re.escape(col) + r'[^\]]*\]\s*=(?!=)')
+            writes = [r for r in own if wr_rx.search(r.get('raw', ''))]
+            if c in ('C2', 'C6') and own and not writes: j['noAssign'] = True
+            if c == 'C2' and not j['src'] and writes:
+                # 원천이 'e.Column == X' 가 아니라 같은 메서드에서 읽은 행 값인 경우(spdMain_CellClick 이 PLANT_ID·OPERATION_GROUP 으로 LINE_ID 후보 재구성 cs:1770~1790)
+                meths = {(r.get('cls'), r.get('meth')) for r in writes}
+                rd_rx = re.compile(r'Get(?:Value|Text)\([^;]*?Def[A-Z]\w*\.([A-Z0-9_]+)')
+                reads = [m.group(1) for x in rmap.values() if x.get('src') == 'AS-IS 액션' and (x.get('cls'), x.get('meth')) in meths for m in rd_rx.finditer(x.get('raw', '') + ' ' + (x.get('guard') or ''))]
+                j['src'] = [s for s in dict.fromkeys(reads) if s != col][:3]
+                if j['src']: j['srcBy'] = '같은 메서드에서 읽은 행 값(후보 재구성 조건)'
             if c == 'C3' and j['src']:
                 # 2026-11-09 T173(SSP0025 12·14번 허위 FAIL): 원천 변경 시 AS-IS 가 이 컬럼을 ""(빈 값)로 비우기만 하는 경우(SpdMain_ComboSelChange:688·689
                 #   DIVISION_ID 변경 → SITE_DESCRIPTION·ITEM_ID = "") '연쇄 자동 채움' 을 기대하면 TO-BE 빈 값이 FAIL 로 나온다 → 기대 = 원천 변경 뒤 대상 비움
-                tgt_rx = re.compile(r'(?:SetValue|SetText)\([^;]*?DefColumns\.' + re.escape(col) + r'\)\s*,\s*(?:""|string\.Empty|String\.Empty)\s*\)')
+                tgt_rx = re.compile(r'(?:SetValue|SetText)\([^;]*?Def[A-Z]\w*\.' + re.escape(col) + r'\)\s*,\s*(?:""|string\.Empty|String\.Empty)\s*\)')
                 from_src = [r for r in assign if cascade_src(r, rmap) in j['src']]
                 if from_src and all(tgt_rx.search(r.get('raw', '')) for r in from_src):
                     j['clearOnly'] = True
@@ -1405,11 +1501,11 @@ def engine_condition(d, rmap):
                 pm = {}
                 for r in assign:
                     if not re.search(r'DoubleClick|SetRoute|Popup|Dialog', r.get('meth') or ''): continue  # 팝업 선택 반영 문장만(InsertButton 기본값 등 다른 대입은 D4 몫 — 2026-10-28 TO_YYYYMMDD 허위 FAIL)
-                    for mm_ in re.finditer(r'DefColumns\.' + re.escape(col) + r'\)\s*\)?\s*,\s*(?:dr\["(\w+)"\]|"([^"]*)")', r.get('raw', '')):
+                    for mm_ in re.finditer(r'Def[A-Z]\w*\.' + re.escape(col) + r'\)\s*\)?\s*,\s*(?:dr\["(\w+)"\]|"([^"]*)")', r.get('raw', '')):
                         pm[col] = mm_.group(1) if mm_.group(1) else '=' + (mm_.group(2) or '')
                 if pm: j['popMap'] = pm
         if c == 'D4':
-            lits = [m.group(1) for r in own if r.get('meth') == 'InsertButton' for m in re.finditer(r'SetValue\([^;]*?DefColumns\.' + re.escape(col) + r'\)\s*,\s*("[^"]*"|-?\d+(?:\.\d+)?|true|false)\s*\)', r.get('raw', ''))]
+            lits = [m.group(1) for r in own if r.get('meth') == 'InsertButton' for m in re.finditer(r'SetValue\([^;]*?Def[A-Z]\w*\.' + re.escape(col) + r'\)\s*,\s*("[^"]*"|-?\d+(?:\.\d+)?|true|false)\s*\)', r.get('raw', ''))]
             j['d4'] = [x.strip('"') for x in lits][:3]
             j['d4expr'] = [r.get('raw', '')[:100] for r in own if r.get('meth') == 'InsertButton' and 'SetValue' in r.get('raw', '') and not lits][:2]
         if c == 'D5':
@@ -1427,13 +1523,13 @@ def engine_condition(d, rmap):
         msgs = [x for x in acts if x['kind'] == 'MESSAGE' and (d['et'] != 'MSG' or d['name'] in x['raw']) and (d['et'] not in ('ENTRY',) or f"{x['class']}.{x['method']}" == d['name'])]
         # 2026-11-12 T261: LEDGER·COND·ROW 는 대상에 속한 메시지 문장만(종전 = 화면 전 메시지 → 전부 첫 메시지의 판정을 물려받음)
         msgs = e4_scope(msgs, d)
-        if d['et'] in ('COL', 'PCOL'): msgs = [x for x in msgs if re.search(r'DefColumns\.' + re.escape(d['name']) + r'(?![A-Z0-9_])', x['guard'] + ' ' + ' '.join(y['raw'] for y in acts if y['method'] == x['method'] and y['kind'] in ('LOCAL', 'FLAG') and re.search(r'\b(s|str)[A-Z]\w*\s*=', y['raw'])))]
+        if d['et'] in ('COL', 'PCOL'): msgs = [x for x in msgs if re.search(r'Def[A-Z]\w*\.' + re.escape(d['name']) + r'(?![A-Z0-9_])', x['guard'] + ' ' + ' '.join(y['raw'] for y in acts if y['method'] == x['method'] and y['kind'] in ('LOCAL', 'FLAG') and re.search(r'\b(s|str)[A-Z]\w*\s*=', y['raw'])))]
         out = []
         for x in msgs[:8]:
             vars_ = {}
             for y in acts:
                 if y['method'] != x['method'] or y['kind'] not in ('LOCAL', 'FLAG'): continue
-                m = re.match(r'^\s*(?:string\s+)?(\w+)\s*=\s*.*?DefColumns\.([A-Z0-9_]+)', y['raw'])
+                m = re.match(r'^\s*(?:string\s+)?(\w+)\s*=\s*.*?Def[A-Z]\w*\.([A-Z0-9_]+)', y['raw'])
                 if m: vars_[m.group(1)] = m.group(2)
             mid = (re.search(r'MSG\d{5}', x['raw']) or [None])[0] if re.search(r'MSG\d{5}', x['raw']) else ''
             tobe, txt = mm(mid) if mid else ('', '')
@@ -1464,6 +1560,7 @@ def engine_condition(d, rmap):
         cr = E.crule.get(d['name'], {}); j['cellRule'] = {k: cr.get(k, '') for k in ('cell_type', 'decimals', 'separator', 'min', 'max')}
     if c == 'H9' or (c == 'H4' and d['et'] == 'SCREEN'):
         j['metaWidth'] = {col: tb.get('column_width', '') for col, tb in E.tobe.items() if tb.get('column_width')}
+        if len(getattr(E, 'tobe_w_sheet', {})) > 1: j['metaWidthBySheet'] = E.tobe_w_sheet
     if c == 'E4':
         # actions.csv 에 지역 변수 선언이 없으면 AS-IS .cs 원문에서 메서드 본문을 잘라 변수→컬럼을 뽑는다
         src_cache = {}
@@ -1481,7 +1578,7 @@ def engine_condition(d, rmap):
                 if not m: continue
                 body = src[m.end(): m.end() + 60000]
                 vars_ = {}
-                for mm in re.finditer(r'\b(\w+)\s*=\s*[^;]*?DefColumns\.([A-Z0-9_]+)', body): vars_.setdefault(mm.group(1), mm.group(2))
+                for mm in re.finditer(r'\b(\w+)\s*=\s*[^;]*?Def[A-Z]\w*\.([A-Z0-9_]+)', body): vars_.setdefault(mm.group(1), mm.group(2))
                 for mm in re.finditer(r'\b(dt\w+)\s*=\s*Convert\.ToDateTime\(\s*(\w+)\s*\)', body):
                     if mm.group(2) in vars_: vars_[mm.group(1)] = vars_[mm.group(2)]
                 e['vars'] = {k: v for k, v in vars_.items() if k in (e.get('guard') or '')}

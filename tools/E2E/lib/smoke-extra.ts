@@ -135,7 +135,8 @@ export async function findCond(nscm: Nscm, labels: string[], tag: string): Promi
       const kind = calOnly ? 'period' : radios ? 'radio' : combos ? 'combo' : checks && !inputs.length ? 'checkbox' : inputs.length >= 2 || inputs.some(i => /YYYY|yyyy/.test((i as HTMLInputElement).placeholder || '')) ? 'period' : ctlPart.querySelector('button, svg[cursor="pointer"], [class*="SearchIcon"]') ? 'popup' : 'text';
       (box as HTMLElement).setAttribute('data-e2e-cond', tag);
       const labEl = (labTrack.querySelector('label, span') as HTMLElement) || labTrack; const lr = labEl.getBoundingClientRect();
-      const target = (ctlPart.querySelector('input[type="checkbox"], input[type="radio"]') || ctl) as HTMLElement;
+      // 2026-11-18 SCP0111 Period: 달력 전용 칸은 ctl 이 null → target.closest 예외 → evaluate 실패 → 칸을 표시해 놓고 null 반환('칸을 찾지 못함' 허위 ERROR) — 달력 상자를 기준으로 쓴다
+      const target = (ctlPart.querySelector('input[type="checkbox"], input[type="radio"]') || ctl || ctlPart.querySelector('[class*="dateBox" i], [aria-label*="calendar" i]') || ctlPart) as HTMLElement;
       const tr = ((target.closest('.MuiCheckbox-root, .MuiRadio-root, .MuiInputBase-root, .MuiAutocomplete-root') as HTMLElement) || target).getBoundingClientRect();
       return { kind, label: (labTrack.innerText || '').replace(/[​\n]/g, ' ').trim(), labelRight: Math.round(lr.right), ctlLeft: Math.round(tr.left), top: Math.round(lr.top), left: Math.round(lr.left) };
     }
@@ -150,6 +151,58 @@ export async function findCond(nscm: Nscm, labels: string[], tag: string): Promi
     }
     return null;
   }, { labels, tag }).then(r => (r ? Object.assign(r, { root: page.locator(`[data-e2e-cond="${tag}"]`).first() }) : null)).catch(() => null);
+}
+
+/** 기간 칸(PeriodRangePicker) 표시값 'YYYY-MM[-DD] ~ YYYY-MM[-DD]' → [시작, 끝](숫자만) */
+export async function periodValues(box: Locator): Promise<[string, string]> {
+  const ins = box.locator('input:not([type="hidden"])'); const n = await ins.count().catch(() => 0);
+  if (n >= 2) return [(await ins.nth(0).inputValue().catch(() => '')).replace(/\D/g, ''), (await ins.nth(1).inputValue().catch(() => '')).replace(/\D/g, '')];
+  const ds = ((await box.innerText().catch(() => '')) as string).match(/\d{4}[.\-\/]?\d{2}(?:[.\-\/]?\d{2})?/g) || [];
+  return [(ds[0] || '').replace(/\D/g, ''), (ds[1] || '').replace(/\D/g, '')];
+}
+
+/** 2026-11-18 SCP0111 G1 Period: 기간 범위 달력에서 끝 값을 한 달 앞으로 당긴다(달력 열기 → 오른쪽(끝) 패널 이전 달 → 그 달 날짜 → OK).
+ *  돌려줌: 바꾸기 전·후 표시값 · 실패 사유. 시작 = 끝이면 바꾸지 않는다(범위가 뒤집힘) */
+export async function periodShiftEnd(nscm: Nscm, box: Locator): Promise<{ before: [string, string]; after: [string, string]; why: string }> {
+  const page = nscm.page; const before = await periodValues(box);
+  if (!before[0] || !before[1]) return { before, after: before, why: `초기 기간 빈값('${before[0]}' ~ '${before[1]}')` };
+  if (before[0].slice(0, 6) >= before[1].slice(0, 6)) return { before, after: before, why: '시작·끝이 같은 달 — 끝을 당길 수 없음' };
+  const opener = box.locator('[class*="dateBox" i], [aria-label*="calendar" i]').last();
+  await opener.click({ timeout: 5_000 }).catch(() => undefined);
+  const popup = page.locator('[class*="_popup_"]').filter({ has: page.locator('[class*="monthPanel" i]') }).first();
+  if (!(await popup.isVisible({ timeout: 5_000 }).catch(() => false))) return { before, after: before, why: '달력이 열리지 않음' };
+  const right = popup.locator('[class*="monthPanel" i]').nth(1);
+  await right.locator('[class*="navButton" i]').first().click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(300);
+  const days = right.locator('button[class*="_dayCell_"]:not([class*="Muted" i])');
+  const nd = await days.count().catch(() => 0);
+  if (!nd) { await page.keyboard.press('Escape').catch(() => undefined); return { before, after: before, why: '끝 패널에 고를 날짜 없음' }; }
+  await days.nth(Math.min(14, nd - 1)).click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(200);
+  const ok = popup.getByRole('button', { name: /^OK$/i }).first();
+  if (!(await ok.isEnabled().catch(() => false))) { await popup.getByRole('button', { name: /^Cancel$/i }).first().click({ timeout: 3_000 }).catch(() => undefined); return { before, after: before, why: 'OK 비활성(끝 날짜 미선택)' }; }
+  await ok.click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(500);
+  const after = await periodValues(box);
+  return { before, after, why: after[1] && after[1] !== before[1] ? '' : `끝 값이 바뀌지 않음('${before[1]}' → '${after[1]}')` };
+}
+
+/** 2026-11-18 SCP0111 MSG00344(AS-IS From>To 조회 차단): 기간 범위 달력에서 시작을 끝 다음 달로 옮겨 본다.
+ *  set = 뒤집힌 범위가 칸에 들어감 · okEnabled = 뒤집힌 상태에서 OK 를 누를 수 있었음. 끝나면 원래 값 유지(Cancel) */
+export async function periodReverseTry(nscm: Nscm, box: Locator): Promise<{ before: [string, string]; after: [string, string]; set: boolean; okEnabled: boolean; why: string }> {
+  const page = nscm.page; const before = await periodValues(box);
+  if (!before[0] || !before[1]) return { before, after: before, set: false, okEnabled: false, why: '초기 기간 빈값' };
+  const ym = (s: string) => Number(s.slice(0, 4)) * 12 + Number(s.slice(4, 6)) - 1; const k = ym(before[1]) - ym(before[0]) + 1;
+  await box.locator('[class*="dateBox" i], [aria-label*="calendar" i]').first().click({ timeout: 5_000 }).catch(() => undefined);
+  const popup = page.locator('[class*="_popup_"]').filter({ has: page.locator('[class*="monthPanel" i]') }).first();
+  if (!(await popup.isVisible({ timeout: 5_000 }).catch(() => false))) return { before, after: before, set: false, okEnabled: false, why: '달력이 열리지 않음' };
+  const left = popup.locator('[class*="monthPanel" i]').nth(0); const next = left.locator('[class*="navButton" i]').nth(1);
+  for (let i = 0; i < k && i < 36; i++) { await next.click({ timeout: 3_000 }).catch(() => undefined); await page.waitForTimeout(120); }
+  const days = left.locator('button[class*="_dayCell_"]:not([class*="Muted" i])'); const nd = await days.count().catch(() => 0);
+  if (!nd) { await page.keyboard.press('Escape').catch(() => undefined); return { before, after: before, set: false, okEnabled: false, why: '시작 패널에 고를 날짜 없음' }; }
+  await days.nth(Math.min(5, nd - 1)).click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(200);
+  const ok = popup.getByRole('button', { name: /^OK$/i }).first(); const okEnabled = await ok.isEnabled().catch(() => false);
+  if (okEnabled) { await ok.click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(500); }
+  else { await popup.getByRole('button', { name: /^Cancel$/i }).first().click({ timeout: 3_000 }).catch(() => undefined); await page.waitForTimeout(300); }
+  const after = await periodValues(box);
+  return { before, after, set: !!after[0] && !!after[1] && after[0].slice(0, 6) > after[1].slice(0, 6), okEnabled, why: '' };
 }
 
 /** 조회조건 칸 찾기 + 모드 전환: 기본 모드에서 안 보이는 조건(SCP0100 'Search Mode' 라디오 = Search Level / Detail 전용 칸)은 조회영역 라디오를 바꿔 가며 다시 찾는다(2026-10-29).
@@ -244,7 +297,8 @@ export async function conditionCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan
         if (!val) { items.push({ name, kind: c.kind, verdict: 'WARN', note: `${action} — 팝업 행 선택이 칸에 채워지지 않음(데이터 0건이면 정상)` }); continue; }
       } else if (c.kind === 'period') {
         const ins = c.root.locator('input:not([type="hidden"])'); const nIn = await ins.count().catch(() => 0); let v1 = nIn ? await ins.nth(0).inputValue().catch(() => '') : ''; let v2 = nIn > 1 ? await ins.nth(1).inputValue().catch(() => '') : '';
-        if (!nIn) { const ds = ((await c.root.innerText().catch(() => '')) as string).match(/\d{4}[.\-\/]?\d{2}[.\-\/]?\d{2}/g) || []; v1 = ds[0] || ''; v2 = ds[1] || ''; }  // T110 달력 전용: 표시 글자에서 날짜
+        // T110 달력 전용: 표시 글자에서 날짜 · 2026-11-18 SCP0111 월 단위 달력(monthOnly '2026-10 ~ 2027-03')은 일자 없는 월 표기도 값으로 읽는다(종전 일자만 읽어 '초기 기간 빈값' 허위 FAIL)
+        if (!nIn) { const ds = ((await c.root.innerText().catch(() => '')) as string).match(/\d{4}[.\-\/]?\d{2}(?:[.\-\/]?\d{2})?/g) || []; v1 = ds[0] || ''; v2 = ds[1] || ''; }
         action = `기간 '${v1}' ~ '${v2}'`; changed = false;
         if (!v1 || (nIn > 1 || !nIn) && !v2) { items.push({ name, kind: c.kind, verdict: 'FAIL', note: `${action} — 초기 기간 빈값(DoD B24: As-is Form_Load 초기값)` }); continue; }
       } else {
@@ -628,7 +682,7 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
 /** 화면 안 탭(시트) 클릭 — role=tab → button → 텍스트 순. 전환 못 하면 false(측정 경로 없음 → 호출부가 ERROR) */
 /** 화면별 시트 이동 사실(Doc/verify/<ID>/sheet_nav.json — 2026-11-16 SCP0104) — AS-IS 시트 이름이 TO-BE 탭 이름과 다르거나 조회조건 값·여러 단 탭으로 시트가 정해지는 화면용.
  *  { sheets: { <AS-IS 시트>: { cond?: { 라벨: 값 }, tabs?: [바깥 탭, 안쪽 탭…], popup?: 이름 } } } · 없으면 null(종전 동작) */
-type SheetNav = { cond?: Record<string, string>; tabs?: string[]; popup?: string; base?: string; open?: string; cell?: string };
+type SheetNav = { cond?: Record<string, string>; new_row_cond?: Record<string, string>; tabs?: string[]; popup?: string; base?: string; open?: string; cell?: string };
 const _NAV: Record<string, Record<string, SheetNav> | null> = {};
 /** 시트별 데이터 조건(Doc/verify/<ID>/sheet_data_cond.json — 2026-11-17): 그 시트 조회 SP 를 DB 에서 다시 실행해 행이 나온 Division 목록.
  *  AS-IS·TO-BE 양쪽에 행이 있는 Division(both)을 먼저, 없으면 TO-BE 행 있는 Division(divs). 파일·시트가 없으면 [] */

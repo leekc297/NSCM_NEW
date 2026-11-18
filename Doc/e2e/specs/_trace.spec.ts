@@ -14,15 +14,17 @@ import type { Locator } from '@playwright/test';
 
 import { test } from '../../../tools/E2E/fixtures/test';
 import type { Nscm } from '../../../tools/E2E/lib/nscm';
+import { judgePeriodReverse } from '../../../tools/E2E/lib/shellcheck';
 import { dropdownOptions, parseCsv, probe } from '../../../tools/E2E/lib/probe';
 import { judgeLabel, loadLabelAliases } from '../../../tools/E2E/lib/labelalias';  // TO-BE 라벨 별칭(CR-092 SCP·SSP Valid→Active, 2026-10-30)
-import { clickSheetTab, closeVisibleDialogs, ensureRows, findCondAny as findCond, pickComboOption, tagPopup, waitAlert } from '../../../tools/E2E/lib/smoke-extra';
-import { evalExpr, loadAccountCtx, type CondCtx } from '../../../tools/E2E/lib/condeval';  // 계정 그룹 컨텍스트(D3 GROUP 조건 · 2026-10-30)  // 모드 전환 뒤 숨은 조건까지(2026-10-29)
+import { clickSheetTab, closeVisibleDialogs, ensureRows, findCondAny as findCond, periodReverseTry, periodShiftEnd, pickComboOption, tagPopup, waitAlert } from '../../../tools/E2E/lib/smoke-extra';
+import { useScreenLookups, evalExpr, evalRules, loadAccountCtx, parseRules, type CondCtx } from '../../../tools/E2E/lib/condeval';  // 계정 그룹 컨텍스트(D3 GROUP 조건 · 2026-10-30)  // 모드 전환 뒤 숨은 조건까지(2026-10-29)
 import { staleKids } from '../../../tools/E2E/lib/cellclear';
 import { extraButtons } from '../../../tools/E2E/lib/extrabtn';
 import { combine, loadFormScen, loadResults, runFormScen, saveResult, scenariosOfRow, setVars } from '../../../tools/E2E/lib/formscen';  // 2026-11-16 폼 저장형 화면 시나리오
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
+useScreenLookups(ID);  // 2026-11-18 INLOOKUP 원자(공통 코드 값)
 const ACCT = loadAccountCtx(ID);
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 const DIR = path.join(ROOT, 'Doc', 'verify', ID);
@@ -48,6 +50,20 @@ const has = (...c: string[]) => c.every(x => COLS.has(x));
 // TO-BE SCM_MST_SITE 타입 표본(Doc/verify/<ID>/site_types.json — facts 단계 추출). 엔진 조건 JSON(3000자) 에 넣으면 키가 잘려 들어오지 않아 파일에서 직접 읽는다(2026-10-26)
 const SITE_TYPES: Record<string, string> = (() => { try { const j = JSON.parse(fs.readFileSync(path.join(DIR, 'site_types.json'), 'utf8')) as { sites?: Record<string, { type?: string; valid?: string }> }; const m: Record<string, string> = {}; for (const [k, v] of Object.entries(j.sites || {})) if (v && v.type) m[k] = v.type; return m; } catch { return {}; } })();
 const siteTypeOf = (code: string) => SITE_TYPES[code] || SITE_TYPES[code.split('_')[0]] || SITE_TYPES[code.split(/\s+/)[0]] || '';
+// 2026-11-18 SCP0111 P_SCP0111_GET_ESS_PACK_LINE(T-c2eca54f·T-236699af): AS-IS 가 화면 진입(Form_Load 경로)에서 부르는 SP 인데 TO-BE 진입·조회에서 호출이 없으면 '셀 이벤트·팝업 경로' 가 아니라 배선 누락이다.
+//   근거 = actions_entries.csv(Form_Load 경로 메서드) × actions.csv(그 메서드의 ENDPOINT) × sp_pair.csv(AS-IS SP ↔ TO-BE PROC). 돌려줌: '' = 진입 호출 아님 · 그 밖 = 근거 문구
+const asisEntryCall = (tobeProc: string): string => {
+  try {
+    const sd = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID);
+    const ents = parseCsv(fs.readFileSync(path.join(sd, 'actions_entries.csv'), 'utf8').replace(/^﻿/, '')).filter(e => /^(Form_Load|OnLoad|InitControl|InitForm)$/i.test(e.handler || ''));
+    const meths = new Map(ents.map(e => [e.method, e]));
+    const pairs = parseCsv(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'rules', 'sp_pair.csv'), 'utf8').replace(/^﻿/, '')).filter(z => (z.menu_id || '').toUpperCase() === ID && (z.tobe_proc || '').toUpperCase() === tobeProc.toUpperCase());
+    if (!pairs.length) return '';
+    const acts = parseCsv(fs.readFileSync(path.join(sd, 'actions.csv'), 'utf8').replace(/^﻿/, ''));
+    for (const a of acts) { if (a.kind !== 'ENDPOINT' || !meths.has(a.method)) continue; const ep = String(a.endpoint || '').split('.').pop() || ''; const pr = pairs.find(z => (z.asis_sp || '').toUpperCase() === ep.toUpperCase()); if (pr) { const e = meths.get(a.method)!; return `AS-IS 화면 진입 경로 ${e.path || a.method}(cs:${e.call_line || a.line}) 에서 ${a.endpoint} 호출(cs:${a.line}) ↔ 짝 ${pr.tobe_proc}(${pr.source})`; } }
+  } catch { /* facts 없음 */ }
+  return '';
+};
 const flush = () => {
   if (!ID || !results.length) return;
   const prev: Res[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
@@ -80,7 +96,7 @@ type Cond = { et?: string; name?: string; popup?: boolean; excluded?: string[]; 
   e4?: { meth: string; line: string; msg: string; tobe: string; text: string; args: string; guard: string; vars: Record<string, string> }[];
   m4?: { handler: string; trigger: string; targets: string[]; popup: string; newRow?: boolean }[];
   d3None?: boolean; e4None?: boolean; d5Src?: string; popupSheet?: string; trigger?: string[];
-  siteSamples?: Record<string, string[]>; ctlType?: string; allFlag?: boolean; metaWidth?: Record<string, string>;
+  siteSamples?: Record<string, string[]>; ctlType?: string; allFlag?: boolean; metaWidth?: Record<string, string>; metaWidthBySheet?: Record<string, Record<string, string>>;
   src?: string[]; noAssign?: boolean; clearOnly?: boolean; viaPopup?: boolean; popMap?: Record<string, string>; asisCombo?: boolean; mergeSrc?: string; asisCellSrc?: string; d4?: string[]; d4expr?: string[]; d5?: string; asisCols?: string[]; callProc?: { menu: string; sheet: string; btn: string }[]; truncated?: boolean };
 const condOf = (r: Record<string, string>): Cond => { try { return JSON.parse(r.condition || '{}'); } catch { return {}; } };
 const nrm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
@@ -369,6 +385,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const isSave = /SAVE|INS|UPD|DEL/i.test((c.callProc || []).map(cp => cp.btn).join());
         const wired = (c.callProc || []).map(cp => `${cp.menu}/${cp.sheet}/${cp.btn}`).join(', ');
         // 진입·조회 경로에서 안 불리는 SP(저장·셀 이벤트·팝업 조회)는 실행 경로가 다르다 — 미호출은 FAIL 이 아니라 그 경로의 검사(CRUD·M3·C3)로 넘긴다. PROC_M 배선 자체가 없으면 FAIL
+        const entry = !isSave ? asisEntryCall(c.name || '') : '';
+        if (entry) { put(x.row_id, 'FAIL', `${c.name}: ${wired || '(PROC_M 배선 없음)'} — TO-BE 화면 진입·조회 중 호출 없음 · ${entry} — AS-IS 는 진입 때 불러 쓰는 데이터를 TO-BE 화면이 불러오지 않음(배선 누락)`); continue; }
         put(x.row_id, wired ? (isSave ? 'NA' : '판정필요') : 'FAIL', `${c.name}: ${wired || '(PROC_M 배선 없음 — AS-IS 엔드포인트의 TO-BE 프로시저 배선 확인)'} — 화면 진입·조회 중 호출 없음${isSave ? '(저장 경로 — @verify CRUD 실저장 행에서 판정)' : wired ? '(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정)' : ''}`); continue;
       }
       const bad = hit.filter(q => q.status >= 400);
@@ -457,16 +475,40 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       if (!a5Diff.length) continue;
       put(x.row_id, missing.length || extra.length ? 'FAIL' : 'PASS', `그리드 컬럼 구성(AS-IS Div ${divKey || '40'} 기준 ${a5Diff.length}컬럼 대조): ${missing.length ? `누락(AS-IS 표시인데 TO-BE 미표시) ${missing.length}개 = ${missing.join(', ')}` : '누락 없음'} · ${extra.length ? `추가(AS-IS 숨김인데 TO-BE 표시) ${extra.length}개 = ${extra.join(', ')}` : '추가 없음'}`);
     }
+    // 2026-11-17: 잘린 RULES 조건 → 원천 edit_expect.csv 의 같은 컬럼 조건 중 잘린 앞부분으로 시작하는 전문
+    const EE_FULL = (() => { try { return parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'edit_expect.csv'), 'utf8')); } catch { return [] as Record<string, string>[]; } })();
+    const fullCond = (col: string, cut: string): string => {
+      const head = String(cut || '').replace(/…$/, '');
+      for (const r of EE_FULL.filter(q => (q.column || '').toUpperCase() === String(col || '').toUpperCase()))
+        for (const v of [r.existing_cond, r.new_row_cond]) if (v && v.startsWith(head)) return v;
+      return cut;
+    };
     const editEx = new Map<string, boolean | null>(); const editNew = new Map<string, boolean | null>();
     const judgeD1 = async (x: Record<string, string>, b: string, want: string, cond: string, row: number, where: string, e: boolean | null) => {
       if (e == null) { put(x.row_id, 'NA', `${where} ${b}: 현재 그리드에 없음 — 표시 여부는 A5`); return; }
       if (want === 'Y') put(x.row_id, e ? 'PASS' : 'FAIL', `${where} ${b} 편집=${e} (AS-IS 편집 가능)`);
       else if (want === 'N') put(x.row_id, e ? 'FAIL' : 'PASS', `${where} ${b} 편집=${e} (AS-IS 잠금)`);
+      else if (want === 'COND' && /^RULES:/.test(cond || '') && (parseRules(cond) || parseRules(fullCond(b, cond)))) {
+        cond = parseRules(cond) ? cond : fullCond(b, cond);  // 원장 조건 JSON 의 editExpect 는 400자로 잘린다(mapping_trace 원장 셀 3000자 상한) — 원천 edit_expect.csv 전문으로 복원(SCP0111 BOH_QTY 1,407자)
+        // 2026-11-17 사용자(SCP0111 미검증 250 → 0): edit_expect 'RULES:[{g,lock,ref}]'(facts_lockrules v2) 는 옛 evalCond 가 풀지 못해 D1 11행이
+        //   '행 값으로 계산 불가' 로 남았다 — _verify.spec 와 같은 평가기(condeval.evalRules)로 계정 그룹(GROUP)·사업부(DIV)·행 값(COL)을 넣어 계산
+        const rules = parseRules(cond)!;
+        if (ACCT.unknown && cond.includes('GROUP')) { put(x.row_id, 'ERROR', `[계정 그룹 미확인] ${where} ${b} 편집=${e}: 로그인 계정 그룹을 plan.accounts·accounts.json·user_group_user.csv 에서 찾지 못해 GROUP 조건을 평가할 수 없음`); return; }
+        const item = await probe.rowItem(p, row);
+        const ctx: CondCtx = { group: ACCT.group, admin: ACCT.admin, div: divKey, self: b, col: (n: string) => { if (!item) return null; const k = Object.keys(item).find(q => q.toUpperCase() === n.toUpperCase()); return k ? String(item[k] ?? '') : null; } };
+        const ev = evalRules(rules, ctx);
+        // 2026-11-18 SCP0111 사용자 판정(T-0fed883c 등 '오류 아님'): 편집기는 안 열려도 더블클릭 입력 팝업이 열리는 칸(신규행 Model·Nick Name)은 값을 바꿀 수 있는 칸(CR-072)
+        if (!('error' in ev) && ev.editable && e === false) { const pt = await probe.popupOnDblclick(p, row, b); if (pt) { e = true; where = `${where}(더블클릭 입력 팝업 '${pt}' 열림 — 팝업 입력 칸 CR-072)`; } }
+        if ('error' in ev) put(x.row_id, 'ERROR', `${where} ${b} 편집=${e} — AS-IS 조건부 잠금 평가 불가(${ev.error}) · 계정 그룹 ${ACCT.group.join('/') || '-'} · Div ${divKey || '-'}`);
+        else put(x.row_id, e === ev.editable ? 'PASS' : 'FAIL', `${where} ${b} 편집=${e} · AS-IS ${ev.editable ? '편집 가능' : '잠금'}(${ev.by} · 계정 그룹 ${ACCT.group.join('/') || '-'}${ACCT.admin ? ' admin' : ''} · Div ${divKey || '-'})${e === ev.editable ? '' : ' — 편집 여부 불일치'}`);
+      }
       else if (want === 'COND') { const ev = await evalCond(cond, row); if (ev) put(x.row_id, e === !ev.locked ? 'PASS' : 'FAIL', `${where} ${b} 편집=${e} · AS-IS ${ev.locked ? '잠금' : '편집 가능'}(행 값 ${ev.by})`); else put(x.row_id, '판정필요', `${where} ${b} 편집=${e} — AS-IS 조건부(행 값으로 계산 불가): ${cond.slice(0, 160)}`); }
       else put(x.row_id, '판정필요', `${where} ${b} 편집=${e} — AS-IS 기대 미식별(edit_expect '${want}')`);
     };
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'D1')) {
       const b = c.name || ''; const ee = c.editExpect;
+      // 2026-11-18 SCP0111 T-da57dcda YYYYMM: AS-IS·TO-BE 그리드 메타 어디에도 없는 필드(달력 데이터 테이블 dtCalendar 의 값 등)는 편집 대상 칸이 아니다 — 근거 원문과 함께 NA
+      if (!ee && !Object.keys(c.asisVisible || {}).length && !Object.keys(c.tobeMeta || {}).length && !(await probe.allBindings(p) || []).includes(b)) { put(x.row_id, 'NA', `${b}: AS-IS 그리드 메타·TO-BE 그리드(메타·표시 칸) 어디에도 없는 필드 — 편집 대상 칸 아님 · AS-IS ${(c.raws || []).slice(0, 2).map(s => String(s).slice(0, 90)).join(' | ')}`); continue; }
       if (!ee) { put(x.row_id, '판정필요', `${b} AS-IS 편집 기대(edit_expect) 없음`); continue; }
       if (!ex) { put(x.row_id, 'ERROR', `조회 결과 0행 — 기존행 프로브 불가`); continue; }
       const e = await probe.editable(p, ex.row, b); editEx.set(b, e);
@@ -535,6 +577,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const cls = await probe.cellClasses(p, ref.row, b); if (cls == null) continue;
         const e = mp.has(b) ? mp.get(b) : await probe.editable(p, ref.row, b); if (e == null) continue;
         probed++; const yellow = /wj-cell-editable/.test(cls); const gray = /wj-cell-non-editable/.test(cls);
+        // 2026-11-18 SCP0111 사용자 판정(V-03e0d108 등 'TO-BE RULE'): 편집기는 안 열려도 더블클릭 입력 팝업이 열리는 칸은 편집 가능 칸 — 노랑 정상(CR-072)
+        if (!e && yellow) { const pt = await probe.popupOnDblclick(p, ref.row, b); if (pt) { ev.push(`${nm} 더블클릭 입력 팝업 '${pt}' 열림 → 편집 가능 칸 노랑 일치(CR-072)`); continue; } }
         if (e && !yellow) { fail = true; ev.push(`${nm} 편집 가능인데 노랑 아님`); } else if (!e && yellow) { fail = true; ev.push(`${nm} 편집 불가인데 노랑`); } else if (!e && gray) { human = true; ev.push(`${nm} 잠금 회색(특수 경우만 허용)`); } else ev.push(`${nm} 편집=${e} 표시 일치`);
       }
       if (!probed) { put(x.row_id, 'NA', `${b} 현재 그리드에 없음`); continue; }
@@ -544,7 +588,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     if (!cRow) { for (const { x } of cols.filter(t => ['C3', 'C2', 'C6'].includes(t.x.rule_id))) put(x.row_id, 'ERROR', '조회 결과 0행 — 연쇄 측정 불가'); return; }
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'C3')) {
       const tgt = c.name || ''; const srcs = (c.src || []).filter(s => s !== tgt);
-      if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일) — 연쇄 채움 대상 아님(D1/D3/H2 에서 판정)`); continue; }
+      if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일·후보 설정·읽기) — 연쇄 채움 대상 아님(D1/D3/H2·C2 에서 판정)${(c.raws || []).length ? ` · AS-IS ${(c.raws || []).slice(0, 3).map(s => s.slice(0, 90)).join(' | ')}` : ''}`); continue; }
       if (c.viaPopup) { put(x.row_id, '판정필요', `${tgt}: 원천 ${srcs.join('/')} 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)`); continue; }
       if (!srcs.length) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 컬럼 해석 불가 — AS-IS ${(c.raws || [])[0] || ''}`); continue; }
       const tried: string[] = []; let ok = false; let blocked = ''; let clearFail = false;
@@ -566,6 +610,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // C2 — 원천 값에 따라 대상 콤보 후보가 달라진다
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'C2')) {
       const tgt = c.name || ''; const src = (c.src || []).find(s => s !== tgt) || '';
+      // 2026-11-17 SCP0111: AS-IS 가 이 컬럼의 후보·값을 쓰는 문장이 없으면(읽기만) 후보 재구성 대상 아님(mapping_trace noAssign · 근거 원문 raws)
+      if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 이 컬럼을 읽기만 함(후보·값을 쓰는 문장 없음) — 후보 재구성 대상 아님 · AS-IS ${(c.raws || [])[0]?.slice(0, 120) || ''}`); continue; }
       if (!src) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 해석 불가 — AS-IS ${(c.raws || [])[0] || ''}`); continue; }
       if (!(await probe.editable(p, cRow.row, src))) { put(x.row_id, '판정필요', `원천 ${src} ${crNm} 편집 불가`); continue; }
       if ((await probe.candidates(p, cRow.row, tgt)) == null) { put(x.row_id, '판정필요', `${tgt} 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)`); continue; }
@@ -577,6 +623,30 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         if (!(await probe.setByEditor(p, cRow.row, src, v))) continue; await p.waitForTimeout(500);
         const tc = (await probe.candidates(p, cRow.row, tgt)) || []; sigs.set(v, `${tc.length}:${[...tc].sort().join('|')}`); ev.push(`${src}='${v}' → ${tgt} 후보 ${tc.length}건`);
       }
+      // 2026-11-18 SCP0111 LINE_ID(원천 = 같은 메서드에서 읽은 행 값 PLANT_ID·OPERATION_GROUP·COMPANY_ID · AS-IS spdMain_CellClick cs:1737~1790 신규행만):
+      //   신규행 원천 칸을 바꿀 수 없으면(앵커 행 복사) 원천 값 조합이 다른 기존 행을 골라 각각 Insert → 새 신규행의 대상 후보를 비교한다(저장 안 함)
+      if (sigs.size < 2 && hasInsert && (c.src || []).length) {
+        const ks = (c.src || []).filter(s => s !== tgt);
+        const anchors = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const ks = ${JSON.stringify(ks)}; const seen = new Set(); const o = []; for (let r = 0; r < c.rows.length && o.length < 3; r++) { const d = c.rows[r].dataItem; if (!d || d.CRUD_TYPE === 'I') continue; if (!ks.every(k => String(d[k] ?? '').trim())) continue; const sig = ks.map(k => String(d[k] ?? '')).join('|'); if (seen.has(sig)) continue; seen.add(sig); o.push({ r, sig }); } return o; })()`).catch(() => []) as { r: number; sig: string }[];
+        // 신규행은 위치가 아니라 표식으로 가린다 — Insert 가 앵커 아래에 넣으면 앞서 만든 신규행 인덱스가 밀린다(2026-11-18 세 번째 앵커가 앞 신규행을 잡음)
+        const markNew = () => p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (c) for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I') d.__e2eSeen = 1; } })()`).catch(() => undefined);
+        const freshNew = () => p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (c) for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I' && !d.__e2eSeen) return r; } return -1; })()`).catch(() => -1) as Promise<number>;
+        for (const a of anchors) {
+          await markNew();
+          // 앵커 행 r 이 앞 Insert 로 밀렸을 수 있다 — 같은 원천 값 조합의 기존 행을 다시 찾는다
+          const r1 = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const ks = ${JSON.stringify(ks)}; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE !== 'I' && ks.map(k => String(d[k] ?? '')).join('|') === ${JSON.stringify(a.sig)}) { const CR = c.selection.constructor; c.focus(); c.scrollIntoView(r, 0); c.select(new CR(r, 0, r, 0)); return r; } } return -1; })()`).catch(() => -1) as number;
+          if (r1 < 0) continue;
+          await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(1_200); await nscm.clearDialogs();
+          const nw0 = await freshNew(); const nw = nw0 >= 0 ? nw0 : null;
+          if (nw == null) { ev.push(`앵커 r${r1}(${a.sig}) Insert → 신규행 없음`); continue; }
+          // 관리자 Insert 는 빈 신규행(AS-IS cs:967~976 · TO-BE V1) — 원천 칸이 비어 있으면 앵커 값을 사용자처럼 입력한다
+          const av = a.sig.split('|'); const typed: string[] = [];
+          for (let k = 0; k < ks.length; k++) { const now = (await probe.value(p, nw, ks[k])) ?? ''; if (String(now).trim() || !av[k]) continue; if (await probe.setByEditor(p, nw, ks[k], av[k]).catch(() => false)) { typed.push(`${ks[k]}='${av[k]}'`); await p.waitForTimeout(300); } }
+          const nowSig = (await Promise.all(ks.map(async k => String((await probe.value(p, nw, k)) ?? '')))).join('|');
+          const tc = (await probe.candidates(p, nw, tgt)) || []; sigs.set(`앵커:${nowSig}`, `${tc.length}:${[...tc].sort().join('|')}`);
+          ev.push(`앵커 r${r1} ${ks.join('·')}='${a.sig}' → Insert r${nw}${typed.length ? `(입력 ${typed.join(', ')})` : ''} 신규행 원천 '${nowSig}' · ${tgt} 후보 ${tc.length}건(${tc.slice(0, 4).join(',')})`);
+        }
+      }
       if (sigs.size < 2) { put(x.row_id, '판정필요', `원천 값 2개 이상 입력 불가(후보 ${cands.length}) — ${ev.join(' · ')}`); continue; }
       const distinct = new Set(sigs.values()).size >= 2;
       put(x.row_id, distinct ? 'PASS' : '판정필요', `${ev.join(' · ')}${distinct ? '' : ' — 원천 값과 무관하게 후보 동일(AS-IS 분기 조건 확인 필요)'}`);
@@ -584,6 +654,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // C6 — 원천 더블클릭+Esc(값 변경 없음) → 대상 유지
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'C6')) {
       const tgt = c.name || ''; const src = (c.src || []).find(s => s !== tgt) || '';
+      if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 이 컬럼을 읽기만 함(연쇄로 값을 쓰는 문장 없음) — 무변경 종료 연쇄 검사 대상 아님 · AS-IS ${(c.raws || [])[0]?.slice(0, 120) || ''}`); continue; }
       if (!src) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 해석 불가`); continue; }
       if (!(await probe.editable(p, cRow.row, src))) { put(x.row_id, '판정필요', `원천 ${src} ${crNm} 편집 불가`); continue; }
       if (!((await probe.value(p, cRow.row, src)) ?? '')) { const cc = (await probe.candidates(p, cRow.row, src)) || []; const v = cc.find(t => t.trim()); if (v) { await probe.setByEditor(p, cRow.row, src, v); await p.waitForTimeout(600); } }
@@ -959,7 +1030,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const params = paramsOf(myCall?.body || '');
       const paramVal = (asisParam: string) => { const k = asisParam.replace(/^@?p_/i, '').replace(/_/g, '').toLowerCase(); const hit = Object.keys(params).find(q => q.replace(/_/g, '').toLowerCase() === k); return hit ? String(params[hit] ?? '') : undefined; };
       const called = !!myCall && n0 > 0;
-      if (!called) { put(x.row_id, '판정필요', `${c.name}: 화면 진입·조회 경로에서 이 SP 가 결과를 반환하지 않음(팝업·셀 이벤트 SP) — 해당 시나리오에서 실측`); continue; }
+      if (!called) { const entry = asisEntryCall(c.name || ''); put(x.row_id, entry ? 'FAIL' : '판정필요', entry ? `${c.name}: TO-BE 화면 진입·조회에서 호출 없음 · ${entry} — 결과 정렬을 잴 호출 자체가 없음(배선 누락)` : `${c.name}: 화면 진입·조회 경로에서 이 SP 가 결과를 반환하지 않음(팝업·셀 이벤트 SP) — 해당 시나리오에서 실측`); continue; }
       if (c.sortNone) { put(x.row_id, 'NA', `${c.name}: AS-IS ORDER BY 없음 — 결과 순서 미정(실측 비교 대상 아님, TO-BE 임의 정렬 여부는 정적 대조)`); continue; }
       // 유효 분기 — 가드 "ISNULL(@p_x,'')='R'" 의 파라미터 값과 조회 요청 값 비교. 가드 없는 규칙 1개면 그대로
       let rule = (c.sort || []).find(s => !s.guard) || null; let why = '';
@@ -1363,6 +1434,30 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       seenLab.add(key);
       await openReady(nscm); await nscm.expandSearchArea(true);
       const box = await fc([...g.labels, ...LABEL_ALIASES.filter(a => g.labels.some(l => nrm(l) === nrm(a.asis_label))).map(a => a.tobe_label)], `w4c_g1_${key}`);  // CR-092 AS-IS 'Valid' = TO-BE 'Active'(2026-11-01 SCP0028 허위 '칸 없음')
+      // 2026-11-18 SCP0111 Period: 기간 범위 칸 = 끝 값을 한 달 당겨 조회 → 조회 요청 본문에 새 끝 값 · 결과 월 컬럼(YYYYMM)이 새 범위 안이고 새 끝 월에서 끝나는지
+      if (box && box.kind === 'period') {
+        const sh = await periodShiftEnd(nscm, box.root);
+        if (sh.why) { put(g.rid, 'ERROR', `[측정 실패] 기간 '${g.labels[0]}' 끝 값 변경: ${sh.why}`); if (g.g2) put(g.g2, 'NA', `기간 범위 칸(단일 범위) — ALL·다중 선택 사양 없음`); continue; }
+        const c0 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+        const body = nscm.calls.slice(c0).filter(c => /SEARCH/i.test(c.btn)).map(c => c.body || '').join('\n');
+        const f6 = sh.after[0].slice(0, 6), t6 = sh.after[1].slice(0, 6);
+        const months = [...new Set(((await probe.allBindings(p)) || []).map(b => (/(?:^|[^0-9])((?:19|20)\d{2}(?:0[1-9]|1[0-2]))$/.exec(b) || [])[1]).filter(Boolean) as string[])].sort();
+        const sent = body.includes(t6); const out = months.filter(m => m < f6 || m > t6);
+        const res: 'PASS' | 'FAIL' | 'ERROR' = !body ? 'ERROR' : !sent ? 'FAIL' : !months.length ? 'ERROR' : out.length || months[months.length - 1] !== t6 ? 'FAIL' : 'PASS';
+        put(g.rid, res, `${res === 'ERROR' ? '[측정 경로 없음] ' : ''}기간 '${g.labels[0]}' 끝 값 ${sh.before[1].slice(0, 6)} → ${t6}(달력 조작) 후 조회 · 요청 본문에 ${t6} ${sent ? '있음' : '없음'}${body ? '' : '(조회 요청 없음)'} · 결과 월 컬럼 ${months.length}개 ${months[0] || '-'}~${months[months.length - 1] || '-'}${out.length ? ` · 범위 밖 ${out.slice(0, 4).join(', ')}` : ''}`);
+        if (g.g2) put(g.g2, 'NA', `기간 범위 칸(시작·끝 단일 범위) — ALL·다중 선택 사양 없음`);
+        // AS-IS 기간 역전 차단(예 MSG00344 · DateTime.Compare(dtFrom, dtTo) > 0) 행: 달력에서 시작을 끝 다음 달로 옮겨 본다 — 뒤집힌 범위가 안 들어가고(대조군 = 위 끝 값 변경 성공) 조회 요청도 없으면 PASS
+        const revRows = all.filter(r => r.source === 'ASIS' && r.rule_id === 'G1' && /DateTime\.Compare\s*\(\s*\w*(from|start|fr)\w*\s*,\s*\w*(to|end)\w*\s*\)\s*>\s*0|\b\w*(from|start)\w*\s*>\s*\w*(to|end)\w*\b/i.test(r.condition || ''));
+        if (revRows.length) {
+          const rv = await periodReverseTry(nscm, box.root); let t = { msg: '', sent: false };
+          if (rv.set) { const c1 = nscm.calls.length; await nscm.search().catch(() => undefined); await p.waitForTimeout(1_500); const dlg = p.locator('[role="dialog"], [role="alertdialog"]').first(); t = { msg: ((await dlg.innerText({ timeout: 800 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim(), sent: nscm.calls.slice(c1).some(c => /SEARCH/i.test(c.btn)) }; await nscm.clearDialogs().catch(() => undefined); }
+          const j = rv.why ? { result: 'ERROR' as const, why: `[측정 실패] ${rv.why}` } : judgePeriodReverse({ hasRange: true, set: rv.set, from: rv.after[0] || rv.before[0], to: rv.after[1] || rv.before[1], sent: t.sent, msg: t.msg, asisGuard: true, ctrlOk: true });
+          for (const r of revRows) put(r.row_id, j.result as 'PASS' | 'FAIL' | 'ERROR' | 'NA', `${j.why} · 달력에서 시작을 끝 다음 달로 이동 → OK ${rv.okEnabled ? '누름 가능' : '비활성(끝 날짜 지워짐)'} · 대조군: 끝 값 ${sh.before[1].slice(0, 6)} → ${t6} 변경 성공 · AS-IS ${r.asis_ref}`);
+        }
+        continue;
+      }
+      // 2026-11-18 SCP0111 Model/Nickname·Cell Model: 텍스트·팝업 칸의 G1 은 _verify '조회조건 텍스트 — G8·G9' 가 값 입력 조회로 실측한다(EG255) — 여기서 NA 로 덮으면 실측이 지워진다
+      if (box && ['text', 'popup'].includes(box.kind) && all.some(q => q.source === 'SEARCH' && ['G8', 'G9'].includes(q.rule_id) && q.target.replace(/^조회조건\s*/, '').trim() === g.labels[0])) continue;
       if (!box || box.kind !== 'combo') { put(g.rid, box ? 'NA' : 'ERROR', box ? `${g.labels[0]} 콤보 아님(${box.kind}) — 멀티선택 검사 대상 아님` : `[측정 경로 없음] 조회조건 ${g.labels[0]} 칸을 찾지 못함(라벨·구조 — 존재 여부는 smoke 조회조건 검사에서 판정 · 2026-11-06 T106)`); continue; }
       { const pre = await precond(nscm, { control: g.labels[0], idle: false }); if (!pre.ok && /비활성/.test(pre.why)) { put(g.rid, 'ERROR', `${pre.why} — AS-IS 도 이 Division 에서 비활성인지(Electrode EE 전용 등)는 사람 확인`); if (g.g2) put(g.g2, 'NA', `${g.labels[0]} 비활성 칸 — ALL/다중 사양 측정 불가`); continue; } }
       await searchAndRows(nscm); await nscm.expandSearchArea(true);
@@ -1501,7 +1596,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // 2026-10-30 v13: AS-IS 잠금 문장의 정규형 조건(facts_lockrules v2 → lock_rules.csv cond: GROUP/DIV/COL(SELF)/COL(X)) 이 있으면 그것으로 행 값 평가 — evalGuard2(패턴 나열)가 못 푼 14행(qty==Empty·division_id·measureFlag) ERROR 해소
     const lockRules = ID ? parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'lock_rules.csv'), 'utf8')) : [];
     const dynRe = (() => { try { return parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'dyn_columns.csv'), 'utf8')).map(d => ({ fam: d.family_id, re: d.binding_regex })); } catch { return [] as { fam: string; re: string }[]; } })();
-    const condOfLine = (where: string) => { const ln = (/\.cs:(\d+)/.exec(where) || [])[1]; const lr = ln ? lockRules.find(l => l.line === ln && (l.cond || '').trim()) : undefined; return lr ? { cond: lr.cond, columns: lr.columns || '' } : null; };
+    const condOfLine = (where: string) => { const ln = (/\.cs:(\d+)/.exec(where) || [])[1]; const lr = ln ? lockRules.find(l => l.line === ln && (l.cond || '').trim()) : undefined; return lr ? { cond: lr.cond, columns: lr.columns || '', locked: lr.locked || '', lockExpr: lr.lock_expr || '' } : null; };
     const resolveSelf = async (col: string, columns: string): Promise<string> => { const fam = /<DYNAMIC:[^>]+>/.exec(columns + ' ' + col); if (!fam) return col; const d = dynRe.find(z => z.fam === fam[0]); const bs = d ? await probe.dynColumns(p, d.re) : []; if (bs[0]) await probe.unfreezeIfNeeded(p, bs[0]).catch(() => null); return bs[0] || col; };
     const evalCondRow = async (cond: string, row: number, self: string): Promise<{ hold: boolean | null; by: string[]; cannot: string[] }> => {
       const item = await probe.rowItem(p, row); if (!item) return { hold: null, by: [], cannot: ['행 데이터 없음'] };
@@ -1509,14 +1604,15 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const ctx: CondCtx = { group: ACCT.group, admin: ACCT.admin, div: divSearched, self, col: (n: string) => (n in item ? String(item[n] ?? '') : null) };
       try { const h = evalExpr(cond, ctx); return { hold: h, by: [`${cond.slice(0, 80)} (계정 ${ACCT.group.join('/') || '-'} · Div '${divSearched}' · ${self})`], cannot: [] }; } catch (e) { return { hold: null, by: [], cannot: [`${cond.slice(0, 50)}: ${String((e as Error).message || e).slice(0, 60)}`] }; }
     };
-    const d3Items: { rid: string; col: string; locked: boolean; guard: string; where: string; cond?: string; columns?: string }[] = [];
-    for (const { x, c } of trc('D3').filter(t => (t.c.et === 'COL' || t.c.et === 'LEDGER') && t.c.d3 && t.c.d3.length)) for (const d of c.d3 || []) d3Items.push({ rid: x.row_id, col: (c.name || '').split(',')[0], locked: d.locked === 'Y', guard: d.guard, where: `${d.meth}:${d.line}` });
+    // 2026-11-18 SCP0111 T-767918b6 BOH_QTY: TRACE 행도 같은 줄 잠금 규칙의 정규형 조건(cond)·잠금식(lock_expr — '!isEdit' = 권한 그룹 조건)을 쓴다 — 종전엔 옛 패턴 해석기(evalGuard2)가 measureFlag 를 못 풀어 '조건 계산 불가'
+    const d3Items: { rid: string; col: string; locked: boolean; guard: string; where: string; cond?: string; columns?: string; lockExpr?: string }[] = [];
+    for (const { x, c } of trc('D3').filter(t => (t.c.et === 'COL' || t.c.et === 'LEDGER') && t.c.d3 && t.c.d3.length)) for (const d of c.d3 || []) { const lr = lockRules.find(l => l.line === String(d.line) && (l.cond || '').trim()); d3Items.push({ rid: x.row_id, col: (c.name || '').split(',')[0], locked: lr && lr.locked !== 'EXPR' ? lr.locked === 'Y' : d.locked === 'Y', guard: d.guard, where: `${d.meth}:${d.line}`, cond: lr?.cond, columns: lr?.columns, lockExpr: lr && lr.locked === 'EXPR' ? lr.lock_expr : '' }); }
     // 다중 시트 화면 — 잠금 규칙이 해석된 시트(edit_expect.sheet)가 활성 탭(첫 mainSheets)이 아니면 이 그리드에서 잴 수 없다(2026-10-31 SCP0041) → ERROR 로 분류
     const eeSheet = (() => { try { return (parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'edit_expect.csv'), 'utf8'))[0] || {}).sheet || ''; } catch { return ''; } })();
     const planSheets = (() => { try { return ((JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')).mainSheets || []) as { name: string }[]).map(s => s.name); } catch { return [] as string[]; } })();
     const nrmS = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
     const d3OffSheet = planSheets.length > 1 && eeSheet && nrmS(eeSheet) !== nrmS(planSheets[0]);
-    for (const x of all.filter(r => r.source === 'ASIS' && r.rule_id === 'D3')) { const where = x.asis_ref.split(' ').pop() || ''; const lc = condOfLine(x.asis_ref); const col0 = x.target.split(',')[0]; const colName = /^[A-Z][A-Z0-9_]+$/.test(col0) ? col0 : ((lc?.columns || '').split(';')[0] || col0); d3Items.push({ rid: x.row_id, col: colName, locked: !/false\)\s*$/.test(x.expected.trim()), guard: x.condition, where, cond: lc?.cond, columns: lc?.columns }); }
+    for (const x of all.filter(r => r.source === 'ASIS' && r.rule_id === 'D3')) { const where = x.asis_ref.split(' ').pop() || ''; const lc = condOfLine(x.asis_ref); const col0 = x.target.split(',')[0]; const colName = /^[A-Z][A-Z0-9_]+$/.test(col0) ? col0 : ((lc?.columns || '').split(';')[0] || col0); d3Items.push({ rid: x.row_id, col: colName, locked: lc && lc.locked && lc.locked !== 'EXPR' ? lc.locked === 'Y' : !/false\)\s*$/.test(x.expected.trim()), guard: x.condition, where, cond: lc?.cond, columns: lc?.columns, lockExpr: lc && lc.locked === 'EXPR' ? lc.lockExpr : '' }); }
     const byRid = new Map<string, typeof d3Items>(); for (const it of d3Items) byRid.set(it.rid, [...(byRid.get(it.rid) || []), it]);
     // 잠금 규칙 시트가 첫 탭이 아니면 그 탭으로 옮겨 잰다(2026-10-31 SCP0041) — 전환 실패는 ERROR, 측정 뒤 첫 탭 복귀
     let d3Rows = nAll; let d3Ex: unknown = ex; let d3Tab = '';
@@ -1524,6 +1620,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const [rid, items] of byRid) {
       if (!d3Ex) { put(rid, 'ERROR', `조회 결과 0행${d3Tab ? `(탭 ${d3Tab})` : ''} — 행 조건부 잠금 측정 불가(데이터 없음 · 검사기 미검증)`); continue; }
       const ev: string[] = []; let fail = false; let judged = 0; const cannot = new Set<string>();
+      // 현재 계정·Division 으로는 조건이 성립할 수 없는 행(GROUP·DIV 절이 거짓)은 여기서 판정하지 않는다 — 'D3 조건부 잠금(조건 만족 계정·Division)' 시험이 그 조합으로 잰다
+      const unsat = (it: { cond?: string }) => { if (!it.cond) return false; try { return evalExpr(it.cond, { group: ACCT.group, admin: ACCT.admin, div: divSearched, self: '', col: () => null }) === false; } catch { return false; } };
+      if (items.every(unsat)) continue;
       for (const it of items) {
         let hit = 0;
         const selfB = it.cond ? await resolveSelf(it.col, it.columns || '') : it.col; if (it.cond && /<DYNAMIC:/.test(it.col)) it.col = selfB;
@@ -1531,10 +1630,12 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           const g = it.cond ? await evalCondRow(it.cond, row, selfB) : await evalGuard2(it.guard, row);
           if (g.hold === null) { g.cannot.forEach(s => cannot.add(s)); if (g.cannot.some(s => /타입 미확인/.test(s))) continue; break; }
           if (!g.hold) continue;
+          let lockedNow = it.locked;
+          if (it.lockExpr) { const le = await evalCondRow(it.lockExpr, row, selfB); if (le.hold === null) { le.cannot.forEach(s => cannot.add(s)); continue; } lockedNow = le.hold; }
           hit++; judged++; const e = await probe.editable(p, row, it.col);
           if (e == null) { ev.push(`r${row} ${it.col} 그리드에 없음`); continue; }
-          const ok = e === !it.locked; if (!ok) fail = true;
-          ev.push(`r${row} ${g.by.join(' & ')} → ${it.col} 편집=${e} (AS-IS ${it.locked ? '잠금' : '해제'} ${it.where}) ${ok ? 'OK' : 'NG'}`);
+          const ok = e === !lockedNow; if (!ok) fail = true;
+          ev.push(`r${row} ${g.by.join(' & ')} → ${it.col} 편집=${e} (AS-IS ${lockedNow ? '잠금' : '해제'}${it.lockExpr ? `(잠금식 ${it.lockExpr.slice(0, 60)})` : ''} ${it.where}) ${ok ? 'OK' : 'NG'}`);
         }
       }
       if (fail) put(rid, 'FAIL', ev.join(' · ').slice(0, 900));
@@ -1648,10 +1749,14 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     {
       const meta = trc('H4').find(t => t.c.metaWidth)?.c.metaWidth || trc('H9').find(t => t.c.metaWidth)?.c.metaWidth || {};
       const widthsNow = (await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return {}; const o = {}; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.binding && x.visible !== false) o[String(x.binding)] = Number(x.width || x.renderWidth || 0); } return o; })()`).catch(() => ({}))) as Record<string, number>;
-      const pairs = Object.entries(meta).filter(([k, v]) => widthsNow[k] && Number(v) > 0).map(([k, v]) => ({ k, m: Number(v), t: widthsNow[k] }));
+      // 2026-11-17(SSP0020 V-7c0fa6e6 허위 이탈): 시트가 여럿인 화면은 보이는 그리드의 컬럼 구성과 가장 많이 겹치는 시트의 메타 폭으로 대조한다(한 사전에 합치면 같은 컬럼명이 다른 시트 폭으로 덮인다)
+      const bySheet = (trc('H4').find(t => t.c.metaWidthBySheet)?.c.metaWidthBySheet || trc('H9').find(t => t.c.metaWidthBySheet)?.c.metaWidthBySheet || {}) as Record<string, Record<string, string>>;
+      let metaUse: Record<string, string> = meta as Record<string, string>; let sheetUse = '';
+      { const vis = Object.keys(widthsNow); let best = -1; for (const [sh, mw] of Object.entries(bySheet)) { const ks = Object.keys(mw); const inter = ks.filter(k => vis.includes(k)).length; const score = inter / Math.max(1, new Set([...ks, ...vis]).size); if (inter && score > best) { best = score; metaUse = mw; sheetUse = sh; } } }
+      const pairs = Object.entries(metaUse).filter(([k, v]) => widthsNow[k] && Number(v) > 0).map(([k, v]) => ({ k, m: Number(v), t: widthsNow[k] }));
       const off = pairs.filter(q => Math.abs(q.t - q.m) > Math.max(8, q.m * 0.25));
       // 2026-11-10 T188(SCP0108 5번 · 사용자 판정): 컬럼 폭이 기준과 다를 때는 결함 확정(FAIL)이 아니라 판정필요 — 사람이 폭 차이를 보고 정한다(전 화면 같은 규칙)
-      for (const x of all.filter(r => r.rule_id === 'H9')) put(x.row_id, pairs.length ? (off.length ? '판정필요' : 'PASS') : 'NA', pairs.length ? `컬럼 폭 ${pairs.length}개 메타 대조 — 25% 초과 이탈 ${off.length}: ${off.slice(0, 8).map(q => `${q.k} 메타 ${q.m}→실측 ${q.t}`).join(', ') || '없음'}${off.length ? ' — 폭 차이는 판정필요(사용자 판정 2026-11-10 SCP0108 5번)' : ''}` : '메타 COLUMN_WIDTH 없음');
+      for (const x of all.filter(r => r.rule_id === 'H9')) put(x.row_id, pairs.length ? (off.length ? '판정필요' : 'PASS') : 'NA', pairs.length ? `컬럼 폭 ${pairs.length}개 메타 대조${sheetUse ? `(시트 ${sheetUse})` : ''} — 25% 초과 이탈 ${off.length}: ${off.slice(0, 8).map(q => `${q.k} 메타 ${q.m}→실측 ${q.t}`).join(', ') || '없음'}${off.length ? ' — 폭 차이는 판정필요(사용자 판정 2026-11-10 SCP0108 5번)' : ''}` : '메타 COLUMN_WIDTH 없음');
       for (const x of all.filter(r => r.rule_id === 'H4' && r.result !== 'PASS')) { const hscroll = await p.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 2).catch(() => false); put(x.row_id, hscroll ? 'FAIL' : 'PASS', `페이지 가로 스크롤 ${hscroll ? '있음' : '없음'} · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)`); }
     }
     // ── E4 — catch 예외 메시지(동적) = NA · SetRoute(팝업 선택 경로) = 팝업 시나리오에서
@@ -1889,6 +1994,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const d1Rows = [...byRule('COLUMN', 'D1', /INCOTERMS/), ...trc('D1').filter(t => /INCOTERMS/.test(t.c.name || '')).map(t => t.x)];
         for (const x of d1Rows) {
           const col = /INCOTERMS_SSP/.test(x.target) ? 'INCOTERMS_SSP' : 'INCOTERMS'; const isNew = !/기존행/.test(x.evidence + x.expected);
+          // 2026-11-18 SCP0111 V-48843285·V-9cbd9cd8·T-4297bda0: To Site PLANT/비PLANT 분기는 SCP0007 계열 규칙 — 이 화면 AS-IS 편집 기대(edit_expect · facts_lockrules)에
+          //   이 칸 규칙이 있고 TO_SITE_CODE 칸이 없으면 W5 D1(RULES 계산)이 판정한다 — 여기서 T300 ERROR 로 덮지 않는다
+          if (!toCands.length && (() => { try { return parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'edit_expect.csv'), 'utf8').replace(/^﻿/, '')).some(z => (z.column || '').toUpperCase() === col && !/TO_SITE_CODE/.test(`${z.new_row_cond} ${z.existing_cond}`)); } catch { return false; } })()) continue;
           if (!a || !b2) { put(x.row_id, 'ERROR', `[전제 미충족 T300] To Site 후보에서 PLANT('${plant}')/비PLANT('${sales}') 입력 실패 — 조건부 잠금 재현 불가(후보 ${toCands.length})`); continue; }
           if (isNew) {
             // AS-IS: PLANT 면 INCOTERMS 잠금·INCOTERMS_SSP 해제 / 아니면 INCOTERMS 해제·INCOTERMS_SSP 잠금
@@ -2294,6 +2402,167 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         }
         await nscm.clearDialogs();
       }
+    }
+  });
+  // 2026-11-18 SCP0111 H2 SetBGColor2 미검증(V-48220ccc·V-51c1bd06): AS-IS 조건부 배경색 문장(color_rules.csv — facts_lockrules 가 잠금과 같은 가드 정규형으로 전개)을
+  //   행 값·계정 그룹·Division 으로 계산(condeval · EXISTS = 조회 결과 전체 행 존재 검사)해, 조건을 만족하는 행의 값 있는 기간 칸이 편집 표시(CR-016 표준 노랑 wj-cell-editable 또는 AS-IS 색)인지 잰다.
+  //   조건에 GROUP·DIV 가 있으면 plan.accounts 계정 × 조건 리터럴 Division 중 조건을 만족할 수 있는 첫 조합으로 로그인·조회(현재 계정 우선). 만족 행 0 = ERROR(측정 경로 없음)
+  test('H2 조건부 배경색 = AS-IS 행 조건(color_rules)', async ({ nscm }) => {
+    const ledger = ID ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
+    const h2 = ledger.filter(r => r.source === 'ASIS' && r.rule_id === 'H2' && /SetBGColor|SetBackColor|SetCellColor/.test(`${r.target} ${r.expected}`));
+    const crp = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'color_rules.csv');
+    if (!h2.length || !fs.existsSync(crp)) return;
+    test.setTimeout(900_000);
+    const p = nscm.page;
+    const crs = parseCsv(fs.readFileSync(crp, 'utf8').replace(/^﻿/, ''));
+    type PlanAcc = { id: string; divisions?: string[] };
+    const plan = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')) as { accounts?: PlanAcc[] }; } catch { return {} as { accounts?: PlanAcc[] }; } })();
+    const accs = [...new Set([ACCT.account, ...(plan.accounts || []).map(a => String(a.id || '').toLowerCase())].filter(Boolean))];
+    const dynRe = (() => { const dp = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'dyn_columns.csv'); const gs = fs.existsSync(dp) ? parseCsv(fs.readFileSync(dp, 'utf8')).map(x => x.binding_regex).filter(Boolean) : []; return gs.length ? gs.map(g => `(${g})`).join('|') : '^[WMDY]?_?\\d{6,8}$'; })();
+    let cur = ACCT.account; let curDiv = '';
+    try {
+      for (const x of h2) {
+        const ln = (/\.cs:(\d+)/.exec(x.asis_ref || '') || [])[1] || '';
+        const cr = crs.find(c => c.line === ln && (x.asis_ref || '').includes(c.method || '§'));
+        if (!cr) { put(x.row_id, 'ERROR', `[측정 경로 없음] color_rules.csv 에 이 문장(cs:${ln}) 규칙 없음 — facts_lockrules 재실행 필요`); continue; }
+        const cond = cr.cond || 'TRUE';
+        const divs = [...new Set([...[...cond.matchAll(/DIV\s*[!=]=\s*"(\w+)"/g)].map(m => m[1]), ...(plan.accounts || []).flatMap(a => a.divisions || [])])];
+        let pick: { acc: string; div: string } | null = null;
+        for (const acc of accs) {
+          const ac = loadAccountCtx(ID, acc); if (ac.unknown && cond.includes('GROUP')) continue;
+          for (const dv of divs.length ? divs : ['']) {
+            let sat = true; try { sat = evalExpr(cond, { group: ac.group, admin: ac.admin, div: dv, self: '', col: () => null }); } catch { sat = true; }
+            if (sat) { pick = { acc, div: dv }; break; }
+          }
+          if (pick) break;
+        }
+        if (!pick) { put(x.row_id, 'ERROR', `[측정 경로 없음] 조건 ${cond.slice(0, 160)} 을 만족하는 계정·Division 조합 없음(계정 ${accs.join('/')} · Division 후보 ${divs.join('/') || '-'})`); continue; }
+        if (pick.acc !== cur) { await nscm.loginAs(pick.acc); cur = pick.acc; curDiv = ''; }
+        const r0 = await nscm.openScreen(ID); if (!r0.authorized) { put(x.row_id, 'ERROR', `[측정 경로 없음] ${pick.acc} 화면 권한 없음`); continue; }
+        // 화면을 다시 열면 Division 이 기본값으로 돌아간다 — 매번 맞추고, 실제 조회 요청의 divisionId 로 확인한다(2026-11-18 첫 구현이 두 번째 행에서 다른 Division 으로 조회해 '만족 0행')
+        if (pick.div) { await nscm.expandSearchArea().catch(() => undefined); await nscm.setDivision(pick.div).catch(() => undefined); await p.waitForTimeout(800); }
+        const cs0 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 120_000).catch(() => undefined); await nscm.clearDialogs();
+        curDiv = (/"(?:divisionId|DIVISION_ID|p_division_id)"\s*:\s*"([^"]+)"/i.exec(nscm.calls.slice(cs0).filter(c => /SEARCH/i.test(c.btn)).map(c => c.body || '').join(' ')) || [])[1] || pick.div;
+        if (pick.div && curDiv !== pick.div) { put(x.row_id, 'ERROR', `[측정 실패] Division ${pick.div} 로 맞추지 못함(조회 요청 divisionId '${curDiv}')`); continue; }
+        const names = [...new Set([...[...cond.matchAll(/COL\((\w+)\)/g)].map(m => m[1]), ...[...cond.matchAll(/EXISTS\(([^)]*)\)/g)].flatMap(m => [...m[1].matchAll(/(\w+)\s*[!=]=/g)].map(q => q[1]))])];
+        const data = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const ns = ${JSON.stringify(names)}; const o = []; for (let i = 0; i < Math.min(c.rows.length, 20000); i++) { const d = c.rows[i].dataItem; const r = {}; if (d) for (const k of Object.keys(d)) if (ns.some(n => n.toUpperCase() === k.toUpperCase())) r[k] = d[k] == null ? '' : String(d[k]); o.push(r); } return o; })()`).catch(() => []) as Record<string, string>[];
+        const ac = loadAccountCtx(ID, cur); let unk = 0; const hit: number[] = [];
+        for (let i = 0; i < data.length; i++) {
+          const it = data[i]; const ctx: CondCtx = { group: ac.group, admin: ac.admin, div: curDiv, self: '', rows: data, col: (n: string) => { const k = Object.keys(it).find(q => q.toUpperCase() === n.toUpperCase()); return k ? it[k] : null; } };
+          try { if (evalExpr(cond, ctx)) hit.push(i); } catch { unk++; }
+        }
+        if (!hit.length) { put(x.row_id, 'ERROR', `[측정 경로 없음] 계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${curDiv || '-'} 조회 ${data.length}행 중 조건 만족 0행${unk ? ` · 평가 불가 ${unk}행` : ''} — 조건 ${cond.slice(0, 200)}`); continue; }
+        const cells: { r: number; b: string; cls: string; bg: string }[] = [];
+        for (const r of hit.slice(0, 4)) {
+          const got = await p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c) return []; const re = new RegExp(${JSON.stringify(dynRe)}); const d = c.rows[${r}] && c.rows[${r}].dataItem; const out = []; for (let i = 0; i < c.columns.length && out.length < 3; i++) { const k = c.columns[i]; const b = String(k.binding || ''); if (k.visible === false || !re.test(b) || !d || d[b] == null || String(d[b]).trim() === '') continue; c.scrollIntoView(${r}, i); await new Promise(z => requestAnimationFrame(() => requestAnimationFrame(z))); const el = c.cells.getCellElement(${r}, i); if (el) out.push({ r: ${r}, b, cls: String(el.className || ''), bg: getComputedStyle(el).backgroundColor }); } return out; })()`).catch(() => []) as { r: number; b: string; cls: string; bg: string }[];
+          cells.push(...got);
+        }
+        const want = (cr.color_edit || '').replace(/\s+/g, ''); const ok = (c: { cls: string; bg: string }) => /\bwj-cell-editable\b/.test(c.cls) || (!!want && c.bg.replace(/\s+/g, '') === want);
+        const bad = cells.filter(c => !ok(c));
+        const res: 'PASS' | 'FAIL' | 'ERROR' = !cells.length ? 'ERROR' : bad.length ? 'FAIL' : 'PASS';
+        put(x.row_id, res, `${res === 'ERROR' ? '[측정 경로 없음] 조건 만족 행에 값 있는 기간 칸 없음 · ' : ''}AS-IS ${cr.ref} ${cr.api} 편집 모드 색 ${cr.color_edit || '-'}(조회 모드 ${cr.color_view || '-'}) · 조건 ${cond.slice(0, 220)} · 계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${curDiv || '-'} · 조회 ${data.length}행 중 만족 ${hit.length}행${unk ? ` · 평가 불가 ${unk}행` : ''} · 표본 ${cells.length}칸 ${cells.slice(0, 6).map(c => `r${c.r}.${c.b}=${/\bwj-cell-editable\b/.test(c.cls) ? '편집색(wj-cell-editable)' : c.bg}`).join(', ')}${bad.length ? ` — 편집색 아님 ${bad.length}칸` : ''} · TO-BE 편집 가능 셀 = 표준 노랑(CR-016)`);
+      }
+    } finally {
+      if (cur !== ACCT.account && ACCT.account) await nscm.loginAs(ACCT.account).catch(() => undefined);
+    }
+  });
+  // 2026-11-18 SCP0111 T-e753a725·T-3d630214 G4 btnNickName·btnItemId '이 대상(BTN)을 실행하는 경로 없음': AS-IS 조회조건 옆 팝업 버튼은 TO-BE 조회조건 칸의 팝업 버튼(돋보기)으로 바뀐다.
+  //   popup_args.csv(AS-IS 클릭 메서드 <버튼>_Click → 그 팝업을 여는 TO-BE 조회조건 라벨 host_label)로 칸을 찾아, 팝업 버튼이 보이고 눌러서 팝업이 열리는지 잰다(닫고 끝 · 선택 없음)
+  test('G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼', async ({ nscm }) => {
+    const ledger = ID ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
+    const btnRows = ledger.filter(r => r.source === 'TRACE' && r.rule_id === 'G4' && /"et":\s*"BTN"/.test(r.condition || ''));
+    const pap = path.join(ROOT, 'Doc', 'verify', ID, 'popup_args.csv');
+    if (!btnRows.length || !fs.existsSync(pap)) return;
+    test.setTimeout(300_000); const p = nscm.page;
+    const pa = parseCsv(fs.readFileSync(pap, 'utf8').replace(/^﻿/, ''));
+    const r0 = await nscm.openScreen(ID); if (!r0.authorized) { for (const x of btnRows) put(x.row_id, 'ERROR', '[측정 경로 없음] 화면 권한 없음'); return; }
+    await nscm.expandSearchArea(true).catch(() => undefined);
+    for (const x of btnRows) {
+      const name = String((/"name":\s*"([^"]+)"/.exec(x.condition || '') || [])[1] || '');
+      const hit = pa.find(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase() && a.host_label);
+      if (!hit) { put(x.row_id, 'ERROR', `[측정 경로 없음] AS-IS ${name} 클릭 메서드가 popup_args.csv 에 없음(팝업을 여는 버튼인지 미확인)`); continue; }
+      await nscm.expandSearchArea(true).catch(() => undefined);
+      const box = await findCond(nscm, [hit.host_label, ...hit.host_label.split(/\s*\/\s*/)], `g4btn_${name}`);
+      if (!box) { put(x.row_id, 'FAIL', `AS-IS ${name}(${hit.asis_ref}) 팝업 ${hit.asis_popup} ↔ TO-BE 조회조건 '${hit.host_label}' 칸 없음`); continue; }
+      const btn = box.root.locator('button').first(); const vis = await btn.isVisible().catch(() => false); const en = vis && await btn.isEnabled().catch(() => false);
+      let opened = false;
+      if (en) { await btn.click({ timeout: 5_000 }).catch(() => undefined); const dlg = p.locator('[role="dialog"]').last(); opened = await dlg.isVisible({ timeout: 8_000 }).catch(() => false); if (opened) { const cl = dlg.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first(); if (await cl.isVisible().catch(() => false)) await cl.click({ timeout: 3_000 }).catch(() => undefined); else await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(400); } }
+      put(x.row_id, box.kind === 'popup' && en && opened ? 'PASS' : 'FAIL', `AS-IS ${name}(${hit.asis_ref}) → 팝업 ${hit.asis_popup} · TO-BE 조회조건 '${box.label}' 칸(${box.kind}) 팝업 버튼 표시 ${vis} · 활성 ${en} · 눌러서 팝업 열림 ${opened} — AS-IS 버튼 ${pa.filter(a => a.side === 'ASIS' && a.host_label === hit.host_label).map(a => a.asis_method).filter((v, i, s) => s.indexOf(v) === i).join('·')} 가 TO-BE 칸 하나의 버튼으로 통합`);
+    }
+  });
+  // 2026-11-18 SCP0111 T-767918b6 BOH_QTY D3: 잠금 조건에 계정 그룹·Division 절(!(GROUP=="ADMIN") · DIV!="82" …)이 있어 기본 계정(ADMIN)으로는 조건 만족 행이 생기지 않는다.
+  //   W4c 의 D3 판정이 건너뛴 행(현재 계정·Division 으로 조건 불성립)을 plan.accounts 계정 × 조건 리터럴 Division 중 조건이 성립할 수 있는 첫 조합으로 로그인·조회해 잰다.
+  //   잠금식(lock_expr · AS-IS '!isEdit' = 권한 그룹 조건)도 행·계정 문맥으로 계산한다. 조건 만족 행 0 = ERROR(측정 경로 없음)
+  test('D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)', async ({ nscm }) => {
+    const ledger = ID ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
+    const lrp = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'lock_rules.csv');
+    if (!fs.existsSync(lrp)) return;
+    const lockRules = parseCsv(fs.readFileSync(lrp, 'utf8').replace(/^﻿/, ''));
+    type It = { rid: string; col: string; cond: string; locked: string; lockExpr: string; where: string };
+    const items: It[] = [];
+    for (const x of ledger.filter(r => r.rule_id === 'D3' && (r.source === 'TRACE' || r.source === 'ASIS'))) {
+      let lines: { line: string; meth: string }[] = [];
+      if (x.source === 'TRACE') { try { const c = JSON.parse(x.condition || '{}') as { d3?: { line?: string; meth?: string }[]; name?: string }; lines = (c.d3 || []).map(d => ({ line: String(d.line || ''), meth: String(d.meth || '') })); } catch { lines = []; } }
+      else { const ln = (/\.cs:(\d+)/.exec(x.asis_ref || '') || [])[1]; if (ln) lines = [{ line: ln, meth: '' }]; }
+      const colT = x.source === 'TRACE' ? String((/"name":\s*"([^"]+)"/.exec(x.condition || '') || [])[1] || '').split(',')[0] : x.target.split(',')[0];
+      for (const l of lines) { const lr = lockRules.find(q => q.line === l.line && (q.cond || '').trim()); if (!lr) continue; const col = /^[A-Z][A-Z0-9_]+$/.test(colT) ? colT : (lr.columns || '').split(';')[0]; items.push({ rid: x.row_id, col, cond: lr.cond, locked: lr.locked, lockExpr: lr.locked === 'EXPR' ? lr.lock_expr || '' : '', where: `${lr.method}:${lr.line}` }); }
+    }
+    // W4c 가 건너뛴 행만: 기본 계정·Division 으로 행의 모든 조건이 거짓
+    const p = nscm.page; const r0 = await nscm.openScreen(ID); if (!r0.authorized) return;
+    await nscm.search().catch(() => undefined); await probe.waitRows(p, 120_000).catch(() => undefined); await nscm.clearDialogs();
+    const div0 = (/"(?:divisionId|DIVISION_ID|p_division_id)"\s*:\s*"([^"]+)"/i.exec(nscm.calls.filter(c => /SEARCH/i.test(c.btn)).map(c => c.body || '').join(' ')) || [])[1] || '';
+    const sat = (cond: string, g: { group: string[]; admin: boolean }, div: string) => { try { return evalExpr(cond, { group: g.group, admin: g.admin, div, self: '', col: () => null }) !== false; } catch { return true; } };
+    const byRid = new Map<string, It[]>(); for (const it of items) byRid.set(it.rid, [...(byRid.get(it.rid) || []), it]);
+    const todo = [...byRid].filter(([, its]) => its.every(it => !sat(it.cond, ACCT, div0)));
+    if (!todo.length) return;
+    test.setTimeout(900_000);
+    type PlanAcc = { id: string; divisions?: string[] };
+    const plan = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')) as { accounts?: PlanAcc[] }; } catch { return {} as { accounts?: PlanAcc[] }; } })();
+    const accs = [...new Set([ACCT.account, ...(plan.accounts || []).map(a => String(a.id || '').toLowerCase())].filter(Boolean))];
+    let cur = ACCT.account;
+    try {
+      for (const [rid, its] of todo) {
+        const cond = its[0].cond;
+        const divs = [...new Set([div0, ...[...its.map(i => i.cond).join(' ').matchAll(/DIV\s*[!=]=\s*"(\w+)"/g)].map(m => m[1]), ...(plan.accounts || []).flatMap(a => a.divisions || [])].filter(Boolean))];
+        let pick: { acc: string; div: string } | null = null;
+        for (const acc of accs) { const ac = loadAccountCtx(ID, acc); if (ac.unknown) continue; for (const dv of divs) if (its.some(it => sat(it.cond, ac, dv))) { pick = { acc, div: dv }; break; } if (pick) break; }
+        if (!pick) { put(rid, 'ERROR', `[측정 경로 없음] 잠금 조건 ${cond.slice(0, 160)} 을 만족하는 계정·Division 조합 없음(계정 ${accs.join('/')} · Division ${divs.join('/')})`); continue; }
+        if (pick.acc !== cur) { await nscm.loginAs(pick.acc); cur = pick.acc; }
+        const r1 = await nscm.openScreen(ID); if (!r1.authorized) { put(rid, 'ERROR', `[측정 경로 없음] ${pick.acc} 화면 권한 없음`); continue; }
+        await nscm.expandSearchArea().catch(() => undefined); await nscm.setDivision(pick.div).catch(() => undefined); await p.waitForTimeout(800);
+        const c0 = nscm.calls.length; await nscm.search().catch(() => undefined); const n = await probe.waitRows(p, 120_000).catch(() => 0); await nscm.clearDialogs();
+        const divNow = (/"(?:divisionId|DIVISION_ID|p_division_id)"\s*:\s*"([^"]+)"/i.exec(nscm.calls.slice(c0).filter(c => /SEARCH/i.test(c.btn)).map(c => c.body || '').join(' ')) || [])[1] || '';
+        if (divNow !== pick.div) { put(rid, 'ERROR', `[측정 실패] Division ${pick.div} 로 맞추지 못함(조회 요청 '${divNow}')`); continue; }
+        const ac = loadAccountCtx(ID, cur); const ev: string[] = []; let fail = false; let judged = 0; const cannot = new Set<string>();
+        // 행 값은 한 번에 읽는다(행마다 브라우저 왕복하면 3000행 × 규칙 수만큼 걸린다 — 2026-11-18 첫 실행 2.8분)
+        // 동적 칸(<DYNAMIC:…>) 잠금은 실제 월 칸(binding)으로 펼친다 — COL(SELF) 는 그 칸 값(2026-11-18 v36: 펼치지 않아 '그리드에 없음' → 조건 만족 0 ERROR 10행)
+        const dynRe = (() => { try { const gs = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'dyn_columns.csv'), 'utf8')).map(d => d.binding_regex).filter(Boolean); return gs.length ? gs.map(g => `(${g})`).join('|') : '^[WMDY]?_?\\d{6,8}$'; } catch { return '^[WMDY]?_?\\d{6,8}$'; } })();
+        const dynBs = its.some(it => /<DYNAMIC:/.test(it.col)) ? ((await probe.allBindings(p)) || []).filter(b => new RegExp(dynRe).test(b)) : [];
+        const names = [...new Set([...its.flatMap(it => [...`${it.cond} ${it.lockExpr}`.matchAll(/COL\((\w+)\)/g)].map(m => m[1])).filter(n => n !== 'SELF'), ...its.map(it => it.col).filter(c => !/<DYNAMIC:/.test(c)), ...dynBs])];
+        const data = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const ns = ${JSON.stringify(names)}; const o = []; for (let i = 0; i < Math.min(c.rows.length, 3000); i++) { const d = c.rows[i].dataItem; const r = {}; if (d) for (const k of ns) r[k] = d[k] == null ? '' : String(d[k]); o.push(d ? r : null); } return o; })()`).catch(() => []) as (Record<string, string> | null)[];
+        for (const it of its) {
+          let hit = 0;
+          for (let row = 0; row < data.length && hit < 2; row++) {
+            const item = data[row]; if (!item) continue;
+            let ctx: CondCtx = { group: ac.group, admin: ac.admin, div: divNow, self: it.col, col: (k: string) => (k in item ? String(item[k] ?? '') : null) };
+            let hold = false; let colNow = it.col;
+            for (const b of /<DYNAMIC:/.test(it.col) ? dynBs : [it.col]) {
+              const c2: CondCtx = { ...ctx, self: b }; let h = false; try { h = evalExpr(it.cond, c2); } catch (e) { cannot.add(String((e as Error).message || e).slice(0, 60)); continue; }
+              if (h) { hold = true; colNow = b; ctx = c2; break; }
+            }
+            if (!hold) continue;
+            let lockedNow = it.locked === 'Y'; if (it.lockExpr) { try { lockedNow = evalExpr(it.lockExpr, ctx); } catch (e) { cannot.add(`잠금식 ${String((e as Error).message || e).slice(0, 50)}`); continue; } }
+            if (/<DYNAMIC:/.test(colNow)) { cannot.add(`동적 칸 ${colNow} 펼칠 월 칸 없음`); continue; }
+            const e = await probe.editable(p, row, colNow); if (e == null) { ev.push(`r${row} ${colNow} 그리드에 없음`); hit++; continue; }
+            hit++; judged++; const ok = e === !lockedNow; if (!ok) fail = true;
+            ev.push(`r${row} → ${colNow} 편집=${e} (AS-IS ${lockedNow ? '잠금' : '해제'} ${it.where}${it.lockExpr ? ` · 잠금식 ${it.lockExpr.slice(0, 50)}` : ''}) ${ok ? 'OK' : 'NG'}`);
+          }
+        }
+        const head = `계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${divNow} · 조회 ${n}행 · 조건 ${cond.slice(0, 160)}`;
+        put(rid, fail ? 'FAIL' : judged ? 'PASS' : 'ERROR', `${judged ? '' : '[측정 경로 없음] 조건 만족 행 0 · '}${head} · ${ev.join(' · ')}${cannot.size ? ` · 계산 불가 ${[...cannot].slice(0, 2).join(' / ')}` : ''}`.slice(0, 900));
+      }
+    } finally {
+      if (cur !== ACCT.account && ACCT.account) await nscm.loginAs(ACCT.account).catch(() => undefined);
     }
   });
 });

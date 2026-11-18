@@ -465,7 +465,10 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     const r0 = await nscm.openScreen(ID); if (!r0.authorized) return;
     await nscm.expandSearchArea(); await nscm.search().catch(() => undefined); await probe.waitRows(p, 40_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
     const er = await ensureRows(nscm, 3, 'eg-ins'); await nscm.clearDialogs().catch(() => undefined);
-    const stmts = f.asis?.insertStmts || []; const aboveAsIs = stmts.some(s => /ActiveRow|GetSelection/.test(s.raw));
+    const stmts = f.asis?.insertStmts || [];
+    // 2026-11-18 SCP0111 EG-9b53a22e '삽입 위치 문장 미식별': 프레임워크 SpreadInfo.Insert()(인자 없음)는 활성 행 위치에 행을 넣는다(SpreadInfo.cs:8460~ · sv.Rows.Add(sv.ActiveRow.Index, 1) — 활성 셀 없으면 끝) → 선택 행 위 삽입과 같다
+    const fwInsert = stmts.some(s => /\bsi\w*\.Insert\(\s*\)/.test(s.raw));
+    const aboveAsIs = stmts.some(s => /ActiveRow|GetSelection/.test(s.raw)) || fwInsert;
     const insDiv = Object.entries(f.btnDiv?.__default__ || {}).filter(([, v]) => v.includes('INSERT')).map(([k]) => k);
     const dsI = await divState(nscm); const curHas = !dsI.found || insDiv.includes(dsI.code); const toDiv = curHas ? dsI.code : dsI.options.find(o => insDiv.includes(o)) || '';
     if (dsI.found && !toDiv) { for (const eg of ['EG126', 'EG140', 'EG319']) put(eg, 'Insert', ID, 'NA', 'Insert 권한 Div', `기본 계정 PR_GET_MNU_BTN_AUTH_DIV 에 INSERT 있는 Div 없음(후보 ${dsI.options.join(',')})`, 'CR-070'); return; }
@@ -502,7 +505,8 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     const ins = await clickInsert(); await mutDom(nscm, 'after-insert'); const after = await gridState(p);
     const keptSort = (after?.sort || []).join() === (before?.sort || []).join();
     put('EG126', 'Sort 유지 Insert', `정렬 ${col.binding} · 선택 r${pickRow}`, ins.firstNew < 0 ? 'ERROR' : keptSort ? 'PASS' : 'FAIL', 'Insert 후 정렬 유지 — DM-32', `정렬 전 ${(before?.sort || []).join()} → 후 ${(after?.sort || []).join()} · 신규행 r${ins.firstNew}`, stmts[0]?.ref || '');
-    if (ins.firstNew >= 0) put('EG126', '선택 행 위 Insert', `선택 r${pickRow}`, aboveAsIs ? (ins.firstNew <= pickRow ? 'PASS' : 'FAIL') : '판정필요', aboveAsIs ? `AS-IS 선택 행 기준 삽입 → 신규행 ≤ r${pickRow}` : 'AS-IS 삽입 위치 문장 미식별', `신규행 r${ins.firstNew}`, stmts.map(s => s.ref).slice(0, 2).join(','));
+    // CR-015(Insert = 선택 행 위) · CR-074(세트 구조 없는 목록 그리드는 맨 위 삽입도 오류 아님) — 선택 행 위 = PASS · 맨 위(r0) = PASS(CR-074) · 그 밖(아래·끝) = FAIL
+    if (ins.firstNew >= 0) put('EG126', '선택 행 위 Insert', `선택 r${pickRow}`, aboveAsIs ? (ins.firstNew <= pickRow ? 'PASS' : 'FAIL') : '판정필요', aboveAsIs ? `AS-IS 선택 행 기준 삽입${fwInsert ? '(프레임워크 SpreadInfo.Insert() = 활성 행 위치 · SpreadInfo.cs:8460)' : ''} → 신규행 ≤ r${pickRow}(맨 위 r0 은 CR-074)` : 'AS-IS 삽입 위치 문장 미식별', `신규행 r${ins.firstNew}${aboveAsIs && ins.firstNew > pickRow ? ' — 선택 행 아래·끝에 삽입(CR-015 선택 행 위 · CR-074 맨 위 어느 쪽도 아님)' : ''}`, stmts.map(s => s.ref).slice(0, 2).join(','));
   });
 
   // ── 잠금 규칙·룩업 × 계정 ──────────────────────────────────────────────────────────

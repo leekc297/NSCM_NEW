@@ -26,7 +26,9 @@ export function loadFacts(id: string): Facts | null {
 export function accountId(key: string): string | null {
   try {
     const uj = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'E2E', 'users.json'), 'utf8').replace(/^﻿/, ''));
-    const [area, dv, ...rest] = key.split('/'); return uj.areas[area]?.divisions?.[dv]?.[rest.join('/')] || null;
+    const [area, dv, ...rest] = key.split('/');
+    if (area === 'SCR') return uj.screens?.[dv]?.accounts?.[rest.join('/')] || null;  // 화면별 지정 계정(screens[<ID>].accounts · 2026-11-18)
+    return uj.areas[area]?.divisions?.[dv]?.[rest.join('/')] || null;
   } catch { return null; }
 }
 /** 그룹이 다른 계정 한 명씩(화면 권한 차이를 재는 최소 표본이 아니라 '메뉴 권한 그룹 조합'별 전수) */

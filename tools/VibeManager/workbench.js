@@ -74,7 +74,7 @@ function dbModeBlock(p, what, out) {
 function workModePrefix(p, id) {
   if (!workMode(p).db) return '';
   const g = `Doc/verify/${id || '<화면ID>'}/FE_GUIDE_<YYYYMMDD_HHMM>.md`;
-  return `**[작업 모드 = DB MODE — 환경설정 값 · 아래 본문보다 이 문단이 우선한다]** DB 객체(PKG/SP)·DB 메타는 사내 ZIOUI1 에 직접 수정·적용한다. 화면 FE(nscm-fe)·BE(nscm-be)·공통 컴포넌트는 **한 줄도 수정하지 않는다** — FE 페이지 폴더 안 파일(대조표 __asis-mapping__.md 포함) 쓰기, FE 실행 확인 목적의 수정도 하지 않는다(실행 hook check-work-mode 가 차단한다). FE/BE 수정이 필요한 항목은 가이드(파일:라인 · 변경 전/후 · 이유 · 검증법)로 ${g} 에 모으고, fixlist.csv 해당 행 status=보류(가이드)·change 에 가이드 파일명을 적는다. 본문에서 FE·BE 를 고치라는 지시와 'FE 수정 승인' 문구는 모두 '가이드로 남긴다' 로 읽는다. 보고 끝에 가이드 파일 경로와 항목 수를 적는다. **CheckList(run_verify)는 모드와 무관하게 전체를 수행한다** — 모드를 이유로 어떤 검사·E2E 도 건너뛰거나 NA 처리하지 않는다.\n\n`;
+  return `**[작업 모드 = DB MODE — 환경설정 값 · 아래 본문보다 이 문단이 우선한다]** DB 객체(PKG/SP)·DB 메타는 사내 ZIOUI1 에 직접 수정·적용한다. 화면 FE(nscm-fe)·BE(nscm-be)·공통 컴포넌트는 **한 줄도 수정하지 않는다** — FE 페이지 폴더 안 파일(대조표 __asis-mapping__.md 포함) 쓰기, FE 실행 확인 목적의 수정도 하지 않는다(실행 hook check-work-mode 가 차단한다). FE/BE 수정이 필요한 항목은 가이드(파일:라인 · 변경 전/후 · 이유 · 검증법)로 ${g} 에 모으고, fixlist.csv 해당 행 status=보류(가이드)·change 에 가이드 파일명을 적는다. 본문에서 FE·BE 를 고치라는 지시와 'FE 수정 승인' 문구는 모두 '가이드로 남긴다' 로 읽는다. 가이드 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 규칙 19(개발 용어 대신 업무 단어)와 'FE·BE 가이드 문서 틀'을 따르고, 작성 뒤 python tools/Docs/doc_style.py <가이드 파일> 로 위반 0 을 확인한다. 보고 끝에 가이드 파일 경로와 항목 수를 적는다. **CheckList(run_verify)는 모드와 무관하게 전체를 수행한다** — 모드를 이유로 어떤 검사·E2E 도 건너뛰거나 NA 처리하지 않는다.\n\n`;
 }
 let flowSeq = 0; // 1.8.9: Flow 보드 일련번호(체인·단일 작업)
 // 1.9.5: 체인 단계 산출물 검증 — verify: { type: 'e2eRows', kind } → Doc/e2e/results/_summary.csv 에 (화면, 종류) 행이 이번 실행(파일 갱신 시각 ≥ 단계 시작) 뒤 존재 · { type: 'fileExists', file }
@@ -2336,6 +2336,15 @@ function open(api, opts) {
               wb.out('task', `\n── 사전 단계: ${src.preTask} (${effId}) — ${item.label}\n`, 'cmd');
               const pc = await wb.runTaskStreaming(p, src.preTask, effId, { noConfirm: true, inFlow: true });
               if (pc == null) { wb.out('task', `⛔ 사전 단계 취소 — "${item.label}" 실행 안 함\n`, 'warn'); break; }
+              // 2026-11-18 사용자: 자동 보완은 CheckList 기준으로만 — preTaskRequired 메뉴는 사전 단계 실패(종료코드≠0 · 4 = 같은 화면 CheckList 실행 중)나
+              //   CheckList 결과(Doc/verify/<ID>/fixlist.csv) 없음이면 보완하지 않고 멈춘다. 그 밖 메뉴(🔗·🩺·🧾)는 종전대로 경고 후 계속
+              const flp = path.join(p.root, 'Doc', 'verify', effId, 'fixlist.csv');
+              if (src.preTaskRequired && (pc !== 0 || !fs.existsSync(flp))) {
+                const why = pc !== 0 ? `사전 단계 종료코드 ${pc}${pc === 4 ? '(같은 화면 CheckList 실행 중)' : ''}` : `CheckList 결과 없음(${path.relative(p.root, flp)})`;
+                wb.out('task', `⛔ ${why} — "${item.label}" 은 CheckList 조치 필요 행을 기준으로만 보완하므로 실행하지 않음. 🔎 CheckList 를 먼저 정상 완료한 뒤 다시 실행\n`, 'warn');
+                try { wb.post({ type: 'chat', role: 'meta', text: `⛔ ${item.label} 중단 — ${why}` }); } catch (e) { /* 표시 실패는 무시 */ }
+                break;
+              }
               if (pc !== 0) wb.out('task', `⚠ 사전 단계 종료코드 ${pc} — CheckList 결과 없이(또는 직전 결과로) 보완을 계속합니다\n`, 'warn');
             }
           }

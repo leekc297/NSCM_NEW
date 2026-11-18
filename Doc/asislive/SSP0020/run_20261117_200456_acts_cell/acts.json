@@ -1,0 +1,172 @@
+{
+ "id": "SSP0020",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[CHK]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0020-Sb01ff3",
+    "SSP0020-S84f561",
+    "SSP0020-S45d962",
+    "SSP0020-S099949"
+   ]
+  },
+  {
+   "control": "spdMain[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Delegate",
+     "rows_before": 1,
+     "rows_after": 1,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "CHK",
+       "before": "",
+       "after": "False"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "scenarios": [
+    "SSP0020-Sb01ff3",
+    "SSP0020-S84f561",
+    "SSP0020-S45d962",
+    "SSP0020-S099949"
+   ]
+  },
+  {
+   "control": "spdMain[FROM_DATE]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0020-Sb01ff3",
+    "SSP0020-S84f561",
+    "SSP0020-S45d962",
+    "SSP0020-S099949"
+   ]
+  },
+  {
+   "control": "spdMain[TO_DATE]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0020-Sb01ff3",
+    "SSP0020-S84f561",
+    "SSP0020-S45d962",
+    "SSP0020-S099949"
+   ]
+  },
+  {
+   "control": "spdMain[DELEGATEE]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0020-Sb01ff3",
+    "SSP0020-S84f561",
+    "SSP0020-S45d962",
+    "SSP0020-S099949"
+   ]
+  },
+  {
+   "control": "spdMain[VALID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0020-Sb01ff3",
+    "SSP0020-S84f561",
+    "SSP0020-S45d962",
+    "SSP0020-S099949"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-17 20:03:18",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 10:24 실측: 추가 뒤 SP 결과 1·1행 · 적용 SQL tools/AsisLocal/sql/20261115_SSP0020_DELEGATE_TEST_ROWS.sql(ATTRIBUTE10=ASISLIVE_TEST_20261115, 되돌리기 포함)",
+  "why": "SSP0020_GET_DELEGATE 조회 인자 = 로그인 사용자(p_user_id)·언어뿐. SSP_MST_DELEGATE 699행 중 jaeuk.shin 관련 0행이라 조회 0행. 시험 행 2개 추가(위임한 1·위임받은 1)",
+  "done": []
+ },
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 4,
+   "named_cols": [],
+   "used": [
+    "CHK",
+    "DIVISION_ID",
+    "FROM_DATE",
+    "TO_DATE",
+    "DELEGATEE",
+    "VALID"
+   ],
+   "rule": "이름이 나온 열이 없어 앞쪽 보이는 열 6개"
+  }
+ ]
+}
