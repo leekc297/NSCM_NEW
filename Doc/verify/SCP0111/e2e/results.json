@@ -7,7 +7,7 @@
       "_verify",
       "_trace",
       "--grep",
-      "CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)|W4\\ E4\\ 업무\\ 검증\\ 메시지\\ =\\ AS\\-IS\\(저장\\ 차단\\)|W4b\\ H3·F5·F3·M3·J1·H4|W4c\\ 정밀\\ 판정\\ —\\ 판정필요\\ 해소|W4d\\ 잔여\\ 판정필요\\ 실측|W9\\ 대조표\\ 미구현\\ 행\\ 실측|문서\\ 시나리오|버튼\\ 경로\\ 메시지·모달\\ 조건\\(E4·B3·B4·G4\\)|신규행\\ 검증\\(E3\\ 컬럼별\\ 필수·E4\\ 키\\ 중복\\)|조회조건\\ 콤보\\ 후보\\ 품질\\(B1·B2\\)",
+      "CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)|Division별\\ 조회\\ 오류·콤보\\ 이름\\(F4·A2\\)|Sort\\(F3\\)·Filter\\(F4\\)\\ 버튼·단축키\\(K1\\)\\ —\\ 정렬\\ 3단\\ 토글·필터\\ UI·적용/해제\\ 행수|W4c\\ 정밀\\ 판정\\ —\\ 판정필요\\ 해소|W4d\\ 잔여\\ 판정필요\\ 실측|W5\\ 컬럼\\ 대상\\ 검사\\ —\\ H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4\\(TRACE\\ 행\\)|W9\\ 대조표\\ 미구현\\ 행\\ 실측|버튼\\ 경로\\ 메시지·모달\\ 조건\\(E4·B3·B4·G4\\)|저장\\ 세부\\(F1·F6\\)\\ —\\ 컬럼별\\ 왕복·0\\ 값\\ 저장|조회조건\\ 콤보\\ 후보\\ 품질\\(B1·B2\\)",
       "--workers",
       "1",
       "--reporter=list,json"
@@ -117,7 +117,7 @@
           "column": 6,
           "specs": [
             {
-              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
+              "title": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)",
               "ok": true,
               "tags": [
                 "trace"
@@ -134,7 +134,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9988,
+                      "duration": 27503,
                       "errors": [],
                       "stdout": [
                         {
@@ -143,7 +143,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:39:59.972Z",
+                      "startTime": "2026-11-19T03:57:49.870Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -151,49 +151,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "61ae7fb993b6ecef23da-8df86dadb99a612dd88e",
+              "id": "61ae7fb993b6ecef23da-d09ed44d8e7036980828",
               "file": "_trace.spec.ts",
-              "line": 814,
-              "column": 7
-            },
-            {
-              "title": "W4b H3·F5·F3·M3·J1·H4",
-              "ok": true,
-              "tags": [
-                "trace"
-              ],
-              "tests": [
-                {
-                  "timeout": 600000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 14869,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-18T10:40:12.482Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "61ae7fb993b6ecef23da-69c035b336751c63c906",
-              "file": "_trace.spec.ts",
-              "line": 1075,
+              "line": 372,
               "column": 7
             },
             {
@@ -214,7 +174,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 85588,
+                      "duration": 86780,
                       "errors": [],
                       "stdout": [
                         {
@@ -244,7 +204,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:40:29.531Z",
+                      "startTime": "2026-11-19T03:58:19.787Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -275,7 +235,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 200500,
+                      "duration": 200355,
                       "errors": [],
                       "stdout": [
                         {
@@ -284,7 +244,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:41:57.305Z",
+                      "startTime": "2026-11-19T03:59:48.859Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -315,12 +275,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 190,
+                      "duration": 184,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:45:20.008Z",
+                      "startTime": "2026-11-19T04:03:11.438Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -347,7 +307,7 @@
         {
           "title": "정합검증 SCP0111 @verify",
           "file": "_verify.spec.ts",
-          "line": 267,
+          "line": 272,
           "column": 6,
           "specs": [
             {
@@ -358,11 +318,27 @@
               ],
               "tests": [
                 {
-                  "timeout": 900000,
+                  "timeout": 1500000,
                   "annotations": [
                     {
                       "type": "crud",
-                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [2s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 알림=Saved successfully. · [4s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [6s] 원복 입력 · [7s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [2s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [6s] 원복 입력 · [7s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                    },
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                    },
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                    },
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                    },
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [3s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -373,9 +349,21 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20622,
+                      "duration": 85205,
                       "errors": [],
                       "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
@@ -385,11 +373,27 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:45:22.673Z",
+                      "startTime": "2026-11-19T04:03:14.557Z",
                       "annotations": [
                         {
                           "type": "crud",
-                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [2s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 알림=Saved successfully. · [4s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [6s] 원복 입력 · [7s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [2s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 알림=성공적으로 저장되었습니다. · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [6s] 원복 입력 · [7s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [1s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 · [3s] 재조회 · [3s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [5s] 원복 입력 · [6s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
                         }
                       ],
                       "attachments": []
@@ -400,11 +404,11 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-79c9e86213c94b65859b",
               "file": "_verify.spec.ts",
-              "line": 927,
+              "line": 932,
               "column": 7
             },
             {
-              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
               "ok": true,
               "tags": [
                 "verify"
@@ -412,6 +416,68 @@
               "tests": [
                 {
                   "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 2건: [DB] ORA-01438 99999999999999 값이 지정된 전체 자릿수 (20, 10)( 열)보다 큽니다., RESULT_CNT | [DB] ORA-01438 99999999999999 값이 지정된 전체 자릿수 (20, 10)( 열)보다 큽니다.\",\"RESULT_CN"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 313328,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[저장 세부] 04:06:51 BOH_QTY r73 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 04:07:02 BOH_QTY 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 04:07:03 202610 r73 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 04:07:13 202610 끝\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-19T04:04:41.992Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 2건: [DB] ORA-01438 99999999999999 값이 지정된 전체 자릿수 (20, 10)( 열)보다 큽니다., RESULT_CNT | [DB] ORA-01438 99999999999999 값이 지정된 전체 자릿수 (20, 10)( 열)보다 큽니다.\",\"RESULT_CN"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c1a6ad0a99e7a75e8612",
+              "file": "_verify.spec.ts",
+              "line": 1615,
+              "column": 7
+            },
+            {
+              "title": "Division별 조회 오류·콤보 이름(F4·A2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -421,7 +487,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 57072,
+                      "duration": 148733,
                       "errors": [],
                       "stdout": [
                         {
@@ -430,7 +496,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:45:45.514Z",
+                      "startTime": "2026-11-19T04:09:57.555Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -438,9 +504,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "d557cdbda6ec1bc6afb1-b77e6fb1936af24c0515",
+              "id": "d557cdbda6ec1bc6afb1-45cf0a526c6a2c9b350e",
               "file": "_verify.spec.ts",
-              "line": 1795,
+              "line": 2528,
               "column": 7
             },
             {
@@ -461,7 +527,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6407,
+                      "duration": 6334,
                       "errors": [],
                       "stdout": [
                         {
@@ -470,7 +536,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:46:44.792Z",
+                      "startTime": "2026-11-19T04:12:28.518Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -480,50 +546,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-119a50c591f28d6ee6ca",
               "file": "_verify.spec.ts",
-              "line": 2471,
-              "column": 7
-            },
-            {
-              "title": "문서 시나리오",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 1200000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 13221,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[시나리오] SCP0111 '[자동] 기존 행 BOH_QTY 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 19:46:55\n"
-                        },
-                        {
-                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-18T10:46:53.420Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-dd2cb6e7c9123fcae2ab",
-              "file": "_verify.spec.ts",
-              "line": 2600,
+              "line": 2541,
               "column": 7
             },
             {
@@ -544,7 +567,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 31132,
+                      "duration": 29011,
                       "errors": [],
                       "stdout": [
                         {
@@ -571,7 +594,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T10:47:08.860Z",
+                      "startTime": "2026-11-19T04:12:36.976Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -581,7 +604,47 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-be4a5854fc854f92c0ef",
               "file": "_verify.spec.ts",
-              "line": 3671,
+              "line": 3746,
+              "column": 7
+            },
+            {
+              "title": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17799,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-19T04:13:08.170Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-17ca4688528ae3fbb74e",
+              "file": "_verify.spec.ts",
+              "line": 3982,
               "column": 7
             }
           ]
@@ -591,8 +654,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-18T10:39:58.330Z",
-    "duration": 464964.713,
+    "startTime": "2026-11-19T03:57:47.668Z",
+    "duration": 942137.725,
     "expected": 10,
     "skipped": 0,
     "unexpected": 0,

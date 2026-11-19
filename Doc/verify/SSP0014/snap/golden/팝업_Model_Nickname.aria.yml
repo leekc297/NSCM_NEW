@@ -1,0 +1,27 @@
+- dialog:
+  - heading "Material by Division" [level=2]
+  - text: Div
+  - combobox [disabled]: Mobility & IT Battery
+  - button "Open" [disabled]
+  - img
+  - text: Operation Group
+  - textbox [disabled]
+  - text: Material
+  - textbox
+  - button "Search"
+  - paragraph
+  - grid:
+    - rowgroup:
+      - row "No Div. Material Code Description Nickname Class Name":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Material Code"
+        - columnheader "Description"
+        - columnheader "Nickname"
+        - columnheader "Class Name"
+    - rowgroup:
+      - row {데이터 행}
+  - status
+  - text: "0"
+  - button "OK"
+  - button "Close"

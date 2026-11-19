@@ -1,6 +1,11 @@
 # SSP0005 · SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN
 
-- 실행: 2026-11-14 19:48:28
-- 파라미터: `{"p_start_yyyymmdd": "", "p_end_yyyymmdd": ""}`
+- 실행: 2026-11-19 13:53:56
+- 파라미터: `{"p_start_yyyymmdd": "20261114", "p_end_yyyymmdd": "20271114"}`
 - 종류: GET
-- 파라미터 값 미정 — param_defaults.json 또는 golden_cases.csv params 보완 (manual=Y 면 빈값도 의도된 값으로 실행)
+- 빈 인자 p_start_yyyymmdd, p_end_yyyymmdd = 차등 검증 호출 #2 실측 AS-IS 인자(2026-11-14 22:20:17)
+
+### 결과셋 1  As-is 441행 ↔ To-Be O_RC1 441행
+- 일치
+- 데이터 기준: 공통 441행 · AS-IS 전용 0행 · TO-BE 전용 0행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
+- 실제 순서(공통·유일 441행의 상대 순서): 일치

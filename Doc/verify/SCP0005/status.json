@@ -1,0 +1,547 @@
+{
+ "screen": "SCP0005",
+ "made": "2026-11-19 17:29",
+ "checklist": {
+  "version": 5,
+  "total": 2520,
+  "totals": {
+   "PASS": 1151,
+   "FAIL": 27,
+   "판정필요": 44,
+   "미검증": 392,
+   "해당없음": 906
+  },
+  "axes": [
+   {
+    "axis": "1.디자인·다국어",
+    "total": 443,
+    "PASS": 268,
+    "FAIL": 1,
+    "판정필요": 3,
+    "미검증": 50,
+    "해당없음": 121
+   },
+   {
+    "axis": "2.AS-IS 로직",
+    "total": 247,
+    "PASS": 111,
+    "FAIL": 4,
+    "판정필요": 3,
+    "미검증": 68,
+    "해당없음": 61
+   },
+   {
+    "axis": "3.SMOKE",
+    "total": 701,
+    "PASS": 268,
+    "FAIL": 9,
+    "판정필요": 16,
+    "미검증": 85,
+    "해당없음": 323
+   },
+   {
+    "axis": "4.CRUD",
+    "total": 798,
+    "PASS": 292,
+    "FAIL": 12,
+    "판정필요": 19,
+    "미검증": 166,
+    "해당없음": 309
+   },
+   {
+    "axis": "5.권한별 CRUD",
+    "total": 36,
+    "PASS": 9,
+    "FAIL": 1,
+    "판정필요": 0,
+    "미검증": 8,
+    "해당없음": 18
+   },
+   {
+    "axis": "분류 없음",
+    "total": 295,
+    "PASS": 203,
+    "FAIL": 0,
+    "판정필요": 3,
+    "미검증": 15,
+    "해당없음": 74
+   }
+  ],
+  "action": [
+   [
+    "V-f648eb06",
+    "J1",
+    "SCP0005 화면"
+   ],
+   [
+    "V-660a833e",
+    "H5",
+    "SCP·SSP 컬럼·조회조건 라벨 Valid→Active"
+   ],
+   [
+    "V-087d756b",
+    "E3",
+    "SCP0005 Excel 필수 칸 빈 업로드"
+   ],
+   [
+    "V-9beff6f2",
+    "C3",
+    "SCP0005 시나리오 [자동] FROM_COUNTRY 팝업 선택 → TO_COUNTRY 채움"
+   ],
+   [
+    "V-e4a3ef56",
+    "C3",
+    "SCP0005 시나리오 [자동] FROM_CITY 팝업 선택 → TO_COUNTRY 채움"
+   ],
+   [
+    "V-3aecb21a",
+    "F2",
+    "SCP0005 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I"
+   ],
+   [
+    "V-1d8d1afb",
+    "F10",
+    "PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD"
+   ],
+   [
+    "V-3134fc3e",
+    "E4",
+    "MSG00043"
+   ],
+   [
+    "V-2ca073e5",
+    "N1",
+    "SCP0005 센티널 표시"
+   ],
+   [
+    "V-5b44fefc",
+    "D1",
+    "Distribution Route.FROM_COUNTRY (Country*)"
+   ],
+   [
+    "V-1ff8658b",
+    "D1",
+    "Distribution Route.FROM_CITY (City*)"
+   ],
+   [
+    "V-e32d34a2",
+    "L1",
+    "SCP0005 화면"
+   ]
+  ],
+  "review": [
+   [
+    "V-fd895574",
+    "A1",
+    "SCP0005 화면"
+   ],
+   [
+    "V-d5a22e0f",
+    "M1",
+    "SCP0005 시나리오 [자동] Excel Form 동작(CR-095)"
+   ],
+   [
+    "V-bc940519",
+    "H11",
+    "SCP0005 저장 중 로딩"
+   ],
+   [
+    "V-3f21e469",
+    "A6",
+    "SCP0005_GET_DISTRIBUTION_ROUTE"
+   ],
+   [
+    "V-c8980899",
+    "M1",
+    "[DMF0014 결함 일반화] Excel Upload 컬럼명 검증 메시지, 파일 첨부 개수"
+   ],
+   [
+    "V-73be6002",
+    "M1",
+    "[DMF0014 결함 유형] Excel Form 입력 버킷"
+   ],
+   [
+    "V-e6219df1",
+    "M1",
+    "[DMF0014 결함 유형] Excel Form 양식"
+   ],
+   [
+    "V-dfbb7f9f",
+    "M1",
+    "[DMF0014 결함 유형] Excel Form 버튼"
+   ],
+   [
+    "V-c77e80eb",
+    "M1",
+    "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증"
+   ],
+   [
+    "V-ddba4d7e",
+    "M1",
+    "[DMF0014 결함 유형] Excel Upload 수량 미입력 메시지"
+   ],
+   [
+    "V-09e5dd42",
+    "M1",
+    "[DMF0014 결함 일반화] Excel Upload 헤더 검증 메시지"
+   ],
+   [
+    "V-f8dede79",
+    "M1",
+    "[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model)"
+   ],
+   [
+    "V-c81570fb",
+    "M1",
+    "[DMF0074 결함 유형] Excel Form 버튼"
+   ],
+   [
+    "V-ffb5feca",
+    "M1",
+    "[DMF0074 결함 유형] Excel Form 양식 헤더"
+   ],
+   [
+    "V-27de8d97",
+    "M1",
+    "[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지"
+   ],
+   [
+    "V-f0ecbfc5",
+    "M1",
+    "[DMF0082 결함 유형] Excel Form 양식 Bucket"
+   ],
+   [
+    "V-d747029f",
+    "M1",
+    "[DMF0082 결함 유형] Excel Form 팝업 Search"
+   ],
+   [
+    "V-5a48ba44",
+    "M1",
+    "[DMF0082 결함 유형] Excel Upload"
+   ],
+   [
+    "V-06704edc",
+    "M1",
+    "[DMF0074 결함 일반화] 공용 Excel Upload 창 2단계: Upload(검사, 분류) → OK(저장), 오류 1건 이상이면 저장 차단 MSG00657"
+   ],
+   [
+    "AD-9d969364",
+    "A6",
+    "SCP0005 SCP0005_GET_DISTRIBUTION_ROUTE 공통·유일 행 상대 순서"
+   ],
+   [
+    "AD-dc3e6a42",
+    "A6",
+    "SCP0005 SCP0005_GET_DISTRIBUTION_ROUTE 공통·유일 행 상대 순서"
+   ],
+   [
+    "AD-80df7337",
+    "A6",
+    "SCP0005 SCP0005_GET_DISTRIBUTION_ROUTE 공통·유일 행 상대 순서"
+   ],
+   [
+    "T-5539373c",
+    "A1",
+    "clbTransMode (UsrCheckedList 다중 체크: Designer ItemSelect, Form `CustomDropdown` multiple + allOption(콤마 조인, 'ALL'=무필터), comb"
+   ],
+   [
+    "T-15c61cf0",
+    "A1",
+    "cboValidYN (UsrCombo) · Form `CustomDropdown` 정적 ALL/Y/N (`VALID_OPTIONS`)"
+   ],
+   [
+    "T-5bac20a1",
+    "A1",
+    "txtFromCountry/txtFromCity + btnFromSrch · Form `InputField` 2 + 돋보기 → `RegionModal`(search-from)"
+   ],
+   [
+    "T-d2177f06",
+    "A1",
+    "txtToCountry/txtToCity + btnToSrch · Form `InputField` 2 + 돋보기 → `RegionModal`(search-to)"
+   ],
+   [
+    "T-86a9a3c4",
+    "X-NOTIMPL",
+    "dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe, 미구현(신설 금지)"
+   ],
+   [
+    "T-f69d99a2",
+    "A1",
+    "cascade(clbFromCountry→City), 없음(주석 폐기): 무cascade"
+   ],
+   [
+    "T-400e0530",
+    "A1",
+    "FindDataMain 파라미터 6종 'ALL'→'', store `setFilter()` `orEmpty()`"
+   ],
+   [
+    "T-541ffe75",
+    "A6",
+    "FindDataMain 파라미터 6종 'ALL'→'', store `setFilter()` `orEmpty()`"
+   ],
+   [
+    "T-85a00387",
+    "A1",
+    "R7 조회 databind · `useTabProcQuery` o_rc1"
+   ],
+   [
+    "T-0440e16f",
+    "E3",
+    "R16/R17 클라 검증 색칠, `validateRows`(전 편집행 누적, iter-2 G4) → `invalidCells` state → grid `for"
+   ],
+   [
+    "T-ba2f69a6",
+    "A1",
+    "FindButton(Search) · `hotkeyConfig.search`=handleSearch (hasButton)"
+   ],
+   [
+    "T-addac621",
+    "E3",
+    "SaveButton · `hotkeyConfig.save`=handleSave (validate→saveWithValidation)"
+   ],
+   [
+    "T-690a63d4",
+    "A1",
+    "btnEaxel_Upload → ExcelUploadForm2 · customButton 'Excel Upload' → `ExcelUploadModal` → 재조회"
+   ],
+   [
+    "T-c0851c35",
+    "E3",
+    "메타 필수(INPUT_TP_CD=M/IM), `useSaveWithValidation`"
+   ],
+   [
+    "T-a48010ce",
+    "X-REASON",
+    "COMMON:UC-03, 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 데이터 Reset 후 재조회"
+   ],
+   [
+    "T-40117668",
+    "X-REASON",
+    "COMMON:UC-06, Key-in 조회조건 콤마 다중입력 전건 조회"
+   ],
+   [
+    "T-5e80b2ee",
+    "A1",
+    "COMMON:UC-07, 필터 걸린 상태 재조회해도 조회되고 필터도 유지(rebindFilterColumns)"
+   ],
+   [
+    "T-94b3ad3d",
+    "A1",
+    "SCP0005_GET_DISTRIBUTION_ROUTEID"
+   ],
+   [
+    "T-c65db01b",
+    "A1",
+    "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID"
+   ],
+   [
+    "EG-a2cf8306",
+    "A1",
+    "SCP0005 실전송 건수 route"
+   ],
+   [
+    "EG-9afd4a78",
+    "A6",
+    "SCP0005 문자 정렬 PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE"
+   ],
+   [
+    "EG-58b590c3",
+    "A6",
+    "SCP0005 문자 정렬 PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY"
+   ]
+  ],
+  "ledger": {
+   "PASS": 49,
+   "미검증": 327,
+   "판정필요": 14,
+   "FAIL": 5
+  },
+  "unverified_sheet_rows": 911
+ },
+ "fe_mapping": {
+  "total": 7,
+  "by_state": {
+   "구현": 4,
+   "제외": 1,
+   "해당없음": 2
+  }
+ },
+ "asis_actions": {
+  "total": 266,
+  "blank_state": 242,
+  "meaning_needed": 3,
+  "by_state": {
+   "빈칸": 242,
+   "return false;": 1,
+   "return true;": 1,
+   "데이터 객체 조작/조회": 3,
+   "행/컬럼 값 대입": 10,
+   "팝업 초기화(인자 전달)": 1,
+   "속성 StartPosition 설정": 1,
+   "팝업/폼 열기": 1,
+   "그리드 값 설정": 6
+  }
+ },
+ "counts": {
+  "menu_id": "SCP0005",
+  "unverified_sheet": 911,
+  "unverified_by_reason": {
+   "측정못함": 391,
+   "시험검사": 1,
+   "상속생략": 413,
+   "대상불명": 105,
+   "승인대기(스냅샷)": 1
+  },
+  "direct_unmeasured": 97
+ },
+ "ledger": {
+  "menu_id": "SCP0005",
+  "generated": "2026-11-19T17:08:21",
+  "instances": 565,
+  "done": 316,
+  "open": 249,
+  "by_type": {
+   "W1": 1,
+   "W3": 10,
+   "W5": 13,
+   "W6": 2,
+   "W7": 19,
+   "W8": 3,
+   "W9": 201
+  },
+  "by_owner": {
+   "FE": 5,
+   "화면 FE": 2,
+   "DB 객체": 2,
+   "DB": 2,
+   "하네스": 13,
+   "E2E": 2,
+   "사람 판정 / AS-IS 원문 확인 → 재판정": 19,
+   "선행 W1 완료 후 E2E": 3,
+   "하네스·환경": 201
+  },
+  "suspect_not_implemented": 3,
+  "by_check": {
+   "X-NOTIMPL": {
+    "W1": 1
+   },
+   "F2": {
+    "W3": 1
+   },
+   "X-REASON": {
+    "W3": 2
+   },
+   "E4": {
+    "W3": 2,
+    "W9": 5
+   },
+   "A6": {
+    "W3": 2,
+    "W9": 3
+   },
+   "X-ROW": {
+    "W3": 3,
+    "W9": 21
+   },
+   "DB-SYN": {
+    "W5": 3
+   },
+   "G5": {
+    "W5": 7,
+    "W9": 9
+   },
+   "H6": {
+    "W5": 3,
+    "W6": 2,
+    "W7": 2,
+    "W9": 12
+   },
+   "E3": {
+    "W7": 4
+   },
+   "A1": {
+    "W7": 12,
+    "W8": 1
+   },
+   "M4": {
+    "W7": 1,
+    "W9": 5
+   },
+   "G4": {
+    "W8": 1,
+    "W9": 9
+   },
+   "G1": {
+    "W8": 1,
+    "W9": 7
+   },
+   "J2": {
+    "W9": 1
+   },
+   "C2": {
+    "W9": 24
+   },
+   "C3": {
+    "W9": 25
+   },
+   "C6": {
+    "W9": 17
+   },
+   "K4": {
+    "W9": 1
+   },
+   "F1": {
+    "W9": 1
+   },
+   "F6": {
+    "W9": 1
+   },
+   "F4": {
+    "W9": 4
+   },
+   "A5": {
+    "W9": 8
+   },
+   "H2": {
+    "W9": 28
+   },
+   "H5": {
+    "W9": 9
+   },
+   "I1": {
+    "W9": 1
+   },
+   "D1": {
+    "W9": 8
+   },
+   "M3": {
+    "W9": 2
+   }
+  }
+ },
+ "pending_recheck": null,
+ "name": "DistributionRoute",
+ "sources": [
+  {
+   "file": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v5.xlsx",
+   "time": "2026-11-19 17:08"
+  },
+  {
+   "file": "nscm-fe/features/shipping/src/pages/distribution-route/__asis-mapping__.md",
+   "time": "2026-10-01 09:14"
+  },
+  {
+   "file": "Doc/asisfacts/screens/SCP0005/__asis-actions__.md",
+   "time": "2026-10-23 11:29"
+  },
+  {
+   "file": "Doc/verify/SCP0005/checklist_counts.json",
+   "time": "2026-11-19 17:08"
+  },
+  {
+   "file": "Doc/verify/SCP0005/work_ledger_summary.json",
+   "time": "2026-11-19 17:08"
+  }
+ ]
+}

@@ -177,6 +177,17 @@ def main():
     if lack:
         rc, ev = run(ps(D('tools', 'AsisFacts', 'pack.ps1'), asis), timeout=900)
         lack2 = [n for n in PACK_CORE if not os.path.exists(os.path.join(sd, n))]
+        if lack2:
+            # 2026-11-19 사용자: "파싱이 없으면 무조건 파싱부터 수행" — 화면 재생성(pack)으로도 없으면 파서 전체 실행(run.ps1 = 빌드·함정 시험·scan·교차검증·pack) 뒤
+            #   다시 pack 하고 CheckList 를 계속한다(멈추지 않고 먼저 수행). 공용 결과라 잠금으로 한 번만 · 다른 실행이 돌리는 중이면 끝난 뒤 pack 만
+            print(f"[INFO] AS-IS 파싱 결과에 {asis} 없음({', '.join(lack2)}) → 파서 전체 실행 후 다시 생성", flush=True)
+            _skip = ['-SkipBuild'] if os.path.exists(D('tools', 'AsisFacts', '_bin', 'AsisFacts.dll')) else []
+            pr = producer_lock('asisfacts_parse', lambda: run(ps(D('tools', 'AsisFacts', 'run.ps1'), *_skip), cwd=D('tools', 'AsisFacts'), timeout=5400), timeout_s=5400)
+            prc, pev = (pr[0], pr[1]) if isinstance(pr, tuple) else (pr, '')
+            rc, ev2 = run(ps(D('tools', 'AsisFacts', 'pack.ps1'), asis), timeout=900)
+            ev = f"파서 전체 실행 rc={prc}{' · ' + pev[-160:] if pev else ''} · 다시 pack rc={rc} · {ev2}"
+            lack = lack + [n for n in lack2 if n not in lack]
+            lack2 = [n for n in PACK_CORE if not os.path.exists(os.path.join(sd, n))]
         put('asis_pack', f'AS-IS Fact Pack({asis})', 'FAIL' if lack2 else 'DONE', 'tools/AsisFacts/pack.ps1 <AS-IS ID>',
             (f"pack 후에도 {', '.join(lack2)} 없음 — scan 결과에 화면이 없으면 '🔬 파서 전체 실행'(tools/AsisFacts/run.ps1) 필요 · "
              + (f"map_screen.csv 에 {mid}→AS-IS ID 짝이 없어 같은 ID 로 찾음 · " if asis == mid else '') + ev) if lack2 else f"없던 {', '.join(lack)} 생성 · {ev}")

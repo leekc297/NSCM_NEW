@@ -3,6 +3,53 @@
   "updated": "2026-10-27",
   "guestAccount": "Guest",
   "guestAccountNote": "2026-11-18 SCP0096 미검증(EG380) 해소 — 전 화면 공용 GUEST 전용 계정(사내 ZIOUI1 SCM_ADM_USER_GR_MPG_M 사용 그룹 GUEST 1개 · BE 로그인 200 확인 22:58). 무권한 첫 화면 검사만 쓰고 계정 순회에는 넣지 않음",
+  "adminPool": {
+    "_doc": "2026-11-19 사용자 지정 — ADMIN 권한자 목록: SYSTEM ADMIN(그룹 ADMIN) + 사업부 권한이 기본 계정 minyonglee1 과 같은 14개(40·81·81_HD·81_HG·81_HM·81_ST·81_UC·82·EE·EE_HD·EE_HG·EE_HM·EE_ST·EE_UC) · 사내 ZIOUI1 추출 2026-11-19 15:21 · 로그인 200 확인 15:27 · 근거 Doc/e2e/role_users/system_admin_users_20261119.csv. 언어 전환 시험(I2·시나리오 언어 단계)은 이 목록에서 다른 세션이 쓰지 않는 계정을 골라 로그인한다(tools/E2E/lib/langacct.ts · 기본 계정·명부의 다른 시험 계정·다른 실행이 잡은 계정 제외)",
+    "default": "minyonglee1",
+    "extracted": "2026-11-19 15:21 zioui1",
+    "users": [
+      "minyonglee1",
+      "attackgo",
+      "bindy122678",
+      "brightboy",
+      "candoism",
+      "cnsytchoi",
+      "crjung",
+      "donghoon.lee",
+      "fran.d.k",
+      "heeyoung123",
+      "hoonlee_cns",
+      "hwayoung.lim",
+      "hyerakim",
+      "imadei",
+      "jaehun_cho",
+      "jaeuk.shin",
+      "jeremy.shin",
+      "jhpark9",
+      "jongykim2",
+      "jooyong026",
+      "jssbae",
+      "jungug",
+      "jungyu9.kim",
+      "k0101",
+      "kimcd",
+      "kimkwanghee",
+      "ohsun",
+      "park.choyi",
+      "parkwonchae",
+      "rokhahaha",
+      "sanghyunbyun",
+      "seongwon.j",
+      "sji.kwon",
+      "sooykwon",
+      "taehyun0122",
+      "yanbn82",
+      "yangsh2",
+      "yokejacob",
+      "yongkyu.choi",
+      "yschoithira"
+    ]
+  },
   "areas": {
     "DM": {
       "_doc": "DM UI · 공통 UI 사용자 목록 — 2026-10-20 등록분 그대로(2026-10-27 사용자 지시로 영역 분리). SCP·SSP 화면은 areas.SCP / areas.SSP 를 쓴다",
@@ -179,6 +226,22 @@
       },
       "accountsNote": "2026-11-18 사용자 지정 — 권한 검사(eg-auth) 계정을 영역 명부 대신 이 3개로 확인",
       "mode": "admin"
+    },
+    "SCP0005": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    },
+    "SSP0014": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    },
+    "SCP0028": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    },
+    "SSP0005": {
+      "mode": "admin",
+      "updated": "2026-11-19"
     }
   }
 }

@@ -1,0 +1,90 @@
+{
+  "at": "2026-11-19T08:49:59.708Z",
+  "incident": {
+    "id": "DIAG_SCP0111",
+    "at": "2026-11-19T08:48:25.027Z",
+    "rule": "R10",
+    "ruleName": "CheckList 판정 정체",
+    "screen": "SCP0111",
+    "sig": "R10|SCP0111",
+    "count": 1,
+    "status": "open",
+    "title": "CheckList 판정 정체 — SCP0111 FAIL 42 · 판정필요 22 · 미검증 10 (실행 2026-11-19 12:55:30)",
+    "detail": "미검증 처리 대상이 회차를 거듭해도 줄지 않음. unverified_history.csv 마지막 8줄:\n2026-11-18 19:50:53,7,32,32,13,5,14,,\n2026-11-18 19:52:56,8,32,32,13,5,14,,\n2026-11-19 10:24:07,9,32,32,12,5,14,,\n2026-11-19 10:44:13,10,32,32,12,5,14,,\n2026-11-19 10:58:07,11,32,32,12,5,14,,\n2026-11-19 12:24:00,1,10,10,4,2,3,,\n2026-11-19 12:45:18,2,10,10,4,2,3,,\n2026-11-19 13:16:40,3,10,10,4,2,3,,",
+    "evidence": {
+      "result": "Doc/verify/SCP0111/run_verify.result.json",
+      "fixlist": "Doc/verify/SCP0111/fixlist.csv",
+      "triage": "Doc/verify/SCP0111/unverified_triage.json",
+      "history": "Doc/verify/SCP0111/unverified_history.csv",
+      "issues": [
+        "V-daa3f0ba|D6|SCP0111 시나리오 [자동] 선택 행 위로 Insert",
+        "V-2eed0400|E3|SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
+        "V-ce8459b6|E2|SCP0111 기간 역전 조회",
+        "V-a19f5cc5|F4|SCP0111 경계값 저장",
+        "V-c73d3323|G1|MSG00344",
+        "V-fd3610e5|J4|Home / Auth Request 메뉴",
+        "V-91e6daa3|H6|그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
+        "V-2ee9fe2e|D4|[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
+        "V-309492cc|D6|[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
+        "V-7d827909|D4|[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드",
+        "V-54aee855|D6|[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼",
+        "V-5d7bcf4c|H6|[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업",
+        "V-e0afefd4|H6|[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name)",
+        "V-459bcc89|H6|[DMF0005 결함 일반화] 팝업 No. 컬럼(Model/Owner/Project/Version 팝업)",
+        "V-8e3cf116|D4|[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N",
+        "V-0cc6ae6f|D4|[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
+        "V-f817366c|H6|[DMF0005 결함 일반화] Model Code Change 팝업(MODEL_CODE_CHANGE Modal) 상단 선(line)",
+        "V-f14b1541|D6|[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹",
+        "V-9cd21228|D4|[SYS0017 결함 유형] 하단 메시지설정 탭 Insert",
+        "V-39ca7a8d|D4|[SCM0007 결함 유형] 하단 메시지설정 탭 Insert",
+        "V-1f2c6057|D4|Insert 시 Project 컬럼 · Sort",
+        "V-f98ed28d|D4|Insert 행 Div · Div 변경 시 그리드",
+        "V-ecc4813b|H6|팝업 No. 컬럼(Model/Owner/Project/Version 팝업)",
+        "V-a60e7f28|D6|그리드 Insert 신규행 위치",
+        "V-28123894|G4|SCP0111 스냅샷 조회조건 Div 40",
+        "V-f5114028|H6|SCP0111 스냅샷 팝업 Model/Nickname",
+        "V-55556e17|H4|SCP0111 스냅샷 화면샷 1920",
+        "V-e8ca7b9a|H4|SCP0111 스냅샷 화면샷 1366",
+        "T-99a0a856|G1|메인 조회 · `P_SCP0111_GET_INTEGRATION_PSI` (10 IN + O_RC[PIVOT] + O_RESULT_CURSOR",
+        "T-236699af|F4|PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE",
+        "T-d89f244f|G1|FindButton · search=handleSearch",
+        "T-40ab485f|D6|SCP0111 화면",
+        "T-7ceed643|G1|조회기간 from>to 금지 · Form 조회 전",
+        "T-caf721fa|X-ROW|SCP0111_IntegrationPSI.FindData_Main",
+        "T-6cbc2db4|X-ROW|SCP0111_IntegrationPSI.GetEssPackLineAll",
+        "T-a5cb2d9d|X-ROW|SCP0111_IntegrationPSI.InsertButton",
+        "T-a67f7ade|X-ROW|SCP0111_IntegrationPSI.SaveData",
+        "T-78c12e63|X-ROW|SCP0111_IntegrationPSI.SpdMain_TopChange",
+        "EG-08f72f25|D4|SCP0111 EG319 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
+        "EG-9b53a22e|D4|SCP0111 EG126 선택 행 위 Insert 선택 r2",
+        "EG-45ade04a|J4|SCP0111 EG380 무권한 첫 화면 GUEST/-/GUEST",
+        "EG-42d53d53|MS1|SCP0111 PROC 한글 문구 [99010]동일한 데이터가 존재합니다."
+      ]
+    }
+  },
+  "result": {
+    "cause_class": "engine",
+    "cause": "미검증 10건이 3회 연속 같은 값인 것은 13:42 검사기 보완 T343(combo_oracle 필터식 이어 붙이기, Doc/verify/_checker_defects.md:620)과 T344(F4 세션 그룹 재현, :621)가 13:16:40 마지막 CheckList 실행 뒤에 반영됐고 재수행이 없었기 때문임. 근거 Doc/verify/SCP0111/unverified_history.csv 마지막 3줄, unverified_triage.json stalled=true, _unverified_fix.json fixed_at 13:42. 남은 항목은 사용자 결정(D1,D4,D5,D7,D9,D12,D13,D14)과 계정(A1~A3) 대기임.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "unverified_history.csv, unverified_triage.json, _unverified_decisions.md, _unverified_fix.json, _checker_defects.md T343·T344, verify_ledger.csv 시각 확인",
+        "result": "보완(13:42)이 마지막 실행(13:16:40) 뒤임을 확인. 현재 시각 17:48 기준 재수행 기록 미확인"
+      },
+      {
+        "grade": "A",
+        "what": "조치 필요 항목 정리",
+        "result": "미실행 (진단 전용 지시)"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 진단 전용 지시이고 CheckList 재수행은 사용자 실행 대상",
+    "status": "need-user",
+    "next_for_user": "SCP0111 CheckList 재수행 후 미검증 건수 확인. 이후 _unverified_decisions.md 의 D1, D4, D5, D7, D9, D12, D13, D14 결정과 A1~A3 계정 준비.",
+    "proposal": null
+  },
+  "sec": 95,
+  "turns": 5,
+  "costUsd": 0.36161389999999993,
+  "log": ".vibe\\logs\\2026-11-19T17-48-25_claude_orch.log"
+}

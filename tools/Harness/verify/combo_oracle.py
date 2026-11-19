@@ -203,18 +203,7 @@ def local_rhs(asis_id, ref, var):
     if not m or not re.fullmatch(r'[a-z_]\w*', var or ''):
         return ''
     base, line = m.group(1), int(m.group(2))
-    key = (asis_id, base)
-    if key not in _SRC_CACHE:
-        txt = None
-        try:
-            root = json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or os.path.join(ROOT, 'GSCM')
-            for f in read_csv(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', asis_id, 'files.csv')):
-                if os.path.basename(f.get('file', '')) == base:
-                    txt = open(os.path.join(root, f['file']), encoding='utf-8', errors='replace').read().splitlines(); break
-        except (OSError, ValueError):
-            txt = None
-        _SRC_CACHE[key] = txt
-    lines = _SRC_CACHE[key]
+    lines = _src_lines(asis_id, base)
     if not lines:
         return ''
     rx = re.compile(r'^\s*(?:[\w<>\[\]]+\s+)?' + re.escape(var) + r'\s*=\s*(.+?);\s*(?://.*)?$')
@@ -266,8 +255,77 @@ def resolve(expr, ctx, asis, codes_of):
     raise KeyError(f'인자 식 해석 불가: {e[:60]}')
 
 
-def eval_filter(rows, expr, ctx, asis, codes_of):
-    """DataTable.Select 식(=, <>, IN, AND) — 정적 리터럴 · 'DIVISION_ID IN (조회조건 Div)' 조립식만. 그 밖은 KeyError"""
+CONCAT_RX = re.compile(r'"\s*\+\s*([A-Za-z_]\w*)\s*\+\s*"')
+
+
+def expand_concat(e, value_of):
+    """2026-11-19 T343(SCP0111 Plan Date B4 2행 'AS-IS 0건'): 필터식이 C# 문자열 이어 붙이기("…'" + division + "'…")면
+    변수 자리를 value_of(변수) 값으로 바꾼다. 종전엔 '" + division + "' 를 글자 그대로 비교해 두 분기 모두 0행이 됐다.
+    value_of 가 KeyError 를 내면 그대로 올린다(해석 불가를 0행으로 묻지 않음). 바꾼 뒤에도 '+' 조립이 남으면 KeyError"""
+    out = CONCAT_RX.sub(lambda m: str(value_of(m.group(1))), e)
+    if re.search(r'"\s*\+|\+\s*"', out):
+        raise KeyError(f'필터 조립식 해석 불가: {e[:80]}')
+    return out
+
+
+def _src_lines(asis_id, base):
+    key = (asis_id, base)
+    if key not in _SRC_CACHE:
+        txt = None
+        try:
+            root = json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or os.path.join(ROOT, 'GSCM')
+            for f in read_csv(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', asis_id, 'files.csv')):
+                if os.path.basename(f.get('file', '')) == base:
+                    txt = open(os.path.join(root, f['file']), encoding='utf-8', errors='replace').read().splitlines(); break
+        except (OSError, ValueError):
+            txt = None
+        _SRC_CACHE[key] = txt
+    return _SRC_CACHE[key]
+
+
+def accum_source(lines, line, var):
+    """T343: 사용 줄(line, 1부터) 위에서 반복문 누적 목록 변수를 찾는다.
+      var += "'" + X.Rows[i]["COL"].ToString() + "'";   (첫 항목)  /  var += ", '" + X.Rows[i]["COL"]… + "'";
+      그 위 'DataTable X = DBUtils.Filter(SRC, 식[, true|false]);'
+    → (SRC, 식, COL, 필터 줄 번호) · 누적이 없으면 None · 누적은 있는데 형식이 다르면 KeyError"""
+    if not lines:
+        return None
+    acc, decl = [], None
+    rx_acc = re.compile(r'^\s*' + re.escape(var) + r'\s*\+=\s*(.+?);\s*(?://.*)?$')
+    rx_decl = re.compile(r'^\s*(?:[\w<>\[\]]+\s+)?' + re.escape(var) + r'\s*=\s*(.+?);\s*(?://.*)?$')
+    for i in range(min(line, len(lines)) - 1, max(0, line - 81), -1):
+        t = lines[i]
+        if t.strip().startswith('//'):
+            continue
+        m = rx_acc.match(t)
+        if m:
+            acc.append((i + 1, m.group(1)))
+            continue
+        if rx_decl.match(t):
+            decl = i + 1
+            break
+    if not acc:
+        return None
+    cols, tbls = set(), set()
+    for _, rhs in acc:
+        m = re.search(r"\"[^\"]*'\"\s*\+\s*(\w+)\.Rows\[\w+\]\[\"(\w+)\"\](?:\.ToString\(\))?\s*\+\s*\"'\"", rhs)
+        if not m:
+            raise KeyError(f'누적 목록 {var} 형식 해석 불가: {rhs[:80]}')
+        tbls.add(m.group(1)); cols.add(m.group(2))
+    if len(tbls) != 1 or len(cols) != 1:
+        raise KeyError(f'누적 목록 {var} 원천 표·칸이 하나가 아님: {sorted(tbls)} {sorted(cols)}')
+    tbl, col = tbls.pop(), cols.pop()
+    rx_f = re.compile(r'^\s*(?:DataTable\s+)?' + re.escape(tbl) + r'\s*=\s*DBUtils\.Filter\(\s*(\w+)\s*,\s*(.+?)(?:\s*,\s*(?:true|false))?\s*\)\s*;\s*(?://.*)?$')
+    top = decl or max(1, line - 80)
+    for i in range(min(acc[-1][0], len(lines)) - 1, max(0, top - 41), -1):
+        m = rx_f.match(lines[i])
+        if m:
+            return m.group(1), m.group(2).strip(), col, i + 1
+    raise KeyError(f'누적 목록 {var} 의 원천 {tbl} = DBUtils.Filter(…) 대입 줄 없음')
+
+
+def eval_filter(rows, expr, ctx, asis, codes_of, expand=None):
+    """DataTable.Select 식(=, <>, IN, AND) — 정적 리터럴 · 'DIVISION_ID IN (조회조건 Div)' 조립식 · 문자열 이어 붙이기(expand, T343). 그 밖은 KeyError"""
     e = expr.split(' @')[0].strip()
     if ':=' in e:
         name, tmpl = [x.strip() for x in e.split(':=', 1)]
@@ -276,6 +334,10 @@ def eval_filter(rows, expr, ctx, asis, codes_of):
             vals = codes_of('dtMyDivision') if div in ('', 'ALL') else div.split(',')
             return [r for r in rows if str(r.get('DIVISION_ID', '')) in vals]
         raise KeyError(f'필터 변수 {name} 조립식 해석 불가: {tmpl[:80]}')
+    if CONCAT_RX.search(e):
+        if expand is None:
+            raise KeyError(f'필터 조립식 변수 해석 경로 없음: {e[:80]}')
+        e = expand(e, expr)
     e = e.strip('"')
     if not e:
         return rows
@@ -804,8 +866,48 @@ def main():
             sql = branch_sql(asis, r['sp'], r['code']) if r['code'] and r['sp'].upper().startswith('UP_FX_') else ''
             mst = master_of(sql, vals) if sql else None
             for fexpr in [f for f in (r['filters'] or '').split(' ▸ ') if f]:
-                full = eval_filter(full, fexpr, ctx, asis, codes_of)  # DataTable.Select 는 원천 순서를 유지(DBUtils.cs:297/320)
+                full = eval_filter(full, fexpr, ctx, asis, codes_of, expand=concat_expander(ctx))  # DataTable.Select 는 원천 순서를 유지(DBUtils.cs:297/320)
             return to_list(full), {'mst': mst, 'by_code': False, 'sql': bool(sql), 'sql_text': sql, 'vals': vals, 'has_order': bool(re.search(r'ORDER\s+BY', sql, re.I))}
+
+        _raw = {}
+
+        def raw_rows(var):
+            """T343: 필드 DataTable(예 dtXxxAll) 의 원천 SP 결과 원본 행 — combo_src 필터 주석 '(var→…)' 행의 SP·인자로 실행(필터 전)"""
+            if var in _raw:
+                return _raw[var]
+            x = next((y for y in src if f'({var}→' in (y.get('filters') or '')), None) or next((y for y in src if y['var'] == var and not y.get('filters')), None)
+            if not x or not x.get('sp') or x['sp'] in ('STATIC', 'DM_BIGFILTER', 'SSP_BIGFILTER'):
+                raise KeyError(f'누적 목록 원천 {var} 의 SP 미등록(combo_src)')
+            ps = json.loads(x['args'] or '[]')
+            vals = {p['n']: resolve(local_rhs(asis_id, x.get('ref'), p['expr']) or p['expr'], {}, asis, codes_of) for p in ps}
+            if x['code'] and x['sp'].upper().startswith('UP_FX_'):
+                vals['@Code'] = x['code']
+            _raw[var] = asis.run_sp(x['sp'], vals)
+            return _raw[var]
+
+        def concat_expander(ctx):
+            """T343: 필터식 '" + 변수 + "' 의 값 — 지역 변수 대입식(local_rhs → resolve) · 반복문 누적 목록(accum_source → 원천 행 필터 → 'a', 'b')"""
+            def expand(e, expr):
+                mref = re.search(r'@\s*([^:\s]+\.cs):(\d+)', expr or '')
+                if not mref:
+                    raise KeyError(f'필터 조립식 위치(@파일:줄) 없음: {e[:60]}')
+                base, line = mref.group(1), int(mref.group(2))
+
+                def value_of(var):
+                    acc = accum_source(_src_lines(asis_id, base), line, var)
+                    if acc:
+                        srcv, fx, col, fl = acc
+                        sub = eval_filter(raw_rows(srcv), f'{fx} @{base}:{fl}', ctx, asis, codes_of, expand=expand_at)
+                        return ', '.join("'" + str(r.get(col.upper(), '') if r.get(col.upper()) is not None else '') + "'" for r in sub)
+                    rhs = local_rhs(asis_id, f'{base}:{line}', var)
+                    if not rhs:
+                        raise KeyError(f'필터 변수 {var} 대입식 없음({base}:{line} 위)')
+                    return resolve(rhs, ctx, asis, codes_of)
+                return expand_concat(e, value_of)
+
+            def expand_at(e, expr):
+                return expand(e, expr)
+            return expand
 
         def codes_of(var):
             rs = [x for x in by_var.get(var, []) if INIT_METHODS.match(x['method'] or '<field>')] or by_var.get(var, [])
@@ -1155,6 +1257,57 @@ def main():
     print(f"{mid}: 콤보 {len(results)}개 — B4 {dict(Counter(r.get('b4') for r in results))} · B3 {dict(Counter(r.get('b3') for r in results))} · G7 {dict(Counter(r.get('g7') for r in results if r.get('kind') == 'SEARCH'))} → {out}")
     return 0
 
+def selftest():
+    """T343 변이 입증(DB 없음): 문자열 이어 붙이기 필터 · 반복문 누적 목록"""
+    ok = bad = 0
+    q, dq = "'", '"'
+
+    def chk(name, got, exp):
+        nonlocal ok, bad
+        if got == exp:
+            ok += 1
+        else:
+            bad += 1; print(f'[FAIL] {name}: {got!r} != {exp!r}')
+
+    def raises(name, fn):
+        try:
+            fn()
+            chk(name, 'no-error', 'KeyError')
+        except KeyError:
+            chk(name, 'KeyError', 'KeyError')
+    rows = [{'DIVISION_ID': '81', 'CODE': '20260601'}, {'DIVISION_ID': '81', 'CODE': '20260608'}, {'DIVISION_ID': '40', 'CODE': '20260601'}]
+    vals = {'division': '81', 'sList': q + '20260608' + q}
+    exp_ = lambda e, x: expand_concat(e, vals.__getitem__)  # noqa: E731
+    f1 = dq + 'DIVISION_ID = ' + q + dq + ' + division + ' + dq + q + dq + ' @X.cs:10'
+    chk('이어 붙이기 Div=81', [r['CODE'] for r in eval_filter(rows, f1, {}, None, lambda v: [], expand=exp_)], ['20260601', '20260608'])
+    f2 = dq + 'DIVISION_ID = ' + q + dq + ' + division + ' + dq + q + ' AND CODE IN (' + dq + ' + sList + ' + dq + ')' + dq + ' @X.cs:10'
+    chk('이어 붙이기 + 누적 목록', [r['CODE'] for r in eval_filter(rows, f2, {}, None, lambda v: [], expand=exp_)], ['20260608'])
+    raises('expand 없음 = KeyError(종전 글자 비교 0행 금지)', lambda: eval_filter(rows, f1, {}, None, lambda v: []))
+    raises('해석 불가 변수 = KeyError', lambda: expand_concat(f1, {}.__getitem__))
+    src = [
+        '        string division = CString.GetCheckedListValue(dtDivision, cboDivision.ControlValues);',
+        '        DataTable dtTypeFN = DBUtils.Filter(dtTypeAll, "DIVISION_ID = ' + q + '" + division + "' + q + ' AND CODE IN (' + q + 'SE' + q + ', ' + q + 'FN' + q + ')", true);',
+        '        if (dtTypeFN.Rows.Count > 0)',
+        '        {',
+        '            string sFN = string.Empty;',
+        '            for (int i = 0; i < dtTypeFN.Rows.Count; i++)',
+        '            {',
+        '                if (i == 0)',
+        '                    sFN += "' + q + '" + dtTypeFN.Rows[i]["PLANDATE"].ToString() + "' + q + '";',
+        '                else',
+        '                    sFN += ", ' + q + '" + dtTypeFN.Rows[i]["PLANDATE"].ToString() + "' + q + '";',
+        '            }',
+        '            dtDate = DBUtils.Filter(dtDateAll, "DIVISION_ID = ' + q + '" + division + "' + q + ' AND CODE IN (" + sFN + ")");',
+    ]
+    acc = accum_source(src, 13, 'sFN')
+    chk('누적 목록 원천', acc and (acc[0], acc[2], acc[3]), ('dtTypeAll', 'PLANDATE', 2))
+    chk('누적 목록 필터식', acc and acc[1], '"DIVISION_ID = ' + q + '" + division + "' + q + ' AND CODE IN (' + q + 'SE' + q + ', ' + q + 'FN' + q + ')"')
+    chk('누적 아님(division)', accum_source(src, 13, 'division'), None)
+    bad_src = src[:8] + ['                    sFN += dtTypeFN.Rows[i]["PLANDATE"].ToString();'] + src[9:]
+    raises('누적 형식 다름 = KeyError', lambda: accum_source(bad_src, 13, 'sFN'))
+    print(f'combo_oracle selftest {ok}/{ok + bad}')
+    return 1 if bad else 0
+
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(selftest() if '--selftest' in sys.argv else main())

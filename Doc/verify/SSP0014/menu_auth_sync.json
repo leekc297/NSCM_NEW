@@ -1,0 +1,148 @@
+{
+ "menu_id": "SSP0014",
+ "asis_id": "SSP0014",
+ "at": "2026-11-19 16:16:16",
+ "result": "FAIL",
+ "fails": [
+  "CAPA Planner U→EDIT: AS-IS 허용 ↔ TO-BE 불가",
+  "SSP ADMIN U→EDIT: AS-IS 허용 ↔ TO-BE 불가"
+ ],
+ "gaps": [],
+ "notes": [
+  "ADMIN C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "ADMIN D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "CAPA Planner C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "CAPA Planner D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "FP Planner C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "FP Planner D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SCM PI Admin C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SCM PI Admin D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SCP Planner C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SCP Planner D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SCP Tester C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SCP Tester D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SSP ADMIN C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SSP ADMIN D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SSP Planner C→INSERT: AS-IS SSP0014_ShipmentModelPIC.cs:254 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SSP Planner D→DELETE: AS-IS SSP0014_ShipmentModelPIC.cs:259 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "TO-BE 전용 버튼 ['USER_CHECK'](AS-IS ACL 대응 없음 · 비교 제외)"
+ ],
+ "asis_groups": {
+  "ADMIN": "CRUD",
+  "CAPA Planner": "CRUD",
+  "DM ADMIN": "R",
+  "DM Planner": "R",
+  "DM Planner (W/S)": "R",
+  "DM Viewer": "R",
+  "FP Planner": "CRUD",
+  "FP Viewer": "R",
+  "SCM PI Admin": "CRUD",
+  "SCM Viewer": "R",
+  "SCP Planner": "CRUD",
+  "SCP Tester": "CRUD",
+  "SSP ADMIN": "CRUD",
+  "SSP Planner": "CRUD",
+  "SSP Viewer": "R"
+ },
+ "tobe_groups": [
+  "ADMIN",
+  "CAPA Planner",
+  "DM ADMIN",
+  "DM Planner",
+  "DM Planner (W/S)",
+  "DM Viewer",
+  "FP Planner",
+  "FP Viewer",
+  "SCM PI Admin",
+  "SCM Viewer",
+  "SCP Planner",
+  "SCP Tester",
+  "SSP ADMIN",
+  "SSP Planner",
+  "SSP Viewer"
+ ],
+ "tobe_buttons": {
+  "ADMIN": [
+   "EDIT",
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "CAPA Planner": [
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "DM ADMIN": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "DM Planner": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "DM Planner (W/S)": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "DM Viewer": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "FP Planner": [
+   "EDIT",
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "FP Viewer": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SCM PI Admin": [
+   "EDIT",
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SCM Viewer": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SCP Planner": [
+   "EDIT",
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SCP Tester": [
+   "EDIT",
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SSP ADMIN": [
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SSP Planner": [
+   "EDIT",
+   "SAVE",
+   "SEARCH",
+   "USER_CHECK"
+  ],
+  "SSP Viewer": [
+   "SAVE(N)",
+   "SEARCH",
+   "USER_CHECK"
+  ]
+ },
+ "why": "그룹 15↔15 · CAPA Planner U→EDIT: AS-IS 허용 ↔ TO-BE 불가; SSP ADMIN U→EDIT: AS-IS 허용 ↔ TO-BE 불가"
+}

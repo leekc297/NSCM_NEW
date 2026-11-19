@@ -1,0 +1,138 @@
+{
+ "menu_id": "SCP0028",
+ "asis_id": "SCP0028",
+ "at": "2026-11-19 16:33:16",
+ "result": "FAIL",
+ "fails": [
+  "CAPA Planner U→EDIT: AS-IS 허용 ↔ TO-BE 불가",
+  "SSP ADMIN U→EDIT: AS-IS 허용 ↔ TO-BE 불가"
+ ],
+ "gaps": [],
+ "notes": [],
+ "asis_groups": {
+  "ADMIN": "CRUD",
+  "CAPA Planner": "CRUD",
+  "DM ADMIN": "R",
+  "DM Planner": "CRUD",
+  "DM Viewer": "R",
+  "FP Planner": "CRUD",
+  "FP Viewer": "R",
+  "SCM PI Admin": "CRUD",
+  "SCM Viewer": "R",
+  "SCP Planner": "CRUD",
+  "SCP Tester": "CRUD",
+  "SSP ADMIN": "CRUD",
+  "SSP Planner": "CRUD",
+  "SSP Viewer": "R"
+ },
+ "tobe_groups": [
+  "ADMIN",
+  "CAPA Planner",
+  "DM ADMIN",
+  "DM Planner",
+  "DM Viewer",
+  "FP Planner",
+  "FP Viewer",
+  "SCM PI Admin",
+  "SCM Viewer",
+  "SCP Planner",
+  "SCP Tester",
+  "SSP ADMIN",
+  "SSP Planner",
+  "SSP Viewer"
+ ],
+ "tobe_buttons": {
+  "ADMIN": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "CAPA Planner": [
+   "DELETE",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "DM ADMIN": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "DM Planner": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "DM Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "FP Planner": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "FP Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SCM PI Admin": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SCM Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SCP Planner": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SCP Tester": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SSP ADMIN": [
+   "DELETE",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SSP Planner": [
+   "DELETE",
+   "EDIT",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SSP Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ]
+ },
+ "why": "그룹 14↔14 · CAPA Planner U→EDIT: AS-IS 허용 ↔ TO-BE 불가; SSP ADMIN U→EDIT: AS-IS 허용 ↔ TO-BE 불가"
+}

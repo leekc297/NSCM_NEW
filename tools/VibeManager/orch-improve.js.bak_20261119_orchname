@@ -1,0 +1,212 @@
+// 2026-11-19 오케스트라 P5: 상시 개선안 — 실행 기록을 집계하고 개선안을 올린다. 반영은 사용자 승인 뒤에만 한다(사용자 지시 11-19).
+//   흐름: 집계(코드, digest) → 분석(Claude, 읽기 전용) → 개선안 등록(.vibe/orch/proposals/<id>.json, status pending)
+//         → 사용자 승인 → 반영(Claude) → 검증 → applied | 검증 실패면 대상 파일 복원 후 apply-failed
+//         → 사용자 반려 → rejected(사유 기록). 반려·등록된 것과 같은 서명은 다시 올리지 않는다.
+//   분석 시점: 체인이 끝났을 때와 1시간마다 확인해 마지막 분석에서 reviewEveryHours(기본 24) 지났으면 1회. '지금 분석' 버튼은 즉시.
+//   근거 없는 개선안 금지 — 측정값이 없으면 '측정 추가' 개선안만 올리게 지시한다.
+//   기준값: tools/Harness/harness.json orch 절(reviewEnabled · reviewEveryHours · reviewDays · proposalMaxPerReview)
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const agent = require('./orch-agent');
+const state = require('./orch-state');
+const watch = require('./orch-watch');
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+
+const DEF = { reviewEnabled: true, reviewEveryHours: 24, reviewDays: 7, proposalMaxPerReview: 5 };
+const READ_TOOLS = 'Read,Glob,Grep,Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(git status*),Bash(git diff*),Bash(git log*)';
+const STATUS_KO = { pending: '승인 대기', approved: '승인', applying: '반영 중', applied: '반영 완료', 'apply-failed': '반영 실패', rejected: '반려' };
+
+let started = false, timer = null, notifier = null;
+const listeners = new Set();
+const P = () => agent.paths();
+const orchDir = () => path.join(P().vibeDir, 'orch');
+const propDir = () => path.join(orchDir(), 'proposals');
+const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 2), 'utf8'); return true; } catch { return false; } };
+const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
+const two = n => String(n).padStart(2, '0');
+const stamp = () => { const d = new Date(); return `${d.getFullYear()}${two(d.getMonth() + 1)}${two(d.getDate())}${two(d.getHours())}${two(d.getMinutes())}${two(d.getSeconds())}`; };
+function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); return Object.assign({}, DEF, (h && h.orch) || {}); }
+function changed() { for (const fn of listeners) { try { fn(); } catch { } } }
+const normSig = s => String(s || '').toLowerCase().replace(/\d+(\.\d+)?/g, 'n').replace(/[^\w가-힣|/.]+/g, ' ').trim().slice(0, 160);
+
+// ── 개선안 저장·조회 ──
+function list() {
+  let names = []; try { names = fs.readdirSync(propDir()).filter(f => f.endsWith('.json')).sort().reverse(); } catch { }
+  return names.map(n => readJson(path.join(propDir(), n), null)).filter(Boolean);
+}
+function get(id) { return readJson(path.join(propDir(), `${id}.json`), null); }
+function save(pr) { writeJson(path.join(propDir(), `${pr.id}.json`), pr); changed(); return pr; }
+function log(pr, by, what, extra) { pr.history = pr.history || []; pr.history.push(Object.assign({ at: nowLocal(), by, what }, extra || {})); return pr; }
+function add(o, source) {
+  const sig = normSig(o.sig || o.title);
+  const dup = list().find(x => normSig(x.sig || x.title) === sig && /^(pending|approved|applying|applied|rejected)$/.test(x.status));
+  if (dup) return { dup: dup.id, status: dup.status };
+  let id = `${stamp()}_${source === 'review' ? 'REVIEW' : 'INC'}`; let n = 1; while (fs.existsSync(path.join(propDir(), `${id}.json`))) id = `${stamp()}_${source === 'review' ? 'REVIEW' : 'INC'}_${++n}`;
+  const pr = { id, at: nowLocal(), ms: Date.now(), source, status: 'pending', sig, title: String(o.title || '').slice(0, 200), evidence: o.evidence || '', targets: Array.isArray(o.targets) ? o.targets.map(String) : [], before_after: o.before_after || '', verify: o.verify || '', rollback: o.rollback || '', incident: o.incident || '', screen: o.screen || '', history: [] };
+  save(pr); if (orchEv) orchEv.emit('proposal', { id, title: pr.title, source });
+  return { id };
+}
+
+// ── 집계(코드) ──
+function readEvents(days) {
+  const d = orchDir(); const cut = Date.now() - days * 86400000; const out = [];
+  let files = []; try { files = fs.readdirSync(d).filter(f => /^events(_\d+_\d+)?\.jsonl$/.test(f)).map(f => path.join(d, f)); } catch { }
+  for (const f of files) { try { if (fs.statSync(f).mtimeMs < cut) continue; for (const ln of fs.readFileSync(f, 'utf8').split(/\r?\n/)) { if (!ln.trim()) continue; try { const e = JSON.parse(ln); if (e.ms >= cut) out.push(e); } catch { } } } catch { } }
+  return out.sort((a, b) => a.ms - b.ms);
+}
+const med = a => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const pct = (a, q) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(s.length * q))]; };
+/** 최근 days 일 실행 기록 집계. 숫자는 전부 events.jsonl·incidents 에서 센 값이다 */
+function digest(days) {
+  days = days || cfg().reviewDays; const evs = readEvents(days);
+  const steps = {}, waits = {}, chains = {}, claude = { n: 0, fail: 0, ms: 0, cost: 0, costN: 0, retry: 0, waitMs: 0 }, procs = {};
+  for (const e of evs) {
+    if (e.type === 'step.end') { const k = e.task || e.name; const s = steps[k] || (steps[k] = { key: k, actor: e.actor, n: 0, fail: 0, warn: 0, ms: [], repairs: 0 }); s.n++; if (e.status === 'FAIL') s.fail++; if (e.status === 'WARN' || e.status === 'HOLD') s.warn++; if (e.ms_run) s.ms.push(e.ms_run); s.repairs += e.repairs || 0; }
+    else if (e.type === 'wait.end') { const w = waits[e.kind] || (waits[e.kind] = { kind: e.kind, n: 0, sec: 0, max: 0, gaveUp: 0, screens: {} }); w.n++; w.sec += e.sec_wait || 0; w.max = Math.max(w.max, e.sec_wait || 0); if (e.gave_up) w.gaveUp++; if (e.screen) w.screens[e.screen] = (w.screens[e.screen] || 0) + (e.sec_wait || 0); }
+    else if (e.type === 'chain.end') { const k = e.chain || e.chainLabel; const c = chains[k] || (chains[k] = { chain: k, label: e.chainLabel, n: 0, ok: 0, ms: [], claudeRan: 0, claudeSkipped: 0, noClaude: 0 }); c.n++; if (e.ok) c.ok++; if (e.ms_run) c.ms.push(e.ms_run); c.claudeRan += e.claudeRan || 0; c.claudeSkipped += e.claudeSkipped || 0; if (!e.claudeRan) c.noClaude++; }
+    else if (e.type === 'claude.end') { claude.n++; if (e.exit !== 0) claude.fail++; claude.ms += e.ms_run || 0; if (e.costUsd != null) { claude.cost += e.costUsd; claude.costN++; } }
+    else if (e.type === 'claude.result' && e.costUsd != null) { claude.cost += e.costUsd; claude.costN++; }
+    else if (e.type === 'claude.retry') claude.retry++;
+    else if (e.type === 'claude.wait') claude.waitMs += e.ms_wait || 0;
+    else if (e.type === 'proc.end' && !e.server) { const k = e.label; const pr = procs[k] || (procs[k] = { label: k, n: 0, fail: 0, exits: {} }); pr.n++; if (e.exit !== 0) { pr.fail++; pr.exits[e.exit] = (pr.exits[e.exit] || 0) + 1; } }
+  }
+  const cut = Date.now() - days * 86400000; const incs = watch.list(1000).filter(x => (x.ms || 0) >= cut);
+  const byRule = {}, bySig = {};
+  for (const x of incs) { byRule[x.rule] = (byRule[x.rule] || 0) + (x.count || 1); const s = bySig[x.sig] || (bySig[x.sig] = { sig: x.sig, rule: x.rule, title: x.title, n: 0, screens: new Set(), statuses: {} }); s.n += x.count || 1; if (x.screen) s.screens.add(x.screen); s.statuses[x.status] = (s.statuses[x.status] || 0) + 1; }
+  const r1 = v => Math.round(v / 100) / 10;
+  const d = {
+    at: nowLocal(), days, events: evs.length, firstEventAt: evs.length ? evs[0].at : '', lastEventAt: evs.length ? evs[evs.length - 1].at : '',
+    steps: Object.values(steps).map(s => ({ key: s.key, actor: s.actor, n: s.n, fail: s.fail, warn: s.warn, repairs: s.repairs, medianSec: r1(med(s.ms)), p90Sec: r1(pct(s.ms, 0.9)), totalSec: r1(s.ms.reduce((a, b) => a + b, 0)) })).sort((a, b) => b.totalSec - a.totalSec).slice(0, 30),
+    waits: Object.values(waits).map(w => ({ kind: w.kind, n: w.n, totalSec: w.sec, maxSec: w.max, gaveUp: w.gaveUp, topScreens: Object.entries(w.screens).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([s, v]) => `${s} ${v}s`) })).sort((a, b) => b.totalSec - a.totalSec),
+    chains: Object.values(chains).map(c => ({ chain: c.chain, label: c.label, n: c.n, ok: c.ok, medianSec: r1(med(c.ms)), claudeRan: c.claudeRan, claudeSkipped: c.claudeSkipped, runsWithoutClaude: c.noClaude })),
+    claude: { calls: claude.n, fail: claude.fail, totalSec: r1(claude.ms), costUsd: Math.round(claude.cost * 1000) / 1000, costCounted: claude.costN, sessionRetry: claude.retry, waitedSec: r1(claude.waitMs) },
+    procFails: Object.values(procs).filter(x => x.fail).sort((a, b) => b.fail - a.fail).slice(0, 20),
+    incidents: { total: incs.length, byRule, topRepeats: Object.values(bySig).sort((a, b) => b.n - a.n).slice(0, 15).map(s => ({ rule: s.rule, n: s.n, screens: [...s.screens], title: s.title, statuses: s.statuses, sig: s.sig })) },
+  };
+  writeJson(path.join(orchDir(), 'digest.json'), d);
+  return d;
+}
+
+// ── 분석(Claude, 읽기 전용) ──
+const metaFile = () => path.join(orchDir(), 'review_meta.json');
+function reviewDue() { const c = cfg(); if (!c.reviewEnabled) return false; const m = readJson(metaFile(), {}); return Date.now() - (m.lastMs || 0) >= c.reviewEveryHours * 3600000; }
+async function review(manual) {
+  const c = cfg(); const d = digest(c.reviewDays);
+  if (!d.events && !d.incidents.total) { writeJson(metaFile(), Object.assign(readJson(metaFile(), {}), { lastMs: Date.now(), lastAt: nowLocal(), lastResult: '실행 기록 0건 — 분석 생략' })); agent.say('note', { text: `상시 분석: 최근 ${c.reviewDays}일 실행 기록 0건 — 분석 생략` }); changed(); return { skipped: true }; }
+  const known = list().map(x => ({ title: x.title, status: x.status, reason: x.reason || '' })).slice(0, 40);
+  const prompt = [
+    '.claude/agents/vm-orchestra.md 의 지킬 것을 따른다. 이번 일은 상시 분석이다. 파일을 고치지 않는다(읽기만).',
+    `Vibe_Manager 의 최근 ${c.reviewDays}일 실행 집계를 보고 개선안을 최대 ${c.proposalMaxPerReview}건 올린다.`,
+    '',
+    '규칙',
+    '- 개선안마다 근거(집계의 어느 수치, 어느 사건·로그 파일)를 적는다. 근거 수치가 없는 개선안은 올리지 않는다.',
+    '- 필요한 수치가 집계에 없으면 그 수치를 기록하게 하는 "측정 추가" 개선안을 올린다.',
+    '- 필요하면 .vibe/orch/events.jsonl · .vibe/orch/incidents/ · .vibe/logs/ · Doc/verify/<ID>/_timing.csv · _test_timing.jsonl · 해당 소스를 읽어 원인을 확인한 뒤 올린다.',
+    '- 이미 올라온 개선안(아래 목록)과 같은 내용, 반려된 내용은 다시 올리지 않는다.',
+    '- 올릴 것이 없으면 proposals 를 빈 배열로 낸다.',
+    '- 마지막 출력은 아래 형식의 JSON 코드 블록 1개다.',
+    '```json',
+    '{ "proposals": [ { "title": "", "evidence": "수치와 출처 파일", "targets": ["바꿀 파일 경로 또는 DB 객체"], "before_after": "변경 전 → 변경 후", "verify": "반영 뒤 실행할 검증 명령과 기대 결과", "rollback": "되돌리는 방법", "sig": "같은 안을 가리는 짧은 열쇠말" } ], "summary": "분석 요약 2~3문장" }',
+    '```',
+    '',
+    '[집계]', JSON.stringify(d, null, 1),
+    '',
+    `[이미 올라온 개선안 ${known.length}건]`, known.length ? JSON.stringify(known, null, 1) : '없음',
+  ].join('\n');
+  const r = await agent.withLock('review', async () => { agent.say('start', { id: 'review', text: `상시 분석 — 최근 ${c.reviewDays}일 · 사건 ${d.incidents.total}건 · 실행 기록 ${d.events}건` }); return agent.runClaude(prompt, { label: '상시 분석', permissionMode: 'default', allowedTools: READ_TOOLS }); });
+  if (r && r.busy) { agent.say('note', { text: '상시 분석 보류 — 사건 조치 중' }); return { busy: true }; }
+  const out = agent.lastJsonBlock(r.text); const meta = Object.assign(readJson(metaFile(), {}), { lastMs: Date.now(), lastAt: nowLocal(), manual: !!manual, log: r.log, sec: Math.round(r.ms / 1000), costUsd: r.costUsd });
+  if (!r.ok || !out || !Array.isArray(out.proposals)) { meta.lastResult = !r.ok ? `분석 실패 exit ${r.code}${r.timedOut ? ' (시간 초과)' : ''}` : '결과 JSON 없음'; writeJson(metaFile(), meta); agent.say('end', { id: 'review', ok: false, text: `상시 분석 ${meta.lastResult}` }); changed(); return { ok: false }; }
+  let added = 0, dups = 0;
+  for (const o of out.proposals.slice(0, c.proposalMaxPerReview)) { if (!o || !o.title || !o.evidence) continue; const a = add(o, 'review'); if (a.id) added++; else dups++; }
+  meta.lastResult = `개선안 ${added}건 등록${dups ? ` · 중복 ${dups}건 제외` : ''}`; meta.summary = String(out.summary || '').slice(0, 600); writeJson(metaFile(), meta);
+  agent.say('end', { id: 'review', ok: true, text: `상시 분석 완료 — ${meta.lastResult}. ${meta.summary}` });
+  if (added && notifier) { try { notifier(`개선안 ${added}건 승인 대기`); } catch { } }
+  changed(); return { ok: true, added, dups };
+}
+
+// ── 승인 → 반영 → 검증 ──
+function backupTargets(pr) {
+  const root = P().root; const dir = path.join(orchDir(), 'snap', `prop_${pr.id}`); const kept = [], absent = [];
+  for (const t of pr.targets || []) {
+    const rel = String(t).replace(/\\/g, '/').replace(/^\.\//, ''); const src = path.resolve(root, rel);
+    if (path.relative(root, src).startsWith('..')) continue;
+    try { if (fs.statSync(src).isFile()) { const to = path.join(dir, 'files', rel); fs.mkdirSync(path.dirname(to), { recursive: true }); fs.copyFileSync(src, to); kept.push(rel); } } catch { absent.push(rel); }
+  }
+  writeJson(path.join(dir, 'before.json'), { at: nowLocal(), kept, absent, git: agent.gitDirty() });
+  return { dir, kept, absent };
+}
+function changedSince(dir) {
+  const before = readJson(path.join(dir, 'before.json'), {}).git; const after = agent.gitDirty(); if (!before || !after) return null;
+  return Object.keys(after).filter(f => !(f in before) || before[f] !== after[f]).map(f => f.replace(/\\/g, '/')).filter(f => !f.startsWith('.vibe/') && !/\.bak_/.test(f));
+}
+function restoreTargets(pr) {
+  const root = P().root; const dir = path.join(orchDir(), 'snap', `prop_${pr.id}`); const b = readJson(path.join(dir, 'before.json'), null); if (!b) return { ok: false, why: '사본 없음' };
+  const done = [], fail = [];
+  for (const rel of b.kept || []) { try { fs.copyFileSync(path.join(dir, 'files', rel), path.join(root, rel)); done.push(rel); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
+  for (const rel of b.absent || []) { try { if (fs.existsSync(path.join(root, rel))) { fs.unlinkSync(path.join(root, rel)); done.push(`${rel}(삭제)`); } } catch (e) { fail.push(`${rel}: ${e.message}`); } }
+  return { ok: !fail.length, done, fail };
+}
+/** 사용자 승인 → 반영. 반환 { ok, status } */
+async function approve(id, by) {
+  const pr = get(id); if (!pr) return { ok: false, why: '개선안 없음' };
+  if (!/^(pending|apply-failed)$/.test(pr.status)) return { ok: false, why: `상태 ${STATUS_KO[pr.status] || pr.status}` };
+  pr.status = 'approved'; log(pr, by || '사용자', '승인'); save(pr);
+  const prompt = [
+    '.claude/agents/vm-orchestra.md 의 지킬 것을 따른다. 이번 일은 사용자가 승인한 개선안 반영이다.',
+    '승인 범위 = 아래 개선안의 targets 와 before_after. 이 범위 안에서는 C 등급 대상(FE·BE·DB 객체·tools/VibeManager·룰)도 수정한다. 범위 밖은 고치지 않는다. D 등급(금지)은 그대로 금지다.',
+    '수정 전 파일마다 .bak_<yyyymmdd>_orchprop 백업을 둔다. 반영 뒤 verify 에 적힌 검증을 실행한다. 검증을 실행하지 못했으면 verified 를 false 로 낸다.',
+    '작업 모드(tools/Harness/harness.json repairScope)와 저장소 hook 이 수정을 막으면 그 사실을 적고 applied 를 false 로 낸다.',
+    '마지막 출력은 아래 형식의 JSON 코드 블록 1개다.',
+    '```json',
+    '{ "applied": true, "verified": true, "changed_files": [""], "verify_result": "실행한 명령 · 출력 요약 · 시각", "note": "" }',
+    '```',
+    '',
+    '[개선안]', JSON.stringify({ id: pr.id, title: pr.title, evidence: pr.evidence, targets: pr.targets, before_after: pr.before_after, verify: pr.verify, rollback: pr.rollback }, null, 2),
+  ].join('\n');
+  const snap = backupTargets(pr);
+  const r = await agent.withLock(`prop_${id}`, async () => { const p2 = get(id); p2.status = 'applying'; log(p2, '오케스트라', '반영 시작'); save(p2); agent.say('start', { id, text: `개선안 반영 — ${pr.title}` }); return agent.runClaude(prompt, { label: `개선안 반영 ${pr.title}` }); });
+  const cur = get(id);
+  if (r && r.busy) { cur.status = 'pending'; log(cur, '오케스트라', '반영 보류 — 사건 조치 중. 다시 승인 필요'); save(cur); return { ok: false, why: 'busy' }; }
+  const out = agent.lastJsonBlock(r.text); const files = changedSince(snap.dir);
+  const meta = { log: r.log, sec: Math.round(r.ms / 1000), costUsd: r.costUsd, files: files || [] };
+  if (!r.ok || !out || out.applied !== true || out.verified !== true) {
+    const rs = restoreTargets(cur);
+    cur.status = 'apply-failed'; cur.result = out || null;
+    log(cur, '오케스트라', `반영 실패 — ${!r.ok ? `Claude exit ${r.code}${r.timedOut ? ' (시간 초과)' : ''}` : !out ? '결과 JSON 없음' : out.applied !== true ? `반영 안 됨: ${String(out.note || '').slice(0, 200)}` : `검증 실패: ${String(out.verify_result || '').slice(0, 200)}`} · 대상 파일 ${rs.done ? rs.done.length : 0}개 복원${rs.fail && rs.fail.length ? ` · 복원 실패 ${rs.fail.length}개` : ''}${files && files.some(f => !(snap.kept.includes(f) || snap.absent.includes(f))) ? ` · 대상 밖 변경 ${files.filter(f => !(snap.kept.includes(f) || snap.absent.includes(f))).slice(0, 6).join(', ')} 는 그대로 남음` : ''}`, meta);
+    save(cur); agent.say('end', { id, ok: false, text: `개선안 반영 실패 — ${cur.title}` }); if (notifier) notifier(`개선안 반영 실패 — ${cur.title}`);
+    return { ok: false, status: cur.status };
+  }
+  const outside = (files || []).filter(f => !(snap.kept.includes(f) || snap.absent.includes(f)));
+  cur.status = 'applied'; cur.result = out; cur.snap = `prop_${id}`;
+  log(cur, '오케스트라', `반영 완료 · 검증 통과 — ${String(out.verify_result || '').slice(0, 300)}${files ? ` · 변경 ${files.length}개 파일` : ' · 변경 파일 감지 미실행'}${outside.length ? ` · 대상 목록 밖 변경 ${outside.length}개: ${outside.slice(0, 6).join(', ')}` : ''}`, meta);
+  save(cur); agent.say('end', { id, ok: true, text: `개선안 반영 완료 — ${cur.title}` }); if (notifier) notifier(`개선안 반영 완료 — ${cur.title}`);
+  return { ok: true, status: cur.status };
+}
+function reject(id, reason, by) {
+  const pr = get(id); if (!pr) return { ok: false };
+  pr.status = 'rejected'; pr.reason = String(reason || '').slice(0, 500); log(pr, by || '사용자', `반려${pr.reason ? ` — ${pr.reason}` : ''}`); save(pr);
+  return { ok: true };
+}
+/** 반영한 개선안의 대상 파일을 반영 전 사본으로 되돌린다(DB 객체는 개선안의 rollback 절차로 사용자가 되돌린다) */
+function revert(id, by) {
+  const pr = get(id); if (!pr || pr.status !== 'applied') return { ok: false, why: '반영 완료 상태가 아님' };
+  const rs = restoreTargets(pr); pr.status = 'pending'; pr.reverted = true;
+  log(pr, by || '사용자', `되돌리기 — ${rs.done ? rs.done.length : 0}개 파일 복원${rs.fail && rs.fail.length ? ` · 실패 ${rs.fail.length}개` : ''}`, { files: rs.done, fail: rs.fail }); save(pr);
+  return rs;
+}
+
+function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
+function meta() { const c = cfg(); const m = readJson(metaFile(), {}); return { enabled: !!c.reviewEnabled, everyHours: c.reviewEveryHours, days: c.reviewDays, lastAt: m.lastAt || '', lastResult: m.lastResult || '', summary: m.summary || '', pending: list().filter(x => x.status === 'pending').length }; }
+
+function init(opts) {
+  if (started) return; started = true; notifier = (opts && opts.notify) || null;
+  let chainEndTimer = null;
+  state.on(ev => { if (ev.type !== 'chain.end' && ev.type !== 'job.end') return; if (chainEndTimer) clearTimeout(chainEndTimer); chainEndTimer = setTimeout(() => { try { digest(); if (reviewDue()) review(false); } catch { } }, 20000); });
+  timer = setInterval(() => { try { if (reviewDue() && !state.snapshot().chains.length) review(false); } catch { } }, 3600000);
+}
+function dispose() { if (timer) { clearInterval(timer); timer = null; } started = false; }
+
+module.exports = { init, dispose, on, list, get, add, approve, reject, revert, review, reviewDue, digest, meta, STATUS_KO, DEF };

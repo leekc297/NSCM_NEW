@@ -4,12 +4,14 @@
   "scope": "none",
   "note": "checklist_run.py SCP0111",
   "start": "2026-11-19T11:13:11+09:00",
-  "end": null,
-  "exit": null,
+  "end": "2026-11-19T12:24:00+09:00",
+  "exit": 0,
   "sources": [],
   "source": "chain",
   "label": "CheckList 수행 — run_verify 전체 → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
   "text": "",
   "user": "LG",
-  "host": "LEE-03"
+  "host": "LEE-03",
+  "afterMode": "end",
+  "changed": []
 }

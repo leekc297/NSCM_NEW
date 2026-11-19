@@ -155,7 +155,7 @@
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,1899,1929]]"
+                      "description": "[[\"main\",\"SEARCH\",200,1899,1960]]"
                     },
                     {
                       "type": "i18n",
@@ -170,7 +170,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 12942,
+                      "duration": 13213,
                       "errors": [],
                       "stdout": [
                         {
@@ -179,7 +179,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T02:13:35.318Z",
+                      "startTime": "2026-11-19T03:55:55.437Z",
                       "annotations": [
                         {
                           "type": "console",
@@ -203,7 +203,7 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,1899,1929]]"
+                          "description": "[[\"main\",\"SEARCH\",200,1899,1960]]"
                         },
                         {
                           "type": "i18n",
@@ -288,7 +288,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 28726,
+                      "duration": 33611,
                       "errors": [],
                       "stdout": [
                         {
@@ -297,7 +297,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T02:13:51.253Z",
+                      "startTime": "2026-11-19T03:56:12.346Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -411,7 +411,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261119_111454.xlsx' 6840B"
+                      "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261119_125721.xlsx' 6839B"
                     },
                     {
                       "type": "common",
@@ -438,7 +438,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 33390,
+                      "duration": 33016,
                       "errors": [],
                       "stdout": [
                         {
@@ -450,7 +450,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T02:14:22.249Z",
+                      "startTime": "2026-11-19T03:56:48.356Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -494,7 +494,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261119_111454.xlsx' 6840B"
+                          "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261119_125721.xlsx' 6839B"
                         },
                         {
                           "type": "common",
@@ -531,8 +531,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T02:13:34.093Z",
-    "duration": 84394.53,
+    "startTime": "2026-11-19T03:55:54.525Z",
+    "duration": 89520.84,
     "expected": 3,
     "skipped": 0,
     "unexpected": 0,

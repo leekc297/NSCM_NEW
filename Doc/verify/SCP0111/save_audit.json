@@ -1,9 +1,9 @@
 {
  "menu_id": "SCP0111",
- "generated": "2026-11-18 19:47:47",
+ "generated": "2026-11-19 13:13:34",
  "F8": {
   "verdict": "PASS",
-  "note": "변경 행 6건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정) · 계정 minyonglee1 · 기준 시각 2026-11-18 19:45:33"
+  "note": "변경 행 18건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정) · 계정 minyonglee1 · 기준 시각 2026-11-19 13:03:25"
  },
  "F7": {
   "verdict": "PASS",
@@ -12,9 +12,9 @@
  "run": {
   "cleanup_sql": "save_trace.json(restore_touched 키 없는 복원)",
   "account": "minyonglee1",
-  "saved_at": "2026-11-18 19:45:33",
+  "saved_at": "2026-11-19 13:03:25",
   "tables": {
-   "SCP_ANL_PSI_INTEGRATION": 6
+   "SCP_ANL_PSI_INTEGRATION": 18
   }
  }
 }

@@ -1,6 +1,6 @@
 {
 "id": "SCP0111",
-"at": "2026-11-18 17:36:52",
+"at": "2026-11-19 12:09:50",
 "asis": {
 "insertStmts": [
 {
@@ -149,6 +149,60 @@
 ],
 "btnAuth": [
 {
+"user_gr_id": "ADMIN",
+"sht_nm": "essPackLine",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVEDETAIL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "essPackLine",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
 "user_gr_id": "SCM PI Admin",
 "sht_nm": "main",
 "mnu_btn_cd": "DELETE",
@@ -191,9 +245,51 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SCM Viewer",
+"sht_nm": "essPackLine",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVEDETAIL",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "essPackLine",
+"mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
@@ -203,7 +299,7 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SCP Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "EDIT",
 "use_yn": "Y"
@@ -211,25 +307,7 @@
 {
 "user_gr_id": "SCP Planner",
 "sht_nm": "main",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
 "mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "INSERT",
 "use_yn": "Y"
 },
 {
@@ -239,21 +317,9 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SCP Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVEDETAIL",
 "use_yn": "Y"
 },
 {
@@ -263,38 +329,14 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SCP Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SCP Tester",
-"sht_nm": "main",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "main",
+"sht_nm": "essPackLine",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
@@ -307,13 +349,7 @@
 {
 "user_gr_id": "SCP Tester",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVEDETAIL",
-"use_yn": "N"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "essPackLine",
-"mnu_btn_cd": "SEARCH",
+"mnu_btn_cd": "EXCEL",
 "use_yn": "Y"
 },
 {
@@ -323,56 +359,20 @@
 "use_yn": "N"
 },
 {
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "SCP Tester",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
 "use_yn": "N"
 },
 {
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "SCP Tester",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVEDETAIL",
 "use_yn": "N"
 },
 {
 "user_gr_id": "SCP Tester",
-"sht_nm": "essPackLine",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
 "sht_nm": "main",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM PI Admin",
-"sht_nm": "essPackLine",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "essPackLine",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "essPackLine",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 }
@@ -768,9 +768,15 @@
 }
 ],
 "now": {
-"now_": "2026-11-18 17:36",
-"dow": "WED",
-"hm": "1736"
+"now_": "2026-11-19 12:09",
+"dow": "THU",
+"hm": "1209"
+},
+"titleset": {
+"tobeRows": 0,
+"tobeUsers": 0,
+"pkgRefs": 0,
+"asisRows": 0
 }
 },
 "accounts": [
@@ -1427,6 +1433,34 @@
 "TEST"
 ],
 "titleset": 0
+},
+{
+"key": "GUEST/-/GUEST",
+"keys": [
+"GUEST/-/GUEST"
+],
+"groups": [
+"GUEST"
+],
+"menuGroups": [],
+"divsAll": [],
+"divsMenu": [],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0006",
+"COM0008",
+"COM0009",
+"COM0011",
+"COM0013",
+"COM0014",
+"Demand",
+"Demand_Master",
+"SCM0002",
+"SYS0011",
+"TEST"
+],
+"titleset": 0
 }
 ],
 "btnDiv": {
@@ -1941,6 +1975,7 @@
 "SAVEDETAIL",
 "SEARCH"
 ]
-}
+},
+"GUEST/-/GUEST": {}
 }
 }

@@ -1,11 +1,11 @@
-# 스냅샷 검토 SCP0005 — 2026-11-13 20:55
+# 스냅샷 검토 SCP0005 — 2026-11-19 05:04
 
 | 키 | 종류 | 범위 | 상태 | 골든 | 수신 | 차이 | 설명 |
 |---|---|---|---|---|---|---|---|
 | 조회조건_Div_40 | 조회조건 | Div 40 | NEW |  | Doc\verify\SCP0005\snap\received\조회조건_Div_40.aria.yml |  | 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(18줄 · formItem 공통 조상) ·  |
 | 버튼_Div_40 | 버튼 | Div 40 | NEW |  | Doc\verify\SCP0005\snap\received\버튼_Div_40.aria.yml |  | 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(13줄) · 보이는 버튼 KOR,이 이민용,Ho |
 | 헤더_Distribution_Route | 헤더 | Distribution Route | NEW |  | Doc\verify\SCP0005\snap\received\헤더_Distribution_Route.txt |  | 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\헤더_Distribution_Route.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 2행 · 칸 39 |
-| 팝업_From_City | 팝업 | From City | NEW |  | Doc\verify\SCP0005\snap\received\팝업_From_City.aria.yml |  | 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\팝업_From_City.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 팝업 aria(26줄) |
+| 팝업_From_City | 팝업 | From City | NEW |  | Doc\verify\SCP0005\snap\received\팝업_From_City.aria.yml |  | 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\팝업_From_City.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 팝업 aria(25줄) |
 | 팝업_To_City | 팝업 | To City | ERROR |  |  |  | 팝업 열기/aria 실패 TimeoutError: locator.click: Timeout 5000ms exceeded.
 Call log:
 [2m  - waiting for locator('[data-e2e-cond="snap5"]').f |

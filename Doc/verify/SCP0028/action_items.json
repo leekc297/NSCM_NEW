@@ -1,5 +1,26 @@
 [
  {
+  "row_id": "V-b45d4015",
+  "rule_id": "J4",
+  "target": "SCP0028 탭 이름",
+  "same": []
+ },
+ {
+  "row_id": "V-15f47ff2",
+  "rule_id": "J4",
+  "target": "그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화",
+  "same": []
+ },
+ {
+  "row_id": "EG-a0ea432d",
+  "rule_id": "K4",
+  "target": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
+  "same": [
+   "EG-e6cfb2a1",
+   "EG-3e88650e"
+  ]
+ },
+ {
   "row_id": "V-be29b7a4",
   "rule_id": "F5",
   "target": "SCP0028 화면",
@@ -8,15 +29,15 @@
   ]
  },
  {
-  "row_id": "V-ed697b1a",
-  "rule_id": "E3",
-  "target": "SCP0028 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
+  "row_id": "ES-b81c0f8c",
+  "rule_id": "F1",
+  "target": "SCP0028 E2E authcrud 저장 왕복(no-save) zhangjiali",
   "same": []
  },
  {
-  "row_id": "V-57fd6f09",
-  "rule_id": "E1",
-  "target": "SCP0028 입력검증 음수 INCREMENT",
+  "row_id": "ES-5b4cd8e1",
+  "rule_id": "F1",
+  "target": "SCP0028 E2E crud 저장 왕복(insert)",
   "same": []
  },
  {
@@ -38,19 +59,10 @@
   "same": []
  },
  {
-  "row_id": "EG-a0ea432d",
-  "rule_id": "K4",
-  "target": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
-  "same": [
-   "EG-e6cfb2a1",
-   "EG-3e88650e"
-  ]
- },
- {
-  "row_id": "T-8e194f95",
-  "rule_id": "F5",
-  "target": "",
-  "folded_into": "V-be29b7a4"
+  "row_id": "V-57fd6f09",
+  "rule_id": "E1",
+  "target": "SCP0028 입력검증 음수 INCREMENT",
+  "same": []
  },
  {
   "row_id": "EG-e6cfb2a1",
@@ -63,5 +75,11 @@
   "rule_id": "K4",
   "target": "",
   "folded_into": "EG-a0ea432d"
+ },
+ {
+  "row_id": "T-8e194f95",
+  "rule_id": "F5",
+  "target": "",
+  "folded_into": "V-be29b7a4"
  }
 ]

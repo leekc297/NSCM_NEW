@@ -1,17 +1,17 @@
-# E2E 결과 — 2026-11-19 11:14
+# E2E 결과 — 2026-11-19 17:25
 
-테스트 129 · PASS 77 · FAIL 52 · FLAKY 0 · SKIP 0
+테스트 145 · PASS 80 · FAIL 65 · FLAKY 0 · SKIP 0
 
 | 화면 | 스모크 | 조회조건 동작 | 공통 기능 | CRUD | 권한(계정×DIV) | 권한별 CRUD(계정) | BE DB 오류(시노님·SQL) | 실패 요약 |
 |---|---|---|---|---|---|---|---|---|
 | DMF0004 | 1/3 ✗ | 5/8 OK · FAIL 0 · WARN 1 · ERROR 2 | 8/8 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Team' (TeamField) — 후보 [Team]<br>smoke: Error: 조회조건 판정 불가(ERROR) 2: Team, Detail |
 | DMF0005 | 1/3 ✗ | 7/12 OK · FAIL 0 · WARN 1 · ERROR 4 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Project' (ProjectField) — 후보 [PJT | Project]<br>smoke: Error: 조회조건 판정 불가(ERROR) 4: Project Null, Project, End Customer(Report) Null, Detail |
 | DMF0082 | 0/3 ✗ | 4/12 OK · FAIL 1 · WARN 4 · ERROR 3 | 10/12 OK · FAIL 1 · WARN 0 · ERROR 1 | - | - | - | - | smoke: Error: 조회조건 ' ' (Checkbox) — 후보 []<br>smoke: Error: 조회조건 동작 FAIL 1: Sum<br>smoke: Error: 공통 기능 FAIL 1: Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제) |
-| SCP0005 | 3/3 | 6/7 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
+| SCP0005 | 3/3 | 5/7 OK · FAIL 0 · WARN 2 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 1/2 ✗ | - | crud: Error: 마커 행 저장 성공 <br>authcrud: Error: [jooyong026] 허용 계정 마커 행 저장  |
 | SCP0007 | 2/3 ✗ | 8/9 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 5/5 | 0/1 ✗ | - | smoke: Error: 헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn 2행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검<br>crud: Error: 마커 행 저장 성공 <br>authcrud: Test timeout of 540000ms exceeded. |
 | SCP0016 | 2/3 ✗ | 6/10 OK · FAIL 0 · WARN 4 · ERROR 0 | 12/13 OK · FAIL 0 · WARN 1 · ERROR 0 | - | - | - | - | smoke: Error: As-is 병합 헤더 리터럴 노출 [SUM] |
 | SCP0020 | 3/3 | 5/6 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
-| SCP0028 | 2/3 ✗ | 7/8 OK · FAIL 0 · WARN 0 · ERROR 1 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 판정 불가(ERROR) 1: Model |
+| SCP0028 | 0/3 ✗ | - | - | 0/1 ✗ | 1/2 ✗ | 0/2 ✗ | - | smoke: Error: 권한 안내 없이 열림<br>smoke: Error: 권한 안내 없이 열림<br>smoke: Error: 권한 안내 없이 열림<br>crud: Error: expect(received).toBeTruthy() |
 | SCP0033 | 3/3 | 3/4 OK · FAIL 0 · WARN 1 · ERROR 0 | 10/11 OK · FAIL 0 · WARN 0 · ERROR 1 | - | - | - | - |  |
 | SCP0037 | 3/3 | 6/6 OK · FAIL 0 · WARN 0 · ERROR 0 | 10/11 OK · FAIL 0 · WARN 0 · ERROR 1 | - | - | - | - |  |
 | SCP0041 | 1/3 ✗ | 5/8 OK · FAIL 0 · WARN 0 · ERROR 3 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Inspection' (InputField) — 후보 [Inspection]<br>smoke: Error: 조회조건 판정 불가(ERROR) 3: Inspection, Cutoff Date, Status |
@@ -20,14 +20,14 @@
 | SCP0100 | 2/3 ✗ | 13/18 OK · FAIL 1 · WARN 3 · ERROR 1 | 10/11 OK · FAIL 0 · WARN 0 · ERROR 1 | 1/1 | 2/2 | 2/2 | - | smoke: Error: 조회조건 동작 FAIL 1: (기준표 순서) |
 | SCP0104 | 3/3 | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
 | SCP0108 | 0/3 ✗ | 0/15 OK · FAIL 1 · WARN 0 · ERROR 14 | 0/2 OK · FAIL 1 · WARN 1 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]<br>smoke: Error: 조회조건 동작 FAIL 1: (기준 조회)<br>smoke: Error: 공통 기능 FAIL 1: Search(조회 버튼) |
-| SCP0111 | 3/3 | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 1/2 ✗ | 1건 | crud: Error: Insert(F8) 로 행 추가<br>authcrud: Error: [jooyong026] 허용 계정 마커 행 저장  |
+| SCP0111 | 3/3 | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 1/2 ✗ | - | crud: Error: 마커 행 저장 성공 <br>authcrud: Error: [jooyong026] 허용 계정 마커 행 저장  |
 | SCP0122 | 3/3 | 3/4 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 2/2 | 2건 | crud: Test timeout of 300000ms exceeded. |
 | SCP0125 | 0/3 ✗ | 0/6 OK · FAIL 1 · WARN 0 · ERROR 5 | 0/2 OK · FAIL 1 · WARN 1 · ERROR 0 | - | - | - | 3건 | smoke: Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]<br>smoke: Error: 조회조건 동작 FAIL 1: (기준 조회)<br>smoke: Error: 공통 기능 FAIL 1: Search(조회 버튼) |
 | SCP0127 | 3/3 | 9/9 OK · FAIL 0 · WARN 0 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
 | SCP0131 | 3/3 | 6/7 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
 | SSP0003 | 0/3 ✗ | 7/15 OK · FAIL 0 · WARN 0 · ERROR 8 | 11/12 OK · FAIL 1 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'sItemId' (InputField) — 후보 [sItemId]<br>smoke: Error: 조회조건 판정 불가(ERROR) 8: Approval, sItemId, Request No, Dept Name, Title, Change Reason, Reason Detail, Reject Reason<br>smoke: Error: 공통 기능 FAIL 1: Search Area 조회영역 토글 |
-| SSP0005 | 2/3 ✗ | 4/4 OK · FAIL 0 · WARN 0 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: As-is 병합 헤더 리터럴 노출 [Company, Division, SUM] |
-| SSP0014 | 3/3 | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
+| SSP0005 | 2/3 ✗ | 3/4 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 1/1 | 1/1 | - | smoke: Error: As-is 병합 헤더 리터럴 노출 [Company, Division, SUM]<br>crud: Error: As-is 에 저장 SP 없음 → Save(F7) 비노출 |
+| SSP0014 | 0/3 ✗ | - | - | 0/1 ✗ | 1/1 | 1/1 | - | smoke: Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]<br>smoke: Error: 권한 안내 없이 열림<br>smoke: Error: 권한 안내 없이 열림<br>crud: Error: expect(received).toBeTruthy() |
 | SSP0015 | 0/3 ✗ | - | - | - | 0/1 ✗ | 0/1 ✗ | 2건 | smoke: Error: 조회조건 'Result Type' (CustomDropdown) — 후보 [Result Type]<br>smoke: TimeoutError: locator.click: Timeout 20000ms exceeded.<br>smoke: TimeoutError: locator.click: Timeout 20000ms exceeded.<br>auth: TimeoutError: locator.click: Timeout 20000ms exceeded. |
 | SSP0020 | 1/3 ✗ | 1/5 OK · FAIL 1 · WARN 2 · ERROR 1 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'All' (Checkbox) — 후보 [All | ALL]<br>smoke: Error: 조회조건 동작 FAIL 1: Period |
 | SSP0021 | 0/3 ✗ | 8/16 OK · FAIL 0 · WARN 4 · ERROR 4 | 11/13 OK · FAIL 1 · WARN 1 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Show SQL' (Checkbox) — 후보 [Show SQL]<br>smoke: Error: 조회조건 판정 불가(ERROR) 4: Show SQL, item.UserName, Box ID, Result Type<br>smoke: Error: 공통 기능 FAIL 1: Search Area 조회영역 토글 |

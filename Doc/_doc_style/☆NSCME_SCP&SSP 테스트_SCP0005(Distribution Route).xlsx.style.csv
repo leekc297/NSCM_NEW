@@ -1,0 +1,21 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+공통요건,D4,번역투,사업부마다 보여지는 컬럼이,이중 피동 → '~된' · '보인' · '쓰인',사업부마다 보여지는 컬럼이 다른지 확인하고 As-is와 동일한지 확인
+공통요건,D5,번역투,보여지는 data,이중 피동 → '~된' · '보인' · '쓰인',보여지는 data가 같은지 확인 (다른 경우는 분석필요)
+공통요건,D17,수식어,BE에서는 기본적으로 EDIT 상,삭제,각 GRID에서 AS-IS에서 EDIT(F2)를 눌렀을때 EDIT 되는 컬럼이 TO-BE에서는 기본적으로 EDIT 상태로 조회 되는지
+공통요건,D20,번역투,팝업이 있는 경우 동일하게,'~의 경우' → '~은' · '~이면' · '~할 때',Combo / 팝업이 있는 경우 동일하게 구성되는지
+공통요건,D24,번역투,-in이 되는 경우 Combo,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - Combo에서 key-in이 되는 경우 Combo 내에서 없는 값이면 초기화 되기
+공통요건,D25,번역투,-in이 되는 경우 잘못된 값,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - 팝업 컬럼에 key-in이 되는 경우 잘못된 값이면 Validation 하기. As-is에서 동작 비교 필수
+검증내역,G12,기호,leClick · AS-IS cell_rules FPTextBox · TO-BE S,가운뎃점 나열 → 쉼표,"[그리드] Distribution Route.FROM_COUNTRY (Country*)
+[화면 공통 / 입력 제어 / 확인 필요] 컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 다르게 나왔음
+ - AS-IS : 팝업 입력(직접 편집 차단·더블클릭 팝업), AS-IS SCP0005_DistributionRoute.cs:1140 spdMain_CellDoubleClick
+ - TO-BE : 신규행 1번째 행 'Country'(FROM_COUNTRY) 직접 입력 가능 (AS-IS 직접 입력 차단·더블클릭 팝업으로만 입력, 팝업 동작은 G5 행)
+ - GAP : AS-IS 기대와 TO-BE 실측 결과 다름. 이번 실행에서 처음 나온 결과임, 다시 실행해 같은 결과인지 확인 필요
+같은 문제 2곳: Distribution Route
+- AS-IS 근거 :  · SCP0005_DistributionRoute.cs:1140 spdMain_CellDoubleClick · AS-IS cell_"
+검증내역,G13,기호,leClick · AS-IS cell_rules FPTextBox · TO-BE S,가운뎃점 나열 → 쉼표,"[그리드] Distribution Route.FROM_CITY (City*)
+[화면 공통 / 입력 제어 / 확인 필요] 컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 다르게 나왔음
+ - AS-IS : 팝업 입력(직접 편집 차단·더블클릭 팝업), AS-IS SCP0005_DistributionRoute.cs:1140 spdMain_CellDoubleClick
+ - TO-BE : 신규행 1번째 행 'City'(FROM_CITY) 직접 입력 가능 (AS-IS 직접 입력 차단·더블클릭 팝업으로만 입력, 팝업 동작은 G5 행)
+ - GAP : AS-IS 기대와 TO-BE 실측 결과 다름. 이번 실행에서 처음 나온 결과임, 다시 실행해 같은 결과인지 확인 필요
+같은 문제 2곳: Distribution Route
+- AS-IS 근거 :  · SCP0005_DistributionRoute.cs:1140 spdMain_CellDoubleClick · AS-IS cell_rules FPText"

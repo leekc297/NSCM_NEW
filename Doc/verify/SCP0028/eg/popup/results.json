@@ -127,12 +127,19 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 56277,
+                  "duration": 56170,
                   "errors": [],
-                  "stdout": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/10 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 11 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 9 · filter=function items=9 src=383\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T20:42:17.382Z",
+                  "startTime": "2026-11-19T07:18:15.091Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -142,7 +149,7 @@
           ],
           "id": "85feec5f8d5a0014d343-82709bc5fbb8e2cb1e2d",
           "file": "eg_popup.spec.ts",
-          "line": 906,
+          "line": 951,
           "column": 9
         },
         {
@@ -163,12 +170,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3980,
+                  "duration": 6404,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T20:43:16.095Z",
+                  "startTime": "2026-11-19T07:19:14.238Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -178,7 +185,7 @@
           ],
           "id": "85feec5f8d5a0014d343-77c984d52d4906990d35",
           "file": "eg_popup.spec.ts",
-          "line": 906,
+          "line": 951,
           "column": 9
         },
         {
@@ -199,12 +206,19 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 50213,
+                  "duration": 40963,
                   "errors": [],
-                  "stdout": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/11 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 12 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1848 · filter=function items=1848 src=9616\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T20:43:22.934Z",
+                  "startTime": "2026-11-19T07:19:24.126Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -214,7 +228,7 @@
           ],
           "id": "85feec5f8d5a0014d343-9a437d8e0cf9850a2a04",
           "file": "eg_popup.spec.ts",
-          "line": 906,
+          "line": 951,
           "column": 9
         },
         {
@@ -235,12 +249,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 76944,
+                  "duration": 81859,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T20:44:16.013Z",
+                  "startTime": "2026-11-19T07:20:08.832Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -250,7 +264,7 @@
           ],
           "id": "85feec5f8d5a0014d343-e2e56b3b6a86d6717fde",
           "file": "eg_popup.spec.ts",
-          "line": 906,
+          "line": 951,
           "column": 9
         },
         {
@@ -271,12 +285,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11343,
+                  "duration": 13501,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T20:45:35.841Z",
+                  "startTime": "2026-11-19T07:21:34.202Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -286,7 +300,7 @@
           ],
           "id": "85feec5f8d5a0014d343-40bba1058edd3e1f6259",
           "file": "eg_popup.spec.ts",
-          "line": 906,
+          "line": 951,
           "column": 9
         },
         {
@@ -307,12 +321,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9708,
+                  "duration": 12088,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T20:45:50.040Z",
+                  "startTime": "2026-11-19T07:21:51.687Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -322,7 +336,7 @@
           ],
           "id": "85feec5f8d5a0014d343-8b672d71e3d24a4f8ec4",
           "file": "eg_popup.spec.ts",
-          "line": 906,
+          "line": 951,
           "column": 9
         }
       ]
@@ -330,8 +344,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-13T20:42:16.977Z",
-    "duration": 225960.271,
+    "startTime": "2026-11-19T07:18:14.056Z",
+    "duration": 233616.391,
     "expected": 6,
     "skipped": 0,
     "unexpected": 0,

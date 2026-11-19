@@ -1,0 +1,2 @@
+﻿method,line,api,columns,expand,color_edit,color_view,cond,ref,raw
+SaveData,595,SetBGColor,CRUD_TYPE,ENDPOINTS,LockColor,LockColor,"RAW(action == CAppSetting.FlagM) && COL(LOT_SIZE)=="""" && COL(INCREMENT)=="""" && COL(VALID_YN)==""Y"" && COL(SPLIT_YN)==""N""",SCP0028_Shipment_Lot_Size:595,"siMain.SetBGColor(i, siMain.GetColumnIndex(CAppSetting.StringAction), i, siMain.GetColumnIndex(CAppSetting.StringAction), ControlColor.LockColor)"

@@ -25,6 +25,16 @@ import csv, datetime, getpass, os, socket, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+
+
+def _oev(type_, **fields):
+    """2026-11-19 오케스트라 P1: DB 경고·종료 사건 기록(.vibe/orch/events.jsonl). 기록 실패·모듈 없음은 감시를 멈추지 않는다"""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import orch_event
+        orch_event.emit(type_, **{k: (v if isinstance(v, (int, float, bool, str)) or v is None else str(v)) for k, v in fields.items()})
+    except Exception:
+        pass
 COLS = ['sid', 'serial', 'username', 'machine', 'status', 'last_call_et', 'sql_exec_start', 'event', 'blocking_session', 'pkg', 'proc', 'tx_open', 'osuser', 'decision', 'why']
 
 
@@ -236,10 +246,12 @@ def watch(a):
                 desc = f"sid={r['sid']},{r['serial']} {r['username']} {r['pkg'] or '-'}.{r['proc'] or '-'} {r['last_call_et']}초 시작 {r['sql_exec_start']} 대기={r['event']} SQL={sql_of(cur, r['sid'])}"
                 ok, msg = kill_one(dbconn, r)
                 say(f"[DB 30분 종료] {now} {desc} → {'종료함' if ok else '종료 실패: ' + msg}")
+                _oev('db.kill', sid=r['sid'], serial=r['serial'], username=r['username'], pkg=r['pkg'], proc=r['proc'], sec_run=r['last_call_et'], wait_event=r['event'], killed=bool(ok), msg=str(msg or '')[:200])
             for r in rows:
                 key = (r['sid'], r['serial'], r['sql_exec_start'])
                 if r['decision'] == 'WARN' and key not in warned:
                     warned.add(key)
+                    _oev('db.warn', sid=r['sid'], serial=r['serial'], username=r['username'], pkg=r['pkg'], proc=r['proc'], sec_run=r['last_call_et'], wait_event=r['event'], blocking_session=r['blocking_session'])
                     say(f"[DB 5분 경고] {now} sid={r['sid']},{r['serial']} {r['username']} {r['pkg'] or '-'}.{r['proc'] or '-'} {r['last_call_et']}초째 실행 시작 {r['sql_exec_start']} 대기={r['event']} 막는세션={r['blocking_session'] or '-'} SQL={sql_of(cur, r['sid'])}")
             cx.close(); fails = 0
         except Exception as e:

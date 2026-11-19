@@ -1,0 +1,70 @@
+{
+ "menu_id": "SSP0014",
+ "at": "2026-11-19 17:07:24",
+ "round": 4,
+ "ledger": "Doc\\verify\\SSP0014\\verify_ledger.csv",
+ "before": {
+  "total": 293,
+  "by_actor": {
+   "엔진": 115,
+   "판단": 28,
+   "집계": 145,
+   "사람": 1,
+   "대조표": 4
+  },
+  "by_class": {
+   "검사기공백": 69,
+   "데이터전제": 46,
+   "판단": 28,
+   "집계": 145,
+   "스냅샷승인": 1,
+   "대조표사유": 4
+  },
+  "actionable": 147,
+  "ai_review": 0,
+  "human": 1,
+  "aggregate": 145,
+  "blocked": 0,
+  "guide": 0
+ },
+ "after": {
+  "total": 293,
+  "by_actor": {
+   "엔진": 115,
+   "판단": 28,
+   "집계": 145,
+   "사람": 1,
+   "가이드": 4
+  },
+  "by_class": {
+   "검사기공백": 69,
+   "데이터전제": 46,
+   "판단": 28,
+   "집계": 145,
+   "스냅샷승인": 1,
+   "대조표사유": 4
+  },
+  "actionable": 143,
+  "ai_review": 0,
+  "human": 1,
+  "aggregate": 145,
+  "blocked": 0,
+  "guide": 4
+ },
+ "actionable": 143,
+ "human": 1,
+ "rerun": null,
+ "unverified_sheet": 743,
+ "ledger_mtime": 1795072650.412,
+ "prev_actionable": 143,
+ "continue": 1,
+ "stalled": false,
+ "resolved_actionable": [],
+ "new_actionable": [],
+ "pending_recheck": {
+  "fixed_at": "2026-11-19 17:07",
+  "ledger_at": "2026-11-19 16:17",
+  "note": "미검증 해소 보완 2026-11-19 17:07 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ },
+ "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
+}

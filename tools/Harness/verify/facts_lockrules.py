@@ -534,6 +534,11 @@ def main():
     edit_chain, insert_chain = chain('EditButton'), chain('InsertButton')
     insert_unlocks_row = any(x['method'] in insert_chain and x['class'] == main_cls and re.search(r'\.Insert\s*$', x['target'] or '') for x in acts)
     has_insert_button = any(x['method'] == 'InsertButton' and x['class'] == main_cls for x in acts)  # 화면에 InsertButton 자체가 없으면 신규행 시나리오 없음(2026-10-31 SCP0041)
+    # 2026-11-19 미검증 해소(SCP0028 D1 15행 '[잠금 해석 실패] InsertButton 경로에 siMain.Insert() 없음'): InsertButton 경로의 메서드가 호출만 있고
+    #   실행 문장이 0(SCP0028 InsertButton → InsertRow() · InsertRow 본문 비어 있음 cs:571)이면 AS-IS 는 신규 행을 만들지 않는다 → 해석 실패가 아니라 신규행 시나리오 없음(NONE).
+    #   기준 = tools/E2E/lib/newrow.ts asisInsertNoop 과 같은 규칙(CALL_LOCAL·RETURN·BRANCH·LOCAL 외 문장 0)
+    _ins_body = [x for x in acts if x['method'] in insert_chain and x['class'] == main_cls and x.get('kind') not in ('CALL_LOCAL', 'RETURN', 'BRANCH', 'LOCAL')]
+    insert_noop = has_insert_button and not _ins_body
 
     _dyn_rows = read_csv(os.path.join(sdir, 'dyn_columns.csv')) if os.path.exists(os.path.join(sdir, 'dyn_columns.csv')) else []
 
@@ -700,9 +705,9 @@ def main():
         no_edit_button = not any(l['method'] in edit_chain for l in locks)
         # 편집 버튼(SwitchLock) 모델이 아니고 조회 후 전체 잠금도 없으면 프레임워크 기본(해제) — 명시 LockColumn 규칙만 적용(2026-10-31 SCP0096 UNKNOWN 12)
         d_exist = 'Y' if edit_unlocks_all and not unres_edit else ('N' if no_edit_button and search_locks_all else 'Y' if not unres_edit and not search_locks_all else 'UNKNOWN')
-        d_new = 'Y' if insert_unlocks_row and not unres_new else ('NONE' if not has_insert_button else 'UNKNOWN')
+        d_new = 'Y' if insert_unlocks_row and not unres_new else ('NONE' if not has_insert_button or insert_noop else 'UNKNOWN')
         why_exist = ('EditButton SwitchLock 없음 · 조회 후 전체 잠금 없음 → 기본 편집 가능(명시 잠금 규칙만)' if d_exist == 'Y' and not edit_unlocks_all else '') if d_exist == 'Y' else ('조회 후 전체 잠금 · EditButton 없음(조회 전용 화면)' if d_exist == 'N' else 'EditButton SwitchLock 없음(편집 모드 모델 아님)' if not edit_unlocks_all else '해석 못 한 잠금: ' + ' · '.join(f"{l['method']}:{l['line']} {l['raw'][:60]}" for l in unres_edit[:3]))
-        why_new = '' if d_new == 'Y' else 'AS-IS InsertButton 없음(신규행 시나리오 없음)' if d_new == 'NONE' else ('InsertButton 경로에 siMain.Insert() 없음' if not insert_unlocks_row else '해석 못 한 잠금: ' + ' · '.join(f"{l['method']}:{l['line']} {l['raw'][:60]}" for l in unres_new[:3]))
+        why_new = '' if d_new == 'Y' else ('AS-IS InsertButton 없음(신규행 시나리오 없음)' if not has_insert_button else f"AS-IS InsertButton 경로({','.join(sorted(insert_chain))}) 실행 문장 0(신규행 시나리오 없음)") if d_new == 'NONE' else ('InsertButton 경로에 siMain.Insert() 없음' if not insert_unlocks_row else '해석 못 한 잠금: ' + ' · '.join(f"{l['method']}:{l['line']} {l['raw'][:60]}" for l in unres_new[:3]))
         exp = {}
 
         def ent(c):

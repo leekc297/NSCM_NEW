@@ -1,12 +1,12 @@
 ﻿combo_id,body,resp_n,db_n,missing,extra,result,why
-LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'OPERATION_GROUP'"",""mnuId"":""SCP0028""}",3,3,,,PASS,응답 3건 = DB 3건
 Division_SCP,"{""comboId"":""Division_SCP"",""mnuId"":""SCP0028""}",14,14,,,PASS,응답 14건 = DB 14건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'OPERATION_GROUP'"",""mnuId"":""SCP0028""}",3,3,,,PASS,응답 3건 = DB 3건
 YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0028""}",2,2,,,PASS,응답 2건 = DB 2건
-LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'TRANSPORT_MODE_CODE'"",""mnuId"":""SCP0028""}",5,5,,,PASS,응답 5건 = DB 5건
 FromSiteByDivision,"{""comboId"":""FromSiteByDivision"",""mnuId"":""SCP0028"",""divisionId"":""''""}",107,104,,,PASS,응답 104건 = DB 104건
+LookupCommon,"{""comboId"":""LookupCommon"",""lookupType"":""'TRANSPORT_MODE_CODE'"",""mnuId"":""SCP0028""}",5,5,,,PASS,응답 5건 = DB 5건
+LookupCommon,"{""comboId"":""LookupCommon"",""mnuId"":""SCP0028"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
 YesOrNo,"{""comboId"":""YesOrNo"",""mnuId"":""SCP0028"",""validYn"":""'Y'""}",2,2,,,PASS,응답 2건 = DB 2건
 SCM0001_GET_DIVISION,"{""comboId"":""SCM0001_GET_DIVISION"",""mnuId"":""SCP0028""}",14,14,,,PASS,응답 14건 = DB 14건
-LookupCommon,"{""comboId"":""LookupCommon"",""mnuId"":""SCP0028"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
 ToSiteByDivision,"{""comboId"":""ToSiteByDivision"",""divisionId"":""''"",""mnuId"":""SCP0028""}",2723,2654,,,PASS,응답 2654건 = DB 2654건
 FromSiteByDivision,"{""comboId"":""FromSiteByDivision"",""mnuId"":""SCP0028"",""divisionId"":""'81'""}",30,30,,,PASS,응답 30건 = DB 30건
 ToSiteByDivision,"{""comboId"":""ToSiteByDivision"",""divisionId"":""'81'"",""mnuId"":""SCP0028""}",486,486,,,PASS,응답 486건 = DB 486건

@@ -78,11 +78,78 @@ def progress(prev_ids, cur_ids, prev_n, cur_n, ledger_changed):
     return (not res), res, new
 
 
+AI_ENGINE = {'검사기오판': 'AI검토:검사기오판', '추출오류': 'AI검토:추출오류', 'TOBE룰': 'AI검토:룰등록'}
+
+
+def ai_review_rows(mid, tri):
+    """2026-11-19 AI 판정 검토(llm_review.csv) 가 인용 확인과 함께 '검사엔진 오판·AS-IS 사실 추출 오류·미등록 TO-BE 룰'로 가린 행 → 엔진 보완 대상.
+    미검증(ERROR) 행이 아니어도(FAIL·판정필요) 처리 대상에 넣는다 — 사용자가 사용자의견으로 하던 일(오판 지적 → 엔진 수정 → 룰 등록)을 체인 2단계가 잇는다.
+    이미 미검증 목록에 있는 행은 처리 방법만 덧붙인다. 반환 = 새로 더한 행 수"""
+    try:
+        with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'llm_review.csv'), encoding='utf-8-sig', newline='') as fh:
+            rv = list(csv.DictReader(fh))
+    except OSError:
+        return 0
+    have = {t['row_id']: t for t in tri}
+    n = 0
+    for x in rv:
+        c = x.get('class') or ''
+        if c not in AI_ENGINE or x.get('verified') != 'Y' or (c == 'TOBE룰' and x.get('rule_ok') == 'Y' and x.get('apply') == 'Y'):
+            continue   # 등록된 룰로 이미 반영된 행은 엔진이 그 룰을 읽게 하는 일만 남는다 → 아래에서 다루지 않음(룰 원장 NO_ENFORCER 점검 대상)
+        hint = ('AI 판정 검토: ' + c + ' — ' + (x.get('fix_hint') or '').strip() + ' / ' + (x.get('reason') or '').strip() + ' / 근거 ' + (x.get('evidence_ref') or '').strip())[:600]
+        if x['row_id'] in have:
+            t = have[x['row_id']]
+            if t['actor'] in ('집계', '사람', '보완'):
+                continue
+            t['remedy'] = (t['remedy'] + ' · ' + hint)[:900]
+            continue
+        tri.append({'row_id': x['row_id'], 'source': x.get('source', ''), 'rule_id': x.get('rule_id', ''), 'target': x.get('target', ''), 'class': AI_ENGINE[c], 'actor': '엔진',
+                    'remedy': hint + ' → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)',
+                    'evidence': re.sub(r'\s+', ' ', f"[{x.get('cur_result', '')}] {x.get('reason', '')}")[:400], '_ai': True})
+        n += 1
+    have = {t['row_id']: t for t in tri}
+    # 사용자의견 처리(opinion_intake.csv) 중 열린 것 = 사용자가 오류 아님·TO-BE RULE 로 적었는데 검사엔진 판정이 아직 그대로인 행
+    for x in _read(os.path.join(ROOT, 'Doc', 'verify', mid, 'opinion_intake.csv')):
+        if x.get('status') != 'open' or x.get('class') not in ('엔진오판', '룰등록'):
+            continue
+        hint = (f"사용자의견 처리: {x['class']} — 의견 '{(x.get('opinion') or '')[:120]}' / " + (x.get('action') or '').strip() + (f" / 일반 규칙 초안: {x['rule_draft'].strip()}" if (x.get('rule_draft') or '').strip() else '')
+                + (f" / 근거 {x['evidence_ref'].strip()}" if (x.get('evidence_ref') or '').strip() else ''))[:700]
+        if x['row_id'] in have:
+            t = have[x['row_id']]
+            if hint[:40] not in t['remedy']:
+                t['remedy'] = (t['remedy'] + ' · ' + hint)[:1200]
+            continue
+        t = {'row_id': x['row_id'], 'source': '', 'rule_id': '', 'target': '', 'class': 'AI검토:의견-' + x['class'], 'actor': '엔진',
+             'remedy': hint + ' → 행을 사용자판정으로 덮는 데서 끝내지 않고 검사엔진 원인 수정 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check) · 결함 유형(T번호) 기록',
+             'evidence': re.sub(r'\s+', ' ', x.get('opinion') or '')[:400], '_ai': True}
+        tri.append(t); have[t['row_id']] = t; n += 1
+    # AS-IS 사실 추출 검토(llm_facts.csv) 중 원문 인용이 확인된 후보 = 추출기 보완 대상(행 ID FACT-…)
+    for x in _read(os.path.join(ROOT, 'Doc', 'verify', mid, 'llm_facts.csv')):
+        if x.get('verified') != 'Y' or not (x.get('fact_id') or '').strip():
+            continue
+        tri.append({'row_id': x['fact_id'], 'source': 'FACT', 'rule_id': '', 'target': f"{x.get('fact_file', '')} {x.get('key', '')}", 'class': 'AI검토:추출오류', 'actor': '엔진',
+                    'remedy': (f"AS-IS 사실 추출 {x.get('kind', '')}: {x.get('detail', '')} / 추출기 원인 {x.get('fix_hint', '')} / 근거 {x.get('evidence_ref', '')}")[:700]
+                    + ' → 추출기(tools/Harness/verify/facts_*.py · tools/AsisFacts) 보완 · 사실 파일을 손으로 고치지 않음 · 영향 검사: ' + (x.get('affects') or '미기재'),
+                    'evidence': re.sub(r'\s+', ' ', x.get('detail') or '')[:400], '_ai': True})
+        n += 1
+    return n
+
+
+def _read(p):
+    try:
+        with open(p, encoding='utf-8-sig', newline='') as fh:
+            return list(csv.DictReader(fh))
+    except OSError:
+        return []
+
+
 def counts(tri):
-    by_actor = collections.Counter(t['actor'] for t in tri)
-    by_class = collections.Counter(t['class'] for t in tri)
-    actionable = sum(by_actor[a] for a in WORK_ACTORS) + by_actor['자동']
-    return {'total': len(tri), 'by_actor': dict(by_actor), 'by_class': dict(by_class), 'actionable': actionable,
+    unv = [t for t in tri if not t.get('_ai')]   # 미검증(ERROR) 행 — 건수 표시는 이것만
+    ai = len(tri) - len(unv)
+    by_actor = collections.Counter(t['actor'] for t in unv)
+    by_class = collections.Counter(t['class'] for t in unv)
+    actionable = sum(by_actor[a] for a in WORK_ACTORS) + by_actor['자동'] + ai
+    return {'total': len(unv), 'by_actor': dict(by_actor), 'by_class': dict(by_class), 'actionable': actionable, 'ai_review': ai,
             'human': by_actor['사람'], 'aggregate': by_actor['집계'], 'blocked': by_actor['보완'], 'guide': by_actor['가이드']}  # 보완 = 선행 FAIL(화면 기능 누락) 뒤에만 잴 수 있는 행
 
 
@@ -240,11 +307,12 @@ def main():
         for t in tri:
             if t['actor'] == '대조표':
                 t['actor'] = '가이드'; t['remedy'] = 'DB MODE(repairScope DB_ONLY): 대조표(FE 폴더) 수정 불가, FE 가이드(FE_GUIDE_*.md)로 남기고 결정 목록에 적음 · 재수행으로 줄지 않아 처리 대상에서 뺌'
+    ai_n = ai_review_rows(mid, tri)
     after = counts(tri)
-    print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}, 사람 확인 {after["human"]}, 집계 {after["aggregate"]}'), flush=True)
+    print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}(AI 판정 검토가 가린 엔진 보완 대상 {ai_n} 포함), 사람 확인 {after["human"]}, 집계 {after["aggregate"]}'), flush=True)
     os.makedirs(vd, exist_ok=True)
     with open(os.path.join(vd, 'unverified_triage.csv'), 'w', encoding='utf-8-sig', newline='') as fh:
-        w = csv.DictWriter(fh, fieldnames=['row_id', 'source', 'rule_id', 'target', 'class', 'actor', 'remedy', 'evidence'])
+        w = csv.DictWriter(fh, fieldnames=['row_id', 'source', 'rule_id', 'target', 'class', 'actor', 'remedy', 'evidence'], extrasaction='ignore')
         w.writeheader(); w.writerows(tri)
     md = group_md(mid, tri, before, after, rr, rnd) if not prc else (
         f'# {mid} 미검증 분류 · {now()} · 라운드 {rnd}\n\n- {prc["note"]}\n- 원장 {prc["ledger_at"]} 은 보완 전 판이라 건수를 싣지 않음. CheckList 재수행 뒤 다시 만듦\n'

@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 392,
+  "at": "2026-11-19T05:03:45.259Z",
+  "user": "minyonglee1",
+  "test": "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
+ }
+]

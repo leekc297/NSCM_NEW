@@ -1,4 +1,4 @@
-# 완료 정의(DoD) — DMF0042 2026-11-17 06:12
+# 완료 정의(DoD) — DMF0042 2026-11-19 08:29
 
 29/45 충족
 
@@ -48,4 +48,4 @@
 | B27 | ✅ | 동적 헤더 원천 DMF0042_3_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
 | B27 | ✅ | 동적 헤더 원천 DMF0042_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
 | B27 | ✅ | 동적 헤더 원천 DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
-| S01 | ❌ | 정적 게이트 직접 FAIL 0(정적 판정 3801행 · ERROR 2551) | FAIL 1: I4×1 — Doc/verify/DMF0042/static_gate.md |
+| S01 | ❌ | 정적 게이트(run_verify.py --static) 실행 | 실행 결과 없음(rc=1) — [세부 1/2] 공통 최신 받기 + 파일별 판정(미리보기 · 파일 변경 없음) | ⬇️ git fetch common … |

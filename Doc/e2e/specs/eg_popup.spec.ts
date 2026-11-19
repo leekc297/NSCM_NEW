@@ -11,6 +11,7 @@ import { test } from '../../../tools/E2E/fixtures/test';
 import type { Nscm } from '../../../tools/E2E/lib/nscm';
 import { CFG } from '../../../tools/E2E/lib/nscm';
 import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
+import { labelVariants } from '../../../tools/E2E/lib/labeltrans';  // 2026-11-19 라벨 코드 다른 언어 글자
 import { ensureRows } from '../../../tools/E2E/lib/smoke-extra';
 import { applyPopDomMutations, cellPoint, clickPopHeader, closePopup, dialogCount, dragPopup, hasMut, installPopMutations, mainColumn, mainPopRoot, mainPopTrigger, mainPopupConds, measure, orderCheck, pickRows, PopNet, popDisplay, popRowCount, popRows, popSearch, POPMUT, resizePopup, selectedRows, setText, filterByF4, sortByF3, settle, tagTop, waitPopRows, waitPopup, type PopCond, type PopMeasure } from '../../../tools/E2E/lib/popupprobe';
 
@@ -129,6 +130,8 @@ async function openPopup(nscm: Nscm, c: Call, state: { popup: boolean }): Promis
   }
   if (k === 'BTN' || k === 'INSERT') {
     const names = k === 'INSERT' ? ['Insert'] : [c.trigger.button_text || '', (PLAN?.buttons || []).find(b => (b.asis || '').toLowerCase() === c.trigger.control.toLowerCase())?.label || '', c.trigger.control.replace(/^btn/i, '')].filter(Boolean);
+    // 2026-11-19 SCP0028 EG-5ca14a48: 측정 계정 언어(KO)로 보이는 같은 라벨 코드 글자('Input' ↔ '입력')도 찾는다(메시지 원장 · labeltrans.ts)
+    for (const n of [...names]) for (const v of labelVariants(n)) if (!names.includes(v)) names.push(v);
     for (const n of names) {
       const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*');
       const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}(\\(F\\d+\\))?$`, 'i') })).catch(() => null);
@@ -789,8 +792,10 @@ async function runCell(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
   if (isText) put('CELL_KEYIN', ['EG137'], edit ? 'PASS' : '판정필요', 'FPTextModal = 키인 가능 + 팝업', `editor 열림 ${edit}(행 ${row}) — 행 조건 잠금이면 다른 행 필요`, '문서 GAPPI-16');
   // 팝업 아이콘
   const cls = await probe.cellClasses(p, row, col).catch(() => '');
-  const icon = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const col = c && c.columns.getColumn(${JSON.stringify(col)}); const el = col && c.cells.getCellElement(${row}, col.index); return el ? !!el.querySelector('svg, button, [class*="icon"], [class*="Icon"]') : null; })()`).catch(() => null) as boolean | null;
-  put('CELL_ICON', ['EG137'], icon === null ? 'ERROR' : icon ? 'PASS' : '판정필요', '팝업 셀 아이콘 표시', `아이콘 ${icon} · 셀 클래스 '${String(cls).slice(0, 80)}' · 메타 [${ctlTypes.join(',')}]`, '');
+  // 2026-11-19 SSP0014 미검증 해소(T351): 공용 그리드는 팝업 아이콘을 셀 자식 요소가 아니라 CSS 가상 요소로 그린다(_grid.scss .wj-cell-popup::after · .is-popup::after) —
+  //   자식 svg·button 만 보던 탓에 아이콘이 보이는 칸도 '아이콘 false' 판정필요(8행). 셀 클래스 + ::after 계산 스타일(content·mask·배경 이미지)도 본다
+  const icon = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const col = c && c.columns.getColumn(${JSON.stringify(col)}); const el = col && c.cells.getCellElement(${row}, col.index); if (!el) return null; if (el.querySelector('svg, button, [class*="icon"], [class*="Icon"]')) return true; const a = getComputedStyle(el, '::after'); const has = a && a.content && a.content !== 'none' && a.content !== 'normal' && (a.content !== '""' || (a.maskImage && a.maskImage !== 'none') || (a.webkitMaskImage && a.webkitMaskImage !== 'none') || (a.backgroundImage && a.backgroundImage !== 'none')); return !!has && /wj-cell-popup|is-popup/.test(el.className); })()`).catch(() => null) as boolean | null;
+  put('CELL_ICON', ['EG137'], icon === null ? 'ERROR' : icon ? 'PASS' : '판정필요', '팝업 셀 아이콘 표시', `아이콘 ${icon} · 셀 클래스 '${String(cls).slice(0, 160)}' · 메타 [${ctlTypes.join(',')}]`, '');
   // Delete — 값 삭제 허용(문서 DM-18)
   const v0 = (await probe.value(p, row, col)) ?? '';
   const pt = await probe.cellCenter(p, row, col);

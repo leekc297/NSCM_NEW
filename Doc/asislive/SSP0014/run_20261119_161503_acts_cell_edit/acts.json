@@ -1,0 +1,359 @@
+{
+ "id": "SSP0014",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": true,
+ "acts": [
+  {
+   "control": "spdMain[USER_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[PART_LEADER]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[TEAM_LEADER]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[MAIL_USER1]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[MAIL_USER2]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[MAIL_USER3]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[MAIL_USER4]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  },
+  {
+   "control": "spdMain[MAIL_USER5]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭(수정 모드)",
+   "ok": true,
+   "error": null,
+   "popups": [
+    {
+     "form": "UserInfoPopup",
+     "title": "UserInfoPopup",
+     "modal": true,
+     "grid_rows": 0,
+     "closed": true
+    }
+   ],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0014-Sdf96ef",
+    "SSP0014-Sd0c36e",
+    "SSP0014-S4485c8",
+    "SSP0014-S8a26f8",
+    "SSP0014-Sbf1a08",
+    "SSP0014-Sd9ae7b",
+    "SSP0014-Sdcc851",
+    "SSP0014-Sc0513e",
+    "SSP0014-S7e34f1",
+    "SSP0014-S0e99db",
+    "SSP0014-Sd54967",
+    "SSP0014-S7b5b80",
+    "SSP0014-Sd72b51",
+    "SSP0014-S09a805",
+    "SSP0014-S767cc0",
+    "SSP0014-S39a4cd"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-19 16:12:01",
+ "edit_focus": "셀 0,2",
+ "edit_mode": true,
+ "plan": [
+  {
+   "kind": "dbl",
+   "scenarios": 16,
+   "named_cols": [
+    "USER_ID",
+    "PART_LEADER",
+    "TEAM_LEADER",
+    "MAIL_USER1",
+    "MAIL_USER2",
+    "MAIL_USER3",
+    "MAIL_USER4",
+    "MAIL_USER5"
+   ],
+   "used": [
+    "USER_ID",
+    "PART_LEADER",
+    "TEAM_LEADER",
+    "MAIL_USER1",
+    "MAIL_USER2",
+    "MAIL_USER3",
+    "MAIL_USER4",
+    "MAIL_USER5"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

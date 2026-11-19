@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-19T19:58:43+09:00",
+  "days": 7,
+  "events": 33,
+  "firstEventAt": "2026-11-19T17:10:46+09:00",
+  "lastEventAt": "2026-11-19T19:35:39+09:00",
+  "steps": [],
+  "waits": [
+    {
+      "kind": "dbwin",
+      "started": 4,
+      "unfinished": 3,
+      "unfinishedLive": 0,
+      "unfinishedScreens": [
+        "DMF0042"
+      ],
+      "gone": 0,
+      "goneSec": 0,
+      "n": 1,
+      "totalSec": 30,
+      "maxSec": 30,
+      "gaveUp": 0,
+      "topScreens": [
+        "DMF0042 30s"
+      ]
+    }
+  ],
+  "chains": [],
+  "claude": {
+    "started": 6,
+    "unfinished": 1,
+    "runningNow": 0,
+    "calls": 5,
+    "fail": 1,
+    "totalSec": 611.5,
+    "costUsd": 4.394,
+    "costCounted": 4,
+    "sessionRetry": 0,
+    "waitedSec": 0
+  },
+  "procFails": [],
+  "incidents": {
+    "total": 0,
+    "byRule": {},
+    "topRepeats": []
+  }
+}

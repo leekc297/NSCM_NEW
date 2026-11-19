@@ -1529,7 +1529,7 @@
             8080,
             5173
           ],
-          "title": "CheckList 수행 — run_verify 전체 → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+          "title": "CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
           "kind": "python",
           "script": "${harnessDir}/verify/checklist_run.py",
           "splitArgs": true,
@@ -1997,6 +1997,37 @@
             }
           ],
           "title_en": "Set work mode (DB / UIDB)"
+        },
+        {
+          "id": "S8.llmReview",
+          "title": "AI 검토 켜고 끄기 (CheckList 단계별 Claude Code 활용 · harness.json llmReview)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_llm_review.py",
+          "splitArgs": true,
+          "args": [
+            "${input:llm}"
+          ],
+          "inputs": [
+            {
+              "name": "llm",
+              "prompt": "AI 검토 — CheckList 수행 때 Claude Code 로 판단 검토(토큰 사용)",
+              "options": [
+                {
+                  "value": "ON",
+                  "description": "켜기 — 사용자의견 처리 · AS-IS 사실 추출 검토 · 판정 검토 · 설명 문장 작성"
+                },
+                {
+                  "value": "OFF",
+                  "description": "끄기 — 검사엔진 판정만(토큰 사용 없음)"
+                },
+                {
+                  "value": "STATUS",
+                  "description": "현재 값만 표시"
+                }
+              ]
+            }
+          ],
+          "title_en": "AI review on/off"
         },
         {
           "id": "S8.diagnose",

@@ -1,6 +1,6 @@
 # SSP0014 · SSP0014_GET_SHIPMENT_MODEL_PIC ↔ PKG_SSP0014.P_SSP0014_GET_MODEL_PIC
 
-- 실행 2026-11-14 21:02:03 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-19 16:07:06 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 DIFF** — 공통 1738행 중 불일치 셀 69 — diff/P_SSP0014_GET_MODEL_PIC__12.csv · 키 원천 cleanup_spec.json · 키 DIVISION_ID+FROM_SITE+ITEM_ID · golden 집합 판정 DIFF
 - 호출 #12 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 1763 · 원천 Doc\verify\SSP0014\calls\_verify_Division_컬럼_A5__0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "82", "operationGroup": "", "fromSite": "", "validYn": "", "itemId": "", "userId": "", "language": "KO"}`

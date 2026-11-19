@@ -1,0 +1,321 @@
+// 2026-11-19 VMO P2: VMO 창 화면(webview HTML). 실행기는 workbench.js 의 WB(orch=true)를 그대로 쓴다.
+//   탭: 상황판(서버·실행 중 체인·대기·잠금·부하) · BE Log · FE Log · 공통 기능(Server · Git · 환경설정 버튼 + Task Log)
+//   받는 메시지: out · outBulk · server · serverState · board · commonMenu · workMode · orchTab · showTab · chat(meta) · busy
+//   보내는 메시지: orch:ready · orch:quick{label} · stop
+'use strict';
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function html(p, opts) {
+  const ko = !p || p.language !== 'en';
+  const T = (k, e) => (ko ? k : e);
+  const first = /^(belog|felog|task|board|inc|agent|prop)$/.test(String((opts && opts.tab) || '')) ? opts.tab : 'board';
+  return `<!DOCTYPE html><html lang="${ko ? 'ko' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--b:var(--vscode-panel-border,rgba(128,128,128,.35));--mut:var(--vscode-descriptionForeground);--ok:var(--vscode-testing-iconPassed,#3fb950);--warn:var(--vscode-editorWarning-foreground,#d29922);--bad:var(--vscode-errorForeground,#f85149)}
+*{box-sizing:border-box}
+body{margin:0;padding:0;font-family:var(--vscode-font-family);font-size:12px;color:var(--vscode-foreground);background:var(--vscode-editor-background);height:100vh;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--b);flex-wrap:wrap}
+.top h1{font-size:13px;margin:0 8px 0 0;font-weight:700}
+.tab{background:transparent;color:var(--vscode-foreground);border:1px solid transparent;border-radius:4px;padding:4px 10px;cursor:pointer;opacity:.7;font-size:12px;display:flex;gap:6px;align-items:center}
+.tab.on{opacity:1;font-weight:700;border-color:var(--b);background:var(--vscode-list-activeSelectionBackground,rgba(128,128,128,.18));color:var(--vscode-list-activeSelectionForeground,inherit)}
+.tab .nb{font-size:9px;background:var(--vscode-badge-background);color:var(--vscode-badge-foreground);border-radius:6px;padding:0 4px}
+.sp{flex:1}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--b);border-radius:10px;padding:2px 8px;font-size:11px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mut);display:inline-block}
+.dot.up{background:var(--ok)}.dot.listen{background:var(--warn)}.dot.down{background:var(--mut)}
+.pane{flex:1;min-height:0;display:none;overflow:auto}
+.pane.on{display:block}
+.log{font-family:var(--vscode-editor-font-family,monospace);font-size:11.5px;white-space:pre-wrap;word-break:break-all;padding:8px 10px;line-height:1.45}
+.log .ok{color:var(--ok)}.log .bad{color:var(--bad)}.log .warn{color:var(--warn)}.log .cmd{opacity:.75;font-weight:700}
+.logbar{position:sticky;top:0;display:flex;gap:6px;justify-content:flex-end;padding:4px 10px;background:var(--vscode-editor-background);border-bottom:1px solid var(--b);z-index:1}
+button.sec{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground);border:none;border-radius:3px;padding:3px 9px;cursor:pointer;font-size:11px}
+button.sec:hover{background:var(--vscode-button-secondaryHoverBackground)}
+.wrap{padding:10px 12px;display:flex;flex-direction:column;gap:12px}
+.sect h2{font-size:12px;margin:0 0 6px;font-weight:700;display:flex;gap:8px;align-items:baseline}
+.sect h2 small{font-weight:400;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.card{border:1px solid var(--b);border-radius:6px;padding:8px 10px;display:flex;flex-direction:column;gap:3px}
+.card b{font-size:12px}.card .s{color:var(--mut);font-size:11px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--b);font-size:11.5px;vertical-align:top}
+th{color:var(--mut);font-weight:600;white-space:nowrap}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{color:var(--mut);padding:4px 2px}
+.actor{border:1px solid var(--b);border-radius:8px;padding:0 6px;font-size:10.5px;white-space:nowrap}
+.actor.claude{border-color:var(--vscode-charts-purple,#a371f7);color:var(--vscode-charts-purple,#a371f7)}
+.grp{border:1px solid var(--b);border-radius:6px;padding:8px 10px}
+.grp h3{font-size:12px;margin:0 0 6px}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+.btns button{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground);border:none;border-radius:4px;padding:5px 10px;cursor:pointer;font-size:12px}
+.btns button:hover{background:var(--vscode-button-secondaryHoverBackground)}
+.split{display:flex;flex-direction:column;height:100%}
+.split .menu{padding:10px 12px;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--b);max-height:46%;overflow:auto}
+.split .log{flex:1;overflow:auto}
+.notice{display:flex;flex-direction:column;gap:2px;max-height:120px;overflow:auto;font-size:11.5px}
+.notice div{white-space:pre-wrap}
+@media (max-width:520px){.cards{grid-template-columns:1fr}}
+/* ── 2026-11-19 디자인: 반투명(유리) 대시보드 · 공통 기능 전체 영역 ── */
+:root{--fg:var(--vscode-editor-foreground,#ccc);--g1:color-mix(in srgb,var(--fg) 5%,transparent);--g2:color-mix(in srgb,var(--fg) 9%,transparent);--gb:color-mix(in srgb,var(--fg) 14%,transparent);--acc:var(--vscode-charts-blue,#3794ff);--acc2:var(--vscode-charts-purple,#a371f7)}
+body{background:radial-gradient(1100px 460px at 8% -12%,color-mix(in srgb,var(--acc) 15%,transparent),transparent 62%),radial-gradient(900px 440px at 104% -6%,color-mix(in srgb,var(--acc2) 12%,transparent),transparent 58%),var(--vscode-editor-background);background-attachment:fixed}
+.glass{background:var(--g1);border:1px solid var(--gb);border-radius:12px;-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 22px rgba(0,0,0,.16)}
+.top{gap:4px;padding:8px 12px;border-bottom:1px solid var(--gb);background:var(--g1);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.top h1{font-size:13px;letter-spacing:.3px;margin-right:10px}
+.tab{border-radius:8px;padding:5px 11px;opacity:.72;transition:background .15s,opacity .15s}
+.tab:hover{opacity:1;background:var(--g2)}
+.tab.on{background:var(--g2);border-color:var(--gb);color:inherit;box-shadow:inset 0 -2px 0 var(--acc)}
+.chip{border-color:var(--gb);background:var(--g1)}
+.pane.on{display:flex;flex-direction:column}
+.pane>.wrap,.pane>.dash,.pane>.common,.pane>.split{flex:1;min-height:0}
+.pane>.log{flex:1}
+.split{height:auto}
+.logbar{background:var(--g1);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--gb)}
+button.sec{border-radius:6px;background:var(--g2);color:inherit;border:1px solid var(--gb)}
+button.sec:hover{background:color-mix(in srgb,var(--fg) 16%,transparent)}
+.grp{border-color:var(--gb);background:var(--g1);border-radius:12px}
+/* 상황판 */
+.dash{padding:14px;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kc{display:contents}
+.kpi{position:relative;padding:12px 14px;border-radius:14px;background:var(--g1);border:1px solid var(--gb);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 22px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:4px;min-height:86px;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--gb))}
+.kpi .kl{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.kpi .kv{font-size:24px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kpi .kv small{font-size:12px;font-weight:500;color:var(--mut);margin-left:4px}
+.kpi .ks{font-size:11px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kpi.up{--kc:var(--ok)}.kpi.listen,.kpi.warn{--kc:var(--warn)}.kpi.bad{--kc:var(--bad)}.kpi.on{--kc:var(--acc)}
+.kpi .dot{width:9px;height:9px}
+.kpi.up .dot{box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent)}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.panel{padding:12px 14px;min-width:0}
+.panel.wide{grid-column:1/-1}
+.panel h2{font-size:12px;margin:0 0 8px;font-weight:700;display:flex;gap:8px;align-items:baseline;letter-spacing:.2px}
+.panel h2 small{font-weight:400;color:var(--mut)}
+.pbody{overflow:auto;max-height:300px}
+.panel table th{position:sticky;top:0;background:transparent}
+.panel th,.panel td{border-bottom-color:var(--gb)}
+.panel tr:last-child td{border-bottom:none}
+.gauges{display:flex;flex-direction:column;gap:12px;overflow:visible;max-height:none}
+.gz .gh{display:flex;align-items:baseline;gap:8px}
+.gz .gh b{font-size:12px}.gz .gh .gv{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}.gz .gh .gs{color:var(--mut);font-size:11px;margin-left:auto;white-space:nowrap}
+.gz .bar{position:relative;height:8px;border-radius:5px;background:var(--g2);margin-top:6px}
+.gz .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--ok);min-width:2px;transition:width .4s}
+.gz.warn .bar i{background:var(--warn)}.gz.bad .bar i{background:var(--bad)}.gz.na .bar i{background:var(--mut);opacity:.4}
+.gz .bar u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg);opacity:.55;border-radius:1px}
+.notice{max-height:220px}
+.notice div{padding:3px 0;border-bottom:1px dashed var(--gb)}
+.notice div:last-child{border-bottom:none}
+/* 공통 기능 */
+.common{display:grid;grid-template-columns:minmax(320px,46%) minmax(0,1fr);gap:14px;padding:14px}
+.cmenu{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:12px;padding-right:2px}
+.cgrp{padding:12px 14px}
+.cgrp h3{font-size:12px;margin:0 0 10px;display:flex;align-items:baseline;gap:8px;letter-spacing:.2px}
+.cgrp h3 small{font-weight:400;color:var(--mut)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(184px,1fr));gap:8px}
+.tile{display:flex;align-items:center;gap:10px;text-align:left;padding:9px 11px;border-radius:10px;border:1px solid var(--gb);background:var(--g1);color:inherit;cursor:pointer;font-family:inherit;font-size:12px;min-height:44px;transition:background .15s,border-color .15s,transform .05s}
+.tile:hover{background:var(--g2);border-color:color-mix(in srgb,var(--acc) 55%,var(--gb))}
+.tile:active{transform:translateY(1px)}
+.tile:focus-visible{outline:2px solid var(--vscode-focusBorder,var(--acc));outline-offset:1px}
+.tile .ti{flex:0 0 26px;height:26px;border-radius:8px;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:14px}
+.tile .tt{min-width:0;display:flex;flex-direction:column;gap:1px}
+.tile .tt b{font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3;overflow-wrap:anywhere}
+.tile .tt span{font-size:10.5px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clog{min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.clhead{display:flex;align-items:baseline;gap:8px;padding:10px 14px;border-bottom:1px solid var(--gb)}
+.clhead small{color:var(--mut)}
+.clog .log{flex:1;min-height:0;overflow:auto}
+@media (max-width:820px){.dgrid{grid-template-columns:1fr}.common{grid-template-columns:1fr;grid-template-rows:minmax(0,46%) minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.tab,.tile,.gz .bar i{transition:none}}
+</style></head><body>
+<div class="top">
+  <h1>${T('VMO', 'VMO')}</h1>
+  <button class="tab" data-t="board">${T('상황판', 'Board')}</button>
+  <button class="tab" data-t="belog">☕ BE Log<span class="dot" id="dbe"></span></button>
+  <button class="tab" data-t="felog">🎨 FE Log<span class="dot" id="dfe"></span></button>
+  <button class="tab" data-t="task">${T('공통 기능', 'Common')}</button>
+  <button class="tab" data-t="inc">${T('사건', 'Incidents')}<span class="chip" id="incN" style="display:none;padding:0 6px"></span></button>
+  <button class="tab" data-t="prop">${T('개선안', 'Proposals')}<span class="chip" id="prN" style="display:none;padding:0 6px"></span></button>
+  <button class="tab" data-t="agent">${T('에이전트', 'Agent')}<span class="chip" id="agN" style="display:none;padding:0 6px"></span></button>
+  <span class="sp"></span>
+  <span class="chip" id="cbusy" style="display:none"></span>
+  <span class="chip" id="cai" title="${T('AI 검토 = CheckList 수행 중 Claude 가 사용자의견 처리, AS-IS 사실 추출 검토, 판정 검토, 설명 작성을 함. 켜고 끄기 = 공통 기능 탭 환경설정의 AI 검토 · 상한 = harness.json llmReviewBudgetUsd', 'AI review inside CheckList')}"></span>
+  <span class="chip" id="cmode" title="${T('작업 모드 — 변경은 공통 기능 탭 환경설정의 작업 모드', 'Work mode')}"></span>
+  <button class="sec" id="stop" title="${T('이 창에서 실행한 공통 작업 중지(서버는 종료하지 않음)', 'Stop tasks started here (servers keep running)')}">${T('중지', 'Stop')}</button>
+</div>
+
+<div class="pane" id="board"><div class="dash">
+  <div class="kpis"><div class="kc" id="bSrv"></div><div class="kc" id="bKpi"></div></div>
+  <div class="dgrid">
+    <section class="panel glass wide"><h2>${T('실행 중', 'Running')}<small id="bAt"></small></h2><div class="pbody" id="bRun"></div></section>
+    <section class="panel glass"><h2>${T('부하', 'Load')}<small>${T('동시 실행 입장 기준', 'admission limits')}</small></h2><div class="pbody gauges" id="bLoad"></div></section>
+    <section class="panel glass"><h2>${T('대기', 'Waiting')}</h2><div class="pbody" id="bWait"></div></section>
+    <section class="panel glass"><h2>${T('잠금 파일', 'Locks')}<small>Doc/e2e</small></h2><div class="pbody" id="bLock"></div></section>
+    <section class="panel glass"><h2>${T('알림', 'Notices')}</h2><div class="pbody notice" id="bNote"><div class="empty">${T('없음', 'None')}</div></div></section>
+  </div>
+</div></div>
+
+<div class="pane" id="belog"><div class="logbar"><button class="sec" data-latest="belogB">⤓ ${T('최신', 'Latest')}</button><button class="sec" data-clear="belogB">${T('지우기', 'Clear')}</button></div><div class="log" id="belogB"></div></div>
+<div class="pane" id="felog"><div class="logbar"><button class="sec" data-latest="felogB">⤓ ${T('최신', 'Latest')}</button><button class="sec" data-clear="felogB">${T('지우기', 'Clear')}</button></div><div class="log" id="felogB"></div></div>
+<div class="pane" id="inc"><div class="wrap">
+  <div class="sect"><h2>${T('사건', 'Incidents')}<small>${T('감시기가 잡은 오류 · 지연 · 반복 (.vibe/orch/incidents)', 'Errors, delays and repeats caught by the watcher')}</small><span class="sp"></span><label style="font-weight:400"><input type="checkbox" id="incAll"> ${T('닫은 사건 포함', 'Include closed')}</label></h2><div id="incList"><div class="empty">${T('없음', 'None')}</div></div></div>
+</div></div>
+<div class="pane" id="prop"><div class="wrap">
+  <div class="sect"><h2>${T('개선안', 'Proposals')}<small id="prMeta"></small><span class="sp"></span><label style="font-weight:400"><input type="checkbox" id="prAll"> ${T('끝난 것 포함', 'Include finished')}</label> <button class="sec" id="prNow" title="${T('최근 실행 기록을 지금 분석해 개선안을 올림(Claude 호출 1회)', 'Analyze now (one Claude call)')}">${T('지금 분석', 'Analyze now')}</button></h2>
+  <div class="s" style="color:var(--mut);margin-bottom:6px">${T('개선안은 승인한 것만 반영합니다. 반려한 안과 같은 안은 다시 올리지 않습니다.', 'Only approved proposals are applied. Rejected ones are not proposed again.')}</div>
+  <div id="prList"><div class="empty">${T('없음', 'None')}</div></div></div>
+</div></div>
+<div class="pane" id="agent"><div class="split">
+  <div class="menu" style="max-height:none;flex:0 0 auto">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>${T('VMO Agent', 'VMO agent')}</b><span class="chip" id="agSt"></span><span class="sp"></span><button class="sec" id="agStop">${T('조치 중지', 'Stop')}</button></div>
+    <div style="display:flex;gap:6px"><textarea id="agIn" rows="2" style="flex:1;resize:vertical;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,var(--b));border-radius:4px;padding:6px;font-family:inherit;font-size:12px" placeholder="${T('에이전트에게 질문·지시 (Ctrl+Enter 전송). 예: 오늘 반복된 오류와 대기 시간을 정리', 'Ask the agent (Ctrl+Enter)')}"></textarea><button class="sec" id="agSend">${T('전송', 'Send')}</button></div>
+  </div>
+  <div class="log" id="agB"></div>
+</div></div>
+<div class="pane" id="task"><div class="common">
+  <div class="cmenu" id="menu"><div class="empty">${T('공통 기능 목록을 읽는 중', 'Loading')}</div></div>
+  <div class="clog glass">
+    <div class="clhead"><b>Task Log</b><small>${T('이 창에서 실행한 공통 기능의 출력', 'Output of common actions run here')}</small><span class="sp"></span><button class="sec" data-latest="taskB">⤓ ${T('최신', 'Latest')}</button><button class="sec" data-clear="taskB">${T('지우기', 'Clear')}</button></div>
+    <div class="log" id="taskB"></div>
+  </div>
+</div></div>
+
+<script>
+const vscode = acquireVsCodeApi();
+const $ = id => document.getElementById(id);
+const KO = ${ko ? 'true' : 'false'};
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cur = '';
+function show(t){ if(!$(t)) t='board'; cur=t; document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.t===t;b.classList.toggle('on',on);if(on){const n=b.querySelector('.nb');if(n)n.remove();}}); document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('on',x.id===t)); const lb={belog:'belogB',felog:'felogB',task:'taskB',agent:'agB'}[t]; if(lb)scrollEnd(lb); try{vscode.setState({tab:t});}catch(e){} }
+function scroller(id){ const b=$(id); return (id==='taskB'||id==='agB')?b:b.parentElement; }
+function scrollEnd(id){ const s=scroller(id); s.scrollTop=s.scrollHeight; }
+function mark(t){ if(cur===t) return; const b=document.querySelector('.tab[data-t="'+t+'"]'); if(b&&!b.querySelector('.nb')){const n=document.createElement('span');n.className='nb';n.textContent='●';b.appendChild(n);} }
+function add(id, text, cls){ const b=$(id); const s=scroller(id); const stick=s.scrollHeight-s.scrollTop-s.clientHeight<60; const d=document.createElement('span'); if(cls)d.className=cls; d.textContent=text; b.appendChild(d); while(b.childNodes.length>5000)b.removeChild(b.firstChild); if(stick)s.scrollTop=s.scrollHeight; }
+const boxOf = st => st==='be'?'belogB':st==='fe'?'felogB':'taskB';
+const tabOf = st => st==='be'?'belog':st==='fe'?'felog':'task';
+function sec(n){ n=Math.max(0,Math.round(n||0)); if(n<60) return n+(KO?'초':'s'); const m=Math.floor(n/60); if(m<60) return m+(KO?'분 ':'m ')+(n%60)+(KO?'초':'s'); return Math.floor(m/60)+(KO?'시간 ':'h ')+(m%60)+(KO?'분':'m'); }
+function hm(ms){ const d=new Date(ms); const p=n=>String(n).padStart(2,'0'); return p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds()); }
+const stWord = s => s==='up'?(KO?'응답 있음':'Responding'):s==='listen'?(KO?'포트만 열림':'Port open, no HTTP'):(KO?'꺼짐':'Down');
+let states=[];
+function paintServers(){
+  const be=states.find(x=>x.port===8080), fe=states.find(x=>x.port===5173);
+  $('dbe').className='dot '+(be?be.state:''); $('dfe').className='dot '+(fe?fe.state:'');
+  $('bSrv').innerHTML = states.length ? states.map(s=>'<div class="kpi '+s.state+'"><span class="kl"><span class="dot '+s.state+'"></span>'+esc(s.label)+' · '+s.port+'</span><span class="kv">'+(s.state==='up'?'ON':s.state==='listen'?(KO?'응답 없음':'NO HTTP'):'OFF')+(s.bootSec!=null&&s.state!=='down'?'<small>'+(KO?'기동 ':'boot ')+s.bootSec+'s</small>':'')+'</span><span class="ks">'+stWord(s.state)+' · '+hm(s.since)+(KO?' 부터':' since')+(s.owner?' · '+(s.owner==='vm'?(KO?'VM 이 띄움':'by VM'):(KO?'VM 밖에서 띄움':'external')):'')+'</span></div>').join('') : '<div class="kpi"><span class="kl">'+(KO?'서버':'Servers')+'</span><span class="kv">–</span><span class="ks">'+(KO?'측정 전':'Not measured yet')+'</span></div>';
+}
+function tbl(head, rows){ return rows.length ? '<table><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr>'+rows.join('')+'</table>' : '<div class="empty">'+(KO?'없음':'None')+'</div>'; }
+function paintBoard(d){
+  $('bAt').textContent = hm(d.at);
+  if(d.ai){ const c=$('cai'); c.textContent=(KO?'AI 검토 ':'AI review ')+(d.ai.on?(KO?'켬':'on'):(KO?'끔':'off'))+(d.ai.on?' · '+(d.ai.budget>0?(KO?'상한 ':'cap ')+d.ai.budget+' USD':(KO?'상한 없음':'no cap')):''); c.style.color=d.ai.on?'':'var(--warn)'; }
+  if(d.mode) $('cmode').textContent=d.mode;
+  const actor = a => '<span class="actor '+(a==='claude'?'claude':'')+'">'+(a==='claude'?'Claude':(KO?'스크립트':'script'))+'</span>';
+  const win = w => w==null?'':(w===0?(KO?'VMO':'orch'):'VM#'+w);
+  const rows=[];
+  for(const j of d.jobs||[]) rows.push('<tr><td>'+(KO?'업무 작업':'Job')+'</td><td></td><td>'+esc(j.label)+'</td><td>'+j.done+'/'+j.total+(KO?' 완료 · 실행 ':' done · running ')+j.running+'</td><td></td><td class="n">'+sec(j.sec)+'</td></tr>');
+  for(const c of d.chains||[]) rows.push('<tr><td>'+(KO?'체인':'Chain')+'</td><td>'+esc(c.screen)+'</td><td>'+esc(c.label)+'</td><td>'+(c.step?('['+c.step.no+'] '+esc(c.step.name)+' · '+sec(c.step.sec)):(KO?'단계 사이':'between steps'))+'</td><td>'+(c.step?actor(c.step.actor):'')+' '+win(c.wb)+'</td><td class="n">'+sec(c.sec)+'</td></tr>');
+  for(const c of d.claudes||[]) rows.push('<tr><td>Claude</td><td>'+esc(c.screen)+'</td><td>'+esc(c.label||c.source)+'</td><td>PID '+(c.pid||'-')+'</td><td>'+actor('claude')+' '+win(c.wb)+'</td><td class="n">'+sec(c.sec)+'</td></tr>');
+  for(const p of d.procs||[]) rows.push('<tr><td>'+(KO?'프로세스':'Process')+'</td><td>'+esc(p.screen)+'</td><td>'+esc(p.label)+'</td><td>PID '+(p.pid||'-')+' · '+esc(p.log)+'</td><td>'+actor('script')+' '+win(p.wb)+'</td><td class="n">'+sec(p.sec)+'</td></tr>');
+  $('bRun').innerHTML = tbl(KO?['종류','화면','이름','현재','주체 · 창','경과']:['Kind','Screen','Name','Now','Actor · Window','Elapsed'], rows);
+  const kindKo={admit:'부하 입장',lock:'화면 잠금',slot:'동시 상한',dbwin:'시험 데이터 구간',langwait:'언어 전환 대기',e2elock:'E2E 잠금'};
+  $('bWait').innerHTML = tbl(KO?['종류','화면','사유','경과','최대']:['Kind','Screen','Why','Elapsed','Max'], (d.waits||[]).map(w=>'<tr><td>'+esc(KO?(kindKo[w.kind]||w.kind):w.kind)+'</td><td>'+esc(w.screen)+'</td><td>'+esc(w.why)+(w.blocker_pid?' · PID '+w.blocker_pid:'')+'</td><td class="n">'+sec(w.sec)+'</td><td class="n">'+(w.max_sec?sec(w.max_sec):'')+'</td></tr>'));
+  $('bLock').innerHTML = tbl(KO?['파일','PID','주인','시작','인자']:['File','PID','Owner','Started','Args'], (d.locks||[]).map(l=>'<tr><td>'+esc(l.file)+'</td><td class="n">'+(l.pid||'')+'</td><td>'+(l.alive===null?'':(l.alive?(KO?'실행 중':'alive'):'<span style="color:var(--bad)">'+(KO?'프로세스 없음':'dead')+'</span>'))+'</td><td>'+esc(String(l.started).replace('T',' ').slice(0,19))+'</td><td>'+esc(l.args)+'</td></tr>'));
+  const L=d.load||{};
+  const gz=(name,val,pct,mark,cls,sub)=>'<div class="gz '+cls+'"><div class="gh"><b>'+name+'</b><span class="gv">'+val+'</span><span class="gs">'+sub+'</span></div><div class="bar"><i style="width:'+Math.max(0,Math.min(100,pct))+'%"></i>'+(mark!=null?'<u style="left:'+mark+'%"></u>':'')+'</div></div>';
+  const cpuC=L.cpu==null?'na':L.cpu>=80?'bad':L.cpu>=65?'warn':''; const memUsed=L.memTotalMB?Math.round(100*(1-L.memFreeMB/L.memTotalMB)):0; const memMark=L.memTotalMB?Math.round(100*(1-3072/L.memTotalMB)):null; const memC=L.memFreeMB==null?'na':L.memFreeMB<3072?'bad':L.memFreeMB<4608?'warn':'';
+  const tcpC=L.tcp==null?'na':L.tcp>=14000?'bad':L.tcp>=12000?'warn':'';
+  $('bLoad').innerHTML = gz('CPU',L.cpu==null?(KO?'미측정':'n/a'):L.cpu+'%',L.cpu||0,80,cpuC,KO?'입장 기준 < 80%':'admit < 80%')
+    +gz(KO?'메모리':'Memory',L.memFreeMB!=null?(KO?'여유 ':'free ')+L.memFreeMB.toLocaleString()+' MB':'',memUsed,memMark,memC,(KO?'입장 기준 여유 ≥ 3,072 MB · 전체 ':'admit free ≥ 3,072 MB · total ')+(L.memTotalMB||0).toLocaleString()+' MB')
+    +gz(KO?'TCP 연결 수':'TCP connections',L.tcp==null?(KO?'미측정':'n/a'):L.tcp.toLocaleString(),L.tcp==null?0:100*L.tcp/16000,75,tcpC,(KO?'경고 12,000 · E2E 중단 14,000':'warn 12,000 · abort 14,000')+(L.tcpAt?' · '+hm(L.tcpAt):''));
+  lastBoard=d; paintKpi();
+}
+let lastBoard=null;
+function paintKpi(){ const d=lastBoard||{}; const run=(d.jobs||[]).length+(d.chains||[]).length+(d.claudes||[]).filter(c=>!(d.chains||[]).some(x=>x.wb===c.wb&&x.screen===c.screen)).length+(d.procs||[]).filter(p=>!(d.chains||[]).some(x=>x.wb===p.wb&&x.screen===p.screen)).length;
+  const cl=(d.claudes||[]).length, wt=(d.waits||[]).length; const wmax=(d.waits||[]).reduce((a,w)=>Math.max(a,w.sec||0),0);
+  const io=incs.filter(x=>x.status==='open'||x.status==='acting').length, iu=incs.filter(x=>x.status==='need-user').length, pp=props.filter(x=>x.status==='pending').length;
+  const k=(cls,label,val,sub,tab)=>'<div class="kpi '+cls+'"'+(tab?' data-go="'+tab+'" style="cursor:pointer"':'')+'><span class="kl">'+label+'</span><span class="kv">'+val+'</span><span class="ks">'+sub+'</span></div>';
+  $('bKpi').innerHTML = k(run?'on':'',KO?'실행 중':'Running',run,(d.chains||[]).length?(KO?'체인 ':'chains ')+(d.chains||[]).length+((d.jobs||[]).length?(KO?' · 업무 작업 ':' · jobs ')+(d.jobs||[]).length:''):(KO?'실행 중인 체인 없음':'no chains'))
+    +k(cl?'on':'','Claude',cl,cl?(d.claudes||[]).map(c=>c.screen||(c.wb===0?'VMO':'')).filter(Boolean).join(', ')||(KO?'세션 실행 중':'sessions'):(KO?'실행 중인 세션 없음':'no sessions'))
+    +k(wmax>600?'warn':'',KO?'대기':'Waiting',wt,wt?(KO?'가장 오래 ':'longest ')+sec(wmax):(KO?'대기 없음':'none'))
+    +k(iu?'warn':io?'on':'',KO?'사건':'Incidents',io+iu,(KO?'열림 ':'open ')+io+(KO?' · 사용자 확인 ':' · need user ')+iu,'inc')
+    +k(pp?'on':'',KO?'개선안':'Proposals',pp,KO?'승인 대기':'pending','prop');
+  $('bKpi').querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>show(e.dataset.go)); }
+function note(text){ const b=$('bNote'); const e=b.querySelector('.empty'); if(e)e.remove(); const d=document.createElement('div'); d.textContent=hm(Date.now())+'  '+text; b.insertBefore(d,b.firstChild); while(b.childNodes.length>60)b.removeChild(b.lastChild); }
+function paintMenu(groups){
+  // 기능 타일: 라벨 맨 앞 그림 글자 = 아이콘 칸 · 나머지 = 이름 · 설명(hint) 첫 구절 = 둘째 줄
+  const tile=it=>{ const s=String(it.show||''); const i=s.indexOf(' '); const head=i>0?s.slice(0,i):''; const isIcon=head&&!/[A-Za-z0-9가-힣]/.test(head); const name=isIcon?s.slice(i+1):s; const sub=String(it.hint||'').split(/ · | — |\\. /)[0].slice(0,60);
+    return '<button class="tile" data-q="'+esc(it.label)+'" title="'+esc(it.hint||s)+'"><span class="ti">'+(isIcon?esc(head):'▸')+'</span><span class="tt"><b>'+esc(name)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</span></button>'; };
+  $('menu').innerHTML = groups.map(g=>'<section class="cgrp glass"><h3>'+esc(g.title)+'<small>'+g.items.length+(KO?'개':'')+'</small></h3><div class="tiles">'+g.items.map(tile).join('')+'</div></section>').join('') || '<div class="empty">'+(KO?'공통 기능 없음(quick.json area common)':'No common items')+'</div>';
+  $('menu').querySelectorAll('button[data-q]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'orch:quick',label:b.dataset.q}));
+}
+let incs=[]; const stKo={open:'열림',acting:'조치 중',resolved:'해결',closed:'닫음','need-user':'사용자 확인 필요'};
+function paintInc(){
+  const all=$('incAll').checked; const rows=incs.filter(x=>all||(x.status!=='closed'&&x.status!=='resolved'));
+  const openN=incs.filter(x=>x.status==='open'||x.status==='need-user').length; const c=$('incN'); c.style.display=openN?'':'none'; c.textContent=openN;
+  $('incList').innerHTML = rows.length ? '<table><tr>'+(KO?['시각','규칙','화면','내용','횟수','상태','']:['Time','Rule','Screen','What','Count','Status','']).map(h=>'<th>'+h+'</th>').join('')+'</tr>'+rows.map(x=>{
+    const acts=(x.actions||[]).map(a=>'<div class="s" style="color:var(--mut)">'+esc(String(a.at||'').replace('T',' ').slice(5,19))+' '+esc(a.by||'')+' — '+esc(a.what||'')+'</div>').join('');
+    const btnA=(x.status!=='acting'&&x.status!=='closed')?'<button class="sec" data-ia="'+esc(x.id)+'" title="'+(KO?'이 사건을 에이전트가 지금 조치':'Let the agent handle this now')+'">'+(KO?'에이전트':'Agent')+'</button> ':'';
+    const btnR=(x.snap&&!x.reverted)?'<button class="sec" data-ir="'+esc(x.id)+'" title="'+(KO?'에이전트가 고친 파일을 조치 전으로 되돌림':'Revert files changed by the agent')+'">'+(KO?'되돌리기':'Revert')+'</button> ':'';
+    x._btn=btnA+btnR;
+    return '<tr><td style="white-space:nowrap">'+esc(String(x.lastAt||x.at||'').replace('T',' ').slice(5,19))+'</td><td style="white-space:nowrap">'+esc(x.rule)+' '+esc(x.ruleName||'')+'</td><td>'+esc(x.screen||'')+'</td><td><b>'+esc(x.title)+'</b>'+(x.detail?'<div style="white-space:pre-wrap;color:var(--mut)">'+esc(String(x.detail).slice(0,600))+'</div>':'')+acts+'</td><td class="n">'+(x.count||1)+'</td><td style="white-space:nowrap'+(x.status==='need-user'?';color:var(--warn)':'')+'">'+esc(KO?(stKo[x.status]||x.status):x.status)+'</td><td style="white-space:nowrap">'+x._btn+'<button class="sec" data-io="'+esc(x.id)+'">'+(KO?'원문':'Open')+'</button> '+(x.status!=='closed'?'<button class="sec" data-ic="'+esc(x.id)+'">'+(KO?'닫기':'Close')+'</button>':'')+'</td></tr>'; }).join('')+'</table>' : '<div class="empty">'+(KO?'없음':'None')+'</div>';
+  $('incList').querySelectorAll('[data-io]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'orch:incOpen',id:b.dataset.io}));
+  $('incList').querySelectorAll('[data-ic]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'orch:incStatus',id:b.dataset.ic,status:'closed'}));
+  $('incList').querySelectorAll('[data-ia]').forEach(b=>b.onclick=()=>{vscode.postMessage({type:'orch:incAgent',id:b.dataset.ia});show('agent');});
+  $('incList').querySelectorAll('[data-ir]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'orch:incRevert',id:b.dataset.ir}));
+}
+let props=[]; const prKo={pending:'승인 대기',approved:'승인',applying:'반영 중',applied:'반영 완료','apply-failed':'반영 실패',rejected:'반려'};
+function paintProp(){
+  const all=$('prAll').checked; const rows=props.filter(x=>all||/^(pending|approved|applying|apply-failed)$/.test(x.status));
+  const pn=props.filter(x=>x.status==='pending').length; const c=$('prN'); c.style.display=pn?'':'none'; c.textContent=pn;
+  const row=(k,v)=>v?'<div><span style="color:var(--mut)">'+k+'</span> <span style="white-space:pre-wrap">'+esc(v)+'</span></div>':'';
+  $('prList').innerHTML = rows.length ? rows.map(x=>{
+    const hist=(x.history||[]).slice(-4).map(h=>'<div class="s" style="color:var(--mut)">'+esc(String(h.at||'').replace('T',' ').slice(5,19))+' '+esc(h.by||'')+' — '+esc(h.what||'')+'</div>').join('');
+    const can=x.status==='pending'||x.status==='apply-failed';
+    const btn=(can?'<button class="sec" data-pa="'+esc(x.id)+'" style="background:var(--vscode-button-background);color:var(--vscode-button-foreground)">'+(KO?'승인 · 반영':'Approve')+'</button> <button class="sec" data-pr="'+esc(x.id)+'">'+(KO?'반려':'Reject')+'</button> ':'')+(x.status==='applied'?'<button class="sec" data-pv="'+esc(x.id)+'">'+(KO?'되돌리기':'Revert')+'</button> ':'')+'<button class="sec" data-po="'+esc(x.id)+'">'+(KO?'원문':'Open')+'</button>';
+    return '<div class="grp" style="margin-bottom:8px"><div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap"><b>'+esc(x.title)+'</b><span class="chip"'+(x.status==='apply-failed'?' style="color:var(--bad)"':x.status==='applied'?' style="color:var(--ok)"':'')+'>'+esc(KO?(prKo[x.status]||x.status):x.status)+'</span><span class="s" style="color:var(--mut)">'+esc(String(x.at||'').replace('T',' ').slice(0,16))+' · '+(x.source==='review'?(KO?'상시 분석':'review'):(KO?'사건 ':'incident ')+esc(x.incident||''))+(x.screen?' · '+esc(x.screen):'')+'</span><span class="sp"></span><span>'+btn+'</span></div>'
+      +row(KO?'근거':'Evidence',x.evidence)+row(KO?'대상':'Targets',(x.targets||[]).join(', '))+row(KO?'변경':'Change',x.before_after)+row(KO?'검증':'Verify',x.verify)+row(KO?'되돌리기':'Rollback',x.rollback)+(x.reason?row(KO?'반려 사유':'Reason',x.reason):'')+hist+'</div>'; }).join('') : '<div class="empty">'+(KO?'없음':'None')+'</div>';
+  const q=(sel,type)=>$('prList').querySelectorAll(sel).forEach(b=>b.onclick=()=>vscode.postMessage({type,id:b.dataset.pa||b.dataset.pr||b.dataset.pv||b.dataset.po}));
+  q('[data-pa]','orch:propApprove'); q('[data-pr]','orch:propReject'); q('[data-pv]','orch:propRevert'); q('[data-po]','orch:propOpen');
+}
+function propMeta(m){ if(!m) return; $('prMeta').textContent=(m.enabled?(KO?'자동 분석 '+m.everyHours+'시간마다 · 최근 '+m.days+'일 기록':'auto every '+m.everyHours+'h'):(KO?'자동 분석 끔':'auto off'))+(m.lastAt?' · '+(KO?'마지막 분석 ':'last ')+String(m.lastAt).replace('T',' ').slice(5,16)+' '+(m.lastResult||''):(KO?' · 분석 이력 없음':'')); }
+$('prAll').onchange=paintProp; $('prNow').onclick=()=>{vscode.postMessage({type:'orch:propReview'});show('agent');};
+function agAdd(m){
+  const t=String(m.at||'').replace('T',' ').slice(11,19);
+  if(m.kind==='start') add('agB','\\n▶ '+t+'  '+(m.text||'')+'\\n','cmd');
+  else if(m.kind==='text') add('agB',(m.text||'')+'\\n','');
+  else if(m.kind==='tool') add('agB','  · '+(m.name||'')+' '+(m.text||'')+'\\n','warn');
+  else if(m.kind==='user') add('agB','\\n▷ '+t+'  '+(m.text||'')+'\\n','cmd');
+  else if(m.kind==='end') add('agB',(m.ok?'■ ':'✖ ')+t+'  '+(m.text||'')+'\\n',m.ok?'ok':'bad');
+  else add('agB','ℹ '+t+'  '+(m.text||'')+'\\n','');
+}
+function agStatus(s){ if(!s) return; $('agSt').textContent=(s.enabled?(KO?'자동 조치 켬':'auto on'):(KO?'자동 조치 끔':'auto off'))+' · '+(s.busy?(KO?'조치 중 ':'working ')+(s.current||''):(KO?'대기':'idle'))+(s.queued?' · '+(KO?'대기열 ':'queued ')+s.queued:'')+' · '+(KO?'최근 1시간 ':'last hour ')+s.perHour+'/'+s.maxPerHour; const c=$('agN'); c.style.display=s.busy?'':'none'; c.textContent=s.busy?'●':''; }
+function agSend(){ const v=$('agIn').value.trim(); if(!v) return; vscode.postMessage({type:'orch:agentAsk',text:v}); $('agIn').value=''; }
+$('agSend').onclick=agSend; $('agIn').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();agSend();} });
+$('agStop').onclick=()=>vscode.postMessage({type:'orch:agentStop'});
+$('incAll').onchange=paintInc;
+window.addEventListener('message', e=>{ const m=e.data||{};
+  if(m.type==='incidents'){ incs=m.items||[]; paintInc(); paintKpi(); if(m.fresh) mark('inc'); return; }
+  if(m.type==='proposals'){ props=m.items||[]; paintProp(); paintKpi(); propMeta(m.meta); if(m.fresh) mark('prop'); return; }
+  if(m.type==='agent'){ agAdd(m); mark('agent'); return; }
+  if(m.type==='agentFeed'){ for(const x of m.items||[]) agAdd(x); agStatus(m.status); return; }
+  if(m.type==='agentStatus'){ agStatus(m.status); return; }
+  if(m.type==='out'){ add(boxOf(m.stream), m.text, m.cls); mark(tabOf(m.stream)); }
+  else if(m.type==='outBulk'){ const id=boxOf(m.stream); const b=$(id); const f=document.createDocumentFragment(); for(const x of m.items){const d=document.createElement('span'); if(x.cls)d.className=x.cls; d.textContent=x.text; f.appendChild(d);} b.insertBefore(f,b.firstChild); scrollEnd(id); }
+  else if(m.type==='serverState'){ states=m.states||[]; paintServers(); }
+  else if(m.type==='server'){ note((m.name||'')+' '+(m.state==='stopped'?(KO?'종료됨':'stopped'):(m.ok?(KO?'기동 완료':'ready'):(KO?'기동 실패':'failed')))+(m.sec!=null?' ('+m.sec+'s)':'')); }
+  else if(m.type==='board'){ paintBoard(m.data||{}); }
+  else if(m.type==='commonMenu'){ paintMenu(m.groups||[]); }
+  else if(m.type==='workMode'){ $('cmode').textContent=m.label||''; }
+  else if(m.type==='orchTab'){ show(m.tab); }
+  else if(m.type==='showTab'){ if(!m.auto&&m.tab==='log') show('task'); else if(m.tab==='log') mark('task'); }
+  else if(m.type==='chat'&&m.role==='meta'){ note(m.text||''); }
+  else if(m.type==='busy'){ const c=$('cbusy'); const n=(m.procs||0)+(m.claude?1:0); c.style.display=n?'':'none'; c.textContent=n?((KO?'실행 중 ':'Running ')+(m.labels||[]).join(', ')):''; }
+});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.t));
+document.querySelectorAll('[data-latest]').forEach(b=>b.onclick=()=>scrollEnd(b.dataset.latest));
+document.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{$(b.dataset.clear).innerHTML='';});
+$('stop').onclick=()=>vscode.postMessage({type:'stop'});
+let st0=null; try{st0=vscode.getState();}catch(e){}
+show(${JSON.stringify(opts && opts.tab ? first : '')} || (st0&&st0.tab) || 'board');
+vscode.postMessage({type:'orch:ready'});
+</script></body></html>`;
+}
+
+module.exports = { html, esc };

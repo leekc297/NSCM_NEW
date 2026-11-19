@@ -183,10 +183,10 @@ def write_sheet(wb, title, header, rows, widths, result_col=None):
 # 2026-10-27 사용자 지시: 1~5 축 시트를 '검증 전체' 한 시트로 합치고 축은 '분류' 열(1.디자인·다국어 / 2.AS-IS 로직 / 3.SMOKE / 4.CRUD / 5.권한별 CRUD)로. '검증 ID' 는 2번째 열 고정(사용자판정 반입 키 rr[1])
 # 2026-10-30 사용자 지시: 열 순서 = 영역 / 대상 / 결과 / 설명(구 '쉬운 설명' 명칭 변경) / 기대(AS-IS·규칙) / AS-IS 근거 / 조건 / 정답 / … — 결과·설명 두 열을 대상 바로 뒤로.
 #   열 폭은 이름으로 묶어(LW_BY) 순서를 바꿔도 폭·값이 밀리지 않게 한다. lrow() 도 이름 → 값 사전으로 만들어 LH 순서로 뽑는다.
-LH = ['No', '검증 ID', '분류', '출처', '유형', '규칙', '영역', '대상', '결과', '설명', '기대(AS-IS·규칙)', 'AS-IS 근거', '조건', '정답', '판정 방법', '사용자의견', '근거 등급', '증거(실측)', 'TO-BE 위치', '결함 원장', '사용자판정',
+LH = ['No', '검증 ID', '분류', '출처', '유형', '규칙', '영역', '대상', '결과', '설명', '기대(AS-IS·규칙)', 'AS-IS 근거', '조건', '정답', '판정 방법', 'CheckList Remark', '사용자의견', '근거 등급', '증거(실측)', 'TO-BE 위치', '결함 원장', '사용자판정',
       '오라클', '기대 원천', '증거 경로', '전제']  # W8-A(플랜 G2): 3-증거 열 — 조치 필요 행마다 비공란이어야 한다
 LW_BY = {'No': 5, '검증 ID': 12, '분류': 14, '출처': 11, '유형': 6, '규칙': 7, '영역': 10, '대상': 30, '조건': 22, '정답': 7, '기대(AS-IS·규칙)': 50, 'AS-IS 근거': 40, '판정 방법': 10, '결과': 11,
-         '사용자의견': 30, '설명': 70, '근거 등급': 16, '증거(실측)': 60, 'TO-BE 위치': 22, '결함 원장': 14, '사용자판정': 30, '오라클': 9, '기대 원천': 28, '증거 경로': 34, '전제': 30}
+         'CheckList Remark': 50, '사용자의견': 30, '설명': 70, '근거 등급': 16, '증거(실측)': 60, 'TO-BE 위치': 22, '결함 원장': 14, '사용자판정': 30, '오라클': 9, '기대 원천': 28, '증거 경로': 34, '전제': 30}
 LW = [LW_BY[h] for h in LH]
 RESULT_COL = LH.index('결과')  # write_sheet 의 result_col 은 0-based(row[result_col]) — 2026-10-27 결과 배경색이 '근거 등급' 열에 칠해지던 결함 수정
 
@@ -204,7 +204,7 @@ def evidence_grade(r):
         return '없음(판정 대기)'
     if t.startswith('수동 사용자판정') or t.startswith('수동 결정(사람:'):
         return '사람'
-    if t.startswith('수동 결정(AI·근거 확인)'):
+    if t.startswith('수동 결정(AI·근거 확인)') or t.startswith('AI 검토(근거 확인)'):  # 2026-11-19 AI 판정 검토(llm_review.py) — 인용이 기계 확인된 것만 반영된다
         return 'AI 작성·인용 확인'
     if t.startswith('수동 결정'):  # AI·근거 없음, 또는 작성자 미기록(구 형식)
         return 'AI 판단만'
@@ -256,6 +256,29 @@ def close_evidence(r, layer):
 
 
 USER_VERDICT = {}
+REMARK = {}  # 2026-11-19 사용자 지시: 'CheckList Remark' 열 — 판정 검토(llm_review.csv)·사용자의견 처리 결과(opinion_intake.csv)를 행별로 적는다
+
+
+def load_remarks(mid):
+    """검증 ID → Remark 문구. 판정 검토: 분류·판정(반영 여부)·사유·근거 경로 / 사용자의견 처리: 처리 구분·답"""
+    REMARK.clear()
+    for x in read_csv(P('Doc', 'verify', mid, 'llm_review.csv')):
+        rid = (x.get('row_id') or '').strip(); c = x.get('class') or ''
+        if not rid or c in ('검토 제외', ''): continue
+        if c == '미검토':
+            REMARK[rid] = '[판정 검토] 검토하지 못함 — ' + (x.get('apply_why') or '')[:120]; continue
+        ap = '반영' if x.get('apply') == 'Y' else ('미반영: ' + (x.get('apply_why') or '')[:60])
+        L = [f"[판정 검토] 분류 {c} · 판정 {x.get('verdict', '')}({ap})", (x.get('reason') or '').strip()]
+        if (x.get('evidence_ref') or '').strip(): L.append(('근거(확인됨): ' if x.get('verified') == 'Y' else '근거(미확인): ') + x['evidence_ref'].strip()[:300])
+        if (x.get('rule_ref') or '').strip(): L.append('룰: ' + x['rule_ref'].strip() + ('' if x.get('rule_ok') == 'Y' else '(미등록)'))
+        REMARK[rid] = chr(10).join(l for l in L if l)[:1500]
+    for x in read_csv(P('Doc', 'verify', mid, 'opinion_intake.csv')):
+        rid = (x.get('row_id') or '').strip()
+        if not rid or not (x.get('class') or '').strip(): continue
+        t = f"[의견 처리] {x.get('class', '')} — {(x.get('answer') or x.get('action') or '').strip()}"[:700]
+        REMARK[rid] = (REMARK[rid] + chr(10) + t) if rid in REMARK else t
+
+
 USER_OPINION = {}  # 정합검증서 '사용자의견' 열(2026-10-27 사용자가 조치 필요 시트에 추가) — 검증 ID 로 이어 넘긴다
 
 
@@ -702,7 +725,7 @@ def lrow(i, r):
     shown = RESULT_NAME.get(r['result'], r['result']) + (' (AI 판단만)' if r.get('_raw_result') and r['_raw_result'] != r['result'] else '')
     explain = _explain(r)
     by = {'No': i, '검증 ID': r['row_id'], '분류': AXIS_NAME.get(r.get('axis', ''), r.get('axis', '')), '출처': r['source'], '유형': r['family'], '규칙': r['rule_id'], '영역': r['area'], '대상': r['target'],
-          '조건': r['condition'], '정답': r['oracle'], '기대(AS-IS·규칙)': r['expected'], 'AS-IS 근거': r['asis_ref'], '판정 방법': r['method'], '결과': shown, '사용자의견': USER_OPINION.get(r['row_id'], ''),
+          '조건': r['condition'], '정답': r['oracle'], '기대(AS-IS·규칙)': r['expected'], 'AS-IS 근거': r['asis_ref'], '판정 방법': r['method'], '결과': shown, 'CheckList Remark': REMARK.get(r['row_id'], ''), '사용자의견': USER_OPINION.get(r['row_id'], ''),
           '설명': explain, '근거 등급': r['_grade'], '증거(실측)': r['evidence'], 'TO-BE 위치': r['tobe_ref'], '결함 원장': r['defect_ref'], '사용자판정': USER_VERDICT.get(r['row_id'], ''),
           '오라클': r.get('oracle_class', ''), '기대 원천': r.get('expect_src', ''), '증거 경로': r.get('evidence_ref', ''), '전제': (r.get('precond') or '')[:300]}
     assert set(by) == set(LH), '열 정의(LH)와 행 값(lrow) 불일치'
@@ -725,6 +748,7 @@ def main():
     scope = scope_setting(a.scope)
     name = screen_name(mid)
     load_user_verdicts(mid)
+    load_remarks(mid)
     for r in rows:  # 근거 등급 → 문서상 결과(AI 판단만 PASS·NA = 판정필요). 원장 파일은 바꾸지 않는다.
         r['_grade'] = evidence_grade(r)
         eff = effective_result(r)
@@ -949,6 +973,11 @@ def main():
     write_sheet(wb, '판정 필요', LH, [lrow(i, r) for i, r in enumerate(_rv, 1)], LW, result_col=RESULT_COL)
     # 2026-11-18 전 화면: 두 시트에 보이는 행 중 정리 파일(action_summary.csv) 문장이 없는 행 = 설명 정리 필요(50_DOC_STYLE.md CheckList 설명 칸 틀)
     _NO_SUMMARY.update(r['row_id'] for r in list(fails) + _rv if not _summary_text(r))
+    try:  # 2026-11-19 설명 문장 작성(llm_desc.py)용 — 정리 파일 문장이 없는 행과 그 행에 묶인 행
+        json.dump([{'row_id': r['row_id'], 'sheet': ('조치 필요' if r in fails else '판정 필요'), 'same': list(r.get('_same') or [])} for r in list(fails) + _rv if not _summary_text(r)],
+                  open(P('Doc', 'verify', mid, 'no_summary.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    except Exception as _ex:
+        print(f'  [WARN] no_summary.json 기록 실패: {_ex}')
     base = {(d['src'] + '-' + d['no']): d for d in read_csv(P('Doc', 'verify', 'defects_baseline.csv'))}
     drows = []
     for i, ref in enumerate(dref, 1):

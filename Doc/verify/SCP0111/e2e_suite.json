@@ -2,34 +2,34 @@
  "crud": {
   "mode": "admin",
   "mode_src": "users.json screens",
-  "at": "2026-11-18 16:35:05",
+  "at": "2026-11-19 11:14:59",
   "ran": true,
   "rc": 1,
   "rows": 1,
   "passed": 0,
-  "sec": 304.7,
+  "sec": 296.5,
   "reason": "실행 · FAIL 포함(판정 반입)"
  },
  "auth": {
   "mode": "admin",
   "mode_src": "users.json screens",
-  "at": "2026-11-18 16:40:10",
+  "at": "2026-11-19 11:19:55",
   "ran": true,
   "rc": 0,
   "rows": 2,
   "passed": 2,
-  "sec": 28.4,
+  "sec": 26.9,
   "reason": "실행 · 전부 PASS"
  },
  "authcrud": {
   "mode": "admin",
   "mode_src": "users.json screens",
-  "at": "2026-11-18 16:40:38",
+  "at": "2026-11-19 11:20:22",
   "ran": true,
   "rc": 1,
   "rows": 2,
   "passed": 1,
-  "sec": 319.1,
+  "sec": 309.5,
   "reason": "실행 · FAIL 포함(판정 반입)"
  }
 }

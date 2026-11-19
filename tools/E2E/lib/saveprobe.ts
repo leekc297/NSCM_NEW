@@ -12,6 +12,8 @@ const norm = (s: string) => String(s ?? '').replace(/,/g, '').trim();
 const same = (a: string, b: string) => norm(a) === norm(b) || (norm(a) !== '' && norm(b) !== '' && !isNaN(Number(norm(a))) && Number(norm(a)) === Number(norm(b)));
 
 export async function nextOf(nscm: Nscm, row: number, b: string, cur: string): Promise<string | null> {
+  // T349(2026-11-19 SSP0014): 팝업 입력 칸(FPModal·FPTextModal)은 등록된 값만 저장된다(SSP0014 USER_CHECK 미등록 차단) — '원값+X' 는 저장 검증에 막혀 저장 시험이 안 된다 → 같은 칸 다른 행의 실제 값
+  if (await probe.popupColumn(nscm.page, b)) { const ov = await probe.otherColumnValue(nscm.page, b, cur); if (ov) return ov; }
   const cands = await probe.candidates(nscm.page, row, b);
   if (cands && cands.length) return cands.find(v => v.trim() && !same(v, cur) && !same(v.split(/\s+/)[0], cur)) ?? null;
   const t = norm(cur);
@@ -41,8 +43,9 @@ export async function typeRaw(nscm: Nscm, row: number, b: string, value: string)
   for (let k = 0; k < 4; k++) {
     const pt = await probe.cellCenter(p, row, b); if (!pt) return '셀 위치 없음';
     await p.waitForTimeout(250 + k * 250); const pt2 = await probe.cellCenter(p, row, b); if (!pt2) return '셀 위치 없음';
+    const dlgN = await p.locator('[role="dialog"]:visible').count().catch(() => 0);  // T350: 더블클릭 전 대화상자 수(사실 파일 없는 화면도 새로 열린 입력 팝업을 닫는다)
     await p.mouse.dblclick(pt2.x, pt2.y); await p.waitForTimeout(300);
-    await nscm.dismissDblPopup(() => p.mouse.click(pt2.x, pt2.y));  // 2026-11-16 SCP0104: 더블클릭이 선택 팝업도 여는 화면 — 닫고 F2
+    await nscm.dismissDblPopup(() => p.mouse.click(pt2.x, pt2.y), dlgN);  // 2026-11-16 SCP0104: 더블클릭이 선택 팝업도 여는 화면 — 닫고 F2
     ed = String(await p.evaluate('(() => { const a = document.activeElement; return a ? a.tagName + ":" + (a.value ?? "") : "" })()').catch(() => ''));
     if (/^(INPUT|TEXTAREA)/.test(ed)) break;
   }

@@ -1,0 +1,41 @@
+{
+ "id": "SCP0111",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[LINE_ID]",
+   "kind": "cell",
+   "change": "첫 행 클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SCP0111-S190916",
+    "SCP0111-Sbe8975"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-19 12:16:34",
+ "plan": [
+  {
+   "kind": "click",
+   "scenarios": 2,
+   "named_cols": [
+    "LINE_ID"
+   ],
+   "used": [
+    "LINE_ID"
+   ],
+   "rule": "분기 조건식에 이름이 나온 열"
+  }
+ ]
+}

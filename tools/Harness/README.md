@@ -26,7 +26,7 @@ node install.js                                                                 
 | `gen.js` + `templates.js` | 골격 생성기. 표준 참조(user-management) 구조 그대로: constants / store / Page / index / Form / Grid / `__asis-mapping__.md` 초기본 / `__tests__/*.asis.spec.ts`(Agent 단위테스트 → it.todo) / `register.json`(P_REGISTER_SCREEN 입력 초안) / `hooks/use{Page}Validation.ts`·`Expression.ts`(As-is 검증·계산식 1행 = 1마커) / `GEN_NOTES.md` |
 | `check.js` | 게이트: 금지 패턴(주석 제외) · 표준 파일·Form/Page 표준(S02/S03) · 매핑표 빈칸/위치/사유 · As-is 시트·엔드포인트·이벤트·컨트롤 대사 · 사전 밖 컴포넌트 · Validation/Expression 마커 수(V01)·미이식(V02). exit 0/1/2 |
 | `hooks/check-asis-harness.ps1` | Claude Code PostToolUse — 저장 즉시 check; BLOCK 은 차단, WARN 은 additionalContext |
-| `hooks/harness-stop-gate.ps1` | Claude Code Stop — 바뀐 화면 폴더에 `--final`(미구현 0) 요구, 아니면 종료 차단·사유 반환 |
+| `hooks/harness-stop-gate.ps1` | Claude Code Stop — 바뀐 화면 폴더에 `--final`(미구현 0) 요구, 아니면 종료 차단·사유 반환. 2026-11-19: DB MODE 는 게이트 없이 기준선(`gate_baseline.tsv`)만 갱신 · UI/DB MODE 는 기준선과 내용이 다른 파일이 있는 화면만 대상 |
 | `hooks/harness-gen-context.ps1` | Claude Code UserPromptSubmit — 화면ID+생성 의도면 절차·GEN_NOTES 첨부 |
 | `pre-commit.js` | husky — 스테이징된 화면 폴더 게이트(BLOCK 만 커밋 차단) |
 | `prompts/new_screen.md` | Claude Code 작업 지시(채울 것/하지 말 것) |
@@ -147,7 +147,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 ### 도구 등록부
 
 <!-- TOOL-REGISTRY:BEGIN -->
-> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-19 10:58 · 도구 234개 · 손 실행 35개). 직접 고치지 말고 다시 생성한다.
+> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-19 17:09 · 도구 242개 · 손 실행 35개). 직접 고치지 말고 다시 생성한다.
 > 진입 열: `체인 <단계>` = `run_verify.py`(CheckList) 가 그 단계에서 실행 · `VM <작업 id>` = `tools/VibeManager/steps.json` 작업 · `다른 도구가 사용` = import·호출만 · `손 실행` = 어떤 진입점에도 연결 없음(명령줄에서 직접).
 
 
@@ -229,7 +229,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `doc_archive.py` | 다른 도구가 사용: make_docs.py, make_test_report.py, make_testcases.py 외 1 | 버전 문서 공용 — 다음 버전 번호 · 이전 버전 old/ 이동 (2026-10-28 사용자 요청) |
-| `doc_style.py` | 다른 도구가 사용: make_docs.py, make_test_report.py, make_testcases.py 외 4 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
+| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 5 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
 | `make_docs.py` | VM S3.xlsx | make_docs — 화면 ID 하나로 사람이 보는 Excel 문서 4종을 팀 양식(hook #105 · TestCases4)으로 생성한다. |
 | `make_testcases.py` | 다른 도구가 사용: doc_archive.py, make_docs.py | make_testcases — 단위테스트(TestCases4) 를 '실제 사용자 흐름' 으로 재구성해 생성한다 (2026-10-27 사용자 지시). |
 | `md2xlsx.py` | 다른 도구가 사용: agent.ps1 | md2xlsx — 화면 문서(MD) + Fact Pack CSV + GAP CSV 를 사용자가 보는 Excel 1권으로 묶는다. |
@@ -255,7 +255,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `actions-checklist.js` | 다른 도구가 사용: check.js | AS-IS 액션 대조표 생성/갱신 (사용자 지시 2026-10-23) — **문서 보강 단계: 개발된 FE·작업 흐름 무영향** |
 | `check-pkg.js` | VM S5.pkgcheck | check-pkg — PKG 이식 게이트: Doc/gen/<ID>/<ID>_PKG.sql (또는 --file) 에 T-SQL 잔재·미이식 TODO·ASIS 원문 블록이 남아 있으면 BLOCK |
 | `check.js` | VM S5.check·S5.final·S5.tsc | 하네스 게이트 — To-Be 화면 폴더를 As-is Fact Pack + 사전(rules/) 에 대고 판정한다. Claude Code hook / husky / CI 가 같은 이 파일을 부른다. |
-| `e2e-judge.js` | 다른 도구가 사용: weaken_check.py, workbench.js | 2e-judge — 🩹 E2E 오류 보완의 '독립 판정 세션' (2026-10-26, Atlas Studio 규약 이식: 검토자 분리 · 근거 등급) |
+| `e2e-judge.js` | 다른 도구가 사용: llm_call.py, weaken_check.py, workbench.js | 2e-judge — 🩹 E2E 오류 보완의 '독립 판정 세션' (2026-10-26, Atlas Studio 규약 이식: 검토자 분리 · 근거 등급) |
 | `gap.js` | 다른 도구가 사용: export_tobe_meta.py, gen-e2e.js, gen.js 외 3 | GapCheck — As-is Fact(Doc/asisfacts) vs To-Be Fact(Doc/tobefacts) 를 화면(MENU_ID)별로 대사해 3분류한다. |
 | `gen-pkg.js` | VM S5.pkg | gen-pkg — 화면의 As-is SP 들을 To-Be 규약의 Oracle PACKAGE 골격(SPEC+BODY)으로 생성한다. SQL 본문 이식은 TODO(Claude Code / 사람) — FE 골격과 같은 방식. |
 | `gen-register-sql.js` | VM S5.regsql | gen-register-sql — 신규 화면의 Oracle 메타 등록 SQL(7영역) 을 Fact Pack 에서 생성한다 (템플릿: To-be_v2_converted/08_Screen_Registration/02_NEW_SCREEN_FULL_REGISTRATION_TE |
@@ -322,7 +322,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `engine_gap_merge.py` | 손 실행(진입점 연결 없음) | 엔진 갭 대조표 병합·온전성 점검(2026-10-31) — gap_*.csv → Doc/verify/_engine_gap.csv(항목 ID 부여·상태 열 유지) |
 | `engine_selfcheck.py` | 다른 도구가 사용: inventory_check.py, run_verify.py | 엔진 변경 게이트(EN-00 · 2026-11-11) — 검증·생성 도구를 고친 뒤 실행에 투입하기 전에 '돌려 보면 드러나는' 결함을 실제로 돌려서 잡는다. |
 | `envelope.py` | 다른 도구가 사용: decisions.py, evidence_check.py, run_verify.py 외 1 | 결과 봉투 vibe-result/1 — 판정 산출물 옆 <이름>.result.json (2026-10-26) |
-| `evidence_check.py` | 다른 도구가 사용: decisions.py, e2e-judge.js, workbench.js | 근거 확인기 — 결과 봉투(vibe-result/1)의 인용 근거가 실제로 있는지 기계로 확인해 근거 등급(hard/soft)을 매긴다 (2026-10-26) |
+| `evidence_check.py` | 다른 도구가 사용: decisions.py, e2e-judge.js, llm_call.py 외 1 | 근거 확인기 — 결과 봉투(vibe-result/1)의 인용 근거가 실제로 있는지 기계로 확인해 근거 등급(hard/soft)을 매긴다 (2026-10-26) |
 | `excel_stage_clean.py` | 다른 도구가 사용: _verify.spec.ts | Excel 업로드 시험이 남긴 스테이징 행 정리(2026-11-02) |
 | `expect_rows.py` | 다른 도구가 사용: doc_patterns.py, gen_expect.py, gen_expect_recall.py 외 2 | expect_rows — 화면별 기대 행 = 손 행(Doc/verify/<name>) ∪ 자동 행(Doc/verify/<ID>/auto_expect/<name>) (W8-2, 2026-11-04) |
 | `f10_check.py` | 체인 static | F10 저장 트랜잭션 원자성 — 화면 저장 PROC(PROC_M SAVE/INS/UPD/DEL 배선)와 그 하위 호출 PROC 본문(사내오라클 ALL_SOURCE 새로 조회 · hook #152)에 |
@@ -363,10 +363,14 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `keyset_guard.py` | 손 실행(진입점 연결 없음) | 키 범위 스냅샷·복원 — 자동 복원기(restore_touched)가 못 되살리는 '지우고 다시 넣기·삭제' 저장 시험용 (2026-11-04 · GAP-175) |
 | `ledger.py` | 체인 facts | 화면 검증 항목 원장 생성 — Doc/verify/<ID>/verify_ledger.csv |
 | `ledger_guard.py` | 다른 도구가 사용: _verify.spec.ts, cleanup_marker.py | 정합검증 CRUD 실제 저장 안전장치 — 저장 직전 빈 키 확인 · 공유 마스터 스냅샷 기록(2026-10-24) |
+| `llm_call.py` | 다른 도구가 사용: llm_desc.py, llm_facts.py, llm_review.py 외 2 | AI 검토 공용 호출기 — 검증 체인(Python)에서 Claude Code 를 읽기 전용으로 불러 JSON 답을 받는다 (2026-11-19 사용자 지시) |
+| `llm_desc.py` | 다른 도구가 사용: make_verify_docs.py, run_verify.py | CheckList 설명 문장 작성 — '조치 필요'·'판정 필요' 시트의 설명 칸 정리 문장을 Claude 가 쓴다 (2026-11-19 사용자 지시 · 적용 단계 '설명 문장 작성') |
+| `llm_facts.py` | 다른 도구가 사용: judge.py, run_verify.py | AS-IS 사실 추출 검토 — 검사엔진이 기대값으로 쓰는 AS-IS 사실 추출본을 Claude 가 화면 원문과 대조해 누락·오추출을 찾는다 (2026-11-19 사용자 지시 · 적용 단계 'AS-IS 사실 추출 검토') |
+| `llm_review.py` | 다른 도구가 사용: judge.py, llm_desc.py, llm_facts.py 외 4 | AI 판정 검토 — 검사엔진이 FAIL·판정필요·미검증으로 남긴 행을 Claude 가 원문과 대조해 가린다 (2026-11-19 사용자 지시) |
 | `lookup_check.py` | 체인 post | Lookup 기반 셀 편집 후보 판정(2026-11-01 엔진 갭 EG066) |
 | `make_test_report.py` | VM S8.report | 테스트결과서 — UI CheckList(run_verify) 결과를 사용자가 읽는 '테스트 내역 · 결과' Excel 로 (2026-10-30 사용자 요청) |
 | `make_ui_test_sheet.py` | VM S8.uitest | UI 테스트 Sheet — CheckList '조치 필요' 시트를 Doc/UI_TEST(SCP&SSP) 의 화면별 테스트 Excel 로 옮긴다 |
-| `make_verify_docs.py` | 다른 도구가 사용: decisions.py, doc_archive.py, make_test_report.py 외 4 | 화면 정합검증서 + 보완대상목록 xlsx 생성 |
+| `make_verify_docs.py` | 다른 도구가 사용: decisions.py, doc_archive.py, llm_desc.py 외 6 | 화면 정합검증서 + 보완대상목록 xlsx 생성 |
 | `mapping_trace.py` | 체인 static·post | 대조표 ↔ 검증 추적표 v2 — 대조표의 모든 행을 '검증 대상'으로 보고, 행마다 해야 할 검사를 카탈로그로 정해 결과를 단다 (2026-10-26) |
 | `master_sweep.py` | 체인 post | 기준정보 존재·활성 스윕(2026-11-02 엔진 갭 EG455) |
 | `measure_by_site_check.py` | 체인 post | Sales Site 유형별 입력 Measure 허용 목록(B5 · EG068 · DM-37/DM-135/DM-139/DM-153) — Doc/verify/<ID>/measure_by_site.csv (2026-11-03) |
@@ -374,7 +378,9 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `menu_auth_sync.py` | 체인 post | menu_auth_sync — 그룹별 메뉴·버튼 권한 AS-IS ↔ TO-BE 대조(읽기 전용 · 2026-11-18 SCP0111 V-d9598564 J4 GAPSELF-22 '측정 코드 없음') |
 | `meta_live_check.py` | VM S8.metaLive | 메타·배선 실시간 검증(EN-03 · EN-22 의 확인 단계 · 2026-11-11) — 생성·보완 뒤 화면이 실제로 동작할 DB 상태인지를 사내 DB 를 '지금' 조회해 확인한다. |
 | `new_screen_precheck.py` | VM S8.precheck | new_screen_precheck.py — EN-25 신규 화면 사전 점검 (2026-11-11 · 플랜 '추측 대신 실행') |
+| `opinion_intake.py` | 다른 도구가 사용: run_verify.py | 사용자의견 자동 처리 — CheckList '사용자의견' 열에 적은 의견을 Claude 가 읽고 처리 구분·근거·답을 만든다 (2026-11-19 사용자 지시 · 적용 단계 '사용자의견 자동 처리') |
 | `oracle_class.py` | 체인 post | 규칙 → 오라클 분류 마스터(2026-11-06 사용자 원칙: AS-IS 직접 비교가 1순위 정답 · 룰은 AS-IS 로 비교할 수 없는 항목만) |
+| `orch_event.py` | 다른 도구가 사용: db_orphan_sessions.py, orch-events.js, run_verify.py | 오케스트라 사건 기록(Python 쪽) — .vibe/orch/events.jsonl 에 한 줄 1건(JSON) 덧붙임 (2026-11-19 오케스트라 P1) |
 | `pattern_coverage.py` | 다른 도구가 사용: gen_expect.py | pattern_coverage.py <ID> [<ID> ...] — 화면별 결함 패턴 적용표(W8-3, 2026-11-05) |
 | `pending_recheck.py` | 다른 도구가 사용: recheck.js, screen_status.py, unverified_resolve.py | 미검증 해소 보완 뒤 CheckList 재수행 전인지 판단(2026-11-19 사용자 지시) |
 | `pkg_asis_map.py` | 다른 도구가 사용: gen_param_map.py | pkg_asis_map.py — TO-BE PKG 원문에 적힌 AS-IS SP 이름으로 짝을 읽는다 (2026-11-11 · EN-02 ② 짝 = 기록된 사실) |
@@ -399,6 +405,8 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `save_diff_targets.py` | 다른 도구가 사용: save_diff.py, sqllog_calls.py | save_diff_targets.py — EN-02 ③ 저장 SP 실행 대조의 대상·제외 목록 (2026-11-11 · 플랜 '추측 대신 실행' M1) |
 | `save_residue.py` | 다른 도구가 사용: cleanup_marker.py, gen_cleanup_spec.py, run_docs_batch.py | 실저장 잔존 변경 실측(2026-10-31) — 저장 대상 테이블에서 E2E 계정이 --since 이후 만들거나 고친 행 수를 DB 에서 센다. 정리가 끝났다는 주장의 증거. |
 | `scenario_env.py` | 체인 facts | scenario_env.py <ID> [...] — 화면별 데이터 전제 프로필(W8-5, 2026-11-05) → Doc/verify/<ID>/scenario_env.json |
+| `server_guard.py` | 다른 도구가 사용: nscm.ts, run-e2e.cmd, run_verify.py 외 1 | CheckList 서버 확인·자동 기동 (2026-11-19 사용자 지시) |
+| `set_llm_review.py` | VM S8.llmReview | AI 검토 켜고 끄기 — tools/Harness/harness.json 의 llmReview 를 읽고 쓴다(단일 원천 · 2026-11-19 사용자 지시 'VM 환경설정에 AI 검토 켜고 끄는 항목') |
 | `set_scope.py` | VM S8.scope | 보완 범위 환경설정 — tools/Harness/harness.json 의 repairScope 를 읽고 쓴다(단일 원천) |
 | `sheet_data_cond.py` | 다른 도구가 사용: asis_live_scen_run.py, smoke-extra.ts | 시트별 데이터 조건 탐색(2026-11-17 SCP0104 SOP 탭 0행 미측정 대응). |
 | `snap_approve.py` | 체인 post | 스냅샷 승인 = 골든(2026-11-06 플랜 3-4) — 수신본을 골든으로 올리고 사용자 판정 회귀 오라클(_user_verdicts_direct.csv)에 기록한다. |
@@ -417,7 +425,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `timing_report.py` | 손 실행(진입점 연결 없음) | CheckList 소요 시간 집계 (2026-11-06 속도 개선 ① 계측) — 측정값만 읽어 요약한다(추정 없음). |
 | `titleset_check.py` | 체인 post | 사용자 칸·Measure 설정(SCM_MST_TITLESET_USER) 정합(2026-11-02 엔진 갭 EG025·EG399) |
 | `titleset_guard.py` | 다른 도구가 사용: _verify.spec.ts | 컬럼 설정 Save 시험용 개인화 스냅샷·복원 (2026-11-04 · EG021/EG392) |
-| `tobe_rule_registry.py` | 다른 도구가 사용: engine_selfcheck.py | TO-BE 룰 원장(2026-11-11 · 플랜 §3) — 흩어진 TO-BE 룰을 1룰 1행으로 모으고, 각 룰이 어느 단계에서 무엇으로 강제되는지를 코드 실측으로 붙인다. |
+| `tobe_rule_registry.py` | 다른 도구가 사용: engine_selfcheck.py, unverified_resolve.py | TO-BE 룰 원장(2026-11-11 · 플랜 §3) — 흩어진 TO-BE 룰을 1룰 1행으로 모으고, 각 룰이 어느 단계에서 무엇으로 강제되는지를 코드 실측으로 붙인다. |
 | `trace_all.py` | 손 실행(진입점 연결 없음) | 전 화면 대조표 검증 커버리지 집계 (사용자 지시 2026-10-26 — '전체에 대해서 검증을 제대로 하도록') |
 | `unverified_resolve.py` | VM S8.unverified | CheckList 미검증 자동 해소 1단계: 분류 + 자동 재측정 (2026-11-18 사용자 지시) |
 | `validate_classified.py` | 다른 도구가 사용: defects_sources_merge.py | 분류 CSV(Doc/verify/sources/_classified/*.csv 또는 defects_classified.csv) 형식·일관성 검사 — 보고만(자동 수정 없음) |

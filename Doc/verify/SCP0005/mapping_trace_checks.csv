@@ -1,31 +1,31 @@
 ﻿row_id,source,check,instance,result
-clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,X-LOC,X-LOC|ROW:clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,NA
+clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,X-LOC,X-LOC|ROW:clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,PASS
 clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,G4,G4|COND:clbTransMode,PASS
-clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,SC1,SC1|SCREEN,ERROR
+clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,SC1,SC1|SCREEN,NA
 clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,G1,G1|COND:clbTransMode,ERROR
 clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,G6,G6|COND:clbTransMode,PASS
 clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,C1,C1|COND:clbTransMode,PASS
 clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,C4,C4|COND:clbTransMode,PASS
 clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,A1,A1|ROW:clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,REVIEW
-clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,J2,J2|SCREEN,PASS
-cboValidYN (UsrCombo),FE 대조표,X-LOC,X-LOC|ROW:cboValidYN (UsrCombo),NA
+clbTransMode (UsrCheckedList **다중 체크** — Designer ItemSelect,FE 대조표,J2,J2|SCREEN,ERROR
+cboValidYN (UsrCombo),FE 대조표,X-LOC,X-LOC|ROW:cboValidYN (UsrCombo),PASS
 cboValidYN (UsrCombo),FE 대조표,G4,G4|COND:cboValidYN,PASS
-cboValidYN (UsrCombo),FE 대조표,SC1,SC1|SCREEN,ERROR
+cboValidYN (UsrCombo),FE 대조표,SC1,SC1|SCREEN,NA
 cboValidYN (UsrCombo),FE 대조표,G1,G1|COND:cboValidYN,PASS
 cboValidYN (UsrCombo),FE 대조표,G6,G6|COND:cboValidYN,PASS
 cboValidYN (UsrCombo),FE 대조표,A1,A1|ROW:cboValidYN (UsrCombo),REVIEW
-cboValidYN (UsrCombo),FE 대조표,J2,J2|SCREEN,PASS
-txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,X-LOC,X-LOC|ROW:txtFromCountry/txtFromCity + btnFromSrch,NA
+cboValidYN (UsrCombo),FE 대조표,J2,J2|SCREEN,ERROR
+txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,X-LOC,X-LOC|ROW:txtFromCountry/txtFromCity + btnFromSrch,PASS
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G4,G4|COND:txtFromCountry,ERROR
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G4,G4|COND:txtFromCity,ERROR
-txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G4,G4|BTN:btnFromSrch,NOPATH
-txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,SC1,SC1|SCREEN,ERROR
+txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G4,G4|BTN:btnFromSrch,ERROR
+txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,SC1,SC1|SCREEN,NA
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G1,G1|COND:txtFromCountry,PASS
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G1,G1|COND:txtFromCity,NA
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G6,G6|COND:txtFromCountry,PASS
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G6,G6|COND:txtFromCity,PASS
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,H6,H6|COND:txtFromCountry,NOT_RUN
-txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,H6,H6|COND:txtFromCity,PASS
+txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,H6,H6|COND:txtFromCity,WARN
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,H6,H6|BTN:btnFromSrch,ERROR
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G5,G5|COND:txtFromCountry,NOPATH
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,G5,G5|COND:txtFromCity,NOPATH
@@ -34,12 +34,12 @@ txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,M4,M4|COND:txtFromCountry,
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,M4,M4|COND:txtFromCity,ERROR
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,M4,M4|BTN:btnFromSrch,PASS
 txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,A1,A1|ROW:txtFromCountry/txtFromCity + btnFromSrch,REVIEW
-txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,J2,J2|SCREEN,PASS
-txtToCountry/txtToCity + btnToSrch,FE 대조표,X-LOC,X-LOC|ROW:txtToCountry/txtToCity + btnToSrch,NA
+txtFromCountry/txtFromCity + btnFromSrch,FE 대조표,J2,J2|SCREEN,ERROR
+txtToCountry/txtToCity + btnToSrch,FE 대조표,X-LOC,X-LOC|ROW:txtToCountry/txtToCity + btnToSrch,PASS
 txtToCountry/txtToCity + btnToSrch,FE 대조표,G4,G4|COND:txtToCountry,ERROR
 txtToCountry/txtToCity + btnToSrch,FE 대조표,G4,G4|COND:txtToCity,ERROR
-txtToCountry/txtToCity + btnToSrch,FE 대조표,G4,G4|BTN:btnToSrch,NOPATH
-txtToCountry/txtToCity + btnToSrch,FE 대조표,SC1,SC1|SCREEN,ERROR
+txtToCountry/txtToCity + btnToSrch,FE 대조표,G4,G4|BTN:btnToSrch,ERROR
+txtToCountry/txtToCity + btnToSrch,FE 대조표,SC1,SC1|SCREEN,NA
 txtToCountry/txtToCity + btnToSrch,FE 대조표,G1,G1|COND:txtToCountry,PASS
 txtToCountry/txtToCity + btnToSrch,FE 대조표,G1,G1|COND:txtToCity,NA
 txtToCountry/txtToCity + btnToSrch,FE 대조표,G6,G6|COND:txtToCountry,PASS
@@ -54,43 +54,43 @@ txtToCountry/txtToCity + btnToSrch,FE 대조표,M4,M4|COND:txtToCountry,ERROR
 txtToCountry/txtToCity + btnToSrch,FE 대조표,M4,M4|COND:txtToCity,ERROR
 txtToCountry/txtToCity + btnToSrch,FE 대조표,M4,M4|BTN:btnToSrch,PASS
 txtToCountry/txtToCity + btnToSrch,FE 대조표,A1,A1|ROW:txtToCountry/txtToCity + btnToSrch,REVIEW
-txtToCountry/txtToCity + btnToSrch,FE 대조표,J2,J2|SCREEN,PASS
+txtToCountry/txtToCity + btnToSrch,FE 대조표,J2,J2|SCREEN,ERROR
 dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,X-NOTIMPL,X-NOTIMPL|ROW:dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FAIL
 dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,G4,G4|ROW:dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,BLOCKED
-dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,SC1,SC1|SCREEN,ERROR
+dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,SC1,SC1|SCREEN,NA
 dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,G1,G1|ROW:dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,BLOCKED
 dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,G6,G6|ROW:dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,NA
 dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,A1,A1|ROW:dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,BLOCKED
-dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,J2,J2|SCREEN,PASS
+dead 콤보(Division/Site/BodType/dtFromCountry/dtToCountry/dtYe,FE 대조표,J2,J2|SCREEN,ERROR
 cascade(clbFromCountry→City),FE 대조표,X-LOC,X-LOC|ROW:cascade(clbFromCountry→City),NA
 cascade(clbFromCountry→City),FE 대조표,G4,G4|ROW:cascade(clbFromCountry→City),ERROR
-cascade(clbFromCountry→City),FE 대조표,SC1,SC1|SCREEN,ERROR
+cascade(clbFromCountry→City),FE 대조표,SC1,SC1|SCREEN,NA
 cascade(clbFromCountry→City),FE 대조표,G1,G1|ROW:cascade(clbFromCountry→City),ERROR
 cascade(clbFromCountry→City),FE 대조표,G6,G6|ROW:cascade(clbFromCountry→City),NA
 cascade(clbFromCountry→City),FE 대조표,A1,A1|ROW:cascade(clbFromCountry→City),REVIEW
-cascade(clbFromCountry→City),FE 대조표,J2,J2|SCREEN,PASS
-FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,X-LOC,X-LOC|ROW:FindDataMain 파라미터 6종 'ALL'→'',NA
+cascade(clbFromCountry→City),FE 대조표,J2,J2|SCREEN,ERROR
+FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,X-LOC,X-LOC|ROW:FindDataMain 파라미터 6종 'ALL'→'',PASS
 FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,G4,G4|ROW:FindDataMain 파라미터 6종 'ALL'→'',ERROR
-FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,SC1,SC1|SCREEN,ERROR
+FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,SC1,SC1|SCREEN,NA
 FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,G1,G1|ROW:FindDataMain 파라미터 6종 'ALL'→'',ERROR
 FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,G6,G6|ROW:FindDataMain 파라미터 6종 'ALL'→'',NA
 FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,A1,A1|ROW:FindDataMain 파라미터 6종 'ALL'→'',REVIEW
-FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,A6,A6|ROW:FindDataMain 파라미터 6종 'ALL'→'',ERROR
+FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,A6,A6|ROW:FindDataMain 파라미터 6종 'ALL'→'',FAIL
 FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,F4,F4|ROW:FindDataMain 파라미터 6종 'ALL'→'',ERROR
 FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,DB-SYN,DB-SYN|ROW:FindDataMain 파라미터 6종 'ALL'→'',NA
-FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,J2,J2|SCREEN,PASS
-DB메타 구동(gridColumns=[]),FE 대조표,X-LOC,X-LOC|ROW:DB메타 구동(gridColumns=[]),NA
+FindDataMain 파라미터 6종 'ALL'→'',FE 대조표,J2,J2|SCREEN,ERROR
+DB메타 구동(gridColumns=[]),FE 대조표,X-LOC,X-LOC|ROW:DB메타 구동(gridColumns=[]),PASS
 DB메타 구동(gridColumns=[]),FE 대조표,A5,A5|ROW:DB메타 구동(gridColumns=[]),ERROR
 DB메타 구동(gridColumns=[]),FE 대조표,H5,H5|ROW:DB메타 구동(gridColumns=[]),ERROR
 DB메타 구동(gridColumns=[]),FE 대조표,H2,H2|ROW:DB메타 구동(gridColumns=[]),ERROR
-R1 숫자셀 범위(cellType),FE 대조표,X-LOC,X-LOC|ROW:R1 숫자셀 범위(cellType),NA
+R1 숫자셀 범위(cellType),FE 대조표,X-LOC,X-LOC|ROW:R1 숫자셀 범위(cellType),PASS
 R1 숫자셀 범위(cellType),FE 대조표,A5,A5|COL:PRIORITY,PASS
 R1 숫자셀 범위(cellType),FE 대조표,H5,H5|COL:PRIORITY,PASS
 R1 숫자셀 범위(cellType),FE 대조표,H2,H2|COL:PRIORITY,ERROR
 R1 숫자셀 범위(cellType),FE 대조표,C2,C2|COL:PRIORITY,ERROR
-R1 숫자셀 범위(cellType),FE 대조표,C3,C3|COL:PRIORITY,ERROR
+R1 숫자셀 범위(cellType),FE 대조표,C3,C3|COL:PRIORITY,NA
 R1 숫자셀 범위(cellType),FE 대조표,C6,C6|COL:PRIORITY,ERROR
-R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,X-LOC,X-LOC|ROW:R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),NA
+R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,X-LOC,X-LOC|ROW:R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),PASS
 R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,A5,A5|COL:ROUTE_ID,PASS
 R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,A5,A5|COL:LT_SUM,PASS
 R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,H5,H5|COL:ROUTE_ID,PASS
@@ -101,12 +101,12 @@ R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,D1,D1|COL:R
 R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,D1,D1|COL:LT_SUM,ERROR
 R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,D3,D3|COL:ROUTE_ID,PASS
 R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,D3,D3|COL:LT_SUM,PASS
-R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,J2,J2|SCREEN,PASS
-R6 신규행 VALID_YN='Y',FE 대조표,X-LOC,X-LOC|ROW:R6 신규행 VALID_YN='Y',NA
+R3/R4/R5 편집잠금(ROUTE_ID/CITY_NAME/LT_SUM/감사),FE 대조표,J2,J2|SCREEN,ERROR
+R6 신규행 VALID_YN='Y',FE 대조표,X-LOC,X-LOC|ROW:R6 신규행 VALID_YN='Y',PASS
 R6 신규행 VALID_YN='Y',FE 대조표,A5,A5|COL:VALID_YN,PASS
 R6 신규행 VALID_YN='Y',FE 대조표,H5,H5|COL:VALID_YN,PASS
 R6 신규행 VALID_YN='Y',FE 대조표,H2,H2|COL:VALID_YN,PASS
-R8 ROUTE_ID,FE 대조표,X-LOC,X-LOC|ROW:R8 ROUTE_ID,NA
+R8 ROUTE_ID,FE 대조표,X-LOC,X-LOC|ROW:R8 ROUTE_ID,PASS
 R8 ROUTE_ID,FE 대조표,A5,A5|COL:ROUTE_ID,PASS
 R8 ROUTE_ID,FE 대조표,H5,H5|COL:ROUTE_ID,PASS
 R8 ROUTE_ID,FE 대조표,H2,H2|COL:ROUTE_ID,PASS
@@ -115,118 +115,118 @@ R8 ROUTE_ID,FE 대조표,G5,G5|COL:ROUTE_ID,NA
 R8 ROUTE_ID,FE 대조표,M4,M4|COL:ROUTE_ID,PASS
 R8 ROUTE_ID,FE 대조표,D1,D1|COL:ROUTE_ID,ERROR
 R8 ROUTE_ID,FE 대조표,D3,D3|COL:ROUTE_ID,PASS
-R8 ROUTE_ID,FE 대조표,J2,J2|SCREEN,PASS
-R9 TRK/AIR→DAYS 7 'Y',FE 대조표,X-LOC,X-LOC|ROW:R9 TRK/AIR→DAYS 7 'Y',NA
+R8 ROUTE_ID,FE 대조표,J2,J2|SCREEN,ERROR
+R9 TRK/AIR→DAYS 7 'Y',FE 대조표,X-LOC,X-LOC|ROW:R9 TRK/AIR→DAYS 7 'Y',PASS
 R9 TRK/AIR→DAYS 7 'Y',FE 대조표,A5,A5|COL:DAYS,ERROR
 R9 TRK/AIR→DAYS 7 'Y',FE 대조표,H5,H5|COL:DAYS,ERROR
 R9 TRK/AIR→DAYS 7 'Y',FE 대조표,H2,H2|COL:DAYS,NA
 R9 TRK/AIR→DAYS 7 'Y',FE 대조표,C2,C2|COL:DAYS,ERROR
 R9 TRK/AIR→DAYS 7 'Y',FE 대조표,C3,C3|COL:DAYS,ERROR
 R9 TRK/AIR→DAYS 7 'Y',FE 대조표,C6,C6|COL:DAYS,ERROR
-R10 TRK→港/Forwarder 7 '-',FE 대조표,X-LOC,X-LOC|ROW:R10 TRK→港/Forwarder 7 '-',NA
+R10 TRK→港/Forwarder 7 '-',FE 대조표,X-LOC,X-LOC|ROW:R10 TRK→港/Forwarder 7 '-',PASS
 R10 TRK→港/Forwarder 7 '-',FE 대조표,A5,A5|ROW:R10 TRK→港/Forwarder 7 '-',ERROR
 R10 TRK→港/Forwarder 7 '-',FE 대조표,H5,H5|ROW:R10 TRK→港/Forwarder 7 '-',ERROR
 R10 TRK→港/Forwarder 7 '-',FE 대조표,H2,H2|ROW:R10 TRK→港/Forwarder 7 '-',ERROR
 R10 TRK→港/Forwarder 7 '-',FE 대조표,C2,C2|ROW:R10 TRK→港/Forwarder 7 '-',ERROR
 R10 TRK→港/Forwarder 7 '-',FE 대조표,C3,C3|ROW:R10 TRK→港/Forwarder 7 '-',ERROR
 R10 TRK→港/Forwarder 7 '-',FE 대조표,C6,C6|ROW:R10 TRK→港/Forwarder 7 '-',ERROR
-R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,X-LOC,X-LOC|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,NA
+R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,X-LOC,X-LOC|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,PASS
 R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,A5,A5|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,ERROR
 R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,H5,H5|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,ERROR
 R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,H2,H2|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,ERROR
 R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,H6,H6|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,ERROR
 R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,G5,G5|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,ERROR
 R11/R12 FROM/TO 셀 더블클릭→도시팝업,FE 대조표,M4,M4|ROW:R11/R12 FROM/TO 셀 더블클릭→도시팝업,PASS
-"R13 LT 5종→LT_SUM, >999 차단·리셋",FE 대조표,X-LOC,"X-LOC|ROW:R13 LT 5종→LT_SUM, >999 차단·리셋",NA
+"R13 LT 5종→LT_SUM, >999 차단·리셋",FE 대조표,X-LOC,"X-LOC|ROW:R13 LT 5종→LT_SUM, >999 차단·리셋",PASS
 "R13 LT 5종→LT_SUM, >999 차단·리셋",FE 대조표,A5,A5|COL:LT_SUM,PASS
 "R13 LT 5종→LT_SUM, >999 차단·리셋",FE 대조표,H5,H5|COL:LT_SUM,PASS
 "R13 LT 5종→LT_SUM, >999 차단·리셋",FE 대조표,H2,H2|COL:LT_SUM,PASS
-R7 조회 databind,FE 대조표,X-LOC,X-LOC|ROW:R7 조회 databind,NA
+R7 조회 databind,FE 대조표,X-LOC,X-LOC|ROW:R7 조회 databind,PASS
 R7 조회 databind,FE 대조표,A5,A5|ROW:R7 조회 databind,ERROR
 R7 조회 databind,FE 대조표,H5,H5|ROW:R7 조회 databind,ERROR
 R7 조회 databind,FE 대조표,H2,H2|ROW:R7 조회 databind,ERROR
 R7 조회 databind,FE 대조표,G1,G1|ROW:R7 조회 databind,ERROR
 R7 조회 databind,FE 대조표,A1,A1|ROW:R7 조회 databind,REVIEW
-R7 조회 databind,FE 대조표,J2,J2|SCREEN,PASS
-R16/R17 클라 검증 색칠,FE 대조표,X-LOC,X-LOC|ROW:R16/R17 클라 검증 색칠,NA
+R7 조회 databind,FE 대조표,J2,J2|SCREEN,ERROR
+R16/R17 클라 검증 색칠,FE 대조표,X-LOC,X-LOC|ROW:R16/R17 클라 검증 색칠,PASS
 R16/R17 클라 검증 색칠,FE 대조표,A5,A5|ROW:R16/R17 클라 검증 색칠,ERROR
 R16/R17 클라 검증 색칠,FE 대조표,H5,H5|ROW:R16/R17 클라 검증 색칠,ERROR
 R16/R17 클라 검증 색칠,FE 대조표,H2,H2|ROW:R16/R17 클라 검증 색칠,ERROR
 R16/R17 클라 검증 색칠,FE 대조표,D1,D1|ROW:R16/R17 클라 검증 색칠,ERROR
 R16/R17 클라 검증 색칠,FE 대조표,D3,D3|ROW:R16/R17 클라 검증 색칠,PASS
-R16/R17 클라 검증 색칠,FE 대조표,J2,J2|SCREEN,PASS
+R16/R17 클라 검증 색칠,FE 대조표,J2,J2|SCREEN,ERROR
 R16/R17 클라 검증 색칠,FE 대조표,E3,E3|ROW:R16/R17 클라 검증 색칠,REVIEW
 R16/R17 클라 검증 색칠,FE 대조표,E4,E4|ROW:R16/R17 클라 검증 색칠,NA
-R14/R15 저장응답 색칠(99010/99020),FE 대조표,X-LOC,X-LOC|ROW:R14/R15 저장응답 색칠(99010/99020),NA
+R14/R15 저장응답 색칠(99010/99020),FE 대조표,X-LOC,X-LOC|ROW:R14/R15 저장응답 색칠(99010/99020),PASS
 R14/R15 저장응답 색칠(99010/99020),FE 대조표,A5,A5|COL:PRIORITY,PASS
 R14/R15 저장응답 색칠(99010/99020),FE 대조표,H5,H5|COL:PRIORITY,PASS
 R14/R15 저장응답 색칠(99010/99020),FE 대조표,H2,H2|COL:PRIORITY,ERROR
 R14/R15 저장응답 색칠(99010/99020),FE 대조표,F1,F1|SCREEN,ERROR
 R14/R15 저장응답 색칠(99010/99020),FE 대조표,F2,F2|SCREEN,FAIL
-R14/R15 저장응답 색칠(99010/99020),FE 대조표,J2,J2|SCREEN,PASS
-R18 Insert/Delete,FE 대조표,X-LOC,X-LOC|ROW:R18 Insert/Delete,NA
+R14/R15 저장응답 색칠(99010/99020),FE 대조표,J2,J2|SCREEN,ERROR
+R18 Insert/Delete,FE 대조표,X-LOC,X-LOC|ROW:R18 Insert/Delete,PASS
 R18 Insert/Delete,FE 대조표,A5,A5|ROW:R18 Insert/Delete,ERROR
 R18 Insert/Delete,FE 대조표,H5,H5|ROW:R18 Insert/Delete,ERROR
 R18 Insert/Delete,FE 대조표,H2,H2|ROW:R18 Insert/Delete,ERROR
 R18 Insert/Delete,FE 대조표,D4,D4|ROW:R18 Insert/Delete,NA
 R18 Insert/Delete,FE 대조표,D6,D6|SCREEN,PASS
-R18 Insert/Delete,FE 대조표,J2,J2|SCREEN,PASS
+R18 Insert/Delete,FE 대조표,J2,J2|SCREEN,ERROR
 R18 Insert/Delete,FE 대조표,F1,F1|SCREEN,ERROR
 R18 Insert/Delete,FE 대조표,F5,F5|SCREEN,PASS
-FindButton(Search),FE 대조표,X-LOC,X-LOC|ROW:FindButton(Search),NA
+FindButton(Search),FE 대조표,X-LOC,X-LOC|ROW:FindButton(Search),PASS
 FindButton(Search),FE 대조표,G1,G1|ROW:FindButton(Search),ERROR
 FindButton(Search),FE 대조표,A1,A1|ROW:FindButton(Search),REVIEW
-FindButton(Search),FE 대조표,J2,J2|SCREEN,PASS
-InsertButton,FE 대조표,X-LOC,X-LOC|ROW:InsertButton,NA
+FindButton(Search),FE 대조표,J2,J2|SCREEN,ERROR
+InsertButton,FE 대조표,X-LOC,X-LOC|ROW:InsertButton,PASS
 InsertButton,FE 대조표,D4,D4|ROW:InsertButton,NA
 InsertButton,FE 대조표,D6,D6|SCREEN,PASS
-InsertButton,FE 대조표,J2,J2|SCREEN,PASS
-EditButton (SwitchLock 편집모드),FE 대조표,X-LOC,X-LOC|ROW:EditButton (SwitchLock 편집모드),NA
+InsertButton,FE 대조표,J2,J2|SCREEN,ERROR
+EditButton (SwitchLock 편집모드),FE 대조표,X-LOC,X-LOC|ROW:EditButton (SwitchLock 편집모드),PASS
 EditButton (SwitchLock 편집모드),FE 대조표,D1,D1|ROW:EditButton (SwitchLock 편집모드),ERROR
 EditButton (SwitchLock 편집모드),FE 대조표,D3,D3|ROW:EditButton (SwitchLock 편집모드),PASS
-EditButton (SwitchLock 편집모드),FE 대조표,J2,J2|SCREEN,PASS
-DeleteButton(action!=FlagI return),FE 대조표,X-LOC,X-LOC|ROW:DeleteButton(action!=FlagI return),NA
+EditButton (SwitchLock 편집모드),FE 대조표,J2,J2|SCREEN,ERROR
+DeleteButton(action!=FlagI return),FE 대조표,X-LOC,X-LOC|ROW:DeleteButton(action!=FlagI return),PASS
 DeleteButton(action!=FlagI return),FE 대조표,F1,F1|SCREEN,ERROR
 DeleteButton(action!=FlagI return),FE 대조표,F5,F5|SCREEN,PASS
-DeleteButton(action!=FlagI return),FE 대조표,J2,J2|SCREEN,PASS
-SaveButton,FE 대조표,X-LOC,X-LOC|ROW:SaveButton,NA
+DeleteButton(action!=FlagI return),FE 대조표,J2,J2|SCREEN,ERROR
+SaveButton,FE 대조표,X-LOC,X-LOC|ROW:SaveButton,PASS
 SaveButton,FE 대조표,F1,F1|SCREEN,ERROR
 SaveButton,FE 대조표,F2,F2|SCREEN,FAIL
-SaveButton,FE 대조표,J2,J2|SCREEN,PASS
+SaveButton,FE 대조표,J2,J2|SCREEN,ERROR
 SaveButton,FE 대조표,E3,E3|ROW:SaveButton,REVIEW
 SaveButton,FE 대조표,E4,E4|ROW:SaveButton,NA
-btnEaxel_Upload → ExcelUploadForm2,FE 대조표,X-LOC,X-LOC|ROW:btnEaxel_Upload → ExcelUploadForm2,NA
+btnEaxel_Upload → ExcelUploadForm2,FE 대조표,X-LOC,X-LOC|ROW:btnEaxel_Upload → ExcelUploadForm2,PASS
 btnEaxel_Upload → ExcelUploadForm2,FE 대조표,G1,G1|ROW:btnEaxel_Upload → ExcelUploadForm2,ERROR
 btnEaxel_Upload → ExcelUploadForm2,FE 대조표,A1,A1|ROW:btnEaxel_Upload → ExcelUploadForm2,REVIEW
-btnEaxel_Upload → ExcelUploadForm2,FE 대조표,J2,J2|SCREEN,PASS
+btnEaxel_Upload → ExcelUploadForm2,FE 대조표,J2,J2|SCREEN,ERROR
 btnExcel_Form (Visibility=Never),FE 대조표,X-LOC,X-LOC|ROW:btnExcel_Form (Visibility=Never),NA
 btnExcel_Form (Visibility=Never),FE 대조표,X-ROW,X-ROW|ENTRY:btnExcel_Form (Visibility=Never),NA
 ProgressForm,FE 대조표,X-LOC,X-LOC|ROW:ProgressForm,NA
 ProgressForm,FE 대조표,H6,H6|ROW:ProgressForm,ERROR
 ProgressForm,FE 대조표,G5,G5|ROW:ProgressForm,ERROR
 ProgressForm,FE 대조표,M4,M4|ROW:ProgressForm,PASS
-PRIORITY>=1 (MSG00107),FE 대조표,X-LOC,X-LOC|ROW:PRIORITY>=1 (MSG00107),NA
+PRIORITY>=1 (MSG00107),FE 대조표,X-LOC,X-LOC|ROW:PRIORITY>=1 (MSG00107),PASS
 PRIORITY>=1 (MSG00107),FE 대조표,E4,E4|COL:PRIORITY,NA
 PRIORITY>=1 (MSG00107),FE 대조표,E4,E4|MSG:MSG00107,NA
 PRIORITY>=1 (MSG00107),FE 대조표,E4,E4|MSG:MSG01134,NA
 PRIORITY>=1 (MSG00107),FE 대조표,I1,I1|SCREEN,ERROR
 PRIORITY>=1 (MSG00107),FE 대조표,H10,H10|SCREEN,PASS
 PRIORITY>=1 (MSG00107),FE 대조표,E3,E3|COL:PRIORITY,PASS
-FROM/TO City Name 비공백 (MSG00167),FE 대조표,X-LOC,X-LOC|ROW:FROM/TO City Name 비공백 (MSG00167),NA
+FROM/TO City Name 비공백 (MSG00167),FE 대조표,X-LOC,X-LOC|ROW:FROM/TO City Name 비공백 (MSG00167),PASS
 FROM/TO City Name 비공백 (MSG00167),FE 대조표,E4,E4|COL:TO_CITY_NAME,NA
 FROM/TO City Name 비공백 (MSG00167),FE 대조표,E4,E4|MSG:MSG00167,PASS
 FROM/TO City Name 비공백 (MSG00167),FE 대조표,E4,E4|MSG:MSG00429,NA
 FROM/TO City Name 비공백 (MSG00167),FE 대조표,I1,I1|SCREEN,ERROR
 FROM/TO City Name 비공백 (MSG00167),FE 대조표,H10,H10|SCREEN,PASS
 FROM/TO City Name 비공백 (MSG00167),FE 대조표,E3,E3|COL:TO_CITY_NAME,PASS
-DAYS 최소 1 (MSG00223),FE 대조표,X-LOC,X-LOC|ROW:DAYS 최소 1 (MSG00223),NA
+DAYS 최소 1 (MSG00223),FE 대조표,X-LOC,X-LOC|ROW:DAYS 최소 1 (MSG00223),PASS
 DAYS 최소 1 (MSG00223),FE 대조표,E4,E4|COL:DAYS,NA
 DAYS 최소 1 (MSG00223),FE 대조표,E4,E4|MSG:MSG00223,NA
 DAYS 최소 1 (MSG00223),FE 대조표,E4,E4|MSG:MSG00429,NA
 DAYS 최소 1 (MSG00223),FE 대조표,I1,I1|SCREEN,ERROR
 DAYS 최소 1 (MSG00223),FE 대조표,H10,H10|SCREEN,PASS
 DAYS 최소 1 (MSG00223),FE 대조표,E3,E3|COL:DAYS,REVIEW
-메타 필수(INPUT_TP_CD=M/IM),FE 대조표,X-LOC,X-LOC|ROW:메타 필수(INPUT_TP_CD=M/IM),NA
+메타 필수(INPUT_TP_CD=M/IM),FE 대조표,X-LOC,X-LOC|ROW:메타 필수(INPUT_TP_CD=M/IM),PASS
 메타 필수(INPUT_TP_CD=M/IM),FE 대조표,E3,E3|ROW:메타 필수(INPUT_TP_CD=M/IM),REVIEW
 메타 필수(INPUT_TP_CD=M/IM),FE 대조표,E4,E4|ROW:메타 필수(INPUT_TP_CD=M/IM),NA
 COMMON:UC-01,FE 대조표,X-LOC,X-LOC|ROW:COMMON:UC-01,PASS
@@ -235,9 +235,9 @@ COMMON:UC-01,FE 대조표,H10,H10|SCREEN,PASS
 COMMON:UC-01,FE 대조표,G3,G3|SCREEN,PASS
 COMMON:UC-01,FE 대조표,D4,D4|ROW:COMMON:UC-01,NA
 COMMON:UC-01,FE 대조표,D6,D6|SCREEN,PASS
-COMMON:UC-01,FE 대조표,J2,J2|SCREEN,PASS
+COMMON:UC-01,FE 대조표,J2,J2|SCREEN,ERROR
 COMMON:UC-02,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-02,PASS
-COMMON:UC-03,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-03,REVIEW
+COMMON:UC-03,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-03,FAIL
 COMMON:UC-04,FE 대조표,X-LOC,X-LOC|ROW:COMMON:UC-04,PASS
 COMMON:UC-04,FE 대조표,K4,K4|SCREEN,ERROR
 COMMON:UC-04,FE 대조표,H10,H10|SCREEN,PASS
@@ -251,7 +251,7 @@ COMMON:UC-05,FE 대조표,B2,B2|ROW:COMMON:UC-05,NA
 COMMON:UC-05,FE 대조표,B4,B4|ROW:COMMON:UC-05,NA
 COMMON:UC-05,FE 대조표,D5,D5|ROW:COMMON:UC-05,PASS
 COMMON:UC-05,FE 대조표,E5,E5|ROW:COMMON:UC-05,NA
-COMMON:UC-06,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-06,REVIEW
+COMMON:UC-06,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-06,FAIL
 COMMON:UC-07,FE 대조표,X-LOC,X-LOC|ROW:COMMON:UC-07,PASS
 COMMON:UC-07,FE 대조표,K4,K4|SCREEN,ERROR
 COMMON:UC-07,FE 대조표,H10,H10|SCREEN,PASS
@@ -261,10 +261,10 @@ COMMON:UC-07,FE 대조표,H5,H5|ROW:COMMON:UC-07,ERROR
 COMMON:UC-07,FE 대조표,H2,H2|ROW:COMMON:UC-07,ERROR
 COMMON:UC-07,FE 대조표,G1,G1|ROW:COMMON:UC-07,ERROR
 COMMON:UC-07,FE 대조표,A1,A1|ROW:COMMON:UC-07,REVIEW
-COMMON:UC-07,FE 대조표,J2,J2|SCREEN,PASS
-ACT:SCP0005_DistributionRoute..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0005_DistributionRoute..ctor:141:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0005_DistributionRoute..ctor:144:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+COMMON:UC-07,FE 대조표,J2,J2|SCREEN,ERROR
+ACT:SCP0005_DistributionRoute..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
+ACT:SCP0005_DistributionRoute..ctor:141:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
+ACT:SCP0005_DistributionRoute..ctor:144:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.CSafeSetText,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CSafeSetText,NA
 ACT:SCP0005_DistributionRoute.CSafeSetText:159:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CSafeSetText,NA
 ACT:SCP0005_DistributionRoute.CSafeSetText:160:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CSafeSetText,NA
@@ -279,12 +279,12 @@ ACT:SCP0005_DistributionRoute.CheckValid:1271:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:S
 ACT:SCP0005_DistributionRoute.CheckValid:1274:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1276:8,AS-IS 액션,H2,H2|LEDGER:V-c56bdc72,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1276:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1278:9,AS-IS 액션,H2,H2|LEDGER:V-0810a59e,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1278:9,AS-IS 액션,H2,H2|LEDGER:V-0810a59e,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1278:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1278:9,AS-IS 액션,H2,H2|COL:FROM_CITY,PASS
-ACT:SCP0005_DistributionRoute.CheckValid:1279:10,AS-IS 액션,H2,H2|LEDGER:V-c099fa4f,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1278:9,AS-IS 액션,H2,H2|COL:FROM_CITY,ERROR
+ACT:SCP0005_DistributionRoute.CheckValid:1279:10,AS-IS 액션,H2,H2|LEDGER:V-c099fa4f,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1279:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1279:10,AS-IS 액션,H2,H2|COL:TO_CITY,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1279:10,AS-IS 액션,H2,H2|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1283:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1285:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1286:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
@@ -306,9 +306,9 @@ ACT:SCP0005_DistributionRoute.CheckValid:1301:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:
 ACT:SCP0005_DistributionRoute.CheckValid:1302:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1303:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1304:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1305:28,AS-IS 액션,H2,H2|LEDGER:V-17e451a7,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1305:28,AS-IS 액션,H2,H2|LEDGER:V-17e451a7,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1305:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1305:28,AS-IS 액션,H2,H2|COL:FROM_CITY,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1305:28,AS-IS 액션,H2,H2|COL:FROM_CITY,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1306:29,AS-IS 액션,E4,E4|LEDGER:V-0ac54e30,PASS
 ACT:SCP0005_DistributionRoute.CheckValid:1306:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1306:29,AS-IS 액션,E4,E4|MSG:MSG00167,PASS
@@ -316,9 +316,9 @@ ACT:SCP0005_DistributionRoute.CheckValid:1306:29,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1307:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1310:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1312:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1313:33,AS-IS 액션,H2,H2|LEDGER:V-e63ff383,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1313:33,AS-IS 액션,H2,H2|LEDGER:V-e63ff383,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1313:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
-ACT:SCP0005_DistributionRoute.CheckValid:1313:33,AS-IS 액션,H2,H2|COL:TO_CITY,PASS
+ACT:SCP0005_DistributionRoute.CheckValid:1313:33,AS-IS 액션,H2,H2|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1314:34,AS-IS 액션,E4,E4|LEDGER:V-d3fca115,PASS
 ACT:SCP0005_DistributionRoute.CheckValid:1314:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.CheckValid,ERROR
 ACT:SCP0005_DistributionRoute.CheckValid:1314:34,AS-IS 액션,E4,E4|MSG:MSG00167,PASS
@@ -402,69 +402,69 @@ ACT:SCP0005_DistributionRoute.EditButton:324:8,AS-IS 액션,D1,D1|COL:LT_SUM,ERR
 ACT:SCP0005_DistributionRoute.EditButton:324:8,AS-IS 액션,D3,D3|COL:LT_SUM,PASS
 ACT:SCP0005_DistributionRoute.EditButton:325:9,AS-IS 액션,D3,D3|LEDGER:V-ef32dd17,PASS
 ACT:SCP0005_DistributionRoute.EditButton:325:9,AS-IS 액션,D1,D1|COL:CREATED_BY,PASS
-ACT:SCP0005_DistributionRoute.EditButton:325:9,AS-IS 액션,D1,D1|COL:LAST_UPDATE_DATE,PASS
+ACT:SCP0005_DistributionRoute.EditButton:325:9,AS-IS 액션,D1,D1|COL:LAST_UPDATE_DATE,ERROR
 ACT:SCP0005_DistributionRoute.EditButton:325:9,AS-IS 액션,D3,D3|COL:CREATED_BY,PASS
 ACT:SCP0005_DistributionRoute.EditButton:325:9,AS-IS 액션,D3,D3|COL:LAST_UPDATE_DATE,PASS
-ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindButton,ERROR
-ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindButton,FAIL
+ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton,AS-IS 액션,F4,F4|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:272:1,AS-IS 액션,F4,F4|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:274:2,AS-IS 액션,F4,F4|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:277:3,AS-IS 액션,F4,F4|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:279:4,AS-IS 액션,F4,F4|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:283:5,AS-IS 액션,F4,F4|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,REVIEW
+ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_COUNTRY_CITY,PASS
 ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
 ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
-ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,A6,A6|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_COUNTRY_CITY,ERROR
 ACT:SCP0005_DistributionRoute.FindButton:287:6,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
@@ -476,152 +476,152 @@ ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,G1,G1|COND:txtToCity,NA
 ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,G1,G1|COND:clbTransMode,ERROR
 ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,G1,G1|COND:cboValidYN,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:393:1,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:393:1,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:393:1,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:393:1,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:393:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,ERROR
+ACT:SCP0005_DistributionRoute.FindDataMain:393:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:396:2,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:396:2,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:396:2,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:396:2,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:397:3,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:397:3,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:397:3,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:397:3,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:399:4,AS-IS 액션,G1,G1|COND:txtFromCountry,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:399:4,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:399:4,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:399:4,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:399:4,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:400:5,AS-IS 액션,G1,G1|COND:txtFromCity,NA
 ACT:SCP0005_DistributionRoute.FindDataMain:400:5,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:400:5,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:400:5,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:400:5,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:401:6,AS-IS 액션,G1,G1|COND:txtToCountry,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:401:6,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:401:6,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:401:6,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:401:6,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:402:7,AS-IS 액션,G1,G1|COND:txtToCity,NA
 ACT:SCP0005_DistributionRoute.FindDataMain:402:7,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:402:7,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:402:7,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:402:7,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:403:8,AS-IS 액션,G1,G1|COND:clbTransMode,ERROR
 ACT:SCP0005_DistributionRoute.FindDataMain:403:8,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:403:8,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:403:8,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:403:8,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:404:9,AS-IS 액션,G1,G1|COND:cboValidYN,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:404:9,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:404:9,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:404:9,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:404:9,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:406:10,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:406:10,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:406:10,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:406:10,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:407:11,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:407:11,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:407:11,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:407:11,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:408:12,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:408:12,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:408:12,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:408:12,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:409:13,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:409:13,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:409:13,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:409:13,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:410:14,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:410:14,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:410:14,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:410:14,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:413:15,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:413:15,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:413:15,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:413:15,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:415:16,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:415:16,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:415:16,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:415:16,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:417:17,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:417:17,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:417:17,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:417:17,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:417:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,ERROR
+ACT:SCP0005_DistributionRoute.FindDataMain:417:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:418:18,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:418:18,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:418:18,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:418:18,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:418:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,ERROR
+ACT:SCP0005_DistributionRoute.FindDataMain:418:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:420:19,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:420:19,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:420:19,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:420:19,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:420:19,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:422:20,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:422:20,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:422:20,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:422:20,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:422:20,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:424:21,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:424:21,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:424:21,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:424:21,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:424:21,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:425:22,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:425:22,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:425:22,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:425:22,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:425:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,ERROR
+ACT:SCP0005_DistributionRoute.FindDataMain:425:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:426:23,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:426:23,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:426:23,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:426:23,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:427:24,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:427:24,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:427:24,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:427:24,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:428:25,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:428:25,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:428:25,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:428:25,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:429:26,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:429:26,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:429:26,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:429:26,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:430:27,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:430:27,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:430:27,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:430:27,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:431:28,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:431:28,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:431:28,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:431:28,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:433:29,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:433:29,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:433:29,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:433:29,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:433:29,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:435:30,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:435:30,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:435:30,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:435:30,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:440:31,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:440:31,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:440:31,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:440:31,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:442:32,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:442:32,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:442:32,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:442:32,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,D1,D1|LEDGER:V-c31cc83b,NA
 ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,ERROR
+ACT:SCP0005_DistributionRoute.FindDataMain:443:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:448:34,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:448:34,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:448:34,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:448:34,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:450:35,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:450:35,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:450:35,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:450:35,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:452:36,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:452:36,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:452:36,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:452:36,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:455:37,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:455:37,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:455:37,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:455:37,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:457:38,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:457:38,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:457:38,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:457:38,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:459:39,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:459:39,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:459:39,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:459:39,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:463:40,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:463:40,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:463:40,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:463:40,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,G1,G1|LEDGER:V-0d887c1e,NA
 ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,ERROR
+ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataMain,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:468:41,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.FindDataMain:472:42,AS-IS 액션,A1,A1|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
-ACT:SCP0005_DistributionRoute.FindDataMain:472:42,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
+ACT:SCP0005_DistributionRoute.FindDataMain:472:42,AS-IS 액션,A6,A6|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,FAIL
 ACT:SCP0005_DistributionRoute.FindDataMain:472:42,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.FindDataReceive,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.FindDataReceive,ERROR
 ACT:SCP0005_DistributionRoute.FindDataReceive,AS-IS 액션,A1,A1|SP:SCP0005_GET_DISTRIBUTION_ROUTEID,REVIEW
@@ -811,18 +811,18 @@ ACT:SCP0005_DistributionRoute.InitControls:206:3,AS-IS 액션,A10,A10|SCREEN,PAS
 ACT:SCP0005_DistributionRoute.InitControls:208:4,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0005_DistributionRoute.InitControls:208:5,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0005_DistributionRoute.InitControls:210:6,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.InitEvent,NA
+ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
+ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.InitEvent,ERROR
 ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,G4,G4|BTN:btnEaxel,NOPATH
-ACT:SCP0005_DistributionRoute.InitEvent:187:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.InitEvent,AS-IS 액션,G4,G4|BTN:btnEaxel,ERROR
+ACT:SCP0005_DistributionRoute.InitEvent:187:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.InitEvent:187:1,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0005_DistributionRoute.InitEvent:189:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.InitEvent:189:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.InitEvent:189:2,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0005_DistributionRoute.InitEvent:189:2,AS-IS 액션,G4,G4|BTN:btnEaxel,NOPATH
-ACT:SCP0005_DistributionRoute.InitEvent:191:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.InitEvent:189:2,AS-IS 액션,G4,G4|BTN:btnEaxel,ERROR
+ACT:SCP0005_DistributionRoute.InitEvent:191:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.InitEvent:191:3,AS-IS 액션,A10,A10|SCREEN,PASS
-ACT:SCP0005_DistributionRoute.InitEvent:192:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.InitEvent:192:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.InitEvent:192:4,AS-IS 액션,A10,A10|SCREEN,PASS
 ACT:SCP0005_DistributionRoute.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.InitSpread,ERROR
 ACT:SCP0005_DistributionRoute.InitSpread,AS-IS 액션,A10,A10|SCREEN,PASS
@@ -924,7 +924,7 @@ ACT:SCP0005_DistributionRoute.InsertRow:953:11,AS-IS 액션,D3,D3|COL:LT_SUM,PAS
 ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,D3,D3|LEDGER:V-45343874,PASS
 ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.InsertRow,ERROR
 ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,D1,D1|COL:CREATED_BY,PASS
-ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,D1,D1|COL:LAST_UPDATE_DATE,PASS
+ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,D1,D1|COL:LAST_UPDATE_DATE,ERROR
 ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,D3,D3|COL:CREATED_BY,PASS
 ACT:SCP0005_DistributionRoute.InsertRow:954:12,AS-IS 액션,D3,D3|COL:LAST_UPDATE_DATE,PASS
 ACT:SCP0005_DistributionRoute.SaveButton,AS-IS 액션,F1,F1|SCREEN,ERROR
@@ -1859,50 +1859,50 @@ ACT:SCP0005_DistributionRoute.SaveData:856:180,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:856:180,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:856:180,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:856:180,AS-IS 액션,F6,F6|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,H2,H2|LEDGER:V-b6f27092,PASS
+ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,H2,H2|LEDGER:V-b6f27092,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,F6,F6|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,H2,H2|COL:LT_TYPE,PASS
-ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,H2,H2|COL:TRANSPORT_MODE,PASS
-ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,H2,H2|LEDGER:V-bc631885,PASS
+ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,H2,H2|COL:LT_TYPE,ERROR
+ACT:SCP0005_DistributionRoute.SaveData:858:181,AS-IS 액션,H2,H2|COL:TRANSPORT_MODE,ERROR
+ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,H2,H2|LEDGER:V-bc631885,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,F6,F6|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,H2,H2|COL:D_PORT_NAME,PASS
-ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,H2,H2|COL:TO_CITY,PASS
+ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,H2,H2|COL:D_PORT_NAME,ERROR
+ACT:SCP0005_DistributionRoute.SaveData:859:182,AS-IS 액션,H2,H2|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:860:183,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:860:183,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:860:183,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:860:183,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:860:183,AS-IS 액션,F6,F6|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,H2,H2|LEDGER:V-06e7dec2,PASS
+ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,H2,H2|LEDGER:V-06e7dec2,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,F6,F6|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,H2,H2|COL:FROM_CITY_NAME,PASS
-ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,H2,H2|COL:FROM_CITY,PASS
-ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,H2,H2|LEDGER:V-fa71e89c,PASS
+ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,H2,H2|COL:FROM_CITY_NAME,ERROR
+ACT:SCP0005_DistributionRoute.SaveData:861:184,AS-IS 액션,H2,H2|COL:FROM_CITY,ERROR
+ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,H2,H2|LEDGER:V-fa71e89c,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,F6,F6|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:862:185,AS-IS 액션,H2,H2|COL:PRIORITY,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,H2,H2|LEDGER:V-dc54eed4,PASS
+ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,H2,H2|LEDGER:V-dc54eed4,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
 ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,F4,F4|SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,NA
 ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,F6,F6|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,H2,H2|COL:TO_CITY_NAME,PASS
-ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,H2,H2|COL:TO_CITY,PASS
+ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,H2,H2|COL:TO_CITY_NAME,ERROR
+ACT:SCP0005_DistributionRoute.SaveData:863:186,AS-IS 액션,H2,H2|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:870:187,AS-IS 액션,F1,F1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.SaveData:870:187,AS-IS 액션,F2,F2|SCREEN,FAIL
 ACT:SCP0005_DistributionRoute.SaveData:870:187,AS-IS 액션,F4,F4|SP:P_SCP0005_GET_DISTRIBUTION_ROUTE,PASS
@@ -1996,9 +1996,9 @@ ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,A5,A5|COL:FROM_CITY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,A5,A5|COL:TO_COUNTRY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,A5,A5|COL:TO_CITY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H2,H2|COL:FROM_COUNTRY,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H2,H2|COL:FROM_CITY,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H2,H2|COL:FROM_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H2,H2|COL:TO_COUNTRY,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H2,H2|COL:TO_CITY,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H2,H2|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H5,H5|COL:FROM_COUNTRY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H5,H5|COL:FROM_CITY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,H5,H5|COL:TO_COUNTRY,PASS
@@ -2016,31 +2016,31 @@ ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,E4,E4|COL:FROM_CITY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,E4,E4|COL:TO_COUNTRY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell,AS-IS 액션,E4,E4|COL:TO_CITY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:577:1,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetImageCell,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:578:2,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetImageCell,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:580:3,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetImageCell,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetImageCell,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:584:4,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetImageCell,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:587:5,AS-IS 액션,A5,A5|COL:FROM_CITY_NAME,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:587:5,AS-IS 액션,H2,H2|COL:FROM_CITY_NAME,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:587:5,AS-IS 액션,H2,H2|COL:FROM_CITY_NAME,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:587:5,AS-IS 액션,H5,H5|COL:FROM_CITY_NAME,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:587:5,AS-IS 액션,D5,D5|COL:FROM_CITY_NAME,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:587:5,AS-IS 액션,C3,C3|COL:FROM_CITY_NAME,ERROR
@@ -2053,7 +2053,7 @@ ACT:SCP0005_DistributionRoute.SetImageCell:590:6,AS-IS 액션,C3,C3|COL:FROM_COU
 ACT:SCP0005_DistributionRoute.SetImageCell:590:6,AS-IS 액션,E4,E4|COL:FROM_COUNTRY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:590:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:591:7,AS-IS 액션,A5,A5|COL:FROM_CITY,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:591:7,AS-IS 액션,H2,H2|COL:FROM_CITY,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:591:7,AS-IS 액션,H2,H2|COL:FROM_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:591:7,AS-IS 액션,H5,H5|COL:FROM_CITY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:591:7,AS-IS 액션,D5,D5|COL:FROM_CITY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:591:7,AS-IS 액션,C3,C3|COL:FROM_CITY,ERROR
@@ -2067,122 +2067,122 @@ ACT:SCP0005_DistributionRoute.SetImageCell:594:8,AS-IS 액션,C3,C3|COL:TO_COUNT
 ACT:SCP0005_DistributionRoute.SetImageCell:594:8,AS-IS 액션,E4,E4|COL:TO_COUNTRY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:594:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,A5,A5|COL:TO_CITY,PASS
-ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,H2,H2|COL:TO_CITY,PASS
+ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,H2,H2|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,H5,H5|COL:TO_CITY,PASS
 ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,D5,D5|COL:TO_CITY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,C3,C3|COL:TO_CITY,ERROR
 ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,E4,E4|COL:TO_CITY,NA
 ACT:SCP0005_DistributionRoute.SetImageCell:595:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetImageCell,ERROR
-ACT:SCP0005_DistributionRoute.SetSpreadColumn,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:548:1,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:549:2,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:550:3,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:551:4,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:552:5,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:553:6,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:555:7,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:559:8,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:560:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:560:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,A5,A5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,H2,H2|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,H5,H5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,D5,D5|COL:ROUTE_ID,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,C3,C3|COL:ROUTE_ID,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,C3,C3|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:562:10,AS-IS 액션,E4,E4|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,A5,A5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,H2,H2|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,H5,H5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,D5,D5|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:565:11,AS-IS 액션,E4,E4|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,A5,A5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,H2,H2|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,H5,H5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,D5,D5|COL:ROUTE_ID,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,C3,C3|COL:ROUTE_ID,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,C3,C3|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:566:12,AS-IS 액션,E4,E4|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,A5,A5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,H2,H2|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,H5,H5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,D5,D5|COL:ROUTE_ID,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,C3,C3|COL:ROUTE_ID,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,C3,C3|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,E4,E4|COL:ROUTE_ID,NA
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:569:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.SetSpreadColumn,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,A5,A5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,H2,H2|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,H5,H5|COL:ROUTE_ID,PASS
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,D5,D5|COL:ROUTE_ID,PASS
-ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,C3,C3|COL:ROUTE_ID,ERROR
+ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,C3,C3|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.SetSpreadColumn:570:14,AS-IS 액션,E4,E4|COL:ROUTE_ID,NA
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:376:1,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:376:1,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:376:1,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:376:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnEaxel_Upload_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:377:2,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:377:2,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:377:2,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:377:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnEaxel_Upload_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:378:3,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:378:3,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:378:3,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:378:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnEaxel_Upload_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:379:4,AS-IS 액션,G5,G5|LEDGER:V-a6bb7234,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:379:4,AS-IS 액션,H6,H6|LEDGER:V-e14533b1,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:379:4,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:379:4,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:379:4,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:379:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnEaxel_Upload_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:381:5,AS-IS 액션,E4,E4|LEDGER:V-4a0b6271,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:381:5,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:381:5,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:381:5,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:381:5,AS-IS 액션,E4,E4|MSG:MSG00265,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:381:5,AS-IS 액션,I1,I1|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:383:6,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:383:6,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnEaxel_Upload_Click:383:6,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnExcel_Form_Click,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnExcel_Form_Click,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnExcel_Form_Click,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnExcel_Form_Click:1385:1,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnExcel_Form_Click:1385:1,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnExcel_Form_Click:1385:1,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,H6,H6|COND:txtFromCountry,NOT_RUN
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,H6,H6|COND:txtFromCity,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,H6,H6|COND:txtFromCity,WARN
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,H6,H6|BTN:btnFromSrch,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,G5,G5|COND:txtFromCountry,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,G5,G5|COND:txtFromCity,NOPATH
@@ -2191,49 +2191,49 @@ ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,M4,M4|COND:txtFromC
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,M4,M4|COND:txtFromCity,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,M4,M4|BTN:btnFromSrch,PASS
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:340:1,AS-IS 액션,H6,H6|COND:txtFromCountry,NOT_RUN
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:340:1,AS-IS 액션,G5,G5|COND:txtFromCountry,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:340:1,AS-IS 액션,M4,M4|COND:txtFromCountry,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:340:1,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:340:1,AS-IS 액션,J2,J2|SCREEN,PASS
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,H6,H6|COND:txtFromCity,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:340:1,AS-IS 액션,J2,J2|SCREEN,ERROR
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,H6,H6|COND:txtFromCity,WARN
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,G5,G5|COND:txtFromCity,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,M4,M4|COND:txtFromCity,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:341:2,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:343:3,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:343:3,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:343:3,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:344:4,AS-IS 액션,G5,G5|LEDGER:V-2e28bbf0,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:344:4,AS-IS 액션,H6,H6|LEDGER:V-718e1a16,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:344:4,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:344:4,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:344:4,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:345:5,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:345:5,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:345:5,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:345:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnFromSrch_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:346:6,AS-IS 액션,G5,G5|LEDGER:V-c6dd7839,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:346:6,AS-IS 액션,H6,H6|LEDGER:V-7cdbda05,PASS
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:346:6,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:346:6,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:346:6,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,H6,H6|COND:txtFromCountry,NOT_RUN
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,H6,H6|COND:txtFromCity,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,H6,H6|COND:txtFromCity,WARN
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,G5,G5|COND:txtFromCountry,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,G5,G5|COND:txtFromCity,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,M4,M4|COND:txtFromCountry,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,M4,M4|COND:txtFromCity,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:348:7,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,H6,H6|COND:txtFromCountry,NOT_RUN
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,G5,G5|COND:txtFromCountry,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,M4,M4|COND:txtFromCountry,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:350:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnFromSrch_Click,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,H6,H6|COND:txtFromCity,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,H6,H6|COND:txtFromCity,WARN
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,G5,G5|COND:txtFromCity,NOPATH
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,M4,M4|COND:txtFromCity,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnFromSrch_Click:351:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnFromSrch_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,H6,H6|COND:txtToCountry,NOT_RUN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,H6,H6|COND:txtToCity,WARN
@@ -2245,30 +2245,30 @@ ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,M4,M4|COND:txtToCount
 ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,M4,M4|COND:txtToCity,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,M4,M4|BTN:btnToSrch,PASS
 ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:358:1,AS-IS 액션,H6,H6|COND:txtToCountry,NOT_RUN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:358:1,AS-IS 액션,G5,G5|COND:txtToCountry,NOPATH
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:358:1,AS-IS 액션,M4,M4|COND:txtToCountry,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:358:1,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:358:1,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:358:1,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:359:2,AS-IS 액션,H6,H6|COND:txtToCity,WARN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:359:2,AS-IS 액션,G5,G5|COND:txtToCity,NOPATH
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:359:2,AS-IS 액션,M4,M4|COND:txtToCity,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:359:2,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:359:2,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:359:2,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:361:3,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:361:3,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:361:3,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:362:4,AS-IS 액션,G5,G5|LEDGER:V-b16a17a1,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:362:4,AS-IS 액션,H6,H6|LEDGER:V-616b4d31,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:362:4,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:362:4,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:362:4,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:363:5,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:363:5,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:363:5,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:363:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnToSrch_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:364:6,AS-IS 액션,G5,G5|LEDGER:V-595a9098,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:364:6,AS-IS 액션,H6,H6|LEDGER:V-ac0769f6,PASS
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:364:6,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:364:6,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:364:6,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,H6,H6|COND:txtToCountry,NOT_RUN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,H6,H6|COND:txtToCity,WARN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,G5,G5|COND:txtToCountry,NOPATH
@@ -2276,22 +2276,30 @@ ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,G5,G5|COND:txtT
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,M4,M4|COND:txtToCountry,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,M4,M4|COND:txtToCity,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:366:7,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,H6,H6|COND:txtToCountry,NOT_RUN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,G5,G5|COND:txtToCountry,NOPATH
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,M4,M4|COND:txtToCountry,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:368:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnToSrch_Click,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,H6,H6|COND:txtToCity,WARN
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,G5,G5|COND:txtToCity,NOPATH
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,M4,M4|COND:txtToCity,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,K4,K4|SCREEN,ERROR
-ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,J2,J2|SCREEN,PASS
+ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,J2,J2|SCREEN,ERROR
 ACT:SCP0005_DistributionRoute.btnToSrch_Click:369:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.btnToSrch_Click,ERROR
 ACT:SCP0005_DistributionRoute.checkCtiyCode,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.checkCtiyCode,NA
 ACT:SCP0005_DistributionRoute.checkCtiyCode:1254:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.checkCtiyCode,NA
 ACT:SCP0005_DistributionRoute.checkCtiyCode:1257:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.checkCtiyCode,NA
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:TRANSPORT_MODE,NA
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_MON,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_TUE,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_WED,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_THU,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_FRI,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_SAT,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_SUN,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:D_COUNTRY,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:A_PORT_NAME,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:A_COUNTRY,ERROR
@@ -2302,14 +2310,14 @@ ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:LT
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:LT_LAY_OFF_CLEARANCE,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:LT_SUM,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_FRI,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_MON,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_SAT,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_SUN,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_THU,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_TUE,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:DAYS_WED,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C2,C2|COL:TRANSPORT_MODE,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:TRANSPORT_MODE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_MON,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_TUE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_WED,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_THU,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_FRI,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_SAT,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_SUN,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:D_COUNTRY,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:A_PORT_NAME,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:A_COUNTRY,PASS
@@ -2320,14 +2328,14 @@ ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:LT
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:LT_LAY_OFF_CLEARANCE,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:LT_SUM,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_FRI,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_MON,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_SAT,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_SUN,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_THU,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_TUE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:DAYS_WED,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C3,C3|COL:TRANSPORT_MODE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:TRANSPORT_MODE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_MON,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_TUE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_WED,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_THU,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_FRI,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_SAT,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_SUN,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:D_COUNTRY,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:A_PORT_NAME,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:A_COUNTRY,PASS
@@ -2338,14 +2346,6 @@ ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:LT
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:LT_LAY_OFF_CLEARANCE,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:LT_SUM,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_FRI,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_MON,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_SAT,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_SUN,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_THU,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_TUE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:DAYS_WED,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed,AS-IS 액션,C6,C6|COL:TRANSPORT_MODE,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:968:1,AS-IS 액션,C2,C2|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:968:1,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:968:1,AS-IS 액션,C6,C6|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
@@ -2355,7 +2355,7 @@ ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:968:2,AS-IS 액션,C6,C6|
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:969:3,AS-IS 액션,C2,C2|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:969:3,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:969:3,AS-IS 액션,C6,C6|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:970:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:970:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:971:5,AS-IS 액션,C2,C2|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:971:5,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:971:5,AS-IS 액션,C6,C6|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
@@ -2543,89 +2543,89 @@ ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1036:44,AS-IS 액션,C3,C
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1036:44,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1036:44,AS-IS 액션,C6,C6|COL:LT_SUM,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1036:44,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C2,C2|COL:TRANSPORT_MODE,NA
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C2,C2|COL:TRANSPORT_MODE,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C3,C3|COL:TRANSPORT_MODE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C6,C6|COL:TRANSPORT_MODE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1040:45,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C2,C2|COL:TRANSPORT_MODE,NA
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C2,C2|COL:TRANSPORT_MODE,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C3,C3|COL:TRANSPORT_MODE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C6,C6|COL:TRANSPORT_MODE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1042:46,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C2,C2|COL:DAYS_MON,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C2,C2|COL:DAYS_TUE,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C3,C3|COL:DAYS_MON,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C3,C3|COL:DAYS_TUE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C6,C6|COL:DAYS_MON,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C6,C6|COL:DAYS_TUE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1043:47,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C3,C3|LEDGER:V-e8d675a4,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C6,C6|LEDGER:V-1fbc95d4,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C2,C2|COL:DAYS_MON,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C3,C3|COL:DAYS_MON,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C6,C6|COL:DAYS_MON,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1045:48,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C3,C3|LEDGER:V-2d753924,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C6,C6|LEDGER:V-50a02b42,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C2,C2|COL:DAYS_TUE,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C3,C3|COL:DAYS_TUE,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C6,C6|COL:DAYS_TUE,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1046:49,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C3,C3|LEDGER:V-6f1af43f,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C6,C6|LEDGER:V-ef3950e2,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C2,C2|COL:DAYS_WED,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C3,C3|COL:DAYS_WED,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C6,C6|COL:DAYS_WED,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1047:50,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C3,C3|LEDGER:V-b677ef51,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C6,C6|LEDGER:V-64eb20c2,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C2,C2|COL:DAYS_THU,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C3,C3|COL:DAYS_THU,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C6,C6|COL:DAYS_THU,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1048:51,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C3,C3|LEDGER:V-506db472,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C6,C6|LEDGER:V-5a6890ff,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C2,C2|COL:DAYS_FRI,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C3,C3|COL:DAYS_FRI,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C6,C6|COL:DAYS_FRI,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1049:52,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C3,C3|LEDGER:V-cdf9d407,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C6,C6|LEDGER:V-34d20613,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C2,C2|COL:DAYS_SAT,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C3,C3|COL:DAYS_SAT,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C6,C6|COL:DAYS_SAT,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1050:53,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C3,C3|LEDGER:V-d66376f0,PASS
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C6,C6|LEDGER:V-8f21f956,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C2,C2|COL:DAYS_SUN,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C2,C2|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C3,C3|COL:DAYS_SUN,PASS
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C3,C3|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C6,C6|COL:DAYS_SUN,PASS
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,C6,C6|COL:LT_ARRIVAL_INLAND,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1051:54,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1053:55,AS-IS 액션,C2,C2|COL:A_COUNTRY,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1053:55,AS-IS 액션,C2,C2|COL:A_PORT_CODE,ERROR
@@ -2723,7 +2723,7 @@ ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1073:67,AS-IS 액션,C6,C
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1081:68,AS-IS 액션,C2,C2|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1081:68,AS-IS 액션,C3,C3|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
 ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1081:68,AS-IS 액션,C6,C6|ENTRY:SCP0005_DistributionRoute.spdMainDataModel_Changed,ERROR
-ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1082:69,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.spdMainDataModel_Changed:1082:69,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick,AS-IS 액션,H6,H6|COL:ROUTE_ID,ERROR
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick,AS-IS 액션,H6,H6|COL:FROM_CITY_NAME,NOPATH
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick,AS-IS 액션,H6,H6|COL:FROM_COUNTRY,PASS
@@ -2892,7 +2892,7 @@ ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1135:25,AS-IS 액션,G5,G5
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1135:25,AS-IS 액션,G5,G5|COL:FROM_CITY,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1135:25,AS-IS 액션,M4,M4|COL:FROM_COUNTRY,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1135:25,AS-IS 액션,M4,M4|COL:FROM_CITY,NA
-ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1135:25,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1135:25,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1137:26,AS-IS 액션,H6,H6|COL:FROM_COUNTRY,PASS
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1137:26,AS-IS 액션,H6,H6|COL:FROM_CITY,PASS
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1137:26,AS-IS 액션,G5,G5|COL:FROM_COUNTRY,NA
@@ -3046,7 +3046,7 @@ ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1164:43,AS-IS 액션,G5,G5
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1164:43,AS-IS 액션,G5,G5|COL:FROM_CITY,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1164:43,AS-IS 액션,M4,M4|COL:FROM_COUNTRY,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1164:43,AS-IS 액션,M4,M4|COL:FROM_CITY,NA
-ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1164:43,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1164:43,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1165:44,AS-IS 액션,H6,H6|COL:FROM_COUNTRY,PASS
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1165:44,AS-IS 액션,H6,H6|COL:FROM_CITY,PASS
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1165:44,AS-IS 액션,G5,G5|COL:FROM_COUNTRY,NA
@@ -3059,11 +3059,11 @@ ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1166:45,AS-IS 액션,G5,G5
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1166:45,AS-IS 액션,G5,G5|COL:FROM_CITY,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1166:45,AS-IS 액션,M4,M4|COL:FROM_COUNTRY,NA
 ACT:SCP0005_DistributionRoute.spdMain_CellDoubleClick:1166:45,AS-IS 액션,M4,M4|COL:FROM_CITY,NA
-ACT:SCP0005_DistributionRoutePopup..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoutePopup..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoutePopup..ctor,AS-IS 액션,M3,M3|POPUP:SCP0005_DistributionRoutePopup,ERROR
-ACT:SCP0005_DistributionRoutePopup..ctor:95:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoutePopup..ctor:95:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoutePopup..ctor:95:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoutePopup..ctor,ERROR
-ACT:SCP0005_DistributionRoutePopup..ctor:98:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0005_DistributionRoutePopup..ctor:98:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NA
 ACT:SCP0005_DistributionRoutePopup..ctor:98:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoutePopup..ctor,ERROR
 ACT:SCP0005_DistributionRoutePopup.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0005_DistributionRoutePopup.CreateSpread,ERROR
 ACT:SCP0005_DistributionRoutePopup.CreateSpread,AS-IS 액션,M3,M3|POPUP:SCP0005_DistributionRoutePopup,ERROR

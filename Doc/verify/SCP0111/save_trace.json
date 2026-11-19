@@ -1,15 +1,75 @@
 {
  "mode": "keyless",
- "at": "2026-11-18 19:45:33",
+ "at": "2026-11-19 13:03:25",
  "account": "minyonglee1",
  "tables_scanned": [
   "SCP_ANL_PSI_INTEGRATION"
  ],
  "changed": {
-  "SCP_ANL_PSI_INTEGRATION": 6
+  "SCP_ANL_PSI_INTEGRATION": 18
  },
  "created": {},
  "audit": [
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAg",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAh",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAi",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAj",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAk",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAl",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAt",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAu",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAv",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAw",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAx",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQfSAAy",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
   {
    "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAT",
    "result": "PASS",
@@ -41,5 +101,5 @@
    "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
   }
  ],
- "generated": "2026-11-18 19:47:47"
+ "generated": "2026-11-19 13:13:34"
 }

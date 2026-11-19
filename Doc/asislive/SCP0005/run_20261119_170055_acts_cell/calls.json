@@ -1,0 +1,38 @@
+{
+ "calls": [
+  {
+   "at": "2026-11-19 16:59:25.927",
+   "service": "GSCM.SCM.Master.WSL",
+   "foxquery_id": "SCM.SCM_SYS_GET_SPREAD_TITLE",
+   "sp": "SCM_SYS_GET_SPREAD_TITLE",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 16,
+   "rows_kind": "DataSet rows",
+   "ms": 30.3,
+   "params": {
+    "p_program_id": "SCP0005",
+    "p_user_id": "jaeuk.shin",
+    "p_sheet_name": "POPUP"
+   },
+   "inline": "EXEC SCM_SYS_GET_SPREAD_TITLE @p_program_id='SCP0005', @p_user_id='jaeuk.shin', @p_sheet_name='POPUP'",
+   "phase": "action:cell:ROUTE_ID"
+  },
+  {
+   "at": "2026-11-19 16:59:26.211",
+   "service": "GSCM.SCP.Master.WSL",
+   "foxquery_id": "SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+   "sp": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 2,
+   "rows_kind": "DataSet rows",
+   "ms": 223.81,
+   "params": {
+    "p_route_id": "9917"
+   },
+   "inline": "EXEC SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID @p_route_id='9917'",
+   "phase": "action:cell:ROUTE_ID"
+  }
+ ]
+}

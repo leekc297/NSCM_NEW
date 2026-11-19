@@ -1,6 +1,6 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-17T06:13:46.816Z",
+ "ts": "2026-11-19T08:30:30.028Z",
  "producer": "check.js",
  "id": "DMF0042",
  "final": true,
@@ -106,7 +106,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "대조표 FAIL 322행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
+   "msg": "대조표 FAIL 329행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
    "where": "",
    "evidence": [
     {
@@ -119,7 +119,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "대조표 미검증 8449행 — 검사 사유 ERROR 6761 · NOT_RUN 17782 · REVIEW 465 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
+   "msg": "대조표 미검증 9139행 — 검사 사유 ERROR 20009 · NOT_RUN 6048 · REVIEW 276 · NOPATH 172 · WARN 43 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
    "where": "",
    "evidence": [
     {
@@ -132,7 +132,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "작업 원장 미완료 952건 / 검사 인스턴스 2338 — W3 20 · W5 62 · W6 339 · W7 96 · W9 435 · 구현 의심 6 (Doc/verify/DMF0042/work_ledger.md)",
+   "msg": "작업 원장 미완료 1940건 / 검사 인스턴스 2338 — W3 23 · W5 27 · W6 241 · W7 90 · W9 1559 · 구현 의심 6 (Doc/verify/DMF0042/work_ledger.md)",
    "where": "",
    "evidence": [
     {
@@ -327,7 +327,7 @@
   {
    "id": "S01",
    "class": "BLOCK",
-   "msg": "정적 게이트 직접 FAIL 0(정적 판정 3801행 · ERROR 2551) — FAIL 1: I4×1 — Doc/verify/DMF0042/static_gate.md",
+   "msg": "정적 게이트(run_verify.py --static) 실행 — 실행 결과 없음(rc=1) — [세부 1/2] 공통 최신 받기 + 파일별 판정(미리보기 · 파일 변경 없음) | ⬇️ git fetch common …",
    "where": "",
    "evidence": [
     {

@@ -1,14 +1,28 @@
 [
  {
-  "row_id": "V-c951c278",
-  "rule_id": "B2",
-  "target": "조회조건 From Site",
+  "row_id": "V-d74917d5",
+  "rule_id": "J4",
+  "target": "그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화",
   "same": []
  },
  {
-  "row_id": "V-3809bf77",
-  "rule_id": "G9",
-  "target": "조회조건 User ID(Name)",
+  "row_id": "EG-c788094d",
+  "rule_id": "K1",
+  "target": "SSP0014 팝업 UserInfoPopup CELL:USER_ID GRID_FILTER_COUNT",
+  "same": [
+   "EG-1250673f",
+   "EG-79684cf4",
+   "EG-4543f990",
+   "EG-08be1b0d",
+   "EG-e3289c95",
+   "EG-7787b986",
+   "EG-ad2cc9ff"
+  ]
+ },
+ {
+  "row_id": "ES-de56f621",
+  "rule_id": "F1",
+  "target": "SSP0014 E2E crud 저장 왕복(edit-save)",
   "same": []
  },
  {
@@ -34,5 +48,47 @@
   "rule_id": "D1",
   "target": "Shipment Model PIC.ITEM_ID (Model)",
   "same": []
+ },
+ {
+  "row_id": "EG-1250673f",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
+ },
+ {
+  "row_id": "EG-79684cf4",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
+ },
+ {
+  "row_id": "EG-4543f990",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
+ },
+ {
+  "row_id": "EG-08be1b0d",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
+ },
+ {
+  "row_id": "EG-e3289c95",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
+ },
+ {
+  "row_id": "EG-7787b986",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
+ },
+ {
+  "row_id": "EG-ad2cc9ff",
+  "rule_id": "K1",
+  "target": "",
+  "folded_into": "EG-c788094d"
  }
 ]

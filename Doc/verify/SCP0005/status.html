@@ -1,0 +1,45 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>SCP0005 건수 현황</title><style>
+:root{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+@media (prefers-color-scheme:dark){:root{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}}
+:root[data-theme=light]{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+:root[data-theme=dark]{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}
+*{box-sizing:border-box}
+body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:13px/1.5 'Malgun Gothic',system-ui,sans-serif;max-width:760px}
+.hd{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}.hd b{font-size:15px}.hd span{color:var(--mut);font-size:12px}
+.kpi{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.kpi div{flex:1;padding:6px 10px;border-left:1px solid var(--line)}.kpi div:first-child{border-left:0}
+.kpi i{display:block;font-style:normal;color:var(--mut);font-size:11px}.kpi em{font-style:normal;font-size:18px;font-weight:600}
+.kpi .FAIL em{color:var(--fail)}.kpi .판정필요 em{color:var(--rev)}.kpi .미검증 em{color:var(--unv)}.kpi .PASS em{color:var(--pass)}
+table{border-collapse:collapse;width:100%;margin-top:12px}
+th,td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th{color:var(--mut);font-weight:400;font-size:12px}th:first-child,td:first-child{text-align:left}
+td.bar{width:34%;padding-left:12px}
+.bar div{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--soft)}
+.bar span{height:100%}
+.c-PASS{background:var(--pass)}.c-FAIL{background:var(--fail)}.c-판정필요{background:var(--rev)}.c-미검증{background:var(--unv)}.c-해당없음{background:var(--na)}
+td.FAIL{color:var(--fail);font-weight:600}td.판정필요{color:var(--rev)}td.미검증{color:var(--unv)}
+tr.sum td{font-weight:600;border-bottom:0}
+h3{font-size:13px;margin:16px 0 4px}
+ul{margin:0;padding-left:18px}li{margin:1px 0}li code{color:var(--mut);font-size:12px}
+.line{margin-top:12px;color:var(--fg)}.line b{font-weight:600}.warn{color:var(--unv)}
+.src{margin-top:14px;color:var(--mut);font-size:11px}
+</style></head><body>
+<div class="hd"><b>SCP0005 DistributionRoute</b><span>CheckList v5 · 생성 2026-11-19 17:29</span></div>
+<div class="kpi"><div><i>전체</i><em>2,520</em></div><div class="PASS"><i>PASS</i><em>1,151</em></div><div class="FAIL"><i>FAIL</i><em>27</em></div><div class="판정필요"><i>판정필요</i><em>44</em></div><div class="미검증"><i>미검증</i><em>392</em></div><div class="해당없음"><i>해당없음</i><em>906</em></div></div>
+<table><tr><th>축</th><th>전체</th><th>PASS</th><th>FAIL</th><th>판정필요</th><th>미검증</th><th>해당없음</th><th></th></tr>
+<tr><td>1.디자인·다국어</td><td>443</td><td class="">268</td><td class="FAIL">1</td><td class="판정필요">3</td><td class="미검증">50</td><td class="">121</td><td class="bar"><div><span class="c-PASS" style="width:60.5%" title="PASS 268"></span><span class="c-FAIL" style="width:0.2%" title="FAIL 1"></span><span class="c-판정필요" style="width:0.7%" title="판정필요 3"></span><span class="c-미검증" style="width:11.3%" title="미검증 50"></span><span class="c-해당없음" style="width:27.3%" title="해당없음 121"></span></div></td></tr>
+<tr><td>2.AS-IS 로직</td><td>247</td><td class="">111</td><td class="FAIL">4</td><td class="판정필요">3</td><td class="미검증">68</td><td class="">61</td><td class="bar"><div><span class="c-PASS" style="width:44.9%" title="PASS 111"></span><span class="c-FAIL" style="width:1.6%" title="FAIL 4"></span><span class="c-판정필요" style="width:1.2%" title="판정필요 3"></span><span class="c-미검증" style="width:27.5%" title="미검증 68"></span><span class="c-해당없음" style="width:24.7%" title="해당없음 61"></span></div></td></tr>
+<tr><td>3.SMOKE</td><td>701</td><td class="">268</td><td class="FAIL">9</td><td class="판정필요">16</td><td class="미검증">85</td><td class="">323</td><td class="bar"><div><span class="c-PASS" style="width:38.2%" title="PASS 268"></span><span class="c-FAIL" style="width:1.3%" title="FAIL 9"></span><span class="c-판정필요" style="width:2.3%" title="판정필요 16"></span><span class="c-미검증" style="width:12.1%" title="미검증 85"></span><span class="c-해당없음" style="width:46.1%" title="해당없음 323"></span></div></td></tr>
+<tr><td>4.CRUD</td><td>798</td><td class="">292</td><td class="FAIL">12</td><td class="판정필요">19</td><td class="미검증">166</td><td class="">309</td><td class="bar"><div><span class="c-PASS" style="width:36.6%" title="PASS 292"></span><span class="c-FAIL" style="width:1.5%" title="FAIL 12"></span><span class="c-판정필요" style="width:2.4%" title="판정필요 19"></span><span class="c-미검증" style="width:20.8%" title="미검증 166"></span><span class="c-해당없음" style="width:38.7%" title="해당없음 309"></span></div></td></tr>
+<tr><td>5.권한별 CRUD</td><td>36</td><td class="">9</td><td class="FAIL">1</td><td class="">0</td><td class="미검증">8</td><td class="">18</td><td class="bar"><div><span class="c-PASS" style="width:25.0%" title="PASS 9"></span><span class="c-FAIL" style="width:2.8%" title="FAIL 1"></span><span class="c-미검증" style="width:22.2%" title="미검증 8"></span><span class="c-해당없음" style="width:50.0%" title="해당없음 18"></span></div></td></tr>
+<tr><td>분류 없음</td><td>295</td><td class="">203</td><td class="">0</td><td class="판정필요">3</td><td class="미검증">15</td><td class="">74</td><td class="bar"><div><span class="c-PASS" style="width:68.8%" title="PASS 203"></span><span class="c-판정필요" style="width:1.0%" title="판정필요 3"></span><span class="c-미검증" style="width:5.1%" title="미검증 15"></span><span class="c-해당없음" style="width:25.1%" title="해당없음 74"></span></div></td></tr>
+<tr class="sum"><td>합계</td><td>2,520</td><td>1,151</td><td>27</td><td>44</td><td>392</td><td>906</td><td></td></tr></table>
+<div class="line">FE 대조표 <b>7</b>행 (구현 4, 미구현 <b class="">0</b>), AS-IS 액션 대조표 <b>266</b>행 (상태 빈칸 <b class="warn">242</b>)</div>
+<h3>조치 필요 12건</h3><ul><li>SCP0005 화면 <code>J1 V-f648eb06</code></li><li>SCP·SSP 컬럼·조회조건 라벨 Valid→Active <code>H5 V-660a833e</code></li><li>SCP0005 Excel 필수 칸 빈 업로드 <code>E3 V-087d756b</code></li><li>SCP0005 시나리오 [자동] FROM_COUNTRY 팝업 선택 → TO_COUNTRY 채움 <code>C3 V-9beff6f2</code></li><li>SCP0005 시나리오 [자동] FROM_CITY 팝업 선택 → TO_COUNTRY 채움 <code>C3 V-e4a3ef56</code></li><li>SCP0005 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I <code>F2 V-3aecb21a</code></li><li>PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD <code>F10 V-1d8d1afb</code></li><li>MSG00043 <code>E4 V-3134fc3e</code></li><li>SCP0005 센티널 표시 <code>N1 V-2ca073e5</code></li><li>Distribution Route.FROM_COUNTRY (Country*) <code>D1 V-5b44fefc</code></li><li>Distribution Route.FROM_CITY (City*) <code>D1 V-1ff8658b</code></li><li>SCP0005 화면 <code>L1 V-e32d34a2</code></li></ul>
+<div class="src">출처: SCP0005_DistributionRoute_CheckList_v5.xlsx 11-19 17:08, __asis-mapping__.md 10-01 09:14, __asis-actions__.md 10-23 11:29, checklist_counts.json 11-19 17:08, work_ledger_summary.json 11-19 17:08</div>
+</body></html>

@@ -1,0 +1,39 @@
+{
+ "ok": true,
+ "mode": "dry-run",
+ "stamp": "20261119_172934",
+ "areas_sel": "fe",
+ "be_login": [],
+ "tip": "c58fcb52f0c64ae2ddc09aeecf29c696aa850868",
+ "tip_info": "c58fcb52f 2026-11-19 17:29 youngeynParkk fix(SCP0131): 통합테스트 갭 5건 — SCM Site 콤보/SELECT ALL/Priority 범위/날짜 누수/Plan Group 엑셀",
+ "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+ "ancestor": true,
+ "commits": 29,
+ "changed": 0,
+ "counts": {
+  "동일": 18
+ },
+ "actions": {
+  "none": 18,
+  "write": 0,
+  "merge": 0,
+  "delete": 0,
+  "keep": 0
+ },
+ "pending": 0,
+ "areas": {
+  "fe": {
+   "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+   "changed": 0,
+   "actions": {
+    "none": 18
+   },
+   "pending": 0,
+   "local_only": 0,
+   "env_keep": 0
+  }
+ },
+ "overwrite_local": true,
+ "local_only": 0,
+ "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261119_172934.md"
+}

@@ -1,0 +1,56 @@
+# [Harness] SCP0005 distribution-route — BLOCK 2 / WARN 52
+
+- WARN AC1 액션 대조표 미처리 266행: AC-aabf40d9(상태 빈칸 POPUP new ExcelUploadForm2), AC-574e0d9a(상태 빈칸 UI_PROP frm.SaveExceptError), AC-a08e2e85(상태 빈칸 UI_PROP frm.StartPosition), AC-cc5053b4(상태 빈칸 POPUP frm.ShowDialog), AC-57f5cba8(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-9c0a6366(상태 빈칸 CALL_BASE MenuEtcFileDownButton), AC-eeca893d(상태 빈칸 POPUP popCity.Form_Load), AC-ade4f8d6(상태 빈칸 UI_PROP popCity.StartPosition) … @Doc/asisfacts/screens/SCP0005/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 3행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-9c0a6366(MenuEtcFileDownButton @SCP0005_DistributionRoute.cs:1385), AC-02916d30(ctl.Invoke @SCP0005_DistributionRoute.cs:160), AC-b096807f(BLUtils.GetDivisionWithoutEE @SCP0005_DistributionRoute.cs:1178) @Doc/asisfacts/screens/SCP0005/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0005_GET_DISTRIBUTION_ROUTE (SCP0005_GET_DISTRIBUTION_ROUTE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0005_GET_DISTRIBUTION_ROUTEID (SCP0005_GET_DISTRIBUTION_ROUTEID) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE (SCP0005_SAVE_DISTRIBUTION_ROUTE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0005_GET_COUNTRY_CITY (SCP0005_GET_COUNTRY_CITY) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID (SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 btnToSrch.Click → btnToSrch_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnFromSrch.Click → btnFromSrch_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnExcel_Form.Click → btnExcel_Form_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → spdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnEaxel_Upload.Click → btnEaxel_Upload_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMainDataModel_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMainDataModel_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMainDataModel_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 cboValidYN / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbTransMode / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnToSrch / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnFromSrch / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtFromCountry / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtFromCity / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtToCountry / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtToCity / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnEaxel_Upload / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnExcel_Form / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <FileUploader> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExcelUploadModal.tsx
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExcelUploadModal.tsx
+- WARN D01 사전 밖 컴포넌트 <FileExceldownloadIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @DistributionRoute.tsx
+- WARN D01 사전 밖 컴포넌트 <FileExceluploadIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @DistributionRoute.tsx
+- BLOCK V01 Validation 마커 누락 4/4: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined) V-004(Lundefined) @hooks/useDistributionRouteValidation.ts
+- WARN V01 As-is Expression 7건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00265 — AS-IS '다시 조회하시겠습니까?' / TO-BE MSG00265 = 'Excel 업로드가 완료되었습니다. 재조회합니다.' → 문구로 찾은 TO-BE ID MSG01273 @components/modals/ExcelUploadModal.tsx
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @distribution-route.constants.ts
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @distribution-route.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00265 — AS-IS '다시 조회하시겠습니까?' / TO-BE MSG00265 = 'Excel 업로드가 완료되었습니다. 재조회합니다.' → 문구로 찾은 TO-BE ID MSG01273 @distribution-route.constants.ts
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 저장(SAVE) SEQ3 AS-IS MSG00167 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS '잘못된 도시코드입니다.'(코드 오류) ↔ TO-BE '[Country] 값은 필수 입력 항목입니다.'(필수 누락). 도시 @distribution-route.constants.ts:123
+- WARN LB1 라벨 리터럴 'Valid' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @components/DistributionRouteForm.tsx:164
+- WARN LB1 라벨 리터럴 'Valid' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @distribution-route.constants.ts:275
+- WARN LB1 라벨 리터럴 'Valid*' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @distribution-route.excelForm.ts:57
+- WARN VC1 대조표 FAIL 53행 (Doc/verify/SCP0005/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미구현 1행 — 작업 원장 Doc/verify/SCP0005/work_ledger.md W1(기능 구현)
+- WARN VC1 대조표 미검증 614행 — 검사 사유 NOT_RUN 1799 · REVIEW 116 · ERROR 550 · NOPATH 71 · WARN 12 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 235건 / 검사 인스턴스 565 — W1 1 · W3 4 · W5 17 · W6 2 · W7 21 · W8 3 · W9 187 · 구현 의심 6 (Doc/verify/SCP0005/work_ledger.md)
+- WARN I18N1 다국어 미적용 — 화면에 '_Only one file is allowed. Remove the existing file first.' 가 그대로 보임: 코드 FE_EXCEL_UPLOAD_SINGLE_FILE_ONLY 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @components/modals/ExcelUploadModal.tsx:231
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/DistributionRouteGrid.tsx:249
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @DistributionRoute.tsx:167
+- WARN B10 As-is 팝업 SCP0005_DistributionRoutePopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
+- WARN B19 expressions.md 7행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0005/SCP0005_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0005/SCP0005_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

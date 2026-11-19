@@ -1,0 +1,32 @@
+{
+  "id": "20261119193539_REVIEW_4",
+  "at": "2026-11-19T19:35:39+09:00",
+  "ms": 1795084539729,
+  "source": "review",
+  "status": "applied",
+  "sig": "digest unfinished wait claude",
+  "title": "측정 추가: 끝 사건 없이 사라진 대기와 Claude 호출을 집계에 포함",
+  "evidence": ".vibe/orch/events.jsonl 에 wait.start 4건(1, 6, 11, 25행), wait.end 1건(2행). 집계 waits 는 n 1, totalSec 30 으로 PID 28056, 34920, 7936 의 대기 3건이 없음. claude.start 5건(3, 5, 10, 15, 21행), claude.end 4건이고 21행(18:31:24 에이전트 대화)의 끝 사건 없음. 집계 claude.calls 4. tools/VibeManager/orch-improve.js:67, 69 는 끝 사건만 셈. orch-watch.js:159 는 사라진 대기를 기록 없이 버림",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "집계 waits 항목에 unfinished(끝 사건 없는 wait.start 수)와 화면 목록 추가. claude 에 unfinished 추가. tick() 이 sweep 로 지운 대기를 wait.gone 사건(kind, screen, pid, 경과 초)으로 events.jsonl 에 기록",
+  "verify": "지금 events.jsonl 로 집계를 다시 만들면 waits dbwin unfinished 3, claude unfinished 1 이 나와야 함(이번 상시 분석 호출의 claude.end 가 기록된 뒤 기준). 없는 PID 의 wait.start 를 넣은 임시 폴더 시험에서 tick() 뒤 wait.gone 1건 확인",
+  "rollback": "3개 파일을 수정 전 백업본으로 복원. 추가 항목과 wait.gone 사건은 기존 집계 항목을 바꾸지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T20:00:17+09:00",
+      "by": "사용자",
+      "what": "승인(대화에서 \"개선안 4번 승인할게요, 반영해주세요\")"
+    },
+    {
+      "at": "2026-11-19T20:00:17+09:00",
+      "by": "개발 세션",
+      "what": "반영 완료 · 검증 통과 — 실제 events.jsonl 로 집계: dbwin unfinished 3(DMF0042) · claude unfinished 1. 임시 폴더 시험 wait.gone 1건 확인. t_orch_improve 20건 · t_orch_state_old 5건 통과"
+    }
+  ]
+}

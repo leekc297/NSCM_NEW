@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0028",
  "asis_id": "SCP0028",
- "generated": "2026-11-14T05:52:30",
+ "generated": "2026-11-19T16:34:50",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size\\__asis-mapping__.md",
  "rows": 397,
  "fe_rows": 42,
@@ -10,38 +10,37 @@
  "fe_page": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size",
  "fe_mapping_missing": false,
  "verdict": {
-  "미검증": 261,
-  "FAIL": 61,
-  "검증완료": 71,
+  "FAIL": 168,
+  "미검증": 147,
+  "검증완료": 78,
   "해당없음": 4
  },
  "instances": 393,
  "instance_result": {
-  "NA": 124,
-  "PASS": 116,
-  "ERROR": 99,
-  "REVIEW": 35,
-  "NOPATH": 9,
+  "PASS": 159,
+  "ERROR": 95,
+  "REVIEW": 29,
+  "FAIL": 10,
+  "NA": 89,
   "NOT_RUN": 3,
-  "FAIL": 7
+  "NOPATH": 8
  },
  "by_layer": {
   "동적 생성·조회": {
-   "NA": 45,
-   "PASS": 20,
-   "REVIEW": 27,
-   "ERROR": 23,
-   "NOPATH": 1,
-   "FAIL": 3
+   "PASS": 61,
+   "REVIEW": 21,
+   "ERROR": 19,
+   "NA": 11,
+   "NOPATH": 3,
+   "FAIL": 4
   },
   "정적 디자인": {
-   "PASS": 51,
-   "ERROR": 17,
-   "NOPATH": 3,
-   "NA": 1
+   "PASS": 54,
+   "ERROR": 18
   },
   "권한": {
-   "PASS": 2
+   "FAIL": 1,
+   "PASS": 1
   },
   "콤보 후보": {
    "PASS": 6
@@ -72,8 +71,8 @@
    "PASS": 6
   },
   "CRUD": {
-   "ERROR": 3,
-   "FAIL": 1
+   "FAIL": 2,
+   "ERROR": 2
   },
   "공통 기능": {
    "PASS": 2,
@@ -92,8 +91,9 @@
    "PASS": 15
   },
   "A6": {
-   "REVIEW": 3,
-   "ERROR": 2,
+   "NOPATH": 2,
+   "NA": 2,
+   "REVIEW": 1,
    "PASS": 3
   },
   "B3": {
@@ -149,7 +149,7 @@
    "PASS": 4
   },
   "F1": {
-   "ERROR": 1
+   "FAIL": 1
   },
   "F2": {
    "ERROR": 1
@@ -177,9 +177,8 @@
    "PASS": 1
   },
   "G4": {
-   "PASS": 7,
-   "NOPATH": 3,
-   "NA": 1
+   "PASS": 9,
+   "ERROR": 2
   },
   "G5": {
    "ERROR": 10,
@@ -201,7 +200,7 @@
    "PASS": 12
   },
   "H4": {
-   "ERROR": 1
+   "PASS": 1
   },
   "H5": {
    "PASS": 14
@@ -219,7 +218,7 @@
    "PASS": 1
   },
   "J2": {
-   "PASS": 1
+   "FAIL": 1
   },
   "K-SA": {
    "PASS": 1
@@ -239,25 +238,25 @@
    "ERROR": 1
   },
   "X-LOC": {
-   "NA": 38,
-   "REVIEW": 4
+   "PASS": 40,
+   "NA": 2
   },
   "X-REOPEN": {
    "PASS": 1
   },
   "X-ROW": {
    "NA": 5,
-   "ERROR": 9,
-   "PASS": 3,
+   "ERROR": 7,
+   "PASS": 4,
    "REVIEW": 1,
-   "FAIL": 3
+   "FAIL": 4
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "ERROR": 444,
-  "REVIEW": 62,
-  "NOPATH": 21,
-  "NOT_RUN": 4
+  "REVIEW": 35,
+  "NOT_RUN": 2,
+  "NOPATH": 13,
+  "ERROR": 123
  }
 }

@@ -1,6 +1,6 @@
 {
 "id": "SSP0005",
-"at": "2026-11-14 22:07:47",
+"at": "2026-11-19 17:05:11",
 "asis": {
 "insertStmts": [],
 "headerSpan": [
@@ -125,6 +125,306 @@
 ],
 "btnAuth": [
 {
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
 "user_gr_id": "SCM PI Admin",
 "sht_nm": "Shipment Working Day",
 "mnu_btn_cd": "DELETE",
@@ -173,9 +473,171 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SCM Viewer",
 "sht_nm": "Shipment Working Day",
 "mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "EXCEL",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "GET_SCP_PERIOD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Shipment Working Day",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
@@ -185,7 +647,7 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SSP Planner",
 "sht_nm": "Shipment Working Day",
 "mnu_btn_cd": "EDIT",
 "use_yn": "Y"
@@ -193,13 +655,7 @@
 {
 "user_gr_id": "SSP Planner",
 "sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
+"mnu_btn_cd": "EXCEL",
 "use_yn": "Y"
 },
 {
@@ -209,21 +665,9 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SSP Planner",
 "sht_nm": "Shipment Working Day",
 "mnu_btn_cd": "INSERT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
 "use_yn": "Y"
 },
 {
@@ -233,20 +677,8 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SSP Planner",
 "sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "calendar",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
@@ -257,207 +689,9 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SSP Viewer",
 "sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
+"mnu_btn_cd": "DELETE",
 "use_yn": "N"
 },
 {
@@ -475,247 +709,7 @@
 {
 "user_gr_id": "SSP Viewer",
 "sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Viewer",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Viewer",
-"sht_nm": "Shipment Working Day",
 "mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "EXCEL",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "GET_SCP_PERIOD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "calendar",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP Viewer",
-"sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "DELETE",
 "use_yn": "N"
 },
 {
@@ -725,10 +719,16 @@
 "use_yn": "N"
 },
 {
-"user_gr_id": "SCP Planner",
+"user_gr_id": "SSP Viewer",
 "sht_nm": "Shipment Working Day",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "calendar",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
 }
 ],
 "columns": [
@@ -787,9 +787,15 @@
 }
 ],
 "now": {
-"now_": "2026-11-14 22:07",
-"dow": "SAT",
-"hm": "2207"
+"now_": "2026-11-19 17:05",
+"dow": "THU",
+"hm": "1705"
+},
+"titleset": {
+"tobeRows": 0,
+"tobeUsers": 0,
+"pkgRefs": 0,
+"asisRows": 0
 }
 },
 "accounts": [
@@ -1291,6 +1297,34 @@
 "TEST"
 ],
 "titleset": 0
+},
+{
+"key": "GUEST/-/GUEST",
+"keys": [
+"GUEST/-/GUEST"
+],
+"groups": [
+"GUEST"
+],
+"menuGroups": [],
+"divsAll": [],
+"divsMenu": [],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"COM0006",
+"COM0008",
+"COM0009",
+"COM0011",
+"COM0013",
+"COM0014",
+"Demand",
+"Demand_Master",
+"SCM0002",
+"SYS0011",
+"TEST"
+],
+"titleset": 0
 }
 ],
 "btnDiv": {
@@ -1483,6 +1517,7 @@
 "SAVE",
 "SEARCH"
 ]
-}
+},
+"GUEST/-/GUEST": {}
 }
 }

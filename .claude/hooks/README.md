@@ -23,7 +23,7 @@
 | `check-db-fresh-source.ps1` | **PostToolUse** | `_artifacts/**/*.sql` DDL `SOURCE-FRESH` 24h / `*.py` DB 재조회+`FRESH-GATE` (hook #152) | 2 |
 | `tools/Harness/hooks/check-asis-harness.ps1` | **PostToolUse (Write/Edit/MultiEdit)** | 하네스 게이트 — 저장 즉시 `check.js`; BLOCK 은 차단, WARN 은 추가 컨텍스트 (상세 `tools/Harness/README.md`) | 2 |
 | `tools/Harness/hooks/harness-gen-context.ps1` | **UserPromptSubmit** | (차단 없음) 화면ID + 생성 의도면 하네스 절차·GEN_NOTES 첨부 | 0 |
-| `tools/Harness/hooks/harness-stop-gate.ps1` | **Stop** | 바뀐 화면 폴더에 `--final`(미구현 0) 요구 — 아니면 종료 차단 | 2 |
+| `tools/Harness/hooks/harness-stop-gate.ps1` | **Stop** | 바뀐 화면 폴더에 `--final`(미구현 0) 요구 — 아니면 종료 차단. DB MODE 는 건너뜀(2026-11-19 · 기준선 `tools/Harness/gate_baseline.tsv`) | 2 |
 
 > 정정 (2026-11-13 전수 점검): 이 폴더 **10 스크립트**(10-12 의 "9" 뒤 11-02 `check-work-mode` 추가분이 제목에 반영 안 됐음) + 하네스 hook 3종 행 추가(연결은 돼 있었으나 이 표에 없었음). `.sh` parity 는 attach-context·block-dev-commands·check-dbeaver-sql·check-notnull-insert·check-fe-import 5종만 존재 — 나머지 5종(check-ui-gates · check-meta-sql · check-db-fresh-source · check-rules-read · check-work-mode) Linux 미지원.
 > 검증 일괄 실행: `powershell -File scripts\rules\verify_hooks.ps1` (구문·LITE/FULL 판별·rules-read 차단·추출본 drift·상시 컨텍스트 크기).

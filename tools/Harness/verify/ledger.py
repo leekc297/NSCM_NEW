@@ -605,6 +605,10 @@ def main():
         guard = x.get('guard', '')
         val, tgt = x.get('value', ''), x.get('target', '')
         cnames = col_from_args(val)
+        # T370(2026-11-19 SCP0005 미검증 해소): DataTable 칸 대입 'dt.Rows[nRow][DefColumns.X] = 값' 은 칸 이름이 값이 아니라 대상 쪽에 있다 —
+        #   종전엔 대상이 원문 그대로('dt.Rows[nRow][DefColumns.LT_SUM]') 남아 C3 '원천 컬럼 분기 해석 불가'·C6 '대상 값을 채우지 못해' 로 끝났다(SCP0005·SCP0007 8문장)
+        if not cnames and k == 'GRID_SET' and re.search(r'\]\s*\[\s*Def[A-Z]\w*\.[A-Z0-9_]+\s*\]$', tgt or ''):
+            cnames = re.findall(r'Def[A-Z]\w*\.([A-Z0-9_]+)', tgt)
         popup_cls = 'Popup' in cls
         area = '팝업' if popup_cls else '그리드'
         if k == 'GRID_LOCK':

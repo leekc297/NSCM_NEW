@@ -31,7 +31,10 @@ let CUR: { calls: number; rows: number } = { calls: 0, rows: -1 };
 const put = (kind: SnapKind, scope: string, s: SnapResult, extra: Record<string, unknown> = {}) => {
   snaps.push(s);
   const r = rowFor(kind, scope); if (!r) return;
-  const result: Res['result'] = s.status === 'MATCH' ? 'PASS' : s.status === 'DIFF' ? 'FAIL' : s.status === 'NEW' ? '판정필요' : 'ERROR';
+  // 2026-11-19 T348 TO-BE 룰 CR-114(사용자의견 SCP0111 v64 V-55556e17·V-e8ca7b9a '컬럼 폭 비율은 오류에서 제외'): 화면샷 픽셀 차이 = 오류 아님(PASS + 차이 경로 근거)
+  const shotRule = kind === '화면샷' && s.status === 'DIFF';
+  const result: Res['result'] = s.status === 'MATCH' || shotRule ? 'PASS' : s.status === 'DIFF' ? 'FAIL' : s.status === 'NEW' ? '판정필요' : 'ERROR';
+  if (shotRule) s = { ...s, detail: `[TO-BE 룰 CR-114 화면샷 차이(컬럼 폭 비율 등) 오류 제외] ${s.detail}` };
   const ev = `[재실측 스냅샷 ${kind}] ${s.status === 'NEW' ? '골든 없음(승인 전)' : s.status === 'MATCH' ? `기준 ${s.golden} ↔ 실측 일치` : s.status === 'DIFF' ? `기준 ${s.golden} ↔ 실측 ${s.received} · 차이 ${s.lines}줄(${s.diff})` : '측정 실패'} · ${s.detail.slice(0, 500)} · 전제 Div ${String(extra.div || '-')} · calls ${CUR.calls} · rows ${CUR.rows} · 기대원천 ${SRC[kind]}`;
   results.push({ row_id: r.row_id, result, evidence: ev.slice(0, 1400), tobe_ref: `E2E @snap ${kind}`, cond: COND_HASH.get(r.row_id), mctx: { calls: CUR.calls, rows: CUR.rows, req: 0 }, expect_src: SRC[kind], evidence_ref: s.golden || s.received, precond: { div: extra.div || '', calls: CUR.calls, rows: CUR.rows, viewport: extra.viewport || '' } });
 };

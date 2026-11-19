@@ -1,16 +1,16 @@
 {
  "id": "SSP0014",
- "run_dir": "Doc/asislive/SSP0014/run_20261113_054501",
- "live_at": "2026-11-13 05:45:01.090",
+ "run_dir": "Doc/asislive/SSP0014/run_20261119_160733",
+ "live_at": "2026-11-19 16:07:33.912",
  "user": "jaeuk.shin",
  "find": {
   "signaled": true,
-  "time_status": "DB : 2.085s, UI : 1.041s",
+  "time_status": "DB : 1.168s, UI : 1.241s",
   "total": "Total : 7,667",
   "how": "status"
  },
- "mixed_risk": true,
- "live_calls": 19,
+ "mixed_risk": false,
+ "live_calls": 18,
  "live_sp_distinct": 11,
  "static_vs_live": {
   "SP:FRAMEWORK": 8,

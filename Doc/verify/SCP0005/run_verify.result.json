@@ -1,10 +1,10 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-14T07:33:58+09:00",
+ "ts": "2026-11-19T17:08:49+09:00",
  "producer": "run_verify",
  "id": "SCP0005",
  "skip_e2e": false,
- "started": "2026-11-14 05:52:57",
+ "started": "2026-11-19 13:48:58",
  "state": "completed",
  "verdict": "fail",
  "issues": [
@@ -15,19 +15,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-27f100cb",
-   "class": "K3",
-   "msg": "SCP0005 화면",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 07:33"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -39,7 +27,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -51,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-14 07:33"
+     "ref": "E2E @verify 시나리오 @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -63,7 +51,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-14 07:33"
+     "ref": "E2E @verify 시나리오 @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -75,7 +63,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-14 07:33"
+     "ref": "E2E @verify 시나리오 @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -87,7 +75,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 표시 @11-14 07:33"
+     "ref": "E2E @verify 표시 @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -99,7 +87,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify Excel @11-14 07:33"
+     "ref": "E2E @verify Excel @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -117,13 +105,61 @@
    "grade": "hard"
   },
   {
+   "id": "V-5b44fefc",
+   "class": "D1",
+   "msg": "Distribution Route.FROM_COUNTRY (Country*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-19 17:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9a1db2df",
+   "class": "D1",
+   "msg": "Distribution Route.FROM_COUNTRY (Country*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-19 17:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1ff8658b",
+   "class": "D1",
+   "msg": "Distribution Route.FROM_CITY (City*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-19 17:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-599dd774",
+   "class": "D1",
+   "msg": "Distribution Route.FROM_CITY (City*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-19 17:08"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
    "id": "V-3134fc3e",
    "class": "E4",
    "msg": "MSG00043",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -135,19 +171,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-ddd9c330",
-   "class": "G5",
-   "msg": "From City 검색 버튼",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -159,31 +183,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-5e6d8247",
-   "class": "K3",
-   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 07:33"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-36b6c266",
-   "class": "K3",
-   "msg": "[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 07:33"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -204,18 +204,6 @@
    "id": "V-f7d054e1",
    "class": "F2",
    "msg": "[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-326d9325",
-   "class": "G5",
-   "msg": "[SCP0007 결함 유형] Route 검색 팝업 결과",
    "evidence": [
     {
      "kind": "exec",
@@ -285,6 +273,30 @@
    "grade": "soft"
   },
   {
+   "id": "T-d920ea16",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-432b276b",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.FindDataMain",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
    "id": "T-a12fee3f",
    "class": "X-ROW",
    "msg": "SCP0005_DistributionRoute.SaveData",
@@ -303,7 +315,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
@@ -315,45 +327,41 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-14 07:33"
+     "ref": "E2E @trace @11-19 17:08"
     }
    ],
    "grade": "hard"
   }
  ],
- "warnings": [
-  "커버리지 게이트 SUSPECT_NA100 E2 — Doc/verify/SCP0005/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
- ],
+ "warnings": [],
  "summary": {
-  "rows": 2152,
-  "PASS": 809,
-  "FAIL": 26,
-  "판정필요": 36,
-  "미검증": 390,
-  "해당없음": 891,
+  "rows": 2520,
+  "PASS": 1151,
+  "FAIL": 27,
+  "판정필요": 44,
+  "미검증": 392,
+  "해당없음": 906,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1142,
-   "없음(미검증)": 390,
-   "없음(판정 대기)": 36,
-   "사람": 2,
-   "기계(상속·집계)": 575,
-   "출처 미기록": 7
+   "기계": 1518,
+   "없음(판정 대기)": 44,
+   "없음(미검증)": 392,
+   "사람": 6,
+   "기계(상속·집계)": 552,
+   "출처 미기록": 8
   },
-  "fail_listed": 26,
+  "fail_listed": 27,
   "coverage": {
    "rules": 92,
-   "measured": 664,
-   "not_run_error": 341,
-   "na": 261,
-   "suspect_na100": [
-    "E2"
-   ]
+   "measured": 997,
+   "not_run_error": 344,
+   "na": 280,
+   "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0005_DistributionRoute_CheckList_v4.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0005_DistributionRoute_ActionItemList_v4.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v5.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v5.xlsx"
  },
  "evidence": [
   {
@@ -365,5 +373,5 @@
    "ref": "Doc/verify/SCP0005/e2e_results.json"
   }
  ],
- "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 E2 — Doc/verify/SCP0005/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ "note": ""
 }

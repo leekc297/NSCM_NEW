@@ -1,10 +1,10 @@
 ﻿asis_id,menu_id,name,fields,main_sheets,has_save,meta_cols,accounts,sample_account,sample_div,mode
 DMF0005,DMF0005,SaleSite_PjtModelMapping,11,2,Y,Y,1,minyonglee1,40,single
-SCP0005,SCP0005,DistributionRoute,6,1,Y,Y,1,minyonglee1,40,single
+SCP0005,SCP0005,DistributionRoute,6,1,Y,Y,2,minyonglee1,40,admin
 SCP0007,SCP0007,BOD,8,1,Y,Y,1,minyonglee1,40,single
 SCP0016,SCP0016,WaterfallShipmentPlanFG,9,1,,Y,1,minyonglee1,40,single
 SCP0020,SCP0020,TactTime,6,4,Y,Y,1,minyonglee1,40,single
-SCP0028,SCP0028,Shipment_Lot_Size,7,1,Y,Y,1,minyonglee1,40,single
+SCP0028,SCP0028,Shipment_Lot_Size,7,1,Y,Y,2,minyonglee1,40,admin
 SCP0033,SCP0033,Shipment_semi_dept_day,3,1,Y,Y,1,minyonglee1,40,single
 SCP0037,SCP0037,OperationLT,5,1,Y,Y,1,minyonglee1,40,single
 SCP0041,SCP0041,StockOSP,7,2,Y,Y,1,minyonglee1,40,single
@@ -17,8 +17,8 @@ SCP0122,SCP0122,PlanActivityMgmt,3,1,Y,Y,2,minyonglee1,40,admin
 SCP0127,SCP0127,PrecedeSafetyStockDay,8,1,Y,,1,minyonglee1,40,single
 SCP0131,SCP0131,SalesSitePriority,6,1,Y,Y,1,minyonglee1,40,single
 SSP0003,SSP0003,ShipmentChangeRequestConfirm,14,2,Y,Y,1,minyonglee1,40,single
-SSP0005,SSP0005,ShipmentWorkingDay,3,1,,Y,1,minyonglee1,40,single
-SSP0014,SSP0014,ShipmentModelPIC,6,1,Y,Y,1,minyonglee1,40,single
+SSP0005,SSP0005,ShipmentWorkingDay,3,1,,Y,1,minyonglee1,40,admin
+SSP0014,SSP0014,ShipmentModelPIC,6,1,Y,Y,1,minyonglee1,40,admin
 SSP0015,SSP0015,ShipmentPSI,17,15,Y,Y,1,minyonglee1,40,single
 SSP0020,SSP0020,Delegate,4,2,Y,Y,1,minyonglee1,40,single
 SSP0021,SSP0021,ShipmentPlan,15,9,Y,Y,1,minyonglee1,40,single

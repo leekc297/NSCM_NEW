@@ -1,3 +1,211 @@
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스 hook) VMO 개선안 2 반영: VMO 에이전트 호출은 종료 전 게이트 건너뜀 · 결과 뒤 비정상 종료 처리 (2026-11-19 20:1x)
+- 사용자(11-19): "개선안 2번 승인할게요, 반영해주세요." 개선안 = 20261119193539_REVIEW_2. 근거 = 18:29 VMO 에이전트 호출이 결과 JSON 을 낸 뒤 종료 전 hook 대기(30초 표시) 중 result 줄 없이 exit 1 → R7 사건 · R4 사건에 'Claude 조치 실패' 기록. 18:18 호출은 hook 구간 61초가 호출 시간에 더해짐. orch-agent.js 는 VIBE_ORCH=1 을 넣어 Claude 를 띄우지만 hook 이 이 값을 보지 않았음.
+- tools/Harness/hooks/harness-stop-gate.ps1: 환경변수 VIBE_ORCH 가 '1' 이면 바로 종료(게이트 없음). VMO 에이전트는 화면을 만들지 않음.
+- orch-agent.js: exit≠0 이어도 결과 JSON 이 있으면 그 결과(status)대로 처리하고, 조치 기록에 '결과 JSON 뒤 비정상 종료(exit N · result 줄 없음)'를 덧붙임. 결과 JSON 이 없을 때만 '조치 실패'.
+- 확인(20:14 실행): PowerShell 구문 검사 오류 0 · hook 실행 3가지 = DB MODE + VIBE_ORCH=1 출력 없음 exit 0 / UI/DB MODE 사본 + VIBE_ORCH=1 출력 없음 exit 0(대상 확인 전에 종료) / UI/DB MODE 사본 일반 'TARGETS 0 (changed 0 / status 2139 / baseline 2139)' · t_orch_agent.js 12건(추가 1건: 결과 JSON 뒤 exit 1 = 해결 + 종료 상태 기록 · 기존 R7 시험의 호출 수 비교 기준을 그 시험 직전 값으로 보정) · 회귀 t_orch_agent_q · t_orch_lock_repeat · t_orch_improve · t_job_par · t_orch_watch · 로드 시험 통과. 개선안 검증 기준 중 '사건 탭 에이전트 버튼으로 1회 실행 뒤 claude.end exit 0 · 비용 숫자'는 실제 Claude 호출이 필요해 미실행.
+- 적용 시점: hook 은 다음 Claude 호출부터 · orch-agent.js 는 VS Code 창 다시 로드 뒤.
+- 되돌리기: tools/Harness/hooks/harness-stop-gate.ps1.bak_20261119_prop2 · orch-agent.js.bak_20261119_prop2 · test/t_orch_agent.js.bak_20261119_prop2(설치 폴더 orch-agent.js 도 같은 이름).
+
+## (판 번호 없음, Claude Code 설정 + 하네스 hook) VMO 개선안 1 반영: 종료 전 hook 제한 60초 → 960초 · 게이트 시작·끝 기록 (2026-11-19 20:1x)
+- 사용자(11-19): "개선안 1번 승인할게요, 반영해주세요." 개선안 = 20261119193539_REVIEW. 근거 = DMF0042 죽은 잠금 8건의 인자가 전부 'DMF0042 --static'(Stop hook 이 부르는 정적 게이트) · 잠금 시작→감지 57~268초 · Stop hook 제한 60초 · check.js 는 run_verify.py --static 을 최대 15분 실행 · 11-17 정적 검증 1회 533초 → 60초에 hook 이 끊겨 run_verify 가 잠금을 남긴 채 종료된 것으로 개선안이 판단(종료 주체는 시각 일치로만 확인).
+- .claude/settings.json: Stop hook(harness-stop-gate.ps1) timeout 60 → 960(check.js 900초 + 여유 60초).
+- tools/Harness/hooks/harness-stop-gate.ps1: 화면별 최종 게이트(check.js --final) 앞뒤에 proc.start · proc.end 를 .vibe/orch/events.jsonl 에 기록(src hook · screen · 소요 ms · 종료코드 · [FAIL]/[ERROR]/[BLOCK] 줄 3개). 기록 실패는 게이트에 영향 없음.
+- 참고: 같은 날 18:52 다른 변경(harness-stop-gate.ps1.bak_20261119_dbmode)으로 DB MODE 에서는 이 게이트가 돌지 않음(지금 작업 모드 = DB_ONLY). 이번 변경은 UI/DB MODE 에서 게이트가 돌 때 적용됨.
+- 영향: UI/DB MODE 에서 하네스 화면을 고친 턴은 종료 때 최대 960초 기다릴 수 있음(종전 60초에 끊김). 게이트가 BLOCK(exit 2)이면 proc.end exit 2 가 기록되고 VMO 감시기가 R1 사건으로 올림.
+- 확인(20:11 실행): settings.json 파싱 · PowerShell 구문 검사 오류 0 · 시험용 설정(repairScope DB_FE)으로 dry-run → 'TARGETS 0 (changed 0 / status 2139 / baseline 2139)' · 사건 기록 코드 단독 실행 → proc.start · proc.end(exit 2 · why '[BLOCK] 미구현 3건 | [FAIL] x' · ms_run 54) 2줄 기록. 실제 화면 게이트 실행과 960초 제한의 실동작은 미확인(지금 DB MODE 라 게이트가 돌지 않음). 개선안 검증 기준 중 '24시간 집계에서 sig R9|_run.dbwin.* 0건'은 내일 이후 확인.
+- 적용 시점: settings.json 의 hook 제한 시간은 Claude Code 가 설정을 다시 읽을 때(새 세션 또는 /hooks 갱신) 적용. VS Code 창 다시 로드는 필요 없음.
+- 되돌리기: .claude/settings.json.bak_20261119_prop1 · tools/Harness/hooks/harness-stop-gate.ps1.bak_20261119_prop1.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 개선안 4 반영: 끝 사건 없이 사라진 대기 · Claude 호출을 집계에 포함 (2026-11-19 19:5x)
+- 사용자(11-19): "개선안 4번 승인할게요, 반영해주세요." 개선안 = 20261119193539_REVIEW_4. 근거 = wait.start 4건 중 wait.end 1건뿐이라 집계가 대기 3건(DMF0042)을 빠뜨렸고, claude.start 5건 중 claude.end 4건이라 호출 1건이 빠졌음.
+- orch-improve.js 집계(digest): 대기 종류별로 started(시작 수) · unfinished(끝 사건 없는 수) · unfinishedLive(그중 지금도 살아 있는 대기) · unfinishedScreens(화면 목록) · gone(감시기가 사라진 것으로 기록한 수) · goneSec 추가. Claude 에 started · unfinished · runningNow 추가. 기존 항목(n · totalSec · maxSec · calls 등)은 그대로.
+- orch-watch.js: 주인 프로세스가 없어진 대기를 정리할 때 wait.gone 사건(kind · screen · waiter_pid · sec_wait · why)을 events.jsonl 에 남김. 측정이므로 VMO 가 꺼져 있어도 남김.
+- orch-agent.js: VMO 에이전트 claude.end 에 childPid 추가(시작 사건과 짝 맞추기용).
+- 확인(19:58 실행): t_orch_improve.js 20건(추가 3건: 끝 사건 없는 대기 2 · 화면 목록 · 사라진 대기 1 / 기존 항목 그대로 / 끝 사건 없는 Claude 호출 1) · t_orch_state_old.js 5건(추가 1건: 사라진 대기 = wait.gone 1건, 경과 1805초) · 회귀 t_orch_agent · t_orch_agent_q · t_orch_lock_repeat · t_job_par · t_orch_watch · 로드 시험 통과.
+- 개선안의 검증 기준 대조(실제 .vibe/orch/events.jsonl 33건, 마지막 19:35:39): dbwin started 4 · unfinished 3 · 화면 DMF0042 · Claude started 6 · calls 5 · unfinished 1. 개선안이 적은 기대값(dbwin unfinished 3, claude unfinished 1)과 일치.
+- 되돌리기: orch-improve.js · orch-watch.js · orch-agent.js · test/t_orch_improve.js · test/t_orch_state_old.js 의 .bak_20261119_prop4(설치 폴더도 같은 이름).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) VMO 개선안 3 반영: 잠금에 실행 주체 기록 · 같은 죽은 잠금 3회부터 묶음 사건 (2026-11-19 19:5x)
+- 사용자(11-19 19:4x): "개선안 3번 승인할게요, 반영해주세요." 개선안 = 20261119193539_REVIEW_3(VMO 자동 분석 19:35 등록). 근거 = R9 `_run.dbwin.DMF0042.lock` 8건이 18:17:42~18:49:52 에 발생, 8건 삭제만 하고 끝남. 잠금 내용이 pid · started · args 3개라 띄운 쪽을 알 수 없었음.
+- tools/Harness/verify/run_verify.py: 시험 데이터 구간 잠금(`_run.dbwin.<ID>.lock`)에 ppid · parent(부모 프로세스 이름) · chain(부모 사슬 4단계 '이름:pid>…') 추가. 신규 `_proc_chain()` = PowerShell 1회 조회(제한 20초, 실패하면 ppid 만 기록하고 잠금 처리는 그대로).
+- orch-watch.js: 죽은 잠금 1~2회 = 종전대로 R9(삭제만). 같은 잠금 파일이 60분(repeatLockMin) 안에 3회(repeatLockCount) 이상이면 'R2 같은 오류 반복' 묶음 사건 1건. 내용에 회차별 감지 시각 · 잠금 시작 · 시작~감지 간격 · PID · 부모 프로세스 · 사슬 · 인자. 4회째부터는 새 사건 없이 그 사건의 횟수·제목·내용만 갱신. 이력 = .vibe/orch/lock_history.json.
+- orch-agent.js: 묶음 사건이 생기거나 횟수가 올라갈 때도 그 잠금 파일은 삭제(주인 PID 없음 재확인 뒤)하고 사건에 기록. 묶음 사건은 R2 라 자동 조치 대상(agentRules)에 들어 있으면 Claude 가 원인을 1회 확인(30분 안 같은 사건은 다시 부르지 않음).
+- orch-state.js · orchestra.js: 상황판 잠금 파일 표에 '띄운 쪽'(부모 프로세스와 PID, 풍선 도움말 = 사슬) 열 추가.
+- 확인(19:50~19:5x 실행): t_orch_watch.js 18건(추가 3건: 3회 = R9 2 + R2 1 · 묶음 사건 내용 · 4회째 횟수만) · 신규 t_orch_lock_repeat.js 7건(감시기 + 에이전트 연동: 1~2회 삭제 · 3회째 묶음 사건 + 삭제 + 조치 기록 · 4회째 횟수 2 · 잠금 목록에 부모 전달) · 실제 잠금 내용 확인(run_verify.dbwin_acquire('TST9999') → {"pid", "started", "args", "ppid": 30916, "parent": "bash.exe", "chain": "bash.exe:30916>bash.exe:20668>bash.exe:35640>claude.exe:21176"} · 획득 1.5초 · 해제 뒤 파일 없음) · 회귀 t_orch_agent 11 · t_orch_agent_q 13 · t_orch_improve 17 · t_job_par 16 · t_orch_state_old 4 · 로드 시험 · py_compile.
+- 개선안의 검증 명령과 다른 점: `run_verify.py DMF0042 --static` 실행 대신 시험용 화면 ID(TST9999)로 잠금 함수만 호출함. DMF0042 는 다른 실행이 반복해서 쓰고 있어 같은 화면에 검증을 겹쳐 돌리지 않음.
+- 미확인: 실제 DMF0042 실행이 남긴 잠금의 부모 사슬(다음 실행부터 기록됨) · VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: tools/Harness/verify/run_verify.py.bak_20261119_prop3 · tools/VibeManager 의 orch-state.js · orch-watch.js · orch-agent.js · orchestra.js · test/t_orch_watch.js 의 .bak_20261119_prop3(설치 폴더도 같은 이름).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO: 에이전트 탭 = 위 Console · 아래 프롬프트 창 · 켜고 끄기 스위치 · Log 탭 맨 뒤 (2026-11-19 18:5x~19:0x)
+- 사용자(11-19): "VMO 에이전트의 프롬프트 창을 하단에 배치하고 상단에 Console 창으로 · 프롬프트 입력의 Key와 대기기능, Boarder Width 와 그림자등을 Workbench 의 프롬프트 창과 동일한 기능으로" · "우측 상단의 중지 를 버튼형식으로 해서 켜고 끌 수 있도록" · "VMO TAB 순서에 LOG 을 제일 뒤로".
+- 에이전트 탭(orchestra.js): 위 = Console 패널(조치 진행·답변, 상태 표시, 최신·지우기 아이콘, 비었을 때 안내 문구) · 아래 = 프롬프트 창.
+  - 키 = Workbench 와 같음: Enter 전송 · Shift+Enter 줄바꿈 · 한글 조합 중 Enter 는 조합 확정만(isComposing·229) · 첫 줄에서 ↑ / 마지막 줄에서 ↓ = 이전 입력(최근 200건, 창을 다시 열어도 유지).
+  - 대기열 = 에이전트가 작업 중일 때 보낸 프롬프트는 대기열에 쌓이고 끝나면 순서대로 자동 전송. 프롬프트 창 아래에 목록 표시, 항목마다 '지금 보내기'(진행 중인 응답을 멈추지 않고 추가 지시로 넣음 · 넣을 수 없으면 맨 앞으로 이동)와 ✕(지우기).
+  - 모양 = Workbench .pbox 정의 그대로: 테두리 1px · 평소 35% 농도 · 모서리 12px · 커서가 있으면 75% 농도 + 바깥 3px 옅은 띠 + 그림자. 색은 에이전트 권한 모드 기준(acceptEdits = 주황). 입력 칸 최소 44px, 내용만큼 늘어나고 최대 화면 높이 40%. 전송·중지 버튼 28px(중지는 작업 중일 때만 표시).
+- orch-agent.js: 프롬프트 대기열(enqueue · queueList · removeQueued · sendQueuedNow) · 진행 중인 호출에 추가 지시 넣기(inject) · 직접 지시도 중지 대상에 포함 · setEnabled(on).
+- 켜고 끄기 스위치: 우측 상단 '중지' 아이콘 자리에 ON/OFF 스위치. 끄면 tools/Harness/harness.json orch.enabled = false → 감시기가 사건을 만들지 않고(orch-watch.js) 자동 조치(orch-agent.js)·자동 분석(orch-improve.js)을 멈춤. 서버 · 로그 · 기능 실행 · 에이전트 직접 지시 · 사건 탭의 에이전트 버튼은 그대로. 종전 '중지'(이 창에서 실행한 기능 중지)는 실행 중일 때만 스위치 왼쪽에 아이콘으로 나타남.
+- 탭 순서: 상황판 · 기능 · 사건 · 개선안 · 에이전트 · Log.
+- 확인(18:57~19:0x 실행): tools/VibeManager/test/t_orch_agent_q.js 13건 통과(바쁠 때 대기열 · 순서대로 자동 전송 · 지우기 · 지금 보내기 = 같은 호출에 전달 · 끄면 orch.enabled false 와 다른 설정 유지 · 꺼져 있으면 사건 0건 · 직접 지시는 실행 · 켜면 사건 생성과 자동 조치) · 회귀 t_orch_agent 11 · t_orch_watch 15 · t_orch_improve 17 · t_job_par 16 · 로드 시험. 브라우저 렌더(1280×820 · 420×800): Enter 전송 · Shift+Enter 유지 · 조합 중 Enter 유지 · ↑ 이전 입력 · ↓ 복귀 · 대기열 2행과 지금 보내기·지우기 메시지 · 스위치 ON→OFF 메시지 · 콘솔 오류 0 · 가로 넘침 없음 · Console 높이 568px · 프롬프트 창 아래 여백 14px. VS Code 실화면과 실제 Claude 응답 중 '지금 보내기'는 미확인.
+- 되돌리기: 저장소·설치 폴더 orchestra.js · workbench.js · orch-agent.js · orch-watch.js · orch-improve.js 의 .bak_20261119_agprompt. 켜고 끄기 값만 되돌리려면 harness.json orch.enabled 줄 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 기능 탭: 아래에 Task Log 이름과 영역 항상 표시 (2026-11-19 18:5x)
+- 사용자(11-19): "아래에 TASK LOG 명칭과 영역을 표기".
+- 기능 탭 = 위에 기능 타일(그룹 3개 가로 배치), 아래에 'Task Log' 머리글이 있는 패널이 남는 높이를 전부 차지. 출력이 없을 때는 패널 안에 '기능을 실행하면 출력이 여기에 나옵니다' 표시. 앞 절의 '출력이 생길 때만 오른쪽에 나타남 · 닫기 · 다시 열기 버튼'은 없앰(닫기·다시 열기 버튼 숨김). 최신 · 지우기 아이콘은 Task Log 머리글 오른쪽에 유지.
+- 확인: node --check · 웹뷰 스크립트 문법 검사 · 브라우저 렌더 1280×820(기능 영역 높이 215px · Task Log 높이 518px · 아래 여백 14px · 콘솔 오류 0 · 가로 넘침 없음 · 지우기 뒤에도 영역 유지) · 설치 폴더 cmp 일치. VS Code 실화면 미확인(창 다시 로드 필요).
+- 되돌리기: orchestra.js.bak_20261119_tlbottom(저장소).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 창 탭 이름 '공통 기능' → '기능' (2026-11-19 18:5x)
+- 사용자(11-19): "공통기능은 기능으로 변경".
+- VMO 창 탭 이름 '기능'. 메뉴 '🎼 VMO (기능, 감시)' · 명령 제목 'VMO — 기능 · BE/FE Log · 상황판' · 풍선 도움말·안내 문구의 '공통 기능' = '기능'. quick.json 의 그룹 표시("area": "common")와 코드 안 이름(commonMenu · isCommonItem)은 그대로.
+- 확인: node --check 8개 · quick.json·package.json 파싱 · 로드 시험 · 설치 폴더 cmp 일치. VS Code 실화면 미확인(창 다시 로드 필요).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 창: 명칭 VMO · 반투명 대시보드 · 공통 기능 전체 영역 · Log 하위 탭 · 아이콘 버튼 · Workbench FE/BE Log 제거 (2026-11-19 18:4x~18:5x)
+- 사용자(11-19): "VM 오케스트라의 명칭을 VMO 로" · "공통기능의 하위를 전체 영역으로 채우고 디자인을 세련되게 · 상황판도 반투명으로 비치게 하고 DASHBOARD 형태로" · "WORKBENCH 의 LOG 창에 있는 BE, FE LOG 는 삭제" · "VMO 의 BE LOG, FE LOG 는 LOG TABPAGE 아래에 2개의 TABPAGE 로 · 가동/중지/최신/지우기 를 아이콘으로" · "공통 기능이 반으로 분리되어 있는데 하위 영역은 어떤것을 위해서 남겨 놓은 것인가요?"
+- 명칭: 창 제목·머리글 'VMO'(앞 절의 'VM Orch' 를 다시 바꿈). 메뉴 '🎼 VMO (공통 기능, 감시)' · 명령 제목 'VMO — …' · 화면·알림·로그 문구의 'Orch' = 'VMO'. 명령 ID·파일명·설정 키는 그대로.
+- 상황판(orchestra.js): 반투명 유리 패널(배경 번짐 + 은은한 배경 빛). 맨 위 KPI 타일 7개 = BE · FE(ON/응답 없음/OFF, 기동 초, 시작 시각, VM 이 띄움 여부) · 실행 중 · Claude 세션 · 대기(가장 오래 기다린 시간) · 사건(열림·사용자 확인, 누르면 사건 탭) · 개선안(승인 대기, 누르면 개선안 탭). 아래 패널 = 실행 중(전체 폭 표) · 부하(CPU · 메모리 · TCP 연결 수 막대 + 기준선 표시, 기준 근접 = 주황 · 초과 = 빨강) · 대기 · 잠금 파일 · 알림.
+- 공통 기능 탭: 평소에는 기능 타일이 탭 전체를 채움(그룹별 세로 단 · 타일 = 아이콘 칸 + 이름 + 설명 첫 구절). 종전 아래 절반은 Task Log(그 탭에서 실행한 기능의 출력) 자리였고 실행 전에는 비어 보였음 → 출력이 생길 때만 Task Log 가 오른쪽에 나타남. 닫기 아이콘으로 숨기면 오른쪽 아래 'Task Log' 버튼으로 다시 열고, 숨긴 동안 새 출력이 오면 점 표시. 지우기 = 로그를 비우고 타일 전체 영역으로 복귀.
+- Log 탭: 위 탭의 'BE Log' · 'FE Log' 2개를 'Log' 1개로 합치고 그 아래 하위 탭 2개(☕ BE Log · 🎨 FE Log, 탭마다 상태 점·상태 문구·새 출력 점). 오른쪽 아이콘 4개 = 가동(선택한 서버 Start) · 중지(Finish) · 최신 · 지우기. 가동은 서버가 꺼져 있을 때만, 중지는 떠 있을 때만 눌림. 상태 표시줄 BE·FE 항목과 Workbench 에서 넘어오는 belog/felog 요청은 Log 탭의 해당 하위 탭으로 연결.
+- 아이콘 버튼: 창 위 '중지' · Task Log 의 최신·지우기 · 에이전트 탭 '조치 중지'도 같은 선 아이콘(설명은 풍선 도움말과 aria-label).
+- workbench.js: Log 탭의 FE Log · BE Log 버튼 숨김(요소는 남김 — 출력·상태 처리 코드가 그 id 를 참조). commonMenu 메시지에 서버 가동/중지 메뉴 라벨(포트 8080·5173 기준) 추가.
+- 확인(18:4x~18:5x 실행): node --check · 웹뷰 스크립트 문법 검사 · 브라우저 렌더(1280×820 · 420×800)에서 콘솔 오류 0 · 가로 넘침 없음 · KPI 7개 · 공통 기능 그룹 3개가 탭 높이 747px 를 채움 · 출력 수신 시 Task Log 표시 → 닫기 → 새 출력 점 → 다시 열기 · Log 하위 탭 전환 · 가동/중지 버튼 활성 조건과 전송 메시지(FE Start · BE Finish) · 지우기. 회귀 t_job_par 16 · t_orch_agent 11 · t_orch_improve 17 · t_orch_watch 15 · t_job_runner 23 · 로드 시험 통과. VS Code 실화면은 미확인(창 다시 로드 필요). VS Code 웹뷰의 배경 번짐(backdrop-filter) 표시도 미확인.
+- 되돌리기: 저장소 orchestra.js.bak_20261119_dash_mid(디자인 전) · orchestra.js.bak_20261119_logtab(Log 하위 탭 전) · workbench.js.bak_20261119_nolog · 각 파일 .bak_20261119_orchname(한글 명칭 판).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 창 명칭 = 'VM Orch' (2026-11-19 18:4x)
+- 사용자(11-19): "VM 오케스트라 의 명칭을 영문으로" → "아니면 VM Orch 로 변경".
+- 창 제목 · 창 머리글 = 'VM Orch'. 메뉴 '🎼 VM Orch (공통 기능, 감시)' · 명령 제목 'VM Orch — …'. 화면·알림·로그 문구의 '오케스트라' = 'Orch'(예: 'Orch 창 BE Log', 'Orch Agent', 사건 조치 기록의 주체 'Orch'). 소스 주석도 같은 표기.
+- 바꾸지 않은 것: 명령 ID(vibeManager.openOrchestra) · 파일명(orchestra.js · orch-*.js) · 설정 키(vibeManager.orch.*) · 에이전트 정의(.claude/agents/vm-orchestra.md) · 이 CHANGELOG 의 앞 절.
+- 확인: node --check 12개 · t_job_par 16 · t_orch_agent 11 · t_orch_improve 17 · t_job_runner 23 · t_chain_runner 16 · t_orch_watch 15 · 로드 시험 통과 · quick.json·package.json 파싱. VS Code 실화면 미확인(창 다시 로드 필요).
+- 되돌리기: 저장소 각 파일의 .bak_20261119_orchname(한글 표기 판).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 사이드바 제목줄 아이콘 = 흰색 계열 1색으로 통일 (2026-11-19 18:3x)
+- 사용자(11-19): "VIBE MANAGER 우측의 아이콘도 WHITE 계열 1 COLOR 로 아이콘 통일".
+- 종전: 6개(Workbench · FLOW · 재기동 · Source Download · ID 하나로 전체 · CheckList)는 주황 선(media/tb-*-dark.svg #D77A56 · light #C55F3D), 오케스트라 · 업무 작업 2개는 VS Code 기본 아이콘(테마 글자색)이라 색이 섞여 보임.
+- 변경: media/tb-*.svg 12개의 선 색 = 어두운 테마 #D4D4D4 · 밝은 테마 #424242. 오케스트라(tb-orch) · 업무 작업(tb-jobs) 아이콘을 같은 선 굵기(1.8)의 SVG 로 새로 만들고 package.json 명령 아이콘을 그 파일로 바꿈. 제목줄 8개가 같은 색 · 같은 선 모양.
+- 확인: 8개 아이콘 어두운·밝은 배경 브라우저 렌더 캡처 · package.json 파싱 · 설치 폴더 cmp 일치. VS Code 실화면 미확인(창 다시 로드 필요 — 아이콘은 package.json 을 다시 읽을 때 바뀜).
+- 되돌리기: media/_bak_20261119_white/ 의 SVG 12개 복사 · package.json.bak_20261119_icons(저장소 · 설치 폴더). tb-orch-* · tb-jobs-* 4개 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라: 창 다시 로드 뒤 실측 · 감시기 정정 · AI 검토 상한 삭제 (2026-11-19 18:2x)
+- 사용자(11-19 18:2x): "로드함, 정상" · "상한 5 USD 는 삭제해주세요... ULTRA 사용중입니다."
+- 실측(18:24 조회): VS Code 확장 호스트 로그의 VM 활성화 2026-11-19 18:16:53(P0~P10 반영 뒤 첫 실행). .vibe/orch 에 incidents · proposals · snap · servers.json 생성. 사건 3건 = R9 죽은 잠금 2건(Doc/e2e/_run.dbwin.DMF0042.lock, PID 36104·9380 없음 재확인 뒤 삭제, Claude 호출 없음) · R4 대기 지연 1건(DMF0042 dbwin). R4 는 Claude 조치 1회 = 188초 · 25턴 · 1.60 USD · 수정 파일 0 · 개선안 1건 등록.
+- 결함 1(감시기): tick() 이 판정 → 주인 없는 항목 정리 순서라, 끝 사건(wait.end) 없이 종료된 run_verify(PID 28056)의 대기가 R4 로 올라감. 정정 = orch-watch.js tick() 첫 단계에서 state.sweep() 실행 뒤 판정 · orch-state.js snapshot() 의 대기 목록은 살아 있는 프로세스만. 이 내용은 에이전트가 올린 개선안 20261119182142_INC 와 같음(개발 세션이 직접 반영, 개선안 상태 = 반영 완료로 기록).
+- 결함 2(에이전트): '허용 범위 밖 파일 변경' 판정이 조치 중 다른 작업이 바꾼 파일 4개(Doc/asisfacts/.../combo_values.json · 잠금 파일 · CHANGELOG.md · Doc/db/probe_*.md)를 에이전트 변경으로 셈. 정정 = 에이전트가 쓰기 도구(Edit·Write·Bash)를 쓴 실행에서만 범위 밖 변경으로 보고 사용자 확인을 요구. 쓰지 않았으면 '조치 중 다른 작업이 바꾼 파일 N개'로만 적음.
+- harness.json: llmReviewBudgetUsd 5 → 0(상한 없음, 사용자 지시). 오케스트라 창 상단 표시는 'AI 검토 켬 · 상한 없음'.
+- 미확인: 18:16:53 에 시작한 감시기가 17:49:03 의 wait.start 줄을 읽은 경로(시험 t_orch_state_old.js 에서 시작 전 줄은 다시 읽지 않음을 확인). 재현되면 추가 조사.
+- 확인(18:27~18:3x 실행): node --check · tools/VibeManager/test/t_orch_state_old.js 4건(정정 전 1건 FAIL 재현 → 정정 뒤 통과) · t_orch_watch 15 · t_orch_agent 11 · t_orch_improve 17 · t_job_par 16 통과. 정정분은 창을 다시 로드해야 적용됨.
+- 되돌리기: 저장소·설치 폴더 orch-agent.js · orch-watch.js · orch-state.js 의 .bak_20261119_orchfix1.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 P9·P10: 업무 작업 동시 실행 · 생성·보완 업무 추가 (2026-11-19 18:1x~18:2x)
+- 사용자(11-19): "CHECKLIST 을 10개 화면을 선택해서 순차적으로 돌리고 싶을 때(이때 부하가 허락하면 멀티실행)" · (18:1x) "고를 수 있는 업무에 UI 생성이나 보완은 왜 추가가 되지 않았나요? · UI/DB 모드에서 고를 수 있으면 됩니다". 승인 플랜 P9·P10.
+- P9 동시 실행(job-runner.js): 실행 방식 '부하가 허용하면 동시' + 최대 동시 화면 수(상한 orch.jobMaxPar 3). 첫 화면은 바로 시작. 두 번째 화면부터는 CPU < 80% · 여유 메모리 ≥ 3072MB · 입장 간격 120초(tools/E2E/e2e.config.json 의 verifyLoadCpuMax·verifyLoadMemFreeMinMB·verifyAdmitRampSec, harness.json orch.jobLoad*·jobRampSec 로 덮어쓰기)일 때만 시작하고 아니면 '입장 대기'로 두어 순차로 내려감. CheckList 계열(S8.checklistRun·S8.verify 를 부르는 업무)은 run_verify.py 가 스스로 부하 입장을 하므로 최대 동시 수만 적용. 첫 실패에서 중단은 실행 중 화면을 끝까지 돌린 뒤 멈춤.
+- P9 동시 Claude 세션 상한(chain-runner.js claudeGate · workbench.js askClaudeWhenIdle): 업무 작업의 실행기 전부가 여는 Claude 세션을 orch.jobMaxClaude(2)개까지. 자리 대기는 사건 claude.wait(reason gate). Workbench 창은 종전대로 제한 없음.
+- P9 오케스트라 연동(job-runner.js attachWatch): 서버 이상(R6)·TCP 연결 수(R8) 사건이 생기면 실행 중 업무 작업을 일시 중지(실행 중 화면은 끝까지)하고 사건에 조치 기록. 그 사건이 해결·닫힘이 되면 다시 진행.
+- P10 생성·보완 업무: quick.json 🚀 ID 하나로 전체 · 🧩 새 화면(from AS-IS) · 📏 새 화면(from 설계서) · 🚒 자동보완에 "batch": true. 화면을 만드는 체인 3개는 작업 모드가 UI/DB MODE 일 때만 고를 수 있고 DB MODE 에서는 목록에 '(DB MODE 에서 실행 안 함)'과 사유로 비활성 표시(작업 만들기도 거부). 🚒 자동보완은 Workbench 와 같이 DB MODE 에서도 실행(DB 객체 보완 · FE 는 가이드). 🧯 자동 보완 · 🛠️ 수동 보완 · PKG·META 메뉴는 단계 목록(flow)이 없는 Claude 메뉴라 일괄 대상 아님.
+- P10 기존 화면 보호(workbench.js confirmExistingPage): 창 없는 실행기는 기존 생성분이 있는 화면을 지우지 않고 그 화면만 건너뜀(종전 확인 창의 '기존 삭제 후 신규 생성'은 Workbench 에서만).
+- 업무 작업창(jobs.js): 실행 방식 선택(순차 / 부하가 허용하면 동시 + 최대 화면 수)과 기준 설명, 비활성 업무 표시, 새 화면 업무의 '이미 생성된 화면은 건너뜀' 안내.
+- harness.json orch 절: jobMaxPar 3 · jobMaxClaude 2 추가.
+- 확인(18:15~18:2x 실행): node --check · tools/VibeManager/test/t_job_par.js 16건 통과(동시 2 겹침 · 부하 기준 초과 시 순차와 사유 표시 · 입장 간격 · CheckList 계열은 부하 판정 생략 · Claude 세션 상한 1 과 2 · 세션 대기 사건 · R6 사건 → 일시 중지 → 해결 → 재개 → 완료 · DB MODE 에서 생성 업무 비활성·거부) · 회귀 t_job_runner 23 · t_chain_runner 16 · t_orch_watch 15 · t_orch_agent 11 · t_orch_improve 17 · 로드 시험. 실제 quick.json 업무 10개 중 현재 모드(DB_ONLY)에서 가능 7 · 비활성 3 확인. 기존 화면 건너뜀과 실제 생성 체인의 창 없는 실행, 실제 CheckList 동시 실행(플랜 7절 검증 15), VS Code 실화면은 미확인.
+- 되돌리기: 저장소 workbench.js · chain-runner.js · job-runner.js · jobs.js · extension.js 의 .bak_20261119_orchp9 · quick.json.bak_20261119_orchp10 · tools/Harness/harness.json.bak_20261119_orchp9. 설치 폴더 = workbench.js · extension.js 의 .bak_20261119_orchp9.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 P8: 업무 작업창 1차 — 업무 1개 × 화면 여러 개 순차 실행 (2026-11-19 18:0x)
+- 사용자(11-19): "화면설계서를 메뉴에 있는 화면을 멀티로 선택해서 한꺼번에 생성 · CHECKLIST 을 10개 화면을 선택해서 순차적으로 · UI 에 종속되지 않고 업무기능에 종속되는 작업창". 승인 플랜 P8.
+- 신규 job-runner.js: 업무 1개(quick.json 항목)를 화면 여러 개에 실행. 화면마다 ChainRunner 1개. 순차 실행. 같은 화면이 Workbench·다른 작업에서 실행 중이면 뒤로 미루고 다음 화면부터 실행. 실패 처리 2가지(표시 후 계속 / 첫 실패에서 중단). 일시 중지(실행 중 화면은 끝까지) · 중지 · 이어서 실행(끝나지 않은 화면만) · 실패분만 다시. 상태 = .vibe/jobs/<작업번호>/job.json, 화면별 로그 = <화면>.log, 끝나면 SUMMARY.md(화면별 결과·소요·실패 원인 1줄·실행 주체·실행 기록 경로). VS Code 를 닫았다 열면 실행 중이던 작업은 '중단됨'으로 읽히고 이어서 실행 가능. 사건 job.start · job.item.start · job.item.end · job.end.
+- 신규 jobs.js: 업무 작업창(명령 vibeManager.openJobs · 사이드바 제목줄 아이콘 · Overview 메뉴 '업무 작업'). 왼쪽 = 업무 선택(단계 수·Claude 단계 수 표시) · 실패 처리 · 승인 단계 답(해당 업무만) · 화면 선택(검색 · 도메인 · 분석 자료/화면 생성/CheckList 결과 유무 거르기 · 보이는 것 전체 선택 · 화면 ID 붙여넣기 · AS-IS DB 목록 더하기). 오른쪽 = 화면별 진행 표(상태 · 현재 단계 · 실행 주체 · 소요 · 요약·실패 원인 · Workbench 열기 · 실행 기록 · 로그) + 선택 화면 로그 + 최근 작업 열기. 창을 닫아도 작업은 계속 돎.
+- 화면 목록 원천 = FLOW 대상(flow-panel.js targets: 대조표 + Doc/gen). 18:05 실측 86개(분석 자료 있음 83 · 화면 생성 34 · CheckList 결과 34).
+- quick.json: 1차 대상 6개 항목에 "batch": true(AS-IS 파싱·분석 · AS-IS 실측 · CheckList · 미검증 해소 · TestResultList · 문서 생성). Overview 그룹에 '업무 작업', '오케스트라' 메뉴 추가.
+- 확인(18:03~18:08 실행): node --check · tools/VibeManager/test/t_job_runner.js 23건 통과(순차·실패 뒤 계속·실행 순서·SUMMARY.md·화면별 로그·실패분만 다시·첫 실패 중단·승인 답·일시 중지·중단됨 복구·중지·이어서 실행·사건 기록) · 업무 작업창 화면 브라우저 렌더(콘솔 오류 0 · 폭 420 가로 넘침 없음 · 선택·붙여넣기·시작·진행 표 동작) · 실제 quick.json 에서 고를 수 있는 업무 6개 확인. 실제 업무(문서 생성·CheckList)를 실제 화면에 돌린 사례와 VS Code 실화면은 미확인(플랜 7절 검증 13·14 미실행).
+- 참고: 18:07 quick.json·package.json 쓰기가 1회 실패(OSError 22 / UNKNOWN, 원인 미확인)해 임시 파일 → 교체 방식으로 다시 적용함. 두 파일 파싱 정상.
+- 되돌리기: 저장소 quick.json.bak_20261119_orchp8 · package.json.bak_20261119_orchp8 · extension.js(openJobs 등록 3줄). 설치 폴더 extension.js · package.json 의 .bak_20261119_orchp8. 신규 job-runner.js · jobs.js 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 P7: 창 없는 체인 실행기 ChainRunner (2026-11-19 17:5x)
+- 사용자(11-19): "UI 에 종속되지 않고 업무기능에 종속되는 작업창도 추가"(화면 여러 개 일괄 실행)의 선행 단계. 승인 플랜 P7.
+- 신규 chain-runner.js: 화면 1개의 메뉴 항목(체인 · 작업 · flow 가 있는 Claude 메뉴)을 창 없이 실행하고 결과 1개 객체로 돌려줌({ok, status, sec, summary, actorNote, md, fail, steps}). 출력은 호출자가 준 onLog·onStep·onNote 로 감.
+- workbench.js: createRunner(api, opts) 추가 = 창 없는 WB 실행기. 상태는 메모리에만 두고(workspaceState 미사용) 창 목록·창 번호에 넣지 않음. post() 가 창과 sink 양쪽으로 보냄. 창 없는 실행기는 알림 창을 띄우지 않고(quiet), 사용자 승인 단계(askUser)는 시작 때 받은 답(autoAnswer)을 쓰며, 화면 갱신용 HTML(Status·FLOW·History)을 만들지 않음. 체인 종료 때 lastRun(결과 요약) 기록. 사건 chain.* 에 작업 번호(job) 추가.
+- 플랜과 다른 점: 플랜은 _runChain·runTaskStreaming·execShell·spawnStream·askClaude 를 chain-runner.js 로 옮긴다고 적었음. 이번에는 코드를 옮기지 않고 workbench.js 의 같은 실행기를 창 없이 쓰게 했음. 이유 = 같은 날 다른 세션이 workbench.js 를 수정 중이고 VS Code 실화면 확인 전이라 400줄 이동의 회귀 위험이 큼. Workbench 창의 실행 경로는 조건 분기(headless·quiet) 4곳 외에 그대로임. 코드 이동은 실화면 확인 뒤 별도 작업으로 남김.
+- 확인(17:57 실행): node --check · tools/VibeManager/test/t_chain_runner.js 16건 통과(임시 폴더에서 실제 _runChain 실행: 스크립트 → Claude(가짜) → 승인 단계 건너뜀 → 앞 단계 건너뜀이면 실행 안 함 · 승인 답 예 = 4단계 실행 · 실패 체인 원인 줄 · 작업 단독 · flow 메뉴 · 실행기 2개 동시 실행 · 알림 창 0 · workspaceState 접근 0 · FULLRUN.md · 사건 기록). 회귀 t_orch_agent 11 · t_orch_improve 17 · t_orch_watch 15 · t_verify_fresh 4 · 로드 시험 통과. 플랜 7절 검증 12(같은 화면에서 추출 전후 FULLRUN.md 비교)는 VS Code 실행이 필요해 미실행.
+- 되돌리기: 저장소·설치 폴더 workbench.js.bak_20261119_orchp7. 신규 chain-runner.js 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 P6: CheckList 반복 대응 (2026-11-19 17:4x~17:5x)
+- 사용자(11-19): "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복". 승인 플랜 P6. 판정 정체 감지(R10)·Claude 없이 끝난 체인(R11)·원인 분류·같은 서명 3회째 중단은 P3·P4 에 반영됨.
+- 실행 주체 표시: Flow 보드 단계 제목 앞에 '⚙ 스크립트 · ' 또는 '✴️ Claude · '. 체인 종료 요약(Task Log · Console)에 "실행 주체: 스크립트 N단계 · Claude M회 · Claude 단계 건너뜀 K". CheckList 체인은 AI 검토 켬·끔과 이번 실행의 호출 수·행 수·비용(Doc/verify/<ID>/llm_usage.csv 중 체인 시작 뒤 줄, 캐시 제외)도 적음.
+- CheckList 체인 1단계 통과 판정: verify fileExists 에 "fresh": true 추가(quick.json checklist 1단계). unverified_triage.json 이 이번 단계 시작 뒤 갱신된 파일이어야 통과. 종전에는 분류기가 실패해도 예전 파일로 통과함. fresh 가 없는 다른 fileExists 11곳은 종전 그대로.
+- 오케스트라 창 상단: AI 검토 켬·끔과 화면 1회 비용 상한을 항상 표시(harness.json 을 3초마다 다시 읽음). 켜고 끄기 = 공통 기능 탭 환경설정의 'AI 검토 (켜기 / 끄기)'(기존 S8.llmReview).
+- harness.json: llmReviewBudgetUsd 0 → 5(승인 플랜 8절 결정 항목. 근거 실측 = SCP0096 판정 검토 1회 4.93 USD · 2.56 USD, Doc/verify/_llm_usage.csv). llmReview 는 17:28 조회 때 이미 true 였음(이 작업이 바꾼 값 아님).
+- 플랜의 '첫 조치 대상' 2건 현황(17:5x 조회): ① "plan 이 없어 스펙 생성 불가" 는 CheckList·verify 로그 111개 중 21개에 있고 마지막 발생 = 2026-10-30 13:37 로그. 현재 tools/Harness 소스에 그 문구 없음 = 현행 오류 아님. ② SCP0111 정렬 키 차이는 현재 fixlist.csv 에서 A6 '판정필요'(action_needed N, 사용자 지시 10-30)로 분류됨 = 검사기 조치 대상 아님.
+- 실제 사건 진단 1건(17:48~17:49, test/t_orch_agent_diag.js SCP0111 sonnet, 읽기 전용 권한): SCP0111 CheckList 정체(미검증 처리 대상 4→4→4)를 실제 claude 로 진단 → 95초 · 5턴 · 0.36 USD · 수정 파일 0. 결과 = 원인 engine, 13:42 검사기 보완(T343·T344)이 마지막 CheckList 실행(13:16:40) 뒤에 반영됐고 재수행이 없어 건수가 그대로임 · 상태 need-user(CheckList 재수행과 _unverified_decisions.md 결정 대기). 결과 파일 .vibe/orch/diag_SCP0111.json · 로그 .vibe/logs/2026-11-19T17-48-25_claude_orch.log. 수정 권한(B 등급)으로 실제 사건을 조치한 사례는 미실행.
+- 확인(17:47 실행): node --check · tools/VibeManager/test/t_verify_fresh.js 4건 통과 · t_orch_watch.js 15건 · 로드 시험 통과 · quick.json·harness.json 파싱. Flow 보드·요약 문구의 VS Code 실화면은 미확인.
+- 되돌리기: 저장소·설치 폴더 workbench.js · orchestra.js 의 .bak_20261119_orchp6 · 저장소 quick.json.bak_20261119_orchp6 · tools/Harness/harness.json.bak_20261119_orchp6.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 P5: 상시 개선안 — 제시 → 사용자 승인 → 반영 (2026-11-19 17:3x~17:4x)
+- 사용자(11-19): "상시 활동의 경우 개선안을 제시하고 사용자 승인후에 반영될 수 있도록". 승인 플랜 P5.
+- 신규 orch-improve.js.
+  - 집계(코드, Claude 호출 없음): 최근 reviewDays(7)일 .vibe/orch/events*.jsonl 과 사건에서 단계별 횟수·실패·중앙값·p90·합계, 대기 종류별 횟수·합계·최대, 체인별 성공 수와 Claude 없이 끝난 횟수, Claude 호출 수·실패·시간·비용, 실패 프로세스, 규칙별 사건 수와 반복 상위 15건 → .vibe/orch/digest.json.
+  - 분석(Claude, 읽기 전용 권한 · 허용 도구 Read·Glob·Grep·읽기용 Bash): 체인 종료 20초 뒤와 1시간마다 확인해 마지막 분석에서 reviewEveryHours(24) 지났으면 1회. 개선안 탭 '지금 분석' = 즉시. 실행 기록 0건이면 생략.
+  - 개선안 = .vibe/orch/proposals/<id>.json(제목·근거·대상·변경 전후·검증·되돌리는 방법·이력). 근거가 빈 안은 등록하지 않음. 같은 서명이 승인 대기·반영 완료·반려 상태로 있으면 다시 등록하지 않음.
+  - 승인(확인 창) → 대상 파일 사본 저장(.vibe/orch/snap/prop_<id>/) → Claude 반영(승인 범위 안에서 C 등급 대상 수정 허용 · D 등급 금지 유지) → 검증. 반영 안 됨·검증 실패·검증 미실행이면 대상 파일을 복원하고 '반영 실패'. 통과면 '반영 완료'.
+  - 반려 = 사유 입력 후 기록. 반영 완료 건 '되돌리기' = 대상 파일을 반영 전 사본으로 복원 후 승인 대기로(DB 객체 변경은 개선안의 되돌리기 절차로 사용자가 처리).
+- orch-agent.js: 사건 조치에서 나온 개선안도 orch-improve.js 로 등록(종전 직접 파일 쓰기). runClaude 에 권한 모드·허용 도구 인자, 다른 모듈용 withLock(한 번에 Claude 1건) 추가.
+- 오케스트라 창: 개선안 탭(승인 대기 수 표시 · 승인·반영 · 반려 · 되돌리기 · 원문 · 지금 분석 · 마지막 분석 시각과 결과). 새 승인 대기 건은 VS Code 알림.
+- harness.json orch 절: reviewEnabled · reviewEveryHours · reviewDays · proposalMaxPerReview 추가.
+- 확인(17:40~17:4x 실행): node --check 5개 · tools/VibeManager/test/t_orch_improve.js 17건 통과(가짜 claude: 집계 수치 4건 · 분석 등록·근거 없는 안 제외 · 읽기 전용 호출 · 중복 제외 · 검증 실패 시 대상 파일 복원 · 승인 반영 · 재승인 불가 · 되돌리기 · 반려 뒤 재등록 불가) · t_orch_agent.js 11건 · t_orch_watch.js 15건 재실행 통과. 실제 Claude 로 분석·반영한 사례는 미실행. VS Code 실화면 미확인.
+- 참고: 17:37 조회 기준 VS Code 확장 호스트 로그의 VM 활성화는 13:46:14 가 마지막. P0~P5 코드는 창을 다시 로드해야 실행됨.
+- 되돌리기: 저장소·설치 폴더 workbench.js · extension.js · orchestra.js · orch-agent.js 의 .bak_20261119_orchp5. 신규 orch-improve.js 삭제. 자동 분석만 끄려면 harness.json orch.reviewEnabled = false.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 오케스트라 P4: 에이전트 조치 (2026-11-19 17:2x~17:3x)
+- 사용자(11-19): "오류발생 시 조치하거나 보완할 수 있도록 · CheckList 만 한정된 것이 아니고 UI 생성 및 보완 등 모든 활동에 관여". 승인 플랜 P4.
+- 신규 orch-agent.js: 감시기가 새 사건을 만들면 조치 대기열에 넣고 한 번에 1건 처리.
+  - 코드 조치(Claude 호출 없음): R9 죽은 잠금 삭제(주인 PID 없음 재확인 뒤) · R6 서버 재기동(server_guard.py 가 처리 중이면 기다림, 응답 회복이면 조치 없음) · R8 TCP 연결 수 상위 프로세스 5개 집계 · R7 Claude 종료 분류별 안내.
+  - Claude 조치: R1·R2·R3·R4·R5·R10·R11. claude CLI 를 따로 띄움(-p, stream-json, permission-mode acceptEdits, 허용 도구 = Read·Edit·Write·Glob·Grep·Bash(node/python/dir/ls/type/cat/git status·diff·log/netstat/tasklist)). 프롬프트 = 사건 원문 + 같은 서명 과거 사건·조치 결과 + 지금 상태(서버·체인·대기·잠금·부하) + 작업 모드.
+  - 조치 등급: A 진단·단독 재실행 = 자동 / B tools/Harness·tools/E2E·tools/Docs 수정 = 자동 + 알림 / C FE·BE·DB 객체·VM·룰 = 개선안(.vibe/orch/proposals/*.json)만 / D 금지. 정의 = 신규 .claude/agents/vm-orchestra.md.
+  - 조치 전 스냅샷(.vibe/orch/snap/<사건>/, 대상 3개 폴더 377개 파일 6,104KB — 11-19 17:21 측정) → 조치 뒤 변경·신규·삭제 파일 감지. 허용 범위 밖 파일이 바뀌면 사건을 '사용자 확인 필요'로 올리고 파일명을 적음. 사건 탭 '되돌리기' = 조치 전 사본 복원.
+  - 제한: 같은 서명 자동 조치 2회(agentMaxAttempts) 뒤 다시 생기면 '사용자 확인 필요' · 시간당 6회(agentMaxPerHour) · 1건 30분(agentTimeoutMin). 기준값 = tools/Harness/harness.json orch 절(신규).
+  - CheckList 전체 재수행·서버 기동·종료는 에이전트가 하지 않음(정의 파일에 명시).
+- workbench.js: 체인의 Claude 단계가 '세션 이어받기 실패'로 끝나면 새 세션으로 1회 다시 보냄(종전: 안내만 하고 단계 실패). 사건 claude.retry 기록.
+- 오케스트라 창: 에이전트 탭(조치 진행 출력 · 상태 · 직접 질문·지시 입력 · 조치 중지), 사건 탭에 '에이전트'(직접 실행)·'되돌리기' 버튼.
+- 확인(17:26~17:28 실행): node --check · tools/VibeManager/test/t_orch_agent.js 11건 통과(가짜 claude: R9 코드 조치 · Claude 조치 해결 · 수정 파일 감지 · 되돌리기 · 범위 밖 변경 → 사용자 확인 필요 · 개선안 등록 · 같은 서명 3번째 중단 · R7 분류) · t_orch_agent_real.js 실제 claude CLI 1회 통과(haiku · 71초 · 0.014 USD · Read 도구 사용 · exit 0). 실제 사건에 실제 Claude 가 조치한 사례는 미실행. R6 서버 재기동 코드 조치는 시험 미실행. VS Code 실화면 미확인(창 다시 로드 필요).
+- 되돌리기: 저장소 workbench.js.bak_20261119_orchp4 · extension.js.bak_20261119_orchp4 · orchestra.js.bak_20261119_orchp4 · tools/Harness/harness.json 은 백업 없음(orch · orchNote 키 2개 삭제). 설치 폴더 = 같은 이름. 끄기만 하려면 harness.json orch.agentEnabled = false.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 오케스트라 P0~P3: 사건 기록 · 서버 분리 · 오케스트라 창 · 감시기 (2026-11-19 16:5x~17:1x)
+- 사용자(11-19): "VM 의 기능을 UI 별 기능과 공통기능으로 분리 · BE LOG, FE LOG 창을 이쪽으로 이동 · BE, FE 기동상태 항상 표시 · VM 을 모니터링 하고 문제해결을 직접 진행하는 AI 에이전트를 오케스트라 기능으로". 승인 플랜 = ~/.claude/plans/vm-ui-snug-mountain.md(P0~P10). 이번 반영 = P0~P3. P4(에이전트 조치) 이후는 미착수.
+- P0: build_vsix.py 묶음 목록에 recheck.js 가 없어 vsix 설치본이 extension.js:7 에서 활성화 실패하던 결함 → 최상위 .js 를 폴더에서 읽게 변경.
+- P1 사건 기록: 신규 orch-events.js → .vibe/orch/events.jsonl(한 줄 1건). workbench.js spawnStream(proc.start/end) · _runChain(chain.start/end, step.start/end, 단계별 실행 주체 script|claude, Claude 실행 단계 수) · askClaude(claude.start/result/end) · askClaudeWhenIdle(claude.wait) · 중지(user.stop). 하네스: tools/Harness/verify/orch_event.py 신규, run_verify.py 대기 5종(admit·lock·slot·dbwin·langwait wait.start/end), tools/E2E/runlock.js(e2elock), db_orphan_sessions.py(db.warn/db.kill).
+- P2 서버 분리: 신규 server-service.js. 서버 프로세스를 창 대신 확장 호스트가 소유(Workbench 창을 닫아도 서버 유지). 서버 출력은 로그 파일로 보내고 이어 읽음 → 창 다시 로드 뒤 .vibe/orch/servers.json 으로 다시 붙음. server_guard.py 로그(Doc/e2e/logs/_server_<port>.log)도 표시. 상태 표시줄에 BE 8080 · FE 5173 상시 표시(포트 연결 + HTTP 응답, 5초 간격). workbench.js 의 startServerStream·stopServer·ensureServers·portOwnerInfo·killTree·PROTECTED_PROC 는 서비스 위임으로 교체.
+- P2 오케스트라 창: 신규 orchestra.js(화면) · orch-state.js(실행 상태 모음). 명령 vibeManager.openOrchestra · 사이드바 제목줄 아이콘 · 시작 시 배경 탭 자동 열기(설정 vibeManager.orch.autoOpen). 탭 = 상황판(서버·실행 중 체인과 단계·실행 주체·대기·잠금 파일·CPU·여유 메모리·TCP 연결 수) · BE Log · FE Log · 공통 기능(Server·Git·환경설정 버튼 + Task Log) · 사건.
+- 공통 기능 분리: quick.json 그룹 Server · Git · 환경설정에 "area": "common". 이 그룹의 화면 ID 없는 실행 항목(terminal·multi·server-stop·app·git-*·work-mode·task)은 어느 창에서 눌러도 오케스트라 창에서 실행. Workbench Log 탭의 FE Log · BE Log 버튼 = 오케스트라 창 해당 탭으로 이동(옆 상태 표시는 전 창 공통).
+- P3 감시기: 신규 orch-watch.js(Claude 호출 없음). R1 실행 실패 · R2 같은 오류 반복(같은 화면 2회·전 화면 3회) · R3 단계 지연(최근 10회 중앙값 2배) · R4 대기 10분 초과 · R5 로그 10분 무출력·종료 기록 없이 사라진 실행 · R6 서버 이상 · R7 Claude 비정상 종료 · R8 TCP 12,000 이상 · R9 죽은 잠금 · R10 CheckList 연속 2회 같은 FAIL·미검증 행 · R11 Claude 없이 끝난 체인에 오류 남음. 사건 = .vibe/orch/incidents/*.json. 기준값 = tools/Harness/harness.json orch 절(없으면 기본값). 새 사건 알림은 60초에 1회.
+- 설정 추가: vibeManager.orch.autoOpen(기본 true) · vibeManager.orch.stopServersOnExit(기본 false = 서버 유지).
+- 확인(실행 시각 17:03~17:08): node --check 7개 파일 · py_compile 3개 · 모의 vscode 로 workbench.js·extension.js 로드(저장소·설치 폴더) · 서버 서비스 시험 13건(시험 포트 5599: 기동 판정·로그 이어 읽기·다시 붙기·종료) · 감시기 규칙 시험 15건 · orch_event.py --selftest · 오케스트라 화면 브라우저 렌더(콘솔 오류 0) · 설치 폴더 10개 파일 cmp 일치. VS Code 실화면·실제 체인 실행·BE/FE 실기동은 미확인(창 다시 로드 필요). 플랜 7절 검증 1~6·11 미실행.
+- 주의: 설치 폴더 extension.js 는 종전 11-18 판이었음. 이번에 저장소 판을 복사하면서 11-19 10:5x 의 recheck.js·flow-panel.js 변경(미검증 해소 뒤 보완 전 CheckList 건수 숨김)도 함께 설치 폴더에 들어감.
+- 주의: 창을 다시 로드하는 순간 종전 판 Workbench 가 띄운 BE·FE 는 종전 코드(stopAll)로 종료됨. 다시 로드한 뒤 오케스트라 창 공통 기능 탭에서 BE·FE 를 기동하면 그때부터 창과 무관하게 유지됨.
+- 되돌리기: 저장소 workbench.js.bak_20261119_orch(P1 전)·_orchp2(P2 전) · extension.js.bak_20261119_orch · package.json.bak_20261119_orchp2 · quick.json.bak_20261119_orchp2 · build_vsix.py(목록 줄 1개) · tools/Harness/verify/run_verify.py.bak_20261119_orch · db_orphan_sessions.py.bak_20261119_orch · tools/E2E/runlock.js.bak_20261119_orch. 설치 폴더 = workbench.js·extension.js·flow-panel.js·package.json 의 .bak_20261119_orch. 신규 파일(orch-events.js · orch-state.js · orch-watch.js · server-service.js · orchestra.js · recheck.js(설치 폴더) · orch_event.py)은 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 steps.json) 환경설정 = 🧠 AI 검토 켜기/끄기 (2026-11-19 16:5x)
+- 사용자(11-19): "VM 환경설정에 AI 검토 켜고 끄는 항목 추가".
+- quick.json 환경설정 그룹에 '🧠 AI 검토 (켜기 / 끄기)'(kind task · S8.llmReview · 🧭 작업 모드 뒤). steps.json S8.llmReview = tools/Harness/verify/set_llm_review.py, 입력은 선택 목록(ON · OFF · STATUS).
+- 값 = tools/Harness/harness.json llmReview. 끄면 검사엔진 판정만 하고 지난 AI 검토 결과도 반입하지 않음. 모델은 워크벤치 모델(llmReviewModel 빈 값).
+- 확인: set_llm_review.py --selftest OK · ON/OFF 왕복 뒤 harness.json cmp 일치 · JSON 파싱 OK · steps.json 설치 폴더 cmp 일치. VS Code 화면 미확인. workbench.js 변경 없음.
+- 되돌리기: quick.json.bak_20261119_llmset · steps.json.bak_20261119_llmset.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 steps.json) CheckList AI 검토 연결 (2026-11-19 16:4x)
+- 사용자(11-19): "CheckList 의 각각의 단계별 판단을 할 때 필요하면 클로드코드를 활용".
+- quick.json 🧪 미검증 해소 프롬프트: 유형 'AI검토:' 행(판정 검토·사용자의견 처리·사실 추출 검토가 가린 엔진 보완 대상) 처리 절 추가. steps.json S8.checklistRun 제목에 AI 검토 표기.
+- Python 쪽(tools/Harness/verify llm_*.py · opinion_intake.py)은 Doc/verify/_ENGINE_MASTER.md 2026-11-19 16:4x 절. 켜고 끄기 = tools/Harness/harness.json llmReview(지금 false).
+- 확인: JSON 파싱 OK · steps.json 설치 폴더 cmp 일치. VS Code 화면·Flow 보드 표시 미확인. workbench.js 는 고치지 않음(환경설정 화면 항목 없음).
+- 되돌리기: quick.json.bak_20261119_llm · 설치 폴더 steps.json.bak_20261119_llm.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Flow 단계 카드 = 제목 뒤 공백 대신 상세 상태 · 체인 제목 괄호 설명 제거 (2026-11-19 14:1x)
+- 사용자(11-19): "CheckList 수행 뒤에 공백이 있고 뒤쪽 상세 STATUS 는 안 보임 · 공백을 유지한 이유?".
+- 원인: .step .sttl = flex:1(남는 폭 전부) · .slast = 최대 34%(Flow 44%) → 제목이 짧아져도 공백이 남고 상태는 잘림. 정해 둔 이유 없음.
+- .sttl = 글자만큼(최대 55%) · .slast = 남는 폭 전부. 보드 맨 위 체인 제목도 shortT(괄호 설명 제거 · 전체 = 툴팁).
+- 확인: node --check · Chrome 캡처(제목 바로 뒤에 상태 전체 표시). VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_gap.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Flow 보드 이름 = 괄호 설명 빼고 표시 (2026-11-19 11:2x)
+- 사용자(11-19): "4/8 하위의 1/80 같은 하위 step 이 잘려서 안 보임 · CheckList 수행 (…) 과 하위 작업의 ( ) 설명 문장 삭제".
+- 웹뷰 shortT: 괄호 설명 제거('(1/2)' 처럼 숫자/숫자 괄호는 남김). 단계 카드 제목·하위 단계·대분류(단계 i/N) 이름·세부 이름·진행 줄에 적용. 전체 문구는 카드 제목 툴팁. quick.json·FULLRUN.md 의 원래 제목은 그대로.
+- 예: '1. CheckList 수행 (E2E 4종 포함 · …)' → '1. CheckList 수행' · 'CheckList 전체(run_verify) (1/2)' → 'CheckList 전체 (1/2)' · 'E2E 검증엔진(@verify·@trace·@snap)' → 'E2E 검증엔진'.
+- 확인: node --check · 웹뷰 스크립트 문법 OK · 실제 제목 5개 변환 시험. VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_short.
+
 ## (판 번호 없음, VM 저장소 + 설치 폴더) 프롬프트창 새 창·원격 아이콘 = '/' 명령 메뉴 안으로 (2026-11-19 11:1x)
 - 사용자(11-19): "프롬프트 창의 새창, 리모트 아이콘은 명령 아이콘 하위에".
 - 오른쪽 아이콘 2개(#newWin · #remote) 제거 → '/' 명령 메뉴(#pmenu)에 '새 창' · '원격' 항목(같은 id · 기존 동작 그대로 · 누르면 메뉴 닫힘). 명령 버튼 툴팁에 두 항목 추가.

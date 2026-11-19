@@ -1,0 +1,27 @@
+{
+  "id": "20261119182142_INC",
+  "at": "2026-11-19T18:21:42+09:00",
+  "ms": 1795080102178,
+  "source": "incident",
+  "status": "applied",
+  "sig": "rn 대기 지연 판정 전에 대기 프로세스 생존 확인",
+  "title": "R4 대기 지연 판정 전에 대기 프로세스 생존 확인",
+  "evidence": "tools/VibeManager/orch-watch.js:146 이 snap.waits 로 R4 를 올리고 153행에서 state.sweep() 실행. orch-state.js:111 snapshot() 의 waits 에 pid 생존 확인 없음. 사건 20261119_181812_R4_DMF0042 의 대기 PID 28056 은 18:19:22 조회에서 없고 wait.end 없음",
+  "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "변경 전: tick() 이 snapshot() → R4 판정 → sweep() 순서. 변경 후: tick() 첫 단계에서 sweep() 실행 후 snapshot() 을 받거나, snapshot() 의 waits 를 pidAlive(v.pid) 인 항목만 반환. sweep 이 돌려준 wait 항목은 지금처럼 R5 로 올리지 않음",
+  "verify": "t_orch_watch.js 에 없는 PID 의 wait.start(t0 = 11분 전) 를 넣고 tick() 뒤 R4 가 0건인지 확인하는 시험 추가. 살아 있는 PID 의 wait 는 R4 1건 유지 확인. node tools/VibeManager/test/t_orch_watch.js 실행",
+  "rollback": "orch-watch.js, orch-state.js 를 수정 전 백업본으로 복원",
+  "incident": "20261119_181812_R4_DMF0042",
+  "screen": "DMF0042",
+  "history": [
+    {
+      "at": "2026-11-19T18:27:56+09:00",
+      "by": "개발 세션",
+      "what": "같은 내용을 직접 반영(orch-watch.js tick 첫 단계 sweep · orch-state.js snapshot 대기 목록 생존 확인) · 시험 t_orch_state_old.js 4건 통과. 창 다시 로드 뒤 적용"
+    }
+  ]
+}

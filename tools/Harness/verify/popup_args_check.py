@@ -315,9 +315,16 @@ def asis_popups(aid):
             if cm:
                 ln = src_lines(a['file'])
                 txt = ln[int(a['line']) - 1] if 0 < int(a['line']) <= len(ln) else ''
-                vm = re.search(r'(\w+)\s*=\s*new\s+' + re.escape(cm.group(1).split('.')[-1]), txt)
+                # T371(2026-11-19 SCP0005): 'X popup = new GSCM.SCM.PopUp.UIL.X()' 처럼 이름공간이 붙은 new 도 변수 이름을 찾는다(종전엔 '_GSCM…' 로 남아 popup.ROUTE_ID 대입이 인자에서 빠짐)
+                vm = re.search(r'(\w+)\s*=\s*new\s+(?:\w+\.)*' + re.escape(cm.group(1).split('.')[-1]), txt)
                 var_cls[vm.group(1) if vm else '_' + cm.group(1)] = cm.group(1).split('.')[-1]
         locals_ = [a for a in rows if a['kind'] == 'LOCAL']
+        # T371: 팝업 객체를 지역 변수 선언 문장(LOCAL 'X pop = new X();')으로 만들고 pop.Form_Load(…)·pop.ShowDialog() 로 여는 경우 — 종전엔 POPUP 행의 new 만 보아
+        #   Form_Load 인자가 통째로 빠졌다(SCP0005 btnFromSrch·btnToSrch·셀 더블클릭 도시 팝업 cs:343·361·1137)
+        for lo in locals_:
+            lm = re.match(r'^(?:[\w.<>]+\s+)?(\w+)\s*=\s*new\s+((?:\w+\.)*(\w+))\s*\(', lo['target'])
+            if lm and lm.group(1) not in var_cls and any(re.match(r'^' + re.escape(lm.group(1)) + r'\.(ShowDialog|Show|Form_Load)$', p['target']) for p in pops):
+                var_cls[lm.group(1)] = lm.group(3)
 
         def resolve(arg, line):
             arg = arg.strip()

@@ -100,7 +100,7 @@ type Cond = { et?: string; name?: string; popup?: boolean; excluded?: string[]; 
   m4?: { handler: string; trigger: string; targets: string[]; popup: string; newRow?: boolean }[];
   d3None?: boolean; e4None?: boolean; d5Src?: string; popupSheet?: string; trigger?: string[];
   siteSamples?: Record<string, string[]>; ctlType?: string; allFlag?: boolean; metaWidth?: Record<string, string>; metaWidthBySheet?: Record<string, Record<string, string>>;
-  src?: string[]; noAssign?: boolean; clearOnly?: boolean; viaPopup?: boolean; popMap?: Record<string, string>; asisCombo?: boolean; mergeSrc?: string; asisCellSrc?: string; d4?: string[]; d4expr?: string[]; d5?: string; asisCols?: string[]; callProc?: { menu: string; sheet: string; btn: string }[]; truncated?: boolean };
+  src?: string[]; noAssign?: boolean; selfAssign?: string; valueOnly?: boolean; clearOnly?: boolean; viaPopup?: boolean; popMap?: Record<string, string>; asisCombo?: boolean; mergeSrc?: string; asisCellSrc?: string; d4?: string[]; d4expr?: string[]; d5?: string; asisCols?: string[]; callProc?: { menu: string; sheet: string; btn: string }[]; truncated?: boolean };
 const condOf = (r: Record<string, string>): Cond => { try { return JSON.parse(r.condition || '{}'); } catch { return {}; } };
 const nrm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
 const LABEL_ALIASES = loadLabelAliases(ID);  // tools/Harness/rules/label_alias.csv — 이 화면 scope 의 명칭 변경 룰
@@ -523,7 +523,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const hasInsert = await nscm.subButtonVisible('Insert');
     let insDlg = ''; if (hasInsert) { await nscm.clickInsert({ timeout: 10_000, noWaitAfter: true }).catch(() => undefined); await p.waitForTimeout(1_000); insDlg = (await nscm.alertText().catch(() => '')).replace(/[ ]+/g, ' ').slice(0, 80); await nscm.clearDialogs(); }
     const nr = hasInsert ? await probe.findRow(p, 'new') : null;
-    if (!hasInsert) for (const { x } of cols.filter(t => t.x.rule_id === 'D4')) put(x.row_id, '판정필요', 'Insert 버튼 비노출 — 신규행 기본값(D4) 측정 대상 없음');
+    // 2026-11-19 SSP0014 미검증 해소(T354): TO-BE Insert 가 없고 AS-IS Insert 도 실행 문장이 없으면(InsertButton 본문 주석뿐 — SSP0014 cs:254~257) 신규행 자체가 없는 화면 = D4 NA(근거 actions.csv).
+    //   AS-IS 에 Insert 실행 문장이 있으면 종전처럼 판정필요(TO-BE 가 Insert 를 뺀 것인지 사람 확인)
+    const insNoopD4 = !hasInsert ? (() => { const ep = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), ap = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'); if (!fs.existsSync(ep) || !fs.existsSync(ap)) return { noop: false, ref: '' }; return asisInsertNoop(parseCsv(fs.readFileSync(ap, 'utf8')), parseCsv(fs.readFileSync(ep, 'utf8'))); })() : { noop: false, ref: '' };
+    if (!hasInsert) for (const { x } of cols.filter(t => t.x.rule_id === 'D4')) put(x.row_id, insNoopD4.noop ? 'NA' : '판정필요', insNoopD4.noop ? `Insert 버튼 비노출 · AS-IS Insert 도 무동작(${insNoopD4.ref}) — 신규행이 없는 화면이라 신규행 기본값(D4) 대상 없음` : 'Insert 버튼 비노출 — 신규행 기본값(D4) 측정 대상 없음');
     else if (!nr && !insDlg && (() => { const insNoop = (() => { const ep = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), ap = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'); if (!fs.existsSync(ep) || !fs.existsSync(ap)) return { noop: false, ref: '' }; return asisInsertNoop(parseCsv(fs.readFileSync(ap, 'utf8')), parseCsv(fs.readFileSync(ep, 'utf8'))); })(); return insNoop.noop; })()) for (const { x } of cols.filter(t => ['D4', 'E1', 'C3', 'C2', 'C6', 'H2'].includes(t.x.rule_id))) put(x.row_id, 'NA', 'Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상');
     else if (!nr) { const ig = (() => { try { return asisInsertGuard(parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv'), 'utf8').replace(/^﻿/, ''))); } catch { return { guarded: false, guard: '', ref: '' }; } })(); /* T190 — AS-IS Insert 전제 guard 를 못 맞춘 신규행 없음 = 측정 실패 */ for (const { x } of cols.filter(t => ['D4', 'E1', 'C3', 'C2', 'C6', 'H2'].includes(t.x.rule_id))) put(x.row_id, insDlg || ig.guarded ? 'ERROR' : 'FAIL', insDlg ? `[측정 경로 없음] Insert 가 대화상자를 띄움(신규 행 직접 생성 아님) '${insDlg}'` : ig.guarded ? `[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(${ig.ref} · ${ig.guard}) 를 검사기가 맞추지 못함 · 신규행 검사 미측정` : '조회 후 Insert 했으나 신규행 없음'); }
     if (hasInsert && !nr) return;
@@ -593,6 +596,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const tgt = c.name || ''; const srcs = (c.src || []).filter(s => s !== tgt);
       if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일·후보 설정·읽기) — 연쇄 채움 대상 아님(D1/D3/H2·C2 에서 판정)${(c.raws || []).length ? ` · AS-IS ${(c.raws || []).slice(0, 3).map(s => s.slice(0, 90)).join(' | ')}` : ''}`); continue; }
       if (c.viaPopup) { put(x.row_id, '판정필요', `${tgt}: 원천 ${srcs.join('/')} 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)`); continue; }
+      // T356: AS-IS 대입 문장이 전부 자기 칸 대입(팝업 선택값 · 조회 후 표시 변환) — 다른 칸에서 이어지는 연쇄 아님(근거 = 대입 문장 원문)
+      if (!srcs.length && c.selfAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 값 대입이 자기 칸 대입뿐(${c.selfAssign === 'popup' ? '자기 칸 더블클릭 팝업 선택값 — 반영은 M4·G5 에서 판정' : c.selfAssign === 'transform' ? '조회 후 자기 값 표시 변환 — 표시값은 A2·H5 에서 판정' : c.selfAssign === 'reject' ? '자기 칸 입력 거부 — 메시지 뒤 고정 값으로 되돌림 · 메시지는 E4 에서 판정(T367)' : c.selfAssign}) — 연쇄 채움 대상 아님 · AS-IS ${(c.raws || []).slice(0, 2).map(s => s.slice(0, 120)).join(' | ')}`); continue; }
       if (!srcs.length) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 컬럼 해석 불가 — AS-IS ${(c.raws || [])[0] || ''}`); continue; }
       const tried: string[] = []; let ok = false; let blocked = ''; let clearFail = false;
       for (const src of srcs) {
@@ -615,6 +620,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const tgt = c.name || ''; const src = (c.src || []).find(s => s !== tgt) || '';
       // 2026-11-17 SCP0111: AS-IS 가 이 컬럼의 후보·값을 쓰는 문장이 없으면(읽기만) 후보 재구성 대상 아님(mapping_trace noAssign · 근거 원문 raws)
       if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 이 컬럼을 읽기만 함(후보·값을 쓰는 문장 없음) — 후보 재구성 대상 아님 · AS-IS ${(c.raws || [])[0]?.slice(0, 120) || ''}`); continue; }
+      // T368(2026-11-19 SCP0005): AS-IS 가 이 칸에 값만 대입하고 후보 설정 문장이 없으면 후보 재구성 규칙 아님(값 채움은 C3 행) — 근거 = mapping_trace valueOnly 대입 문장 원문
+      if (c.valueOnly) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입뿐(후보 설정 문장 없음) — 후보 재구성 대상 아님(값 채움은 C3) · AS-IS ${(c.raws || []).slice(0, 2).map(s => s.slice(0, 120)).join(' | ')}`); continue; }
       if (!src) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 해석 불가 — AS-IS ${(c.raws || [])[0] || ''}`); continue; }
       if (!(await probe.editable(p, cRow.row, src))) { put(x.row_id, '판정필요', `원천 ${src} ${crNm} 편집 불가`); continue; }
       if ((await probe.candidates(p, cRow.row, tgt)) == null) { put(x.row_id, '판정필요', `${tgt} 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)`); continue; }
@@ -1483,8 +1490,15 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const firstTxt = o.texts[0] || ''; const allChecked = await p.evaluate(() => { const c = [...document.querySelectorAll('.MuiAutocomplete-popper li[role="option"] input[type="checkbox"]')] as HTMLInputElement[]; return c.length > 0 && c.every(i => i.checked); });
         if (allChecked && /select all|^all$|전체/i.test(firstTxt)) { await o.lis.first().click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); }
         const search = p.locator('.MuiAutocomplete-popper [data-dropdown-search]'); if (target && await search.isVisible().catch(() => false)) { await search.fill(target); await p.waitForTimeout(500); }
-        const texts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim());
+        let texts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim());
         let idx = target ? texts.findIndex(t => t === target || t.split(/\s+/)[0] === target || t.startsWith(target + ' ')) : -1;
+        // 2026-11-19 SSP0014 미검증 해소(T355): 결과에서 가장 드문 값이 후보에 없으면(비활성 코드 CN003256_40-A — A2 행) 검색창 거름으로 목록이 비어 '후보 1개' ERROR(2행).
+        //   검색어를 지우고 결과 값을 드문 순으로 최대 12개 더 시도 → 그래도 없으면 거르지 않은 전체 목록에서 고른다(아래 fallback)
+        if (idx < 0 && target && await search.isVisible().catch(() => false)) {
+          const tries = [...freq.entries()].sort((a, b2) => a[1] - b2[1]).map(e => e[0]).filter(v => v !== target).slice(0, 12);
+          for (const v of tries) { await search.fill(v); await p.waitForTimeout(400); const ts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); const k = ts.findIndex(t => t === v || t.split(/\s+/)[0] === v || t.startsWith(v + ' ')); if (k >= 0) { texts = ts; idx = k; break; } }
+          if (idx < 0) { await search.fill(''); await p.waitForTimeout(400); texts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); }
+        }
         const fallback = idx < 0;  // 결과에 있는 값을 후보에서 못 찾아 아무 후보를 고름 — 0행이면 '데이터 없음' 일 뿐 반영 실패의 근거가 아니다(아래 ERROR)
         if (idx < 0) idx = texts.findIndex((t, i) => i > 0 && t && !/select all|^all$/i.test(t));
         if (idx < 0) { await p.keyboard.press('Escape'); const r0: Res['result'] = texts.length <= 1 ? 'ERROR' : 'FAIL'; put(g.rid, r0, `[멀티선택 ${g.labels[0]}] 선택할 옵션 없음(후보 ${texts.length})${texts.length <= 1 ? ' — 후보가 1개 이하라 선택 변경 검사 불가(콤보 원천 오류·데이터 없음: B1/B4·DB-SYN 참조)' : ''}`); if (g.g2) put(g.g2, r0, `[멀티선택 ${g.labels[0]}] 후보 없음${texts.length <= 1 ? ' — 후보가 1개 이하라 ALL 검사 불가' : ''}`); continue; }

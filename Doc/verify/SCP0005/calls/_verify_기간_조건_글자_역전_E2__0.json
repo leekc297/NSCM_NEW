@@ -7,8 +7,21 @@
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
   "rows": 89432,
-  "dur": 1881,
-  "at": "2026-11-13T21:40:55.734Z",
+  "dur": 1546,
+  "at": "2026-11-19T06:28:12.175Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89432,
+  "dur": 1642,
+  "at": "2026-11-19T06:28:17.707Z",
   "user": "minyonglee1",
   "test": "기간 조건 글자·역전(E2)"
  }

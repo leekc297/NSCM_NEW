@@ -43,8 +43,15 @@ if os.path.isdir(PKG_DIR):
             tobe_all.add(f'{pkg.group(1).upper()}.{m.group(1).upper()}')
 
 def norm(s): return re.sub(r'[^A-Z0-9]', '', s.upper())
+# 2026-11-19 SSP0014 미검증 해소(T358): 이름이 다른 짝(SSP0014_GET_SHIPMENT_MODEL_PIC → P_SSP0014_GET_MODEL_PIC)은 이름 비교로 못 찾아 '미매칭' → A1·A6 미검증.
+#   차등 검증 짝 원장 tools/Harness/rules/sp_pair.csv(명세·수동 지정 근거)를 먼저 본다 · kind 도 그 원장 값 우선
+SP_PAIR = {}
+for _r in rcsv(os.path.join(os.path.dirname(HERE), 'Harness', 'rules', 'sp_pair.csv')):
+    if _r.get('tobe_proc'): SP_PAIR[(_r.get('menu_id', '').upper(), _r.get('asis_sp', '').upper())] = _r
 def match_tobe(sp, menu):
-    """As-is SP 이름 → To-Be PKG.PROC 후보: 같은 메뉴 등록분 우선, 이름 토큰 동일(P_ 접두 제거) > 포함"""
+    """As-is SP 이름 → To-Be PKG.PROC 후보: sp_pair.csv 짝 > 같은 메뉴 등록분 우선, 이름 토큰 동일(P_ 접두 제거) > 포함"""
+    pr = SP_PAIR.get((menu.upper(), sp.upper()))
+    if pr: return pr['tobe_proc'], 'sp_pair'
     n = norm(sp)
     pool = list(tobe_by_menu.get(menu, [])) + list(tobe_all)
     for p in pool:
@@ -74,7 +81,9 @@ for sc in screens:
         pj = {name: DEFAULTS.get(name.lower(), '') for _, name, _ in ps}
         tobe, how = match_tobe(sp, sc)
         unresolved = [k for k, v in pj.items() if v == '']
-        kind = 'SAVE' if re.search(r'SAVE|INS|UPD|DEL|UPLOAD|SET_|CREATE|COPY|CONFIRM', sp, re.I) else 'GET'
+        # T358: 이름 안 글자로 찾던 탓에 'MODEL' 의 'DEL' 을 저장으로 봤다(SSP0014_GET_SHIPMENT_MODEL_PIC kind=SAVE) → '_' 로 나뉜 낱말 단위 · sp_pair kind 우선
+        _pk = (SP_PAIR.get((sc.upper(), sp.upper())) or {}).get('kind', '')
+        kind = _pk if _pk in ('GET', 'SAVE') else 'SAVE' if re.search(r'(?:^|_)(SAVE|INS|INSERT|UPD|UPDATE|DEL|DELETE|UPLOAD|SET|CREATE|COPY|CONFIRM)(?:_|$)', sp, re.I) else 'GET'
         rows.append({'screen': sc, 'case_id': cid, 'kind': kind, 'asis_sp': sp, 'tobe_proc': tobe, 'match': how,
                      'params': json.dumps(pj, ensure_ascii=False), 'manual': '',
                      'note': ('' if not unresolved else '파라미터 값 없음: ' + ','.join(unresolved)) + ('' if tobe else ' / To-Be proc 미매칭(proc_meta.csv 필요 또는 수동 지정)')})

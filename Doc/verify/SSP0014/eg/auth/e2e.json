@@ -598,7 +598,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40",
-  "actual": "7669행 Division 40",
+  "actual": "7671행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "",
   "mctx": {
@@ -614,7 +614,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40)",
-  "actual": "7669행 · Division 40",
+  "actual": "7671행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "건수 = 원장 대조는 facts_auth_db 후처리",
   "mctx": {
@@ -774,7 +774,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40",
-  "actual": "7669행 Division 40",
+  "actual": "7671행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "",
   "mctx": {
@@ -790,7 +790,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40)",
-  "actual": "7669행 · Division 40",
+  "actual": "7671행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "건수 = 원장 대조는 facts_auth_db 후처리",
   "mctx": {
@@ -1158,7 +1158,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "행 Division ⊆ 권한 40,81,82,EE",
-  "actual": "7669행 Division 40",
+  "actual": "7671행 Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "",
   "mctx": {
@@ -1174,7 +1174,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "조회 결과 = 권한 Div 범위(40,81,82,EE)",
-  "actual": "7669행 · Division 40",
+  "actual": "7671행 · Division 40",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
   "note": "건수 = 원장 대조는 facts_auth_db 후처리",
   "mctx": {
@@ -1732,9 +1732,9 @@
   "screen": "SSP0014",
   "target": "SSP0014",
   "ctx": "계정쌍",
-  "result": "ERROR",
+  "result": "NA",
   "expected": "TITLESET_USER 보유·미보유 계정쌍",
-  "actual": "명부에 쌍 없음(보유 N · 미보유 Y)",
+  "actual": "이 화면 칸 설정 없음: AS-IS SCM_MST_TITLESET_USER PROGRAM_ID=SSP0014 0행 · TO-BE 0행 · 화면 PKG 참조 0곳",
   "asis": "SCM_MST_TITLESET_USER",
   "note": "",
   "mctx": {
@@ -1763,12 +1763,12 @@
   "eg": "EG380",
   "screen": "SSP0014",
   "target": "무권한 첫 화면",
-  "ctx": "실계정 없음",
-  "result": "ERROR",
+  "ctx": "GUEST/-/GUEST",
+  "result": "FAIL",
   "expected": "Auth Request(권한 신청) 화면 메인 — DM-247",
-  "actual": "명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정)",
+  "actual": "URL /view/home · 안내창 'You are not authorized to NSCM. Apply for permission.' · 안내창 확인 뒤 URL /view/home · 본문 SCM 공급망관리시스템 Supply Chain Management system Demand Authority KOR G Guest Home Close others",
   "asis": "DM-247·GAP-475",
-  "note": "메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요",
+  "note": "명부 GUEST 전용 계정 1",
   "mctx": {
    "calls": 0,
    "rows": -1,

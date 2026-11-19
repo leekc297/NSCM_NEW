@@ -1,0 +1,33 @@
+{
+ "kind": "헤더",
+ "scope": "Shipment Model PIC",
+ "columns": [
+  "Div",
+  "Operation Group",
+  "From Site",
+  "Model",
+  "Nick Name",
+  "User ID",
+  "User Name",
+  "Part Leader",
+  "Part Leader Name",
+  "Team Leader",
+  "Team Leader Name",
+  "Mail User1",
+  "Mail User2",
+  "Mail User3",
+  "Mail User4",
+  "Mail User5",
+  "Active",
+  "Created By",
+  "Creation Date",
+  "Last Updated By",
+  "Last Update Date"
+ ],
+ "meta_hidden": [],
+ "headerSpec": null,
+ "dynamicHeader": false,
+ "src": "plan.json expectedCols[Shipment Model PIC][40](SHEET_COLUMNS)",
+ "personalized": null,
+ "note": "동적 기간 컬럼은 {YM}/{YMD}/{W} 토큰 · TO-BE 추가 컬럼(이름 컬럼 등)은 extra 로 보고(결함 아님 · 사람 확인)"
+}

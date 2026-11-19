@@ -1,0 +1,200 @@
+{
+  "_doc": "E2E·정합검증 테스트 사용자 명부 — 사용자가 직접 관리(2026-10-20 지정). 영역별 목록: areas.DM(DM UI·공통 UI) · areas.SCP · areas.SSP(2026-10-27 사내오라클 추출 — tools/E2E/extract-role-users.py). 명부는 필요한 시점에 USER_ID 를 꺼내 쓰는 풀이다: 기본 테스트 = 화면당 ADMIN/PLANNER 1계정(single), 권한×Division 전수는 사용자가 화면을 지정할 때만(screens[ID].mode=division). 비밀번호 없음(/user/login userId). 기대 권한은 사내 DB 메타(user_group_user·user_group_menu·btn_auth)에서 계산 — 여기 역할은 표기·Division 배정 용도",
+  "updated": "2026-10-27",
+  "guestAccount": "Guest",
+  "guestAccountNote": "2026-11-18 SCP0096 미검증(EG380) 해소 — 전 화면 공용 GUEST 전용 계정(사내 ZIOUI1 SCM_ADM_USER_GR_MPG_M 사용 그룹 GUEST 1개 · BE 로그인 200 확인 22:58). 무권한 첫 화면 검사만 쓰고 계정 순회에는 넣지 않음",
+  "areas": {
+    "DM": {
+      "_doc": "DM UI · 공통 UI 사용자 목록 — 2026-10-20 등록분 그대로(2026-10-27 사용자 지시로 영역 분리). SCP·SSP 화면은 areas.SCP / areas.SSP 를 쓴다",
+      "appliesTo": "SCP·SSP 외 전 화면(DMF·COM·SYS·SCM·SDM 등 DM UI·공통 UI)",
+      "divisions": {
+        "40": {
+          "DM Admin": "hongjae.kim",
+          "DM Planner": "eunah.koo",
+          "DM Viewer": "yooah.chung",
+          "SCP Planner": "dodae"
+        },
+        "81": {
+          "DM Admin": "jiwon.park",
+          "DM Planner": "bpark416",
+          "DM Planner (W/S)": "jaehyeok",
+          "DM Viewer": "park6151",
+          "SCP Planner": "bottle"
+        },
+        "82": {
+          "DM Admin": "wonqthanq",
+          "DM Planner": "ys_cho",
+          "DM Planner (W/S)": "miyeong.lee",
+          "DM Viewer": "yeonjusung",
+          "SCP Planner": "coeogus"
+        }
+      },
+      "admins": {
+        "DM ADMIN": [
+          "minyonglee1",
+          "k0101"
+        ],
+        "SCP ADMIN": [
+          "minyonglee1",
+          "jaeuk.shin"
+        ],
+        "SSP ADMIN": [
+          "minyonglee1",
+          "attackgo"
+        ]
+      },
+      "adminsNote": "각 ADMIN 행의 계정은 SYSTEM ADMIN + 해당 영역 ADMIN 권한자. Division 제한 없이 40/81/82 전부로 돌린다"
+    },
+    "SCP": {
+      "_doc": "SCP UI 권한 × Division 대표 사용자 — 사내오라클 추출(20261027, tools/E2E/extract-role-users.py · 근거 Doc/e2e/role_users/role_users_20261027.md). 기본 테스트 1계정, 전수는 화면 지정 시만",
+      "appliesTo": "SCP*",
+      "roles": [
+        "SCP Planner",
+        "SCP Tester",
+        "SCM Viewer",
+        "ADMIN",
+        "SCM PI Admin"
+      ],
+      "extracted": "2026-10-27 13:31:56 zioui1",
+      "divisions": {
+        "40": {
+          "SCP Planner": "dana.robot",
+          "SCP Tester": "lucky-alex",
+          "SCM Viewer": "zhangjiali",
+          "ADMIN": "jooyong026",
+          "SCM PI Admin": "jinseon_ahn"
+        },
+        "81": {
+          "SCP Planner": "jsh96",
+          "SCP Tester": "lucky-alex",
+          "SCM Viewer": "popiel",
+          "ADMIN": "jooyong026",
+          "SCM PI Admin": "wangyucnb"
+        },
+        "82": {
+          "SCP Planner": "jsh96",
+          "SCP Tester": "lucky-alex",
+          "SCM Viewer": "kang_huichan",
+          "ADMIN": "jooyong026",
+          "SCM PI Admin": "wangyucnb"
+        }
+      },
+      "groupDisabled": []
+    },
+    "SSP": {
+      "_doc": "SSP UI 권한 × Division 대표 사용자 — 사내오라클 추출(20261027, tools/E2E/extract-role-users.py · 근거 Doc/e2e/role_users/role_users_20261027.md). 기본 테스트 1계정, 전수는 화면 지정 시만",
+      "appliesTo": "SSP*",
+      "roles": [
+        "SSP ADMIN",
+        "SSP Planner",
+        "SSP Viewer"
+      ],
+      "extracted": "2026-10-27 13:31:56 zioui1",
+      "divisions": {
+        "40": {
+          "SSP ADMIN": "",
+          "SSP Planner": "jinhuannj",
+          "SSP Viewer": "kijung03.kim"
+        },
+        "81": {
+          "SSP ADMIN": "",
+          "SSP Planner": "iqromoh",
+          "SSP Viewer": "caizedan"
+        },
+        "82": {
+          "SSP ADMIN": "",
+          "SSP Planner": "hoseoknam",
+          "SSP Viewer": "caizedan"
+        }
+      },
+      "groupDisabled": [
+        "SSP ADMIN"
+      ]
+    }
+  },
+  "names": {
+    "hongjae.kim": "김홍재 선임",
+    "eunah.koo": "구은아 선임",
+    "yooah.chung": "정유아 사원",
+    "dodae": "도대현 책임",
+    "jiwon.park": "박지원 선임",
+    "bpark416": "박병창 선임",
+    "jaehyeok": "유재혁 선임",
+    "park6151": "박성운 사원",
+    "bottle": "김재병 선임",
+    "wonqthanq": "정원규 선임",
+    "ys_cho": "조윤성 사원",
+    "miyeong.lee": "이미영 선임",
+    "yeonjusung": "성연주 선임",
+    "coeogus": "채대현 책임",
+    "minyonglee1": "이민용",
+    "k0101": "",
+    "jaeuk.shin": "",
+    "attackgo": "",
+    "dana.robot": "Dana",
+    "lucky-alex": "박현철",
+    "zhangjiali": "장가력",
+    "jooyong026": "강주용",
+    "jinseon_ahn": "안진선",
+    "jsh96": "정승환",
+    "popiel": "KRZYSZTOF POPIEL",
+    "wangyucnb": "왕우",
+    "kang_huichan": "강희찬",
+    "jinhuannj": "근환",
+    "kijung03.kim": "김기정",
+    "iqromoh": "Iqro Mohammad",
+    "caizedan": "ZeDan Cai",
+    "hoseoknam": "Hoseok Nam"
+  },
+  "screens": {
+    "_doc": "화면별 테스트 모드 — single(기본: 영역 ADMIN 1명, 없으면 PLANNER 1명) | admin(영역 ADMIN + 권한 없는 사용자, 마스터 화면) | division(Division·권한 별 역할 계정). admin·division 은 사용자가 화면을 지정할 때만 — 실행 시 --mode 로 지정하면 여기 저장된다. 없는 화면은 single(2026-10-27 사용자 지시: 명부는 필요한 시점에 USER_ID 를 쓰기 위한 풀이지 모든 화면이 모든 계정을 쓰는 것이 아님)",
+    "SCP0096": {
+      "mode": "admin",
+      "note": "마스터 화면(2026-10-20 사용자 지정) — Division 별 사용자 불필요",
+      "updated": "2026-11-19"
+    },
+    "SCP0100": {
+      "mode": "admin",
+      "updated": "2026-10-21"
+    },
+    "SCP0122": {
+      "mode": "admin",
+      "updated": "2026-10-22"
+    },
+    "SCP0111": {
+      "conds": {
+        "Plan Date": "20260907"
+      },
+      "condsNote": "사용자 지정 2026-10-31 — Plan Date 20260907 은 이번 실행(v21)만 한정(사용자: 앞으로는 다른 일자도 데이터 있을 예정). condsValidUntil 이 지나면 무시 → 기본 조건으로 조회",
+      "updated": "2026-11-19",
+      "condsValidUntil": "2026-10-31T12:00:00+09:00",
+      "extra": [
+        "lucky-alex"
+      ],
+      "extraNote": "2026-11-17 사용자 지정 — 권한별 검사(J3 등) 비관리자 계정",
+      "accounts": {
+        "SYSTEM ADMIN": "minyonglee1",
+        "SCM PI Admin": "dwhong1012",
+        "SCP Planner": "bottle"
+      },
+      "accountsNote": "2026-11-18 사용자 지정 — 권한 검사(eg-auth) 계정을 영역 명부 대신 이 3개로 확인",
+      "mode": "admin"
+    },
+    "SCP0005": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    },
+    "SSP0014": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    },
+    "SCP0028": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    },
+    "SSP0005": {
+      "mode": "admin",
+      "updated": "2026-11-19"
+    }
+  }
+}

@@ -7,8 +7,8 @@
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
   "rows": 8613,
-  "dur": 377,
-  "at": "2026-11-14T11:42:26.988Z",
+  "dur": 401,
+  "at": "2026-11-19T05:33:17.535Z",
   "user": "minyonglee1",
   "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
  },
@@ -19,9 +19,9 @@
   "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
   "status": 200,
-  "rows": 7670,
-  "dur": 499,
-  "at": "2026-11-14T11:42:28.303Z",
+  "rows": 7672,
+  "dur": 487,
+  "at": "2026-11-19T05:33:20.882Z",
   "user": "minyonglee1",
   "test": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음"
  }

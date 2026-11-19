@@ -1,0 +1,33 @@
+{
+  "id": "20261119_183054_R7_DMF0042",
+  "at": "2026-11-19T18:30:54+09:00",
+  "ms": 1795080654005,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1) — 응답 중 종료",
+  "screen": "DMF0042",
+  "sig": "R7|응답 중 종료",
+  "count": 1,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-19T18-29-23_claude_orch.log",
+    "label": "R4 대기 지연 — DMF0042 dbwin 29분째",
+    "source": "orch",
+    "cls": "응답 중 종료"
+  },
+  "status": "closed",
+  "actions": [
+    {
+      "at": "2026-11-19T18:31:01+09:00",
+      "by": "오케스트라",
+      "what": "Claude 종료 분류 응답 중 종료 — stderr 와 로그(.vibe\\logs\\2026-11-19T18-29-23_claude_orch.log) 확인",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-19T18:40:26+09:00",
+      "by": "사용자",
+      "what": "닫음"
+    }
+  ]
+}

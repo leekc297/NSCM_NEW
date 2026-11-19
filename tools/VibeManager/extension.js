@@ -686,6 +686,10 @@ function activate(context) {
     vscode.commands.registerCommand('vibeManager.openDashboard', openDashboard),
     vscode.commands.registerCommand('vibeManager.openWorkbench', () => { workbench.open(wbApi()); }),
     vscode.commands.registerCommand('vibeManager.openWorkbenchNew', () => { workbench.open(wbApi(), { fresh: true }); }),
+    // 2026-11-19 VMO P2: VMO 창(기능 · BE/FE Log · 상황판). tab = board | belog | felog | task
+    // 2026-11-19 VMO P8: 업무 작업창(업무 1개 × 화면 여러 개 일괄 실행). 여러 개 열 수 있다
+    vscode.commands.registerCommand('vibeManager.openJobs', () => { try { require('./jobs').open(wbApi()); } catch (e) { vscode.window.showErrorMessage(`Vibe_Manager 업무 작업창을 열 수 없음: ${e.message}`); } }),
+    vscode.commands.registerCommand('vibeManager.openOrchestra', tab => { workbench.openOrchestra(wbApi(), { tab: typeof tab === 'string' ? tab : '' }); }),
     vscode.commands.registerCommand('vibeManager.openFlow', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (workbench.openFlowTab()) return; return flowPanel.open({ paths, runTaskById: (tid, preset) => runTask(findTask(tid), preset), openPath }); }),
     vscode.commands.registerCommand('vibeManager.openTaskHistory', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); workbench.showTab('thist'); }),
     vscode.commands.registerCommand('vibeManager.openHistory', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (workbench.showTab('hist')) return; return history.open({ paths, openPath }); }),
@@ -722,6 +726,40 @@ function activate(context) {
     const auto = cfg().get('autoOpenWorkbench');
     if (auto !== false) setTimeout(() => { vscode.commands.executeCommand('vibeManager.openWorkbench'); }, 300);
   } catch { }
+  // 2026-11-19 VMO P2: 서버 서비스(상태 표시줄 BE·FE 상시 표시 · 서버 소유)와 실행 상태 모음을 창과 무관하게 시작한다.
+  //   VMO 창은 Workbench 뒤에 배경 탭으로 연다(설정 vibeManager.orch.autoOpen=false 로 끔). 실패해도 Workbench 는 그대로 동작한다
+  try {
+    if (p.root) {
+      require('./server-service').init(p, context);
+      require('./orch-state').init(p);
+      // P3 감시기: 오류·지연·반복을 사건으로 만든다(Claude 호출 없음). 새 사건 알림은 60초에 1회까지 — 나머지는 VMO 창 사건 탭 표시만
+      const watch = require('./orch-watch'); watch.init(p, { serverSvc: require('./server-service') });
+      let lastNote = 0;
+      watch.on((inc, isNew) => {
+        if (!isNew || Date.now() - lastNote < 60000) return; lastNote = Date.now();
+        Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager 사건 ${inc.rule} ${inc.ruleName}${inc.screen ? ` · ${inc.screen}` : ''} — ${String(inc.title).slice(0, 160)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { });
+      });
+      // P4 에이전트: 새 사건을 받아 조치(코드 조치 → Claude 조치). 파일을 고쳤거나 사용자 확인이 필요하면 알림
+      require('./orch-agent').init({
+        paths, serverSvc: require('./server-service'),
+        loadQuick: () => promptPanel.loadQuick(paths().extDir, paths().root).groups.flatMap(g => g.items || []),
+        notify: (inc, what) => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO — ${inc.rule}${inc.screen ? ` ${inc.screen}` : ''}: ${String(what).slice(0, 200)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { }); },
+      });
+      // P8·P9 업무 작업 실행기. 서버 이상(R6)·TCP 연결 수(R8) 사건이 생기면 실행 중 작업을 일시 중지하고 사건이 해결되면 다시 진행한다
+      try { const jr = require('./job-runner'); jr.init(wbApi()); jr.attachWatch(watch); } catch (e) { log(`업무 작업 실행기 시작 실패: ${e.message}`); }
+      // P5 상시 개선안: 체인이 끝났을 때와 1시간마다 확인해 마지막 분석에서 reviewEveryHours 지났으면 분석 1회. 반영은 사용자 승인 뒤에만
+      require('./orch-improve').init({ notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO — ${String(text).slice(0, 200)}`, '개선안 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'prop'); }, () => { }); } });
+      if (cfg().get('orch.autoOpen') !== false) setTimeout(() => { try { workbench.openOrchestra(wbApi(), { background: true }); } catch (e) { log(`VMO 창 열기 실패: ${e.message}`); } }, 1500);
+    }
+  } catch (e) { log(`VMO 시작 실패: ${e.message}`); }
 }
-function deactivate() { }
+function deactivate() {
+  // 서버는 기본으로 남긴다(다시 로드하면 server-service 가 .vibe/orch/servers.json 으로 다시 붙는다). 설정 vibeManager.orch.stopServersOnExit=true 면 종료
+  try { require('./server-service').dispose(cfg().get('orch.stopServersOnExit') === true); } catch { }
+  try { require('./job-runner').dispose(); } catch { } // 실행 중이던 업무 작업은 '중단됨'으로 남긴다(다시 열어 이어서 실행)
+  try { require('./orch-improve').dispose(); } catch { }
+  try { require('./orch-agent').dispose(); } catch { }
+  try { require('./orch-watch').dispose(); } catch { }
+  try { require('./orch-state').dispose(); } catch { }
+}
 module.exports = { activate, deactivate };

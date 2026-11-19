@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 80,
+  "at": "2026-11-19T07:01:35.586Z",
+  "user": "minyonglee1",
+  "test": "버튼 경로 메시지·모달 조건(E4·B3·B4·G4)"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261119\",\"endYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 436,
+  "dur": 97,
+  "at": "2026-11-19T07:01:35.717Z",
+  "user": "minyonglee1",
+  "test": "버튼 경로 메시지·모달 조건(E4·B3·B4·G4)"
+ }
+]

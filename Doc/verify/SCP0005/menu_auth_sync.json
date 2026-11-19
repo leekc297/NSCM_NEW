@@ -1,0 +1,202 @@
+{
+ "menu_id": "SCP0005",
+ "asis_id": "SCP0005",
+ "at": "2026-11-19 17:06:38",
+ "result": "PARTIAL",
+ "fails": [],
+ "gaps": [
+  "ADMIN U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음",
+  "SCM PI Admin U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음",
+  "SSP Planner U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음"
+ ],
+ "notes": [
+  "TO-BE 전용 버튼 ['SEARCH_CITY', 'SEARCH_ROUTEID', 'UPLOAD', 'UPLOAD_SAVE'](AS-IS ACL 대응 없음 · 비교 제외)"
+ ],
+ "asis_groups": {
+  "ADMIN": "CRUD",
+  "CAPA Planner": "R",
+  "DM ADMIN": "R",
+  "DM Planner": "R",
+  "DM Planner (W/S)": "R",
+  "DM Viewer": "R",
+  "FP Planner": "R",
+  "FP Viewer": "R",
+  "SCM PI Admin": "CRUD",
+  "SCM Viewer": "R",
+  "SCP Planner": "R",
+  "SCP Tester": "R",
+  "SSP ADMIN": "R",
+  "SSP Planner": "CRUD",
+  "SSP Viewer": "R"
+ },
+ "tobe_groups": [
+  "ADMIN",
+  "CAPA Planner",
+  "DM ADMIN",
+  "DM Planner",
+  "DM Planner (W/S)",
+  "DM Viewer",
+  "FP Planner",
+  "FP Viewer",
+  "SCM PI Admin",
+  "SCM Viewer",
+  "SCP Planner",
+  "SCP Tester",
+  "SSP ADMIN",
+  "SSP Planner",
+  "SSP Viewer"
+ ],
+ "tobe_buttons": {
+  "ADMIN": [
+   "DELETE",
+   "INSERT",
+   "SAVE",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD",
+   "UPLOAD_SAVE"
+  ],
+  "CAPA Planner": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "DM ADMIN": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "DM Planner": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "DM Planner (W/S)": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "DM Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "FP Planner": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "FP Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "SCM PI Admin": [
+   "DELETE",
+   "INSERT",
+   "SAVE",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD",
+   "UPLOAD_SAVE"
+  ],
+  "SCM Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "SCP Planner": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "SCP Tester": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "SSP ADMIN": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ],
+  "SSP Planner": [
+   "DELETE",
+   "INSERT",
+   "SAVE",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD",
+   "UPLOAD_SAVE"
+  ],
+  "SSP Viewer": [
+   "DELETE(N)",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SEARCH_CITY",
+   "SEARCH_ROUTEID",
+   "UPLOAD(N)",
+   "UPLOAD_SAVE(N)"
+  ]
+ },
+ "why": "그룹 15↔15 · ADMIN U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음; SCM PI Admin U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음; SSP Planner U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음"
+}

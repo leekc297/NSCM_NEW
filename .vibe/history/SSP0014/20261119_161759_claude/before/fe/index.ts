@@ -1,0 +1,1 @@
+export { ShipmentModelPic } from './ShipmentModelPic';

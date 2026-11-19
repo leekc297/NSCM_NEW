@@ -108,3 +108,43 @@
 ### 라운드 3 추가 (2026-11-19 10:58)
 
 - 사용자 지시로 보완 뒤 CheckList 재수행 전에는 보완 전 건수를 표시하지 않게 바꿈. 보완 표식 `_unverified_fix.json` 10:58 남김. 건수는 CheckList 재수행 뒤 표시
+
+## 라운드 4 (2026-11-19 12:24 ~ 12:45 · 일괄 보완)
+
+- 입력: CheckList 재수행 결과 원장 `verify_ledger.csv`(12:23), 분류 `unverified_triage.*`(12:24:00). 처리 대상 4(엔진 4), 가이드 1, 사람 2, 집계 3
+- 행별 조치 표 `_unverified_plan.md`(10행, 원장 미검증 10행과 같음). 결정 목록 `_unverified_decisions.md`(D6 취소, D10 대체, D12 추가)
+- 재측정: run_verify, 개별 검사기 재실행 안 함. 확인은 자기 시험, 단위 함수 시험, engine_selfcheck
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|
+| B4 Plan Date(2행) | combo_oracle.json Plan Date: asis_n 0, branches 2. combo_src.csv 3·4줄 필터식이 `"DIVISION_ID = '" + division + "'…"` 이어 붙이기. eval_filter 가 `" + division + "` 를 글자로 비교. 12:3x AS-IS 개발 DB: UP_FX_GetCommonDataList_SCP_ALL DATE_WEEKLY1 사업부 81 13건, SCP_PLAN_VERSION_V 사업부 81 plan_type FN 12건(20260601~20260817). 지난 라운드 원인(뷰 기준일 경과)은 다른 화면(SSP_PLAN_VERSION_V) 기록을 잘못 옮긴 것 | `tools/Harness/verify/combo_oracle.py` expand_concat, _src_lines, accum_source, eval_filter(expand 인자), main raw_rows, concat_expander, selftest (T343) | combo_oracle --selftest 8/8. 단위 함수 시험(실제 cs 원문 + AS-IS DB): accum_source(426줄 sPlanDateFN) = dtPlanTypeAll, 408줄 필터, PLANDATE. 분기 1(426줄) 12건, 분기 2(430줄) 13건(종전 0, 0) |
+| F4 main/SAVE(2행) | IntegrationPsi.tsx:207 isAdmin = 세션 그룹에 'System Administrator' 포함, 342줄 저장 경로 분기. 사내 DB PKG_SCP0111 본문(SCM_MGR, 3466줄) P_SCP0111_SAVE_INTEGRATION_PSI 497~3177줄: 쓰는 표 SCP_ANL_PSI_INTEGRATION(UPDATE 69, INSERT 2, 전부 LAST_UPDATED_BY = P_USER_ID), 임시 표 GT_SCP0111_* 8개, 오류 기록 SCM_SYS_LOG_BATCH. 그룹 검사 없음 | `Doc/e2e/specs/_verify.spec.ts` CRUD 시험 본문 crudBody 로 감싸고 끝에 holder.fn(세션 그룹 재현), judgeSaveSp onlyIds·tag·t210Left (T344) | engine_selfcheck 12:43:38 PASS(TSC 0, PY_COMPILE 0, selftest JS 30, PY 49) |
+| X-LOC(1행) | 라운드 1 과 같음 | DB MODE. `FE_GUIDE_20261118_1816.md` G7 그대로 | 해당 없음 |
+
+### 고치지 않고 결정 목록으로 보낸 행
+
+- F1 저장보류 2행(D9), 집계 3행(하위 행 따름), F4 측정 방식 확인(D12)
+
+### 다음 CheckList 에서 바뀔 판정(검사기 판정 경로 기준, 미측정)
+
+- T-18374ec4, V-530425d0: 미검증 → AS-IS 12건 또는 13건과 TO-BE 22건 비교 결과(통과, 오류, 판정필요 중 하나). TO-BE 에만 있는 20260824 이후 날짜는 explain 단계가 AS-IS 원천 데이터 유무로 설명함
+- T-03071eab, T-ea67ed5b: 미검증 → 세션 그룹 재현에서 main/SAVE 가 나가면 통과 또는 오류. 안 나가면 시도 내역을 붙인 미검증
+- 같은 유형 다른 화면: combo_src 이어 붙이기 필터 24행(SCP0016, SCP0020, SCP0037, SCP0041, SCP0111)이 다음 CheckList 부터 실제 값으로 걸러짐
+
+### 점검
+
+- 새 도구 없음(inventory_check 등록부 갱신 대상 없음). combo_oracle.py 에 --selftest 추가
+- 보완 표식 `_unverified_fix.json` 12:45. unverified_resolve --no-rerun 12:45:17(보완 전 원장이라 건수 표시 생략)
+- 백업: `combo_oracle.py.bak_20261119_t343`, `_verify.spec.ts.bak_20261119_t344`, `_unverified_decisions.md.bak_20261119_r4`
+- 시험 데이터: 이번 라운드에서 TO-BE 저장 없음. 사내 DB·AS-IS DB 는 조회만 함
+
+## CheckList v64 사용자의견 반영 (2026-11-19 13:27 ~ 13:42)
+
+- 입력: `Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_CheckList_v64.xlsx`(13:24 저장) 사용자의견 21행
+- 반영 결과(다음 CheckList, 미측정): 사용자의견 판정 17행(통과 15, 중복 해당없음 2), 스냅샷 4행은 검사기 정규화로 통과, 기간 역전 2행 CR-113 통과, DM-247·EG380 2행 앱 공통 범위 해당없음, MS1 1행 PKG 보완으로 재측정, D6·E3 2행 오류 유지(가이드)
+- 고친 파일: `tools/Harness/verify/judge.py`(T345~T347), `tools/E2E/lib/snap.ts`, `Doc/e2e/specs/_snap.spec.ts`(T348), 신규 `tools/E2E/lib/snap.selftest.js`, `tools/Harness/rules/app_level_scope.csv`, `confirmed_requirements.csv`·`tobe_rule_kind.csv` CR-113~CR-115
+- DB: PKG_SCP0111 BODY 2줄(13:37:58), 실행 확인 MSG 'MSG00428'·변경 0행, 이관 묶음 `_artifacts/_deploy_packages/SCP0111_CLOUD_DB_MOD_20261119_1338`
+- FE 가이드: `FE_GUIDE_20261119_1340.md` G9 1건(doc_style 위반 0). G8 은 CR-113 으로 반영 안 함
+- fixlist 13행 상태 변경(보류(가이드) 2, 완료(DB 적용) 1, 제외(TO-BE 룰) 6, 제외(앱 공통 범위) 2, 제외(중복) 2)

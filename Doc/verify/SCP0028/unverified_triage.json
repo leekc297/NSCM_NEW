@@ -1,0 +1,68 @@
+{
+ "menu_id": "SCP0028",
+ "at": "2026-11-19 17:10:21",
+ "round": 2,
+ "ledger": "Doc\\verify\\SCP0028\\verify_ledger.csv",
+ "before": {
+  "total": 278,
+  "by_actor": {
+   "엔진": 109,
+   "판단": 30,
+   "자동": 2,
+   "집계": 137
+  },
+  "by_class": {
+   "검사기공백": 92,
+   "판단": 30,
+   "재실행": 2,
+   "데이터전제": 9,
+   "미분류": 8,
+   "집계": 137
+  },
+  "actionable": 141,
+  "ai_review": 0,
+  "human": 0,
+  "aggregate": 137,
+  "blocked": 0,
+  "guide": 0
+ },
+ "after": {
+  "total": 278,
+  "by_actor": {
+   "엔진": 109,
+   "판단": 30,
+   "자동": 2,
+   "집계": 137
+  },
+  "by_class": {
+   "검사기공백": 92,
+   "판단": 30,
+   "재실행": 2,
+   "데이터전제": 9,
+   "미분류": 8,
+   "집계": 137
+  },
+  "actionable": 141,
+  "ai_review": 0,
+  "human": 0,
+  "aggregate": 137,
+  "blocked": 0,
+  "guide": 0
+ },
+ "actionable": 141,
+ "human": 0,
+ "rerun": null,
+ "unverified_sheet": 732,
+ "ledger_mtime": 1795073689.238,
+ "prev_actionable": 141,
+ "continue": 1,
+ "stalled": false,
+ "resolved_actionable": [],
+ "new_actionable": [],
+ "pending_recheck": {
+  "fixed_at": "2026-11-19 17:10",
+  "ledger_at": "2026-11-19 16:34",
+  "note": "미검증 해소 보완 2026-11-19 17:10 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ },
+ "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
+}

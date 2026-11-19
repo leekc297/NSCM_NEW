@@ -1,14 +1,14 @@
 {
  "ok": true,
  "mode": "dry-run",
- "stamp": "20261119_111658",
+ "stamp": "20261119_184851",
  "areas_sel": "fe",
  "be_login": [],
- "tip": "dad0c79d5a41bbccf08cf1f5537e2653dcaca705",
- "tip_info": "dad0c79d5 2026-11-19 10:59 Jeongyun Park docs(SCP0025): validation 감사 A2 최대조회기간(MSG01187) 갭 분리·구현 반영",
+ "tip": "3874035dc005a437ebbb69a50d383e2f972d6364",
+ "tip_info": "3874035dc 2026-11-19 17:55 Jeongyun Park fix(SCP0024): Unfix 셀 미선택/미조회 동작을 AS-IS와 일치",
  "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
  "ancestor": true,
- "commits": 9,
+ "commits": 31,
  "changed": 0,
  "counts": {
   "동일": 40
@@ -35,5 +35,5 @@
  },
  "overwrite_local": true,
  "local_only": 0,
- "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261119_111658.md"
+ "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261119_184851.md"
 }

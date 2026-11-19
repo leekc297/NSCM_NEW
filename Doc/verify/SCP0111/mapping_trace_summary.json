@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0111",
  "asis_id": "SCP0111",
- "generated": "2026-11-18T19:50:12",
+ "generated": "2026-11-19T13:16:04",
  "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\integration-psi\\__asis-mapping__.md",
  "rows": 974,
  "fe_rows": 20,
@@ -11,26 +11,27 @@
  "fe_mapping_missing": false,
  "verdict": {
   "FAIL": 408,
-  "미검증": 92,
-  "검증완료": 446,
+  "미검증": 86,
+  "검증완료": 452,
   "해당없음": 28
  },
  "instances": 331,
  "instance_result": {
-  "PASS": 161,
+  "PASS": 165,
   "REVIEW": 8,
-  "NA": 139,
+  "NA": 138,
   "FAIL": 13,
-  "ERROR": 9,
-  "NOT_RUN": 1
+  "ERROR": 5,
+  "WARN": 2
  },
  "by_layer": {
   "동적 생성·조회": {
    "PASS": 47,
    "REVIEW": 8,
-   "NA": 12,
+   "NA": 13,
    "FAIL": 9,
-   "ERROR": 4
+   "ERROR": 2,
+   "WARN": 1
   },
   "DB 실행·접근": {
    "PASS": 13,
@@ -44,8 +45,7 @@
   },
   "CRUD": {
    "FAIL": 1,
-   "PASS": 2,
-   "ERROR": 1
+   "PASS": 3
   },
   "편집·검증": {
    "NA": 58,
@@ -53,10 +53,9 @@
    "PASS": 61
   },
   "정적 디자인": {
-   "ERROR": 1,
-   "PASS": 17,
-   "NA": 9,
-   "NOT_RUN": 1,
+   "WARN": 1,
+   "PASS": 20,
+   "NA": 7,
    "FAIL": 1
   },
   "콤보 후보": {
@@ -154,7 +153,7 @@
    "NA": 1
   },
   "F5": {
-   "ERROR": 1
+   "PASS": 1
   },
   "F6": {
    "PASS": 1
@@ -164,13 +163,11 @@
   },
   "G1": {
    "FAIL": 4,
-   "PASS": 6,
-   "NA": 1
+   "PASS": 5,
+   "NA": 2
   },
   "G4": {
-   "NA": 2,
-   "NOT_RUN": 1,
-   "PASS": 2
+   "PASS": 5
   },
   "G5": {
    "NA": 4,
@@ -197,7 +194,7 @@
    "PASS": 7
   },
   "I1": {
-   "ERROR": 1
+   "WARN": 1
   },
   "J1": {
    "PASS": 1
@@ -223,16 +220,17 @@
   },
   "X-ROW": {
    "NA": 9,
-   "ERROR": 4,
-   "PASS": 15,
+   "ERROR": 2,
+   "PASS": 16,
    "REVIEW": 2,
-   "FAIL": 5
+   "FAIL": 5,
+   "WARN": 1
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "ERROR": 47,
-  "REVIEW": 54,
-  "NOT_RUN": 4
+  "ERROR": 38,
+  "WARN": 7,
+  "REVIEW": 54
  }
 }

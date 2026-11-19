@@ -1,0 +1,39 @@
+{
+ "screen": "SSP0014",
+ "made": "2026-11-19 17:25",
+ "checklist": null,
+ "fe_mapping": {
+  "total": 69,
+  "by_state": {
+   "구현": 55,
+   "해당없음": 10,
+   "제외": 4
+  }
+ },
+ "asis_actions": {
+  "total": 190,
+  "blank_state": 190,
+  "meaning_needed": 1,
+  "by_state": {
+   "빈칸": 190
+  }
+ },
+ "counts": null,
+ "ledger": null,
+ "pending_recheck": {
+  "fixed_at": "2026-11-19 17:07",
+  "ledger_at": "2026-11-19 16:17",
+  "note": "미검증 해소 보완 2026-11-19 17:07 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ },
+ "name": "ShipmentModelPIC",
+ "sources": [
+  {
+   "file": "nscm-fe/features/shipping/src/pages/shipment-model-pic/__asis-mapping__.md",
+   "time": "2026-10-14 09:26"
+  },
+  {
+   "file": "Doc/asisfacts/screens/SSP0014/__asis-actions__.md",
+   "time": "2026-10-23 11:29"
+  }
+ ]
+}

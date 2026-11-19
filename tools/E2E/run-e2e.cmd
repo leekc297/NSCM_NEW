@@ -87,6 +87,8 @@ set "LOG=%LDIR%\run_%RUNID%_%KIND%.log"
 echo ==== %date% %time% run-e2e %ARGS% RUNID %RUNID% LOG %LOG% RESULTS %E2E_RESULTS% >> "%INDEX%"
 echo ==== %date% %time% run-e2e %ARGS% > "%LOG%"
 echo RUNID %RUNID% - log %LOG%
+REM (2a) 2026-11-19: FE/BE down or not responding -> start them first (server_guard.py, same commands as VM BE/FE Start) and wait, then check
+python "%~dp0..\Harness\verify\server_guard.py"
 REM (2) FE/BE must both be up (before: only [WARN], then Playwright failed everything)
 REM (note: 'set' after 'if errorlevel' resets ERRORLEVEL, so capture the curl codes first)
 curl -s -o nul http://127.0.0.1:5173/

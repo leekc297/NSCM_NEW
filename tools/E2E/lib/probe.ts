@@ -12,6 +12,9 @@ const CTL = `(() => { ${SHEET_OF} const ctlOf = el => { let c = el['$WJ-CTRL']; 
   const els = [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null); if (!els.length) return null; const want = window.__e2eGridCols; const wantSh = window.__e2eGridSheet; if (wantSh) { for (const e of els) { const c = ctlOf(e); if (c && nrmSh(sheetOf(e)) === nrmSh(wantSh)) return c; } }
   if (want) for (const e of els) { const c = ctlOf(e); if (c && want.every(b => { const x = c.columns.getColumn(b); return x && x.visible !== false; })) return c; } return ctlOf(els[0]); })()`;
 const J = (v: unknown) => JSON.stringify(v);
+// T349(2026-11-19): 공용 그리드 칸 설정(grid.columnGroups — GridUtils.getColumn 과 같은 평탄화)의 필수·팝업 속성. cfgOf(c)[binding] = 설정 · reqCols(c,'E'|'N') = 기존행·신규행 필수 칸
+const REQ_SRC = `const cfgOf = c => { const m = {}; try { const fl = (c.columnGroups || []).flatMap(g => (g && g.columns) ? g.columns : [g]).flatMap(g => (g && g.columns) ? g.columns : [g]); for (const x of fl) if (x && x.binding) m[x.binding] = x; } catch (e) { /* 설정 없음 */ } return m; };
+  const reqCols = (c, k) => { const m = cfgOf(c); return Object.keys(m).filter(b => { const x = m[b]; const col = c.columns.getColumn(b); if (!col || col.visible === false) return false; return x._requiredMark === true || x._inputEditType === 'M' || (k === 'N' && x._inputEditType === 'IM'); }); };`;
 
 export type RowRef = { row: number; crud: string } | null;
 
@@ -57,9 +60,25 @@ export const probe = {
   newRowCount: (p: Page) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return -1; let n = 0; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I') n++; } return n; })()`) as Promise<number>,
   /** 첫 신규행 / 첫 기존행 위치 */
+  // 2026-11-19 SSP0014 미검증 해소(T349): 기존행 = 필수 칸(공용 그리드 설정 _inputEditType 'M' · _requiredMark)이 전부 채워진 첫 기존행 우선.
+  //   첫 행(r0)의 필수 칸 USER_ID 가 비어 있어 다른 칸 시험(E7 잘못된 값·E3 필수 공란)이 '[User ID] 필수' 안내에 먼저 막혀 측정을 못 했다(실측 2026-11-19 13:58 run).
+  //   필수 설정이 없는 화면·채워진 행이 없으면 종전처럼 첫 기존행
   findRow: (p: Page, kind: 'new' | 'existing') =>
-    p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (!d) continue;
-      const isNew = d.CRUD_TYPE === 'I'; if (${J(kind)} === 'new' ? isNew : !isNew) return { row: r, crud: String(d.CRUD_TYPE || '') }; } return null; })()`) as Promise<RowRef>,
+    p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; ${REQ_SRC} const req = kind0 => reqCols(c, kind0); const full = d => req('E').every(b => String(d[b] ?? '').trim() !== '');
+      let first = null; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (!d) continue;
+      const isNew = d.CRUD_TYPE === 'I'; if (${J(kind)} === 'new' ? isNew : !isNew) { if (${J(kind)} === 'new') return { row: r, crud: String(d.CRUD_TYPE || '') }; if (!first) first = { row: r, crud: String(d.CRUD_TYPE || '') }; if (!req('E').length || full(d)) return { row: r, crud: String(d.CRUD_TYPE || '') }; if (r > 5000) break; } } return first; })()`) as Promise<RowRef>,
+  /** T349: 기존행의 필수 칸(공용 그리드 설정) binding 목록 — 설정이 없으면 [] */
+  requiredColumns: (p: Page) =>
+    p.evaluate(`(() => { const c = ${CTL}; if (!c) return []; ${REQ_SRC} return reqCols(c, 'E'); })()`).catch(() => [] as string[]) as Promise<string[]>,
+  /** T349: 팝업 입력 칸(공용 그리드 설정 _ctrlType FPModal·FPTextModal)인가 — 설정이 없으면 null */
+  popupColumn: (p: Page, binding: string) =>
+    p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; ${REQ_SRC} const x = cfgOf(c)[${J(binding)}]; if (!x) return null; return /^FP(Text)?Modal$/i.test(String(x._ctrlType || '')); })()`).catch(() => null) as Promise<boolean | null>,
+  /** T349: 같은 칸의 다른 행 값(빈 값·cur 제외 · 가장 많이 쓰인 값 우선) — 팝업 입력 칸(등록 값만 저장되는 칸)에 넣을 실제 값 */
+  otherColumnValue: (p: Page, binding: string, cur: string, maxRows = 5000) =>
+    p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; const cur = String(${J(cur)}).trim().toUpperCase(); const f = new Map(); const n = Math.min(c.rows.length, ${maxRows}); for (let r = 0; r < n; r++) { const d = c.rows[r].dataItem; if (!d) continue; const v = String(d[${J(binding)}] ?? '').trim(); if (!v || v.toUpperCase() === cur) continue; f.set(v, (f.get(v) || 0) + 1); } const s = [...f.entries()].sort((a, b) => b[1] - a[1]); return s.length ? s[0][0] : null; })()`).catch(() => null) as Promise<string | null>,
+  /** T349: 행의 필수 칸이 전부 채워졌는가 — 필수 설정이 없으면 true */
+  requiredFilled: (p: Page, row: number) =>
+    p.evaluate(`(() => { const c = ${CTL}; if (!c) return true; ${REQ_SRC} const d = c.rows[${row}] && c.rows[${row}].dataItem; if (!d) return false; return reqCols(c, d.CRUD_TYPE === 'I' ? 'N' : 'E').every(b => String(d[b] ?? '').trim() !== ''); })()`).catch(() => true) as Promise<boolean>,
   /** 편집기 열림 여부(beginningEdit 취소 포함) — 열리면 즉시 취소, 값 변경 없음. 컬럼 없으면 null */
   editable: (p: Page, row: number, binding: string) =>
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null;
@@ -206,7 +225,8 @@ export const probe = {
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return -2; if (col.isReadOnly || c.isReadOnly) return -1; const sk = new Set(${J(skip)});
       const total = c.rows.length; const n = Math.min(total, ${max}); const t0 = Date.now(); const seen = new Set();
       const order = []; for (let step = Math.max(1, Math.floor(total / Math.max(1, n))); order.length < n && step >= 1; step = Math.floor(step / 2)) { for (let r = 0; r < total && order.length < n; r += step) { if (!seen.has(r)) { seen.add(r); order.push(r); } } if (step === 1) break; }
-      for (const r of order) { if (sk.has(r)) continue; if (Date.now() - t0 > ${budgetMs}) return -3; let ok = false; try { ok = c.startEditing(true, r, col.index); if (ok) c.finishEditing(true); } catch { ok = false; } if (ok) return r; } return -1; })()`) as Promise<number>,
+      ${REQ_SRC} const rq = reqCols(c, 'E'); const full = r => { const d = c.rows[r] && c.rows[r].dataItem; return !!d && rq.every(b => String(d[b] ?? '').trim() !== ''); };  /* T349: 필수 칸이 채워진 행 먼저(1차) → 없으면 종전(2차) */
+      for (const pass of rq.length ? [1, 2] : [2]) for (const r of order) { if (sk.has(r)) continue; if (pass === 1 && !full(r)) continue; if (Date.now() - t0 > ${budgetMs}) return -3; let ok = false; try { ok = c.startEditing(true, r, col.index); if (ok) c.finishEditing(true); } catch { ok = false; } if (ok) return r; } return -1; })()`) as Promise<number>,
   /** 대상 컬럼이 고정 영역 밖이고 고정 폭이 가시 폭의 85% 를 넘으면(스크롤 영역 ≈0 → 셀 미렌더·startEditing 실패) 측정 동안 frozenColumns=0 — 측정 전용(화면 재진입 시 원복). 2026-10-31 SCP0111 고정 21컬럼 1415px */
   unfreezeIfNeeded: (p: Page, binding: string) =>
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null; const n = c.frozenColumns || 0; if (!(n > 0 && col.index >= n)) return { did: false, n };

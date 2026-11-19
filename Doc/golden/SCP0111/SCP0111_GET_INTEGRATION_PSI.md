@@ -1,6 +1,6 @@
 # SCP0111 · SCP0111_GET_INTEGRATION_PSI ↔ PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI
 
-- 실행: 2026-11-18 19:39:48
+- 실행: 2026-11-19 12:57:38
 - 파라미터: `{"p_division_id": "81", "p_plan_start_yyyymmdd": "20260817", "p_plan_type": "", "p_seq": "", "p_from_yyyymm": "202608", "p_to_yyyymm": "202701", "p_nick_name": "", "p_cellitem_id": "", "p_item_id": "", "p_qty_yn": "N"}`
 - 종류: GET
 

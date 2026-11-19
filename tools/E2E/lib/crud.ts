@@ -88,7 +88,18 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     const mi = (c: { col: number; colIdx?: number }) => (typeof c.colIdx === 'number' && c.colIdx >= 0 ? c.colIdx : c.col);
     if (exK.size) { const metaK = await nscm.gridColumnsMeta(0); const before = ecs.length; ecs = ecs.filter(c => !exK.has(String((metaK && metaK[mi(c)] ? metaK[mi(c)].binding : '') || '').toUpperCase())); if (ecs.length < before) out.notes.push(`저장 키 컬럼 제외 ${before - ecs.length}셀`); }
     // 값 있는 칸 우선 · 없으면 빈 칸도(2026-11-06 사용자 지시 — 입력·저장 후 지워서 저장까지 왕복. 종전 2026-10-31 SCP0028 빈칸 제외 규칙 대체)
-    const valued = ecs.filter(c => c.text !== ''); const ordered = (valued.length ? valued : ecs).slice(0, 24); if (!valued.length && ecs.length) out.notes.push('값 있는 편집 칸 없음 — 빈 칸 왕복');
+    const valued = ecs.filter(c => c.text !== ''); let ordered = (valued.length ? valued : ecs).slice(0, 24); if (!valued.length && ecs.length) out.notes.push('값 있는 편집 칸 없음 — 빈 칸 왕복');
+    // 2026-11-19 SSP0014 미검증 해소(T349): 필수 칸(공용 그리드 설정)이 빈 행을 고치면 저장이 '[필수] 입력' 안내에 막혀 저장 시험이 안 된다(첫 행 USER_ID 빈 값 실측) →
+    //   필수 칸이 채워진 행의 후보를 앞으로. 그런 행이 화면 앞쪽에 없으면 필수 칸이 채워진 첫 기존행으로 스크롤해 그 행 후보를 다시 모은다
+    { const vrQ = async () => (await nscm.page.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); const g = el && el['$WJ-CTRL']; const vr = g && g.viewRange; return vr && vr.row > 0 ? vr.row : 0; })()`).catch(() => 0)) as number;
+      const rq = await probe.requiredColumns(nscm.page);
+      if (rq.length) {
+        let vr = await vrQ(); const okRow = new Map<number, boolean>(); const isOk = async (r: number) => { if (!okRow.has(r)) okRow.set(r, await probe.requiredFilled(nscm.page, vr + r)); return okRow.get(r)!; };
+        let good: typeof ordered = []; for (const c of ordered) if (await isOk(c.row)) good.push(c);
+        if (!good.length) { const fr = await probe.findRow(nscm.page, 'existing'); if (fr && fr.row > 0) { await probe.cellClasses(nscm.page, fr.row, rq[0]).catch(() => null); await nscm.page.waitForTimeout(400); vr = await vrQ(); okRow.clear(); const ecs2 = await nscm.editableCells(0, 40); const v2 = ecs2.filter(c => c.text !== ''); const all2 = (v2.length ? v2 : ecs2); for (const c of all2) if (await isOk(c.row)) good.push(c); if (good.length) out.notes.push(`필수 칸(${rq.join(',')}) 채워진 기존행 r${fr.row} 로 스크롤 후 후보 ${good.length}셀`); } }
+        if (good.length) { const rest = ordered.filter(c => !good.includes(c)); ordered = [...good, ...rest].slice(0, 24); if (good.length < ordered.length) out.notes.push(`필수 칸(${rq.join(',')}) 채워진 행 후보 ${good.length}셀 우선`); }
+        else out.notes.push(`필수 칸(${rq.join(',')}) 채워진 행 없음 — 종전 후보`);
+      } }
     if (!ordered.length) { out.editable = false; out.notes.push('편집 가능 셀 없음'); countSave(); annotate(info, out); return out; }
     const S: { col: number; colIdx: number; row: number; orig: string; nv: { next: string; restore: string } | null; key: string; binding: string; item0: Record<string, unknown> | null } = { col: -1, colIdx: -1, row: -1, orig: '', nv: null, key: '', binding: '', item0: null };
     const metaB = byMeta ? await nscm.gridColumnsMeta(0) : null;
@@ -100,7 +111,9 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
         const ed = await probe.editable(nscm.page, vr0 + c.row, metaB[mi(c)].binding).catch(() => null);
         if (ed === false) { out.notes.push(`편집 개시 안 됨 제외 ${metaB[mi(c)].binding}`); continue; }
       }
-      const cand = nextValue(c.text);
+      let cand = nextValue(c.text);
+      // T349: 팝업 입력 칸(FPModal·FPTextModal)은 등록 값만 저장된다 — 같은 칸 다른 행의 실제 값으로 바꾸고 원값으로 복원
+      { const metaP = await nscm.gridColumnsMeta(0).catch(() => null); const bP = metaP && metaP[mi(c)] ? metaP[mi(c)].binding : ''; if (bP && await probe.popupColumn(nscm.page, bP)) { const ov = await probe.otherColumnValue(nscm.page, bP, c.text); if (ov) { cand = { next: ov, restore: c.text }; out.notes.push(`팝업 입력 칸 ${bP}: 다른 행 실제 값 '${ov}' 로 시험`); } } }
       // T74 · 2026-11-07 T143: 행 데이터(dataItem)를 입력 전후로 항상 읽어, 실제로 바뀐 binding 으로 편집 컬럼을 확정한다 — chain6b SCP0084 F1 은 MEMO 에 입력·저장(요청 memo:"1")했는데
       //   메타 순번으로 고른 이름이 PIC 이어서 '재조회 미반영' 허위 FAIL + 원복 입력 실패(PIC) → MEMO '1' 이 사내 DB 에 남았다(14:11 실측 UPDATE 093139)
       const kb = (await probe.rowItem(nscm.page, c.row).catch(() => null)) as Record<string, unknown> | null;

@@ -10,6 +10,7 @@ import { expect, type Page, type Locator, type Response } from '@playwright/test
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as net from 'node:net';
+import { spawn } from 'node:child_process';
 import { applyGridMutations } from './mutate';  // CheckList 자기검증(변이 시험, 2026-10-28) — CL_MUTATE 없으면 무동작
 import { waitLangFree, pendingLangRestore, langRestored, acquireLang, releaseLang } from './langlock';
 import { retryInsertWithRow } from './insertpre';  // 2026-11-12 Y01(T259)  // 2026-11-10 T189 — 다른 실행의 언어 전환(서버 사용자 설정) 중에는 화면을 열지 않는다
@@ -26,6 +27,14 @@ export function bePortOpen(): Promise<boolean> {
 export async function waitBeUp(tag: string, maxMs = Number(process.env.E2E_BE_WAIT_MS || 300_000)): Promise<number> {
   if (await bePortOpen()) return 0;
   const t0 = Date.now(); console.log(`[BE 대기] ${tag}: BE(${BE}) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 ${Math.round(maxMs / 1000)}초 대기`);
+  // 2026-11-19 사용자: 서버가 죽어 있는데 기다리기만 하면 진행되지 않음 → 서버 기동 도구(server_guard.py · 포트 잠금으로 여러 실행 중 한 번만 기동)를 띄우고 그 사이 기다린다
+  if (process.env.VERIFY_SERVER_GUARD !== 'off') {
+    try {
+      const sg = path.join(__dirname, '..', '..', 'Harness', 'verify', 'server_guard.py');
+      const ch = spawn(process.env.E2E_PYTHON || 'python', [sg, '--ports', '8080'], { detached: true, stdio: 'ignore', windowsHide: true });
+      ch.unref(); console.log(`[BE 대기] ${tag}: 서버 기동 도구 실행(server_guard.py · 출력 Doc/e2e/logs/_server_8080.log)`);
+    } catch (e) { console.log(`[BE 대기] ${tag}: 서버 기동 도구 실행 실패 — ${String(e).slice(0, 120)}`); }
+  }
   while (Date.now() - t0 < maxMs) { await new Promise(r => setTimeout(r, 5_000)); if (await bePortOpen()) { await new Promise(r => setTimeout(r, 10_000)); /* 포트가 열린 직후는 아직 초기화 중일 수 있다 */ console.log(`[BE 대기] ${tag}: ${Math.round((Date.now() - t0) / 1000)}초 뒤 BE 응답 — 이어서 진행`); return Date.now() - t0; } }
   console.log(`[BE 대기] ${tag}: ${Math.round(maxMs / 1000)}초 안에 BE 가 뜨지 않음`); return -1;
 }
@@ -253,7 +262,7 @@ export class Nscm {
   }
 
   /** MDI 딥링크로 화면을 연다. 반환: authorized(권한 안내가 뜨지 않음), notFound */
-  async openScreen(menuId: string) {
+  async openScreen(menuId: string): Promise<{ authorized: boolean; notFound: boolean; beDown?: boolean }> {
     this.calls = []; this.searchExpanded = false; this.consoleErrors = [];
     this.curMenu = menuId;
     this.userConds = {}; this.userCondsApplied = false; this.userCondsNote = '';
@@ -294,8 +303,19 @@ export class Nscm {
     const landedHome = /\/view\/home\b/i.test(u) && !u.toUpperCase().includes(menuId.toUpperCase());
     if (process.env.E2E_DEBUG_OPEN) console.log(`[openScreen 진단] ${menuId} user=${this.curUser} url=${u} grid=${await this.page.locator('.wj-flexgrid').first().isVisible().catch(() => false)} guest=${guest} home=${landedHome}`);
     if (landedHome) console.log(`[openScreen] ${menuId}: 주소 진입 뒤 Home 에 남음(${u}) — 화면 진입 실패로 처리`);
-    return { authorized: !guest && !landedHome, notFound };
+    // 2026-11-19 미검증 해소(SCP0028 시나리오 12행 · results.json 14:30~15:22 '[BE 대기] … 300초 안에 BE 가 뜨지 않음' 뒤 '[openScreen] Home 에 남음' 10회):
+    //   BE 가 내려가면 세션이 끊겨 Home 으로 떨어지는데 이를 '화면 권한 없음'으로 기록했다. 진입 실패 때 BE 포트를 보고, 닫혀 있으면 서버 기동 대기(waitBeUp · server_guard) →
+    //   같은 계정 재로그인 → 한 번 더 연다. 그래도 BE 가 없으면 beDown=true 로 돌려 호출부가 'BE 응답 없음'(재실행 대상)으로 적게 한다
+    if ((guest || landedHome) && !this.openRetry && !(await bePortOpen())) {
+      const w = await waitBeUp(`화면 열기 ${menuId}`);
+      if (w <= 0) { console.log(`[openScreen] ${menuId}: BE 응답 없음, 화면 진입 실패 원인 = BE 정지(권한 아님)`); return { authorized: false, notFound, beDown: true }; }
+      this.openRetry = true;
+      try { if (this.curUser) await this.loginAs(this.curUser); return await this.openScreen(menuId); } finally { this.openRetry = false; }
+    }
+    return { authorized: !guest && !landedHome, notFound, beDown: false };
   }
+  /** openScreen 재시도 중 표시(BE 재기동 뒤 1회만 다시 연다) */
+  private openRetry = false;
 
   /** 알림/확인 다이얼로그 닫기 (확인 우선) */
   async closeAlert(prefer: 'ok' | 'cancel' = 'ok') {
@@ -589,7 +609,8 @@ export class Nscm {
   async setCell(r: number, c: number, value: string, i = 0) {
     // 2026-10-20: 더블클릭 시간 상한(기본은 테스트 타임아웃까지 대기 — 비편집 셀에서 182s 매달림)
     const cell = await this.gridCell(r, c, i);
-    try { await cell.dblclick({ timeout: 5_000 }); await this.dismissDblPopup(() => cell.click({ timeout: 3_000 })); }
+    const dlg0 = await this.page.locator('[role="dialog"]:visible').count().catch(() => 0);  // T350: 더블클릭 전 대화상자 수
+    try { await cell.dblclick({ timeout: 5_000 }); await this.page.waitForTimeout(300); await this.dismissDblPopup(() => cell.click({ timeout: 3_000 }), dlg0); }
     catch { await cell.scrollIntoViewIfNeeded({ timeout: 3_000 }).catch(() => undefined); await cell.click({ timeout: 5_000 }); await this.page.keyboard.press('F2'); } // 재조회 직후 더블클릭이 안정화 대기에 걸리면 클릭 + F2 로 편집기 열기
     await this.page.keyboard.press('Control+A'); if (value === '') await this.page.keyboard.press('Delete'); else await this.page.keyboard.type(value); await this.page.keyboard.press('Enter');  // 2026-11-06 빈 값 = 지우기(빈 칸 왕복 원복)
   }
@@ -650,8 +671,9 @@ export class Nscm {
       const cell = await this.gridCell(r, ci, i);
       if (!(await cell.isVisible({ timeout: 1_000 }).catch(() => false))) continue;
       sawCell = true;
+      const dlgC = await this.page.locator('[role="dialog"]:visible').count().catch(() => 0);  // T350
       try { await cell.dblclick({ timeout: 5_000 }); } catch { try { await cell.dblclick({ timeout: 3_000, force: true }); } catch { continue; } }
-      await this.dismissDblPopup(() => cell.click({ timeout: 3_000 }));
+      await this.page.waitForTimeout(300); await this.dismissDblPopup(() => cell.click({ timeout: 3_000 }), dlgC);
       const ed = this.grid(i).locator('input.wj-grid-editor, .wj-cell input, .wj-cell textarea, .wj-cell select, .wj-cell [contenteditable="true"]').first();
       const on = await ed.isVisible({ timeout: 1_500 }).catch(() => false);
       await this.page.keyboard.press('Escape');
@@ -679,8 +701,24 @@ export class Nscm {
   }
   /** 셀 더블클릭이 선택 팝업도 여는 화면(sheet_nav.json cell_dblclick_popup = 팝업 제목 · SCP0104 'CAPA Line Search' — AS-IS spdAssign_CellDoubleClick 과 같은 동작):
    *  편집하려고 더블클릭한 뒤 그 팝업이 뜨면 Close 로 닫고 셀을 다시 눌러 F2 로 편집기를 연다. 닫았으면 true */
-  async dismissDblPopup(refocus?: () => Promise<unknown>): Promise<boolean> {
-    const t = this.navFact('cell_dblclick_popup'); if (!t) return false;
+  async dismissDblPopup(refocus?: () => Promise<unknown>, pre?: number): Promise<boolean> {
+    const t = this.navFact('cell_dblclick_popup');
+    // 2026-11-19 SSP0014 미검증 해소(T350): 화면 사실(sheet_nav.json)이 없어도 더블클릭 전보다 대화상자가 늘었으면(셀 더블클릭이 입력 팝업을 여는 칸 — FPTextModal 등)
+    //   그 팝업을 닫고 F2 로 셀 편집기를 연다. 종전엔 팝업에 시험 값이 입력돼 '값이 바뀌는 셀 없음'·'User Popup 이 Save 를 가림'으로 저장 시험 전체가 미측정(2026-11-19 13:58 run)
+    if (!t) {
+      if (pre == null) return false;
+      const vis = this.page.locator('[role="dialog"]:visible');
+      if ((await vis.count().catch(() => 0)) <= pre) return false;
+      const dl = vis.last();
+      const cl = dl.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first();
+      if (!(await cl.isVisible().catch(() => false))) return false;  // 닫기 버튼 없는 대화상자 = 알림창 — 건드리지 않는다(호출부 clearDialogs 몫)
+      await cl.click({ timeout: 3_000 }).catch(() => undefined);
+      await this.page.waitForTimeout(400);
+      if ((await vis.count().catch(() => 0)) > pre) { await this.page.keyboard.press('Escape').catch(() => undefined); await this.page.waitForTimeout(300); }
+      if (refocus) await refocus().catch(() => undefined);
+      await this.page.keyboard.press('F2').catch(() => undefined); await this.page.waitForTimeout(250);
+      return true;
+    }
     const dlg = this.page.locator('[role="dialog"]:visible').filter({ hasText: t }).last();
     if (!(await dlg.isVisible({ timeout: 800 }).catch(() => false))) return false;
     await dlg.getByRole('button', { name: /^(Close|닫기)$/i }).first().click({ timeout: 3_000 }).catch(() => undefined);

@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15316,
+                      "duration": 16111,
                       "errors": [],
                       "stdout": [
                         {
@@ -145,7 +145,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:36:53.237Z",
+                      "startTime": "2026-11-19T03:09:51.354Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -176,14 +176,14 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26433,
+                      "duration": 28505,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCR/SCP0111/SYSTEM ADMIN 9s\n"
+                          "text": "[eg_auth] SCR/SCP0111/SYSTEM ADMIN 10s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -192,7 +192,7 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCR/SCP0111/SCM PI Admin 8s\n"
+                          "text": "[eg_auth] SCR/SCP0111/SCM PI Admin 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -212,7 +212,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:37:11.418Z",
+                      "startTime": "2026-11-19T03:10:10.225Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -243,7 +243,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 8671,
+                      "duration": 9077,
                       "errors": [],
                       "stdout": [
                         {
@@ -255,7 +255,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:37:40.510Z",
+                      "startTime": "2026-11-19T03:10:41.491Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -286,7 +286,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20813,
+                      "duration": 21434,
                       "errors": [],
                       "stdout": [
                         {
@@ -313,7 +313,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:37:51.785Z",
+                      "startTime": "2026-11-19T03:10:53.386Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -344,7 +344,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 27185,
+                      "duration": 30482,
                       "errors": [],
                       "stdout": [
                         {
@@ -371,7 +371,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:38:15.405Z",
+                      "startTime": "2026-11-19T03:11:17.603Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -402,7 +402,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5780,
+                      "duration": 6203,
                       "errors": [],
                       "stdout": [
                         {
@@ -414,7 +414,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:38:45.128Z",
+                      "startTime": "2026-11-19T03:11:50.862Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -445,19 +445,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 153,
+                      "duration": 180,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG032 ERROR\":1}\n"
-                        },
-                        {
-                          "text": "  EG032 ERROR SCP0111 [계정쌍] 기대 TITLESET_USER 보유·미보유 계정쌍 · 실측 명부에 쌍 없음(보유 N · 미보유 Y) · SCM_MST_TITLESET_USER \n"
+                          "text": "[eg_auth] SCP0111 {\"EG032 NA\":1}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:38:53.470Z",
+                      "startTime": "2026-11-19T03:11:59.848Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -488,7 +485,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5802,
+                      "duration": 6315,
                       "errors": [],
                       "stdout": [
                         {
@@ -500,7 +497,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:38:56.180Z",
+                      "startTime": "2026-11-19T03:12:02.806Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -510,7 +507,7 @@
               ],
               "id": "fce9d8edbd378244cae8-f663c20e0e0d7b3e54fd",
               "file": "eg_auth.spec.ts",
-              "line": 639,
+              "line": 642,
               "column": 7
             },
             {
@@ -531,19 +528,19 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 154,
+                      "duration": 8083,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG380 ERROR\":1}\n"
+                          "text": "[eg_auth] SCP0111 {\"EG380 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG380 ERROR 무권한 첫 화면 [실계정 없음] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정) · DM-247·GAP-475 메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요\n"
+                          "text": "  EG380 FAIL 무권한 첫 화면 [GUEST/-/GUEST] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 URL /view/home · 안내창 'You are not authorized to NSCM. Apply for permission.' · 안내창 확인 뒤 UR · DM-247·GAP-475 명부 GUEST 전용 계정 1\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T08:39:04.453Z",
+                      "startTime": "2026-11-19T03:12:11.896Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -553,7 +550,7 @@
               ],
               "id": "fce9d8edbd378244cae8-9b0d92de197bd60696d0",
               "file": "eg_auth.spec.ts",
-              "line": 664,
+              "line": 667,
               "column": 7
             }
           ]
@@ -563,8 +560,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-18T08:36:52.724Z",
-    "duration": 134911.97,
+    "startTime": "2026-11-19T03:09:50.764Z",
+    "duration": 152590.61299999998,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

@@ -1,32 +1,32 @@
-# 대조표 ↔ 검증 추적표 v2 — SCP0111 (AS-IS SCP0111) · 2026-11-18T19:50:12
+# 대조표 ↔ 검증 추적표 v2 — SCP0111 (AS-IS SCP0111) · 2026-11-19T13:16:04
 
 > 대조표의 **모든 행이 검증 대상**이다(제외·해당없음 행 = 사유 근거 검사 X-REASON). 행마다 카탈로그(`mapping_checks.csv`)가 정한 검사를 대상 단위 인스턴스로 묶어 판정한다.
 > **NOT_RUN** = 검사기 있음·이 대상 미실행 · **TODO** = 검사기 미구현(검증 엔진 구현 대상) · **BLOCKED** = 대조표 상태 미구현(구현 엔진 대상 — 구현 후 검증) · REVIEW = 판정필요
 
 - 대상: FE 대조표 20행 (nscm-fe\features\supply\src\pages\integration-psi\__asis-mapping__.md) · AS-IS 액션 954행(진입점 + 전 문장) = **974행** → 검사 인스턴스 **331개**
-- 행 판정: 검증완료 446 · FAIL 408 · 미검증 92 · 해당없음 28
-- 인스턴스 결과: PASS 161 · NA 139 · FAIL 13 · ERROR 9 · REVIEW 8 · NOT_RUN 1
+- 행 판정: 검증완료 452 · FAIL 408 · 미검증 86 · 해당없음 28
+- 인스턴스 결과: PASS 165 · NA 138 · FAIL 13 · REVIEW 8 · ERROR 5 · WARN 2
 
 ## 검사별
 
 | 검사 | 층 | 검사기 | PASS | FAIL | WARN | REVIEW | ERROR | NA | NOT_RUN | NOPATH | TODO | BLOCKED | 방법 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | A5 | 정적 디자인 | 있음 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 표시 컬럼 구성 = 메타·AS-IS(Div·개인화·필수) |
-| G4 | 정적 디자인 | 있음 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 조회조건 표시·라벨·활성 |
+| G4 | 정적 디자인 | 있음 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 조회조건 표시·라벨·활성 |
 | H10 | 정적 디자인 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 메시지 표준(방식·코드 단일화) |
 | H2 | 정적 디자인 | 있음 | 14 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 배경·글자색 규칙 |
 | H4 | 정적 디자인 | 있음 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 레이아웃·스크롤·크기 |
 | H5 | 정적 디자인 | 있음 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 라벨 명칭 |
-| I1 | 정적 디자인 | 있음 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | LBL/MSG 언어별 등록 |
+| I1 | 정적 디자인 | 있음 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | LBL/MSG 언어별 등록 |
 | A1 | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교 |
 | A10 | 동적 생성·조회 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS |
 | A6 | 동적 생성·조회 | 있음 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 |
 | G03-WIRE | 동적 생성·조회 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | AS-IS 이벤트가 TO-BE 대조표·핸들러로 전부 연결 |
-| G1 | 동적 생성·조회 | 있음 | 6 | 4 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 조회조건 값 변경 → 조회 인자·결과 반영 |
+| G1 | 동적 생성·조회 | 있음 | 5 | 4 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 조회조건 값 변경 → 조회 인자·결과 반영 |
 | G6 | 동적 생성·조회 | 있음 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 조회조건 초기 기본값 = AS-IS Form_Load |
 | X-LOC | 동적 생성·조회 | 있음 | 19 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 대조표 상태 구현 행의 구현 위치(파일:라인)가 TO-BE 소스에 실존 |
 | X-REOPEN | 동적 생성·조회 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 화면 닫기·재오픈 시 오류·잔존 상태 없음 |
-| X-ROW | 동적 생성·조회 | 있음 | 15 | 5 | 0 | 2 | 4 | 9 | 0 | 0 | 0 | 0 | 대조표 행이 서술한 동작을 화면에서 재현 |
+| X-ROW | 동적 생성·조회 | 있음 | 16 | 5 | 1 | 2 | 2 | 9 | 0 | 0 | 0 | 0 | 대조표 행이 서술한 동작을 화면에서 재현 |
 | B3 | 콤보 후보 | 있음 | 0 | 0 | 0 | 0 | 0 | 6 | 0 | 0 | 0 | 0 | 콤보 후보 정렬 = AS-IS |
 | B4 | 콤보 후보 | 있음 | 0 | 0 | 0 | 0 | 0 | 6 | 0 | 0 | 0 | 0 | 콤보 후보 집합 = AS-IS 원천+필터(같은 데이터에 AS-IS 논리 적용) |
 | C1 | Cascade | 있음 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 |
@@ -43,7 +43,7 @@
 | E4 | 편집·검증 | 있음 | 3 | 0 | 0 | 0 | 0 | 38 | 0 | 0 | 0 | 0 | 업무 검증·메시지 발생 조건(조건부 필수·중복·관계) |
 | F1 | CRUD | 있음 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 저장 후 DB 반영(마커 행) |
 | F2 | CRUD | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1회 저장(변경 감지) |
-| F5 | CRUD | 있음 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | CRUD Status 표시 정합 |
+| F5 | CRUD | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | CRUD Status 표시 정합 |
 | F6 | CRUD | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 저장 후 값 보존 |
 | G5 | 팝업 | 있음 | 3 | 0 | 0 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 팝업 조건 연동(인자) |
 | H6 | 팝업 | 있음 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 팝업 표준·열림 |
@@ -59,12 +59,12 @@
 
 | 층 | PASS | FAIL | WARN | REVIEW | ERROR | NA | NOT_RUN | NOPATH | TODO | BLOCKED |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 정적 디자인 | 17 | 1 | 0 | 0 | 1 | 9 | 1 | 0 | 0 | 0 |
-| 동적 생성·조회 | 47 | 9 | 0 | 8 | 4 | 12 | 0 | 0 | 0 | 0 |
+| 정적 디자인 | 20 | 1 | 1 | 0 | 0 | 7 | 0 | 0 | 0 | 0 |
+| 동적 생성·조회 | 47 | 9 | 1 | 8 | 2 | 13 | 0 | 0 | 0 | 0 |
 | 콤보 후보 | 0 | 0 | 0 | 0 | 0 | 12 | 0 | 0 | 0 | 0 |
 | Cascade | 7 | 0 | 0 | 0 | 0 | 41 | 0 | 0 | 0 | 0 |
 | 편집·검증 | 61 | 1 | 0 | 0 | 0 | 58 | 0 | 0 | 0 | 0 |
-| CRUD | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| CRUD | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 팝업 | 12 | 0 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 |
 | 공통 기능 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 권한 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
@@ -72,17 +72,17 @@
 
 ## FAIL 인스턴스
 
-- G1|ROW:메인 조회 — 행 집계 — 대조표 메인 조회 '`P_SCP0111_GET_INTEGRATION_PSI` (10 IN + O_RC[PIVO' 의 G1 8요소: PASS:6 · FAIL:1 · NA:1 · FAIL 요소: MSG00344 — 원장 V-c73d3323 (대조표 1행)
+- G1|ROW:메인 조회 — 행 집계 — 대조표 메인 조회 '`P_SCP0111_GET_INTEGRATION_PSI` (10 IN + O_RC[PIVO' 의 G1 8요소: PASS:5 · NA:2 · FAIL:1 · FAIL 요소: MSG00344 — 원장 V-c73d3323 (대조표 1행)
 - F1|SCREEN — 원장 V-3937cc87 RULE_SCREEN / 원장 V-bded1ccf RULE_SCREEN / 원장 V-56473196 RULE_SCREEN / 원장 V-6f8e8fd5 RULE_SCREEN / 원장 V-82a6d508 GENERAL / 원장 V-e6efca32 GENERAL /  (대조표 383행)
 - F4|SP:P_SCP0111_GET_ESS_PACK_LINE — 실측[T-236699af]: PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE: SCP0111/essPackLine/SEARCH — TO-BE 화면 진입·조회 중 호출 없음 · AS-IS 화면 진입 경로 Form_Load > GetEssPackLineAll(cs:1 (대조표 4행)
-- G1|ROW:FindButton — 행 집계 — 대조표 FindButton 'search=handleSearch' 의 G1 8요소: PASS:6 · FAIL:1 · NA:1 · FAIL 요소: MSG00344 — 원장 V-c73d3323 (대조표 1행)
+- G1|ROW:FindButton — 행 집계 — 대조표 FindButton 'search=handleSearch' 의 G1 8요소: PASS:5 · NA:2 · FAIL:1 · FAIL 요소: MSG00344 — 원장 V-c73d3323 (대조표 1행)
 - D6|SCREEN — 원장 V-65789ebc RULE_SCREEN / 원장 V-7b1419f1 RULE_SCREEN / 원장 V-daa3f0ba RULE_SCREEN / 원장 V-309492cc GENERAL / 원장 V-54aee855 GENERAL / 원장 V-f14b1541 GENERAL / 원장 V (대조표 4행)
-- G1|ROW:조회기간 from>to 금지 — 행 집계 — 대조표 조회기간 from>to 금지 'Form 조회 전' 의 G1 8요소: PASS:6 · FAIL:1 · NA:1 · FAIL 요소: MSG00344 — 원장 V-c73d3323 (대조표 1행)
-- X-ROW|ENTRY:SCP0111_IntegrationPSI.FindData_Main — 진입점 집계 17검사 — PASS:10 · NA:4 · REVIEW:1 · ERROR:1 · FAIL:1 (대조표 15행)
+- G1|ROW:조회기간 from>to 금지 — 행 집계 — 대조표 조회기간 from>to 금지 'Form 조회 전' 의 G1 8요소: PASS:5 · NA:2 · FAIL:1 · FAIL 요소: MSG00344 — 원장 V-c73d3323 (대조표 1행)
+- X-ROW|ENTRY:SCP0111_IntegrationPSI.FindData_Main — 진입점 집계 17검사 — PASS:9 · NA:5 · REVIEW:1 · WARN:1 · FAIL:1 (대조표 15행)
 - G1|LEDGER:V-c73d3323 — 원장 V-c73d3323 (대조표 1행)
 - X-ROW|ENTRY:SCP0111_IntegrationPSI.GetEssPackLineAll — 진입점 집계 5검사 — NA:2 · PASS:2 · FAIL:1 (대조표 6행)
 - X-ROW|ENTRY:SCP0111_IntegrationPSI.InsertButton — 진입점 집계 1검사 — FAIL:1 (대조표 1행)
-- X-ROW|ENTRY:SCP0111_IntegrationPSI.SaveData — 진입점 집계 29검사 — NA:15 · PASS:11 · ERROR:2 · FAIL:1 (대조표 18행)
+- X-ROW|ENTRY:SCP0111_IntegrationPSI.SaveData — 진입점 집계 29검사 — NA:15 · PASS:11 · FAIL:1 · ERROR:1 · WARN:1 (대조표 18행)
 - X-ROW|ENTRY:SCP0111_IntegrationPSI.SpdMain_TopChange — 진입점 집계 1검사 — FAIL:1 (대조표 3행)
 - H4|SCREEN — 원장 V-c119ea9a RULE_SCREEN / 원장 V-963e0867 RULE_SCREEN / 원장 V-8511f635 RULE_SCREEN / 원장 V-171648d3 RULE_SCREEN / 원장 V-e1592010 RULE_SCREEN / 원장 V-923a13d7 RULE_S (대조표 4행)
 
@@ -91,4 +91,3 @@
 
 ## NOT_RUN — 검사기 있음·실행 필요(상위 200)
 
-- G4|COND:cboPlanType — 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke

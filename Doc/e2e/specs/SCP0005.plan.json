@@ -1,7 +1,7 @@
 {
   "id": "SCP0005",
-  "mode": "single",
-  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 없음)",
+  "mode": "admin",
+  "modeSource": "users.json screens",
   "menuId": "SCP0005",
   "divCascade": [],
   "divLabels": [
@@ -481,6 +481,38 @@
         "40",
         "EE"
       ]
+    },
+    {
+      "id": "dana.robot",
+      "name": "Dana",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SCP Planner"
+      },
+      "roleNote": "권한 없음 대표",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "SCP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "SEARCH_CITY",
+        "SEARCH_ROUTEID"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40",
+        "82"
+      ]
     }
   ],
   "accountSource": "users.json",
@@ -509,41 +541,41 @@
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
-      "SEARCH_CITY",
+      "SAVE",
       "INSERT",
       "DELETE",
-      "SEARCH_ROUTEID",
-      "SAVE"
+      "SEARCH_CITY",
+      "SEARCH_ROUTEID"
     ],
     "DM Planner": [
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
       "SAVE",
-      "DELETE",
-      "INSERT",
       "SEARCH_ROUTEID",
-      "SEARCH_CITY"
+      "DELETE",
+      "SEARCH_CITY",
+      "INSERT"
     ],
     "DM Planner (W/S)": [
-      "UPLOAD_SAVE",
       "UPLOAD",
+      "UPLOAD_SAVE",
       "SEARCH",
       "SEARCH_CITY",
-      "SEARCH_ROUTEID",
-      "DELETE",
       "INSERT",
-      "SAVE"
+      "SAVE",
+      "SEARCH_ROUTEID",
+      "DELETE"
     ],
     "DM Viewer": [
       "UPLOAD_SAVE",
       "UPLOAD",
       "SEARCH",
-      "SAVE",
+      "DELETE",
       "SEARCH_ROUTEID",
       "SEARCH_CITY",
-      "INSERT",
-      "DELETE"
+      "SAVE",
+      "INSERT"
     ],
     "FP Planner": [
       "UPLOAD",

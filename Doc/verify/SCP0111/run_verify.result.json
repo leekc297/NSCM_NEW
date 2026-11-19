@@ -1,10 +1,10 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-18T19:50:46+09:00",
+ "ts": "2026-11-19T13:16:40+09:00",
  "producer": "run_verify",
  "id": "SCP0111",
  "skip_e2e": false,
- "started": "2026-11-18 19:39:15",
+ "started": "2026-11-19 12:55:30",
  "state": "completed",
  "verdict": "fail",
  "issues": [
@@ -15,7 +15,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-18 19:49"
+     "ref": "E2E @verify 시나리오 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -27,7 +27,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-18 19:49"
+     "ref": "E2E @verify 시나리오 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -39,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 기간 조건 @11-18 19:49"
+     "ref": "E2E @verify 기간 조건 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -51,7 +51,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 저장 세부 @11-18 19:49"
+     "ref": "E2E @verify 저장 세부 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -63,7 +63,19 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-18 19:49"
+     "ref": "E2E @trace @11-19 13:15"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fd3610e5",
+   "class": "J4",
+   "msg": "Home / Auth Request 메뉴",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC EG-45ade04a 결과 연결(결함 DM-247)"
     }
    ],
    "grade": "hard"
@@ -165,18 +177,6 @@
    "grade": "hard"
   },
   {
-   "id": "V-a862f700",
-   "class": "F1",
-   "msg": "[SYS0008 결함 일반화] Created By/Date·Updated By/Date 컬럼",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "V-8e3cf116",
    "class": "D4",
    "msg": "[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 팝업 타이틀",
@@ -189,32 +189,8 @@
    "grade": "hard"
   },
   {
-   "id": "V-7b04b710",
-   "class": "F1",
-   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "V-0cc6ae6f",
    "class": "D4",
-   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-6099c724",
-   "class": "F1",
    "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
    "evidence": [
     {
@@ -249,33 +225,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-a12dbd7b",
-   "class": "F1",
-   "msg": "[SYS0017 결함 유형] 신규 행 Insert 후 Save",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "V-9cd21228",
    "class": "D4",
    "msg": "[SYS0017 결함 유형] 하단 메시지설정 탭 Insert",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-8212f2c2",
-   "class": "F1",
-   "msg": "[SCM0007 결함 유형] 신규 행 Insert 후 Save",
    "evidence": [
     {
      "kind": "exec",
@@ -333,33 +285,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-16d39efa",
-   "class": "F1",
-   "msg": "Created By/Date·Updated By/Date 컬럼",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "V-a60e7f28",
    "class": "D6",
    "msg": "그리드 Insert 신규행 위치",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-b666c29d",
-   "class": "F1",
-   "msg": "공통 버튼 Save(F7) 기존행 수정 + Insert 신규행",
    "evidence": [
     {
      "kind": "exec",
@@ -375,7 +303,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @snap 조회조건 @11-18 19:49"
+     "ref": "E2E @snap 조회조건 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -387,7 +315,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @snap 팝업 @11-18 19:49"
+     "ref": "E2E @snap 팝업 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -399,7 +327,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @snap 화면샷 @11-18 19:49"
+     "ref": "E2E @snap 화면샷 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -411,7 +339,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @snap 화면샷 @11-18 19:49"
+     "ref": "E2E @snap 화면샷 @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -435,7 +363,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-18 19:49"
+     "ref": "E2E @trace @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -459,7 +387,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-18 19:49"
+     "ref": "E2E @trace @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -543,7 +471,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-18 19:49"
+     "ref": "E2E @eg-auth @11-19 13:15"
     }
    ],
    "grade": "hard"
@@ -555,56 +483,67 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @eg-auth @11-18 19:49"
+     "ref": "E2E @eg-auth @11-19 13:15"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "ES-600e4157",
-   "class": "F1",
-   "msg": "SCP0111 E2E crud 저장 왕복(insert)",
+   "id": "EG-45ade04a",
+   "class": "J4",
+   "msg": "SCP0111 EG380 무권한 첫 화면 GUEST/-/GUEST",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @e2e-crud @11-18 19:49"
+     "ref": "E2E @eg-auth @11-19 13:15"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-42d53d53",
+   "class": "MS1",
+   "msg": "SCP0111 PROC 한글 문구 [99010]동일한 데이터가 존재합니다.",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @i18n-static @11-19 13:15"
     }
    ],
    "grade": "hard"
   }
  ],
  "warnings": [
-  "검사기 자체 회귀 — Doc/verify/SCP0111/_checker_regress.md: 승인된 스냅샷(골든)이 FAIL 로 바뀜(화면 변경 또는 검사기 결함 — 사람 확인)",
   "검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
  ],
  "summary": {
-  "rows": 1785,
-  "PASS": 799,
-  "FAIL": 47,
-  "판정필요": 14,
-  "미검증": 32,
-  "해당없음": 893,
+  "rows": 1795,
+  "PASS": 812,
+  "FAIL": 42,
+  "판정필요": 22,
+  "미검증": 10,
+  "해당없음": 909,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1230,
-   "없음(판정 대기)": 14,
-   "없음(미검증)": 32,
+   "기계": 1269,
+   "없음(판정 대기)": 22,
    "사람": 10,
-   "기계(상속·집계)": 496,
-   "출처 미기록": 3
+   "기계(상속·집계)": 480,
+   "없음(미검증)": 10,
+   "출처 미기록": 4
   },
-  "fail_listed": 47,
+  "fail_listed": 42,
   "coverage": {
    "rules": 90,
-   "measured": 548,
-   "not_run_error": 20,
-   "na": 277,
+   "measured": 555,
+   "not_run_error": 9,
+   "na": 286,
    "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_CheckList_v62.xlsx",
-  "ActionItemList": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_ActionItemList_v62.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_CheckList_v64.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_ActionItemList_v64.xlsx"
  },
  "evidence": [
   {
@@ -616,5 +555,5 @@
    "ref": "Doc/verify/SCP0111/e2e_results.json"
   }
  ],
- "note": "⚠ 경고(오류 아님): 검사기 자체 회귀 — Doc/verify/SCP0111/_checker_regress.md: 승인된 스냅샷(골든)이 FAIL 로 바뀜(화면 변경 또는 검사기 결함 — 사람 확인) / 검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0111/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
 }

@@ -263,7 +263,11 @@ def main():
     if not rules:
         print(f'[INFO] sort_rules.csv 없음 — facts_sortrules.py {asis} 먼저'); return 2
     pm_all = [r for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if r.get('proc')]
+    # 2026-11-19 SSP0014 미검증 해소(T358): 이름이 다른 짝(SSP0014_GET_SHIPMENT_MODEL_PIC → P_SSP0014_GET_MODEL_PIC)은 이름 비교로 못 찾아 'PROC_M 배선 없음' REVIEW(A6 미검증) → sp_pair.csv 짝 먼저
+    pairs = {r.get('asis_sp', '').upper(): r.get('tobe_proc', '') for r in rdcsv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rules', 'sp_pair.csv')) if r.get('menu_id', '').upper() == mid and r.get('tobe_proc')}
     def tobe_proc(sp):
+        _k = sp.split('.')[-1].upper()
+        if pairs.get(_k) or pairs.get(tail(sp)): return pairs.get(_k) or pairs[tail(sp)]
         for scope in ([r for r in pm_all if r.get('menu_id', '').upper() == mid], pm_all):
             hit = next((r['proc'] for r in scope if tail(r['proc']) == tail(sp)), '')
             if hit: return hit

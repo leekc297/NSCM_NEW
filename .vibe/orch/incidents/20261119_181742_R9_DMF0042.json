@@ -1,0 +1,26 @@
+{
+  "id": "20261119_181742_R9_DMF0042",
+  "at": "2026-11-19T18:17:42+09:00",
+  "ms": 1795079862408,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금 — _run.dbwin.DMF0042.lock (PID 36104 없음)",
+  "screen": "DMF0042",
+  "sig": "R9|_run.dbwin.DMF0042.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-19 18:13:14 · 인자 DMF0042 --static",
+  "evidence": {
+    "file": "Doc/e2e/_run.dbwin.DMF0042.lock",
+    "pid": 36104
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-19T18:17:42+09:00",
+      "by": "오케스트라",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.dbwin.DMF0042.lock (PID 36104 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

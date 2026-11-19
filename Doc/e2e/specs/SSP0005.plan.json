@@ -1,7 +1,7 @@
 {
   "id": "SSP0005",
-  "mode": "single",
-  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 없음)",
+  "mode": "admin",
+  "modeSource": "--mode",
   "menuId": "SSP0005",
   "divCascade": [],
   "divLabels": [
@@ -240,35 +240,31 @@
   },
   "accounts": [
     {
-      "id": "jinhuannj",
-      "name": "근환",
+      "id": "kijung03.kim",
+      "name": "김기정",
       "groups": [
-        "SSP Planner"
+        "SSP Viewer"
       ],
       "divisions": [
         "40"
       ],
       "roles": {
-        "40": "SSP Planner"
+        "40": "SSP Viewer"
       },
-      "roleNote": "PLANNER",
+      "roleNote": "권한 없음 대표",
       "admin": false,
       "adminOf": [],
       "screenGroup": "",
       "source": "users.json areas.SSP",
       "tobeGroups": [
         "GUEST",
-        "SSP Planner"
+        "SSP Viewer"
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "EDIT",
-        "GET_SCP_PERIOD",
-        "INSERT",
-        "DELETE",
-        "EXCEL",
         "SEARCH",
-        "SAVE"
+        "GET_SCP_PERIOD",
+        "EXCEL"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -296,20 +292,20 @@
       "DELETE"
     ],
     "DM ADMIN": [
-      "INSERT",
-      "DELETE",
-      "SAVE",
-      "EXCEL",
       "GET_SCP_PERIOD",
-      "SEARCH"
+      "EXCEL",
+      "SEARCH",
+      "SAVE",
+      "INSERT",
+      "DELETE"
     ],
     "DM Planner": [
-      "INSERT",
-      "DELETE",
-      "SEARCH",
       "GET_SCP_PERIOD",
       "EXCEL",
-      "SAVE"
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "SEARCH"
     ],
     "DM Viewer": [
       "DELETE",

@@ -44,6 +44,21 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')
 HERE = os.path.dirname(os.path.abspath(__file__))
 E2E = os.path.join(ROOT, 'tools', 'E2E')
 
+# 2026-11-19 오케스트라 P1: 대기 사건 기록(.vibe/orch/events.jsonl — orch_event.py). 종전 대기는 '[WAIT]'·'[INFO] … 대기 후' 문장으로만 남아 집계할 수 없었다.
+#   기록 실패·모듈 없음은 검증을 멈추지 않는다.
+try:
+    import orch_event as _oev
+except Exception:
+    _oev = None
+
+
+def oev(type_, **fields):
+    try:
+        if _oev:
+            _oev.emit(type_, **fields)
+    except Exception:
+        pass
+
 
 # 2026-11-06(사용자 지시): CheckList 진행 표시 — 전체 단계 안에서 지금 어디인지. 종전 VM 은 Playwright 'Running N tests' 만 보고 n/N 을 그려
 #   한 CheckList 안의 여러 Playwright 실행(smoke 3 → 검증엔진 72 → 팝업·권한 9)이 이어지면 '73/9' 처럼 전체가 사라졌다.
@@ -51,13 +66,13 @@ E2E = os.path.join(ROOT, 'tools', 'E2E')
 #   세부 수(M)는 아래 STAGES 의 예정 수 — run() 을 추가·삭제하면 여기도 고친다(어긋나면 단계 끝에 [WARN] 으로 알린다 · 판정 영향 없음).
 #   사전 작업의 세부는 prereq.py 가 항목마다 '[세부 j/M]' 을 낸다(M=None). E2E 단계의 세부 = Playwright 테스트(M=0).
 STAGES = [('pre', '사전 작업(DB·Fact Pack·메타·스펙·smoke)', None),
-          ('facts', 'AS-IS 사실 보강·자동 기대 행·검증 원장', 15),  # 2026-11-13 점검: 실제 run() 15(로그 '실행 15 ≠ 예정 14' 29회) ·  # +facts_defcols(2026-11-12 T266)  # +facts_prereq(2026-11-09 T176) · +facts_popup_meta(2026-11-10 T178)
+          ('facts', 'AS-IS 사실 보강·자동 기대 행·검증 원장', 16),  # +llm_facts(2026-11-19 AI 검토)  # 2026-11-13 점검: 실제 run() 15(로그 '실행 15 ≠ 예정 14' 29회) ·  # +facts_defcols(2026-11-12 T266)  # +facts_prereq(2026-11-09 T176) · +facts_popup_meta(2026-11-10 T178)
           ('static', '정적 검사·골든·대조표 추적', 10),
           ('e2e', 'E2E 검증엔진(@verify·@trace)', 0),
           ('eg', 'E2E 팝업·권한 검사기(eg_chain)', 1),
           ('diff', '차등 검증(AS-IS↔TO-BE 결과 비교)', 7),  # +asis_live_screen(2026-11-13 · 6 → 7)  # +asis_live_auto(2026-11-13)  # +asis_live_ingest(2026-11-12 · 실제 run() 4 + 1 = 5 — 종전 2 는 sqllog_calls·gen_param_map 추가 때 안 고쳐진 값) · 2026-11-06 플랜 2-4: 포착 call-proc 인자로 AS-IS SP ↔ TO-BE PROC 실행·키 기반 비교 → 원장 ASIS_DIFF 행
-          ('post', '사후 검사·판정·추적', 40),  # 2026-11-18 +menu_auth_sync(SCP0111 J4) · 실측 39(SCP0096 로그 '실행 39 ≠ 예정 33' · e2e_suite_ingest 2 포함)  # +snap_expect·snap_validate(2026-11-17 SCP0111)  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
-          ('docs', '문서 생성·회귀 점검', 4)]  # +precision.py(2026-11-06)
+          ('post', '사후 검사·판정·추적', 41),  # +llm_review(2026-11-19 AI 검토)  # 2026-11-18 +menu_auth_sync(SCP0111 J4) · 실측 39(SCP0096 로그 '실행 39 ≠ 예정 33' · e2e_suite_ingest 2 포함)  # +snap_expect·snap_validate(2026-11-17 SCP0111)  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
+          ('docs', '문서 생성·회귀 점검', 5)]  # +llm_desc(2026-11-19 AI 검토)  # +precision.py(2026-11-06)
 _PG = {'i': 0, 'j': 0, 'm': 0}
 
 
@@ -78,6 +93,38 @@ def stage_end():
     if _PG['m'] and _PG['j'] != _PG['m']:
         print(f"[WARN] 진행 표시 — 단계 {_PG['i']} 세부 실행 {_PG['j']} ≠ 예정 {_PG['m']} (run_verify.py STAGES 예정 수 갱신 필요 · 판정 영향 없음)", flush=True)
     _PG['m'] = 0
+
+
+def llm_on(kind):
+    """AI 검토(2026-11-19) 이 종류를 켰는가 — tools/Harness/harness.json llmReview·llmReviewKinds · env LLM_REVIEW=0|1"""
+    try:
+        import llm_call
+        return llm_call.enabled(kind)
+    except Exception:
+        return False
+
+
+def llm_step(kind, cmd, skip=''):
+    """AI 검토 도구 1개 실행(세부 1칸) — 꺼져 있거나 skip 사유가 있으면 건너뜀 표시만. 도구 실패는 체인을 멈추지 않는다(기계 판정 유지). 반환 = 실행했는가"""
+    name = os.path.basename(cmd[1])
+    if skip or not llm_on(kind):
+        sub(name, skip or 'AI 검토 꺼짐(harness.json llmReview)')
+        return False
+    try:
+        rc = run(cmd)
+        if rc:
+            print(f'[WARN] {name} 종료코드 {rc} — AI 검토 결과 없이 진행(기계 판정 유지)', flush=True)
+    except Exception as e:
+        print(f'[WARN] {name} 실행 오류({type(e).__name__}: {str(e)[:120]}) — AI 검토 결과 없이 진행', flush=True)
+    return True
+
+
+def llm_desc_step(py, mid):
+    """설명 문장 작성(llm_desc.py) — 반환 = action_summary.csv 가 바뀌었는가(문서를 한 번 더 만들 것)"""
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'action_summary.csv')
+    sig = lambda: (os.path.getsize(p), os.path.getmtime(p)) if os.path.exists(p) else None
+    s0 = sig()
+    return llm_step('desc', [py, os.path.join(HERE, 'llm_desc.py'), mid]) and sig() != s0
 
 
 def sub(name, skipped=''):
@@ -103,6 +150,14 @@ def run(cmd, env=None, cwd=None):
 # 2026-11-06(속도 개선 ① 계측): 도구·단계별 실제 소요를 남긴다 — 개선 전후 비교의 유일한 근거(감·예측 금지 #126).
 #   로그 줄 '[시간] 도구 · 시작 HH:MM:SS · N.Ns · rc' + 끝에 Doc/verify/<ID>/_timing.csv(실행마다 누적: run_at,stage,tool,start,sec,rc).
 _TM = {'mid': '', 'run_at': time.strftime('%Y-%m-%d %H:%M:%S'), 'rows': [], 'stage': '', 'stage_t0': 0.0}
+
+
+def guard_servers(where):
+    """2026-11-19 사용자: 서버가 살아 있어야 하는 단계 앞에서 FE·BE 응답 확인 — 응답 없으면 기동 후 응답까지 대기(server_guard.py).
+    세부 수(run → sub)에 넣지 않는다(단계 '예정 세부 수' 그대로) · 실패해도 계속(그 단계 검사가 ERROR 로 남음)"""
+    rc = subprocess.call([sys.executable, os.path.join(HERE, 'server_guard.py')], cwd=ROOT)
+    if rc: print(f'[WARN] {where} 앞 서버 확인 실패(rc {rc}) — 서버 미기동 상태로 진행, 이 단계 검사는 ERROR 로 남을 수 있음', flush=True)
+    return rc
 
 
 def timing_add(name, t0, rc=''):
@@ -184,16 +239,35 @@ def _pid_alive(pid):
     return not any(k in o for k in ('No tasks', '작업이 없습니다', '정보:', 'INFO:')) and bool(o.strip())
 
 
+def _proc_chain(depth=4):
+    """이 실행을 띄운 쪽: (ppid, 부모 프로세스 이름, '이름:pid>이름:pid…' 부모 사슬). 조회 실패면 이름·사슬은 빈 문자열(잠금 처리에는 영향 없음)"""
+    ppid = os.getppid()
+    if os.name != 'nt':
+        return ppid, '', ''
+    try:
+        ps = ("$p=%d; $o=@(); for($i=0;$i -lt %d;$i++){ $x=Get-CimInstance Win32_Process -Filter \"ProcessId=$p\"; if(-not $x){break}; "
+              "$o+=('{0}:{1}' -f $x.Name,$x.ProcessId); $p=$x.ParentProcessId }; $o -join '>'") % (ppid, depth)
+        r = subprocess.run(['powershell', '-NoProfile', '-Command', ps], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=20)
+        chain = (r.stdout or '').strip().splitlines()[-1].strip() if (r.stdout or '').strip() else ''
+        return ppid, (chain.split('>')[0].rsplit(':', 1)[0] if chain else ''), chain
+    except Exception:
+        return ppid, '', ''
+
+
 def dbwin_acquire(mid, max_min=120):
     fp = os.path.join(ROOT, 'Doc', 'e2e', f'_run.dbwin.{mid}.lock'); waited = 0; told = False
     while True:
         try:
             fd = os.open(fp, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
             with os.fdopen(fd, 'w', encoding='utf-8') as f:
-                json.dump({'pid': os.getpid(), 'started': time.strftime('%Y-%m-%d %H:%M:%S'), 'args': ' '.join(sys.argv[1:])}, f, ensure_ascii=False)
+                # 2026-11-19 VMO 개선안 20261119193539_REVIEW_3(사용자 승인): 잠금에 실행 주체 기록 — ppid · 부모 이름 · 부모 사슬.
+                #   같은 화면의 죽은 잠금이 32분에 8회 남았는데(18:17~18:49 DMF0042) pid·started·args 만으로는 누가 띄웠는지 알 수 없었다
+                _pp, _pn, _pc = _proc_chain()
+                json.dump({'pid': os.getpid(), 'started': time.strftime('%Y-%m-%d %H:%M:%S'), 'args': ' '.join(sys.argv[1:]), 'ppid': _pp, 'parent': _pn, 'chain': _pc}, f, ensure_ascii=False)
             _DBWIN['fp'] = fp
             if waited:
                 print(f'[INFO] {mid} 시험 데이터 구간 잠금 획득 — {waited // 60}분 {waited % 60}초 대기 후 시작', flush=True)
+                oev('wait.end', kind='dbwin', screen=mid, sec_wait=waited, gave_up=False)
             return True
         except FileExistsError:
             try:
@@ -209,8 +283,10 @@ def dbwin_acquire(mid, max_min=120):
                 continue
             if not told:
                 print(f"[WAIT] 같은 화면({mid})의 다른 검증 실행이 시험 데이터 구간(시작~시험 행 정리)에 있음 — PID {cur.get('pid')} · 시작 {cur.get('started')} · 인자 '{cur.get('args')}'. 끝나면 시작(최대 {max_min}분)", flush=True); told = True
+                oev('wait.start', kind='dbwin', screen=mid, blocker_pid=cur.get('pid'), why=f"같은 화면 검증 실행(시작 {cur.get('started')})", max_sec=max_min * 60)
             if waited >= max_min * 60:
                 print(f'[FAIL] {mid} 시험 데이터 구간 잠금 대기 {max_min}분 초과 — {fp} 확인', flush=True)
+                oev('wait.end', kind='dbwin', screen=mid, sec_wait=waited, gave_up=True)
                 return False
             time.sleep(30); waited += 30
 
@@ -289,6 +365,8 @@ def main():
         if made is not True:
             print(f'[ERROR] 문서 생성 확인 실패 — {made}')
             return 8
+        if llm_desc_step(py, mid) and run(cmd):  # 2026-11-19 설명 문장 작성(AI) — 쓴 행이 있으면 문서만 한 번 더
+            return 8
         rc_reg = run([py, os.path.join(HERE, 'regress.py'), mid, '--harvest'])
         run([py, os.path.join(HERE, 'checker_regress.py'), mid])  # P3 검사기 자체 회귀(골든 기준 있을 때만 대조 · 경고)
         run([py, os.path.join(HERE, 'precision.py'), mid])  # 조치필요 정밀도 이력(2026-11-06 플랜 G1)
@@ -328,6 +406,10 @@ def main():
         # 2026-10-30: E2E plan·스펙·smoke 가 없으면 FAIL(종전엔 MANUAL/ERROR 로 기록만 하고 진행 → SCP0111 smoke 근거 규칙 전부 미측정 · T13). rc 5 = 서버/잠금(환경)
         print(f"[FAIL] 사전 작업 미충족 — Doc/verify/{mid}/prereq.json 확인({'FE/BE 미기동 또는 다른 E2E 실행 중' if rc_pre == 5 else 'AS-IS Fact Pack·TO-BE 화면·E2E plan/스펙/smoke 중 생산 실패'})")
         return 5 if rc_pre == 5 else 6
+    # 2026-11-19 사용자 지시(AI 검토 · 적용 단계 '사용자의견 자동 처리'): 지난 CheckList 에 적은 사용자의견 중 검사엔진 판정이 아직 그대로인 것을 Claude 가 읽고
+    #   처리 구분(엔진오판·룰등록·결함유지·질문답)·근거·답을 만든다(opinion_intake.csv). 판정은 바꾸지 않는다 · 실패해도 체인 계속 · 부분 재판정(--only)·정적 게이트는 건너뜀
+    if not (only or a.static):
+        llm_step('opinion', [py, os.path.join(HERE, 'opinion_intake.py'), mid])
     # 2026-11-18 사용자: "CheckList 생성 시 테스트의 모든 단계까지를 테스트 · 테스트 4단계가 CheckList 에 포함" — smoke(사전 작업) 다음에
     #   crud · auth · authcrud 를 같은 실행기(run-e2e.cmd, 화면별 잠금)로 돌린다. 결과가 최신이면 재사용 · 저장 종류는 VERIFY_NO_SAVE=1 이면 건너뜀(미검증 행).
     #   판정 반입 = e2e_suite_ingest.py(eg_ingest 뒤). E2E 를 돌리지 않는 실행(--skip-e2e · --static · --only)은 건너뛰고 직전 결과만 반입한다
@@ -348,6 +430,9 @@ def main():
     run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
     # 2026-11-10 T212: AS-IS 저장 SP 가 저장마다 새 키로 행을 쌓는 표(append_tables.csv) — F7 '2회 저장 행 수' 가 AS-IS 동작을 결함으로 보지 않게. 실패해도 중단하지 않음(없으면 종전 판정)
     run([py, '-I', os.path.join(HERE, 'facts_append_tables.py'), asis])
+    # 2026-11-19 사용자 지시(AI 검토 · 적용 단계 'AS-IS 사실 추출 검토'): 위에서 보강한 사실 추출본을 Claude 가 화면 원문과 대조해 누락·오추출 후보를 낸다(llm_facts.csv).
+    #   원문·추출본이 지난 검토와 같으면 호출 없음(캐시). 사실 파일은 고치지 않는다 · 실패해도 체인 계속
+    llm_step('facts', [py, os.path.join(HERE, 'llm_facts.py'), mid], skip='정적 게이트' if a.static else '')
     # 2026-11-04 W8-2 ②: 자동 기대 행 재생성 — 방금 보강한 AS-IS 사실·TO-BE 메타로 Doc/verify/<ID>/auto_expect/ 를 다시 만든다(손 행 불변).
     #   자동 행은 기본으로 원장·E2E 가 읽는다(2026-11-05 사용자 지시) → 생성 실패 시 낡은 행 측정 방지로 중단 · VERIFY_AUTO=0(끔)이면 경고만.
     if run([py, os.path.join(HERE, 'gen_expect.py'), mid, '--asis', asis]):
@@ -415,6 +500,7 @@ def main():
 
     if not a.skip_e2e and not blocked:
         stage('e2e', f'tier {a.tier}')
+        guard_servers('E2E 검증엔진')
         # 2026-11-09 T173(SSP0024·SSP0025 시험 저장 잔존): cleanup_spec.json 정의가 없는 화면은 E2E 실저장 뒤 restore_touched 가 'ERROR 표 없음'·cleanup_marker 가 SKIP 으로 끝나
         #   사내 DB 에 시험 행(SSP0025 신규 1행)·감사 칸·이력 2행(SSP0024)이 남았다. 실저장 전에 저장 PROC DML 대상으로 정의를 자동 생성한다(수기 정의는 건드리지 않음)
         try:
@@ -440,11 +526,15 @@ def main():
                 break
             if waited == 0:
                 print(lock.stderr.strip()); print(f'[WAIT] 같은 화면({mid})의 E2E 가 진행 중 — 끝나면 이어서 실행(최대 120분 대기)', flush=True)
+                oev('wait.start', kind='lock', screen=mid, why=(lock.stderr or '').strip()[:300], max_sec=120 * 60)
             if waited >= 120 * 60:
                 print(f'[FAIL] {mid} E2E 잠금 대기 120분 초과 — 이전 실행을 확인(tools/E2E: node runlock.js status)')
+                oev('wait.end', kind='lock', screen=mid, sec_wait=waited, gave_up=True)
                 return 4
             time.sleep(30); waited += 30
-        if waited: print(f'[INFO] {mid} 잠금 획득 — {waited // 60}분 대기 후 시작', flush=True)
+        if waited:
+            print(f'[INFO] {mid} 잠금 획득 — {waited // 60}분 대기 후 시작', flush=True)
+            oev('wait.end', kind='lock', screen=mid, sec_wait=waited, gave_up=False)
         # 2026-10-29: 동시 E2E 상한(슬롯 잠금) — 5화면 동시 실행에서 BE 커넥션 풀(maxPoolSize 10) 고갈 → 로그인 401(-9998)·콤보 60초 대기 → 검증엔진(@trace) 미기동(SCP0020·SCP0096·SCP0111 21:24~26)
         #   + CPU 포화로 15분 타임아웃(SCP0111 B1·B2). e2e.config.json verifyMaxConcurrent(기본 3 · 환경변수 VERIFY_MAX_CONCURRENT) 개까지만 동시에 E2E 를 돌리고 넘치면 빈 슬롯까지 대기(30초 폴링 · 최대 120분).
         # 2026-11-05 사용자 지시: 동시 상한 해제 — 0(또는 음수) = 무제한(슬롯 잠금 생략). 값 미설정일 때만 기본 3.
@@ -462,8 +552,10 @@ def main():
                 break
             if waited == 0:
                 print(f'[WAIT] 동시 E2E 상한 {max_par}개가 모두 실행 중 — 빈 슬롯이 나면 이어서 실행(최대 120분 대기 · tools/E2E: node runlock.js status)', flush=True)
+                oev('wait.start', kind='slot', screen=mid, why=f'동시 E2E 상한 {max_par}개 실행 중', max_sec=120 * 60)
             if waited >= 120 * 60:
                 print(f'[FAIL] {mid} E2E 슬롯 대기 120분 초과 — 실행 중인 E2E 를 확인(tools/E2E: node runlock.js status)')
+                oev('wait.end', kind='slot', screen=mid, sec_wait=waited, gave_up=True)
                 subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
                 return 4
             time.sleep(30); waited += 30
@@ -474,7 +566,9 @@ def main():
                 print(f'[FAIL] {mid} 부하 대기 초과 — {adm}')
                 subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
                 return 4
-        elif waited: print(f'[INFO] {mid} E2E 슬롯 {slot} 획득 — {waited // 60}분 대기 후 시작', flush=True)
+        elif waited:
+            print(f'[INFO] {mid} E2E 슬롯 {slot} 획득 — {waited // 60}분 대기 후 시작', flush=True)
+            oev('wait.end', kind='slot', screen=mid, sec_wait=waited, gave_up=False)
         else: print(f'[INFO] {mid} E2E 슬롯 {slot}/{max_par} 사용', flush=True)
         try:
             out_dir = os.path.join(ROOT, 'Doc', 'verify', mid)
@@ -589,6 +683,7 @@ def main():
                 stage('eg', f"건너뜀(--only {','.join(sorted(only))} — 팝업·권한 검사기는 전체 실행에서만)", m=0)
             elif a.tier in ('all', 'slow'):  # 엔진 갭 팝업·권한 검사기 — 오래 걸려 fast 에서는 돌지 않는다. 화면 잠금을 쥔 채 실행(2026-11-01)
                 stage('eg')
+                guard_servers('팝업·권한 검사기')
                 run([py, os.path.join(HERE, 'eg_chain.py'), mid, '--asis', asis])
             else:
                 stage('eg', '건너뜀(--tier fast — 팝업·권한 검사기는 slow/all 에서만)', m=0)
@@ -622,6 +717,7 @@ def main():
                 print(f'[WARN] 직전 차등 검증 결과 반입 실패(그 행은 이번 판에 빠짐): {str(e_d)[:120]}')
     else:
         stage('diff')
+        guard_servers('차등 검증')
         # 2026-11-11 EN-02: 짝·인자 대응표(sp_pair.csv·param_map.csv)를 이 화면분으로 먼저 만든다 — 종전엔 체인에 없어 손으로 돌린 6화면만 대조되고
         #   나머지는 전부 'sp_pair.csv 에 AS-IS 짝 없음' SKIP 이었다(20화면 diff 395행 중 SKIP 299 — 사유 전부 이것 · 실측 11-11 14:4x)
         run([py, os.path.join(HERE, 'sqllog_calls.py'), mid, '--from-calls'])  # 2026-11-11 T235: E2E 시각대의 사내 호출 로그 → 세션 인자·저장 본문(없으면 rc 3 = 미측정, 체인 계속)
@@ -716,6 +812,29 @@ def main():
         if _sig is not None and _sig == _sig0:
             break
         _sig0 = _sig
+    # 2026-11-19 사용자 지시(AI 검토 · 적용 단계 '판정 검토' · 결정 '근거 확인되면 반영'): 검사엔진이 FAIL·판정필요·미검증으로 남긴 행을 Claude 가 원문과 대조(llm_review.py).
+    #   인용이 기계 확인된 답만 judge 가 반입한다(llm_review.csv apply=Y). 검토 결과가 지난 실행과 달라졌으면 추적표 재계산 + 반입을 한 번 더 돈다(집계 행이 하위 행을 따라가게).
+    #   같은 입력은 캐시라 다시 부르지 않는다 · 실패해도 체인 계속(기계 판정 유지) · 정적 게이트(--static)는 건너뜀
+    _rvp = os.path.join(ROOT, 'Doc', 'verify', mid, 'llm_review.csv')
+    def _rv_sig():
+        try:
+            with open(_rvp, encoding='utf-8-sig', newline='') as _f:
+                return hash(tuple(sorted((x.get('row_id'), x.get('verdict'), x.get('apply'), x.get('ev_hash')) for x in csv.DictReader(_f))))
+        except Exception:
+            return None
+    _rv0 = _rv_sig()
+    if llm_step('judge', [py, os.path.join(HERE, 'llm_review.py'), mid], skip='정적 게이트' if a.static else '') and _rv_sig() != _rv0:
+        for _it in range(2):
+            if run([py, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis, '--to-ledger']):
+                return 9
+            run([py, os.path.join(HERE, 'eg_ingest.py'), mid])
+            subprocess.call([py, os.path.join(HERE, 'e2e_suite_ingest.py'), mid], cwd=ROOT)
+            if run([py, os.path.join(HERE, 'judge.py'), mid]):
+                return 7
+            _sig = _ledger_sig()
+            if _sig is not None and _sig == _sig0:
+                break
+            _sig0 = _sig
     if run([py, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis]):
         return 9
     run([py, os.path.join(HERE, 'impl_engine.py'), mid])
@@ -739,9 +858,17 @@ def main():
     if made is not True:
         print(f'[ERROR] 문서 생성 확인 실패 — {made} (make_verify_docs rc 0 이지만 이번 실행의 CheckList·ActionItemList xlsx 없음)')
         return 8
+    # 2026-11-19 사용자 지시(AI 검토 · 적용 단계 '설명 문장 작성'): '[설명 정리 필요]' 행의 설명 문장을 Claude 가 쓴다(action_summary.csv 에 덧붙임 · 문장 규칙 검사 통과분만).
+    #   쓴 행이 있으면 문서만 한 번 더 만든다(판정 불변). 실패해도 문서는 이미 만들어져 있다(생성기 임시 문장)
+    if llm_desc_step(py, mid) and run(cmd):
+        return 8
     # 검사기 회귀 게이트(2026-10-29)·커버리지 게이트(2026-10-30) — 문서가 만들어진 뒤의 검사기 품질 신호다. 2026-11-06 부터 종료코드 10(오류)이 아니라 경고:
     #   콘솔 '⚠ 경고(오류 아님)' + 결과 봉투 warnings[] 에 남긴다(VM 은 성공으로 표시 · 내용은 봉투·로그에서 확인).
     rc_reg = run([py, os.path.join(HERE, 'regress.py'), mid, '--harvest'])
+    try:  # 2026-11-19 AI 판정 검토 ↔ 사용자 판정 대조(방금 수집한 _user_verdicts.csv 기준 · 보조 호출 · Claude 호출 없음)
+        subprocess.call([py, os.path.join(HERE, 'llm_review.py'), mid, '--precision'], cwd=ROOT)
+    except Exception:
+        pass
     rc_cr = run([py, os.path.join(HERE, 'checker_regress.py'), mid])  # P3 검사기 자체 회귀(골든 기준 있을 때만 대조 · 경고 · 2026-11-06: 승인 스냅샷 악화는 exit 2)
     run([py, os.path.join(HERE, 'precision.py'), mid])  # 조치필요 정밀도 이력(2026-11-06 플랜 G1)
     if rc_cr:
@@ -912,8 +1039,12 @@ def lang_retry(mid, env, out_dir, cfg):
     try:
         with open(wait_p, 'w', encoding='utf-8') as fh:
             json.dump({'pid': os.getpid(), 'at': time.time(), 'tag': f'{mid} I2 재실행 대기'}, fh)
+        if o:
+            oev('wait.start', kind='langwait', screen=mid, why=f"다른 화면 E2E 실행 중({','.join(o)})", max_sec=max_s)
         while o and time.time() - t0 < max_s:
             time.sleep(30); o = busy()
+        if time.time() - t0 >= 30:
+            oev('wait.end', kind='langwait', screen=mid, sec_wait=int(time.time() - t0), gave_up=bool(o))
     finally:
         try:
             os.remove(wait_p)
@@ -967,12 +1098,17 @@ def admit_by_load(mid, cfg):
                 with open(adm, 'w', encoding='utf-8') as fh:
                     json.dump({'pid': os.getpid(), 'id': mid, 'at': time.time(), 'until': time.time() + ramp}, fh)
                 print(f"[INFO] {mid} E2E 시작 — {why}{f' · {waited // 60}분 {waited % 60}초 대기 후' if waited else ''} · 다음 화면 입장은 {ramp}초 뒤부터(부하 반영)", flush=True)
+                if waited:
+                    oev('wait.end', kind='admit', screen=mid, sec_wait=waited, gave_up=False, why=why[:300])
                 return True
             os.remove(adm)
         if why != last_why or waited - last_print >= 600:
             print(f'[WAIT] {mid} 부하 기준 초과·입장 대기 — {why} · 30초 뒤 다시 잼(최대 {wait_max // 60}분)', flush=True)
+            if last_print < 0:
+                oev('wait.start', kind='admit', screen=mid, why=why[:300], max_sec=wait_max)
             last_why, last_print = why, waited
         if waited >= wait_max:
+            oev('wait.end', kind='admit', screen=mid, sec_wait=waited, gave_up=True, why=why[:300])
             return f'{wait_max // 60}분 대기 — 마지막 사유: {why}'
         time.sleep(30); waited += 30
 
@@ -1006,6 +1142,7 @@ def made_docs_text(mid):
 if __name__ == '__main__':
     import datetime
     STARTED = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    os.environ['LLM_RUN_START'] = STARTED  # 2026-11-19 AI 검토 비용 상한(harness.json llmReviewBudgetUsd)은 이 실행이 쓴 합으로 센다(llm_call.spent)
     rc = main()
     stage_end()
     timing_write()

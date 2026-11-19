@@ -1,0 +1,23 @@
+{
+ "kind": "버튼",
+ "scope": "Div 40",
+ "codes": [
+  "EDIT",
+  "SEARCH",
+  "DELETE",
+  "SAVE",
+  "INSERT"
+ ],
+ "asis_buttons": [
+  {
+   "key": "delete",
+   "label": "Delete",
+   "lbl": "LBL00622",
+   "kind": "hotkey",
+   "tobe": "hotkeyConfig.delete",
+   "asis": "btnDelete"
+  }
+ ],
+ "src": "plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)",
+ "note": "코드 ↔ 표시명은 접두 일치(SEARCH~Search(F5)) · MEASURE_SELECT~Measure"
+}

@@ -97,7 +97,7 @@
           {
             "type": "command",
             "command": "powershell -NoProfile -ExecutionPolicy Bypass -File C:/Projects/NSCM/tools/Harness/hooks/harness-stop-gate.ps1",
-            "timeout": 60
+            "timeout": 960
           }
         ]
       }

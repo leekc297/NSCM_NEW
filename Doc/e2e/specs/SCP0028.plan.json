@@ -1,7 +1,7 @@
 {
   "id": "SCP0028",
-  "mode": "single",
-  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "mode": "admin",
+  "modeSource": "users.json screens",
   "menuId": "SCP0028",
   "divCascade": [],
   "divLabels": [
@@ -363,6 +363,36 @@
         "40",
         "EE"
       ]
+    },
+    {
+      "id": "zhangjiali",
+      "name": "장가력",
+      "groups": [
+        "SCM Viewer"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SCM Viewer"
+      },
+      "roleNote": "권한 없음 대표",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "GUEST",
+        "SCM Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "40"
+      ]
     }
   ],
   "accountSource": "users.json",
@@ -381,17 +411,17 @@
       "DELETE"
     ],
     "DM ADMIN": [
-      "DELETE",
-      "SEARCH",
       "SAVE",
+      "SEARCH",
+      "DELETE",
       "INSERT"
     ],
     "DM Planner": [
-      "DELETE",
-      "INSERT",
       "SAVE",
-      "SEARCH",
-      "EDIT"
+      "DELETE",
+      "EDIT",
+      "INSERT",
+      "SEARCH"
     ],
     "DM Viewer": [
       "SEARCH",

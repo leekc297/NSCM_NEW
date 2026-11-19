@@ -11,7 +11,13 @@
 - text: Plan Date
 - combobox: {DATE} ({W})
 - button "Open"
-- text: Period 2026.10 ~ 2027.03
+- img
+- text: Period
+- button "calendar"
+- textbox "YYYY.MM": "2026.10"
+- text: ~
+- button "calendar"
+- textbox "YYYY.MM": "2027.03"
 - checkbox "Qty < 0"
 - text: Qty < 0
 # visual-order: Div > Model/Nickname > Cell Model > Plan Date > Period > Qty < 0

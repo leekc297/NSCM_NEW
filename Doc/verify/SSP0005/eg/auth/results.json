@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44350,
+                      "duration": 46465,
                       "errors": [],
                       "stdout": [
                         {
@@ -148,7 +148,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:07:48.557Z",
+                      "startTime": "2026-11-19T08:05:12.355Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -179,35 +179,35 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 47283,
+                      "duration": 62124,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SSP/40/SSP Planner 9s\n"
+                          "text": "[eg_auth] SSP/40/SSP Planner 13s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/40/SSP Viewer 10s\n"
+                          "text": "[eg_auth] SSP/40/SSP Viewer 12s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/81/SSP Planner 9s\n"
+                          "text": "[eg_auth] SSP/81/SSP Planner 12s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/81/SSP Viewer 10s\n"
+                          "text": "[eg_auth] SSP/81/SSP Viewer 13s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/82/SSP Planner 9s\n"
+                          "text": "[eg_auth] SSP/82/SSP Planner 13s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG374 PASS\":1,\"EG411 PASS\":1,\"EG374 판정필요\":2,\"EG411 판정필요\":2}\n"
@@ -218,7 +218,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:08:36.951Z",
+                      "startTime": "2026-11-19T08:06:02.300Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -249,7 +249,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44226,
+                      "duration": 47084,
                       "errors": [],
                       "stdout": [
                         {
@@ -278,11 +278,14 @@
                         },
                         {
                           "text": "  EG022 ERROR Div 선택 [81_HG] 기대 선택 · 실측 실패 ·  측정 경로 실패\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\eg\\auth\\e2e.json — UNKNOWN\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:09:28.346Z",
+                      "startTime": "2026-11-19T08:07:08.933Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -292,7 +295,7 @@
               ],
               "id": "fce9d8edbd378244cae8-843814ab85f5c6242117",
               "file": "eg_auth.spec.ts",
-              "line": 366,
+              "line": 380,
               "column": 7
             },
             {
@@ -313,32 +316,20 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 299949,
+                      "duration": 328511,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241114\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211119\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241114\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 \n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG109 NA\":1,\"EG373 NA\":1,\"EG126 ERROR\":1,\"EG140 ERROR\":1,\"EG319 ERROR\":1}\n"
@@ -355,7 +346,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:10:16.530Z",
+                      "startTime": "2026-11-19T08:08:00.614Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -365,7 +356,7 @@
               ],
               "id": "fce9d8edbd378244cae8-627265a9ace872a0bfaa",
               "file": "eg_auth.spec.ts",
-              "line": 417,
+              "line": 431,
               "column": 7
             },
             {
@@ -386,7 +377,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 295,
+                      "duration": 313,
                       "errors": [],
                       "stdout": [
                         {
@@ -395,7 +386,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:15:20.525Z",
+                      "startTime": "2026-11-19T08:13:33.775Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -405,7 +396,7 @@
               ],
               "id": "fce9d8edbd378244cae8-da6cc83be0a583cf4a98",
               "file": "eg_auth.spec.ts",
-              "line": 488,
+              "line": 513,
               "column": 7
             },
             {
@@ -426,7 +417,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44724,
+                      "duration": 47178,
                       "errors": [],
                       "stdout": [
                         {
@@ -435,7 +426,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:15:24.765Z",
+                      "startTime": "2026-11-19T08:13:38.939Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -445,7 +436,7 @@
               ],
               "id": "fce9d8edbd378244cae8-7ccd2f96bb49ce8208f0",
               "file": "eg_auth.spec.ts",
-              "line": 558,
+              "line": 583,
               "column": 7
             },
             {
@@ -466,19 +457,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 273,
+                      "duration": 285,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SSP0005 {\"EG032 ERROR\":1}\n"
-                        },
-                        {
-                          "text": "  EG032 ERROR SSP0005 [계정쌍] 기대 TITLESET_USER 보유·미보유 계정쌍 · 실측 명부에 쌍 없음(보유 N · 미보유 Y) · SCM_MST_TITLESET_USER \n"
+                          "text": "[eg_auth] SSP0005 {\"EG032 NA\":1}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:16:13.653Z",
+                      "startTime": "2026-11-19T08:14:31.303Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -488,7 +476,7 @@
               ],
               "id": "fce9d8edbd378244cae8-2d4849858c9e4f46ff5f",
               "file": "eg_auth.spec.ts",
-              "line": 574,
+              "line": 599,
               "column": 7
             },
             {
@@ -509,31 +497,25 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 171549,
+                      "duration": 269177,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20241114\",\"toYyyymmdd\":\"20271114\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AA00\",\"debugMode\":\"F\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211114\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 \n"
                         },
                         {
                           "text": "[eg_auth] SSP0005 {\"EG395 ERROR\":1}\n"
                         },
                         {
-                          "text": "  EG395 ERROR SSP0005 [저장 후 비움] 기대 조회 행 · 실측 0행(기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행) ·  \n"
+                          "text": "  EG395 ERROR SSP0005 [저장 후 비움] 기대 조회 행 · 실측 0행(기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행) ·  \n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:16:18.017Z",
+                      "startTime": "2026-11-19T08:14:36.113Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -543,7 +525,7 @@
               ],
               "id": "fce9d8edbd378244cae8-fa5fab798057cc305114",
               "file": "eg_auth.spec.ts",
-              "line": 604,
+              "line": 642,
               "column": 7
             },
             {
@@ -564,19 +546,19 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 271,
+                      "duration": 11904,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SSP0005 {\"EG380 ERROR\":1}\n"
+                          "text": "[eg_auth] SSP0005 {\"EG380 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG380 ERROR 무권한 첫 화면 [실계정 없음] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정) · DM-247·GAP-475 메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요\n"
+                          "text": "  EG380 FAIL 무권한 첫 화면 [GUEST/-/GUEST] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 URL /view/home · 안내창 'You are not authorized to NSCM. Apply for permission.' · 안내창 확인 뒤 UR · DM-247·GAP-475 명부 GUEST 전용 계정 1\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-14T13:19:13.476Z",
+                      "startTime": "2026-11-19T08:19:10.240Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -586,7 +568,7 @@
               ],
               "id": "fce9d8edbd378244cae8-6111a177f36cc774262b",
               "file": "eg_auth.spec.ts",
-              "line": 629,
+              "line": 667,
               "column": 7
             }
           ]
@@ -596,8 +578,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-14T13:07:48.153Z",
-    "duration": 690372.777,
+    "startTime": "2026-11-19T08:05:11.788Z",
+    "duration": 855645.395,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

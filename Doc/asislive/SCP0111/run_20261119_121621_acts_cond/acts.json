@@ -1,0 +1,313 @@
+{
+ "id": "SCP0111",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboPlanDate",
+     "before": [
+      "2026-08-17 (W34)",
+      12,
+      0,
+      null,
+      true,
+      true,
+      "20260817"
+     ],
+     "after": [
+      "2026-10-19 (W43)",
+      14,
+      0,
+      null,
+      true,
+      true,
+      "20261019"
+     ]
+    },
+    {
+     "control": "cmbFromMonth",
+     "before": [
+      "2026-08",
+      20,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-10",
+      13,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "cmbToMonth",
+     "before": [
+      "2027-01",
+      20,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2027-03",
+      13,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0111-S596746",
+    "SCP0111-S950695"
+   ]
+  },
+  {
+   "control": "cboDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:81 Automotive Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cboPlanDate",
+     "before": [
+      "2026-10-19 (W43)",
+      14,
+      0,
+      null,
+      true,
+      true,
+      "20261019"
+     ],
+     "after": [
+      "2026-08-17 (W34)",
+      12,
+      0,
+      null,
+      true,
+      true,
+      "20260817"
+     ]
+    },
+    {
+     "control": "cmbFromMonth",
+     "before": [
+      "2026-10",
+      13,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-08",
+      20,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "cmbToMonth",
+     "before": [
+      "2027-03",
+      13,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2027-01",
+      20,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0111-S596746",
+    "SCP0111-S950695"
+   ]
+  },
+  {
+   "control": "cboPlanDate",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:2026-08-10 (W33)",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cmbFromMonth",
+     "before": [
+      "2026-08",
+      20,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-08",
+      13,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "cmbToMonth",
+     "before": [
+      "2027-01",
+      20,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2027-01",
+      13,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0111-S96bd28",
+    "SCP0111-Sceb3f0",
+    "SCP0111-S1aee1d",
+    "SCP0111-S950695",
+    "SCP0111-S47b3dc",
+    "SCP0111-S8ce3f4"
+   ]
+  },
+  {
+   "control": "cboPlanDate",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:2026-08-17 (W34)",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "SCM_SYS_GET_SPREAD_TITLE"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "cmbFromMonth",
+     "before": [
+      "2026-08",
+      13,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2026-08",
+      20,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "cmbToMonth",
+     "before": [
+      "2027-01",
+      13,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "2027-01",
+      20,
+      5,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "SCP0111-S96bd28",
+    "SCP0111-Sceb3f0",
+    "SCP0111-S1aee1d",
+    "SCP0111-S950695",
+    "SCP0111-S47b3dc",
+    "SCP0111-S8ce3f4"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "CboPlanType",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 1
+  }
+ ],
+ "at": "2026-11-19 12:15:49"
+}

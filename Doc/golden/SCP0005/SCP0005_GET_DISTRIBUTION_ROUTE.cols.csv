@@ -1,0 +1,42 @@
+﻿set,column,asis_fill,tobe_fill,key_rows,mismatch,verdict,note,key_source,keys
+1,route_id,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,from_country,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,from_city,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,from_city_name,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,transport_mode,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,transport_mode_name,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,priority,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_mon,0.508,0.508,8036,0,PASS,채움 AS-IS 51% ↔ TO-BE 51% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_tue,0.501,0.501,8036,0,PASS,채움 AS-IS 50% ↔ TO-BE 50% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_wed,0.558,0.558,8036,0,PASS,채움 AS-IS 56% ↔ TO-BE 56% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_thu,0.505,0.505,8036,0,PASS,채움 AS-IS 51% ↔ TO-BE 51% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_fri,0.539,0.539,8036,0,PASS,채움 AS-IS 54% ↔ TO-BE 54% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_sat,0.482,0.482,8036,0,PASS,채움 AS-IS 48% ↔ TO-BE 48% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days_sun,0.473,0.473,8036,0,PASS,채움 AS-IS 47% ↔ TO-BE 47% · 같은 키 8036행 중 다름 0,auto,routeid
+1,days,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,d_country,0.935,0.935,8036,0,PASS,채움 AS-IS 93% ↔ TO-BE 93% · 같은 키 8036행 중 다름 0,auto,routeid
+1,d_port_code,0.935,0.935,8036,0,PASS,채움 AS-IS 93% ↔ TO-BE 93% · 같은 키 8036행 중 다름 0,auto,routeid
+1,d_port_name,0.935,0.935,8036,0,PASS,채움 AS-IS 93% ↔ TO-BE 93% · 같은 키 8036행 중 다름 0,auto,routeid
+1,a_country,0.933,0.933,8036,0,PASS,채움 AS-IS 93% ↔ TO-BE 93% · 같은 키 8036행 중 다름 0,auto,routeid
+1,a_port_code,0.933,0.933,8036,0,PASS,채움 AS-IS 93% ↔ TO-BE 93% · 같은 키 8036행 중 다름 0,auto,routeid
+1,a_port_name,0.932,0.932,8036,8,REVIEW,같은 키(routeid) 8036행 중 8행 값 다름(0%) 예: 662: ''↔'/' / 2444: ''↔'/',auto,routeid
+1,shipping_company,0.909,0.909,8036,334,REVIEW,같은 키(routeid) 8036행 중 334행 값 다름(4%) 예: 27: ''↔'/' / 43: ''↔'/',auto,routeid
+1,to_country,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,to_city,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,to_city_name,0.998,0.998,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,ship_doc_preparation_date,0.045,0.045,8036,0,PASS,채움 AS-IS 5% ↔ TO-BE 5% · 같은 키 8036행 중 다름 0,auto,routeid
+1,lt_departure_inland,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,lt_wait_shipping,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,lt_voyage,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,lt_lay_off_clearance,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,lt_arrival_inland,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,lt_sum,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,valid_yn,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,created_by,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,creation_date,1.000,1.000,8036,0,PASS,채움 AS-IS 100% ↔ TO-BE 100% · 같은 키 8036행 중 다름 0,auto,routeid
+1,last_updated_by,1.000,1.000,8036,1,REVIEW,같은 키(routeid) 8036행 중 1행 값 다름(0%) 예: 6650: 'kimkwanghee'↔'minyonglee1',auto,routeid
+1,last_update_date,1.000,1.000,8036,1,REVIEW,같은 키(routeid) 8036행 중 1행 값 다름(0%) 예: 6650: '2020-10-13 16:08:0'↔'2026-11-10 09:18:5',auto,routeid
+1,lt_type,0.790,0.790,8036,1685,REVIEW,같은 키(routeid) 8036행 중 1685행 값 다름(21%) 예: 3641: ''↔'/' / 3396: ''↔'/',auto,routeid
+1,One_SEGMENT_COST,0.052,0.052,8036,0,PASS,채움 AS-IS 5% ↔ TO-BE 5% · 같은 키 8036행 중 다름 0,auto,routeid
+1,Two_SEGMENT_COST,0.052,0.052,8036,0,PASS,채움 AS-IS 5% ↔ TO-BE 5% · 같은 키 8036행 중 다름 0,auto,routeid
+1,Three_SEGMENT_COST,0.052,0.052,8036,0,PASS,채움 AS-IS 5% ↔ TO-BE 5% · 같은 키 8036행 중 다름 0,auto,routeid

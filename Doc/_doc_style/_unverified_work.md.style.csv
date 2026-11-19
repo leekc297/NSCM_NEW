@@ -1,2 +1,2 @@
 ﻿시트,위치,규칙,걸린 표현,고치는 법,문장
-,L87,기호,| F4 2행 · B4 2행 | 라운드 1 원인 그대로(ADMIN 계정만 시험 · AS-IS 개,가운뎃점 나열 → 쉼표,"| F4 2행 · B4 2행 | 라운드 1 원인 그대로(ADMIN 계정만 시험 · AS-IS 개발 DB Plan date 0건) | 수정 없음 | 결정 D10, D6 |"
+,L15,용어,| 원장 단위 시험 26행 해,단위 시험·자동 시험 코드 → 테스트 코드·테스트 케이스 + 테스트 파일명(규칙 19),"| C Insert 무동작 | 26 | AS-IS SCP0028_Shipment_Lot_Size.cs:200~203 InsertButton → InsertRow(), 571~573 InsertRow 본문 비어 있음. TO-BE 실측 'Insert 무동작', 'Insert 뒤 신규 행 없음' | `tools/Harness/verify/facts_lockrules.py` insert_noop, `tools/Harness/verify/judge.py` _asis_insert_noop, insert_noop_na (T362) | 원장 단위 시험 26행 해당없음. facts_lockrules SCP0028 재생성 diff = new_row 열 UNKNOWN → NONE 18칸만. 빈 본문 판정 134화면(원문 확인 표본 SCP0096 cs:274, SSP0020 cs:897) |"

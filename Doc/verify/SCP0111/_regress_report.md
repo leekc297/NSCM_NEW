@@ -1,10 +1,10 @@
-# 검사기 회귀 보고 — 2026-11-18 19:50
+# 검사기 회귀 보고 — 2026-11-19 13:16
 
-오라클: Doc\verify\_user_verdicts.csv (470건 · 판정오류/중복/대상아님만 검사) · 놓친결함 오라클 Doc\verify\_missed_oracle.csv
+오라클: Doc\verify\_user_verdicts.csv (475건 · 판정오류/중복/대상아님만 검사) · 놓친결함 오라클 Doc\verify\_missed_oracle.csv
 위반 합계: 9
 
 ## SCP0111 — 대조 12건 · 위반 4 · 놓친결함 오라클 9건 중 위반 5
-- V-28123894 [판정오류] G4 SCP0111 스냅샷 조회조건 Div 40 — 검사기 원판정 FAIL 유지 — 사용자: '오류 아님' · 현재 증거: [재실측 스냅샷 조회조건] 기준 Doc\verify\SCP0111\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 Doc\verify\SCP0111\snap\received\조회조건_Div_40.aria.yml · 차이 13줄(Do
+- V-28123894 [판정오류] G4 SCP0111 스냅샷 조회조건 Div 40 — 검사기 원판정 FAIL 유지 — 사용자: '오류 아님' · 현재 증거: [재실측 스냅샷 조회조건] 기준 Doc\verify\SCP0111\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 Doc\verify\SCP0111\snap\received\조회조건_Div_40.aria.yml · 차이 10줄(Do
 - V-55556e17 [판정오류] H4 SCP0111 스냅샷 화면샷 1920 — 검사기 원판정 FAIL 유지 — 사용자: '- 오류 아님 - 컬럼 폭 비율 은 오류에서 제외' · 현재 증거: [재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0111\snap\golden\화면샷_1920.png ↔ 실측 C:\Projects\NSCM\Doc\verify\SCP0111\e2e\artifacts\_snap--snap-스냅샷-형상-검사-sn
 - V-e8ca7b9a [판정오류] H4 SCP0111 스냅샷 화면샷 1366 — 검사기 원판정 FAIL 유지 — 사용자: '- 오류 아님 - 컬럼 폭 비율 은 오류에서 제외' · 현재 증거: [재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0111\snap\golden\화면샷_1366.png ↔ 실측 C:\Projects\NSCM\Doc\verify\SCP0111\e2e\artifacts\_snap--snap-스냅샷-형상-검사-sn
 - V-f5114028 [판정오류] H6 SCP0111 스냅샷 팝업 Model/Nickname — 검사기 원판정 FAIL 유지 — 사용자: '오류 아님 - TO-BE RULE' · 현재 증거: [재실측 스냅샷 팝업] 기준 Doc\verify\SCP0111\snap\golden\팝업_Model_Nickname.aria.yml ↔ 실측 Doc\verify\SCP0111\snap\received\팝업_Model_Nickname.aria.yml ·

@@ -92,6 +92,27 @@ export function writeDiff(id: string, key: string, text: string): string {
   const p = path.join(snapDir(id), 'diff', `${key}.txt`); fs.writeFileSync(p, text, 'utf8'); return path.relative(ROOT, p);
 }
 
+/** 2026-11-19 T348 형상 정규화(비교 전용 · 저장 파일은 원문 그대로) — 사용자의견 SCP0111 v64 V-28123894·V-f5114028
+ *  CR-115 ① 공용 월 범위 칸: '- text: 라벨' 다음 [달력 버튼 · 입력칸 · '~' · 달력 버튼 · 입력칸] 6줄 = '- text: 라벨 시작 ~ 끝' 한 줄
+ *         ② 이름 없는 아이콘 줄('- img') 제외 ③ 'YYYY.MM' 값 = {YM}(날마다 바뀌는 기본값)
+ *  CR-100 팝업 종류: 건수 표시 줄('- text: {TOTAL}') 제외(TO-BE 공통 팝업은 건수 표시 없음이 TO-BE 룰 · 건수 검사는 H6 시험 몫) */
+export function shapeNorm(kind: SnapKind, t: string): string {
+  const L = t.replace(/\r/g, '').split('\n').filter(s => !/^\s*- img\s*$/.test(s));
+  const out: string[] = [];
+  const cal = (s: string | undefined) => /^\s*- button "calendar"\s*$/i.test(s || '');
+  const box = (s: string | undefined) => /^\s*- textbox(?: "[^"]*")?(?::\s*"?([^"]*)"?)?\s*$/.exec(s || '');
+  for (let i = 0; i < L.length; i++) {
+    const m = /^(\s*)- text: (.+?)\s*$/.exec(L[i]);
+    const b1 = box(L[i + 2]), b2 = box(L[i + 5]);
+    if (m && cal(L[i + 1]) && b1 && /^\s*- text: ~\s*$/.test(L[i + 3] || '') && cal(L[i + 4]) && b2) {
+      out.push(`${m[1]}- text: ${m[2]} ${b1[1] || ''} ~ ${b2[1] || ''}`.trimEnd()); i += 5; continue;
+    }
+    out.push(L[i]);
+  }
+  return out.map(s => s.replace(/\b20\d{2}\.(0[1-9]|1[0-2])\b/g, '{YM}'))
+    .filter(s => !(kind === '팝업' && /^\s*- text: \{TOTAL\}\s*$/.test(s))).join('\n');
+}
+
 /** 텍스트 종류 스냅샷 1건 판정(aria·헤더 공통) — 골든 없음 NEW / 같음 MATCH / 다름 DIFF */
 export function judgeText(id: string, kind: SnapKind, scope: string, ext: 'aria.yml' | 'txt', received: string, detail = ''): SnapResult {
   const key = keyOf(kind, scope); const at = new Date().toISOString();
@@ -101,7 +122,10 @@ export function judgeText(id: string, kind: SnapKind, scope: string, ext: 'aria.
   if (golden == null) return { key, kind, scope, status: 'NEW', golden: '', received: rp, diff: '', lines: received.split('\n').filter(Boolean).length, detail: `골든 없음 — 수신본 ${rp} 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · ${detail}`, at };
   const norm = (s: string) => s.replace(/\r/g, '').split('\n').map(x => x.trimEnd()).filter(Boolean).join('\n');
   if (norm(golden) === norm(received)) return { key, kind, scope, status: 'MATCH', golden: gp, received: rp, diff: '', lines: 0, detail: `골든 ${gp} 와 일치 · ${detail}`, at };
-  const d = lineDiff(golden, received); const dp = writeDiff(id, key, d.text);
+  // 2026-11-19 T348: 형상이 아닌 차이(공용 기간 칸 구조·아이콘 CR-115 · 팝업 건수 표시 CR-100)는 양쪽을 같은 규칙으로 정규화한 뒤 비교한다
+  const gN = shapeNorm(kind, golden), rN = shapeNorm(kind, received);
+  if (norm(gN) === norm(rN)) return { key, kind, scope, status: 'MATCH', golden: gp, received: rp, diff: '', lines: 0, detail: `골든 ${gp} 와 형상 일치(원문 차이는 TO-BE 룰 ${kind === '팝업' ? 'CR-100 팝업 건수 표시 · ' : ''}CR-115 공용 기간 칸·아이콘 정규화로 같음) · ${detail}`, at };
+  const d = lineDiff(gN, rN); const dp = writeDiff(id, key, d.text);
   return { key, kind, scope, status: 'DIFF', golden: gp, received: rp, diff: dp, lines: d.lines, detail: `골든 ${gp} 와 ${d.lines}줄 다름(${dp}) — 첫 차이: ${d.text.split('\n')[0]?.slice(0, 140) || ''} · ${detail}`, at };
 }
 

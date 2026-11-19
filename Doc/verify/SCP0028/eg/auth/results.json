@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15271,
+                      "duration": 17027,
                       "errors": [],
                       "stdout": [
                         {
@@ -142,7 +142,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:46:19.138Z",
+                      "startTime": "2026-11-19T07:22:15.534Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -173,23 +173,23 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 104523,
+                      "duration": 119888,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 11s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 11s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 11s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":2,\"EG411 PASS\":2,\"EG374 FAIL\":1,\"EG411 FAIL\":1}\n"
@@ -201,25 +201,25 @@
                           "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/40/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 12s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 12s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 14s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCP Planner 12s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 12s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":2,\"EG411 PASS\":2,\"EG374 FAIL\":1,\"EG411 FAIL\":1}\n"
@@ -231,13 +231,13 @@
                           "text": "  EG411 FAIL DELETE 버튼 조회 전 [SCP/81/SCM Viewer] 기대 계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음  · 실측 조회 전 노출 · 조회 후 노출 · PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070 \n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 12s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/82/SCM Viewer 12s\n"
+                          "text": "[eg_auth] SCP/82/SCM Viewer 13s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":2,\"EG411 PASS\":2,\"EG374 FAIL\":1,\"EG411 FAIL\":1}\n"
@@ -254,7 +254,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:46:37.288Z",
+                      "startTime": "2026-11-19T07:22:36.595Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -285,7 +285,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9699,
+                      "duration": 11074,
                       "errors": [],
                       "stdout": [
                         {
@@ -294,7 +294,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:48:25.580Z",
+                      "startTime": "2026-11-19T07:24:40.483Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -304,7 +304,7 @@
               ],
               "id": "fce9d8edbd378244cae8-84c5c856340bfa65f61c",
               "file": "eg_auth.spec.ts",
-              "line": 366,
+              "line": 380,
               "column": 7
             },
             {
@@ -325,9 +325,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26778,
+                      "duration": 42535,
                       "errors": [],
                       "stdout": [
+                        {
+                          "text": "[EG126] F3 정렬 스위치 켠 뒤 OPERATION_GROUP_ID asc 정렬\n"
+                        },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG109 NA\":1,\"EG373 NA\":1,\"EG140 ERROR\":1,\"EG319 ERROR\":1,\"EG126 ERROR\":1}\n"
                         },
@@ -338,12 +341,12 @@
                           "text": "  EG319 ERROR 병합 그룹 위 삽입 [병합 DIVISION_ID r0~36 · 선택 r1] 기대 신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15 · 실측 신규행 r-1 · 메시지 - · SCP0028_Shipment_Lot_Size.cs:202 \n"
                         },
                         {
-                          "text": "  EG126 ERROR Sort 상태 Insert [SCP0028] 기대 헤더 클릭 정렬 · 실측 헤더 15칸 클릭 후 정렬 상태 없음 — 측정 경로 없음 ·  \n"
+                          "text": "  EG126 ERROR Sort 유지 Insert [정렬 OPERATION_GROUP_ID asc · 선택 r2] 기대 Insert 후 정렬 유지 — DM-32 · 실측 정렬 전 OPERATION_GROUP_ID asc → 후 OPERATION_GROUP_ID asc · 신규행 r-1 · SCP0028_Shipment_Lot_Size.cs:202 \n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:48:38.929Z",
+                      "startTime": "2026-11-19T07:24:55.504Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -353,7 +356,7 @@
               ],
               "id": "fce9d8edbd378244cae8-25e3af2b96dead289b27",
               "file": "eg_auth.spec.ts",
-              "line": 417,
+              "line": 431,
               "column": 7
             },
             {
@@ -374,7 +377,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 288,
+                      "duration": 280,
                       "errors": [],
                       "stdout": [
                         {
@@ -383,7 +386,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:49:09.330Z",
+                      "startTime": "2026-11-19T07:25:41.937Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -393,7 +396,7 @@
               ],
               "id": "fce9d8edbd378244cae8-a1048601e2c9044a11fe",
               "file": "eg_auth.spec.ts",
-              "line": 488,
+              "line": 513,
               "column": 7
             },
             {
@@ -414,7 +417,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4817,
+                      "duration": 6846,
                       "errors": [],
                       "stdout": [
                         {
@@ -423,7 +426,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:49:13.271Z",
+                      "startTime": "2026-11-19T07:25:46.142Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -433,7 +436,7 @@
               ],
               "id": "fce9d8edbd378244cae8-6def0b352080f2687100",
               "file": "eg_auth.spec.ts",
-              "line": 558,
+              "line": 583,
               "column": 7
             },
             {
@@ -454,19 +457,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 295,
+                      "duration": 268,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0028 {\"EG032 ERROR\":1}\n"
-                        },
-                        {
-                          "text": "  EG032 ERROR SCP0028 [계정쌍] 기대 TITLESET_USER 보유·미보유 계정쌍 · 실측 명부에 쌍 없음(보유 N · 미보유 Y) · SCM_MST_TITLESET_USER \n"
+                          "text": "[eg_auth] SCP0028 {\"EG032 NA\":1}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:49:21.794Z",
+                      "startTime": "2026-11-19T07:25:56.877Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -476,7 +476,7 @@
               ],
               "id": "fce9d8edbd378244cae8-f1f88438aa34d8bc6429",
               "file": "eg_auth.spec.ts",
-              "line": 574,
+              "line": 599,
               "column": 7
             },
             {
@@ -497,7 +497,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4869,
+                      "duration": 7325,
                       "errors": [],
                       "stdout": [
                         {
@@ -506,7 +506,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:49:25.704Z",
+                      "startTime": "2026-11-19T07:26:00.948Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -516,7 +516,7 @@
               ],
               "id": "fce9d8edbd378244cae8-5391b674f2ac1d07277b",
               "file": "eg_auth.spec.ts",
-              "line": 604,
+              "line": 642,
               "column": 7
             },
             {
@@ -537,19 +537,19 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 307,
+                      "duration": 10169,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP0028 {\"EG380 ERROR\":1}\n"
+                          "text": "[eg_auth] SCP0028 {\"EG380 FAIL\":1}\n"
                         },
                         {
-                          "text": "  EG380 ERROR 무권한 첫 화면 [실계정 없음] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정) · DM-247·GAP-475 메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요\n"
+                          "text": "  EG380 FAIL 무권한 첫 화면 [GUEST/-/GUEST] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 URL /view/home · 안내창 'You are not authorized to NSCM. Apply for permission.' · 안내창 확인 뒤 UR · DM-247·GAP-475 명부 GUEST 전용 계정 1\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-13T20:49:34.484Z",
+                      "startTime": "2026-11-19T07:26:12.369Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -559,7 +559,7 @@
               ],
               "id": "fce9d8edbd378244cae8-29b89290151e193023c2",
               "file": "eg_auth.spec.ts",
-              "line": 629,
+              "line": 667,
               "column": 7
             }
           ]
@@ -569,8 +569,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-13T20:46:18.730Z",
-    "duration": 200572.336,
+    "startTime": "2026-11-19T07:22:14.822Z",
+    "duration": 253533.937,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

@@ -480,9 +480,22 @@ class Elems:
         for r in rdcsv(os.path.join(DOC, 'verify', MENU, 'verify_ledger.csv')):
             ct_ = col_of_target(r.get('target', '')) if r.get('source') == 'COLUMN' else None   # 2026-11-13 T295: 대소문자 섞인 컬럼 이름을 끝까지 읽는다
             if ct_: self.cols[ct_[0]] = ct_[1]
+        _ledger_cols = set(self.cols)  # T359: 원장 COLUMN 행 칸(그리드 칸) — 상수 이름 대응은 이 칸으로 가는 것만
         for rs in acts.values():
             for r in rs:
                 for m in re.finditer(r'Def[A-Z]\w*\.([A-Z0-9_]+)(?![A-Za-z0-9_…])', r['raw'] + ' ' + r['value']): self.cols.setdefault(m.group(1), '')  # '…' = 추출기 말줄임(잘린 이름 제외)
+        # 2026-11-19 SSP0014 미검증 해소(T359): AS-IS 칸 상수 이름 ≠ 칸 이름(SSP0014 cs:77 'const string DIVISION = "DIVISION_ID"')이면 상수 이름을 칸으로 써
+        #   그리드에서 못 찾음(A5·H5 'DIVISION' 미검증). 원문 상수 값(facts_cellclear.const_map)으로 칸 이름을 바꾸고, 대조표 글에 상수 이름이 나오면 그 칸으로 잇는다
+        self.col_alias = {}
+        try:
+            from facts_cellclear import const_map
+            for f in {r.get('file', '') for rs in acts.values() for r in rs if (r.get('file') or '').endswith('.cs')}:
+                for k, v in const_map(f.replace(chr(92), '/')).items():
+                    if k != v and k in self.cols and k not in _ledger_cols and v in _ledger_cols: self.col_alias.setdefault(k, v)
+        except Exception as e:
+            print(f'[cols] 상수 값 읽기 실패: {str(e)[:120]}')
+        for k, v in self.col_alias.items():
+            lab = self.cols.pop(k, ''); self.cols[v] = self.cols.get(v) or lab
         self.main_cls = collections.Counter(r['class'] for rs in acts.values() for r in rs).most_common(1)[0][0] if acts else ''
         self.popups = {c for c, _ in acts} - {self.main_cls} if acts else set()
         # W5(2026-10-26): 검증 엔진이 컬럼 대상 검사에 쓰는 AS-IS·TO-BE 사실 — 라벨·표시(Division 별)·편집 기대·셀 규칙·TO-BE 메타
@@ -551,6 +564,8 @@ class Elems:
             if b not in ('btnButtonList',): out.append(('BTN', b))
         for c in self.cols:
             if re.search(r'(?<![A-Za-z0-9_])' + re.escape(c) + r'(?![A-Za-z0-9_])', text): out.append(('COL', c))
+        for k, v in getattr(self, 'col_alias', {}).items():  # T359: 상수 이름으로 적힌 칸 → 실제 칸 이름
+            if re.search(r'(?<![A-Za-z0-9_])' + re.escape(k) + r'(?![A-Za-z0-9_])', text): out.append(('COL', v))
         for p in self.popups:
             if p in text: out.append(('POPUP', p))
         for m in RX_MSG.finditer(text): out.append(('MSG', m.group(0)))
@@ -614,9 +629,17 @@ def ev_e2e(elems):
     return out
 
 
-def ev_gates():
+def ev_gates(page=None):
     out = []
     chk = os.path.join(DOC, 'gen', MENU, 'CHECK.md')
+    if not os.path.exists(chk) and page and os.path.isdir(page):
+        # 2026-11-19 SSP0014 미검증 해소(T357): 하네스 생성기를 거치지 않은 화면은 게이트 결과(Doc/gen/<ID>/CHECK.md)가 없어 G03-WIRE 가 '실행 경로 없음' 미검증 —
+        #   게이트 check.js 를 화면 폴더에 읽기 전용으로 1회 돌려 결과를 만든다(--final 아님 · tsc·eslint 안 돌림 · 화면 파일 쓰기 없음 · 결과는 Doc/gen/<ID>/CHECK.md)
+        try:
+            import subprocess
+            subprocess.run(['node', os.path.join(ROOT, 'tools', 'Harness', 'check.js'), '--page', page, '--id', MENU], cwd=ROOT, capture_output=True, timeout=180)
+        except Exception as e:  # node 없음·시간 초과 = 종전처럼 결과 없음(G03-WIRE 미검증 유지)
+            print(f'[gates] check.js 실행 실패: {str(e)[:120]}')
     if os.path.exists(chk):
         for line in open(chk, encoding='utf-8'):
             m = re.match(r'-\s*(BLOCK|WARN|PASS|OK)\s+(\w+)\s+(.*)', line.strip())
@@ -710,7 +733,7 @@ def main():
     global E
     E = Elems(asis, acts)
     led, trace_led = ev_ledger()
-    e2e = ev_e2e(E); gates = ev_gates()
+    e2e = ev_e2e(E); gates = ev_gates(page)
     syn = [r for r in rdcsv(os.path.join(DOC, 'verify', MENU, 'syn_check.csv')) if r.get('kind') != 'NOTE']
     pm_all = [r for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if r.get('proc')]
     pm = [r for r in pm_all if r.get('menu_id', '').upper() == MENU]
@@ -1580,6 +1603,28 @@ def engine_condition(d, rmap):
                 if s and s != col: srcs.append(s)
             j['src'] = list(dict.fromkeys(srcs))[:3]
             if c == 'C3' and not assign and own: j['noAssign'] = True  # 값 대입 문장이 없다(잠금·스타일만) — 연쇄 채움 검사 대상 아님
+            if c == 'C3' and assign and not j['src']:
+                # 2026-11-19 SSP0014 미검증 해소(T356): 값 대입 문장이 전부 '자기 칸' 대입이면 다른 칸에서 이어지는 연쇄가 아니다 —
+                #   ① 자기 칸 더블클릭 팝업 선택값 대입(guard 'e.Column == X' 이 자기 칸 · 같은 메서드에 ShowDialog · SSP0014 cs:649 USER_ID = item.UserID) = 'popup'(팝업 선택값 반영은 M4·G5)
+                #   ② 자기 칸 값을 읽어 표시 값으로 바꾸는 조회 후 처리(guard 가 자기 칸 GetValue 만 읽음 · e.Column 없음 · cs:358 'W' → 'Warranty') = 'transform'(표시값은 A2·H5)
+                #   종전엔 '연쇄 원천 컬럼 해석 불가' 판정필요(9행)
+                def _self_kind(r):
+                    g = r.get('guard') or ''
+                    refs = set(re.findall(r'Def[A-Z]\w*\.([A-Z0-9_]+)', g))
+                    if 'e.Column' in g:
+                        if cascade_src(r, rmap) != col: return ''
+                        same = [x for x in rmap.values() if x.get('src') == 'AS-IS 액션' and x.get('cls') == r.get('cls') and x.get('meth') == r.get('meth')]
+                        if any('ShowDialog' in (x.get('raw') or '') for x in same): return 'popup'
+                        # 2026-11-19 SCP0005 미검증 해소(T367): 자기 칸 값을 고정 값으로 되돌리고 같은 메서드가 메시지를 띄우면 입력 거부(값 검증) — 다른 칸 연쇄 아님
+                        #   (SCP0005 cs:1005~1028 합계 999 초과 → MSG00209 + 바꾼 칸 "0"). 검증 메시지 판정은 E4 행
+                        if re.search(r'=\s*"[^"]*"\s*;?\s*$|,\s*"[^"]*"\s*\)\s*;?\s*$', (r.get('raw') or '').strip()) and any(re.search(r'MessageBox|GMessageBox|ShowMessage', (x.get('raw') or '') + ' ' + (x.get('val') or x.get('value') or '')) for x in same):
+                            return 'reject'
+                        return ''
+                    return 'transform' if refs == {col} and re.search(r'Get(?:Value|Text)\(', g) else ''
+                kinds = {_self_kind(r) for r in assign}
+                if kinds and '' not in kinds:
+                    j['selfAssign'] = '/'.join(sorted(kinds))
+                    j['raws'] = [f"{r.get('meth', '')}:{r['line']} {r.get('raw', '')[:140]}" + (f" [{r.get('guard', '')[:120]}]" if r.get('guard') else '') for r in assign[:6]]
             if c == 'C3' and not own:
                 # 2026-11-18 SCP0111 LINE_ID C3(cs:1781 'dtLine = DBUtils.Filter(…)' — 이 컬럼 상수가 없는 문장에서 만든 행): 화면 전체 AS-IS 문장 중 이 컬럼에 값을 대입하는 문장이 없고
                 #   후보 설정(SetCombo*)·읽기만 있으면 연쇄 채움 대상 아님 → noAssign(근거 = 그 문장들)
@@ -1593,6 +1638,11 @@ def engine_condition(d, rmap):
             wr_rx = re.compile(r'(?:SetValue|SetText)\([^;]*?Def[A-Z]\w*\.' + re.escape(col) + r'\)\s*\)?\s*,|SetCombo\w*\([^;]*?Def[A-Z]\w*\.' + re.escape(col) + r'\b|\[Def[A-Z]\w*\.' + re.escape(col) + r'[^\]]*\]\s*=(?!=)')
             writes = [r for r in own if wr_rx.search(r.get('raw', ''))]
             if c in ('C2', 'C6') and own and not writes: j['noAssign'] = True
+            # 2026-11-19 SCP0005 미검증 해소(T368): AS-IS 가 이 칸에 쓰는 문장이 값 대입(SetValue·SetText·[..]=)뿐이고 후보 설정(SetCombo·CellType·Items·DataSource)이 없으면
+            #   원천 값에 따라 '후보'가 바뀌는 규칙이 아니다(SCP0005 cs:1045~1061 Trans Mode → DAYS_*='Y'·포트 칸 '-') → C2 대상 아님(값 채움은 C3). 근거 = 대입 문장 원문
+            if c == 'C2' and writes and not any(re.search(r'SetCombo|CellType|\.Items\b|DataSource|ComboBox', r.get('raw', '')) for r in writes):
+                j['valueOnly'] = True
+                j['raws'] = [f"{r.get('meth', '')}:{r['line']} {r.get('raw', '')[:140]}" for r in writes[:4]]
             if c == 'C2' and not j['src'] and writes:
                 # 원천이 'e.Column == X' 가 아니라 같은 메서드에서 읽은 행 값인 경우(spdMain_CellClick 이 PLANT_ID·OPERATION_GROUP 으로 LINE_ID 후보 재구성 cs:1770~1790)
                 meths = {(r.get('cls'), r.get('meth')) for r in writes}
@@ -1762,7 +1812,7 @@ def engine_condition(d, rmap):
         elif isinstance(j[k], list): j[k] = j[k][:n]
         elif isinstance(j[k], dict): j[k] = {kk: j[k][kk] for kk in list(j[k])[:n]}
         s = json.dumps(j, ensure_ascii=False)
-    if len(s) > 3000: s = json.dumps({**{'et': j.get('et'), 'name': j.get('name'), 'labels': j.get('labels', [])[:3], 'truncated': True}, **{k: j[k] for k in ('dead', 'popup', 'asisCombo', 'merge', 'viaPopup', 'popMap', 'd5Src', 'd5', 'noAssign', 'clearOnly', 'allFlag', 'ctlType', 'asisLabel') if k in j}}, ensure_ascii=False)  # 작은 판정 키는 폴백에도 남긴다(2026-10-27 VMI_YN asisCombo 누락)
+    if len(s) > 3000: s = json.dumps({**{'et': j.get('et'), 'name': j.get('name'), 'labels': j.get('labels', [])[:3], 'truncated': True}, **{k: j[k] for k in ('dead', 'popup', 'asisCombo', 'merge', 'viaPopup', 'popMap', 'd5Src', 'd5', 'noAssign', 'selfAssign', 'valueOnly', 'clearOnly', 'allFlag', 'ctlType', 'asisLabel') if k in j}}, ensure_ascii=False)  # 작은 판정 키는 폴백에도 남긴다(2026-10-27 VMI_YN asisCombo 누락)
     return s
 
 

@@ -1,0 +1,6 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+,L14,기호,기 렌더) — 시각 사용,줄표 삭제 — 문장을 나누거나 쉼표로,- 변경 전: `` | 1 | SmartColMerge(InitSpread) | 223 | 공용 DataGrid 병합(초기 렌더) — 시각 사용자 축 | 패턴 | ``
+,L26,기호,미이식** — 편집모드,줄표 삭제 — 문장을 나누거나 쉼표로,- 변경 전: `` | 2 | SwitchLock(EditButton) | 272 | **미이식** — 편집모드 기본 ON(convert-core §2.4). AS-IS 수정모드 토글 어포던스 자체는 전 화면 공통 제외(`Doc/Doc_lgc_bak/rules/11_asis_parity/asis_to_tobe.md` §11) | 제외(근거) | ``
+,L26,기호,272 | **미이식** — 편집모,굵은 글씨 표시 삭제,- 변경 전: `` | 2 | SwitchLock(EditButton) | 272 | **미이식** — 편집모드 기본 ON(convert-core §2.4). AS-IS 수정모드 토글 어포던스 자체는 전 화면 공통 제외(`Doc/Doc_lgc_bak/rules/11_asis_parity/asis_to_tobe.md` §11) | 제외(근거) | ``
+,L38,기호,id 병합 — 시각 사용,줄표 삭제 — 문장을 나누거나 쉼표로,"- 변경 전: `` | 13-14 | SmartColMerge(조회후/TopChange) | 364,622 | 공용 DataGrid 병합 — 시각 사용자 축 | 패턴 | ``"
+,L50,기호,무관) | — | 연타,줄표 삭제 — 문장을 나누거나 쉼표로,- 변경 전: `` | B-1~B-7 | 해당없음(AS-IS 무관) | — | 연타 선점 / 저장중 잠금+스냅샷 / 재조회 실패 분리 / Division clamp / `{0}` 치환 / 메타 실패 분리 / 타입 계약 | 구현 | ``

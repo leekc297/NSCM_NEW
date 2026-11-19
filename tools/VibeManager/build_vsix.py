@@ -40,7 +40,8 @@ ctypes = '''<?xml version="1.0" encoding="utf-8"?>
   <Default Extension=".js" ContentType="application/javascript"/><Default Extension=".md" ContentType="text/markdown"/>
   <Default Extension=".svg" ContentType="image/svg+xml"/><Default Extension=".txt" ContentType="text/plain"/>
 </Types>'''
-files = ['package.json', 'extension.js', 'prompt-panel.js', 'flow-panel.js', 'history.js', 'workbench.js', 'tabview.js', 'menu-view.js', 'quick.json', 'steps.json', 'README.md', 'CHANGELOG.md', 'CONCEPT.md', 'media/vibe.svg', 'media/vibe-color.png', 'media/vibe-color.svg'] + ['media/' + f for f in sorted(os.listdir(os.path.join(here, 'media'))) if f.startswith('tb-') and f.endswith('.svg')]
+# 2026-11-19: 최상위 .js 는 목록에 적지 않고 폴더에서 읽는다(recheck.js 가 목록에 없어 vsix 설치본이 활성화에 실패하던 결함). 백업(.bak_*)은 확장자가 .js 가 아니라 빠진다
+files = ['package.json'] + sorted(f for f in os.listdir(here) if f.endswith('.js')) + ['quick.json', 'steps.json', 'README.md', 'CHANGELOG.md', 'CONCEPT.md', 'media/vibe.svg', 'media/vibe-color.png', 'media/vibe-color.svg'] + ['media/' + f for f in sorted(os.listdir(os.path.join(here, 'media'))) if f.startswith('tb-') and f.endswith('.svg')]
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('[Content_Types].xml', ctypes); z.writestr('extension.vsixmanifest', manifest)
     for f in files:

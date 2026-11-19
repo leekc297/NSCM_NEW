@@ -1559,3 +1559,90 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 - quick.json 🧪 프롬프트 [5]: 보고에 보완 전 건수를 쓰지 않음 · 표식 남기기 추가
 - _unverified_work.md 수정 시각은 판단에 쓰지 않음(SCP0096 10:03 재수행 결과 기록도 그 파일에 붙어 오판 실측)
 - 확인: pending_recheck --selftest 4/4 · node --check 4파일 · SCP0111 표식 10:58 → 현황판·분류 출력 건수 없음 · SCP0096 표식 없음 → 종전 표시 · engine_selfcheck PASS(10:58). VM 확장 변경은 창 다시 로드 뒤 반영. 백업 *.bak_20261119_recheck
+
+## 2026-11-19 12:4x SCP0111 미검증 해소 라운드 4(일괄 보완)
+- 입력: CheckList 재수행 원장(12:23) 미검증 10 · 처리 대상 4(F4 2 · B4 2) · 가이드 1 · 사람 2 · 집계 3
+- combo_oracle.py 필터식 이어 붙이기·반복문 누적 목록 해석(T343). 같은 유형 combo_src 24행(SCP0016·SCP0020·SCP0037·SCP0041·SCP0111). 종전엔 글자 비교로 0행
+- _verify.spec.ts CRUD 시험 끝 세션 그룹 재현(T344): 저장 경로가 FE 세션 그룹으로 갈리는 화면에서 같은 계정·그룹 1개 제외로 같은 수정 저장. 다른 화면 T210 행에도 적용
+- 확인: combo_oracle --selftest 8/8 · 단위 함수 시험(SCP0111 분기 12건·13건) · engine_selfcheck PASS(12:43). 백업 *.bak_20261119_t343 · t344
+
+## 2026-11-19 13:4x SCP0111 CheckList v64 사용자의견 반영(공용 · 전 화면)
+- 사용자의견 21행: 오류 아님·TO-BE RULE 14 · 중복 제거 2 · 확인 필요 3 · 질문 2
+- judge.py 사용자의견 문구 인식(T345) · CR-113 기간 역전 조회 허용(T346) · 앱 공통 범위 제외(T347, app_level_scope.csv, 결과는 _app_level_results.csv) · snap.ts·_snap.spec 형상 정규화와 화면샷 차이 제외(T348, CR-114·CR-115·CR-100)
+- TO-BE 룰 원천 confirmed_requirements.csv CR-113~CR-115 등록, tobe_rule_registry --build/--check 위반 0
+- 확인 필요 재점검: V-daa3f0ba(Insert 위치) 화면 결함 유지 · FE_GUIDE_20261119_1340.md G9 / V-2eed0400(빈 신규 행 안내) 화면 결함 유지 · 기존 G5 / EG-42d53d53 PKG_SCP0111 C_MSG_DUP = MSG00428 사내 적용(13:37:58) · 이관 SCP0111_CLOUD_DB_MOD_20261119_1338
+- 확인: snap.selftest 9/9 · engine_selfcheck PASS(13:41) · inventory_check 등록부 갱신. 백업 *.bak_20261119_t345 · t348 · cr113 · v64op
+
+## 2026-11-19 14:2x CheckList 전처리 = 파싱 없으면 먼저 수행(공용)
+- 사용자 지시: "파싱이 없으면 무조건 파싱부터 · 실측은 필요하면 먼저, 필요 없으면 차후 · 멈추지 말고 먼저 수행하고 CheckList 진행".
+- 확인: prereq.py 는 Fact Pack 핵심 4파일(controls·actions·files·endpoints)이 없으면 pack.ps1(화면 1개 재생성)만 돌리고, 그래도 없으면 rc 6 으로 CheckList 중단했음(파서 전체 실행은 사람 몫).
+- 보완: pack 뒤에도 없으면 파서 전체 실행(tools/AsisFacts/run.ps1 · _bin 있으면 -SkipBuild · 잠금 asisfacts_parse · 최대 90분) → pack 다시 → 생기면 DONE 으로 계속. 그래도 없으면 종전처럼 FAIL(파서 결과에 화면 없음).
+- AS-IS 실측: 실측을 읽는 검사(asis_live_auto·ingest·rows·doc·plain_detail)는 전부 diff 단계 이후. diff 단계 첫머리 asis_live_auto 가 24시간 지난 실측을 다시 잼 → 앞으로 당길 필요 없음(변경 없음).
+- 확인: py_compile OK. 파서 전체 실행 경로 실제 실행은 미측정(4화면 CheckList 진행 중 · 공용 결과 재생성이라 시험 실행 안 함). 백업 prereq.py.bak_20261119_parse.
+
+## 2026-11-19 15:1x CheckList 서버 자동 기동(공용 · server_guard.py)
+- 사용자 지시: "CheckList 중 FE·BE 서버가 기동 중이 아니면 기동시켜 진행 · 죽어 있는데 대기만 하면 진행 안 됨 · 응답이 없으면 서버 기동 프로세스 가동".
+- 확인: VM ensureServers 는 작업 시작 때 1회·포트 LISTEN 만 봄(멈춘 서버도 정상). CheckList 안 run-e2e.cmd 는 서버가 죽어 있으면 rc 5 로 E2E 를 건너뛰기만 함. 검증엔진·팝업권한(eg_chain)·차등 검증은 서버 확인 없음.
+- 신설 tools/Harness/verify/server_guard.py: HTTP 응답(상태코드 무관)으로 판정 · 포트 열림+무응답은 20초 간격 3회 재확인 뒤 멈춤 판정 → java·node·cmd 만 종료(VPN·시스템 보호) → quick.json BE/FE Start 명령 그대로 창 없이 기동(출력 Doc/e2e/logs/_server_<port>.log) → 응답까지 대기(BE 300·FE 120초) · 포트별 잠금으로 동시 CheckList 중 한 실행만 기동. 끄기 VERIFY_SERVER_GUARD=off.
+- 연결: run-e2e.cmd(서버 확인 직전) · run_verify.py guard_servers()(E2E 검증엔진·팝업권한·차등 검증 단계 시작 · 세부 수에 넣지 않음).
+- 확인(15:10): selftest OK · --check rc 0(BE java 20928 · FE node 34956 응답) · 빈 포트 18999 시험 서버로 '응답 없음 → 기동 → 응답' 4.6초 · 잠금 해제 확인. 실제 BE·FE 를 내려 놓은 상태의 기동은 미측정(4화면 CheckList 진행 중).
+- 백업 run-e2e.cmd.bak_20261119_guard · run_verify.py.bak_20261119_guard.
+
+## 2026-11-19 15:1x 동시 E2E 대기 원인 분석 · BE 대기 중 서버 기동 연결
+- 사용자 지시: "여러 화면 E2E 동시 실행 시 다른 화면 실행 중이라 대기 · 각 세션별로 대기 없이 진행" · 이어서 "부하 기준 초과 대기는 인정".
+- 13:48~ 4화면(SCP0005·SSP0014·SCP0028·SSP0005) 로그 실측: ① BE 포트 닫힘 대기([BE 대기] 300초 · 화면당 3~6회) ② 부하 입장 대기(SSP0014 3분 30초 · 인정) ③ 언어 잠금(I2 · 4화면 모두 6.1분 = acquireLangExclusive 6분 상한 → [측정 경로 없음] 미검증).
+- ① 보완: nscm.ts waitBeUp 이 BE 포트 닫힘을 보면 server_guard.py --ports 8080 을 띄우고 기다림(포트 잠금으로 한 번만 기동 · 끄기 VERIFY_SERVER_GUARD=off). 백업 nscm.ts.bak_20261119_guard. tsc nscm.ts 오류 0.
+- ③ 원인: 언어 = 서버 계정 설정(SCM_ADM_USER_M.LANG_CD) · 모든 화면이 같은 계정(minyonglee1)이라 I2 는 다른 화면 E2E 가 끝날 때까지 기다림(T200 · 이미 연 화면의 측정이 바뀌는 허위 FAIL 방지). 대기 없이 하려면 I2 를 다른 계정으로 재야 함 → 후보 test001(ADMIN·SPMS ADMIN · 사업부 81) · testa(ADMIN·GUEST · 사업부 40 없음) — 측정 계정·사업부가 바뀌는 판정 조건 변경이라 사용자 결정 대기.
+
+## 2026-11-19 15:4x 언어 전환 시험 = 전용 ADMIN 계정(다른 화면 대기 제거 · 공용)
+- 사용자 지시: "minyonglee1 과 사업부 권한이 같은 40명을 ADMIN 권한자로 목록 관리 · 언어 전환 시험 때 다른 세션이 쓰지 않는 사용자로 로그인".
+- users.json adminPool(40명 · 사내 ZIOUI1 15:21 추출 · 로그인 200 · 근거 Doc/e2e/role_users/system_admin_users_20261119.csv).
+- 신설 tools/E2E/lib/langacct.ts: 후보 = adminPool − 기본 계정 − users.json 의 다른 시험 계정(영역 명부·화면 지정·GUEST) = 35명 · 계정별 잠금 Doc/e2e/_run.langacct.<USER>.lock(주인 생존 시 다른 실행은 건너뜀) · 잠금에 원래 언어 기록 · 못 되돌리면 잠금을 남겨 다음 실행이 언어 설정 API 로 먼저 되돌림.
+- _verify.spec.ts: I2(언어 전환 문구 덤프) = 시작 때 전용 계정 로그인 → 다른 화면 대기(acquireLangExclusive 6분) 없음 → 끝에 원래 언어로 되돌린 뒤(실패 시 API 재시도) 기본 계정 재로그인. 언어 단계가 있는 시나리오도 시작부터 전용 계정. 계정을 못 받으면 종전 방식(기본 계정 + 대기).
+- 확인: tsc(langacct.ts · _verify.spec.ts · nscm.ts) 오류 0 · 모듈 단독 시험(다른 실행 잡은 계정 건너뜀 · 원복 뒤 잠금 삭제 · 낡은 잠금의 원래 언어 EN 넘겨받음 · 못 되돌림 잠금 유지). 실제 I2 동시 실행은 미측정(다음 CheckList).
+- 백업 users.json.bak_20261119_adminpool · _verify.spec.ts.bak_20261119_langacct.
+
+## 2026-11-19 15:5x 동시 다른 계정·다른 언어 격리 실측(언어 시험 계정 분리의 전제 확인)
+- 사용자 지시: "하나의 PC 에서 동시에 다른 계정으로 각각의 언어 설정으로 테스트를 동시에 진행할 때 문제가 없는지 다시 확인".
+- 코드: BE 언어 = 로그인 세션의 사용자 정보(UserSession·CustomUserDetails) → 프로시저 인자 sesLangCd. 전역(static)·캐시에 언어 없음(BaseService sessionDefaults 는 호출마다 지역 생성).
+- DB 원문(ZIOUI1 15:45): 언어를 접속 단위로 남기는 코드 0(세션 컨텍스트 설정 0 · SYS_CONTEXT 언어 조회 0 · 패키지 전역 LANG 변수 0). LANG 컬럼 임시표 7개 = EDI·메일 연계(화면 언어 무관).
+- 실측(15:50 · E2E 의 실제 Nscm.loginAs·openScreen·search): A=bindy122678→CN · C=brightboy→EN · B=minyonglee1 그대로 · 화면 SCP0096.
+  세션 언어 20회(3계정 동시 요청) A CN 20 · C EN 20 · B KO 20 · 메시지 응답 언어 20회 같음 · 세 계정 동시 화면 열기·조회 성공 · 머리글 CHN/ENG/KOR · B 라벨 전후 같음(Div) · A·C 라벨은 'Div.'(언어 반영).
+  원복 뒤 DB LANG_CD 3계정 KO 확인(15:51) · 잠금·임시 스펙 0.
+- 실측 중 발견·정정: takeLangAccount 가 같은 프로세스에서 두 번 부르면 같은 계정을 돌려줌 → 자기 잠금도 건너뛰게 고침(langacct.ts).
+- 남는 주의: 후보 35명은 실제 사용자 계정 — 시험하는 동안(화면당 몇 분) 그 사람이 TO-BE 에 접속하면 화면 언어가 바뀌어 보임(끝나면 원복).
+
+## 2026-11-19 16:4x 덧붙임 — AI 검토(CheckList 단계별 Claude Code 활용)
+- 사용자(11-19): "CheckList 의 각각의 단계별 판단을 할 때 필요하면 클로드코드를 활용하도록 기능 보완". 결정: 근거 확인되면 판정 반영 · 대상 FAIL·판정필요·미검증 · 오판은 체인 안에서 엔진까지 수정 · 4단계(판정 검토, 설명 문장, 사용자의견 처리, AS-IS 사실 추출 검토) · 문서 열 이름 'CheckList Remark'.
+- 신규(tools/Harness/verify): llm_call.py(공용 호출기 · 읽기 전용 · 인용 확인 · 캐시 · 사용량 Doc/verify/_llm_usage.csv) · llm_review.py(판정 검토) · opinion_intake.py(사용자의견 처리) · llm_facts.py(사실 추출 검토) · llm_desc.py(설명 문장).
+- 수정: judge.py(AI 검토 되돌리기 + 반입 + 사실 검토 후보 note) · run_verify.py(pre opinion_intake · facts llm_facts · post llm_review 뒤 변경 시 추적·판정 재반입 · docs llm_desc · STAGES facts 16·post 41·docs 5) · make_verify_docs.py('CheckList Remark' 열 · 근거 등급 · no_summary.json) · unverified_resolve.py(AI 검토가 가린 엔진 보완 대상을 처리 대상에 합류) · harness.json llmReview* 키 · quick.json 🧪 프롬프트 · steps.json 제목.
+- 반영 규칙: 인용(경로:줄 + 원문)이 evidence_check 로 확인된 답만. FAIL→PASS·NA 는 AS-IS 원문(GSCM/ · DB_DDL/ · Doc/asisfacts/db/modules/) 인용 또는 등록 룰 번호 필요. 미검증(ERROR) 행은 반영하지 않음. 사용자판정·정적 판정·재실측 행은 덮지 않음. 꺼져 있으면 지난 검토 결과도 반입하지 않음.
+- 시범 실측(SCP0096 · 원장 11-19 10:02 · 16:18~16:41): 대상 38행 중 검토 13행(제외 25 = 사용자 판정·집계·스냅샷·선행 종속). 호출 3회 · 12.086 USD · 1,381초(Doc/verify/SCP0096/llm_usage.csv · 모델 claude-fable-5-1 · effort high). 인용 확인 13/13. 분류 검사기오판 8 · 추출오류 1 · 실결함 2 · 데이터차이 2. 판정 반영 9행.
+  - 반입 시험(16:43~16:44 · mapping_trace --to-ledger → judge 2회): FAIL 25→21 · 판정필요 13→6 · 2회차도 같은 결과(AI_RESET 6 · AI_REVIEW 8 · STALE 0 · T-a8c0dab9 는 하위 행 PASS 로 사라짐). 시험 뒤 원장은 시험 전 판으로 복원(cmp 일치).
+  - 확인된 검사기 결함 후보(엔진 보완 대상 9행 · 미수정): ① gen_expect p_sumtoggle 이 chkSum.Visible=false(Designer.cs:346 · layoutSum Visibility Never :573)를 보지 않아 숨긴 체크박스에 토글 기대 생성 → V-eb856b69 FAIL 과 선행 종속 2행(V-d8f314e2 · V-9e29a0e2)·FE 가이드 1번이 허위(원문 직접 확인 16:42) ② _trace.spec W4b F5 값 주입 뒤 반영 확인 없음 ③ H11 저장 중 로딩 기대가 AS-IS 원문 아님 ④ facts_sortrules 가 변수 대입문의 ORDER BY 를 결과 정렬로 추출 ⑤ judge sort_check 매칭 키에 줄 번호 없음 ⑥ sort_check 가 ORDER BY 를 300자로 잘라 sort_ci_check 가 오독 ⑦ 대조표 D00-3-020 · D00-3-032 사유 문구 오류(FE 폴더 · DB MODE 가이드).
+- 호출 비용: 기본 호출은 세션 기본 문맥 약 12만 토큰이 실려 한 줄 읽기 1.245 USD · 76초 → --safe-mode --strict-mcp-config --tools Read,Glob,Grep 로 0.120 USD · 17초(16:14 실측 · llmReviewLean). Sonnet 같은 시험 0.016 USD(판정 품질 미측정).
+- 상태: harness.json llmReview = false(꺼 둠 — 비용 확인 뒤 사용자 결정). 미실측: opinion_intake · llm_facts · llm_desc 의 실제 Claude 호출, run_verify 전체 체인에서의 동작, VM Flow 보드 표시. VM 환경설정 화면 항목 없음(harness.json 직접 수정).
+- 확인: 5개 도구 --selftest OK · engine_selfcheck PASS(16:45) · tobe_rule_registry --check 0 · 추측 지점 원장 MANUAL 4행 등록 · README 등록부 갱신.
+- 되돌리기: make_verify_docs.py.bak_20261119_llm · quick.json.bak_20261119_llm · 설치 폴더 steps.json.bak_20261119_llm · 신규 5개 파일 삭제 + judge.py·run_verify.py·unverified_resolve.py 의 '2026-11-19 AI' 블록 제거.
+- 16:49 사용자 지시 "AI 검토 OPUS 로 켜기": harness.json llmReview = true · llmReviewModel = claude-opus-5-5(effort high). 호출 1회 확인(한 줄 읽기 · 0.044 USD · 11.5초 · 인용 확인됨 · Doc/verify/_SELFTEST/llm_usage.csv). Opus 로 한 판정 검토는 아직 없음.
+- 16:5x 사용자 지시 "WORKBENCH 가 사용하고 있는 MODEL 그대로 사용": harness.json llmReviewModel = 빈 값(llmReview true 유지). 모델 = VM 워크벤치가 체인 작업에 넘기는 CLAUDE_MODEL(workbench.js:1256 getState().model || claudeModel · llm_call.claude_cmd). 워크벤치 모델이 비어 있으면 CLI 기본값. VM 체인에서의 실제 전달은 미실측.
+
+## 2026-11-19 16:5x SSP0014 미검증 해소 라운드 1(일괄 보완)
+- 입력: CheckList 13:49~16:17 원장 미검증 293 · 처리 대상 143(엔진 115 · 판단 28) · 가이드 4 · 사람 1 · 집계 145. 행별 조치 Doc/verify/SSP0014/_unverified_plan.md · 결정 _unverified_decisions.md(D1~D8) · 기록 _unverified_work.md · FE 가이드 FE_GUIDE_20261119_1647.md(4건)
+- 원인 실측: BE 14:33~15:07 중단(nscm.log 0줄)으로 36행 미측정(15:1x server_guard 반영분이 다음 실행 처리) · 언어 계정 4행(15:4x langacct 반영분)
+- 공용 엔진 보완 T349~T358: 필수 칸 채워진 기존행 우선 · 팝업 입력 칸 = 다른 행 실제 값(probe.ts · crud.ts · saveprobe.ts) · 더블클릭 입력 팝업 일반 닫기(nscm.ts · saveprobe.ts) · 팝업 아이콘 CSS ::after(eg_popup.spec.ts) · G5 원천 칸 0개 PASS · F6 숫자 칸 0 NA(_verify.spec.ts) · D4 AS-IS Insert 무동작 NA · 멀티선택 재시도(_trace.spec.ts) · C3 자기 칸 대입 NA(mapping_trace.py · _trace.spec.ts) · G03 게이트 결과 생성(mapping_trace.py) · sp_pair 짝·kind(gen_golden_cases.py · sort_check.py) · unverified_classes.csv order 55
+- 다른 화면 영향: 같은 증상 원장 행 C3 119(15화면) · 멀티선택 67(10) · A6 97(13) · D5 27(11) · G5 22(2) · F6 12(12) · D4 14(3). 골든 kind 13건(9화면) sp_pair 값으로 바뀜(파일 재생성은 SSP0014 만). 다음 CheckList 부터 반영
+- 확인: tsc 오류 0 · mapping_trace selftest 81/81 · sort_check 5/5 · 단위 함수 시험 8/8 · 5/5 · engine_selfcheck PASS(16:44). 실제 E2E 동작은 미측정. 백업 *.bak_20261119_ssp14u
+- 16:5x 사용자 지시 "VM 환경설정에 AI 검토 켜고 끄는 항목": 신규 tools/Harness/verify/set_llm_review.py(ON·OFF·현재 값 · harness.json 의 llmReview 줄만 바꿈 · --selftest 7건 OK · 켜고 끄기 왕복 뒤 파일 cmp 일치) · steps.json S8.llmReview(입력 선택 목록 ON/OFF/STATUS) · quick.json 환경설정 그룹 "🧠 AI 검토 (켜기 / 끄기)"(🧭 작업 모드 뒤). workbench.js 는 고치지 않음(다른 세션이 수정 중 · 작업 항목의 선택 목록 입력 = extension.js collectInputs). steps.json 설치 폴더 반영(cmp 일치). VS Code 화면에서 메뉴 실행은 미확인. 16:54 engine_selfcheck FAIL = TSC nscm.ts TS7023 openScreen(다른 세션 16:52 수정분 · 이 작업과 무관 · 미수정).
+
+### 2026-11-19 17:1x SSP0014 미검증 해소 라운드 2(라운드 1 미보완 2묶음)
+- 원장 16:17 그대로(재수행 없음) · 라운드 1 보완 되풀이 안 함
+- T359 mapping_trace.py AS-IS 칸 상수 이름 → 원문 상수 값 칸(DIVISION → DIVISION_ID · 원장 COLUMN 칸으로 가는 것만). 대응 생기는 화면 6
+- 팝업 대조표 오기 4행: 화면 팝업 = COM0013(2026-10-12 사용자 지시 교체), 대조표는 SCM0002 그대로 → FE_GUIDE_20261119_1647.md G5 · 출발 사이트 인자 차이 결정 D7
+- 확인: mapping_trace selftest 81/81 · engine_selfcheck PASS(17:07:12)
+
+## 2026-11-19 17:1x SCP0028 미검증 해소 라운드 1(일괄 보완)
+- 입력: CheckList 원장 16:34 미검증 278 · 처리 대상 141 · 집계 137. 행별 조치 Doc/verify/SCP0028/_unverified_plan.md · 결정 _unverified_decisions.md(D1~D19 70행) · 기록 _unverified_work.md
+- 공용 엔진 보완 T360~T366: openScreen BE 정지 구분·재시도(nscm.ts) · ensureRows 대안 0건 메모 금지(smoke-extra.ts) · AS-IS Insert 빈 본문 = 신규 행 시나리오 없음(facts_lockrules.py · judge.py insert_noop_na) · 조회조건 별칭 라벨 찾기(_verify.spec.ts findSearchBox · CR-092) · 기준표 행 0 화면 H5·SC1(judge.py) · C2 연쇄 표기 대상 칸 판별(judge.py) · 버튼 다른 언어 라벨(labeltrans.ts 신규 · eg_popup.spec.ts)
+- 확인: 단위 시험(insert_noop_na 26행 · cascade_entities 6/10 · labelVariants) · tsc 0 · engine_selfcheck PASS. 실제 E2E 동작은 미측정(다음 CheckList)
+- 겹침 확인: SSP0014 세션 T354(_trace D4 Insert 비노출)와 대상 다름. T355·T357 은 SCP0028 D5·D17 과 같은 증상

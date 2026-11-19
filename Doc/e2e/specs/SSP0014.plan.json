@@ -1,7 +1,7 @@
 {
   "id": "SSP0014",
-  "mode": "single",
-  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "mode": "admin",
+  "modeSource": "users.json screens",
   "menuId": "SSP0014",
   "divCascade": [],
   "divLabels": [
@@ -303,32 +303,30 @@
   },
   "accounts": [
     {
-      "id": "jinhuannj",
-      "name": "근환",
+      "id": "kijung03.kim",
+      "name": "김기정",
       "groups": [
-        "SSP Planner"
+        "SSP Viewer"
       ],
       "divisions": [
         "40"
       ],
       "roles": {
-        "40": "SSP Planner"
+        "40": "SSP Viewer"
       },
-      "roleNote": "PLANNER",
+      "roleNote": "권한 없음 대표",
       "admin": false,
       "adminOf": [],
       "screenGroup": "",
       "source": "users.json areas.SSP",
       "tobeGroups": [
         "GUEST",
-        "SSP Planner"
+        "SSP Viewer"
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "EDIT",
-        "SEARCH",
-        "SAVE",
-        "USER_CHECK"
+        "USER_CHECK",
+        "SEARCH"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -355,13 +353,13 @@
       "SEARCH"
     ],
     "DM Planner": [
-      "SAVE",
       "USER_CHECK",
+      "SAVE",
       "SEARCH"
     ],
     "DM Planner (W/S)": [
-      "SAVE",
       "SEARCH",
+      "SAVE",
       "USER_CHECK"
     ],
     "DM Viewer": [

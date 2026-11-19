@@ -1,0 +1,39 @@
+{
+ "screen": "SCP0028",
+ "made": "2026-11-19 17:25",
+ "checklist": null,
+ "fe_mapping": {
+  "total": 0,
+  "by_state": {}
+ },
+ "asis_actions": {
+  "total": 149,
+  "blank_state": 144,
+  "meaning_needed": 4,
+  "by_state": {
+   "빈칸": 144,
+   "메시지 표시(확인창이면 결과로 분기)": 1,
+   "처리 중단/반환": 1,
+   "⚠ 의미 확인 필요": 2,
+   "그리드 값 설정": 1
+  }
+ },
+ "counts": null,
+ "ledger": null,
+ "pending_recheck": {
+  "fixed_at": "2026-11-19 17:10",
+  "ledger_at": "2026-11-19 16:34",
+  "note": "미검증 해소 보완 2026-11-19 17:10 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ },
+ "name": "Shipment_Lot_Size",
+ "sources": [
+  {
+   "file": "nscm-fe/features/shipping/src/pages/shipment-lot-size/__asis-mapping__.md",
+   "time": "2026-10-14 09:26"
+  },
+  {
+   "file": "Doc/asisfacts/screens/SCP0028/__asis-actions__.md",
+   "time": "2026-10-23 11:29"
+  }
+ ]
+}

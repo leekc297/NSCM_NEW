@@ -1,5 +1,17 @@
 [
  {
+  "row_id": "V-fd3610e5",
+  "rule_id": "J4",
+  "target": "Home / Auth Request 메뉴",
+  "same": []
+ },
+ {
+  "row_id": "EG-45ade04a",
+  "rule_id": "J4",
+  "target": "SCP0111 EG380 무권한 첫 화면 GUEST/-/GUEST",
+  "same": []
+ },
+ {
   "row_id": "V-28123894",
   "rule_id": "G4",
   "target": "SCP0111 스냅샷 조회조건 Div 40",
@@ -24,6 +36,12 @@
   "same": []
  },
  {
+  "row_id": "EG-42d53d53",
+  "rule_id": "MS1",
+  "target": "SCP0111 PROC 한글 문구 [99010]동일한 데이터가 존재합니다.",
+  "same": []
+ },
+ {
   "row_id": "V-a19f5cc5",
   "rule_id": "F4",
   "target": "SCP0111 경계값 저장",
@@ -33,12 +51,6 @@
   "row_id": "V-2eed0400",
   "rule_id": "E3",
   "target": "SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
-  "same": []
- },
- {
-  "row_id": "ES-600e4157",
-  "rule_id": "F1",
-  "target": "SCP0111 E2E crud 저장 왕복(insert)",
   "same": []
  },
  {

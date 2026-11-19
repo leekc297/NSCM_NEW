@@ -1,37 +1,13 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-14T21:23:39+09:00",
+ "ts": "2026-11-19T16:17:57+09:00",
  "producer": "run_verify",
  "id": "SSP0014",
  "skip_e2e": false,
- "started": "2026-11-14 20:11:45",
+ "started": "2026-11-19 13:49:48",
  "state": "completed",
  "verdict": "fail",
  "issues": [
-  {
-   "id": "V-c951c278",
-   "class": "B2",
-   "msg": "조회조건 From Site",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 21:23"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-3809bf77",
-   "class": "G9",
-   "msg": "조회조건 User ID(Name)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-14 21:23"
-    }
-   ],
-   "grade": "hard"
-  },
   {
    "id": "V-6784cbc4",
    "class": "D1",
@@ -39,7 +15,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-14 21:23"
+     "ref": "E2E @verify @11-19 16:17"
     }
    ],
    "grade": "hard"
@@ -51,7 +27,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-14 21:23"
+     "ref": "E2E @verify @11-19 16:17"
     }
    ],
    "grade": "hard"
@@ -63,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-14 21:23"
+     "ref": "E2E @verify @11-19 16:17"
     }
    ],
    "grade": "hard"
@@ -75,31 +51,19 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-14 21:23"
+     "ref": "E2E @verify @11-19 16:17"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-788e51ee",
-   "class": "B2",
-   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "id": "V-d74917d5",
+   "class": "J4",
+   "msg": "그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-830447ce",
-   "class": "B2",
-   "msg": "[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
+     "ref": "STATIC menu_auth_sync (그룹×메뉴·버튼 권한)"
     }
    ],
    "grade": "hard"
@@ -117,9 +81,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-225a8aab",
-   "class": "B2",
-   "msg": "[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site",
+   "id": "V-06acd0c1",
+   "class": "K1",
+   "msg": "[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
    "evidence": [
     {
      "kind": "exec",
@@ -141,9 +105,33 @@
    "grade": "hard"
   },
   {
+   "id": "V-d9706e63",
+   "class": "K1",
+   "msg": "[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
    "id": "V-a9bc120d",
    "class": "D1",
    "msg": "[DMF0042 결함 유형] Sales Site·End Customer 셀",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-048aa3eb",
+   "class": "K1",
+   "msg": "[DMF0053 결함 유형] 팝업 Filter 텍스트 입력창",
    "evidence": [
     {
      "kind": "exec",
@@ -165,9 +153,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-ef7e8fee",
-   "class": "G5",
-   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "id": "V-208f2de5",
+   "class": "F1",
+   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
    "evidence": [
     {
      "kind": "exec",
@@ -189,9 +177,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-c88d2fa4",
-   "class": "G5",
-   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "id": "V-85aedfae",
+   "class": "K1",
+   "msg": "[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 · 건수 표시",
    "evidence": [
     {
      "kind": "exec",
@@ -201,9 +189,9 @@
    "grade": "hard"
   },
   {
-   "id": "V-0a7c8441",
-   "class": "B2",
-   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "id": "V-27456ffc",
+   "class": "K1",
+   "msg": "[DMF0020 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
    "evidence": [
     {
      "kind": "exec",
@@ -213,9 +201,153 @@
    "grade": "hard"
   },
   {
-   "id": "V-066d4f8a",
-   "class": "G5",
-   "msg": "검색 팝업(공용 모달) 호출 인자",
+   "id": "V-6bffb65c",
+   "class": "K1",
+   "msg": "[DMF0048 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-391605fc",
+   "class": "K1",
+   "msg": "[DMF0014 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2e5b69eb",
+   "class": "K1",
+   "msg": "[DMF0074 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3a12fec8",
+   "class": "K1",
+   "msg": "[DMF0042 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e2173971",
+   "class": "K1",
+   "msg": "[DMF0021 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1d00db3d",
+   "class": "K1",
+   "msg": "[DMF0044 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-26088524",
+   "class": "K1",
+   "msg": "[DMF0049 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fd966969",
+   "class": "F1",
+   "msg": "[SYS0017 결함 유형] 신규 행 Insert 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9b33a420",
+   "class": "F1",
+   "msg": "[SYS0017 결함 유형] 사용자 우측 그리드(allReceiver) 추가 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4be9bc83",
+   "class": "F1",
+   "msg": "[SCM0007 결함 유형] 신규 행 Insert 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cc840fa0",
+   "class": "F1",
+   "msg": "[SCM0007 결함 유형] 사용자 우측 그리드(allReceiver) 추가 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4dbc99ae",
+   "class": "K1",
+   "msg": "결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-67e7e0e2",
+   "class": "F1",
+   "msg": "공통 버튼 Save(F7) 기존행 수정 + Insert 신규행",
    "evidence": [
     {
      "kind": "exec",
@@ -235,42 +367,161 @@
     }
    ],
    "grade": "hard"
+  },
+  {
+   "id": "T-3487b794",
+   "class": "X-ROW",
+   "msg": "SSP0014_ShipmentModelPIC.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-c788094d",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:USER_ID GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-1250673f",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:PART_LEADER GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-79684cf4",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:TEAM_LEADER GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4543f990",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:MAIL_USER1 GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-08be1b0d",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:MAIL_USER2 GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-e3289c95",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:MAIL_USER3 GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-7787b986",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:MAIL_USER4 GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-ad2cc9ff",
+   "class": "K1",
+   "msg": "SSP0014 팝업 UserInfoPopup CELL:MAIL_USER5 GRID_FILTER_COUNT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "ES-de56f621",
+   "class": "F1",
+   "msg": "SSP0014 E2E crud 저장 왕복(edit-save)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @e2e-crud @11-19 16:17"
+    }
+   ],
+   "grade": "hard"
   }
  ],
  "warnings": [
-  "커버리지 게이트 SUSPECT_NA100 F1, F6 — Doc/verify/SSP0014/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+  "커버리지 게이트 SUSPECT_NA100 F6 — Doc/verify/SSP0014/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
  ],
  "summary": {
-  "rows": 2168,
-  "PASS": 953,
-  "FAIL": 19,
-  "판정필요": 28,
-  "미검증": 365,
-  "해당없음": 803,
+  "rows": 2144,
+  "PASS": 947,
+  "FAIL": 40,
+  "판정필요": 30,
+  "미검증": 293,
+  "해당없음": 834,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1272,
-   "없음(미검증)": 365,
-   "사람": 2,
-   "기계(상속·집계)": 497,
-   "없음(판정 대기)": 28,
+   "기계": 1265,
+   "없음(미검증)": 293,
+   "사람": 7,
+   "기계(상속·집계)": 545,
+   "없음(판정 대기)": 30,
    "출처 미기록": 4
   },
-  "fail_listed": 19,
+  "fail_listed": 40,
   "coverage": {
    "rules": 91,
-   "measured": 781,
-   "not_run_error": 267,
-   "na": 223,
+   "measured": 789,
+   "not_run_error": 197,
+   "na": 239,
    "suspect_na100": [
-    "F1",
     "F6"
    ]
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SSP0014_ShipmentModelPic_CheckList_v4.xlsx",
-  "ActionItemList": "Doc/CheckList/SSP0014_ShipmentModelPic_ActionItemList_v4.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_CheckList_v5.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_ActionItemList_v5.xlsx"
  },
  "evidence": [
   {
@@ -282,5 +533,5 @@
    "ref": "Doc/verify/SSP0014/e2e_results.json"
   }
  ],
- "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F1, F6 — Doc/verify/SSP0014/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F6 — Doc/verify/SSP0014/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

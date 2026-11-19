@@ -12,7 +12,7 @@
 import * as fs from 'node:fs';
 import type { Locator, TestInfo } from '@playwright/test';
 import type { Nscm, ProcCall } from './nscm';
-import { CFG, FE } from './nscm';
+import { CFG, FE, bePortOpen } from './nscm';
 import { probe } from './probe';
 
 export type Verdict = 'OK' | 'FAIL' | 'WARN' | 'NA' | 'ERROR';
@@ -736,8 +736,13 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default', minRow
     }
   }
   const via = `기본 조회 ${minRows > 1 ? `${minRows}행 미만` : '0행'} · 대안 ${tried.join(' · ') || '없음'} 전부 0행${nscm.requiredNotes.length ? ` · 필수 조건 ${nscm.requiredNotes.slice(-2).join(' / ')}` : ''}`;
-  ENSURE_MEMO.set(key, { via, none: true });
-  return { rows, via };
+  // 2026-11-19 미검증 해소(SCP0028 시나리오 7행 '이전 시도 … 재시도 생략'): BE 가 내려가 콤보 후보·조회가 0 이 된 시도를 '대안 없음'으로 메모하면
+  //   BE 가 다시 떠도 같은 실행의 뒤 테스트가 모두 재시도를 건너뛰었다 → BE 포트가 닫혀 있거나 이 화면 요청에 5xx 가 있었으면 메모하지 않는다
+  const beOk = await bePortOpen().catch(() => true);
+  //   대안을 하나도 시도하지 못한 경우(tried 0 · Division 콤보를 못 읽음, 팝업이 열린 상태 등)도 '데이터 없음'이 아니라 측정 실패라 메모하지 않는다
+  //   (SCP0028 11-19 05:27Z 'E4·B3·B4·G4' 테스트가 입력 팝업의 From Site 필수 알림 중 '대안 없음'을 메모 → 뒤 '문서 시나리오' 7행이 재시도 생략)
+  if (beOk && tried.length && !(nscm.serverErrors || []).length) ENSURE_MEMO.set(key, { via, none: true });
+  return { rows, via: beOk ? via : `${via} · [BE 응답 없음] BE 포트 닫힘, 메모하지 않음(재실행 대상)` };
 }
 
 /** 화면 안 탭(시트) 클릭 — role=tab → button → 텍스트 순. 전환 못 하면 false(측정 경로 없음 → 호출부가 ERROR) */

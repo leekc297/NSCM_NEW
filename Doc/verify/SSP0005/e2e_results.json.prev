@@ -42,12 +42,12 @@
  {
   "row_id": "V-34e1b890",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 헤더] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\헤더_Shipment_Working_Day.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 3행 · 칸 362 · 전제 Div - · calls 4 · rows 435 · 기대원천 ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
+  "evidence": "[재실측 스냅샷 헤더] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\헤더_Shipment_Working_Day.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 3행 · 칸 368 · 전제 Div - · calls 4 · rows 442 · 기대원천 ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
   "tobe_ref": "E2E @snap 헤더",
   "cond": "9260f978",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
   "expect_src": "ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
@@ -55,19 +55,19 @@
   "precond": {
    "div": "",
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "viewport": ""
   }
  },
  {
   "row_id": "V-735f7065",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1515 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SSP0005\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 4 · rows 435 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 1399 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SSP0005\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 4 · rows 442 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "76e850b6",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
   "expect_src": "RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
@@ -75,19 +75,19 @@
   "precond": {
    "div": "",
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "viewport": 1920
   }
  },
  {
   "row_id": "V-dc1a965d",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 893 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SSP0005\\snap\\golden\\화 · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 4 · rows 435 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 골든 없음(승인 전) · 골든 없음(승인 전) — 자동 생성 골든 후보 png 와 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 938 pixels (ratio 0.01 of all image pixels) are different. Snapshot: SSP0005\\snap\\golden\\화 · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 4 · rows 442 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "dd9a0f7d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
   "expect_src": "RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
@@ -95,22 +95,22 @@
   "precond": {
    "div": "",
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "viewport": 1366
   }
  },
  {
   "row_id": "T-b297258d",
   "result": "PASS",
-  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 Shipment Working Day/GET_SCP_PERIOD(2행), calendar/SEARCH(435행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출 없음)",
+  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 Shipment Working Day/GET_SCP_PERIOD(2행), calendar/SEARCH(442행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출 없음)",
   "tobe_ref": "E2E @trace",
   "cond": "5bf828cc",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-ddc05b78",
@@ -120,10 +120,10 @@
   "cond": "84e4a56e",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-411ddf36",
@@ -133,10 +133,10 @@
   "cond": "c93a5b5d",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-bd9b7b34",
@@ -146,10 +146,10 @@
   "cond": "a1efb4ca",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-485b5ce9",
@@ -159,10 +159,10 @@
   "cond": "30d68abf",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-4ca17d7e",
@@ -172,10 +172,10 @@
   "cond": "0eae188e",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-3033cfc8",
@@ -185,10 +185,10 @@
   "cond": "b93fd91a",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-cc61811c",
@@ -198,10 +198,10 @@
   "cond": "98388b92",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-5436b9c0",
@@ -211,10 +211,10 @@
   "cond": "aa381094",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-3fcc372a",
@@ -224,23 +224,23 @@
   "cond": "8421ee2f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-b4703e42",
   "result": "PASS",
-  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '2026.11.13 | 2027.11.07' 허용 (사용자 룰 2026-10-26)",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '2026.11.14 | 2027.11.14' 허용 (사용자 룰 2026-10-26)",
   "tobe_ref": "E2E @trace",
   "cond": "8e39615a",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-d4a25387",
@@ -250,10 +250,10 @@
   "cond": "b3f3fe83",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-270be947",
@@ -263,10 +263,10 @@
   "cond": "4c6182a7",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-32e05fd2",
@@ -276,10 +276,10 @@
   "cond": "9b397c93",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-e92a5ea5",
@@ -289,10 +289,10 @@
   "cond": "bace6652",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-e35a08b8",
@@ -302,10 +302,10 @@
   "cond": "2210dbec",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-bc93c313",
@@ -315,10 +315,10 @@
   "cond": "36219bb3",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-619b8db9",
@@ -328,10 +328,10 @@
   "cond": "b6a8b0de",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-670a2d2b",
@@ -341,10 +341,10 @@
   "cond": "4c6182a7",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-64e04f79",
@@ -354,36 +354,36 @@
   "cond": "9b397c93",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-50365a11",
   "result": "PASS",
-  "evidence": "PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY: Shipment Working Day/SEARCH HTTP 200 1행",
+  "evidence": "PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY: Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행",
   "tobe_ref": "E2E @trace",
   "cond": "97595841",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-a9bbcb00",
   "result": "PASS",
-  "evidence": "P_SSP0005_GET: Shipment Working Day/SEARCH HTTP 200 1행",
+  "evidence": "P_SSP0005_GET: Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행",
   "tobe_ref": "E2E @trace",
   "cond": "21847734",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-686bcc89",
@@ -392,11 +392,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "e17a6823",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-cbcf7784",
@@ -405,11 +405,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "0bf20acb",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-16740de1",
@@ -419,23 +419,23 @@
   "cond": "9cc06719",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-85bad504",
   "result": "PASS",
-  "evidence": "AS-IS 기본 표시 컬럼 2 ⊆ TO-BE 그리드 362: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: )",
+  "evidence": "AS-IS 기본 표시 컬럼 2 ⊆ TO-BE 그리드 368: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: )",
   "tobe_ref": "E2E @trace",
   "cond": "0961e4b9",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-cf1c437a",
@@ -444,11 +444,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "45c3928d",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-52caa56a",
@@ -457,11 +457,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "45c3928d",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-c6a37ad5",
@@ -470,11 +470,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "b5cbda47",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-a70c25ab",
@@ -483,11 +483,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "d5bb3d45",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-bbab90dd",
@@ -496,11 +496,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "eb91ea94",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-c38775b6",
@@ -509,11 +509,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "23318061",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-89492970",
@@ -522,11 +522,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "ca4e151d",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-4147891b",
@@ -535,11 +535,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "45c3928d",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-3e579fb8",
@@ -548,11 +548,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "812724f7",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-94eb5239",
@@ -561,11 +561,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "9b7f84e8",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-542b856c",
@@ -574,11 +574,11 @@
   "tobe_ref": "E2E @trace",
   "cond": "c772b5bb",
   "mctx": {
-   "calls": 4,
-   "rows": 435,
+   "calls": 14,
+   "rows": 2641,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-3ba36206",
@@ -588,10 +588,10 @@
   "cond": "7948ab8c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-661b63bd",
@@ -601,10 +601,10 @@
   "cond": "c16568af",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-9c7bd228",
@@ -614,10 +614,10 @@
   "cond": "f435a0fa",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-24f44d76",
@@ -627,10 +627,10 @@
   "cond": "217ad48f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4a7ffdbe",
@@ -639,10 +639,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1f2690f4",
@@ -651,10 +651,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-d0627780",
@@ -667,7 +667,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-78e5f7bd",
@@ -680,7 +680,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-6bb51613",
@@ -693,7 +693,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-8379129e",
@@ -706,7 +706,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-526f0502",
@@ -719,7 +719,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-f940fd4d",
@@ -732,7 +732,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-6a36644b",
@@ -745,7 +745,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-70f04acc",
@@ -758,7 +758,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-2d2a01e5",
@@ -771,7 +771,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-35bab764",
@@ -784,7 +784,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-ff56d71b",
@@ -797,7 +797,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-9c41c2a1",
@@ -807,10 +807,10 @@
   "cond": "7c9a3d2d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-9df99546",
@@ -820,10 +820,10 @@
   "cond": "7c9a3d2d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-cd6386c9",
@@ -833,10 +833,10 @@
   "cond": "07c112ad",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-57fe96b8",
@@ -846,10 +846,10 @@
   "cond": "5c59b565",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-f5e2b116",
@@ -859,10 +859,10 @@
   "cond": "dab952f6",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-59de933f",
@@ -872,10 +872,10 @@
   "cond": "d98a4dab",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-bc60d5c7",
@@ -885,10 +885,10 @@
   "cond": "405aa082",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-db2a4710",
@@ -898,10 +898,10 @@
   "cond": "e5386727",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-c61b1188",
@@ -911,10 +911,10 @@
   "cond": "765e6e6c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-f6d2008f",
@@ -924,10 +924,10 @@
   "cond": "047b6903",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-c409c22a",
@@ -937,10 +937,10 @@
   "cond": "76d7d684",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-a05684ff",
@@ -950,10 +950,10 @@
   "cond": "265a1808",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-d9af9685",
@@ -963,10 +963,10 @@
   "cond": "a38d53a9",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-267333fd",
@@ -976,10 +976,10 @@
   "cond": "044bc6f9",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-29626914",
@@ -989,10 +989,10 @@
   "cond": "9056bb9b",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-c7d508e6",
@@ -1002,10 +1002,10 @@
   "cond": "aa9ca3f0",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-15ecca3e",
@@ -1015,10 +1015,10 @@
   "cond": "a4182def",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4068b6f5",
@@ -1027,10 +1027,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1a5e296e",
@@ -1039,10 +1039,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-786cbaa7",
@@ -1052,10 +1052,10 @@
   "cond": "585e385d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-909c64fd",
@@ -1064,23 +1064,23 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0a997734",
   "result": "NA",
-  "evidence": "같은 컬럼 구성에서 비교할 시점 1개 — Division 전환 단계 없음(고정·비활성 조건 등) · 컬럼 구성 다른 시점 제외: 조회 전 54(컬럼 362), 조회 뒤 54(컬럼 362)(T216)",
+  "evidence": "같은 컬럼 구성에서 비교할 시점 1개 — Division 전환 단계 없음(고정·비활성 조건 등) · 컬럼 구성 다른 시점 제외: 조회 전 54(컬럼 368), 조회 뒤 54(컬럼 368)(T216)",
   "tobe_ref": "E2E @verify 레이아웃 묶음",
   "cond": "70c8b29c",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-edb955cc",
@@ -1090,10 +1090,10 @@
   "cond": "f4868673",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f2bd7c17",
@@ -1103,10 +1103,10 @@
   "cond": "1d68df2e",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4941bae6",
@@ -1116,10 +1116,10 @@
   "cond": "baacfd1e",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d7c83f9c",
@@ -1129,10 +1129,10 @@
   "cond": "d7029302",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-3c282728",
@@ -1142,10 +1142,10 @@
   "cond": "c93a5b5d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2b612c39",
@@ -1154,10 +1154,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a5233fef",
@@ -1167,10 +1167,10 @@
   "cond": "8ac88073",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7de57eeb",
@@ -1180,10 +1180,10 @@
   "cond": "0c603b16",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-f1230888",
@@ -1193,10 +1193,10 @@
   "cond": "c93a5b5d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a97f26ef",
@@ -1205,10 +1205,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-19ecf1cd",
@@ -1218,10 +1218,10 @@
   "cond": "c2935dc0",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9b27bdf0",
@@ -1230,10 +1230,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "T-6aac674b",
@@ -1243,10 +1243,10 @@
   "cond": "a79ba8de",
   "mctx": {
    "calls": 10,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9bf88d42",
@@ -1254,11 +1254,11 @@
   "evidence": "[멀티선택 Div] '81 Automotive Battery' 1개 선택 조회 → 0행 (기본 ALL 0행) · 조회 후 30초간 그리드 변화 없음 · 조회 요청 1건(본문에 '81' 포함) · 조건 칸 표시 '81 Automotive Battery' · 결과 컬럼 미식별 값에서 고를 후보를 못 찾아 임의 후보 선택 — 기본(ALL) 조회 0행: 조건 반영 검사 불가(데이터 없음)",
   "tobe_ref": "E2E @trace",
   "mctx": {
-   "calls": 18,
-   "rows": 2634,
+   "calls": 8,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-197bd851",
@@ -1266,11 +1266,11 @@
   "evidence": "[멀티선택 Div] ALL 선택 조회 → 1행 (개별 0행)",
   "tobe_ref": "E2E @trace",
   "mctx": {
-   "calls": 18,
-   "rows": 2634,
+   "calls": 8,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c9bd2b82",
@@ -1279,10 +1279,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0ac85697",
@@ -1291,10 +1291,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-abd1d540",
@@ -1303,10 +1303,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d150a84e",
@@ -1315,10 +1315,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9c543d4d",
@@ -1328,10 +1328,10 @@
   "cond": "eb4c5cfa",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9060fc1a",
@@ -1340,10 +1340,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c1e6f01f",
@@ -1352,10 +1352,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0a012ab4",
@@ -1364,10 +1364,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ad028e16",
@@ -1376,10 +1376,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a9d05cdb",
@@ -1388,10 +1388,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-710a0604",
@@ -1400,10 +1400,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8498bb0e",
@@ -1412,10 +1412,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-cf84c50e",
@@ -1424,10 +1424,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-bc3e7021",
@@ -1436,10 +1436,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-540d5f40",
@@ -1448,10 +1448,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0896f465",
@@ -1460,10 +1460,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-bbf6a660",
@@ -1472,10 +1472,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ef56a00d",
@@ -1484,10 +1484,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e08b931d",
@@ -1496,10 +1496,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9eca9110",
@@ -1508,10 +1508,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-93fdf223",
@@ -1520,10 +1520,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8934faef",
@@ -1532,10 +1532,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f4a3c8a8",
@@ -1544,10 +1544,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-afafa841",
@@ -1556,10 +1556,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0b43798a",
@@ -1568,10 +1568,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-937a7922",
@@ -1580,10 +1580,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e53be5fa",
@@ -1592,10 +1592,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1eb8240d",
@@ -1604,10 +1604,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1f6bd272",
@@ -1616,10 +1616,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-cdd63988",
@@ -1628,10 +1628,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-042d1a66",
@@ -1640,10 +1640,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f1c20fe8",
@@ -1652,10 +1652,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-fe007f1c",
@@ -1664,10 +1664,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-82c4e022",
@@ -1676,10 +1676,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5911f069",
@@ -1688,10 +1688,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-cb99a7cc",
@@ -1700,10 +1700,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f46800f5",
@@ -1712,10 +1712,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e3998ea2",
@@ -1724,10 +1724,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c3498440",
@@ -1736,10 +1736,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7f38f4c1",
@@ -1748,10 +1748,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f55f813e",
@@ -1760,34 +1760,34 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-defa3798",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 111ms(요청~응답 111ms · 벽시계 925ms) · 0행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 122ms(요청~응답 122ms · 벽시계 973ms) · 0행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-fcc5697c",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 111ms(요청~응답 111ms · 벽시계 925ms) · 0행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 122ms(요청~응답 122ms · 벽시계 973ms) · 0행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0e6a45db",
@@ -1797,10 +1797,10 @@
   "cond": "ae5f8b8d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-46c4075e",
@@ -1809,10 +1809,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c768d493",
@@ -1821,10 +1821,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-91e1d7eb",
@@ -1833,10 +1833,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-50affe7b",
@@ -1845,10 +1845,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a0556d41",
@@ -1857,10 +1857,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a29ba8ca",
@@ -1869,10 +1869,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-91bdcb5e",
@@ -1881,10 +1881,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0ba12adf",
@@ -1893,10 +1893,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7b19ede7",
@@ -1905,10 +1905,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8e2c9933",
@@ -1918,10 +1918,10 @@
   "cond": "dd038fda",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2da50bea",
@@ -1931,10 +1931,10 @@
   "cond": "a2988e16",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f93e78da",
@@ -1944,10 +1944,10 @@
   "cond": "2a6dc203",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-92d0ce2b",
@@ -1956,10 +1956,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a66393ea",
@@ -1969,10 +1969,10 @@
   "cond": "364d8f2c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-0f692acd",
@@ -1981,10 +1981,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6699d960",
@@ -1993,22 +1993,22 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ef85017d",
   "result": "NA",
-  "evidence": "명칭(_NAME/_NM) 컬럼 없음(표시 컬럼 362: COMPANY_ID,DIVISION_ID,D_20261113,D_20261114,D_20261115,D_20261116,D_20261117,D_20261118,D_20261119,D_20261120,D_20261121,D_20261122…) — 데이터 다국어 규칙 대상 없음",
+  "evidence": "명칭(_NAME/_NM) 컬럼 없음(표시 컬럼 368: COMPANY_ID,DIVISION_ID,D_20261114,D_20261115,D_20261116,D_20261117,D_20261118,D_20261119,D_20261120,D_20261121,D_20261122,D_20261123…) — 데이터 다국어 규칙 대상 없음",
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7817cd17",
@@ -2017,10 +2017,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7d9d415a",
@@ -2030,10 +2030,10 @@
   "cond": "321d9481",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c063e27c",
@@ -2043,10 +2043,10 @@
   "cond": "6fa5edb3",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ad197a3a",
@@ -2055,10 +2055,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9a045231",
@@ -2067,10 +2067,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-3019a617",
@@ -2079,10 +2079,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-da32e30b",
@@ -2091,10 +2091,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-487fddf1",
@@ -2103,10 +2103,10 @@
   "tobe_ref": "E2E @trace",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6d330a41",
@@ -2116,10 +2116,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a7ff1087",
@@ -2129,10 +2129,10 @@
   "cond": "b61587bd",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e60b34c2",
@@ -2142,10 +2142,10 @@
   "cond": "b61587bd",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4c0fb1d3",
@@ -2155,10 +2155,10 @@
   "cond": "b61587bd",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-182caf9d",
@@ -2168,10 +2168,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ddf6ea3b",
@@ -2181,10 +2181,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-831acbe0",
@@ -2194,10 +2194,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2cb6636e",
@@ -2207,10 +2207,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8a24338f",
@@ -2220,10 +2220,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1598bbba",
@@ -2233,10 +2233,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-b8e1ebd2",
@@ -2246,10 +2246,10 @@
   "cond": "9dd4d87c",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6c335f99",
@@ -2259,23 +2259,23 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-85cbb017",
   "result": "PASS",
-  "evidence": "D_20261113: AS-IS COMBO ↔ TO-BE dataType=Object · dataMap=Y",
+  "evidence": "D_20261114: AS-IS COMBO ↔ TO-BE dataType=Object · dataMap=Y",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d203d42a",
@@ -2285,10 +2285,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-04c7dc81",
@@ -2298,23 +2298,23 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d017dfef",
   "result": "NA",
-  "evidence": "D_20261113 현재 그리드에 없음",
+  "evidence": "D_20261114 현재 그리드에 없음",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4aafa2ac",
@@ -2324,10 +2324,10 @@
   "cond": "207fafa5",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-054016a3",
@@ -2337,10 +2337,10 @@
   "cond": "d6d97a29",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-87c93e74",
@@ -2350,10 +2350,10 @@
   "cond": "be0442ce",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-45ceb78a",
@@ -2363,10 +2363,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f8bcc179",
@@ -2376,10 +2376,10 @@
   "cond": "56594782",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5c9fabe3",
@@ -2389,10 +2389,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-75c9d6f8",
@@ -2402,10 +2402,10 @@
   "cond": "fd28131e",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-860976f4",
@@ -2415,10 +2415,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-489602aa",
@@ -2428,10 +2428,10 @@
   "cond": "e0110833",
   "mctx": {
    "calls": 20,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5f3d1aad",
@@ -2441,10 +2441,10 @@
   "cond": "5f790b2d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2bc6b855",
@@ -2454,10 +2454,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-400f4037",
@@ -2467,10 +2467,10 @@
   "cond": "13932bc6",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-657eef0e",
@@ -2480,10 +2480,10 @@
   "cond": "0f1387ec",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a14b0257",
@@ -2493,10 +2493,10 @@
   "cond": "33391ca3",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2c074ac3",
@@ -2506,10 +2506,10 @@
   "cond": "86ca7438",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e4f681b2",
@@ -2519,10 +2519,10 @@
   "cond": "92f0eb0a",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a6d90c80",
@@ -2532,10 +2532,10 @@
   "cond": "e5202097",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-66b6fe9a",
@@ -2545,10 +2545,10 @@
   "cond": "670b4701",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e3a3e44f",
@@ -2558,10 +2558,10 @@
   "cond": "71c89073",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-3f39ad5f",
@@ -2571,10 +2571,10 @@
   "cond": "94002964",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-23be0292",
@@ -2584,23 +2584,23 @@
   "cond": "dc0c3226",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2e7a63b6",
   "result": "PASS",
-  "evidence": "기간 20261113~20271107 · D_ 칸 360개 20261113~20271107 · 중복·역순 없음 · 주·일 달력 원천 대조는 미구현 · 행 0",
+  "evidence": "기간 20261114~20271114 · D_ 칸 366개 20261114~20271114 · 중복·역순 없음 · 주·일 달력 원천 대조는 미구현 · 행 0",
   "tobe_ref": "E2E @verify 기간 동적 컬럼",
   "cond": "b8359680",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a66d06d4",
@@ -2610,10 +2610,10 @@
   "cond": "afde2791",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4245df49",
@@ -2623,10 +2623,10 @@
   "cond": "b050dd7f",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6524b70e",
@@ -2636,10 +2636,10 @@
   "cond": "c000d424",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-00476254",
@@ -2649,10 +2649,10 @@
   "cond": "3b12d9ac",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9511d96e",
@@ -2662,10 +2662,10 @@
   "cond": "ae660f5d",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ae96b44a",
@@ -2675,10 +2675,10 @@
   "cond": "89a7bf5d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9b59270b",
@@ -2688,10 +2688,10 @@
   "cond": "29343c5e",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-af14b50c",
@@ -2701,10 +2701,10 @@
   "cond": "11073c0b",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8ef6d144",
@@ -2714,10 +2714,10 @@
   "cond": "747ee4de",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ec70d951",
@@ -2727,10 +2727,10 @@
   "cond": "2b19fdba",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5a57089c",
@@ -2740,10 +2740,10 @@
   "cond": "48e66caa",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-494abd53",
@@ -2753,23 +2753,23 @@
   "cond": "14055692",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-70c10de0",
   "result": "PASS",
-  "evidence": "기간 칸 360개 값 360건 이상값 0",
+  "evidence": "기간 칸 366개 값 366건 이상값 0",
   "tobe_ref": "E2E @verify 표시 묶음2",
   "cond": "1bd40be8",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6bee414b",
@@ -2779,10 +2779,10 @@
   "cond": "4f68a894",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-3100cb6a",
@@ -2792,10 +2792,10 @@
   "cond": "0e28e42c",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2e889f80",
@@ -2805,10 +2805,10 @@
   "cond": "a795772a",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c9c36f93",
@@ -2818,10 +2818,10 @@
   "cond": "7ac2da6f",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-63c6cabf",
@@ -2831,10 +2831,10 @@
   "cond": "1c5fe62d",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9c955342",
@@ -2844,10 +2844,10 @@
   "cond": "7d2a3114",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-3b7b3c3e",
@@ -2857,10 +2857,10 @@
   "cond": "158b39b1",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-b986e197",
@@ -2870,10 +2870,10 @@
   "cond": "26a4e16f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5564070a",
@@ -2883,10 +2883,10 @@
   "cond": "f0a74fbd",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-679f5030",
@@ -2896,36 +2896,36 @@
   "cond": "1008d7ad",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-3fa63d31",
   "result": "PASS",
-  "evidence": "기간 칸 글자 입력 거부 — '2026.11.13' → '2026.11.13'",
+  "evidence": "기간 칸 글자 입력 거부 — '2026.11.14' → '2026.11.14'",
   "tobe_ref": "E2E @verify 기간 조건",
   "cond": "08dc7828",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ce2c787d",
-  "result": "ERROR",
-  "evidence": "[측정 경로 없음] 기간을 뒤집어 넣지 못함 · 대조군도 안 들어감(From '2026.11.13' · To '2026.11.13')",
+  "result": "PASS",
+  "evidence": "기간 역전 입력을 컨트롤이 거부(From '2026.11.14' · To '2027.11.14') · 정상 범위 날짜 입력은 됨",
   "tobe_ref": "E2E @verify 기간 조건",
   "cond": "c4306d3a",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5e1d64bd",
@@ -2935,10 +2935,10 @@
   "cond": "058cab2a",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-689c2134",
@@ -2948,36 +2948,36 @@
   "cond": "482d0d98",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d75aa24b",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-12 09:04 · 행 수 ) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출2·요청10 → 언어 KOR→KOR → search:0행·신규0·호출2·요청11 → 언어 복원 → KOR → 끝:0행·신규0·호출4·요청14 · 문서 자동 생성 P01 · btn_auth SAVE",
+  "evidence": "[측정 경로 없음] [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출2·요청10 → 언어 KOR→KOR → search:0행·신규0·호출2·요청11 → 언어 복원 → KOR → 끝:0행·신규0·호출4·요청14 · 문서 자동 생성 P01 · btn_auth SAVE",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "aba8c369",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c80a8e31",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] CN 언어 조회 건수 총/건 표기: [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0003) — 계정 언어 전환 생략(T200) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출2·요청8 · 문서 자동 생성 P02 · btn_auth SEARCH",
+  "evidence": "[측정 경로 없음] [자동] CN 언어 조회 건수 총/건 표기: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · lang:0행·신규0·호출2·요청8 → 언어 KOR→CHN → search:0행·신규0·호출2·요청14 → 언어 복원 → KOR → 끝:0행·신규0·호출4·요청17 · 문서 자동 생성 P02 · btn_auth SEARCH",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "b4253da6",
   "mctx": {
-   "calls": 2,
-   "rows": 435,
+   "calls": 4,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-71847098",
@@ -2987,75 +2987,75 @@
   "cond": "7d4e4c62",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-3a321dcf",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 선택 행 위로 Insert: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-12 09:04 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P05 · btn_auth INSERT · D6 확정 요구(O2)",
+  "evidence": "[측정 경로 없음] [자동] 선택 행 위로 Insert: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P05 · btn_auth INSERT · D6 확정 요구(O2)",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "aaa8091d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8bcce9c3",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-12 09:04 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P12 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · 필수 오탐 유형(DM-215)",
+  "evidence": "[측정 경로 없음] [자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P12 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · 필수 오탐 유형(DM-215)",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "9fbaa312",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d9d4b814",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙): 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-12 09:04 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P15 · DM-52 general_rule · AS-IS 버튼 btnInput Text 'Input'",
+  "evidence": "[측정 경로 없음] [자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙): 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P15 · DM-52 general_rule · AS-IS 버튼 btnInput Text 'Input'",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "30e9f385",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ce9bc8df",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 당주 구분선(rail) = 이번 주(Weekly): 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-12 09:04 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P18 · AS-IS W_ 칸 접두 검사 14건",
+  "evidence": "[측정 경로 없음] [자동] 당주 구분선(rail) = 이번 주(Weekly): 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P18 · AS-IS W_ 칸 접두 검사 14건",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "2aa9673f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-664e9248",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [자동] 값 있는 편집 구간 수량 셀 편집: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-12 09:04 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P19 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · SAVE",
+  "evidence": "[측정 경로 없음] [자동] 값 있는 편집 구간 수량 셀 편집: 조회 0행(기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행 · Div AB+기간:0행 · Div AC+기간:0행 전부 0행 · 재시도 생략)) · [전제] Div조건 있음 · 기본 Div - · 계정 Div 40,81,82 · 필수조건 Div,Period · 이전 관측 최대 0행(e2e_results.json 2026-11-13 07:06 · 행 수 ) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P19 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · SAVE",
   "tobe_ref": "E2E @verify 시나리오",
   "cond": "c1b5f9db",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-b263da2c",
@@ -3065,10 +3065,10 @@
   "cond": "0f85cb7b",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-67877bc6",
@@ -3078,10 +3078,10 @@
   "cond": "04e26ead",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-13080996",
@@ -3091,10 +3091,10 @@
   "cond": "85de9e9f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6ac126ba",
@@ -3104,10 +3104,10 @@
   "cond": "3b24417b",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e5f58985",
@@ -3117,10 +3117,10 @@
   "cond": "4d862552",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-b2cf061d",
@@ -3130,10 +3130,10 @@
   "cond": "893f180f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2ff0e17f",
@@ -3143,10 +3143,10 @@
   "cond": "15a24a2f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-db64f402",
@@ -3156,10 +3156,10 @@
   "cond": "e7af3788",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-96ab3439",
@@ -3169,10 +3169,10 @@
   "cond": "6d939bf3",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5be4f9ae",
@@ -3182,10 +3182,10 @@
   "cond": "1903bb48",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-469ad4ca",
@@ -3195,10 +3195,10 @@
   "cond": "0528a59b",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-450840d5",
@@ -3208,10 +3208,10 @@
   "cond": "be445c32",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6482ac41",
@@ -3221,10 +3221,10 @@
   "cond": "229a06b9",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e17142fb",
@@ -3234,23 +3234,23 @@
   "cond": "ed5ab234",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8f2b620c",
   "result": "PASS",
-  "evidence": "Excel 머리글 362개 = 화면 컬럼",
+  "evidence": "Excel 머리글 368개 = 화면 컬럼",
   "tobe_ref": "E2E @verify Excel 내용",
   "cond": "3df20a64",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-b4f21a24",
@@ -3260,10 +3260,10 @@
   "cond": "3df20a64",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-2a38e40f",
@@ -3273,10 +3273,10 @@
   "cond": "3df20a64",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d95b6f78",
@@ -3286,10 +3286,10 @@
   "cond": "3df20a64",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6e9bc0e7",
@@ -3299,23 +3299,23 @@
   "cond": "db0b6000",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-9f46dfd7",
   "result": "PASS",
-  "evidence": "조회 클릭 → 로딩 표시 관측 1회(100ms 폴링) · 응답 836ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "evidence": "조회 클릭 → 로딩 표시 관측 1회(100ms 폴링) · 응답 985ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
   "tobe_ref": "E2E @verify",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4b9beb46",
@@ -3325,23 +3325,23 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-59909ef8",
   "result": "PASS",
-  "evidence": "동적 헤더 바인딩 360 · 헤더 360(빈 0 · 중복 0) 예 13 | 14 | 15",
+  "evidence": "동적 헤더 바인딩 366 · 헤더 366(빈 0 · 중복 0) 예 14 | 15 | 16",
   "tobe_ref": "E2E @verify A9",
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5ef21cd2",
@@ -3354,7 +3354,7 @@
    "rows": -1,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6644b67e",
@@ -3364,10 +3364,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a8f53080",
@@ -3377,10 +3377,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f1eec983",
@@ -3390,10 +3390,10 @@
   "cond": "e2739692",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ea863b45",
@@ -3403,10 +3403,10 @@
   "cond": "0351e52e",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ded146fb",
@@ -3416,10 +3416,10 @@
   "cond": "e96c3a35",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e7486e7f",
@@ -3429,10 +3429,10 @@
   "cond": "3b134d2e",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-19f6079d",
@@ -3442,10 +3442,10 @@
   "cond": "b6fc94a4",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-947aac49",
@@ -3455,10 +3455,10 @@
   "cond": "567536cd",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6766a0f1",
@@ -3468,10 +3468,10 @@
   "cond": "0e8dbe71",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-340eb940",
@@ -3481,10 +3481,10 @@
   "cond": "90c3576b",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1746b56b",
@@ -3494,10 +3494,10 @@
   "cond": "794a7155",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a2bac29f",
@@ -3507,10 +3507,10 @@
   "cond": "794a7155",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f4089525",
@@ -3520,10 +3520,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-64d012df",
@@ -3533,10 +3533,10 @@
   "cond": "e96c3a35",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-dc2837b7",
@@ -3546,10 +3546,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-bfa56aec",
@@ -3559,10 +3559,10 @@
   "cond": "e5cf1e91",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-4f9ee984",
@@ -3572,10 +3572,10 @@
   "cond": "0e8dbe71",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-803fc0b5",
@@ -3585,10 +3585,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ec9e8596",
@@ -3598,10 +3598,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-dea0fab6",
@@ -3611,10 +3611,10 @@
   "cond": "2ce6c429",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-cba823b3",
@@ -3624,10 +3624,10 @@
   "cond": "c79b07db",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-08844ab4",
@@ -3637,10 +3637,10 @@
   "cond": "3ee9243d",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7c279ee0",
@@ -3650,10 +3650,10 @@
   "cond": "fd9611d0",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8bccac42",
@@ -3663,10 +3663,10 @@
   "cond": "11699a71",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e6fa5f9d",
@@ -3676,10 +3676,10 @@
   "cond": "b13670e8",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-278e3425",
@@ -3689,10 +3689,10 @@
   "cond": "726e5489",
   "mctx": {
    "calls": 6,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a9d8cee0",
@@ -3702,10 +3702,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6b0304a4",
@@ -3715,10 +3715,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d35fdfb8",
@@ -3728,10 +3728,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-fe598693",
@@ -3741,10 +3741,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8051ecab",
@@ -3754,10 +3754,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-8cf4cffe",
@@ -3767,10 +3767,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-6adc17b7",
@@ -3780,10 +3780,10 @@
   "cond": "e2739692",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1a01a3a5",
@@ -3793,10 +3793,10 @@
   "cond": "56b0f36f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-c97c566d",
@@ -3806,10 +3806,10 @@
   "cond": "60f2f53a",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-f331200e",
@@ -3819,10 +3819,10 @@
   "cond": "6c00b5f2",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-bd8c9a68",
@@ -3832,10 +3832,10 @@
   "cond": "467d44ac",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a90f96f3",
@@ -3845,10 +3845,10 @@
   "cond": "b6fc94a4",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-005bcedc",
@@ -3858,10 +3858,10 @@
   "cond": "567536cd",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-1503b652",
@@ -3871,10 +3871,10 @@
   "cond": "0529442d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-ab7531bf",
@@ -3884,10 +3884,10 @@
   "cond": "794a7155",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-df027667",
@@ -3897,10 +3897,10 @@
   "cond": "081caa10",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-53c53194",
@@ -3910,10 +3910,10 @@
   "cond": "e84666f0",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5d70e153",
@@ -3923,10 +3923,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-de47e92b",
@@ -3936,10 +3936,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-022da8af",
@@ -3949,10 +3949,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-90401b0a",
@@ -3962,10 +3962,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-7acf4c68",
@@ -3975,10 +3975,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-95c6640c",
@@ -3988,10 +3988,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-b0be461f",
@@ -4001,10 +4001,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-33d3b226",
@@ -4014,10 +4014,10 @@
   "cond": "377b764d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-19a015ce",
@@ -4027,10 +4027,10 @@
   "cond": "56b0f36f",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-a3ff3769",
@@ -4040,10 +4040,10 @@
   "cond": "b6fc94a4",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-e67fd879",
@@ -4053,10 +4053,10 @@
   "cond": "0529442d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-fdf43251",
@@ -4066,10 +4066,10 @@
   "cond": "081caa10",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-d0bc918a",
@@ -4079,10 +4079,10 @@
   "cond": "51a44eaf",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "V-5b329f48",
@@ -4092,10 +4092,10 @@
   "cond": "da39a3ee",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   },
-  "run": "20261113043155"
+  "run": "20261114194841"
  },
  {
   "row_id": "AD-793afd2c",
@@ -4164,71 +4164,71 @@
  {
   "row_id": "AD-762743cd",
   "result": "PASS",
-  "evidence": "[KEYSET] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 434행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 434행 ↔ TO-BE 434행 · 공통 434 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
+  "evidence": "[KEYSET] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 441행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 441행 ↔ TO-BE 441행 · 공통 441 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
-   "rows": 434,
+   "rows": 441,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20261113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20261114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-9407e4e3",
   "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 434행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 434행 ↔ TO-BE 434행 · 공통 434 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
+  "evidence": "[VALUES] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 441행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 441행 ↔ TO-BE 441행 · 공통 441 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
-   "rows": 434,
+   "rows": 441,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20261113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20261114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-cee0a0ea",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 434행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 434행 ↔ TO-BE 434행 · 공통 434 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
+  "evidence": "[COLSET] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 441행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 441행 ↔ TO-BE 441행 · 공통 441 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
-   "rows": 434,
+   "rows": 441,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20261113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20261114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-66131cd1",
   "result": "PASS",
-  "evidence": "[ORDER] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 434행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 434행 ↔ TO-BE 434행 · 공통 434 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
+  "evidence": "[ORDER] [차등 검증 #2] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 441행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 441행 ↔ TO-BE 441행 · 공통 441 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20261114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
-   "rows": 434,
+   "rows": 441,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__2.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20261113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20261114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-3ac76aab",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
+  "evidence": "[KEYSET] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4238,13 +4238,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-cdd2ce97",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
+  "evidence": "[VALUES] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4254,13 +4254,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-2c0d4352",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
+  "evidence": "[COLSET] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4270,13 +4270,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-ac1347e0",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
+  "evidence": "[ORDER] [차등 검증 #3] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4286,77 +4286,77 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__3.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-bda58e89",
   "result": "PASS",
-  "evidence": "[KEYSET] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1313행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1313행 ↔ TO-BE 1313행 · 공통 1313 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
+  "evidence": "[KEYSET] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1320행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1320행 ↔ TO-BE 1320행 · 공통 1320 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
-   "rows": 1313,
+   "rows": 1320,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20241113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20241114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-4c6a4c8d",
   "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1313행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1313행 ↔ TO-BE 1313행 · 공통 1313 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
+  "evidence": "[VALUES] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1320행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1320행 ↔ TO-BE 1320행 · 공통 1320 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
-   "rows": 1313,
+   "rows": 1320,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20241113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20241114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-06953b03",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1313행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1313행 ↔ TO-BE 1313행 · 공통 1313 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
+  "evidence": "[COLSET] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1320행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1320행 ↔ TO-BE 1320행 · 공통 1320 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
-   "rows": 1313,
+   "rows": 1320,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20241113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20241114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-a2aed2b9",
   "result": "PASS",
-  "evidence": "[ORDER] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1313행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1313행 ↔ TO-BE 1313행 · 공통 1313 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
+  "evidence": "[ORDER] [차등 검증 #4] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 1320행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 1320행 ↔ TO-BE 1320행 · 공통 1320 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20241114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
-   "rows": 1313,
+   "rows": 1320,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__4.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20241113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20241114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-082fd90a",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
+  "evidence": "[KEYSET] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4366,13 +4366,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20241113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20241114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-83a0e35e",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
+  "evidence": "[VALUES] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4382,13 +4382,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20241113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20241114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-bf3abec8",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
+  "evidence": "[COLSET] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4398,13 +4398,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20241113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20241114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-4a5a3e3c",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
+  "evidence": "[ORDER] [차등 검증 #5] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20241114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4414,77 +4414,77 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__5.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20241113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20241114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-db0efb13",
   "result": "PASS",
-  "evidence": "[KEYSET] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2633행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2633행 ↔ TO-BE 2633행 · 공통 2633 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
+  "evidence": "[KEYSET] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2640행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2640행 ↔ TO-BE 2640행 · 공통 2640 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
-   "rows": 2633,
+   "rows": 2640,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20211113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20211114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-d7318362",
   "result": "PASS",
-  "evidence": "[VALUES] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2633행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2633행 ↔ TO-BE 2633행 · 공통 2633 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
+  "evidence": "[VALUES] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2640행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2640행 ↔ TO-BE 2640행 · 공통 2640 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
-   "rows": 2633,
+   "rows": 2640,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20211113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20211114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-a542964b",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2633행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2633행 ↔ TO-BE 2633행 · 공통 2633 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
+  "evidence": "[COLSET] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2640행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2640행 ↔ TO-BE 2640행 · 공통 2640 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
-   "rows": 2633,
+   "rows": 2640,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20211113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20211114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-a83ba1f6",
   "result": "PASS",
-  "evidence": "[ORDER] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2633행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2633행 ↔ TO-BE 2633행 · 공통 2633 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211113\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
+  "evidence": "[ORDER] [차등 검증 #6] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 PASS · 공통 2640행 전 컬럼 일치 · 키(auto) COLUMN_NAME · AS-IS 2640행 ↔ TO-BE 2640행 · 공통 2640 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 PASS · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"20211114\", \"p_end_yyyymmdd\": \"20271114\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
-   "rows": 2633,
+   "rows": 2640,
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__6.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"20211113\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"20211114\", \"endYyyymmdd\": \"20271114\"}"
   }
  },
  {
   "row_id": "AD-25acef39",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
+  "evidence": "[KEYSET] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4494,13 +4494,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-cd94b738",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
+  "evidence": "[VALUES] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4510,13 +4510,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-4e2e5076",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
+  "evidence": "[COLSET] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4526,13 +4526,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-45e05e7f",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
+  "evidence": "[ORDER] [차등 검증 #7] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4542,13 +4542,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__7.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-636aa45a",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
+  "evidence": "[KEYSET] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4558,13 +4558,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-9cd9a90b",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
+  "evidence": "[VALUES] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4574,13 +4574,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-bce5a2ad",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
+  "evidence": "[COLSET] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4590,13 +4590,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-8cd5774a",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
+  "evidence": "[ORDER] [차등 검증 #8] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4606,13 +4606,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__8.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-9de9e3a3",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
+  "evidence": "[KEYSET] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4622,13 +4622,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-c4eeda40",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
+  "evidence": "[VALUES] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4638,13 +4638,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-585fe07b",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
+  "evidence": "[COLSET] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4654,13 +4654,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-77ea6c9f",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
+  "evidence": "[ORDER] [차등 검증 #9] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4670,13 +4670,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__9.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20211114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-19a90225",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
+  "evidence": "[KEYSET] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4686,13 +4686,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-4208330d",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
+  "evidence": "[VALUES] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4702,13 +4702,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-14390ac6",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
+  "evidence": "[COLSET] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4718,13 +4718,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-ed037b68",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
+  "evidence": "[ORDER] [차등 검증 #10] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AB00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4734,13 +4734,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__10.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AB00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-3afa946c",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
+  "evidence": "[KEYSET] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4750,13 +4750,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-e6e9c4e1",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
+  "evidence": "[VALUES] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4766,13 +4766,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-b8dd20f0",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
+  "evidence": "[COLSET] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4782,13 +4782,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-40b1e318",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
+  "evidence": "[ORDER] [차등 검증 #11] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4798,13 +4798,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__11.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-dc2aa02f",
   "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
+  "evidence": "[KEYSET] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4814,13 +4814,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-50475f0e",
   "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
+  "evidence": "[VALUES] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4830,13 +4830,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-da574fda",
   "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
+  "evidence": "[COLSET] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4846,13 +4846,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
   "row_id": "AD-63efb00e",
   "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20211113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AC00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
+  "evidence": "[ORDER] [차등 검증 #12] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261114\", \"p_to_yyyymmdd\": \"20271114\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4862,77 +4862,13 @@
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
   "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__12.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"20211113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AC00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"20261114\", \"toYyyymmdd\": \"20271114\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
-  "row_id": "AD-8db408cd",
-  "result": "판정필요",
-  "evidence": "[KEYSET] [차등 검증 #13] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "tobe_ref": "DB @diff KEYSET",
-  "mctx": {
-   "calls": 1,
-   "rows": 0,
-   "req": 0
-  },
-  "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
-  }
- },
- {
-  "row_id": "AD-48ddc572",
-  "result": "판정필요",
-  "evidence": "[VALUES] [차등 검증 #13] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "tobe_ref": "DB @diff VALUES",
-  "mctx": {
-   "calls": 1,
-   "rows": 0,
-   "req": 0
-  },
-  "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
-  }
- },
- {
-  "row_id": "AD-e77141b7",
-  "result": "PASS",
-  "evidence": "[COLSET] [차등 검증 #13] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "tobe_ref": "DB @diff COLSET",
-  "mctx": {
-   "calls": 1,
-   "rows": 0,
-   "req": 0
-  },
-  "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
-  }
- },
- {
-  "row_id": "AD-02d62fcb",
-  "result": "NA",
-  "evidence": "[ORDER] [차등 검증 #13] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 ROWS_ONLY · 공통행 0(키 company_id+division_id) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키(cleanup_spec.json) company_id+division_id · AS-IS 0행 ↔ TO-BE 0행 · 공통 0 · 단독 AS-IS 0 / TO-BE 0 · 불일치 셀 0 · 순서 NA · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"20261113\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "tobe_ref": "DB @diff ORDER",
-  "mctx": {
-   "calls": 1,
-   "rows": 0,
-   "req": 0
-  },
-  "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__13.md",
-  "precond": {
-   "params": "{\"fromYyyymmdd\": \"20261113\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
-  }
- },
- {
-  "row_id": "AD-8d5f09b1",
+  "row_id": "AD-1508558f",
   "result": "ERROR",
-  "evidence": "[KEYSET] [차등 검증 #14] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence": "[KEYSET] [차등 검증 #13] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),endYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"Invalid Date\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -4940,15 +4876,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"Invalid Date\"}"
   }
  },
  {
-  "row_id": "AD-5bb7c758",
+  "row_id": "AD-9763fd3b",
   "result": "ERROR",
-  "evidence": "[VALUES] [차등 검증 #14] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence": "[VALUES] [차등 검증 #13] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),endYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"Invalid Date\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -4956,15 +4892,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"Invalid Date\"}"
   }
  },
  {
-  "row_id": "AD-71d1e049",
+  "row_id": "AD-13dccd8e",
   "result": "ERROR",
-  "evidence": "[COLSET] [차등 검증 #14] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence": "[COLSET] [차등 검증 #13] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),endYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"Invalid Date\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -4972,15 +4908,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"Invalid Date\"}"
   }
  },
  {
-  "row_id": "AD-028a8228",
+  "row_id": "AD-023605a0",
   "result": "ERROR",
-  "evidence": "[ORDER] [차등 검증 #14] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"20271107\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence": "[ORDER] [차등 검증 #13] calendar/SEARCH AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ TO-BE PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 판정 SKIP · 인자 미해결(UNRESOLVED): startYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),endYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_start_yyyymmdd\": \"Invalid Date\", \"p_end_yyyymmdd\": \"Invalid Date\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -4988,15 +4924,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SCP0009_GET_SHEET_CALENDAR_3SPAN",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__14.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SCP0009_GET_SHEET_CALENDAR_3SPAN__13.md",
   "precond": {
-   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"20271107\"}"
+   "params": "{\"startYyyymmdd\": \"Invalid Date\", \"endYyyymmdd\": \"Invalid Date\"}"
   }
  },
  {
-  "row_id": "AD-9cee5307",
+  "row_id": "AD-b40bfe2f",
   "result": "ERROR",
-  "evidence": "[KEYSET] [차등 검증 #15] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence": "[KEYSET] [차등 검증 #14] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),toYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"Invalid Date\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "tobe_ref": "DB @diff KEYSET",
   "mctx": {
    "calls": 1,
@@ -5004,15 +4940,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"Invalid Date\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
-  "row_id": "AD-7a84b996",
+  "row_id": "AD-bd09d1a5",
   "result": "ERROR",
-  "evidence": "[VALUES] [차등 검증 #15] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence": "[VALUES] [차등 검증 #14] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),toYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"Invalid Date\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "tobe_ref": "DB @diff VALUES",
   "mctx": {
    "calls": 1,
@@ -5020,15 +4956,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"Invalid Date\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
-  "row_id": "AD-4b8afa43",
+  "row_id": "AD-e473a4db",
   "result": "ERROR",
-  "evidence": "[COLSET] [차등 검증 #15] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence": "[COLSET] [차등 검증 #14] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),toYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"Invalid Date\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "tobe_ref": "DB @diff COLSET",
   "mctx": {
    "calls": 1,
@@ -5036,15 +4972,15 @@
    "req": 0
   },
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"Invalid Date\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
-  "row_id": "AD-7b274669",
+  "row_id": "AD-e2813bb5",
   "result": "ERROR",
-  "evidence": "[ORDER] [차등 검증 #15] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"20271107\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence": "[ORDER] [차등 검증 #14] Shipment Working Day/SEARCH AS-IS SSP0005_GET_SHIPMENT_WORKING_DAY ↔ TO-BE PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY · 판정 SKIP · 인자 미해결(UNRESOLVED): fromYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님),toYyyymmdd='Invalid Date'(E2E 입력 시험 중 포착된 호출 — 대조 대상 아님) — param_map.csv 에 값/대응 지정 · 키()  · AS-IS 행 ↔ TO-BE 행 · 공통  · 단독 AS-IS  / TO-BE  · 불일치 셀  · 순서  · 전제: AS-IS 인자 {\"p_from_yyyymmdd\": \"Invalid Date\", \"p_to_yyyymmdd\": \"Invalid Date\", \"p_division_id\": \"81_HG\", \"p_company_id\": \"AA00\", \"debug_mode\": \"F\"} · 증거 Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "tobe_ref": "DB @diff ORDER",
   "mctx": {
    "calls": 1,
@@ -5052,9 +4988,9 @@
    "req": 0
   },
   "expect_src": "ASIS:SSP0005_GET_SHIPMENT_WORKING_DAY",
-  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__15.md",
+  "evidence_ref": "Doc\\verify\\SSP0005\\diff\\P_SSP0005_GET_SHIPMENT_WORKING_DAY__14.md",
   "precond": {
-   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"20271107\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
+   "params": "{\"fromYyyymmdd\": \"Invalid Date\", \"toYyyymmdd\": \"Invalid Date\", \"divisionId\": \"81_HG\", \"companyId\": \"AA00\", \"debugMode\": \"F\"}"
   }
  },
  {
@@ -5064,7 +5000,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5075,7 +5011,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5086,7 +5022,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5097,7 +5033,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5108,7 +5044,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5119,7 +5055,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5130,7 +5066,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5141,7 +5077,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5163,7 +5099,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5174,7 +5110,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5185,7 +5121,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5196,7 +5132,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5207,7 +5143,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5218,7 +5154,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5229,7 +5165,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5240,7 +5176,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5251,7 +5187,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5262,7 +5198,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5273,7 +5209,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5284,7 +5220,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5295,7 +5231,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5306,7 +5242,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5317,7 +5253,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5328,7 +5264,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5339,7 +5275,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5350,7 +5286,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5361,7 +5297,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5372,7 +5308,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5383,7 +5319,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5394,7 +5330,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5405,7 +5341,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5416,7 +5352,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5427,7 +5363,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5438,7 +5374,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5449,7 +5385,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5460,7 +5396,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5471,7 +5407,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5482,7 +5418,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5493,7 +5429,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5504,7 +5440,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5515,7 +5451,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5526,7 +5462,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5537,7 +5473,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5548,7 +5484,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5559,7 +5495,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5570,7 +5506,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5581,7 +5517,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5592,7 +5528,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5603,7 +5539,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5614,7 +5550,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5625,7 +5561,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5636,7 +5572,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5647,7 +5583,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5658,7 +5594,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5669,7 +5605,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5680,7 +5616,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5691,7 +5627,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5702,7 +5638,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5713,7 +5649,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5724,7 +5660,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5735,7 +5671,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5746,7 +5682,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5757,7 +5693,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 2,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5790,7 +5726,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 22,
-   "rows": 2634,
+   "rows": 2641,
    "req": 0
   }
  },
@@ -5801,7 +5737,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 22,
-   "rows": 2634,
+   "rows": 2641,
    "req": 0
   }
  },
@@ -5812,7 +5748,7 @@
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 22,
-   "rows": 2634,
+   "rows": 2641,
    "req": 0
   }
  },
@@ -5896,11 +5832,11 @@
  {
   "row_id": "EG-3a750694",
   "result": "PASS",
-  "evidence": "기대 AS-IS 헤더 병합 (spdInfo.ColumnHeaderSpan(0, iLargeStartCol, 1, iLargeSpanCnt) · 실제 TO-BE 헤더 3행 병합 73개 Company|Divison|2026-11|2026-12|2027-01 · AS-IS SSP0005_ShipmentWorkingDay.cs:274",
+  "evidence": "기대 AS-IS 헤더 병합 (spdInfo.ColumnHeaderSpan(0, iLargeStartCol, 1, iLargeSpanCnt) · 실제 TO-BE 헤더 3행 병합 74개 Company|Divison|2026-11|2026-12|2027-01 · AS-IS SSP0005_ShipmentWorkingDay.cs:274",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 442,
    "req": 0
   }
  },
@@ -5918,11 +5854,11 @@
  {
   "row_id": "EG-0e3461e7",
   "result": "ERROR",
-  "evidence": "기대 조회 행 · 실제 0행(기본 조회 0행 · 대안 기간 2년 확대(2024.11.13~):0행 · 기간 5년 확대(2021.11.13~):0행 · Div AA+기간:0행) · AS-IS ",
+  "evidence": "기대 조회 행 · 실제 0행(기본 조회 0행 · 대안 기간 2년 확대(2024.11.14~):0행 · 기간 5년 확대(2021.11.14~):0행 · Div AA+기간:0행) · AS-IS ",
   "tobe_ref": "E2E @eg-auth",
   "mctx": {
    "calls": 12,
-   "rows": 2634,
+   "rows": 2641,
    "req": 0
   }
  },
@@ -5938,9 +5874,9 @@
   }
  },
  {
-  "row_id": "EG-d4adfcfc",
-  "result": "PASS",
-  "evidence": "AS-IS 0행 · TO-BE 0행 · 키 대조 없음",
+  "row_id": "EG-57ab9048",
+  "result": "FAIL",
+  "evidence": "AS-IS 441행 · TO-BE 0행 · 키 대조 없음",
   "tobe_ref": "E2E @a1-live",
   "mctx": {
    "calls": 0,
@@ -5973,7 +5909,7 @@
  {
   "row_id": "EG-75ac0291",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0003) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0014) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -5984,7 +5920,7 @@
  {
   "row_id": "EG-69110810",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0003) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0014) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -5995,7 +5931,7 @@
  {
   "row_id": "EG-f47ce7eb",
   "result": "ERROR",
-  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0003) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
+  "evidence": "[측정 경로 없음] [측정 경로 없음] 다른 화면 E2E 동시 실행(SSP0014) — 계정 언어 전환이 그 화면 측정을 오염시켜 전환 생략(T200)",
   "tobe_ref": "E2E @i18n-lang",
   "mctx": {
    "calls": 0,
@@ -6007,17 +5943,6 @@
   "row_id": "EG-4109ef8f",
   "result": "PASS",
   "evidence": "응답 8건 = DB 8건",
-  "tobe_ref": "E2E @combo-live",
-  "mctx": {
-   "calls": 0,
-   "rows": -1,
-   "req": 0
-  }
- },
- {
-  "row_id": "EG-07f9eaf6",
-  "result": "PASS",
-  "evidence": "응답 9건 = DB 9건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,
@@ -6040,6 +5965,17 @@
   "row_id": "EG-27708ae8",
   "result": "PASS",
   "evidence": "응답 25건 = DB 25건",
+  "tobe_ref": "E2E @combo-live",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "row_id": "EG-07f9eaf6",
+  "result": "PASS",
+  "evidence": "응답 9건 = DB 9건",
   "tobe_ref": "E2E @combo-live",
   "mctx": {
    "calls": 0,

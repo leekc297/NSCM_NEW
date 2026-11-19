@@ -1,0 +1,9 @@
+start 2026-11-19 17:51:09
+S1 load 45495
+S1 #5 위반0: 원본=None (0.28s) 수정본=None (0.27s) 위반집합=0건 | 판정같음=True 수정본값∈집합=True 수정본=MIN(집합)=True
+S2 #5 위반3: 원본='ZZROWGOAL_T1' (0.26s) 수정본='ZZROWGOAL_T1' (0.26s) 위반집합=3건 | 판정같음=True 수정본값∈집합=True 수정본=MIN(집합)=True
+S3 load D 45495
+S3 #18_40 전행D: 원본='● Sales Site : IM_US_SPK / ● Model : APCCA3789A' (0.06s) 수정본='● Sales Site : ABS_US_LRP / ● Model : MCCM348018A3' (0.47s) 위반집합=248건 | 판정같음=True 수정본값∈집합=True 수정본=MIN(집합)=True
+S4 #18_81 전행D: 원본='● Sales Site : IM_US_SPK / ● Model : APCCA3789A' (0.83s) 수정본='● Sales Site : ABS_US_LRP / ● Model : MCCM348018A3' (1.06s) | 판정같음=True 원본값·수정본값 실제 위반행=True
+RESULT PASS (S1~S3 verify_equiv.py, S4 verify_s4.py)
+S5 #18_40 위반0 대량삭제 45,495행: 수정본=None (0.2s) / 원본=None (109.2s)

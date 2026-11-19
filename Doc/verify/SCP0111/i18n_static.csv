@@ -1,3 +1,2 @@
-﻿menu_id,kind,where,text
-SCP0111,DB,PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN,[99010]동일한 데이터가 존재합니다.
-SCP0111,DUP,"MSG00002,MSG00606",[EN] Saved successfully.
+﻿menu_id,kind,where,text,use
+SCP0111,DB,PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN,[99010]동일한 데이터가 존재합니다.,RAISE

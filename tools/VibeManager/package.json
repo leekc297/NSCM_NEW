@@ -79,6 +79,24 @@
         "icon": "$(split-horizontal)"
       },
       {
+        "command": "vibeManager.openOrchestra",
+        "title": "VMO — 기능 · BE/FE Log · 상황판",
+        "category": "Vibe_Manager",
+        "icon": {
+          "light": "media/tb-orch-light.svg",
+          "dark": "media/tb-orch-dark.svg"
+        }
+      },
+      {
+        "command": "vibeManager.openJobs",
+        "title": "업무 작업 — 업무 1개를 화면 여러 개에 실행",
+        "category": "Vibe_Manager",
+        "icon": {
+          "light": "media/tb-jobs-light.svg",
+          "dark": "media/tb-jobs-dark.svg"
+        }
+      },
+      {
         "command": "vibeManager.runTask",
         "title": "작업 실행",
         "category": "Vibe_Manager",
@@ -237,6 +255,16 @@
       "view/title": [
         {
           "command": "vibeManager.openWorkbench",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "vibeManager.openOrchestra",
+          "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
+          "group": "navigation@0"
+        },
+        {
+          "command": "vibeManager.openJobs",
           "when": "view =~ /^vibeManager\\.menu(Tree)?$/",
           "group": "navigation@0"
         },
@@ -551,6 +579,16 @@
             "bypassPermissions"
           ],
           "description": "Claude Code 기본 모드 (워크벤치·Claude 터미널 공통). 기본 bypassPermissions = 자동승인(도구 사용 확인 없이 진행, .claude/settings.json 차단 hook 은 그대로 동작). acceptEdits=편집만 자동 / default=수동 / plan. 워크벤치 하단에서 세션별 재선택 가능."
+        },
+        "vibeManager.orch.autoOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "VS Code 시작 시 VMO 창(기능 · BE/FE Log · 상황판)을 배경 탭으로 엽니다. 끄려면 false."
+        },
+        "vibeManager.orch.stopServersOnExit": {
+          "type": "boolean",
+          "default": false,
+          "description": "VS Code 를 닫거나 창을 다시 로드할 때 VM 이 띄운 BE·FE 서버를 종료합니다. 기본 false = 서버를 남기고 다시 열면 로그에 다시 붙습니다."
         }
       }
     }

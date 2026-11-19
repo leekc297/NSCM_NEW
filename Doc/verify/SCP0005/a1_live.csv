@@ -1,3 +1,3 @@
 ﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
 SCP0005,route,SCP0005_GET_DISTRIBUTION_ROUTE,REVIEW,8036,8036,"AS-IS 8036행 · TO-BE 8036행 · 키 ['from_country', 'from_city', 'from_city_name', 'transport_mode', 'days_mon', 'days_tue', 'days_wed', 'days_thu'] AS-IS 전용 0 · TO-BE 전용 1 · 값 대조 791칸(숫자 컬럼 12) · 불일치 컬럼 0",
-SCP0005,route · AS-IS 실구동,SCP0005_GET_DISTRIBUTION_ROUTE,PASS,8036,8036,"AS-IS 를 실제로 띄워 조회한 결과 8,036건 ↔ TO-BE 같은 조건 조회 결과 8,036건 — 같음 · 키 대조: 공통 8,036 · AS-IS 에만 0 · TO-BE 에만 0",AS-IS 실구동 run_20261114_072344 · SP SCP0005_GET_DISTRIBUTION_ROUTE · 조건 같음(인자 6개 일치)
+SCP0005,route · AS-IS 실구동,SCP0005_GET_DISTRIBUTION_ROUTE,PASS,8036,8036,"AS-IS 를 실제로 띄워 조회한 결과 8,036건 ↔ TO-BE 같은 조건 조회 결과 8,036건 — 같음 · 키 대조: 공통 8,036 · AS-IS 에만 0 · TO-BE 에만 0",AS-IS 실구동 run_20261119_165522 · SP SCP0005_GET_DISTRIBUTION_ROUTE · 조건 같음(인자 6개 일치)

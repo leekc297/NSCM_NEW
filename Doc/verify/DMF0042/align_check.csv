@@ -6,7 +6,7 @@ DMF0042,,CURRENCY,Currency,L,DMF0042_ExchangeRatePopup.cs:228,DMF0044,exchangeRa
 DMF0042,,UNIT_CURRENCY,Unit,L,DMF0042_ExchangeRatePopup.cs:229,DMF0044,exchangeRate,L,메타 DMF0044/exchangeRate,PASS,AS-IS left ↔ TO-BE left · TO-BE 원천 추정(같은 화면 시트 없음 · 컬럼 겹침 67% 로 다른 화면 메타 DMF0044/exchangeRate 사용 — TO-BE 팝업 실제 메타 미확인)
 DMF0042,,CURRENCY_UNITCURRENCY,Currency,,DMF0042_ExchangeRatePopup.cs:230,DMF0044,exchangeRate,L,메타 DMF0044/exchangeRate,NA,AS-IS 정렬 근거 없음
 DMF0042,,"D{?dt.Rows[i][""BASIS_START_DATE""]}","dt.Rows[i][""CALENDAR_MONTH""]",R,DMF0042_ExchangeRatePopup.cs:254,DMF0044,exchangeRate,,메타 DMF0044/exchangeRate,NA,TO-BE DMF0044/exchangeRate 에 컬럼 없음 — 표시 구성(A5)에서 판정
-DMF0042,Biz Plan,APPLICATION,Applicaion,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0042,Biz Plan,APPLICATION,Applicaion,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,BIZ_TYPE_NAME40,Biz.Type,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,BIZ_TYPE_NAME81,Biz.Type*,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,CELL_PER_CAR,Cell/Car,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
@@ -55,12 +55,12 @@ DMF0042,Biz Plan,PRODUCT_GROUP_NAME,Product Group Name,L,META SCM_MST_SHEET_COLU
 DMF0042,Biz Plan,PROJECT_CODE,Project Code,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,PROJECT_CODE82,Project Code,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,PROJECT_NAME,Project*,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
-DMF0042,Biz Plan,REPORT_GROUP1,Application Gr.,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0042,Biz Plan,REPORT_GROUP1,Application Gr.,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,REPORT_GROUP2,Cust. (Report),L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0042,Biz Plan,REPORT_GROUP3,Product Gr.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0042,Biz Plan,REPORT_GROUP4,Product Details.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0042,Biz Plan,REPORT_GROUP5,Cyl Gr. (Report),L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
-DMF0042,Biz Plan,REPORT_GROUP6,Cell Model Info,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0042,Biz Plan,REPORT_GROUP6,Cell Model Info,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,ROUTE,Route,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,,메타 DMF0042/Biz Plan,NA,TO-BE DMF0042/Biz Plan 에 컬럼 없음 — 표시 구성(A5)에서 판정
 DMF0042,Biz Plan,SCM_SITE_ID40,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left
 DMF0042,Biz Plan,SCM_SITE_ID81,Sales Site,L,META SCM_MST_SHEET_COLUMNS(DMF0042/Biz Plan),DMF0042,Biz Plan,L,메타 DMF0042/Biz Plan,PASS,AS-IS left ↔ TO-BE left

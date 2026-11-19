@@ -49,6 +49,9 @@ if (cmd === 'acquire') {
     }
     return '';
   };
+  // 2026-11-19 오케스트라 P1: 잠금 대기 사건 기록(.vibe/orch/events.jsonl — VM orch-events.js 와 같은 줄 형식). 기록 실패는 잠금 처리에 영향 없음
+  const oev = (type, d) => { try { const od = process.env.VIBE_ORCH_DIR || path.join(__dirname, '..', '..', '.vibe', 'orch'); fs.mkdirSync(od, { recursive: true }); const n = new Date(); const off = -n.getTimezoneOffset(); const at = `${n.getFullYear()}-${pad(n.getMonth() + 1)}-${pad(n.getDate())}T${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}${off >= 0 ? '+' : '-'}${pad(Math.floor(Math.abs(off) / 60))}:${pad(Math.abs(off) % 60)}`; fs.appendFileSync(path.join(od, 'events.jsonl'), JSON.stringify(Object.assign({ at, ms: n.getTime(), type, src: 'node', pid: process.pid, script: 'runlock.js' }, d)) + '\n', 'utf8'); } catch { } };
+  const evScreen = myKey.replace(/^(e2e|verify|slot)\./, '');
   const t0 = Date.now(); let told = false; let runId = '';
   for (;;) {
     const why = busyWhy();
@@ -64,13 +67,14 @@ if (cmd === 'acquire') {
     }
     const msg = why || '다른 E2E 실행이 방금 잠금을 잡았습니다';
     if (!waitable || Date.now() - t0 >= waitMax) {
+      if (told) oev('wait.end', { kind: 'e2elock', screen: evScreen, sec_wait: Math.round((Date.now() - t0) / 1000), gave_up: true });
       process.stderr.write(`[FAIL] ${msg}${waitable ? ` — ${Math.round((Date.now() - t0) / 60000)}분 대기 초과` : ''}\n       끝나기를 기다리거나 그 프로세스를 종료한 뒤 다시 실행하세요.\n`);
       process.exit(4);
     }
-    if (!told) { process.stderr.write(`[WAIT] ${msg} — 끝나면 이어서 실행(15초 간격 · 최대 ${Math.round(waitMax / 60000)}분)\n`); told = true; }
+    if (!told) { process.stderr.write(`[WAIT] ${msg} — 끝나면 이어서 실행(15초 간격 · 최대 ${Math.round(waitMax / 60000)}분)\n`); told = true; oev('wait.start', { kind: 'e2elock', screen: evScreen, why: msg.slice(0, 300), max_sec: Math.round(waitMax / 1000) }); }
     sleep(15_000);
   }
-  if (told) process.stderr.write(`[INFO] E2E 잠금 획득 — ${Math.round((Date.now() - t0) / 1000)}초 대기 후 실행\n`);
+  if (told) { process.stderr.write(`[INFO] E2E 잠금 획득 — ${Math.round((Date.now() - t0) / 1000)}초 대기 후 실행\n`); oev('wait.end', { kind: 'e2elock', screen: evScreen, sec_wait: Math.round((Date.now() - t0) / 1000), gave_up: false }); }
   process.stdout.write(runId + '\n');
 } else if (cmd === 'release') {
   const key = keyOf(process.argv.slice(3));

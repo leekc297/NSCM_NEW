@@ -1,0 +1,31 @@
+{
+  "id": "20261119193539_REVIEW",
+  "at": "2026-11-19T19:35:39+09:00",
+  "ms": 1795084539655,
+  "source": "review",
+  "status": "applied",
+  "sig": "stop gate timeout n vs static",
+  "title": "종료 전 hook 제한 60초를 정적 게이트 소요 시간 이상으로 변경",
+  "evidence": "R9 8건(.vibe/orch/incidents/*_R9_DMF0042.json)의 잠금 인자는 8건 'DMF0042 --static'. 잠금 시작 → 감지 간격 268, 69, 62, 68, 57, 75, 57, 61초(감시 주기 30초). .claude/settings.json:99-100 harness-stop-gate.ps1 timeout 60. tools/Harness/check.js:600 은 run_verify.py <ID> --static 을 spawnSync timeout 15분으로 실행. Doc/verify/DMF0042/_timing.csv 의 11-17 실행은 15:03:59 시작, 15:12:52 종료(533초). events.jsonl 11~12행: 잠금 시작 18:20:33, 같은 Claude 호출 종료 18:21:34(61초 뒤). Doc/verify/DMF0042 의 verify_ledger.csv 등 12개 파일 수정 시각 18:39~18:49, run_verify.result.json 은 11-17 15:12:52 그대로(끝까지 간 실행 0건). harness-stop-gate.ps1 은 18:52:28 수정본에서 DB MODE 만 게이트를 건너뜀. UI/DB MODE 경로(59행)는 같은 60초 제한을 받음. 프로세스 종료 로그는 없어 종료 주체는 시각 일치로만 확인",
+  "targets": [
+    ".claude/settings.json",
+    "tools/Harness/hooks/harness-stop-gate.ps1"
+  ],
+  "before_after": "Stop hook timeout 60 → 960(check.js spawnSync 900초 + 여유 60초). harness-stop-gate.ps1 59행 앞뒤에 화면별 시작·종료 시각과 종료코드를 .vibe/orch/events.jsonl 에 proc.start, proc.end 로 기록",
+  "verify": "harness.json repairScope 를 시험용 사본(NSCM_HARNESS_JSON)에서 DB_FE 로 두고 NSCM_GATE_DRYRUN=1 로 hook 실행 → TARGETS 출력 확인. 대상 1개 화면에서 hook 을 직접 실행한 뒤 Doc/verify/<ID>/static_gate.json 수정 시각이 실행 시각 이후이고 Doc/e2e/_run.dbwin.<ID>.lock 이 없으면 통과. 이후 24시간 집계에서 sig R9|_run.dbwin.* 0건",
+  "rollback": ".claude/settings.json Stop hook timeout 을 60 으로 되돌림. harness-stop-gate.ps1 은 수정 전 백업본 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T20:11:37+09:00",
+      "by": "사용자",
+      "what": "승인(대화에서 \"개선안 1번 승인할게요, 반영해주세요\")"
+    },
+    {
+      "at": "2026-11-19T20:11:37+09:00",
+      "by": "개발 세션",
+      "what": "반영 완료 — settings.json Stop hook timeout 960 · harness-stop-gate.ps1 게이트 앞뒤 proc.start/proc.end 기록. 확인 = 구문 검사 · dry-run(DB_FE 사본) TARGETS 0 · 기록 코드 단독 실행 2줄. 실제 게이트 실행과 24시간 R9 0건은 미확인(지금 DB MODE)"
+    }
+  ]
+}

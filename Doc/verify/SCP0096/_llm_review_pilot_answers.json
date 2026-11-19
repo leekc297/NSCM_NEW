@@ -1,0 +1,606 @@
+{
+ "items": [
+  {
+   "row_id": "EG-e0881be0",
+   "class": "데이터차이",
+   "verdict": "판정필요",
+   "confidence": "보통",
+   "evidence": [
+    {
+     "ref": "Doc/verify/SCP0096/a1_live.csv",
+     "quote": [
+      "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+      "REVIEW",
+      "1",
+      "2",
+      "AS-IS 전용 1 · TO-BE 전용 2"
+     ]
+    },
+    {
+     "ref": "Doc/verify/SCP0096/a1_live.json",
+     "quote": [
+      "\"divisionId\":\"81\"",
+      "\"PLANT_SITE_ID\":\"AU000062_81-P\"",
+      "\"PLANT_SITE_NAME\":\"TEST\"",
+      "\"PLANT_SITE_ID\":\"KR02239900_81-P\""
+     ]
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:54",
+     "quote": "FROM SCM_MST_SITE S"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:61",
+     "quote": "AND S.OSP_YN"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:89",
+     "quote": "LEFT OUTER JOIN SCP_MST_SHIPMENT_WORKING_DAY_OSP B"
+    }
+   ],
+   "rule_ref": "CR-101",
+   "reason": "Division 81 조회에서 AS-IS 1행, TO-BE 2행이며 TO-BE 추가 행은 PLANT_SITE_ID AU000062_81-P, PLANT_SITE_NAME TEST 인 값 없는 행이다. 조회 행은 SCM_MST_SITE 의 OSP_YN=Y 공장 마스터에서 나오므로 TO-BE DB 에만 있는 테스트 사이트 데이터 차이다. 검사기가 D_ 일자 값 컬럼까지 키로 써서 AS-IS 1행도 전용으로 셌으나 건수 차이 자체는 데이터 차이라 CR-101 에 따라 판정필요로 둔다.",
+   "fix_hint": "",
+   "general": "Y"
+  },
+  {
+   "row_id": "V-2a948121",
+   "class": "데이터차이",
+   "verdict": "판정필요",
+   "confidence": "보통",
+   "evidence": [
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:4",
+     "quote": "\"p_division_id\": \"40\""
+    },
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:7",
+     "quote": "As-is 18행 ↔ To-Be O_RC1 19행"
+    },
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:14",
+     "quote": "| T | 40 | PL01279700_40-P | INFAC_40 |"
+    },
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:16",
+     "quote": "실제 순서(공통·유일 17행의 상대 순서): 일치"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/diff/P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP__5.csv",
+     "quote": [
+      "40|CN00254300_40-P",
+      "D_20261121",
+      "Y",
+      "N"
+     ]
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:54",
+     "quote": "FROM SCM_MST_SITE S"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:89",
+     "quote": "LEFT OUTER JOIN SCP_MST_SHIPMENT_WORKING_DAY_OSP B"
+    }
+   ],
+   "rule_ref": "CR-101",
+   "reason": "Division 40, 2026년 조회에서 AS-IS 18행, TO-BE 19행이고 공통 17행의 순서는 일치한다. TO-BE 전용 행은 PLANT_SITE_ID PL01279700_40-P(INFAC_40) 1행이고 CN00254300_40-P 행은 D_20261121, D_20261122 값이 AS-IS Y, TO-BE N 으로 다르다. 공장 마스터 행과 출하일 Y/N 값은 각 DB 의 데이터이므로 CR-101 에 따라 판정필요로 둔다.",
+   "fix_hint": "",
+   "general": "Y"
+  },
+  {
+   "row_id": "V-eb856b69",
+   "class": "검사기오판",
+   "verdict": "NA",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.Designer.cs:346",
+     "quote": "this.chkSum.Visible = false;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.Designer.cs:344",
+     "quote": "this.chkSum.Text = \"Sum\";"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:121",
+     "quote": "chkSum.Checked = false;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:355",
+     "quote": "siObj.ActiveSheet.Columns[iCol].Visible = chkSum.Checked;"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx:79",
+     "quote": "W_/M_ SUM 열은 항상 숨김(showSum=false 고정)"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx:420",
+     "quote": "showSum={false}"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:211",
+     "quote": "visible: showSum,"
+    },
+    {
+     "ref": "tools/Harness/verify/gen_expect.py:1058",
+     "quote": "if sets_true_designer and not sets_false_code:"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 는 Designer 에서 chkSum.Visible = false 로 두어 Sum 체크박스가 화면에 보이지 않고, Checked 도 false 라 W_·M_ 합계 컬럼은 항상 숨겨진다. TO-BE 도 showSum 을 false 로 고정해 W_·M_ 컬럼을 숨기므로 동작이 같다. 사용자가 쓸 수 없는 체크박스의 토글 기대를 만든 것이라 대상이 없다.",
+   "fix_hint": "tools/Harness/verify/gen_expect.py p_sumtoggle 이 chkSum 의 Checked 초기값만 보고 Designer 의 chkSum.Visible = false 를 보지 않아 숨긴 체크박스에 P28 토글 기대를 만든다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "EG-d965ca33",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "보통",
+   "evidence": [
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:139",
+     "quote": "ORDER BY LAST_INPUT_DATE, DIVISION_ID, PLANT_SITE_ID , MEASURE"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:31",
+     "quote": "( SELECT MAX(YYYYMMDD)"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:35",
+     "quote": "AS LAST_INPUT_DATE"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/sort_ci.csv",
+     "quote": [
+      "PLANT_SITE_ID(대소문자 무시·NULL 먼저 없음)",
+      "NLSSORT(REGEXP_REPLACE(IA.PLANT_SITE_ID, '"
+     ]
+    },
+    {
+     "ref": "tools/Harness/verify/sort_check.py:302",
+     "quote": "'tobe_order_by': ' '.join(ob.split())[:300]"
+    },
+    {
+     "ref": "tools/Harness/verify/sort_ci_check.py:111",
+     "quote": "ob = (r.get('tobe_order_by') or '').strip()"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/sort_check.csv",
+     "quote": [
+      "139",
+      "LAST_INPUT_DATE,DIVISION_ID,PLANT_SITE_ID,MEASURE",
+      "PASS",
+      "분기 키 순서 동일"
+     ]
+    },
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:16",
+     "quote": "실제 순서(공통·유일 17행의 상대 순서): 일치"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "sort_check.py 가 TO-BE ORDER BY 원문을 300자로 잘라 저장했고 그 문장이 PLANT_SITE_ID 의 NLSSORT 괄호 앞에서 끊겨 sort_ci_check 가 대소문자 무시와 NULLS FIRST 가 없다고 읽었다. LAST_INPUT_DATE 는 AS-IS 에서 MAX(YYYYMMDD) 숫자 문자열이라 대소문자 구분이 생길 수 없고 TO-BE 에는 NULLS FIRST 가 있다. TO-BE 정렬 키 4개는 AS-IS 139줄과 같고 같은 인자 실측 순서도 일치한다.",
+   "fix_hint": "tools/Harness/verify/sort_check.py 302줄이 tobe_order_by 를 300자로 잘라 쓰고 tools/Harness/verify/sort_ci_check.py 가 그 잘린 문장으로 키별 대소문자·NULL 판정을 한다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "V-a007d973",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:139",
+     "quote": "ORDER BY LAST_INPUT_DATE, DIVISION_ID, PLANT_SITE_ID , MEASURE"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:146",
+     "quote": "EXEC (@MEXEC);"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/sort_check.csv",
+     "quote": [
+      "139",
+      "LAST_INPUT_DATE,DIVISION_ID,PLANT_SITE_ID,MEASURE",
+      "PASS",
+      "분기 키 순서 동일"
+     ]
+    },
+    {
+     "ref": "tools/Harness/verify/judge.py:1046",
+     "quote": "s['sp'] == r['target'] and (s.get('guard') or '') == (r.get('condition') or '')"
+    },
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:16",
+     "quote": "실제 순서(공통·유일 17행의 상대 순서): 일치"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 결과 행 순서는 139줄의 동적 SQL ORDER BY LAST_INPUT_DATE, DIVISION_ID, PLANT_SITE_ID, MEASURE 이고 sort_check.csv 의 139줄 행은 TO-BE 키 순서 동일로 PASS 다. judge.py 가 sort_check 행을 SP 이름과 가드만으로 찾아 같은 SP 의 120줄 FAIL 행을 이 행에도 붙였다. 같은 인자 실측 순서도 일치한다.",
+   "fix_hint": "tools/Harness/verify/judge.py 1046줄 sort_check 행 매칭이 sp 와 guard 만 비교해 같은 SP 의 ORDER BY 가 둘이면 첫 행을 두 원장 행에 모두 붙이므로 asis_line 을 매칭 키에 넣어야 한다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "V-b713388c",
+   "class": "추출오류",
+   "verdict": "PASS",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:112",
+     "quote": "@MQRY_SUM = @MQRY_SUM+','+"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:120",
+     "quote": "ORDER BY SORT_ORDER_NO"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:135",
+     "quote": "SET @MEXEC = @MEXEC+'   ' +@MQRY_SUM + CHAR(10);"
+    },
+    {
+     "ref": "Doc/asisfacts/db/modules/dbo.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.sql:139",
+     "quote": "ORDER BY LAST_INPUT_DATE, DIVISION_ID, PLANT_SITE_ID , MEASURE"
+    },
+    {
+     "ref": "Doc/asisfacts/screens/SCP0096/sort_rules.csv",
+     "quote": [
+      "120",
+      "SORT_ORDER_NO",
+      "ORDER BY SORT_ORDER_NO  ;",
+      "정적"
+     ]
+    },
+    {
+     "ref": "tools/Harness/verify/facts_sortrules.py:70",
+     "quote": "re.finditer(r'(?i)ORDER\\s+BY\\s+(.+)', line)"
+    },
+    {
+     "ref": "Doc/golden/SCP0096/SCP0096_GET_SHIPMENT_WORKING_DAY_OSP.md:16",
+     "quote": "실제 순서(공통·유일 17행의 상대 순서): 일치"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "120줄의 ORDER BY SORT_ORDER_NO 는 SELECT @MQRY_SUM = @MQRY_SUM + ... 변수 대입문에 붙어 피벗 일자 컬럼 문자열의 나열 순서를 정하는 것이고 결과 행을 내는 문장이 아니다. 결과 행 순서는 139줄 ORDER BY LAST_INPUT_DATE, DIVISION_ID, PLANT_SITE_ID, MEASURE 이며 TO-BE PKG 키와 같고 실측 순서도 일치한다. 사실 추출본이 변수 대입문의 ORDER BY 를 결과 정렬 규칙으로 올려 생긴 허위 차이다.",
+   "fix_hint": "tools/Harness/verify/facts_sortrules.py sp_rules 가 모든 줄의 ORDER BY 를 결과 정렬 규칙으로 추출하므로 SELECT @변수 = 대입문(동적 컬럼 목록 생성)의 ORDER BY 는 제외해야 한다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "T-a8c0dab9",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:274",
+     "quote": "protected override void InsertButton()"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:278",
+     "quote": "protected override void DeleteButton()"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:545",
+     "quote": "if (action != CAppSetting.FlagI && action != CAppSetting.FlagM && action != CAppSetting.FlagD)"
+    },
+    {
+     "ref": "nscm-fe/packages/foundation/src/utils/editTracker.ts:83",
+     "quote": "item.CRUD_TYPE = hasChanges ? CRUD_TYPE.MODIFY : undefined;"
+    },
+    {
+     "ref": "nscm-fe/packages/shared/src/components/organisms/data-grid/dataGridUtils.ts:332",
+     "quote": "rowHeaderCell.dataset.status = dataItem['CRUD_TYPE'];"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:316",
+     "quote": "InputNumber(커스텀 에디터) 셀은 grid.activeEditor 가 null 이라"
+    },
+    {
+     "ref": "Doc/e2e/specs/_trace.spec.ts:1139",
+     "quote": "await probe.setByEditor(p, ex2.row, bb, cur === '7' ? '8' : '7')) { edited = bb; break; }"
+    },
+    {
+     "ref": "tools/E2E/lib/probe.ts:107",
+     "quote": "try { ed.value = ${J(text)}; c.finishEditing(false); }"
+    },
+    {
+     "ref": "tools/E2E/lib/saveprobe.ts:57",
+     "quote": "편집기 주입이 남긴 상태가 뒤이은 입력을 먹어 화면 결함처럼 보였다(2026-10-31 SCP0096 순수 키보드 진단으로 확인)"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/e2e_results.json:2912",
+     "quote": "WORKING_TIME_DEFAULT r1 → 6 · 저장 요청 1.5초 지연 동안 로딩 표시 0회"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 는 Insert 버튼과 Delete 버튼이 빈 재정의로 무동작이고 수정 행만 M 플래그로 저장 대상이 되며, TO-BE 는 EditTracker 가 변경 셀을 기록하면 CRUD_TYPE M 을 상태 열에 표시한다. 같은 실행의 저장 시험에서는 키보드 입력으로 WORKING_TIME_DEFAULT 2행을 7 에서 6 으로 고쳐 저장 요청이 나갔으므로 수정 표시 경로는 동작한다. 검사기 W4b 는 InputNumber 편집기 칸에 ed.value 로 값을 주입한 뒤 반영 확인 없이 편집 성공으로 기록해, 값이 들어가지 않은 1행의 빈 CRUD_TYPE 을 결함으로 적었다.",
+   "fix_hint": "Doc/e2e/specs/_trace.spec.ts W4b F5 — setByEditor 뒤 probe.value 로 값 반영을 확인하고 미반영이면 saveprobe typeCell(키보드) 경로로 재시도한 뒤 CRUD_TYPE 을 읽는다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "V-4a2afe1f",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:274",
+     "quote": "protected override void InsertButton()"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:278",
+     "quote": "protected override void DeleteButton()"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:545",
+     "quote": "if (action != CAppSetting.FlagI && action != CAppSetting.FlagM && action != CAppSetting.FlagD)"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx:291",
+     "quote": "insert: false,"
+    },
+    {
+     "ref": "nscm-fe/packages/foundation/src/utils/editTracker.ts:83",
+     "quote": "item.CRUD_TYPE = hasChanges ? CRUD_TYPE.MODIFY : undefined;"
+    },
+    {
+     "ref": "nscm-fe/packages/shared/src/components/organisms/data-grid/dataGridUtils.ts:332",
+     "quote": "rowHeaderCell.dataset.status = dataItem['CRUD_TYPE'];"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:316",
+     "quote": "InputNumber(커스텀 에디터) 셀은 grid.activeEditor 가 null 이라"
+    },
+    {
+     "ref": "Doc/e2e/specs/_trace.spec.ts:1139",
+     "quote": "await probe.setByEditor(p, ex2.row, bb, cur === '7' ? '8' : '7')) { edited = bb; break; }"
+    },
+    {
+     "ref": "tools/E2E/lib/probe.ts:107",
+     "quote": "try { ed.value = ${J(text)}; c.finishEditing(false); }"
+    },
+    {
+     "ref": "tools/E2E/lib/saveprobe.ts:57",
+     "quote": "편집기 주입이 남긴 상태가 뒤이은 입력을 먹어 화면 결함처럼 보였다(2026-10-31 SCP0096 순수 키보드 진단으로 확인)"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/e2e_results.json:2912",
+     "quote": "WORKING_TIME_DEFAULT r1 → 6 · 저장 요청 1.5초 지연 동안 로딩 표시 0회"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 는 Insert 버튼과 Delete 버튼이 빈 재정의로 무동작이라 TO-BE 가 두 버튼을 숨긴 것은 처리 대상에 차이가 없고, 삭제 행과 병합 행의 상태 표시는 이 화면에 대상이 없다. 수정 행은 AS-IS 가 M 플래그로 저장하고 TO-BE 도 EditTracker 가 CRUD_TYPE M 을 상태 열에 표시하며 같은 실행의 저장 시험에서 WORKING_TIME_DEFAULT 수정이 저장 요청까지 나갔다. 검사기는 InputNumber 편집기 칸에 값을 주입한 뒤 반영 확인 없이 편집 성공으로 기록해 값이 들어가지 않은 행의 빈 CRUD_TYPE 을 결함으로 적었다.",
+   "fix_hint": "Doc/e2e/specs/_trace.spec.ts W4b F5 — setByEditor 뒤 probe.value 로 값 반영을 확인하고 미반영이면 saveprobe typeCell(키보드) 경로로 재시도한 뒤 CRUD_TYPE 을 읽는다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "V-9a4ab0ac",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:518",
+     "quote": "//prg.Show();"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:612",
+     "quote": "asyncProxy.ShowProgress = false;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:436",
+     "quote": "prg.Show();"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx:241",
+     "quote": "setIsPending(true);"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx:243",
+     "quote": "const res = await apiClient.post<Record<string, unknown>>("
+    },
+    {
+     "ref": "Doc/verify/SCP0096/e2e_results.json:2912",
+     "quote": "저장 요청 1.5초 지연 동안 로딩 표시 0회 · 대조군 조회 지연 때는 38회 관측"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS SaveData_Main 은 진행 창 prg.Show 가 주석 처리되고 FoxAsyncProxy 의 ShowProgress 가 false 라 저장 중 로딩 표시가 없으며, 조회 FindData_Main 만 prg.Show 로 진행 창을 띄운다. TO-BE handleSave 도 isPending 재진입 차단만 하고 로딩 표시 없이 저장하므로 저장 중 로딩 없음은 AS-IS 와 같고 조회 중 로딩 38회 관측도 AS-IS 와 같다. 검사기는 AS-IS 원문이 아닌 결함원장 일반 유형으로 저장 중 로딩을 기대했고, SCP0084 사용자 판정(오류 아님)과 같은 원인이다.",
+   "fix_hint": "tools/Harness/verify — H11 저장 중 로딩 전용 행은 AS-IS 저장 메서드에 ProgressForm Show 또는 ShowProgress true 가 주석 아닌 코드로 있을 때만 기대하고 없으면 NA 로 둔다.",
+   "general": "Y"
+  },
+  {
+   "row_id": "EG-ad36724d",
+   "class": "실결함",
+   "verdict": "FAIL",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:130",
+     "quote": "clsCtrl.setListBox(dtMyDivision, cboDivision, false, \"CODE\", \"NAME\");"
+    },
+    {
+     "ref": "GSCM/01.Framework/GSCM.Windows.Forms/Class/CControl.cs:373",
+     "quote": "cbo.DataSource = dtTarget;"
+    },
+    {
+     "ref": "GSCM/01.Framework/GSCM.Windows.Forms/Class/CControl.cs:375",
+     "quote": "cbo.ValueMember = sValueMember;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:843",
+     "quote": "sDayRange = DateUtil.GetDayRange(cboDivision.ControlValues, \"DAILY\");"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts:63",
+     "quote": "divisionId: '81',"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts:62",
+     "quote": "사용자가 81 권한이 없으면 콤보가 빈값으로 표시 → 수동 선택"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx:167",
+     "quote": "value={searchParams.divisionId}"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/static_verdicts.csv",
+     "quote": [
+      "EG-807044ce",
+      "FAIL",
+      "EG-ad36724d · EG-c63a0d42"
+     ]
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 는 Division 콤보를 DataSource 바인딩으로 채워 첫 후보가 선택된 상태로 열리고 화면 로드 때 그 선택값으로 조회 기간까지 계산하므로, 후보가 40 하나인 SCM Viewer 계정은 40 이 자동 선택된다. TO-BE 는 Division 기본값을 81 로 고정해 81 권한이 없는 계정은 Division 이 빈값으로 표시되고 수동 선택이 필요하다. 같은 원인의 EG-807044ce 를 사용자가 11-18 에 FAIL 로 확정했고 빈 기본값을 허용하는 TO-BE 룰은 없다.",
+   "fix_hint": "",
+   "general": "Y"
+  },
+  {
+   "row_id": "EG-c63a0d42",
+   "class": "실결함",
+   "verdict": "FAIL",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:130",
+     "quote": "clsCtrl.setListBox(dtMyDivision, cboDivision, false, \"CODE\", \"NAME\");"
+    },
+    {
+     "ref": "GSCM/01.Framework/GSCM.Windows.Forms/Class/CControl.cs:373",
+     "quote": "cbo.DataSource = dtTarget;"
+    },
+    {
+     "ref": "GSCM/01.Framework/GSCM.Windows.Forms/Class/CControl.cs:375",
+     "quote": "cbo.ValueMember = sValueMember;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:843",
+     "quote": "sDayRange = DateUtil.GetDayRange(cboDivision.ControlValues, \"DAILY\");"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts:63",
+     "quote": "divisionId: '81',"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts:62",
+     "quote": "사용자가 81 권한이 없으면 콤보가 빈값으로 표시 → 수동 선택"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx:167",
+     "quote": "value={searchParams.divisionId}"
+    },
+    {
+     "ref": "Doc/verify/SCP0096/static_verdicts.csv",
+     "quote": [
+      "EG-807044ce",
+      "FAIL",
+      "EG-ad36724d · EG-c63a0d42"
+     ]
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 는 Division 콤보를 DataSource 바인딩으로 채워 첫 후보가 선택된 상태로 열리고 화면 로드 때 그 선택값으로 조회 기간까지 계산하므로, 후보가 82 하나인 SCM Viewer 계정은 82 가 자동 선택된다. TO-BE 는 Division 기본값을 81 로 고정해 81 권한이 없는 계정은 Division 이 빈값으로 표시되고 수동 선택이 필요하다. 같은 원인의 EG-807044ce 를 사용자가 11-18 에 FAIL 로 확정했고 빈 기본값을 허용하는 TO-BE 룰은 없다.",
+   "fix_hint": "",
+   "general": "Y"
+  },
+  {
+   "row_id": "T-428f2fa6",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "보통",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:249",
+     "quote": "spdMain.CellDoubleClick += SpdMain_CellDoubleClick;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:822",
+     "quote": "siMain.SetDblClickColumnShowHide(sender, e);"
+    },
+    {
+     "ref": "GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:13654",
+     "quote": "if (spreadInfo.GetColumnTag(e.Column).IndexOf(\"M_\") == 0 && spreadInfo.GetColumnText(e.Row, e.Column).ToUpper() == \"SUM\")"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.Designer.cs:346",
+     "quote": "this.chkSum.Visible = false;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.Designer.cs:330",
+     "quote": "this.chkSum.InitValue = \"N\";"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:355",
+     "quote": "siObj.ActiveSheet.Columns[iCol].Visible = chkSum.Checked;"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:484",
+     "quote": "SetSpreadColumn(siMain);"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx:79",
+     "quote": "W_/M_ SUM 열은 항상 숨김(showSum=false 고정)"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:211",
+     "quote": "visible: showSum,"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgGrid.tsx:290",
+     "quote": "host.addEventListener('dblclick', onDblClick);"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md:79",
+     "quote": "§3 SetDblClickColumnShowHide / 819"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 더블클릭 접기는 태그 M_ 이고 헤더 문구가 SUM 인 컬럼 헤더에서만 동작하는데, SCP0096 은 Sum 체크박스가 Visible=false 이고 조회 후 SetSpreadColumn 이 W_·M_ 컬럼을 chkSum.Checked(초기값 N)로 숨기므로 사용자가 더블클릭할 SUM 헤더가 화면에 나오지 않는다. TO-BE 도 W_·M_ SUM 열을 항상 숨기므로 더블클릭 결과는 AS-IS 와 TO-BE 모두 없다. 대조표 사유의 '전 화면 pivot 편의기능 미이식' 은 SCP0016 WaterfallShipmentPlanFgGrid 가 더블클릭 접기를 구현했으므로 틀린 문장이고, 제외 근거는 chkSum 숨김으로 바꿔 적어야 한다.",
+   "fix_hint": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md:46·79 사유를 'chkSum Visible=false(Designer.cs:346)·조회 후 SetSpreadColumn(cs:355·484)으로 W_·M_ SUM 헤더가 숨겨져 더블클릭 대상이 표시되지 않음' 으로 고치면 tools/Harness/verify 의 X-REASON(mapping_trace.py) 근거 검사가 통과한다. 조회 결과 0행일 때는 SetSpreadColumn 이 호출되지 않아 SUM 헤더가 남는 경우가 있으나 빈 그리드 헤더 접기만 가능하다.",
+   "general": "N"
+  },
+  {
+   "row_id": "T-8cdb4616",
+   "class": "검사기오판",
+   "verdict": "PASS",
+   "confidence": "높음",
+   "evidence": [
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:294",
+     "quote": "SetLockSumColumn(siMain); //합계컬럼 lock"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:406",
+     "quote": "if (spreadInfo.GetColumnTag(iCol).IndexOf(\"W_\") == 0 || spreadInfo.GetColumnTag(iCol).IndexOf(\"M_\") == 0)"
+    },
+    {
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:408",
+     "quote": "spreadInfo.LockColumn(iCol, true);"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:212",
+     "quote": "_inputEditType: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:224",
+     "quote": "dynBindings.has(binding) || binding === EDITABLE_STATIC_BINDING;"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx:274",
+     "quote": "if (!editModeRef.current || !isEditableBinding(binding)) e.cancel = true;"
+    },
+    {
+     "ref": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md:67",
+     "quote": "§3 LockColumn / 405 (spdInfo 제목시트 잠금)"
+    }
+   ],
+   "rule_ref": "",
+   "reason": "AS-IS 405줄 부근의 LockColumn 은 제목 시트 잠금이 아니고 SetLockSumColumn 이 Edit 버튼 뒤에 태그 W_·M_ 합계 컬럼을 편집 잠금하는 코드다. TO-BE 는 W_·M_ SUM 열을 SEARCH_ONLY 로 선언하고 isEditableBinding 이 D_ 열과 WORKING_TIME_DEFAULT 만 편집 허용하며 beginningEdit 에서 그 외 칸의 편집을 취소하므로 합계 칸 잠금 동작이 같다. 대조표 D00-3-020 의 요소 설명과 제외 사유가 원문과 달라 X-REASON 이 근거 없음으로 FAIL 을 냈을 뿐 화면 동작 차이는 없다.",
+   "fix_hint": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md:67 행을 'SetLockSumColumn W_·M_ 합계 칸 잠금 · 구현 위치 ShipmentWorkingDayOspGrid.tsx:212·224·274 · 상태 구현' 으로 고치면 tools/Harness/verify 의 X-REASON(mapping_trace.py) 대상에서 빠진다.",
+   "general": "N"
+  }
+ ]
+}

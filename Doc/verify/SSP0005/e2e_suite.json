@@ -1,0 +1,35 @@
+{
+ "crud": {
+  "mode": "admin",
+  "mode_src": "기본(계정 1개 · 사용자 지시 2026-10-27)",
+  "at": "2026-11-19 13:52:26",
+  "ran": true,
+  "rc": 1,
+  "rows": 1,
+  "passed": 0,
+  "sec": 25.7,
+  "reason": "실행 · FAIL 포함(판정 반입)"
+ },
+ "auth": {
+  "mode": "admin",
+  "mode_src": "기본(계정 1개 · 사용자 지시 2026-10-27)",
+  "at": "2026-11-19 13:52:52",
+  "ran": true,
+  "rc": 0,
+  "rows": 1,
+  "passed": 1,
+  "sec": 18.7,
+  "reason": "실행 · 전부 PASS"
+ },
+ "authcrud": {
+  "mode": "admin",
+  "mode_src": "기본(계정 1개 · 사용자 지시 2026-10-27)",
+  "at": "2026-11-19 13:53:11",
+  "ran": true,
+  "rc": 0,
+  "rows": 1,
+  "passed": 1,
+  "sec": 19.8,
+  "reason": "실행 · 전부 PASS"
+ }
+}

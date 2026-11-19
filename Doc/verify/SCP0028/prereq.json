@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0028",
  "asis_id": "SCP0028",
- "generated": "2026-11-14 05:03:49",
+ "generated": "2026-11-19 17:19:50",
  "rc": 0,
  "items": [
   {
@@ -23,14 +23,14 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "6.5시간 전 export(기준 12시간)"
+   "evidence": "8.2시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
    "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
-   "status": "OK",
+   "status": "DONE",
    "producer": "tools/TobeFacts/run.ps1",
-   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size · 인덱스 최신"
+   "evidence": "FE 소스가 인덱스보다 최신 → 재추출 · rc=1 · 12s ·  호출 79건 해석 FE: 파일 2689, 페이지 145 (8.0s) BE: java 139, xml 13, 엔드포인트 53, SQL 53 완료 8.2s → C:\\Projects\\NSCM\\Doc\\tobefacts 2/3 독립 교차검증 (자체 렉서) files python=729 parser=729 live calls python=1774 parser=1774 commented python=206 parser=205 mismatches=1 features/supply/src/pages/integration-psi/IntegrationPsi.tsx commented 1 0 RESULT FAIL 교차검증 불일치 - C:\\Projects\\NSCM\\Doc\\tobefacts\\crosscheck_report.csv 확인"
   },
   {
    "key": "mapping_md",
@@ -72,7 +72,7 @@
    "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
    "status": "DONE",
    "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
-   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 115s · oc\\e2e\\specs\\SCP0028.smoke.spec.ts:106:7 › SCP0028 Shipment_Lot_Size 스모크 @smoke › 조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인 2 passed (1.7m) # E2E 결과 — 2026-11-14 05:03 테스트 3 · PASS 2 · FAIL 1 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0028\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0028\\run_20261114_050154_smoke.log"
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 462s · 8.smoke.spec.ts:115:7 › SCP0028 Shipment_Lot_Size 스모크 @smoke › 공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual # E2E 결과 — 2026-11-19 17:19 테스트 8 · PASS 1 · FAIL 7 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0028\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0028\\run_20261119_171208_smoke.log"
   }
  ]
 }

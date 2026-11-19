@@ -1,0 +1,77 @@
+// 2026-11-19 VMO P1: 실행 사건 기록 — .vibe/orch/events.jsonl 에 한 줄 1건(JSON).
+//   VM(이 모듈)과 VM 밖 스크립트(tools/Harness/verify/orch_event.py · tools/E2E/runlock.js)가 같은 파일에 덧붙인다.
+//   기록 실패는 본 작업을 멈추지 않는다(예외를 삼킨다). 기존 기록(runs.log · _timing.csv · history meta.json)은 그대로 둔다.
+//   줄 형식: { at(로컬 시각), ms(epoch), type, src('vm'|'py'|'node'), pid, ...필드 }
+//   파일이 MAX_BYTES 를 넘으면 events_<yyyymmdd_hhmmss>.jsonl 로 이름을 바꾸고 새 파일에 이어 쓴다.
+'use strict';
+const fs = require('fs');
+const path = require('path');
+
+const MAX_BYTES = 16 * 1024 * 1024;
+let dir = '';
+const listeners = new Set();
+
+const two = n => String(n).padStart(2, '0');
+function nowLocal(ms) {
+  const d = new Date(ms == null ? Date.now() : ms); const off = -d.getTimezoneOffset(); const sg = off >= 0 ? '+' : '-'; const ab = Math.abs(off);
+  return `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}T${two(d.getHours())}:${two(d.getMinutes())}:${two(d.getSeconds())}${sg}${two(Math.floor(ab / 60))}:${two(ab % 60)}`;
+}
+
+/** vibeDir = <프로젝트>/.vibe · 여러 번 불러도 됨 */
+function init(vibeDir) {
+  if (!vibeDir) return '';
+  const d = path.join(vibeDir, 'orch');
+  try { fs.mkdirSync(d, { recursive: true }); dir = d; } catch { }
+  return dir;
+}
+function file() { return dir ? path.join(dir, 'events.jsonl') : ''; }
+
+function rotate(f) {
+  try {
+    const st = fs.statSync(f); if (st.size < MAX_BYTES) return;
+    const d = new Date(); const tag = `${d.getFullYear()}${two(d.getMonth() + 1)}${two(d.getDate())}_${two(d.getHours())}${two(d.getMinutes())}${two(d.getSeconds())}`;
+    fs.renameSync(f, path.join(dir, `events_${tag}.jsonl`));
+  } catch { }
+}
+
+/** 사건 1건 기록. 반환 = 기록한 객체(기록 실패여도 객체는 돌려준다 — 구독자 전달용) */
+function emit(type, data) {
+  const ms = Date.now();
+  const ev = Object.assign({ at: nowLocal(ms), ms, type: String(type), src: 'vm', pid: process.pid }, data || {});
+  const f = file();
+  if (f) { try { rotate(f); fs.appendFileSync(f, JSON.stringify(ev) + '\n', 'utf8'); } catch { } }
+  for (const fn of listeners) { try { fn(ev); } catch { } }
+  return ev;
+}
+
+/** 같은 프로세스 안 구독(감시기). 반환 = 해제 함수 */
+function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
+
+/** 최근 사건 읽기(파일 끝에서 maxBytes 만큼). 깨진 줄은 건너뛴다 */
+function tail(maxBytes) {
+  const f = file(); if (!f) return [];
+  try {
+    const st = fs.statSync(f); const n = Math.min(st.size, maxBytes || 2 * 1024 * 1024);
+    const fd = fs.openSync(f, 'r'); const buf = Buffer.alloc(n);
+    try { fs.readSync(fd, buf, 0, n, st.size - n); } finally { fs.closeSync(fd); }
+    const lines = buf.toString('utf8').split(/\r?\n/); if (n < st.size) lines.shift();
+    const out = [];
+    for (const ln of lines) { if (!ln.trim()) continue; try { out.push(JSON.parse(ln)); } catch { } }
+    return out;
+  } catch { return []; }
+}
+
+/** 실패 원인 줄 → 반복 비교용 서명(숫자·시각·경로·화면 ID 를 지운다) */
+function signature(label, why) {
+  const first = String(why || '').split(/\r?\n/).find(s => s.trim()) || '';
+  const norm = first
+    .replace(/[A-Za-z]:[\\/][^\s'"|]+/g, '<path>')
+    .replace(/\b(?:Doc|tools|nscm-fe|nscm-be|\.vibe)[\\/][^\s'"|]+/g, '<path>')
+    .replace(/\b[A-Z]{2,4}\d{4}[A-Z]?\b/g, '<ID>')
+    .replace(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(?::\d{2})?/g, '<time>')
+    .replace(/\d+(?:\.\d+)?/g, 'N')
+    .replace(/\s+/g, ' ').trim().slice(0, 200);
+  return `${String(label || '').replace(/\b[A-Z]{2,4}\d{4}[A-Z]?\b/g, '<ID>').trim()} | ${norm}`;
+}
+
+module.exports = { init, emit, on, tail, file, nowLocal, signature };
