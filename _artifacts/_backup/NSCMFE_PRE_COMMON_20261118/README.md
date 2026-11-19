@@ -1,0 +1,96 @@
+# 공통소스 다운로드 & 병합 회차 보고 — 2026-11-18 13:18
+
+- 원천: remote `common` (https://gyucheollee297@github.com/eunjoo-hwang/nscm-fe.git) · push URL `no_push` 확인 — 푸시 없음
+- 기준선 `fdff7f17e` → **신규 기준선 `724a61550`** (724a61550 2026-11-18 12:02 yongjun_kang fix(SSP0022): 엑셀 업로드 결과 포맷·필수컬럼 안내·적재 RESULT_CODE 판정)
+- 공통 신규 커밋 90건 · FE 대상(nscm-fe: apps·features·packages·public·configs) 변경 269건 (이름변경은 삭제+신규로 풀어 집계)
+- BE(nscm-be) 미포함 — 이번 실행 대상 아님(BE 는 --areas be 로 따로 받는다)
+- ⚠ **DB MODE — 로컬 소스 보호 안 함**: 공통 최신 트리 기준으로 다른 파일은 내 편집본도 공통 원문으로 덮어쓴다 · 공통이 지운 파일은 삭제 · 공통에 없는 로컬 전용 파일은 유지
+
+## 분류·처리 결과
+
+| 구분 | 건수 | 처리 |
+|---|---:|---|
+| 동일 | 2522 | 변경 없음 |
+| 공통 변경분 — 공통 원문 적용(로컬 보호 안 함) | 166 | 공통 원문 적용 |
+| 로컬 전용(공통에 없음) — 유지 | 102 | 로컬 유지 |
+| 공통 파일 — 로컬 부재 | 75 | 공통 원문 적용 |
+| 공통 삭제 — 로컬 삭제(로컬 보호 안 함) | 28 | 삭제 |
+| 로컬만 다름 — 공통 원문으로 복원(로컬 보호 안 함) | 9 | 공통 원문 적용 |
+
+적용 폴더별: supply 93 / shipping 47 / demand 35 / report 35 / master 31 / foundation 4 / shared 2 / apps 1 / configs 1 / public 1
+
+## ⚠️ 결정 대기 0건 (로컬 유지 상태 — 자동 적용 안 함)
+
+- 없음
+
+## 삭제 28건
+
+- `features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.module.scss`
+- `features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx`
+- `features/demand/src/pages/sales-future-price-01/__asis-mapping__.md`
+- `features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.module.scss`
+- `features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx`
+- `features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx`
+- `features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.module.scss`
+- `features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx`
+- `features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.module.scss`
+- `features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx`
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceRangeModal.module.scss`
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceRangeModal.tsx`
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.module.scss`
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.tsx`
+- `features/demand/src/pages/sales-future-price-01/components/modals/exchangeRateModalStore.ts`
+- `features/demand/src/pages/sales-future-price-01/components/modals/priceBatchInputModalStore.ts`
+- `features/demand/src/pages/sales-future-price-01/components/modals/salesPriceVersionModalStore.ts`
+- `features/demand/src/pages/sales-future-price-01/hooks/useSalesFuturePrice01Expression.ts`
+- `features/demand/src/pages/sales-future-price-01/hooks/useSalesFuturePrice01Validation.ts`
+- `features/demand/src/pages/sales-future-price-01/index.ts`
+- `features/demand/src/pages/sales-future-price-01/sales-future-price-01.constants.ts`
+- `features/demand/src/pages/sales-future-price-01/sales-future-price-01.types.ts`
+- `features/demand/src/pages/sales-future-price-01/salesPriceExchange.ts`
+- `features/demand/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts`
+- `features/demand/src/pages/sales-future-price-01/utils/combo.util.ts`
+- `features/demand/src/pages/sales-future-price-01/utils/grid.util.ts`
+- `features/demand/src/pages/sales-future-price-01/utils/period.util.ts`
+- `features/demand/src/pages/sales-future-price-01/utils/salesPriceAutoMap.ts`
+
+삭제 파일을 가리키는 import 후보: 
+- `features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.module.scss` ← features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx, features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx, features/demand/src/pages/sales-price-model-group/components/modals/ExchangeRateModal.tsx, features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx, features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/exchangeRateModalStore.ts` ← features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx, features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx, features/master/src/pages/sales-future-price/components/modals/ExchangeRateModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx` ← features/demand/src/pages/business-plan/components/modals/index.ts, features/demand/src/pages/forecast-price/components/modals/index.ts, features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupModals.tsx, features/demand/src/pages/sales-reports/components/modals/index.ts, features/master/src/pages/sales-future-price/SalesFuturePrice.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx` ← features/demand/src/pages/sales-price-model-group/components/SalesPriceModelGroupModals.tsx, features/master/src/pages/sales-future-price/SalesFuturePrice.tsx, features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.module.scss` ← features/demand/src/pages/sales-price-model-group/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/priceBatchInputModalStore.ts` ← features/demand/src/pages/sales-price-model-group/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceRangeModal.tsx` ← features/master/src/pages/sales-future-price/SalesFuturePrice.tsx, features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.tsx` ← features/master/src/pages/sales-future-price/SalesFuturePrice.tsx, features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx
+- `features/demand/src/pages/sales-future-price-01/salesPriceExchange.ts` ← features/master/src/pages/sales-future-price/SalesFuturePrice.tsx, features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx, features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx
+- `features/demand/src/pages/sales-future-price-01/utils/salesPriceAutoMap.ts` ← features/master/src/pages/sales-future-price/SalesFuturePrice.tsx, features/master/src/pages/sales-future-price/components/SalesFuturePriceGrid.tsx, features/master/src/pages/sales-future-price/utils/salesPriceAutoMap.test.ts, features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceRangeModal.module.scss` ← features/master/src/pages/sales-future-price/components/modals/SalesPriceRangeModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/SalesPriceRangeModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.module.scss` ← features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.tsx
+- `features/demand/src/pages/sales-future-price-01/components/modals/salesPriceVersionModalStore.ts` ← features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/SalesPriceVersionModal.tsx
+- `features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.tsx` ← features/master/src/pages/sales-future-price-01/index.ts
+- `features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx
+- `features/demand/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx
+- `features/demand/src/pages/sales-future-price-01/hooks/useSalesFuturePrice01Validation.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx
+- `features/demand/src/pages/sales-future-price-01/index.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx, features/master/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx
+- `features/demand/src/pages/sales-future-price-01/sales-future-price-01.constants.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx, features/master/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx
+- `features/demand/src/pages/sales-future-price-01/sales-future-price-01.types.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx, features/master/src/pages/sales-future-price-01/hooks/useSalesFuturePrice01Expression.ts, features/master/src/pages/sales-future-price-01/hooks/useSalesFuturePrice01Validation.ts
+- `features/demand/src/pages/sales-future-price-01/useSalesFuturePrice01Store.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx
+- `features/demand/src/pages/sales-future-price-01/utils/grid.util.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx
+- `features/demand/src/pages/sales-future-price-01/utils/period.util.ts` ← features/master/src/pages/sales-future-price-01/SalesFuturePrice01.tsx, features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx, features/master/src/pages/sales-future-price-01/components/modals/ExchangeRateModal.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx, features/master/src/pages/sales-future-price-01/hooks/useSalesFuturePrice01Validation.ts
+- `features/demand/src/pages/sales-future-price-01/utils/combo.util.ts` ← features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Form.tsx, features/master/src/pages/sales-future-price-01/components/modals/PriceBatchInputModal.tsx
+- `features/demand/src/pages/sales-future-price-01/SalesFuturePrice01.module.scss` ← features/master/src/pages/sales-future-price-01/components/SalesFuturePrice01Grid.tsx
+
+## 원복 자료
+- `local_before/` — 덮어쓰거나 삭제한 로컬 원본
+- `worktree_tracked.patch` — 적용 직전 nscm-fe 추적파일 전체 diff
+- `git_status_before.txt` — 적용 직전 워킹트리 상태
+- `local_before/nscm-be/` · `be_worktree_tracked.patch` · `be_git_status_before.txt` — BE(nscm-be) 분
+- `conflicts/` — 결정 대기 파일의 base · common · merged(충돌 마커 포함) 사본
+
+## 검증
+- 공통 원문 적용 250건 — 개행 정규화 후 공통 원문과 불일치 0건
+- 적용 파일 충돌 마커 잔존 0건
+- 삭제 28건 — 잔존 0
+- procedures.d.ts `declare global` 1건(기대 1)
+- 정적검증(type-check/lint) **미수행** — 사용자 지시(요청 시만). 공통 신규 소스 ↔ 내 화면 소스 타입 불일치는 type-check 로 확인 필요

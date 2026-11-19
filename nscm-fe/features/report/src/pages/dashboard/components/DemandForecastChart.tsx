@@ -5,7 +5,9 @@ import { useEffect, useRef } from 'react';
 import type { ProductKey } from '../demand-as-dashboard.mock';
 import { DEMAND_FORECAST, PRODUCTS } from '../demand-as-dashboard.mock';
 import styles from '../DemandAsDashboard.module.scss';
+import { drawYUnitTop } from '../wijmo-axis-unit';
 import { attachAutoSize } from '../wijmo-autosize';
+import { styleLineLegend } from '../wijmo-legend';
 import { applyCompactTooltip } from '../wijmo-tooltip';
 
 interface Props {
@@ -14,9 +16,11 @@ interface Props {
   refreshKey: string;
 }
 
-// 실적/예측 색 — palette·경계 구분선이 공유.
+// 실적·예측은 같은 색(파랑)으로 두고 실선/점선으로만 구분한다(캡처 문서 기준).
 const ACTUAL_COLOR = '#1565c0';
-const FORECAST_COLOR = '#90a4ae';
+const FORECAST_COLOR = '#1565c0';
+// 실적→예측 경계 세로 구분선은 데이터 선과 섞이지 않게 중립 회색으로 둔다.
+const BOUNDARY_COLOR = '#90a4ae';
 
 export const DemandForecastChart = ({ product, onProductChange, refreshKey }: Props) => {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -38,9 +42,11 @@ export const DemandForecastChart = ({ product, onProductChange, refreshKey }: Pr
       legend: { position: Position.Top },
       axisX: { labelAngle: 0 },
       // 가로선(Y 주눈금 그리드)은 숨기고 Y축 선·눈금·라벨(0·500·…·2000, EA)은 표시.
-      axisY: { min: 0, max: 2000, majorUnit: 500, title: 'EA', majorGrid: false, axisLine: true },
+      axisY: { min: 0, max: 2000, majorUnit: 500, majorGrid: false, axisLine: true },
     });
     applyCompactTooltip(chart);
+    styleLineLegend(chart);
+    drawYUnitTop(chart, 'EA');
 
     // 실적→예측 경계(forecast 가 처음 생기는 지점)에 세로 구분선 + 'Forecast' 라벨.
     //   카테고리 축이라 축좌표 변환(convert)이 필요해 rendered 이벤트에서 직접 그린다.
@@ -52,7 +58,7 @@ export const DemandForecastChart = ({ product, onProductChange, refreshKey }: Pr
       const yBottom = chart.axisY.convert(Number(chart.axisY.actualMin));
       if (!Number.isFinite(x) || !Number.isFinite(yTop) || !Number.isFinite(yBottom)) return;
       e.engine.drawLine(x, yTop, x, yBottom, undefined, {
-        stroke: FORECAST_COLOR,
+        stroke: BOUNDARY_COLOR,
         strokeWidth: '1',
         strokeDasharray: '4 3',
       });

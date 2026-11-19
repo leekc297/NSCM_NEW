@@ -1,6 +1,6 @@
 - dialog:
   - heading "Material by Division" [level=2]
-  - text: Div
+  - text: Div.
   - combobox [disabled]: Automotive Battery
   - button "Open" [disabled]
   - img
@@ -10,7 +10,6 @@
   - textbox
   - button "Search"
   - paragraph
-  - text: {TOTAL}
   - grid:
     - rowgroup:
       - row "No Div. Material Code Description Nickname Class Name":

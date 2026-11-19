@@ -63,7 +63,8 @@ const SAVED_TEXT = '{0} data saved.';
 
 /**
  * 완료 SP 실패 사유 -> [MSG 코드, 영문 fallback]. AS-IS cs:2305~2320 의 3분기를 그대로 옮긴다.
- *   MSG00316/MSG00353 은 TO-BE 미등록이라 fallback 이 실제로 쓰인다(문구 공유 금지 — 사유가 다르다).
+ *   unauthorized=MSG01500(2026-11-17 등록, DB 문구=아래 fallback). modelPic/modelItem=MSG01347 은
+ *   미등록 시 fallback 이 쓰일 수 있다(문구 공유 금지 — 사유가 다르다).
  */
 const completeFailMessage = (
   kind: CompleteResult['failKind']

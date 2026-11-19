@@ -1,0 +1,82 @@
+# SCP0096 미검증 전체 목록과 행별 조치 (2026-11-18 라운드 3 · 일괄 보완)
+
+- 기준: CheckList v30 원장 미검증 133행 중 처리 대상(엔진·판단·대조표) 66행 + 사람 7행. 집계 60행은 하위 행을 따라감.
+- 진행: 아래 조치를 모두 적용한 뒤 CheckList 전체 1회 실행(묶음별 재측정 없음).
+
+| 행 | 규칙 | 유형 | 대상 | 조치 | 상태 |
+|---|---|---|---|---|---|
+| V-74ab8496 | A5 | 스냅샷승인 | SCP0096 스냅샷 헤더 Shipment Working Day OSP | 사람 담당(스냅샷 승인·계정) | 사람 |
+| EG-c5e0731c | A6 | 계정 | SCP0096 EG032 SCP0096 계정쌍 | 사람 담당(스냅샷 승인·계정) | 사람 |
+| V-ae24cd16 | E4 | 검사기공백 | SCP0096 키 중복 신규행 | judge: AS-IS·TO-BE 모두 Insert 없음 → 키 중복 신규행 대상 없음 | 보완 적용 |
+| V-0d52121b | G4 | 스냅샷승인 | SCP0096 스냅샷 조회조건 Div 40 | 사람 담당(스냅샷 승인·계정) | 사람 |
+| V-b36b0750 | H4 | 스냅샷승인 | SCP0096 스냅샷 화면샷 1920 | 사람 담당(스냅샷 승인·계정) | 사람 |
+| V-308cf4c5 | H4 | 스냅샷승인 | SCP0096 스냅샷 화면샷 1366 | 사람 담당(스냅샷 승인·계정) | 사람 |
+| EG-9d49925f | J4 | 계정 | SCP0096 EG380 무권한 첫 화면 실계정 없음 | 사람 담당(스냅샷 승인·계정) | 사람 |
+| V-06af9fa9 | K4 | 스냅샷승인 | SCP0096 스냅샷 버튼 Div 40 | 사람 담당(스냅샷 승인·계정) | 사람 |
+| EG-33c91716 | A1 | 판단 | SCP0096 콤보 SQL 실존 PKG_COM0000 | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| V-4ccf9d80 | A7 | 미분류 | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-365577cd | B8 | 판단 | SCP0096 Team 원천 PKG_COM0000 | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-bde3e8b3 | C1 | 미분류 | SCP0096 연쇄 후보 Plant Site | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-ce8f8757 | G1 | 판단 | SCP0096 NULL 행 탈락 LIKE PKG_COM0000 | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| ES-450a8579 | G4 | 판단 | SCP0096 E2E smoke 조회조건 라벨 | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-46e1377f | I1 | 판단 | SCP0096 같은 문구 다른 코드 [EN] Saved successfully. | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-e3aded01 | I1 | 판단 | SCP0096 같은 문구 다른 코드 [EN] No data to save. | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-807044ce | J1 | 미분류 | SCP0096 EG365 자동 선택 SCP/40/SCP Planner | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-d98bd5c6 | N1 | 판단 | SCP0096 기준정보 키 존재 SCM_MST_PLAN | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-85b47891 | N1 | 판단 | SCP0096 기준정보 키 존재 SCM_MST_PROJECT | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| EG-a184f82b | N1 | 판단 | SCP0096 기준정보 키 존재 SCM_MST_SITE_ITEM | 판단 — 결정 목록(Doc/verify/SCP0096/_unverified_decisions.md) | 결정 목록 |
+| T-8cdb4616 | X-REASON | 대조표사유 | D00-3-020 · §3 LockColumn / 405 (spdInfo 제목시트 잠금) | 대조표 제외 사유 근거 보강 — FE 대조표 파일 · DB_ONLY 가이드 | 대조표 가이드 |
+| T-428f2fa6 | X-REASON | 대조표사유 | D00-3-032 · §3 SetDblClickColumnShowHide / 819 | 대조표 제외 사유 근거 보강 — FE 대조표 파일 · DB_ONLY 가이드 | 대조표 가이드 |
+| T-af133d05 | X-REASON | 대조표사유 | MODAL:(none) · 팝업/모달 없음 | 대조표 제외 사유 근거 보강 — FE 대조표 파일 · DB_ONLY 가이드 | 대조표 가이드 |
+| T-15cf757f | X-REASON | 대조표사유 | COMMON:UC-01 · 필터링 상태 신규행 Insert 시 필터 유지 (keepRowV | 대조표 제외 사유 근거 보강 — FE 대조표 파일 · DB_ONLY 가이드 | 대조표 가이드 |
+| V-ca0b2246 | D2 | 검사기공백 | SCP0096 시나리오 [자동] 값 있는 편집 구간 수량 셀 편집 | D2 수량 동적 칸 편집 시나리오 — AS-IS 동적 칸 D_ 는 Y/N, W_/M_ 는 잠금 합계 · 시나리오 생성 조건 재검토 필요 | 미처리(신규 검사기 필요) |
+| V-24927c17 | E3 | 검사기공백 | 그리드 필수 컬럼 Setting(Div 별 META) · 컬럼셋팅 필수 표시 · 저장 필수 | judge _k3_scope_na 대상 아님(컬럼 이름 없음) — CR-091 필수 컬럼 META 대조 검사기 필요 | 미처리(신규 검사기 필요) |
+| V-7a4e6087 | F7 | 검사기공백 | SCP0096 저장 연계 테이블 | F7·F8 저장 감사 — 편집 저장형(Insert 없음)은 정리 백업이 없음 · touched_rows 기준 감사 컬럼 조회 검사기 필요 | 미처리(신규 검사기 필요) |
+| V-36c8d524 | F8 | 검사기공백 | SCP0096 저장 감사 필드 | F7·F8 저장 감사 — 편집 저장형(Insert 없음)은 정리 백업이 없음 · touched_rows 기준 감사 컬럼 조회 검사기 필요 | 미처리(신규 검사기 필요) |
+| V-f95f27ac | J4 | 검사기공백 | Home / Auth Request 메뉴 | J4 메뉴 노출·그룹별 메뉴·버튼 권한 동기화 — 권한 없는 계정 또는 AS-IS↔TO-BE 권한 표 대조 검사기 필요 | 미처리(신규 검사기 필요) |
+| V-65a3c78c | J4 | 검사기공백 | 그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화 | J4 메뉴 노출·그룹별 메뉴·버튼 권한 동기화 — 권한 없는 계정 또는 AS-IS↔TO-BE 권한 표 대조 검사기 필요 | 미처리(신규 검사기 필요) |
+| T-796a1766 | B3 | 검사기공백 | cboDayWeek / Day of the week / Day Week / - | 같은 신규 시험이 모달 콤보 후보를 combo_runtime 에 기록 → combo_oracle · judge 가 TRACE 조건 라벨로 연결 | 보완 적용 |
+| T-cc214e9d | B3 | 검사기공백 | cboInputValue / Input Value / - | 같은 신규 시험이 모달 콤보 후보를 combo_runtime 에 기록 → combo_oracle · judge 가 TRACE 조건 라벨로 연결 | 보완 적용 |
+| T-39ebe0a6 | B3 | 검사기공백 | COLUMN_NAME | mapping_trace combo_applicable: AS-IS 그리드 컬럼 아님(GetDayOfWeek dt.Select) → 콤보 대상 아님 | 보완 적용 |
+| T-25c93480 | B3 | 검사기공백 | DAY_CODE | mapping_trace combo_applicable: AS-IS 그리드 컬럼 아님(GetDayOfWeek dt.Select) → 콤보 대상 아님 | 보완 적용 |
+| T-30489568 | B4 | 검사기공백 | COLUMN_NAME | mapping_trace combo_applicable: AS-IS 그리드 컬럼 아님(GetDayOfWeek dt.Select) → 콤보 대상 아님 | 보완 적용 |
+| T-169847b2 | B4 | 검사기공백 | DAY_CODE | mapping_trace combo_applicable: AS-IS 그리드 컬럼 아님(GetDayOfWeek dt.Select) → 콤보 대상 아님 | 보완 적용 |
+| V-f8a41f6a | B8 | 검사기공백 | 조회조건 Sales Site·End Customer·Sold to Customer·Plan | judge: Team 조건 없음 · Plant Site 후보 = combo_oracle B4 결과로 판정 | 보완 적용 |
+| V-463fdd38 | B8 | 검사기공백 | Team 컬럼(MKT FCST 조회·신규행) | judge: Team 조건 없음 · Plant Site 후보 = combo_oracle B4 결과로 판정 | 보완 적용 |
+| T-46eaf186 | C1 | 미분류 | clbPlantSite / Plant Site | judge _asis_empty_handler: ClbPlantSite_SelectedIndexChanged 본문 비어 있음(cs:665) → 하위 연쇄 없음 | 보완 적용 |
+| V-66111d89 | D1 | 데이터전제 | Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬 | judge: AS-IS·TO-BE 모두 Insert 없음 → 신규행 조건 대상 없음 | 보완 적용 |
+| T-647cc843 | DB-SYN | 검사기공백 | DM0003_GET_BUCKET_TYPE_CODE | mapping_trace _sp_unused: AS-IS 결과 미사용 SP(DM0003) → 시노님 검사 대상 아님 | 보완 적용 |
+| V-b9c7786e | E3 | 검사기공백 | [DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼 | judge _k3_scope_na: 결함 유형 대상(신규행·Insert · Team/Project/Measure 컬럼)이 이 화면에 없음 → NA 근거 | 보완 적용 |
+| V-24a499ba | E3 | 검사기공백 | [SYS0004 결함 유형] Insert 저장 / Delete CRUD Status | judge _k3_scope_na: 결함 유형 대상(신규행·Insert · Team/Project/Measure 컬럼)이 이 화면에 없음 → NA 근거 | 보완 적용 |
+| V-d41d6aa9 | E3 | 검사기공백 | 그리드 필수 컬럼(USER_SELECTABLE_FLAG=N · 라벨 *) 미입력 저장 | judge _k3_scope_na: 결함 유형 대상(신규행·Insert · Team/Project/Measure 컬럼)이 이 화면에 없음 → NA 근거 | 보완 적용 |
+| V-5403aadf | E4 | 검사기공백 | MSG00135 | _verify.spec 신규 시험 "버튼 경로 메시지·모달 조건": 조회 전 Bulk Update 클릭 차단 알림 · SelectDay+선택 없음 차단 알림 | 보완 적용 |
+| V-ee57bb7a | E4 | 검사기공백 | MSG00134 | _verify.spec 신규 시험 "버튼 경로 메시지·모달 조건": 조회 전 Bulk Update 클릭 차단 알림 · SelectDay+선택 없음 차단 알림 | 보완 적용 |
+| T-a78a213f | E4 | 검사기공백 | MSG00135 | _verify.spec 신규 시험 "버튼 경로 메시지·모달 조건": 조회 전 Bulk Update 클릭 차단 알림 · SelectDay+선택 없음 차단 알림 | 보완 적용 |
+| T-4b1ff7b8 | E4 | 검사기공백 | MSG00134 | _verify.spec 신규 시험 "버튼 경로 메시지·모달 조건": 조회 전 Bulk Update 클릭 차단 알림 · SelectDay+선택 없음 차단 알림 | 보완 적용 |
+| T-0f8f235c | E4 | 검사기공백 | MSG00135 | _verify.spec 신규 시험 "버튼 경로 메시지·모달 조건": 조회 전 Bulk Update 클릭 차단 알림 · SelectDay+선택 없음 차단 알림 | 보완 적용 |
+| T-bd7523c3 | E4 | 검사기공백 | MSG00134 | _verify.spec 신규 시험 "버튼 경로 메시지·모달 조건": 조회 전 Bulk Update 클릭 차단 알림 · SelectDay+선택 없음 차단 알림 | 보완 적용 |
+| V-7b7c7536 | F1 | 미분류 | SCP0096 컬럼별 저장 왕복 | saveprobe nextOf: AS-IS 셀 규칙 min·max 안에서 새 값(7 → 6) | 보완 적용 |
+| V-2ef3bd27 | F1 | 검사기공백 | SCP0096 2행 동시 저장 | _verify.spec 2행 동시 저장: 재조회 뒤 값 있는 두 행 선택 | 보완 적용 |
+| ES-e648b9a6 | F1 | 데이터전제 | SCP0096 E2E authcrud 저장 왕복(no-save) lucky-alex | e2e_suite_ingest: 권한별 CRUD Save 비노출 계정 = 저장 권한 없음 → 저장 왕복 대상 아님 | 보완 적용 |
+| V-b49b4af7 | F4 | 검사기공백 | SCP0096 Division별 조회 오류 | _verify.spec Division별 조회: 행 수 최대 호출(달력 437행) 대신 Division 인자 실린 호출에서 값 읽기 | 보완 적용 |
+| V-e663a76c | F4 | 검사기공백 | SCP0096 경계값 저장 | _verify.spec 경계값 저장: 원값이 경계값(7)과 같은 행 건너뜀 | 보완 적용 |
+| T-4aadee67 | G4 | 검사기공백 | btnInput | 같은 신규 시험: 버튼영역 Bulk Update 표시·모달 조건 | 보완 적용 |
+| V-192ad4a8 | G8 | 검사기공백 | [SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Gri | judge _no_text_cond: 조회조건 3개 모두 텍스트 입력칸 아님 → G8 결함 유형 대상 아님 | 보완 적용 |
+| V-f8275d89 | G8 | 검사기공백 | [SYS0003 결함 일반화] API Name 조회조건 | judge _no_text_cond: 조회조건 3개 모두 텍스트 입력칸 아님 → G8 결함 유형 대상 아님 | 보완 적용 |
+| V-96c659a2 | G8 | 검사기공백 | [DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/ | judge _no_text_cond: 조회조건 3개 모두 텍스트 입력칸 아님 → G8 결함 유형 대상 아님 | 보완 적용 |
+| V-6689455d | G8 | 검사기공백 | [DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nic | judge _no_text_cond: 조회조건 3개 모두 텍스트 입력칸 아님 → G8 결함 유형 대상 아님 | 보완 적용 |
+| V-abe19a87 | K3 | 미분류 | 전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리 | judge _k3_cover: 대조표 MODAL:(none) · eg 팝업 0건 → 팝업 그리드 항목 대상 없음 | 보완 적용 |
+| V-ebddaf2c | K3 | 미분류 | 그리드 Ctrl+클릭 다중 선택(Version 팝업 포함) | judge _k3_cover: 대조표 MODAL:(none) · eg 팝업 0건 → 팝업 그리드 항목 대상 없음 | 보완 적용 |
+| V-ceeeff0a | K3 | 미분류 | [DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validati | judge _k3_scope_na: 결함 유형 대상(신규행·Insert · Team/Project/Measure 컬럼)이 이 화면에 없음 → NA 근거 | 보완 적용 |
+| V-6586c3ea | K3 | 미분류 | [DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀) | judge _k3_scope_na: 결함 유형 대상(신규행·Insert · Team/Project/Measure 컬럼)이 이 화면에 없음 → NA 근거 | 보완 적용 |
+| V-ad63bbde | K3 | 미분류 | 그리드 Ctrl+클릭 다중 선택(Version 팝업 포함) | judge _k3_cover: 대조표 MODAL:(none) · eg 팝업 0건 → 팝업 그리드 항목 대상 없음 | 보완 적용 |
+| V-fe134102 | L1 | 검사기공백 | SCP0096 방향키 누적 지연 | _verify.spec 방향키: 행 20개 미만이면 열 방향(ArrowRight)으로 측정 | 보완 적용 |
+| EG-e766f8b7 | N1 | 검사기공백 | SCP0096 기준정보 키 존재 SCM_ADM_MSG_M | master_sweep: TO-BE PK·유일 인덱스 없으면 AS-IS PK·유일 인덱스로 키 대조 | 보완 적용 |
+| EG-cac7a1b1 | N1 | 검사기공백 | SCP0096 기준정보 키 존재 SCM_MST_PLAN_DETAIL | master_sweep: TO-BE PK·유일 인덱스 없으면 AS-IS PK·유일 인덱스로 키 대조 | 보완 적용 |
+| T-52a2cd25 | A6 | 미분류 | PKG_SCP0019.P_SCP0019_GET_WORKING_TIME | mapping_trace _sp_other_menu: 대조표가 SCP0019 PROC 를 적음 · 이번 실행 호출 0건 → [대조표 오기 의심](대조표 담당 · DB_ONLY 가이드) | 보완 적용(대조표 가이드) |
+| T-e1d6f057 | F4 | 검사기공백 | PKG_SCP0019.P_SCP0019_GET_WORKING_TIME | mapping_trace _sp_other_menu: 대조표가 SCP0019 PROC 를 적음 · 이번 실행 호출 0건 → [대조표 오기 의심](대조표 담당 · DB_ONLY 가이드) | 보완 적용(대조표 가이드) |
+| EG-938ba32f | A1 | 검사기공백 | SCP0096 실전송 건수 Shipment Working Day OSP/같은 사용자 | A1 같은 사용자 실전송 — 양쪽 Measure 칸 설정 사용자 없음(시험 계정 필요) | 사람(계정) |
+| V-9e29a0e2 | D3 | 검사기공백 | spreadInfo.LockColumn | judge _asis_toggle_prefixes: W_/M_ 칸은 chkSum 체크 시 표시(cs:355) · TO-BE Sum FAIL(V-eb856b69) → [선행 결함] 보완 대기 | 선행 결함(화면 보완 뒤 측정) |
+| V-d8f314e2 | H2 | 검사기공백 | SCP0096 시나리오 [자동] 당주 구분선(rail) = 이번 주(Weekly) | judge _asis_toggle_prefixes: W_/M_ 칸은 chkSum 체크 시 표시(cs:355) · TO-BE Sum FAIL(V-eb856b69) → [선행 결함] 보완 대기 | 선행 결함(화면 보완 뒤 측정) |
+
+- 행 수: 73 · 보완 적용 39 · 보완 적용(대조표 가이드) 2 · 선행 결함(화면 보완 뒤 측정) 2 · 미처리(신규 검사기 필요) 6 · 결정 목록 12 · 대조표 가이드 4 · 사람 7 · 사람(계정) 1

@@ -161,12 +161,44 @@ export async function periodValues(box: Locator): Promise<[string, string]> {
   return [(ds[0] || '').replace(/\D/g, ''), (ds[1] || '').replace(/\D/g, '')];
 }
 
+/** 2026-11-18 SCP0111 Period(G1 '달력이 열리지 않음' · E2 역전 · MSG00344): 시작·끝 월 칸이 따로 있는 기간(_periodSplit_ · 칸마다 달력 버튼 → MUI 월 팝오버)
+ *  — 종전 함수는 범위 달력(_popup_ · monthPanel)만 다뤄 이 형태에서 '달력이 열리지 않음' 으로 끝났다. 칸 2개 + 달력 버튼 2개면 분리형 */
+export async function isSplitPeriod(box: Locator): Promise<boolean> {
+  const n1 = await box.locator('input:not([type="hidden"])').count().catch(() => 0);
+  const n2 = await box.locator('button[aria-label*="calendar" i]').count().catch(() => 0);
+  return n1 >= 2 && n2 >= 2;
+}
+const ymAdd = (yyyymm: string, k: number) => { const t = Number(yyyymm.slice(0, 4)) * 12 + Number(yyyymm.slice(4, 6)) - 1 + k; return `${Math.floor(t / 12)}${String((t % 12) + 1).padStart(2, '0')}`; };
+/** 분리형 기간의 idx 번째 칸(0 시작·1 끝)을 달력으로 yyyymm 에 맞춘다(달력 버튼 → 연도 머리글 → 연도 → 월 순번). 돌려줌 = 고른 뒤 두 칸 값 · 실패 사유 */
+export async function pickSplitMonth(nscm: Nscm, box: Locator, idx: 0 | 1, yyyymm: string): Promise<{ after: [string, string]; why: string }> {
+  const page = nscm.page; await nscm.clearDialogs().catch(() => undefined);
+  await box.locator('button[aria-label*="calendar" i]').nth(idx).click({ timeout: 5_000 }).catch(() => undefined);
+  const pop = page.locator('.MuiPopover-paper').last();
+  if (!(await pop.isVisible({ timeout: 5_000 }).catch(() => false))) return { after: await periodValues(box), why: '달력 팝오버가 열리지 않음' };
+  const y = yyyymm.slice(0, 4); const head = ((await pop.innerText().catch(() => '')) || '').match(/\d{4}/)?.[0] || '';
+  if (head !== y) {
+    await pop.locator('button').first().click({ timeout: 3_000 }).catch(() => undefined); await page.waitForTimeout(300);
+    const yb = pop.locator('button').filter({ hasText: new RegExp(`^${y}$`) }).first();
+    if (!(await yb.isVisible().catch(() => false))) { await page.keyboard.press('Escape').catch(() => undefined); return { after: await periodValues(box), why: `연도 ${y} 버튼 없음` }; }
+    await yb.click({ timeout: 3_000 }).catch(() => undefined); await page.waitForTimeout(300);
+  }
+  const months = pop.locator('.MuiPickersMonth-monthButton, [class*="monthButton" i]');
+  if ((await months.count().catch(() => 0)) < 12) { await page.keyboard.press('Escape').catch(() => undefined); return { after: await periodValues(box), why: '월 버튼 12개를 못 찾음' }; }
+  const mb = months.nth(Number(yyyymm.slice(4, 6)) - 1);
+  if (await mb.isDisabled().catch(() => false)) { await page.keyboard.press('Escape').catch(() => undefined); return { after: await periodValues(box), why: `[비활성] ${yyyymm} 월 버튼 비활성(달력이 고르지 못하게 막음)` }; }
+  await mb.click({ timeout: 3_000 }).catch(() => undefined); await page.waitForTimeout(400);
+  if (await pop.isVisible().catch(() => false)) await page.keyboard.press('Escape').catch(() => undefined);
+  const after = await periodValues(box);
+  return { after, why: after[idx].slice(0, 6) === yyyymm ? '' : `칸 값이 ${yyyymm} 로 바뀌지 않음('${after[idx]}')` };
+}
+
 /** 2026-11-18 SCP0111 G1 Period: 기간 범위 달력에서 끝 값을 한 달 앞으로 당긴다(달력 열기 → 오른쪽(끝) 패널 이전 달 → 그 달 날짜 → OK).
  *  돌려줌: 바꾸기 전·후 표시값 · 실패 사유. 시작 = 끝이면 바꾸지 않는다(범위가 뒤집힘) */
 export async function periodShiftEnd(nscm: Nscm, box: Locator): Promise<{ before: [string, string]; after: [string, string]; why: string }> {
   const page = nscm.page; const before = await periodValues(box);
   if (!before[0] || !before[1]) return { before, after: before, why: `초기 기간 빈값('${before[0]}' ~ '${before[1]}')` };
   if (before[0].slice(0, 6) >= before[1].slice(0, 6)) return { before, after: before, why: '시작·끝이 같은 달 — 끝을 당길 수 없음' };
+  if (await isSplitPeriod(box)) { const r = await pickSplitMonth(nscm, box, 1, ymAdd(before[1].slice(0, 6), -1)); return { before, after: r.after, why: r.why || (r.after[1] && r.after[1] !== before[1] ? '' : `끝 값이 바뀌지 않음('${before[1]}' → '${r.after[1]}')`) }; }
   const opener = box.locator('[class*="dateBox" i], [aria-label*="calendar" i]').last();
   await opener.click({ timeout: 5_000 }).catch(() => undefined);
   const popup = page.locator('[class*="_popup_"]').filter({ has: page.locator('[class*="monthPanel" i]') }).first();
@@ -190,6 +222,8 @@ export async function periodReverseTry(nscm: Nscm, box: Locator): Promise<{ befo
   const page = nscm.page; const before = await periodValues(box);
   if (!before[0] || !before[1]) return { before, after: before, set: false, okEnabled: false, why: '초기 기간 빈값' };
   const ym = (s: string) => Number(s.slice(0, 4)) * 12 + Number(s.slice(4, 6)) - 1; const k = ym(before[1]) - ym(before[0]) + 1;
+  // 분리형(시작·끝 칸 따로): 시작 칸을 끝 다음 달로 고른다 — OK 단계 없음(고르면 칸에 바로 들어감 · okEnabled = 고른 값이 칸에 들어갔는지)
+  if (await isSplitPeriod(box)) { const r = await pickSplitMonth(nscm, box, 0, ymAdd(before[1].slice(0, 6), 1)); return { before, after: r.after, set: !!r.after[0] && !!r.after[1] && r.after[0].slice(0, 6) > r.after[1].slice(0, 6), okEnabled: !r.why, why: r.why.startsWith('[비활성]') ? '' : r.why }; }  // 월 버튼 비활성 = 컨트롤이 역전을 막음(판정 근거) · 값만 안 바뀜 = 측정 실패
   await box.locator('[class*="dateBox" i], [aria-label*="calendar" i]').first().click({ timeout: 5_000 }).catch(() => undefined);
   const popup = page.locator('[class*="_popup_"]').filter({ has: page.locator('[class*="monthPanel" i]') }).first();
   if (!(await popup.isVisible({ timeout: 5_000 }).catch(() => false))) return { before, after: before, set: false, okEnabled: false, why: '달력이 열리지 않음' };
@@ -590,10 +624,31 @@ export async function widenFrom(p: Nscm['page'], months: number): Promise<number
 /** 기본 조회가 0행이면 실제 화면 후보로 대안 조회를 시도한다 — ① Division 후보 순회 ② 기간(period) 시작 2년 앞으로. 행이 생기는 첫 조건에서 멈춘다(2026-10-31 SCP0041 기본 조회 0행 → 전 검사 ERROR).
  *  사전 데이터셋을 쓰지 않는다(화면 콤보 후보·실데이터만). 결과 via 는 증거용 경로 설명 */
 const ENSURE_MEMO = new Map<string, { via: string; years?: number; div?: string; none?: boolean; req?: { label: string; idx: number } }>();
-export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promise<{ rows: number; via: string }> {
+// 2026-11-18 미검증 해소: minRows = 시험이 요구하는 최소 행 수(K3 다중 선택 3행·K1 정렬 2행). 기본 1 = 종전(0행일 때만 대안 조회)
+/** 2026-11-19 SCP0096 경계값 저장 미검증(Div 40·81 값이 전부 7=경계값 · Div 82 에만 5 행): 조건에 맞는 행이 나올 때까지 Division 후보 전부를 순회한다.
+ *  pick = 현재 조회 결과에서 쓸 행 번호(없으면 -1). 행 수 기준(ensureRows)과 달리 '쓸 수 있는 행' 기준이라 0행·조건 불충족 Division 을 건너뛴다. 반환 via = 시도 기록 */
+export async function findRowAcrossDivisions(nscm: Nscm, pick: () => Promise<number>): Promise<{ row: number; via: string }> {
+  const p = nscm.page; const tried: string[] = [];
+  const item = await nscm.visibleFirst(p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: /^\s*\*?\s*(Div\.?|Division)\s*\*?\s*$/i }) }), 6).catch(() => null);
+  const combo = item ? item.locator('[role="combobox"]').first() : await nscm.visibleFirst(p.getByRole('combobox'));
+  if (!combo) return { row: -1, via: 'Division 칸 없음' };
+  await combo.click({ timeout: 3_000 }).catch(() => undefined);
+  const opts = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
+  await p.keyboard.press('Escape').catch(() => undefined);
+  const codes = [...new Set(opts.map(o => (o.trim().split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '')).filter(c => c && !/^all$/i.test(c)))];
+  for (const code of codes) {
+    if (!(await nscm.setDivision(code).catch(() => false))) { tried.push(`Div ${code}:선택 실패`); continue; }
+    await nscm.search().catch(() => undefined); await probe.waitRows(p, 25_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+    const n = await probe.rowCount(p); const r = n > 0 ? await pick() : -1; tried.push(`Div ${code}:${n}행${r >= 0 ? `·r${r}` : '·해당 행 없음'}`);
+    if (r >= 0) return { row: r, via: `Division '${code}' 순회(${tried.join(' · ')})` };
+  }
+  return { row: -1, via: `Division 후보 ${codes.length}개 순회 · ${tried.join(' · ') || '시도 없음'}` };
+}
+
+export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default', minRows = 1): Promise<{ rows: number; via: string }> {
   const p = nscm.page;
   let rows = await probe.rowCount(p);
-  if (rows > 0) return { rows, via: '기본 조회' };
+  if (rows >= minRows) return { rows, via: '기본 조회' };
   const searchCount = async () => { const b0 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 25_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); const n = await probe.rowCount(p); const body = (nscm.calls.slice(b0).find(c => /SEARCH/i.test(c.btn))?.body || '').replace(/\s+/g, '').slice(0, 140); console.log(`[ensureRows] 시도 → ${n}행 · 본문 ${body}`); return n; };  // 25s: Div 40 7,849행이 12s 안에 안 차서 0행으로 읽었다(2026-10-31 r8 진단)
   // 기간 칸 = 입력 2개 이상 + 첫 입력값이 날짜인 FormItem 전부(Hold 기간·Cutoff 기간처럼 여러 개일 수 있다 — 2026-10-31 SCP0041 Pack Hold 는 Cutoff 까지 넓혀야 행이 나온다)
   const widenAll = async (years: number): Promise<string[]> => {
@@ -623,7 +678,7 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
   key = `${key}|${curSheet}`;
   const memo = ENSURE_MEMO.get(key);
   if (memo) {
-    if (memo.none) return { rows, via: `기본 조회 0행 · 대안 전부 0행(이전 시도 ${memo.via} · 재시도 생략)` };
+    if (memo.none) return { rows, via: `기본 조회 ${minRows > 1 ? `${minRows}행 미만` : '0행'} · 대안 전부 ${minRows > 1 ? `${minRows}행 미만` : '0행'}(이전 시도 ${memo.via} · 재시도 생략)` };
     if (memo.years) await widenAll(memo.years);
     if (memo.div) await nscm.setDivision(memo.div).catch(() => false);
     if (memo.req) await nscm.fillRequired(memo.req.label, memo.req.idx).catch(() => '');  // T59 필수 후보 재적용
@@ -636,17 +691,11 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
   for (const code of sheetDataDivs(key.split('|')[0] === 'default' ? (process.env.VERIFY_ID || nscm.curMenu || '') : key.split('|')[0], curSheet)) {
     if (!(await nscm.setDivision(code).catch(() => false))) { tried.push(`데이터 조건 Div ${code}:선택 실패`); continue; }
     rows = await searchCount(); tried.push(`데이터 조건 Div ${code}:${rows}행`);
-    if (rows > 0) { const via = `시트 데이터 조건 Division '${code}' 조회(sheet_data_cond.json · ${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, div: code }); return { rows, via }; }
+    if (rows >= minRows) { const via = `시트 데이터 조건 Division '${code}' 조회(sheet_data_cond.json · ${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, div: code }); return { rows, via }; }
   }
-  // ① 모든 기간 칸의 시작을 2년 → 5년 앞으로(현재 Division 유지)
-  let widened = 0;
-  for (const years of [2, 5]) {
-    const did = await widenAll(years).catch(() => [] as string[]);
-    if (!did.length) break;
-    widened = years; rows = await searchCount(); tried.push(`기간 ${years}년 확대(${did.join(',')}~):${rows}행`);
-    if (rows > 0) { const via = `기간 ${years}년 확대 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, years }); return { rows, via }; }
-  }
-  // ② Division 후보 순회(확대된 기간 유지)
+  // 2026-11-18 미검증 해소(SCP0096): 기간을 먼저 넓히면 기간이 길수록 컬럼이 늘어나는 화면(일자 피벗)이 TO-BE 한도(1000컬럼)에 걸려 전부 0행이 됐다 →
+  //   ② Division 순회를 기간 그대로 먼저 하고, 그래도 부족하면 ① 기간 확대 뒤 Division 을 다시 순회한다
+  const divSweep = async (wd: number): Promise<{ rows: number; via: string } | null> => {
   try {
     const combo = await nscm.visibleFirst(p.getByRole('combobox'));
     if (combo) {
@@ -659,22 +708,34 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promi
         const code = (o.trim().split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '');
         if (!code || /^all$/i.test(code)) continue;
         if (!(await nscm.setDivision(code))) continue;
-        if (widened) await widenAll(widened);  // Division 변경이 기간을 기본값으로 되돌리는 화면(C1 연쇄) — 확대 기간 재적용(2026-10-31 SCP0041 r7)
-        rows = await searchCount(); tried.push(`Div ${code}${widened ? '+기간' : ''}:${rows}행`);
-        if (rows > 0) { const via = `Division '${code}'${widened ? ` + 기간 ${widened}년 확대` : ''} 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, years: widened || undefined, div: code }); return { rows, via }; }
+        if (wd) await widenAll(wd);  // Division 변경이 기간을 기본값으로 되돌리는 화면(C1 연쇄) — 확대 기간 재적용(2026-10-31 SCP0041 r7)
+        rows = await searchCount(); tried.push(`Div ${code}${wd ? '+기간' : ''}:${rows}행`);
+        if (rows >= minRows) { const via = `Division '${code}'${wd ? ` + 기간 ${wd}년 확대` : ''} 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, years: wd || undefined, div: code }); return { rows, via }; }
       }
     }
   } catch { /* Division 순회 실패 */ }
+    return null;
+  };
+  { const r0 = await divSweep(0); if (r0) return r0; }
+  // ① 모든 기간 칸의 시작을 2년 → 5년 앞으로(현재 Division 유지)
+  let widened = 0;
+  for (const years of [2, 5]) {
+    const did = await widenAll(years).catch(() => [] as string[]);
+    if (!did.length) break;
+    widened = years; rows = await searchCount(); tried.push(`기간 ${years}년 확대(${did.join(',')}~):${rows}행`);
+    if (rows >= minRows) { const via = `기간 ${years}년 확대 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, years }); return { rows, via }; }
+  }
+  { const r1 = widened ? await divSweep(widened) : null; if (r1) return r1; }
   // ③ 2026-11-06 T59: 필수 조회조건을 search() 가 첫 후보로 채웠는데 0행 — 같은 칸의 다음 화면 후보 2개(다중선택이면 추가 체크)
   for (const label of [...nscm.requiredFilled]) {
     for (const idx of [1, 2]) {
       const note = await nscm.fillRequired(label, idx).catch(() => '');
       if (!note.startsWith('선택')) break;
       rows = await searchCount(); tried.push(`필수 ${label} ${idx + 1}번째 후보:${rows}행`);
-      if (rows > 0) { const via = `필수 조건 '${label}' ${idx + 1}번째 후보 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, req: { label, idx } }); return { rows, via }; }
+      if (rows >= minRows) { const via = `필수 조건 '${label}' ${idx + 1}번째 후보 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, req: { label, idx } }); return { rows, via }; }
     }
   }
-  const via = `기본 조회 0행 · 대안 ${tried.join(' · ') || '없음'} 전부 0행${nscm.requiredNotes.length ? ` · 필수 조건 ${nscm.requiredNotes.slice(-2).join(' / ')}` : ''}`;
+  const via = `기본 조회 ${minRows > 1 ? `${minRows}행 미만` : '0행'} · 대안 ${tried.join(' · ') || '없음'} 전부 0행${nscm.requiredNotes.length ? ` · 필수 조건 ${nscm.requiredNotes.slice(-2).join(' / ')}` : ''}`;
   ENSURE_MEMO.set(key, { via, none: true });
   return { rows, via };
 }

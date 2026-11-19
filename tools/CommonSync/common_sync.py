@@ -422,6 +422,7 @@ def main():
     g = ap.add_mutually_exclusive_group(required='--restore-be-from' not in sys.argv); g.add_argument('--dry-run', action='store_true'); g.add_argument('--apply', action='store_true')
     g.add_argument('--upload-prepare', action='store_true', help='Source Upload(UI) 준비 — 선택 파일별로 올릴 내용(전체/내 작업분만)을 --out 에 만든다')
     ap.add_argument('--overwrite-local', action='store_true', help='DB MODE — 로컬 소스를 보호하지 않는다: 공통에 있는 파일은 내 편집본도 공통 원문으로 덮어쓰고, 공통이 지운 파일은 내 편집본도 삭제한다. 공통에 없는 로컬 전용 파일은 유지')
+    ap.add_argument('--paths', help='FE 대상을 이 경로들로 좁힌다(nscm-fe 기준 상대경로, 쉼표 구분 · 예 features/supply/src/pages/x) — 기준선(state.json) 갱신 안 함(2026-11-18 CheckList 화면 소스 받기)')
     ap.add_argument('--keys', help='--upload-prepare: procedures.d.ts 에서 올릴 메뉴 키(쉼표) — 보통 화면 ID. 없으면 내 블록 전부')
     ap.add_argument('--files-from', help='--upload-prepare: 올릴 파일 목록(nscm-fe 기준 상대경로, 줄 단위)'); ap.add_argument('--out', help='--upload-prepare: 결과 폴더')
     a = ap.parse_args()
@@ -456,7 +457,13 @@ def main():
     # 영역 — FE(nscm-fe) + BE(nscm-be · 2026-11-12 추가). BE 는 공통 트리에 `nscm-be/` 가 있고 로컬 폴더가 있을 때만.
     #   사본 시험(--work)에서는 --be-work 를 줄 때만 BE 를 다룬다(실제 nscm-be 를 건드리지 않게)
     want_fe, want_be = a.areas in ('fe', 'all'), a.areas in ('be', 'all')
-    areas = [{'key': 'fe', 'label': 'FE', 'prefix': prefix, 'work': work, 'scope': SCOPE, 'base': base, 'keep': (), 'show': ''}] if want_fe else []
+    # 2026-11-18 --paths: FE 대상 경로를 화면 폴더 등으로 좁힌다(nscm-fe 기준 상대경로 · SCOPE 최상위 폴더 아래만 허용)
+    fe_scope = SCOPE
+    if a.paths:
+        fe_scope = [x.strip().replace('\\', '/').strip('/') for x in a.paths.split(',') if x.strip()]
+        badp = [x for x in fe_scope if x.split('/')[0] not in SCOPE or '..' in x.split('/')]
+        if badp or not fe_scope: print(f'⛔ --paths 는 {"·".join(SCOPE)} 아래 경로만: {badp or a.paths}'); finish(2, error='bad-paths', detail=str(badp))
+    areas = [{'key': 'fe', 'label': 'FE', 'prefix': prefix, 'work': work, 'scope': fe_scope, 'base': base, 'keep': (), 'show': ''}] if want_fe else []
     be_work = a.be_work or (None if a.work else a.be); be_skip = ''
     if a.no_be or not want_be: be_skip = '이번 실행 대상 아님(BE 는 --areas be 로 따로 받는다)'
     elif not prefix or not git.out('ls-tree', '--name-only', tip, 'nscm-be/').strip(): be_skip = '공통 트리에 nscm-be/ 없음'
@@ -801,6 +808,8 @@ def main():
     if bad:
         print(f'\n✖ 적용 후 검증 실패 {bad}건 — 기준선 갱신 안 함 · 보고 {rp} · 원복 자료 {bdir}'); finish(4, report=rp, backup=bdir, verify=verify)
     if test: print(f'\n✅ 시험 적용 완료(기준선 미갱신) — 보고 {rp}'); finish(0, ok=True, report=rp, backup=bdir, verify=verify)
+    # 2026-11-18: --paths(화면 폴더 등 일부 경로만 받기)는 전체 기준선을 옮기지 않는다 — 옮기면 범위 밖 파일의 공통 변경을 다음 전체 받기에서 놓친다
+    if a.paths: print(f'\n✅ 일부 경로 적용 완료(기준선 미갱신 · 대상 {a.paths}) — 보고 {rp}'); finish(0, ok=True, report=rp, backup=bdir, verify=verify, paths=a.paths)
     hist_list = state.get('history', [])
     be_ar = next((ar for ar in areas if ar['key'] == 'be'), None)
     ent = {'baseline': tip, 'from': base, 'applied': now.isoformat(timespec='seconds'), 'report': os.path.relpath(rp, ROOT)}

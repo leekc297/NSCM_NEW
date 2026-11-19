@@ -2,5 +2,5 @@
 DM0003_GET_BUCKET_TYPE_CODE,,GET,0,,,1,load,3,{},LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
 SCP0111_SAVE_INTEGRATION_PSI_ADMIN,PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
 SCP0111_GET_ESS_PACK_LINE,PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE,GET,0,,,1,load,32,{},LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
-SCP0111_GET_INTEGRATION_PSI,PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI,GET,20,PASS:8 ROWS_ONLY:12,,1,find,1712,"{""p_division_id"": ""81"", ""p_plan_start_yyyymmdd"": ""20260817"", ""p_plan_type"": """", ""p_seq"": """", ""p_from_yyyymm"": ""202608"", ""p_to_yyyymm"": ""202701"", ""p_nick_name"": """", ""p_cellitem_id"": """", ""p_item_id"": """", ""p_qty_yn"": ""N""}",BOTH,차등 검증·실측 모두 있음
+SCP0111_GET_INTEGRATION_PSI,PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI,GET,19,PASS:8 ROWS_ONLY:11,,1,find,1712,"{""p_division_id"": ""81"", ""p_plan_start_yyyymmdd"": ""20260817"", ""p_plan_type"": """", ""p_seq"": """", ""p_from_yyyymm"": ""202608"", ""p_to_yyyymm"": ""202701"", ""p_nick_name"": """", ""p_cellitem_id"": """", ""p_item_id"": """", ""p_qty_yn"": ""N""}",BOTH,차등 검증·실측 모두 있음
 SCP0111_SAVE_INTEGRATION_PSI,PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)

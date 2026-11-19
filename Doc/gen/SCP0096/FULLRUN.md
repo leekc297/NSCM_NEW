@@ -1,14 +1,15 @@
-# FULLRUN SCP0096 — 2026-10-28 18:28 ✅ 전부 완료
+# FULLRUN SCP0096 — 2026-11-19 01:34 ✅ 전부 완료
 
-체인: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) · 총 617s
+체인: 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 총 8152s
 
 | # | 단계 | 결과 | exit | 소요 |
 |---|---|---|---|---|
-| 1 | AS-IS 파싱 (Fact Pack — 없을 때만) — 자료 있음 | SKIP | - | 0s |
-| 2 | 문서 사전 준비 — TO-BE 파싱·메타·GAP 최신화 (생성 절차 없이 · UI 가 이미 있으면 그대로 문서화) | OK | 0 | 25s |
-| 3 | 문서 생성 (분석서·설계서·GAP·테스트 MD, Agent) | OK | 0 | 568s |
-| 4 | GAP 분석 (사전 준비 후에도 없을 때만) (선택) — 자료 있음 | SKIP | - | 0s |
-| 5 | 대조표 갱신 (이 화면 행이 없을 때만) (선택) — 자료 있음 | SKIP | - | 0s |
-| 6 | 문서 Excel (설계서·분석서·GAP·테스트·대조표) | OK | 0 | 25s |
+| 1 | 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) | OK | 0 | 2259s |
+| 2 | 2. 검증 보완 (미검증 처리 대상 전체 목록 → 검사엔진 일괄 신설·보완 · 처리 대상이 있을 때만) (선택) | OK | 0 | 1476s |
+| 3 | 3. CheckList 재수행 (미검증 행만 다시 잴 수 있으면 그 규칙만 · 아니면 처음부터 → 재분류) (선택) | OK | 0 | 2306s |
+| 4 | 2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만) (선택) | OK | 0 | 1539s |
+| 5 | 3-2. CheckList 재수행 2회차 (선택) | OK | 0 | 572s |
+| 6 | 2-3. 검증 보완 3회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만) (선택) — 처리 대상 0 또는 직전 회차보다 줄지 않음(stalled) — 반복 중단, 남은 행은 결정 목록(continue = 0) | SKIP | - | 0s |
+| 7 | 3-3. CheckList 재수행 3회차 (선택) — 검증 보완을 하지 않음 — 재수행 필요 없음 | SKIP | - | 0s |
 
-다음 할 일: UI Status 의 단계·E2E 타일과 Doc/gen/SCP0096/PIPELINE.md · Doc/e2e/results/_summary.md 확인
+다음 할 일: Status 탭의 단계·E2E 타일과 Doc/gen/SCP0096/PIPELINE.md · Doc/e2e/results/_summary.md 확인

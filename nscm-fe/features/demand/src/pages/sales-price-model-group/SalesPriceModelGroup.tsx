@@ -2,7 +2,7 @@ import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcGridColumnSetup } from '@foundation/assets';
+import { IcExchangeRate, IcGridColumnSetup } from '@foundation/assets';
 import type { BUTTON_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
@@ -238,6 +238,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openItem, setOpenItem] = useState(false);
   const [openColumnSetting, setOpenColumnSetting] = useState(false);
   const [openPriceBatch, setOpenPriceBatch] = useState(false);
+  const [openExchange, setOpenExchange] = useState(false);
   const handlePopupCellDblClick = useCallback((modalKey: string, row: ModelGroupRow) => {
     setPopupRow(row);
     if (modalKey === MODAL_KEY.PROJECT) setOpenProject(true);
@@ -287,6 +288,18 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
                 },
               ]
             : []),
+          // Exchange Rate — 아이콘 버튼, Column Setting 앞(UI-02, 원천 DMF0020 과 같은 순서). 팝업이 main / EXCHANGE_RATE 를 부른다.
+          ...(hasButton(PROC_ACTION.EXCHANGE_RATE, SHEETS.MAIN)
+            ? [
+                {
+                  label: t('LBL00661', '_Exchange Rate'),
+                  title: t('LBL00661', '_Exchange Rate'),
+                  action: () => setOpenExchange(true),
+                  iconComponent: <IcExchangeRate />,
+                  buttonLabel: '',
+                },
+              ]
+            : []),
           ...(hasButton('SEARCH', SHEETS.TITLE_SET)
             ? [
                 {
@@ -317,6 +330,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
       <SalesPriceModelGroupModals
         columnSetting={{ open: openColumnSetting, close: () => setOpenColumnSetting(false) }}
         priceBatch={{ open: openPriceBatch, close: () => setOpenPriceBatch(false) }}
+        exchangeRate={{ open: openExchange, close: () => setOpenExchange(false) }}
         projectCell={{ open: openProject, close: () => setOpenProject(false) }}
         itemCell={{ open: openItem, close: () => setOpenItem(false) }}
         popupRow={popupRow}
@@ -324,6 +338,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
         editTrackerRef={editTrackerRef}
         divisionId={division}
         mainFromYyyymmdd={fromYyyymmdd}
+        mainToYyyymmdd={toYyyymmdd}
         endCustomers={searchParams.endCustomers}
         staticColumns={staticColumns[SHEETS.MAIN]}
         originalStaticColumns={originalStaticColumns[SHEETS.MAIN]}

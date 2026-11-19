@@ -36,6 +36,9 @@ const CL_SELFTEST = !!(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE);  
 const RUN_ID = process.env.VERIFY_RUN_ID || '';
 type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number }; run?: string };
 const results: Res[] = [];
+// 2026-11-18: 이 실행 전 결과 파일의 행별 판정(판정을 다른 시험에 넘기는 행이 앞 실행의 확정 판정을 덮지 않게)
+const PREV: Map<string, Res> = (() => { try { return new Map((JSON.parse(fs.readFileSync(OUT, 'utf8')) as Res[]).map(z => [z.row_id, z])); } catch { return new Map(); } })();
+const prevVerdict = (rid: string): Res | undefined => PREV.get(rid);
 // 2026-10-30: 조건 JSON "dead"(실행되지 않는 AS-IS 메서드에서만 나온 검사 — mapping_trace.asis_live) 행은 측정하지 않는다. 정적 단계가 NA 로 둔 행을 이 엔진이 다시 재 FAIL 하던 결함(SCP0041 SCP0040 F4)
 const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'TRACE' && !/"dead":\s*"/.test(r.condition || '')) : [];
 // 2026-10-28 화면 독립화: 메인 시트명·컬럼 집합은 화면 메타(plan.json·원장 COLUMN 행)에서 — SCP0007 의 'bod'·ROUTE_ID 등을 다른 화면에 적용하던 결함(SCP0096 L1 77초·G4/H5 허위 FAIL)
@@ -878,7 +881,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       //   실측: SCP0005 CheckValid 는 'SaveButton > SaveData > CheckValid' 인데 이름이 Save 로 시작하지 않아 판정필요(수동)로 빠졌다 — 25개 화면 E4 424건
       // 2026-11-12 CR-103(사용자 결정): AS-IS 편집(Edit) 버튼 진입점에서만 닿는 메시지 = TO-BE 는 편집 버튼이 없고 조회 때 편집 가능 상태면 자동 편집 모드 — 메시지 없어도 정상(해당없음 · TO-BE 룰)
       if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && editReach.has(e.meth)) { put(rid, 'NA', `${e.msg || '(동적)'} — ${e.meth} = AS-IS 편집(Edit) 버튼 경로 메시지 · TO-BE 는 편집 버튼 없이 조회 시 편집 가능 상태면 자동 편집 모드 — 메시지 없어도 정상(TO-BE 룰 CR-103 · 편집 가능·배경색은 D1·H2 에서 판정)`); continue; }
-      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth)) { put(rid, '판정필요', `${e.msg || '(동적)'} — ${e.meth} 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(${e.meth})에서 판정`); continue; }
+      // 2026-11-18 SCP0111 V-f679aa42·V-8f1324a1: 다른 시험에 판정을 넘기는 행 — 부분 재판정(--only)에서 이 시험만 돌면 앞 실행의 확정 판정(NA 'catch 블록 예외 메시지')을 판정필요로 덮었다 → 이전 결과에 확정 판정(PASS·FAIL·NA)이 있으면 쓰지 않는다
+      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth)) { const pv = prevVerdict(rid); if (pv && ['PASS', 'FAIL', 'NA'].includes(pv.result)) continue; put(rid, '판정필요', `${e.msg || '(동적)'} — ${e.meth} 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(${e.meth})에서 판정`); continue; }
       const viol = planViolation(e.guard, e.vars);
       if (!viol) {
         const g = e.guard.split('▸').pop()?.trim() || '';

@@ -143,7 +143,7 @@ export const MSG = {
   N2_START_OVERLAP: 'MSG01130', // 중첩되는 시작일자가 있습니다.(AS-IS MSG00102 → MSG01130)
   N3_PLANT_DUP: 'MSG01131', // 동일 기간에 Plant Site가 중복되었습니다.(AS-IS MSG00103 → MSG01131)
   N4_PRIORITY_DUP: 'MSG01132', // 동일 기간에 Priority가 중복되었습니다.(AS-IS MSG00104 → MSG01132)
-  N5_PERIOD_OVERLAP: 'MSG00700', // 중첩된 기간이 있습니다.(AS-IS MSG00105 → TO-BE MSG00700)
+  N5_PERIOD_OVERLAP: 'MSG01227', // 중첩된 기간이 있습니다.\n리스트 확인 후 입력하십시오.(AS-IS MSG00105 → MSG01227, 사용자 지시 2026-11-17 — 본화면도 팝업과 동일 문구)
   N6_PERIOD_CONTINUITY: 'MSG01133', // 기간은 연속적으로 입력하여야 합니다.(AS-IS MSG00106 → MSG01133)
   N7_PRIORITY_POSITIVE: 'MSG01134', // Priority는 양의 정수입니다.(AS-IS MSG00107 → MSG01134)
   N8_DATE_ORDER: 'MSG01135', // 시작일자가 종료일자보다 늦을 수 없습니다.(AS-IS MSG00108 → MSG01135)

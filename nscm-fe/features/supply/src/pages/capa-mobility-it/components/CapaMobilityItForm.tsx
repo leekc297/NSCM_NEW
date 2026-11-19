@@ -1,9 +1,9 @@
-import { MaterialByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal, PeriodField } from 'features/master/src/components';
 import { useEffect, useRef, useState } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -23,6 +23,9 @@ const snapRangeToMonth = (from: string, to: string): { start: string; end: strin
       : '30';
   return { start, end: `${to.slice(0, 6)}${day}` };
 };
+
+// YYYYMM → 그 달 말일 YYYYMMDD (PeriodField mode='month' 의 YYYYMM 출력을 스토어 8자리 계약으로 되돌릴 때).
+const monthEnd = (ym: string): string => snapRangeToMonth(ym, ym).end;
 
 interface Props {
   onSearch: () => void;
@@ -192,20 +195,24 @@ export const CapaMobilityItForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Period — 월 단위 피커(monthOnly). 표기 YYYY-MM, 확정값은 월경계(시작월 1일~종료월 말일)로
-                정규화되어 start/end = YYYYMMDD(8자리) 계약 유지. GET SP(PKG_SCP0098.P_GET_CAPA_MOBILITYIT)는
-                from/to 를 SUBSTR(...,1,6)=YYYYMM 으로만 쓰므로(일 자리 무시) SP·PROC_M 변경 없이 월 조회 등가. */}
-            <Grid size={3}>
-              <PeriodRangePicker
-                start={sc.startYyyymmdd}
-                end={sc.endYyyymmdd}
-                onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
-                label={t(LBL.PERIOD, 'Period')}
-                required
-                monthOnly
-                className={commonStyles.formItem}
-              />
-            </Grid>
+            {/* Period — 표준 PeriodField mode='month'(features/master, DatePickerCalendar usecase='month'
+                월-그리드 picker, 시빌링 capa/opt-capa 동일). 스토어는 월경계 YYYYMMDD(8자리) 계약 유지:
+                PeriodField 는 YYYYMM(6자리)라 표시엔 앞 6자리를 주고, 확정 시 시작월 1일~종료월 말일로
+                되돌린다. GET SP(PKG_SCP0098.P_GET_CAPA_MOBILITYIT)는 from/to 를 SUBSTR(...,1,6)=YYYYMM
+                으로만 쓰므로 SP·PROC_M·스토어 계약 불변. PeriodField 는 자체 Grid 를 렌더(gridSize=3). */}
+            <PeriodField
+              gridSize={3}
+              mode='month'
+              label={t(LBL.PERIOD, 'Period')}
+              start={sc.startYyyymmdd.slice(0, 6)}
+              end={sc.endYyyymmdd.slice(0, 6)}
+              onChange={(start, end) =>
+                setSearchParams({
+                  startYyyymmdd: start ? `${start}01` : '',
+                  endYyyymmdd: end ? monthEnd(end) : '',
+                })
+              }
+            />
           </>
         }
       />

@@ -40,6 +40,9 @@ interface SingleProps<T> extends Omit<DropdownFieldProps<T>, 'multiple' | 'onCha
   allOption?: boolean;
   // 목록 정렬. 안 주면 서버 순서 그대로. 위 sortOptionsBy 주석 참조.
   sortBy?: DropdownSortKey;
+  // 센티널 값(`''`/`'-'`/`'--'`) 옵션 제외를 끈다(아래 dropSentinelOptions 주석 참조).
+  //   기본 false — '-' 등이 실제 유효 코드인 콤보(예: SCP0104 Line Type)에서만 true 로 켠다.
+  keepSentinelValues?: boolean;
   value?: string;
   onChange?: (event: React.SyntheticEvent, value: string) => void;
 }
@@ -50,6 +53,9 @@ interface MultipleProps<T> extends Omit<DropdownFieldProps<T>, 'multiple' | 'onC
   allOption?: boolean;
   // 목록 정렬. 안 주면 서버 순서 그대로. 위 sortOptionsBy 주석 참조.
   sortBy?: DropdownSortKey;
+  // 센티널 값(`''`/`'-'`/`'--'`) 옵션 제외를 끈다(아래 dropSentinelOptions 주석 참조).
+  //   기본 false — '-' 등이 실제 유효 코드인 콤보(예: SCP0104 Line Type)에서만 true 로 켠다.
+  keepSentinelValues?: boolean;
   value?: string;
   onChange?: (event: React.SyntheticEvent, value: string) => void;
 }
@@ -257,6 +263,7 @@ export const CustomDropdown = ({
   limitTags = 1,
   allOption,
   sortBy,
+  keepSentinelValues,
   className,
   ...props
 }: SingleProps<DropdownOption> | MultipleProps<DropdownOption>) => {
@@ -296,6 +303,11 @@ export const CustomDropdown = ({
   const [popperMinWidth, setPopperMinWidth] = useState<number>();
   const measureClass = `dd-measure-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
 
+  // 단일 선택 콤보 remount 키 — 닫힐 때 inner 필드를 다시 그려 표시 텍스트를 controlled value 로
+  //   재조정한다(아래 onClose 주석 참조). 멀티 선택은 표시를 칩(selectedOptions)으로 직접 그리므로
+  //   이 문제에서 자유로워 건드리지 않는다.
+  const [singleRemountKey, setSingleRemountKey] = useState(0);
+
   const closeList = useCallback(() => {
     if (openList?.id === listId.current) openList = null;
     setListSearch('');
@@ -325,7 +337,7 @@ export const CustomDropdown = ({
   //   (①② 는 변화가 없으면 원본 배열 참조를 그대로 돌려주어 불필요한 리렌더를 만들지 않는다.
   //    ③ 은 sortBy 를 준 화면에서만 돈다 - 기본은 서버 순서라 안 준 화면은 비용이 0이다)
   const options = sortOptionsBy(
-    dedupeOptions(dropSentinelOptions(rawOptions, splitValueSet)),
+    dedupeOptions(keepSentinelValues ? rawOptions : dropSentinelOptions(rawOptions, splitValueSet)),
     sortBy
   );
 
@@ -582,6 +594,8 @@ export const CustomDropdown = ({
       onBlurCapture={handleBlurCapture}
     >
       <DropdownField<DropdownOption>
+        // 단일 선택: 닫힘마다 remount(아래 onClose). 멀티는 key 없이 안정 유지.
+        key={props.multiple ? undefined : singleRemountKey}
         className={clsx(styles.customDropdown, className)}
         disableListWrap
         options={optionsWithAll}
@@ -752,6 +766,12 @@ export const CustomDropdown = ({
         onClose={(event, reason) => {
           setPopupOpen(false);
           if (isSearchControlled) closeList();
+          // 단일 선택: 닫힐 때 inner 필드를 remount 해 표시 텍스트를 controlled value 로 되돌린다.
+          //   MUI 는 옵션을 고르는 즉시 내부 inputValue 를 낙관적으로 그 값으로 바꾼다. 그런데 onChange 가
+          //   비동기로 값을 확정하는 화면(예: dirty-confirm 후에만 반영)에서 사용자가 취소하면 value prop 이
+          //   그대로라, MUI 는 표시를 되돌리지 않고 고른 값에 멈춘다 → 표시와 store(조회값)가 어긋난다.
+          //   닫힘 시 remount 로 항상 value 기준 표시를 보장한다(전역 안전망, 화면별 보정 불필요).
+          else setSingleRemountKey(k => k + 1);
           props.onClose?.(event, reason);
         }}
         // 필수: props 스프레드 뒤에 둔다 — 호출부가 sx 를 넘기더라도 칩 폭 규칙이 유지되고,

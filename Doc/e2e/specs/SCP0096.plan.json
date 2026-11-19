@@ -1,12 +1,13 @@
 {
   "id": "SCP0096",
   "mode": "admin",
-  "modeSource": "users.json screens",
+  "modeSource": "--mode",
   "menuId": "SCP0096",
   "divCascade": [],
   "divLabels": [
     "Div",
-    "Division"
+    "Division",
+    "部门"
   ],
   "condOrder": [
     "Div",
@@ -65,7 +66,8 @@
       "catalog": "",
       "labels": [
         "Div",
-        "Division"
+        "Division",
+        "部门"
       ],
       "excluded": false,
       "excludedWhy": ""
@@ -319,8 +321,8 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "EDIT",
-        "SEARCH",
-        "SAVE"
+        "SAVE",
+        "SEARCH"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -389,28 +391,28 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "EDIT",
-      "SEARCH",
-      "SAVE"
+      "SAVE",
+      "SEARCH"
     ],
     "SCM PI Admin": [
+      "EDIT",
       "SAVE",
-      "SEARCH",
-      "EDIT"
+      "SEARCH"
     ],
     "SCM Viewer": [
       "SAVE",
       "SEARCH"
     ],
     "SCP Planner": [
-      "SEARCH",
       "SAVE",
-      "EDIT"
+      "EDIT",
+      "SEARCH"
     ]
   },
   "menuBtnCodes": [
     "EDIT",
-    "SEARCH",
-    "SAVE"
+    "SAVE",
+    "SEARCH"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

@@ -21,6 +21,37 @@ export interface SaveResult {
   message?: string;
 }
 
+// 커서 이름 · 칸 이름은 서버가 대소문자를 바꿔 내려줄 수 있어 대소문자 구분 없이 찾는다(SCP0128 저장 판정과 같음).
+const pickIgnoreCase = (obj: unknown, ...keys: string[]): unknown => {
+  if (!obj || typeof obj !== 'object') return undefined;
+  const entries = Object.entries(obj as Record<string, unknown>);
+  for (const key of keys) {
+    const hit = entries.find(([k]) => k.toUpperCase() === key.toUpperCase());
+    if (hit) return hit[1];
+  }
+  return undefined;
+};
+
+const firstRow = (cursor: unknown): unknown => (Array.isArray(cursor) ? cursor[0] : undefined);
+
+// 저장 프로그램의 업무 거부 판정 — 서버는 프로그램 실행만 끝나면 응답 code 를 성공으로 쓰므로 결과 커서를 본다
+//   (갭분석 C-20). O_RC1 RESULT_CODE 'S' 아님 또는 O_RESULT_CURSOR RESULT_CODE '0' 아님 = 거부.
+//   AS-IS .cs:862~875 : 결과 S 가 아니면 저장 프로그램 문구를 표시하고 재조회하지 않는다.
+const rejectedMessage = (result: unknown): string | undefined => {
+  const head = firstRow(pickIgnoreCase(result, 'O_RESULT_CURSOR'));
+  const headCode = safeString(pickIgnoreCase(head, 'RESULT_CODE')).trim();
+  const rc1 = firstRow(pickIgnoreCase(result, 'O_RC1'));
+  const rc1Code = safeString(pickIgnoreCase(rc1, 'RESULT_CODE')).trim();
+  if ((headCode === '' || headCode === '0') && (rc1Code === '' || rc1Code === 'S')) {
+    return undefined;
+  }
+  const message =
+    safeString(pickIgnoreCase(head, 'RESULT_MESSAGE')).trim() ||
+    safeString(pickIgnoreCase(rc1, 'RESULT_CNT')).trim();
+  // 사용자 정의 오류 머리(ORA-20xxx: )는 떼어 업무 문구만 보인다. 그 밖의 오류는 그대로 둔다.
+  return message.replace(/^ORA-20\d{3}:\s*/, '').trim() || 'Error';
+};
+
 // SAVE SP pre-image 복합키 4컬럼(SP 본문 UPDATE/DELETE WHERE 실측 .body:520~523) ↔ 그리드 UPPERCASE.
 //   SCP_OPMZ_CONSTRAINT_OF_SHIPMENT_QTY 열쇠 = DIVISION_ID/OPMZ_PLAN_GR_ID/MDL_GR_NM/ITEM_ID.
 //   WHERE 는 NVL(pre, C_NOMATCH) 로 self 를 집으므로 신규행(I)은 pre 를 비워 보낸다.
@@ -120,6 +151,8 @@ export const submitConstraintOfShipmentQtySave = async <T extends WijmoRowItem>(
       const reason = (res.data as { message?: string })?.message?.trim();
       return { ok: false, message: reason };
     }
+    const rejected = rejectedMessage((res.data as { result?: unknown })?.result);
+    if (rejected) return { ok: false, message: rejected };
     return { ok: true };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : undefined };

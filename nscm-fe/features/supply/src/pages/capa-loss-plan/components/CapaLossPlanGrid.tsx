@@ -440,8 +440,9 @@ export const CapaLossPlanGrid = ({
       comboParams={comboParams}
       numberRules={numberRules}
       sheetName={sheetName}
-      // 3단 헤더 총높이 48px — 컬럼 정의의 height 가 아니라 이 prop 이 단일 출처다(hook #93).
-      headerRowHeight={HEADER_ROW_HEIGHT}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체 applyHeaderHeight 의 동적 tier 보정이 충돌해 무한
+      //   invalidate 가 됐다. 헤더 총높이는 위 applyHeaderHeight 가 tier 수로 균등배분해 박는 단일 출처다.
       allowMerging={allowMerging}
       frozenColumns={frozenColumns}
     />

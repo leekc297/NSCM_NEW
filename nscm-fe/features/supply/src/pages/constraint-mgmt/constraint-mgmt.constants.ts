@@ -43,6 +43,8 @@ export const LBL = {
   SEARCH: 'LBL00112',
   CONFIRM: 'LBL00359',
   CANCEL: 'LBL00107',
+  /** Bulk Insert 팝업 "추가 Row 수" 라벨 — SCM_ADM_MSG_M 등록 완료(KO/EN/CN). */
+  BULK_INSERT_ROW_COUNT: 'LBL01276',
 } as const;
 
 /**
@@ -79,6 +81,11 @@ export const MSG = {
   UNSAVED_DATA: 'MSG01059',
    /** 건수 입력이 1~1000 정수가 아닐 때. "{0}" 자리에 입력값이 들어간다. */
   INVALID_NUMBER: 'MSG01082',
+  /**
+   * Bulk Insert 팝업 안내 — "직접 입력, 최대 {0}건 가능". "{0}" 자리에 BULK_INSERT_MAX.
+   * SCM_ADM_MSG_M 등록 완료(KO/EN/CN).
+   */
+  BULK_INSERT_NOTICE: 'MSG01504',
 } as const;
 
 /**

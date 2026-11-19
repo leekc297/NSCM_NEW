@@ -16,6 +16,7 @@ import {
 import type { ModelGroupRow } from '../sales-price-model-group.types';
 import { cellOf, modelGroupsOf, sameBundle } from '../utils/sales-price-model-group.util';
 
+import { ExchangeRateModal } from './modals/ExchangeRateModal';
 import { PriceBatchInputModal } from './modals/PriceBatchInputModal';
 
 // 팝업마다 열림 상태를 따로 둔다(POP-10).
@@ -27,6 +28,7 @@ interface ModalSwitch {
 interface Props {
   columnSetting: ModalSwitch;
   priceBatch: ModalSwitch;
+  exchangeRate: ModalSwitch;
   projectCell: ModalSwitch;
   itemCell: ModalSwitch;
   popupRow: ModelGroupRow | null;
@@ -34,6 +36,7 @@ interface Props {
   editTrackerRef: MutableRefObject<EditTracker<ModelGroupRow> | undefined>;
   divisionId: string;
   mainFromYyyymmdd: string;
+  mainToYyyymmdd: string;
   endCustomers: string[];
   staticColumns: RawFlexGridColumnConfig[];
   originalStaticColumns: RawFlexGridColumnConfig[];
@@ -57,10 +60,11 @@ const toLayoutRows = (cols: RawFlexGridColumnConfig[]): ColumnLayoutRow[] =>
     };
   });
 
-// 화면 팝업 모음 — Column Setting(공용), 셀 팝업 Project(COM0005) · Model Group(COM0008), Price Batch Input(전용).
+// 화면 팝업 모음 — Column Setting(공용), 셀 팝업 Project(COM0005) · Model Group(COM0008), Price Batch Input · Exchange Rate(전용).
 export const SalesPriceModelGroupModals = ({
   columnSetting,
   priceBatch,
+  exchangeRate,
   projectCell,
   itemCell,
   popupRow,
@@ -68,6 +72,7 @@ export const SalesPriceModelGroupModals = ({
   editTrackerRef,
   divisionId,
   mainFromYyyymmdd,
+  mainToYyyymmdd,
   endCustomers,
   staticColumns,
   originalStaticColumns,
@@ -75,6 +80,12 @@ export const SalesPriceModelGroupModals = ({
   onBatchSaved,
 }: Props) => {
   const { t } = useTranslation();
+
+  // Exchange Rate 팝업 기본 기간 = 메인 조회 기간의 연월 (원천 DMF0020 과 같음).
+  const exchangePeriod = useMemo(
+    () => ({ start: mainFromYyyymmdd.slice(0, 6), end: mainToYyyymmdd.slice(0, 6) }),
+    [mainFromYyyymmdd, mainToYyyymmdd]
+  );
 
   // 셀 팝업 선택 → 같은 신규 묶음 3행에 값을 넣는다(POP-11: 칸마다 storeChange 후 대입, 신규 행만).
   const applyToBundle = (values: Record<string, string>) => {
@@ -172,6 +183,13 @@ export const SalesPriceModelGroupModals = ({
         mainFromYyyymmdd={mainFromYyyymmdd}
         endCustomers={endCustomers}
         onSaved={onBatchSaved}
+      />
+
+      <ExchangeRateModal
+        open={exchangeRate.open}
+        modalClose={exchangeRate.close}
+        divisionId={divisionId}
+        defaultPeriod={exchangePeriod}
       />
     </>
   );

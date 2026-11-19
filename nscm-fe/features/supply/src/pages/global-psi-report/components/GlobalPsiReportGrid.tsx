@@ -290,7 +290,13 @@ export const GlobalPsiReportGrid = ({
     const applyHeaderHeight = () => {
       const hdrRows = g.columnHeaders?.rows;
       if (!hdrRows || hdrRows.length === 0) return;
-      const target = HEADER_TOTAL_HEIGHT / hdrRows.length;
+      // 필수(무한 렌더 루프 방지): target 을 정수로 반올림한다. 48/헤더단수가 정수로 안 떨어지면
+      //   (예: 단수 5 → 9.6) 아래 `Math.round(height) !== target` 가 영원히 true 가 되어 — height 는
+      //   9.6 으로 설정되는데 비교는 Math.round(9.6)=10 과 하므로 — 매 updatedLayout 마다 changed=true
+      //   → g.invalidate(true) 재발사 → refresh 가 중첩돼 셀 DOM 이 정리 전에 쌓이고(DOM 노드 폭증)
+      //   CPU 가 100% 로 치솟아 스크롤 중 브라우저가 멈춘다(사용자 신고 2026-11-18, SCP0100 대형 피벗).
+      //   반올림하면 설정값(정수)과 비교값(Math.round=동일 정수)이 일치해 1~2회 내 수렴한다.
+      const target = Math.round(HEADER_TOTAL_HEIGHT / hdrRows.length);
       let changed = false;
       for (let i = 0; i < hdrRows.length; i += 1) {
         if (Math.round(hdrRows[i].height ?? hdrRows.defaultSize) !== target) {
@@ -325,8 +331,13 @@ export const GlobalPsiReportGrid = ({
       staticColumns={fixedColumns}
       dynamicColumns={pivotColumns}
       allowMerging={AllowMerging.All}
-      // 초기 예측값(pivot 있으면 3단 16, 없으면 1단 48). 실제 tier 수 보정은 applyHeaderHeight effect 가 담당.
-      headerRowHeight={pivotColumns.length > 0 ? HEADER_TOTAL_HEIGHT / 3 : HEADER_TOTAL_HEIGHT}
+      // headerRowHeight 를 넘기지 않는다(사용자 신고 2026-11-18 조회만 해도 CPU 100%·DOM 폭증·멈춤 교정).
+      //   공용 DataGrid 는 updatedLayout 마다 이 정적 prop 값으로 headerRows.defaultSize 를 되돌리는데,
+      //   아래 applyHeaderHeight 는 '실제 렌더된 tier 수'(48/hdrRows.length)로 설정한다. 실제 헤더가 3단이
+      //   아니면(예: MONTHLY 2단=24) 정적 prop(48/3=16)과 서로 달라, 매 updatedLayout 마다 defaultSize 를
+      //   16 ↔ 24 로 번갈아 엎어쓰며 g.invalidate 가 끝없이 재발사되는 무한 렌더 루프가 된다(헤더셀 재생성으로
+      //   DOM 노드 폭증 + CPU 100%). 동적 tier 보정은 applyHeaderHeight 가 단독으로 맡아 수렴시키므로,
+      //   정적 headerRowHeight 는 넘기지 않아 충돌 자체를 없앤다(공용 핸들러는 h==null 이면 건너뛴다).
       gotFocus={onFocus}
     />
   );

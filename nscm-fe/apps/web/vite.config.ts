@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -19,17 +19,34 @@ import type { Plugin as EsbuildPlugin } from 'esbuild';
  * locale 데이터는 `apps/web/src/dayjs-setup.ts` 에서 정적 import 로 사전 등록되어 있어
  * 동적 로딩이 불필요.
  */
+const DAYJS_LOCALE_DYNAMIC_IMPORT = /import\(`dayjs\/locale\/\$\{[^}]+\}`\)/g;
+const LGES_LIB_MAIN = /[\\/]@lges[\\/]design-system[\\/]lib-main\.mjs$/;
+
+// [dev] esbuild 사전번들(optimizeDeps) 경로 — 동적 locale import 를 Promise.resolve() 로 치환.
 const lgesDayjsLocalePatch: EsbuildPlugin = {
   name: 'lges-dayjs-locale-patch',
   setup(build) {
-    build.onLoad({ filter: /[\\/]@lges[\\/]design-system[\\/]lib-main\.mjs$/ }, async args => {
+    build.onLoad({ filter: LGES_LIB_MAIN }, async args => {
       const source = await fsPromises.readFile(args.path, 'utf8');
-      const patched = source.replace(
-        /import\(`dayjs\/locale\/\$\{[^}]+\}`\)/g,
-        'Promise.resolve()'
-      );
+      const patched = source.replace(DAYJS_LOCALE_DYNAMIC_IMPORT, 'Promise.resolve()');
       return { contents: patched, loader: 'js' };
     });
+  },
+};
+
+// [build] 운영 빌드(Rollup) 경로 — 위 esbuild 플러그인은 optimizeDeps(dev 사전번들)에만 적용돼
+//   `vite build` 에는 반영되지 않는다. 그래서 운영 번들에서는 패치가 빠져 `@lges/design-system`
+//   DatePicker 의 `import(\`dayjs/locale/${locale}\`)` 가 그대로 남아 브라우저가 bare specifier
+//   `dayjs/locale/ko` 를 resolve 못해 `Failed to resolve module specifier` + 연쇄 TypeError
+//   (startTime)가 났다(운영 전용 재발, 2026-11-17). Vite transform 훅(apply:'build')으로 동일
+//   치환을 운영 빌드에도 적용한다. locale 데이터는 dayjs-setup.ts 정적 import 가 이미 등록한다.
+const lgesDayjsLocaleBuildPatch: Plugin = {
+  name: 'lges-dayjs-locale-patch-build',
+  apply: 'build',
+  transform(code, id) {
+    if (!LGES_LIB_MAIN.test(id)) return null;
+    const patched = code.replace(DAYJS_LOCALE_DYNAMIC_IMPORT, 'Promise.resolve()');
+    return patched === code ? null : { code: patched, map: null };
   },
 };
 
@@ -42,6 +59,7 @@ export default ({ mode }: { mode: string }) => {
 
   return defineConfig({
     plugins: [
+      lgesDayjsLocaleBuildPatch,
       tsconfigPaths(),
       react(),
       svgr(),

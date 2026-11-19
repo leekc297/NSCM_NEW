@@ -16,6 +16,7 @@ import {
   normalizeDynamicColumns,
   hasRequiredMark,
   mapRawColumnsToWijmoColumns,
+  resolveRowComboCode,
   rowParamKey,
   rowParamValues,
   stripRequiredMark,
@@ -560,6 +561,105 @@ describe('재조회형 상위 콤보 변경 시 후보 밖 하위 셀 (findStale
     expect(
       findStaleRowParamComboCells(insertCols, base, insert, insertRow, 'END_CUSTOMER').stale
     ).toEqual([{ binding: SITE, previousValue: 'S1' }]);
+  });
+});
+
+describe('동명이코드 커밋 보정 (resolveRowComboCode)', () => {
+  // 필터형(attribute2) — Division 맥락만 달라 같은 'Site X' 라벨이 다른 코드로 겹친다.
+  //   전역 첫 'Site X' = S_81(div81). div40 행에서 'Site X' 를 고르면 Wijmo 는 전역 첫 코드
+  //   S_81 을 넣는다 — 그 행 후보(S_40)로 되맞춰야 한다.
+  const DIV_SITES: ComboResponse[] = [
+    { CODE: 'S_81', NAME: 'Site X', DIVISION_ID: '81' },
+    { CODE: 'S_40', NAME: 'Site X', DIVISION_ID: '40' },
+    { CODE: 'S_40B', NAME: 'Site Y', DIVISION_ID: '40' },
+  ] as unknown as ComboResponse[];
+  const filterCol = col({
+    colNm: 'SITE_ID',
+    cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+    cellCboDataTp: 'Site',
+    dataMap: DIV_SITES,
+    attribute2: 'DIVISION_ID:DIVISION_ID',
+  });
+
+  it('커밋 코드가 행 후보 밖이고 동명 후보가 1건이면 그 코드로 바로잡는다', () => {
+    const row: WijmoRowItem = { DIVISION_ID: '40', SITE_ID: 'S_81' };
+    expect(resolveRowComboCode(filterCol, row, 'S_81')).toBe('S_40');
+  });
+
+  it('커밋 코드가 이미 그 행 후보 안이면 손대지 않는다', () => {
+    const row: WijmoRowItem = { DIVISION_ID: '40', SITE_ID: 'S_40' };
+    expect(resolveRowComboCode(filterCol, row, 'S_40')).toBeUndefined();
+  });
+
+  it('행 안에서도 동명 후보가 둘 이상이면 판정 불가 — 손대지 않는다', () => {
+    const DUP: ComboResponse[] = [
+      { CODE: 'A0', NAME: 'Same', DIVISION_ID: '81' },
+      { CODE: 'A1', NAME: 'Same', DIVISION_ID: '40' },
+      { CODE: 'A2', NAME: 'Same', DIVISION_ID: '40' },
+    ] as unknown as ComboResponse[];
+    const dupCol = col({
+      colNm: 'SITE_ID',
+      cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+      cellCboDataTp: 'Site',
+      dataMap: DUP,
+      attribute2: 'DIVISION_ID:DIVISION_ID',
+    });
+    const row: WijmoRowItem = { DIVISION_ID: '40', SITE_ID: 'A0' };
+    expect(resolveRowComboCode(dupCol, row, 'A0')).toBeUndefined();
+  });
+
+  it('좁힘 조건이 없는 콤보는 커밋 코드가 전역 후보라 손대지 않는다', () => {
+    const plainCol = col({
+      colNm: 'SITE_ID',
+      cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+      cellCboDataTp: 'Site',
+      dataMap: DIV_SITES,
+    });
+    const row: WijmoRowItem = { DIVISION_ID: '40', SITE_ID: 'S_81' };
+    expect(resolveRowComboCode(plainCol, row, 'S_81')).toBeUndefined();
+  });
+
+  it('빈 커밋값은 지움 의도이므로 손대지 않는다', () => {
+    const row: WijmoRowItem = { DIVISION_ID: '40', SITE_ID: '' };
+    expect(resolveRowComboCode(filterCol, row, '')).toBeUndefined();
+  });
+
+  it('콤보 컬럼이 아니면 손대지 않는다', () => {
+    const textCol = col({ colNm: 'SITE_ID', cellCtrlObjTpCd: CELL_CONTROL_TYPE.TEXT });
+    const row: WijmoRowItem = { DIVISION_ID: '40', SITE_ID: 'S_81' };
+    expect(resolveRowComboCode(textCol, row, 'S_81')).toBeUndefined();
+  });
+
+  // 재조회형(PARAM10='D') — 전역 메타는 S2_GLOBAL, 그 행 재조회 후보는 S2_C2(둘 다 'Site 2').
+  const SITE = 'SCM_SITE_ID';
+  const bindings = { DIVISION_ID: 'divisionId', END_CUSTOMER: 'endCustomer' };
+  const keyOf = (row: WijmoRowItem) => rowParamKey(bindings, row);
+  const rowC2: WijmoRowItem = { DIVISION_ID: '40', END_CUSTOMER: 'C2', [SITE]: 'S2_GLOBAL' };
+  const rowParamCol = col({
+    colNm: SITE,
+    cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+    cellCboDataTp: 'SalesSite',
+    attribute10: 'D',
+    attribute2: 'DIVISION_ID:divisionId,END_CUSTOMER:endCustomer',
+    dataMap: [{ CODE: 'S2_GLOBAL', NAME: 'Site 2' }] as unknown as ComboResponse[],
+    rowParamRows: { [keyOf(rowC2)]: [{ CODE: 'S2_C2', NAME: 'Site 2' }] as ComboResponse[] },
+  });
+
+  it('재조회형: 커밋 코드가 전역 코드면 그 행 재조회 후보 코드로 바로잡는다', () => {
+    expect(resolveRowComboCode(rowParamCol, rowC2, 'S2_GLOBAL')).toBe('S2_C2');
+  });
+
+  it('재조회형: 후보가 아직 안 실렸으면(미도착) 손대지 않는다', () => {
+    const notArrived = col({
+      colNm: SITE,
+      cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+      cellCboDataTp: 'SalesSite',
+      attribute10: 'D',
+      attribute2: 'DIVISION_ID:divisionId,END_CUSTOMER:endCustomer',
+      dataMap: [{ CODE: 'S2_GLOBAL', NAME: 'Site 2' }] as unknown as ComboResponse[],
+      rowParamRows: {},
+    });
+    expect(resolveRowComboCode(notArrived, rowC2, 'S2_GLOBAL')).toBeUndefined();
   });
 });
 

@@ -1,0 +1,166 @@
+{
+ "screen": "SSP0020",
+ "made": "2026-11-18 15:41",
+ "checklist": {
+  "version": 55,
+  "total": 1468,
+  "totals": {
+   "PASS": 479,
+   "FAIL": 6,
+   "판정필요": 0,
+   "미검증": 0,
+   "해당없음": 983
+  },
+  "axes": [
+   {
+    "axis": "1.디자인·다국어",
+    "total": 237,
+    "PASS": 104,
+    "FAIL": 1,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 132
+   },
+   {
+    "axis": "2.AS-IS 로직",
+    "total": 105,
+    "PASS": 16,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 89
+   },
+   {
+    "axis": "3.SMOKE",
+    "total": 503,
+    "PASS": 144,
+    "FAIL": 2,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 357
+   },
+   {
+    "axis": "4.CRUD",
+    "total": 466,
+    "PASS": 127,
+    "FAIL": 3,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 336
+   },
+   {
+    "axis": "5.권한별 CRUD",
+    "total": 39,
+    "PASS": 19,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 20
+   },
+   {
+    "axis": "분류 없음",
+    "total": 118,
+    "PASS": 69,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 49
+   }
+  ],
+  "action": [
+   [
+    "V-3e374103",
+    "E4",
+    "MSG00219"
+   ],
+   [
+    "V-9e99f124",
+    "H11",
+    "SSP0020 저장 중 로딩"
+   ]
+  ],
+  "review": [],
+  "ledger": {
+   "미검증": 350,
+   "PASS": 45
+  },
+  "unverified_sheet_rows": 401
+ },
+ "fe_mapping": {
+  "total": 7,
+  "by_state": {
+   "해당없음": 5,
+   "구현": 2
+  }
+ },
+ "asis_actions": {
+  "total": 198,
+  "blank_state": 194,
+  "meaning_needed": 1,
+  "by_state": {
+   "빈칸": 194,
+   "메시지 표시(확인창이면 결과로 분기)": 2,
+   "처리 중단/반환": 2
+  }
+ },
+ "counts": {
+  "menu_id": "SSP0020",
+  "unverified_sheet": 401,
+  "unverified_by_reason": {
+   "상속생략": 392,
+   "대상불명": 9
+  },
+  "direct_unmeasured": 371,
+  "source": "Doc/UI_CHECKLIST/SSP0020_Delegate_CheckList_v55.xlsx 미검증 시트(2026-11-18 VM 완료 정의용 1회 집계)"
+ },
+ "ledger": {
+  "menu_id": "SSP0020",
+  "generated": "2026-11-18T09:53:36",
+  "instances": 224,
+  "done": 219,
+  "open": 5,
+  "by_type": {
+   "W3": 5
+  },
+  "by_owner": {
+   "FE": 1,
+   "DB 객체": 2,
+   "화면 FE": 2
+  },
+  "suspect_not_implemented": 0,
+  "by_check": {
+   "G4": {
+    "W3": 1
+   },
+   "E4": {
+    "W3": 2
+   },
+   "X-ROW": {
+    "W3": 2
+   }
+  }
+ },
+ "name": "Delegate",
+ "sources": [
+  {
+   "file": "Doc/UI_CHECKLIST/SSP0020_Delegate_CheckList_v55.xlsx",
+   "time": "2026-11-18 11:52"
+  },
+  {
+   "file": "nscm-fe/features/shipping/src/pages/delegate/__asis-mapping__.md",
+   "time": "2026-11-18 13:19"
+  },
+  {
+   "file": "Doc/asisfacts/screens/SSP0020/__asis-actions__.md",
+   "time": "2026-10-23 11:29"
+  },
+  {
+   "file": "Doc/verify/SSP0020/checklist_counts.json",
+   "time": "2026-11-18 13:20"
+  },
+  {
+   "file": "Doc/verify/SSP0020/work_ledger_summary.json",
+   "time": "2026-11-18 09:53"
+  }
+ ]
+}

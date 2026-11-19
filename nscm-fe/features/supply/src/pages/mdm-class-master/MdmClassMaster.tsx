@@ -60,6 +60,9 @@ export const MdmClassMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
+    // SP 가 저장 실패를 결과 커서 RESULT_CODE(1)에만 담아 돌려주므로 그 커서를 들여다봐 실패면
+    //   서버 메시지 Alert·재조회 생략(false-success 방지, 테스트 No.1).
+    checkResultCode: true,
   });
 
   const rows = useMemo<MainRow[]>(() => data?.o_rc1 ?? [], [data]);

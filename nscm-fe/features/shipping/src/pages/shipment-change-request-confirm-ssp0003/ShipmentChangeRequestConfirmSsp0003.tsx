@@ -596,10 +596,13 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
 
       {/* 상(마스터 그리드) / 하(Request Confirm Detail 폼 + 디테일 그리드) 2분할 — 경계를 드래그해 상하 크기 조절.
           자매 SSP0200/SSP0201 과 같은 PanelGroup 방식이다. 폼은 하단 패널 안에서 자연 높이로 고정되고
-          남는 높이를 디테일 그리드가 갖으므로, 스플리터는 사실상 두 그리드만 늘이고 줄인다. */}
+          남는 높이를 디테일 그리드가 갖으므로, 스플리터는 사실상 두 그리드만 늘이고 줄인다.
+          상단 그리드를 하단 그리드보다 작게 — SSP0200 과 동일하게 상단만 px(200px) 로 작게 고정하고
+          하단은 나머지를 전부 가져간다(사용자 지시 2026-11-13). % 비율이면 화면 높이에 따라 상단이 커 보여
+          체감이 어긋나므로 px 고정으로 맞춘다. */}
       <div className={styles.splitWrapper}>
         <PanelGroup className={styles.panelGroup} orientation='vertical'>
-          <Panel defaultSize='45%' minSize='15%'>
+          <Panel defaultSize='220px' minSize='15%'>
             <div className={styles.mainPane}>
               <ShipmentChangeRequestConfirmSsp0003MainGrid
                 rows={mainRows}
@@ -614,7 +617,8 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
 
           <PanelSeparator className={styles.splitBar} />
 
-          <Panel defaultSize='55%' minSize='30%'>
+          {/* 하단(폼 + 디테일 그리드) — defaultSize 미지정 → 상단(px 고정)을 뺀 나머지를 전부 가져간다. */}
+          <Panel minSize='30%'>
             <div className={styles.detailPane}>
               <div className={styles.detailForm}>
                 <ConfirmDetailPanel

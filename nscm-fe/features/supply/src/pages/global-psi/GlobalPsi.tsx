@@ -8,14 +8,18 @@ import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { GlobalPsiForm } from './components/GlobalPsiForm';
 import { GlobalPsiGrid } from './components/GlobalPsiGrid';
 import { GlobalPsiModals } from './components/GlobalPsiModals';
 import {
+  COMBO,
   CONDITION_NOT_SAVED,
+  DIVISION_EE_EXCLUDE,
+  DIVISION_EXCLUDE_CODE,
   LBL,
   MENU_ID,
   MSG,
@@ -47,6 +51,18 @@ export const GlobalPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const sc = useGlobalPsiStore(s => s.searchCondition);
   const set = useGlobalPsiStore(s => s.setSearchCondition);
+
+  // Sum 체크박스(SubTitle afterCount)의 비활성 조건 — 권한 Division 0건(EE·40 제외 후)이면 끈다. 조회조건 폼
+  //   GlobalPsiForm 의 noDivisionAuth 를 그대로 재현한다(design 02 §2.2). useTabComboQueries 는 tab 캐시 공유라
+  //   폼과 같은 Division 콤보 결과를 쓴다(추가 네트워크 없음).
+  const [divisions] = useTabComboQueries({ filters: [COMBO.DIVISION] });
+  const noDivisionAuth =
+    divisions !== undefined &&
+    (divisions ?? []).filter(
+      r =>
+        String(r.ATTRIBUTE3 ?? '') !== DIVISION_EE_EXCLUDE &&
+        String(r.CODE ?? '') !== DIVISION_EXCLUDE_CODE
+    ).length === 0;
   const filters = useGlobalPsiStore(s => s.filters);
   const setFilter = useGlobalPsiStore(s => s.setFilter);
   const clearFilters = useGlobalPsiStore(s => s.clearFilters);
@@ -230,6 +246,16 @@ export const GlobalPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={savedParam}
         customButtons={customButtons}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        //   권한 Division 0건이면 비활성(조회조건 폼 noDivisionAuth 파리티 유지).
+        afterCount={
+          <Checkbox
+            disabled={noDivisionAuth}
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={checked => set({ chkSum: checked })}
+          />
+        }
       />
 
       <GlobalPsiGrid

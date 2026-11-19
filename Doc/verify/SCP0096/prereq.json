@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0096",
  "asis_id": "SCP0096",
- "generated": "2026-10-31 05:27:52",
+ "generated": "2026-11-19 09:26:08",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "5.4시간 전 export(기준 12시간)"
+   "evidence": "0.5시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -51,7 +51,7 @@
    "what": "골든 케이스(golden_cases.csv)",
    "status": "OK",
    "producer": "tools/DbConn/gen_golden_cases.py",
-   "evidence": "3건 있음 · TO-BE PROC 미매칭 1건(SCP0096:DM0003_GET_BUCKET_TYPE_CODE) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
+   "evidence": "4건 있음 · TO-BE PROC 미매칭 1건(SCP0096:DM0003_GET_BUCKET_TYPE_CODE) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
   },
   {
    "key": "e2e_plan",
@@ -69,10 +69,10 @@
   },
   {
    "key": "smoke",
-   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
    "status": "OK",
    "producer": "tools/E2E/run-e2e.cmd smoke",
-   "evidence": "3건 · 마지막 smoke 10-31 02:27 (FE 소스보다 최신)"
+   "evidence": "3건 · 마지막 smoke 11-19 08:57 (FE 소스·smoke 엔진보다 최신)"
   }
  ]
 }

@@ -1,6 +1,33 @@
 {
- "at": "2026-10-30T20:37:36.858Z",
+ "at": "2026-11-19T00:33:29.666Z",
  "search": {
+  "Day of the week": {
+   "label": "Day of the week",
+   "opts": [
+    "EveryDay",
+    "SelectDay",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+   ],
+   "multi": false,
+   "sel": [],
+   "modal": "Bulk Update"
+  },
+  "Input Value": {
+   "label": "Input Value",
+   "opts": [
+    "Y",
+    "N"
+   ],
+   "multi": false,
+   "sel": [],
+   "modal": "Bulk Update"
+  },
   "Div": {
    "label": "Div",
    "opts": [
@@ -17,10 +44,45 @@
    "sel": [
     "81 Automotive Battery"
    ]
+  },
+  "Plant Site": {
+   "label": "Plant Site",
+   "opts": [
+    "SELECT ALL",
+    "CS-ENERTECH_PACK",
+    "TEST"
+   ],
+   "multi": true,
+   "sel": []
   }
  },
  "grid": {},
  "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantByDivisionOperOsp3_SCP\",\"divisionId\":\"'81'\",\"mnuId\":\"SCP0096\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "OPERATION_ID",
+    "OSP_YN",
+    "NAME",
+    "OPERATION_GROUP"
+   ],
+   "rows": [
+    {
+     "c": "AU000062_81-P",
+     "v": "TEST"
+    },
+    {
+     "c": "KR02239900_81-P",
+     "v": "CS-ENERTECH_PACK"
+    }
+   ],
+   "user": "minyonglee1"
+  },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"Division_SCP_NoEE\",\"mnuId\":\"SCP0096\"}",
@@ -79,27 +141,8 @@
      "c": "81_HG",
      "v": "81_HG Automotive Battery(HG)"
     }
-   ]
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"PlantByDivisionOperOsp3_SCP\",\"divisionId\":\"'81'\",\"mnuId\":\"SCP0096\"}",
-   "status": 200,
-   "n": 1,
-   "keys": [
-    "CODE",
-    "DIVISION_ID",
-    "OPERATION_ID",
-    "OSP_YN",
-    "NAME",
-    "OPERATION_GROUP"
    ],
-   "rows": [
-    {
-     "c": "KR02239900_81-P",
-     "v": "CS-ENERTECH_PACK"
-    }
-   ]
+   "user": "minyonglee1"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -119,7 +162,8 @@
      "c": "N",
      "v": "N"
     }
-   ]
+   ],
+   "user": "minyonglee1"
   }
  ]
 }

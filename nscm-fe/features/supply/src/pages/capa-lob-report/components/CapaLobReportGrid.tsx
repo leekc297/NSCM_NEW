@@ -175,8 +175,9 @@ export const CapaLobReportGrid = ({
       staticColumns={staticColumns}
       dynamicColumns={periodColumns}
       sheetName={ADMIN_SHEET_NAME[sheetName]}
-      // 3단 헤더 총높이 48px — 컬럼 정의의 height 가 아니라 이 prop 이 단일 출처다(hook #93 / V-19).
-      headerRowHeight={HEADER_ROW_HEIGHT}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체 applyHeaderHeight 의 동적 tier 보정이 충돌해 무한
+      //   invalidate 가 됐다. 헤더 총높이는 위 applyHeaderHeight 가 tier 수로 균등배분해 박는 단일 출처다.
       allowMerging={allowMerging}
       // 전건 조회전용이라 dirty 집계 대상이 아니다(CRUD_TYPE 이 생기는 경로가 없다).
       excludeFromDirtyCheck

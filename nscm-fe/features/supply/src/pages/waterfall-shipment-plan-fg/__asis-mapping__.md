@@ -146,7 +146,7 @@
 
 | # | AS-IS handler (cs:line) | 효과 | TO-BE 반영 |
 |--:|---|---|---|
-| 1 | CboDivision_SelectedIndexChanged(601) | SetOperationGroupByDivision(EE 분기 재조회) + SetChangedControl(Version 재조회, Electrode enable) | `useWaterfallShipmentPlanFgStore.setDivision` + Form isEe 콤보 스왑(OperationGroup(EE)_SCP / WaterfallVer_FG2_SCP @divisionId) |
+| 1 | CboDivision_SelectedIndexChanged(601) | SetOperationGroupByDivision(EE 분기 재조회) + SetChangedControl(Version 재조회, Electrode enable) | `useWaterfallShipmentPlanFgStore.setDivision` + Form isEe 콤보 스왑(OperationGroup(EE)_SCP) + Version 은 _ALL 전량로드분을 division 으로 클라 재필터(재조회 아님) |
 | 2 | ClbVersion_SelectedIndexChanged(607) | dCalendar.InitValue = GetDayRange() | `setVersions` → periodFromVersion(코드 뒤 8자 = 계획시작일, +12개월 근사) |
 | 3 | BtnProject_Click(1304) | ProjectbyDivisionPopup → txtProject | `ProjectByDivisionModal` (page onProjectSearch) |
 | 4 | BtnItem_Id_Click(1283) | ItembyDivisionPopup → txtItem_Id | `ItemByDivisionModal` (page onModelSearch) |
@@ -181,7 +181,7 @@
 | LookupCommon OPERATION_GROUP(203) | lookup(초기 P/A/E) | 초기 로드. division 선택 시 아래 EE 분기로 스왑(division 자동 기본선택으로 즉시 분기) |
 | OperationGroup(928) / OperationGroupEE(932) | `OperationGroup_SCP`{P,A} / `OperationGroupEE_SCP`{A,E} | isEe 로 comboId 스왑(재조회 방식) |
 | LookupCommon ELECTRODE_TYPE(206) | lookup `ELECTRODE_TYPE`(다중) | enable=isEe(비EE clear+disable) |
-| WaterfallVer_FG2(234) | `WaterfallVer_FG2_SCP`(@divisionId) | 다중 CheckedList, 최신10. 조회조건 저장 제외(ConditionNotUse — TO-BE 조회조건 저장 미구현이라 자동 충족) |
+| CommonAll WaterfallVer_FG21(55)+DBUtils.Filter(237) | `WaterfallVer_FG21_SCP_ALL`(무파라미터, DIVISION_ID 클라 필터) | 다중 CheckedList, **캡 없음**(해당 사업부 확정 버전 전건 — AS-IS SP 'TOP 제약 제거'). 종전 `WaterfallVer_FG2_SCP`(TOP 10)은 자매 SCP0018 소스라 오매핑이었음(2026-11-17 수정). 조회조건 저장 제외(ConditionNotUse) |
 | BucketISO(221) | `BucketISO_SCP` | DAILY/WEEKLY/MONTHLY/WEEKLY_ISO 4옵션, 기본 DAILY |
 
 ## popups (5) ↔ TO-BE

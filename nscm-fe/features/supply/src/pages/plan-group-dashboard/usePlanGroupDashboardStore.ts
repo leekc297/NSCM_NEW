@@ -141,8 +141,11 @@ export const usePlanGroupDashboardStore = createPersistedStoreWithTab<
     //   조회조건 6개(divisionId/planGroupId/plantId/completedYn/startDate/endDate)는 전부 문자열이라
     //   역직렬화 불요(멀티셀렉트 plantId 도 CustomDropdown 콤마결합 string 이라 그대로 patch). 저장은
     //   EXCLUDED_DATE_PARAM·빈값 필터 후 재삽입이라(gridAction.ts personalizeCondition) 응답에 없는
-    //   키는 initSearchParams 기본값 그대로 둔다. startDate/endDate 는 '…Date' 라 EXCLUDED_DATE_PARAM
-    //   (date(fr|to)$/yyyymmdd$ 등) 미해당이라 저장·복원된다(자매 SCP0123 planDate 동형 거동).
+    //   키는 initSearchParams 기본값 그대로 둔다. startDate/endDate 는 '…Date' 라 공용
+    //   EXCLUDED_DATE_PARAM(date(fr|to)$/yyyymmdd$ 등)에 안 걸려 과거 날짜가 저장·복원되던 버그가
+    //   있었다(2026-11-13 교정) — 저장은 PlanGroupDashboard 가 searchParam 에서 날짜를 destructure 로
+    //   빼고, 복원은 아래 루프가 날짜 키를 건너뛰어 기본값(today-7~today)을 유지한다. 이미 저장돼 있던
+    //   과거 날짜 행도 이 가드로 무해화된다(F6 재저장 시 저장 SP 의 전체 DELETE 후 재삽입으로 정리됨).
     //   setDivision/setSearchParams 를 쓰지 않는다 — divisionId 변경 cascade 가 하위조건을 지워버린다.
     restoreSearchConditions: async () => {
       if (get().conditionsRestored) return;
@@ -159,6 +162,9 @@ export const usePlanGroupDashboardStore = createPersistedStoreWithTab<
         const patch: Partial<SearchParamProps> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in allow)) continue; // searchParams 필드만 allowlist
+          // 날짜(startDate/endDate)는 복원하지 않는다 — 기본값(today-7~today) 유지. 저장 측(화면
+          //   destructure)과 짝을 이뤄, 과거 DB 에 남은 날짜 행이 있어도 무시한다(위 주석 참조).
+          if (paramNm === 'startDate' || paramNm === 'endDate') continue;
           patch[paramNm as keyof SearchParamProps] = paramCtn ?? '';
         }
         set(state => {

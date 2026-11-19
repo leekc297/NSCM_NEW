@@ -1,0 +1,36 @@
+// WaterfallVersionModal — 표준 모달 레이아웃 (VersionSelectModal 형제 동일)
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gridWrapper {
+  position: relative;
+  // ResultArea(flex:1 1 0)가 채우려면 부모가 flex 컬럼이어야 한다(ProjectModal 등 표준 팝업 패턴).
+  //   블록이면 ResultArea 가 안 늘어나 그리드가 0-height 로 무너져 모달 오픈 시 결과가 안 보인다.
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}

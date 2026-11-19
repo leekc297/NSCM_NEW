@@ -11,6 +11,10 @@ export interface RawFlexGridColumnConfig {
   cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
   cellCboDataTp?: string;
   scale?: number;
+  // 엑셀 전용 셀 서식(opt-in) — 화면이 명시하면 excelDownload formatItem 이 그 서식을 셀에 직접 건다.
+  //   공용 변환기가 scale 을 무시하고 0/2자리로 캡핑하는 숫자 컬럼에서 고정밀 표시를 강제할 때 쓴다.
+  //   admin 메타엔 없고 화면이 주입한다(미주입 컬럼은 종전과 동일 — 전 화면 영향 없음).
+  _excelFormat?: string;
   // 입력 최대 글자수 (admin SCM_MST_SHEET_COLUMNS.DATA_MAX_LENGTH). 편집기 입력을 N자로 제한.
   dataMaxLength?: number;
   inputTpCd?: CELL_INPUT_EDIT_TYPE;

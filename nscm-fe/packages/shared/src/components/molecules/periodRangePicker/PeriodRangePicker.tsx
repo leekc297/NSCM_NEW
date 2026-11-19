@@ -39,10 +39,12 @@ interface PeriodRangePickerProps {
   required?: boolean;
   // FormItem 래퍼 클래스 — 다른 조회조건 필드와 동일 레이아웃(commonStyles.formItem) 적용용.
   className?: string;
-  // 프리셋 버튼 주 단위 목록. 기본값은 W26/W52/W82.
+  // 고정 프리셋 버튼 주 단위 목록(각 n → W{n} 버튼). 기본값은 W26/W52/W82(하위호환 — 미지정 소비자 불변).
   quickWeeks?: number[];
-  // WLast(사업부별 최종 주차) 프리셋 — 값을 주면 W{lastWeeks} 버튼이 고정 프리셋 옆에 뜬다.
-  //   AS-IS R7: 사업부 기본기간(SCM_MST_DIVISION.DAILY_PLAN_PERIOD)이 52면 숨김(W52와 중복). 미지정이면 미표시.
+  // 동적 WLast 프리셋 — 값을 주면 W{lastWeeks} 버튼이 고정 프리셋 옆에 뜬다(미지정이면 미표시).
+  //   quickWeeks 에 이미 같은 주 수가 있으면 중복이라 띄우지 않는다(예: lastWeeks=52 ↔ 고정 W52).
+  //   SCP0013 은 선택 Plan Date 행의 OVER_52W_YN='Y'(계획기간 52주 초과)일 때 그 행 PLAN_WEEKS 를 넘겨
+  //   W{PLAN_WEEKS} 버튼을 띄운다(DATE_WEEKLY1_SCP_ALL, 사용자 지시 2026-11-17).
   lastWeeks?: number;
   // 기본은 handleQuickWeeks 가 현재 선택된 From 기준으로 주 수를 더한다(여러 화면의 기존 동작, 하위호환 유지).
   //   AS-IS 화면 중 서버 GetDayRange(p_from_date="") 처럼 항상 오늘 기준으로 계산하는 화면은 이 플래그로
@@ -60,6 +62,21 @@ interface PeriodRangePickerProps {
   //   키인 기본값과 무관하게 항상 달력 전용이다. 필요해지면 monthOnly 쪽 파서를 YYYY-MM 로 따로 맞춰야 한다.
   monthOnly?: boolean;
 }
+
+// 동적 WLast 주 수 — DATE_WEEKLY / DATE_WEEKLY1_SCP_ALL 콤보가 함께 반환하는 PLAN_WEEKS·OVER_52W_YN 으로
+//   결정한다(SCM_ADM_CMBO_SQL_M 실측). W26/W52 는 고정이고 이 값만 가변(DB 에서 70·99 등으로 날아옴).
+//   OVER_52W_YN='Y'(계획기간 = Plan Date~Horizon End 가 52주 초과)인 선택 행의 PLAN_WEEKS 를 반환,
+//   'N'·미선택·미등록이면 undefined → lastWeeks 미지정과 동일하게 버튼 숨김. 위 두 콤보를 쓰는 화면에서
+//   lastWeeks={over52WeekPreset(planDates, 선택CODE)} 로 일괄 적용한다(사용자 지시 2026-11-17).
+//   rows 는 ComboResponse([key]:string) 호환 — CODE/PLAN_WEEKS/OVER_52W_YN 만 참조하므로 타입 결합 없이 받는다.
+export const over52WeekPreset = (
+  rows: ReadonlyArray<{ readonly [key: string]: string }> | undefined,
+  selectedCode: string
+): number | undefined => {
+  const row = (rows ?? []).find(r => r.CODE === selectedCode);
+  if (!row || row.OVER_52W_YN !== 'Y') return undefined;
+  return Number(row.PLAN_WEEKS) || undefined;
+};
 
 const parseValue = (value: string): Dayjs | null => {
   if (!value || value.length !== 8) return null;
@@ -256,6 +273,8 @@ export const PeriodRangePicker = ({
   label,
   required,
   className,
+  quickWeeks = [26, 52, 82],
+  lastWeeks,
   quickWeeksFromToday,
   allowTextInput,
   monthOnly,
@@ -514,27 +533,27 @@ export const PeriodRangePicker = ({
                       buttonLabel='Today'
                       onClick={handleToday}
                     />
-                    <Button
-                      appearance='outlined'
-                      priority='normal'
-                      size='small'
-                      buttonLabel='W26'
-                      onClick={() => handleQuickWeeks(26)}
-                    />
-                    <Button
-                      appearance='outlined'
-                      priority='normal'
-                      size='small'
-                      buttonLabel='W52'
-                      onClick={() => handleQuickWeeks(52)}
-                    />
-                    <Button
-                      appearance='outlined'
-                      priority='normal'
-                      size='small'
-                      buttonLabel='W82'
-                      onClick={() => handleQuickWeeks(82)}
-                    />
+                    {quickWeeks.map(w => (
+                      <Button
+                        key={`W${w}`}
+                        appearance='outlined'
+                        priority='normal'
+                        size='small'
+                        buttonLabel={`W${w}`}
+                        onClick={() => handleQuickWeeks(w)}
+                      />
+                    ))}
+                    {/* 동적 WLast — lastWeeks 지정 + 고정 프리셋과 중복 아닐 때만(위 주석). */}
+                    {lastWeeks != null && !quickWeeks.includes(lastWeeks) && (
+                      <Button
+                        key={`WLast-${lastWeeks}`}
+                        appearance='outlined'
+                        priority='normal'
+                        size='small'
+                        buttonLabel={`W${lastWeeks}`}
+                        onClick={() => handleQuickWeeks(lastWeeks)}
+                      />
+                    )}
                   </div>
                   <div className={styles.footerActions}>
                     <Button

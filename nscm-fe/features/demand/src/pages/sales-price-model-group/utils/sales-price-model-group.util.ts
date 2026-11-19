@@ -179,6 +179,18 @@ export const enumerateWeekStarts = (from: string, to: string): string[] => {
   return result;
 };
 
+// 기간(YYYYMM ~ YYYYMM)의 모든 달. Exchange Rate 팝업의 월 칸을 조회한 기간 전체로 세울 때 쓴다.
+//   형식이 다르거나 시작이 종료보다 늦으면 빈 배열.
+export const enumerateYyyymm = (start: string, end: string): string[] => {
+  if (!/^\d{6}$/.test(start) || !/^\d{6}$/.test(end) || start > end) return [];
+  const last = dayjs(`${end}01`);
+  const result: string[] = [];
+  for (let cur = dayjs(`${start}01`); cur.isValid() && !cur.isAfter(last, 'month'); cur = cur.add(1, 'month')) {
+    result.push(cur.format('YYYYMM'));
+  }
+  return result;
+};
+
 // 주 칸 헤더 — ISO 주차 번호 (원천 DMF0020 그리드와 같은 값).
 export const isoWeekLabel = (yyyymmdd: string): string =>
   `W${String(dayjs(yyyymmdd).isoWeek()).padStart(2, '0')}`;

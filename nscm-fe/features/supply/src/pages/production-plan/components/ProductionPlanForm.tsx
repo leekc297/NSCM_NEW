@@ -4,9 +4,9 @@ import { useEffect, useMemo } from 'react';
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { CustomDropdown, over52WeekPreset, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
@@ -333,29 +333,8 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
             () => onItemSearch('modelNick')
           )}
 
-          {/* Row1 우측 — Sum. Bucket 바로 아래, 체크박스를 Bucket 라벨 글자 시작선(B)에 맞춘다.
-              숨긴 Bucket 텍스트로 라벨과 같은 폭을 잡고 그 왼쪽 끝에 체크박스를 둔다(언어별 라벨 길이 대응). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label=''
-              labelAlign='right'
-              render={() => (
-                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '0px' }}>
-                  <span style={{ position: 'relative', whiteSpace: 'nowrap' }}>
-                    <span style={{ visibility: 'hidden' }}>{t(LBL.BUCKET, '_Bucket')}</span>
-                    <span style={{ position: 'absolute', left: '4px', top: '50%', transform: 'translateY(-50%)' }}>
-                      <Checkbox
-                        labelText={t(LBL.SUM, '_Sum')}
-                        checked={sc.chkSum}
-                        onChange={checked => set({ chkSum: checked })}
-                      />
-                    </span>
-                  </span>
-                </div>
-              )}
-            />
-          </Grid>
+          {/* Sum(chkSum)은 그리드 건수 오른쪽(상단 SubTitle afterCount)으로 이동(사용자 지시 2026-11-18,
+              SCP0013 동형). 폼에서 제거. */}
 
           {/* Plan 버전·Period 는 접고펼침 없이 항상 보이게 둔다(SCP0009·SCP0013 동일, 사용자 지시 2026-11-02).
               extraConditions 를 넘기지 않아 펼치기 버튼도 없다. */}
@@ -392,27 +371,10 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
               onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
               label={t(LBL.PERIOD, '_Period')}
               quickWeeks={QUICK_WEEKS}
+              // 동적 WLast — 선택 Plan Date 행 OVER_52W_YN='Y' 면 W{PLAN_WEEKS}(DATE_WEEKLY1_SCP_ALL, 2026-11-17).
+              lastWeeks={over52WeekPreset(planDates, sc.planStartYyyymmdds[0] ?? '')}
             />
           </Grid>
-
-          {/* Sum 은 Row1 우측(Bucket 아래)으로 이동(사용자 지시 2026-10-19). 기존 Row3 배치:
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label=''
-              labelAlign='right'
-              render={() => (
-                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '16px' }}>
-                  <Checkbox
-                    labelText={t(LBL.SUM, '_Sum')}
-                    checked={sc.chkSum}
-                    onChange={checked => set({ chkSum: checked })}
-                  />
-                </div>
-              )}
-            />
-          </Grid>
-          */}
         </>
       }
     />

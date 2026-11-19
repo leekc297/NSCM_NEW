@@ -5,7 +5,7 @@ import dayjs from '@foundation/dayjs';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useSessionStore } from '@shared/stores';
@@ -238,7 +238,8 @@ export const ShipmentPlanAutoEssForm = ({
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={`${t(LBL.DIVISION, '_Div')}*`}
+              label={t(LBL.DIVISION, '_Div')}
+              required
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -263,7 +264,8 @@ export const ShipmentPlanAutoEssForm = ({
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={`${t(LBL.COMPANY, '_Company')}*`}
+              label={t(LBL.COMPANY, '_Company')}
+              required
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -323,7 +325,8 @@ export const ShipmentPlanAutoEssForm = ({
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={`${t(LBL.PLAN_DATE, '_Plan Date')}*`}
+              label={t(LBL.PLAN_DATE, '_Plan Date')}
+              required
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -374,25 +377,6 @@ export const ShipmentPlanAutoEssForm = ({
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                />
-              )}
-            />
-          </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Sum — chkSum (W_/M_ 집계 컬럼 표시 토글, 03 §2.2) */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
                 />
               )}
             />

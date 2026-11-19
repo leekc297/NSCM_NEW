@@ -35,16 +35,16 @@ export const useMktFcst01Validation = () => {
 
   // ===== 조회조건 (FindData L1207~1233 — validation.md #29~32) =====
   //   #31 MSG00108 기간 역전 / #32 MSG00164 기간 3년 초과.
-  //   Division 은 MktFcst01.tsx 의 자동선택 effect 가 항상 채우므로 여기서 별도 필수 검증을 하지 않는다.
+  //   #29 MSG00097 Division 필수 — 이 화면은 82 만 조회하므로(SEARCHABLE_DIVISIONS) 82 권한이 없는
+  //   계정은 Division 이 공란으로 남는다. 공란 그대로 SP 를 부르지 않게 여기서 막는다.
   const validateFind = (c: SearchCondition): ValidationResult => {
-
-    /* if (!str(c.divisionId)) {
+    if (!str(c.divisionId)) {
       void setAlert({
         type: 'alert',
         content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
       });
       return { ok: false, msgId: MSG.REQUIRE_DIVISION };
-    }*/
+    }
 
     const start = str(c.startYyyymmdd);
     const end = str(c.endYyyymmdd);

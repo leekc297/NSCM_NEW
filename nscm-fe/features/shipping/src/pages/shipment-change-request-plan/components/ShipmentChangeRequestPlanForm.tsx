@@ -5,9 +5,9 @@ import type { ComboParam, ComboResponse, LookupResponse } from '@foundation/mode
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
-import { Box, Grid } from '@shared/mui';
+import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useSessionStore, useTabid } from '@shared/stores';
 
 import {
@@ -297,18 +297,23 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
 
           {/* Single Process(chkSingleProcess, 해제 시 동일 ERP_SO_NO 전 행 전파 cs:3904) — 상시 노출.
               New / Insert Multiple 버튼은 BtnArea(SubTitle customButtons)로 이동했다(사용자 지시 2026-09-30). */}
-          <Grid size={6}>
-            <Box display='flex' gap={2} alignItems='center' height='100%'>
-              <Box display='flex' gap={0.5} alignItems='center'>
-                {/* @lges Label 은 텍스트를 labelText prop 으로 받는다(children 아님) — children 으로 주면 안 뜬다. */}
-                <Label labelText={t(SCREEN_TEXT.SINGLE_PROCESS, { defaultValue: 'Single Process' })} />
+          {/* Shipment Plan(FG Waterfall)의 Sum 체크박스와 같은 생김새·위치로 통일(사용자 지시 2026-11-12):
+              다른 조회조건과 동일하게 size={3} + FormItem(label=' ', labelAlign='right')로 감싸 라벨열
+              오프셋을 맞추고, @lges Checkbox 의 labelText 로 [체크박스][텍스트] 순서로 렌더한다. */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={' '}
+              labelAlign='right'
+              render={() => (
                 <Checkbox
+                  labelText={t(SCREEN_TEXT.SINGLE_PROCESS, { defaultValue: 'Single Process' })}
                   checked={singleProcess}
                   disabled={noDivisionAuth}
                   onChange={setSingleProcess}
                 />
-              </Box>
-            </Box>
+              )}
+            />
           </Grid>
         </>
       }

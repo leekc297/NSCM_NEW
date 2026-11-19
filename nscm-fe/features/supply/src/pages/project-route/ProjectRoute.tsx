@@ -39,6 +39,7 @@ import type { BomRow, PlantRow, SiteRow } from './project-route.types';
 import styles from './ProjectRoute.module.scss';
 import { useProjectRouteStore } from './useProjectRouteStore';
 import { buildMonthColumns } from './utils/projectRoute.calendar';
+import { clearPlantInvalidCells, markPlantInvalidCells, syncOrgDates } from './utils/projectRoute.plantDerive';
 import { submitPlantSaveRequest } from './utils/projectRoute.plantSaveRequest';
 
 export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -263,21 +264,27 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
-  // 저장검증 실패 셀 하이라이트(design/03 §3.4 SetBGColor). 뷰행 index 로 배경색 직접 지정.
-  //   주의: Wijmo 는 스크롤/refresh 시 셀 DOM 을 재활용해 이 배경이 지워질 수 있다(persistent 하이라이트는
-  //   formatItem + IS_PASS_N* 플래그가 정석 — 04_react-gap 잔여 gap 기재). 저장 차단·MSG 는 정상 동작.
+  // 저장검증 실패 셀 하이라이트(design/03 §3.4 SetBGColor, AS-IS IS_PASS_N* 그리드 paint 파리티).
+  //   실패 셀을 행 객체에 플래그로 심고(markPlantInvalidCells) 그리드 formatItem 이 셀을 (재)그릴 때마다
+  //   읽어 칠한다(ProjectRoutePlantGrid). 스크롤/refresh 로 셀 DOM 이 재활용돼도 다시 칠해져 지워지지
+  //   않는다 — 종전 DOM 직접 칠하기(getCellElement().style)가 가상 스크롤에 지워지던 gap 교정.
+
+  // 이전 검증 실패 마킹 제거(AS-IS 매 checkValidN* 시작의 BG UnLockColor 리셋). 안 지우면 재시도 때
+  //   현재 오류와 무관한 옛 빨강이 남아 오해를 준다. 플래그를 지우고 grid 를 invalidate 해 재칠하게 한다.
+  const clearPlantInvalidMarks = () => {
+    const grid = plantGridRef.current;
+    const source = (grid?.collectionView?.sourceCollection ?? []) as unknown[];
+    clearPlantInvalidCells(source);
+    grid?.invalidate();
+  };
+
+  // 저장검증 실패 셀 하이라이트(design/03 §3.4 SetBGColor). 실패 셀을 행 객체에 플래그로 심고 grid 를
+  //   invalidate 하면 formatItem 이 #ffd7d7 로 칠한다 — 영구 유지(스크롤 후에도).
   const markInvalidCells = (cells: { row: PlantRow; column: string }[]) => {
     const grid = plantGridRef.current;
     if (!grid) return;
-    const items = grid.collectionView?.items ?? [];
-    cells.forEach(({ row, column }) => {
-      const viewRow = items.indexOf(row);
-      const col = grid.columns.findIndex(c => c.binding === column);
-      if (viewRow >= 0 && col >= 0) {
-        const cellEl = grid.cells.getCellElement(viewRow, col);
-        cellEl?.style.setProperty('background-color', '#ffd7d7', 'important');
-      }
-    });
+    markPlantInvalidCells(cells);
+    grid.invalidate();
   };
 
   // 실제 SAVE_PLANT 호출(payload 조립 + false-success 판별, utils/projectRoute.plantSaveRequest 공용).
@@ -301,10 +308,13 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
     void Promise.all([refetchBom(), refetchPlant()]);
   };
 
-  // Save(design/03 §4.4) — 검증 N1~N9 통과 후 ^-delim CLOB 로 SAVE_PLANT 호출.
-  //   H1 교정(04_impl-gap-audit): 공통 saveWithValidation 로 메타 필수(INPUT_TP_CD=M/IM) 컬럼
-  //   빈값(PLANT_SITE_ID/PRIORITY/FROM/TO 등)을 커스텀 N1~N9 뒤에 추가 차단 — N7 은 PRIORITY 형식만
-  //   보고 빈값 자체는 걸러내지 못해 필수값 누락 신규행이 저장으로 샐 수 있었다(SCP0020 동형 사고).
+  // Save(design/03 §4.4) — AS-IS CheckChangedValues(cs L941-955) 순서를 그대로 지킨다:
+  //   ① 필수값 체크(checkRequiredOfSpread) → ② N1~N9 → ③ SAVE_PLANT(^-delim CLOB).
+  //   공용 saveWithValidation 이 ①(미입력 필수셀 → "[항목] 값은 필수 입력 항목입니다" alert)을
+  //   담당하므로 먼저 태우고, 그 통과 콜백 안에서 ②를 돈다.
+  //   주의(2026-11-13 교정): ①②를 거꾸로 두면 빈 FROM/TO 가 ②의 N8-a(AS-IS 가 메시지 없이 막는
+  //   무언 차단)에 먼저 가로채여, 사용자에게 "필수" 메시지 없이 아무 반응 없이 저장만 막히는
+  //   것처럼 보였다 — AS-IS 는 ①이 먼저라 필수 메시지가 뜬다. 순서를 AS-IS 로 되돌려 교정.
   const handleSave = () => {
     const grid = plantGridRef.current;
     if (!grid) return;
@@ -316,18 +326,27 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    // 검증은 화면 전체 VALID_YN='Y' 행 대비(design/03 §3.4 중첩/연속성 등).
-    const v = validatePlantSave(source);
-    if (!v.ok) {
-      markInvalidCells(v.invalidCells);
-      // N8-a(design/03 §3)는 AS-IS 가 메시지 없이 조용히 저장을 막는 유일한 분기 — alert 생략.
-      if (!v.silent) {
-        void setAlert({ type: 'alert', content: t(v.msgId ?? MSG.SAVE_ERROR, '_저장 검증 실패') });
-      }
-      return;
-    }
+    // 검증 직전 ORG_*/MERGE_DATE 를 현재 화면값으로 재동기화(syncOrgDates) — 붙여넣기/채우기 편집은
+    //   cellEditEnded 를 안 거쳐 ORG 가 stale 해지고, 그러면 화면엔 같은 날짜인데도 검증이 옛 ORG 로
+    //   비교해 N1 을 오탐한다(AS-IS 는 모델 Changed 로 전건 재파생 — 파리티 복원, 2026-11-12).
+    syncOrgDates(source);
 
-    saveWithValidation(changed, staticColumns[RESPONSE_SET.PLANT], rows => void submitPlantSave(rows));
+    // ① 필수값 체크(통과 시에만 콜백). ② 콜백 안에서 N1~N9. ③ 통과 시 SAVE.
+    saveWithValidation(changed, staticColumns[RESPONSE_SET.PLANT], validRows => {
+      // 재검증 전 이전 실패 마킹을 먼저 지운다(AS-IS 매 검사 BG 리셋) — 재시도 시 옛 빨강 잔존 방지.
+      clearPlantInvalidMarks();
+      // 검증은 화면 전체 VALID_YN='Y' 행 대비(design/03 §3.4 중첩/연속성 등).
+      const v = validatePlantSave(source);
+      if (!v.ok) {
+        markInvalidCells(v.invalidCells);
+        // N8-a(design/03 §3)는 AS-IS 가 메시지 없이 조용히 저장을 막는 유일한 분기 — alert 생략.
+        if (!v.silent) {
+          void setAlert({ type: 'alert', content: t(v.msgId ?? MSG.SAVE_ERROR, '_저장 검증 실패') });
+        }
+        return;
+      }
+      void submitPlantSave(validRows);
+    });
   };
 
   // Input All(btnAllFind, design/01 R5) — SCM0002_ProjectRouteListSavePopup 일괄등록 팝업.

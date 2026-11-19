@@ -338,13 +338,8 @@ export const ShipmentPsiForm = ({ onSearch, onItemSearch }: Props) => {
                       checked={sc.chkDelegateeModel}
                       onChange={c => set({ chkDelegateeModel: c })}
                     />
-                    <Box sx={{ ml: 2 }}>
-                      <Checkbox
-                        labelText={t(LBL.SUM, '_Sum')}
-                        checked={sc.chkSum}
-                        onChange={c => set({ chkSum: c })}
-                      />
-                    </Box>
+                    {/* Sum(chkSum)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18,
+                        SCP0013 동형). 폼에서 제거. */}
                   </Stack>
                 </Box>
               </Box>

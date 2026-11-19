@@ -1,0 +1,73 @@
+{
+ "id": "SCP0096",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "sheet": "",
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SCP0096-S04b664",
+    "SCP0096-Sae2550",
+    "SCP0096-S74dcc7",
+    "SCP0096-Sb8a5f3",
+    "SCP0096-S0cf863",
+    "SCP0096-Scdfefb",
+    "SCP0096-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SCP0096-S04b664",
+    "SCP0096-Sae2550",
+    "SCP0096-S74dcc7",
+    "SCP0096-Sb8a5f3",
+    "SCP0096-S0cf863",
+    "SCP0096-Scdfefb",
+    "SCP0096-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-18 14:34:12.325",
+ "fills": 0,
+ "fill_left": [],
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

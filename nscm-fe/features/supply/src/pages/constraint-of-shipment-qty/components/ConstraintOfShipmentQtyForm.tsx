@@ -1,25 +1,22 @@
 import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
+import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
+import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
 
-import { COMBO, INIT_SET, LBL, MENU_ID, SHEETS } from '../constraint-of-shipment-qty.constants';
+import { COMBO, LBL, MENU_ID, MSG } from '../constraint-of-shipment-qty.constants';
 import { useConstraintOfShipmentQtyStore } from '../useConstraintOfShipmentQtyStore';
-import {
-  filterByDivision,
-  filterSiteBase,
-  toCascadeSource,
-  toOptions,
-} from '../utils/constraint-of-shipment-qty.cascadeCombo';
+import { buildSearchOptions } from '../utils/constraint-of-shipment-qty.cascadeCombo';
 
 interface Props {
+  initData: Parameters<typeof buildSearchOptions>[0];
   onSearch: () => void;
 }
 
@@ -27,6 +24,8 @@ interface Option {
   label: string;
   value: string;
 }
+
+const PERIOD_ALERT_DELAY_MS = 300;
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -43,9 +42,14 @@ const pickMulti = (picked: unknown): string[] =>
 //   conditions 에 둔다(4열×3줄: Division/PlanGroup/ItemId/Stage/ModelGroup/FromSite/ToSite/Period/Valid).
 //   extraConditions 미사용이라 SearchArea 더보기(chevron) 버튼도 뜨지 않는다.
 //   Division 트리거 -> PlanGroup/FromSite/ToSite/Stage/ModelGroup 5갈래 fan-out 동시 갱신(design 02 §3, 순차 아님).
-export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
+export const ConstraintOfShipmentQtyForm = ({ initData, onSearch }: Props) => {
   const { t } = useTranslation();
   const [openItemModal, setOpenItemModal] = useState(false);
+  // Div 확인창 Cancel 때 콤보 표시 원복용 key(갭분석 C-01). 선택 칸은 value 가 그대로여도 입력란 글자를
+  //   클릭한 항목으로 바꿔 두므로 Cancel 이면 key 를 바꿔 다시 그려 store 의 이전 Div 로 되돌린다.
+  const [divisionKey, setDivisionKey] = useState(0);
+  // Period 없는 날짜를 거부할 때 입력란을 store 값으로 되돌리는 key(갭분석 G-15).
+  const [periodKey, setPeriodKey] = useState(0);
 
   const sc = useConstraintOfShipmentQtyStore(s => s.searchCondition);
   const set = useConstraintOfShipmentQtyStore(s => s.setSearchCondition);
@@ -57,18 +61,6 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
   // CMBO 원천은 Division/Valid 둘뿐(design 02 §2.1/§2.2, AS-IS BLUtils.GetDivision / Data.Type.YesOrNo).
   const [divisions, validYn] = useTabComboQueries({
     filters: [COMBO.DIVISION, COMBO.VALID],
-  });
-
-  // init(GET_SEARCH_INFO) — PlanGroup/ToSite/FromSite/Stage/ModelGroup(+Item) 다중커서 원천.
-  //   AS-IS 는 GetSearchInfo("81") 로 전사 로드 후 DBUtils.Filter 로 Division cascade(.cs:265~306) —
-  //   FE 는 division 빈 값으로 1회 호출하고 아래에서 클라 필터로 재현한다(자매 SCP0128 init 동형).
-  const initFilters = useMemo(() => ({ divisionId: '', scmSiteId: '' }), []);
-  const { data: initData } = useTabProcQuery<MENU_ID, SHEETS.INIT>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.INIT,
-    tabId,
-    filters: initFilters,
-    enabled: true,
   });
 
   const divisionOptions = toDivisionOptions(divisions);
@@ -84,22 +76,35 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
   }, [firstDivision, hasDivision, set]);
   // 하위 5콤보 — init 커서 소스를 Division cascade 로 좁힌다(AS-IS Refresh*ByDivision). 정렬 없음:
   //   AS-IS setListBox 가 SP 반환 순서 그대로 바인딩하므로 sortBy 를 걸지 않는다(SP 순서 = 정본).
-  const planGroupOptions = toOptions(
-    filterByDivision(toCascadeSource(initData?.[INIT_SET.PLAN_GROUP]), sc.divisionId)
-  );
-  const fromSiteOptions = toOptions(
-    filterByDivision(filterSiteBase(toCascadeSource(initData?.[INIT_SET.FROM_SITE])), sc.divisionId)
-  );
-  const toSiteOptions = toOptions(
-    filterByDivision(filterSiteBase(toCascadeSource(initData?.[INIT_SET.TO_SITE])), sc.divisionId)
-  );
-  const stageOptions = toOptions(
-    filterByDivision(toCascadeSource(initData?.[INIT_SET.STAGE]), sc.divisionId)
-  );
-  const modelGroupOptions = toOptions(
-    filterByDivision(toCascadeSource(initData?.[INIT_SET.MODEL_GROUP]), sc.divisionId)
-  );
+  //   From/To Site 는 Div 를 사이트 사업부로 바꿔 거른다(EE → 81·40·82 등, 갭분석 C-03).
+  const {
+    planGroup: planGroupOptions,
+    fromSite: fromSiteOptions,
+    toSite: toSiteOptions,
+    stage: stageOptions,
+    modelGroup: modelGroupOptions,
+  } = useMemo(() => buildSearchOptions(initData, sc.divisionId), [initData, sc.divisionId]);
   const validOptions = toDivisionOptions(validYn);
+
+  // Period 커밋 — 공용 기간 칸은 없는 날짜(20260230)도 그대로 넘긴다. 달력에 없는 날짜는 안내 후 이전 값으로
+  //   되돌려 표시와 조회 값이 어긋나지 않게 한다(갭분석 G-15).
+  const handlePeriodChange = (fromDate: string, toDate: string) => {
+    const invalid = [fromDate, toDate].some(
+      v => v.length === 8 && !dayjs(v, 'YYYYMMDD', true).isValid()
+    );
+    if (invalid) {
+      setPeriodKey(k => k + 1);
+      // Enter 로 커밋하면 키를 떼는 순간 안내창이 바로 닫히므로 키를 뗀 뒤에 띄운다.
+      window.setTimeout(() => {
+        void useMessageStore.getState().setAlert({
+          type: 'alert',
+          content: t(MSG.PERIOD_DATE_INVALID, '_Invalid date format. (YYYYMMDD)'),
+        });
+      }, PERIOD_ALERT_DELAY_MS);
+      return;
+    }
+    set({ fromDate, toDate });
+  };
 
   return (
     <>
@@ -117,16 +122,18 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
+                    key={divisionKey}
                     value={sc.divisionId}
                     options={divisionOptions}
                     onChange={(_, picked) => {
-                      // Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
-                      //   편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로
-                      //   복귀(commit 51d4e9fa 패턴). design 02 §3 의 5갈래 fan-out cascade 초기화는 setDivision 이
-                      //   상위집합으로 포함(item/valid·그리드까지 함께 초기화).
+                      // Division 변경 = 검색조건(Div·기간·Active 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
+                      //   편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 key 를 바꿔 콤보를 이전 Div 로
+                      //   다시 그린다(갭분석 C-01). design 02 §3 의 5갈래 fan-out cascade 초기화는 setDivision 이
+                      //   상위집합으로 포함(item·그리드까지 함께 초기화).
                       const v = str(picked);
                       void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                         if (ok) setDivision(v);
+                        else setDivisionKey(k => k + 1);
                       });
                     }}
                   />
@@ -152,8 +159,8 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Item ID — 텍스트(읽기전용, 팝업 결과 바인딩) + 돋보기(MaterialByDivisionModal, design 02 §4.6).
-                라벨은 AS-IS Model/Nickname(LBL.ITEM_ID=LBL00618). */}
+            {/* Item ID — 직접 입력 · 지우기 + 돋보기(MaterialByDivisionModal, design 02 §4.6). AS-IS txtItemId 텍스트
+                칸(갭분석 C-06·표-06). 입력값은 조회 조건이자 찾기 창 초기 조건. 라벨은 AS-IS Model/Nickname(LBL.ITEM_ID=LBL00618). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -165,7 +172,6 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
                     className={commonStyles.popupSearchField}
                     value={sc.itemId}
                     InputProps={{
-                      readOnly: true,
                       endAdornment: (
                         <Button
                           appearance='outlined'
@@ -175,7 +181,7 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
                         />
                       ),
                     }}
-                    onChange={() => undefined}
+                    onChange={e => set({ itemId: e.target.value })}
                   />
                 )}
               />
@@ -264,11 +270,12 @@ export const ConstraintOfShipmentQtyForm = ({ onSearch }: Props) => {
                 사용자 지시(2026-10-13): To Site 와 함께 항상 보이는 조회조건(conditions)에 둔다. */}
             <Grid size={3}>
               <PeriodRangePicker
+                key={periodKey}
                 className={commonStyles.formItem}
                 label={t(LBL.PERIOD, '_Period')}
                 start={sc.fromDate}
                 end={sc.toDate}
-                onChange={(fromDate, toDate) => set({ fromDate, toDate })}
+                onChange={handlePeriodChange}
               />
             </Grid>
             {/* Valid(단일) — AS-IS cboValid.DataBind(Data.Type.YesOrNo, true)(.cs:171): isAddALL=true 라

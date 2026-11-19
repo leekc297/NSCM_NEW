@@ -1,65 +1,77 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-10-31T05:51:20+09:00",
+ "ts": "2026-11-19T10:02:34+09:00",
  "producer": "run_verify",
  "id": "SCP0096",
  "skip_e2e": false,
- "started": "2026-10-31 05:27:50",
+ "started": "2026-11-19 09:26:00",
  "state": "completed",
  "verdict": "fail",
  "issues": [
   {
-   "id": "V-9ce92210",
+   "id": "V-4a2afe1f",
    "class": "F5",
    "msg": "SCP0096 화면",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 05:45"
+     "ref": "E2E @trace @11-19 10:02"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-d255e233",
-   "class": "G3",
-   "msg": "SCP0096 화면",
+   "id": "V-eb856b69",
+   "class": "A3",
+   "msg": "SCP0096 체크박스 Sum",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E smoke/auth 요약"
+     "ref": "E2E @verify Sum 체크박스 @11-19 10:02"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-6ff7c5a4",
-   "class": "F10",
-   "msg": "PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+   "id": "V-d8f314e2",
+   "class": "H2",
+   "msg": "SCP0096 시나리오 [자동] 당주 구분선(rail) = 이번 주(Weekly)",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+     "ref": "E2E @verify 시나리오 @11-19 10:02"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-f8a41f6a",
-   "class": "B8",
-   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "id": "V-9e29a0e2",
+   "class": "D3",
+   "msg": "spreadInfo.LockColumn",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 05:45"
+     "ref": "E2E @trace @11-19 10:02"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-eb47f8fe",
-   "class": "C4",
-   "msg": "[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 · 건수 표시",
+   "id": "V-f95f27ac",
+   "class": "J4",
+   "msg": "Home / Auth Request 메뉴",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC EG-a24f3b24 결과 연결(결함 DM-247)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b26007f0",
+   "class": "N1",
+   "msg": "[DMF0003 결함 일반화] AS From Site 공란 데이터",
    "evidence": [
     {
      "kind": "exec",
@@ -69,21 +81,93 @@
    "grade": "hard"
   },
   {
-   "id": "V-463fdd38",
-   "class": "B8",
-   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "id": "V-56781cf1",
+   "class": "N1",
+   "msg": "[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @10-31 05:45"
+     "ref": "규칙 판정 상속"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-ad49a504",
+   "id": "V-d99fa380",
+   "class": "N1",
+   "msg": "[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-07d772e7",
+   "class": "N1",
+   "msg": "[DMF0004 결함 유형] Sales Site 조회조건 표시값",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e8aeb458",
+   "class": "N1",
+   "msg": "[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6ff00758",
+   "class": "N1",
+   "msg": "[DMF0082 결함 유형] Div 81 컬럼·Measure 구성(Project·Cust FCST 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-48b7999b",
+   "class": "N1",
+   "msg": "[DMF0035 결함 유형] Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0d52121b",
    "class": "G4",
-   "msg": "D00-1-010 · §1 usrConditionPanel1 / UsrConditionPanel",
+   "msg": "SCP0096 스냅샷 조회조건 Div 40",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @snap 조회조건 @11-19 10:02"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3168aa6e",
+   "class": "D3",
+   "msg": "D00-1-011 · §1 usrButton1 / UsrButton",
    "evidence": [
     {
      "kind": "exec",
@@ -93,33 +177,9 @@
    "grade": "hard"
   },
   {
-   "id": "T-d83840e6",
-   "class": "C4",
-   "msg": "cboDivision / Division / Div",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @10-31 05:45"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-a8c0dab9",
-   "class": "F5",
-   "msg": "SCP0096 화면",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @10-31 05:45"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-d2b44fb5",
-   "class": "G4",
-   "msg": "COMMON:UC-06 · Key-in 조회조건 콤마 다중 입력 전건 조회",
+   "id": "T-cf17d66b",
+   "class": "D3",
+   "msg": "D00-4d-002 · §4d BtnInput_Click 가드 편집모드 아님",
    "evidence": [
     {
      "kind": "exec",
@@ -129,9 +189,33 @@
    "grade": "hard"
   },
   {
-   "id": "T-bf85a2e4",
+   "id": "T-5618d74a",
+   "class": "D3",
+   "msg": "D00-4d-006 · §4d BtnInput_Click 권한(!CanModelChange, 무메시지)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-41297850",
+   "class": "D3",
+   "msg": "COMMON:UC-02 · 수정 중 재조회 시 confirm (MSG00703)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-03dcfd08",
    "class": "X-ROW",
-   "msg": "SCP0096_Shipment_Working_Day_OSP.DefineProperty",
+   "msg": "SCP0096_Shipment_Working_Day_OSP.SetLockSumColumn",
    "evidence": [
     {
      "kind": "exec",
@@ -141,69 +225,123 @@
    "grade": "hard"
   },
   {
-   "id": "T-342ea234",
-   "class": "X-ROW",
-   "msg": "SCP0096_Shipment_Working_Day_OSP.FindButton",
+   "id": "EG-807044ce",
+   "class": "J1",
+   "msg": "SCP0096 EG365 자동 선택 SCP/40/SCP Planner",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "정적 판정(원문 대조)"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-7312ac1d",
-   "class": "X-ROW",
-   "msg": "SCP0096_Shipment_Working_Day_OSP.FindData_Main",
+   "id": "EG-ad36724d",
+   "class": "J1",
+   "msg": "SCP0096 EG365 자동 선택 SCP/40/SCM Viewer",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @eg-auth @11-19 10:02"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "T-eee5a30e",
-   "class": "X-ROW",
-   "msg": "SCP0096_Shipment_Working_Day_OSP.InitControls",
+   "id": "EG-c63a0d42",
+   "class": "J1",
+   "msg": "SCP0096 EG365 자동 선택 SCP/82/SCM Viewer",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "기계(상속·집계)"
+     "ref": "E2E @eg-auth @11-19 10:02"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a24f3b24",
+   "class": "J4",
+   "msg": "SCP0096 EG380 무권한 첫 화면 GUEST/-/GUEST",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-19 10:02"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-cac7a1b1",
+   "class": "N1",
+   "msg": "SCP0096 기준정보 키 존재 SCM_MST_PLAN_DETAIL",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-85b47891",
+   "class": "N1",
+   "msg": "SCP0096 기준정보 키 존재 SCM_MST_PROJECT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a184f82b",
+   "class": "N1",
+   "msg": "SCP0096 기준정보 키 존재 SCM_MST_SITE_ITEM",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "정적 판정(원문 대조)"
     }
    ],
    "grade": "hard"
   }
  ],
+ "warnings": [
+  "검사기 회귀 오라클 위반 — Doc/verify/SCP0096/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)",
+  "커버리지 게이트 SUSPECT_NA100 E3 — Doc/verify/SCP0096/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
  "summary": {
-  "rows": 1268,
-  "PASS": 584,
-  "FAIL": 14,
-  "판정필요": 22,
-  "미검증": 17,
-  "해당없음": 631,
+  "rows": 1675,
+  "PASS": 751,
+  "FAIL": 25,
+  "판정필요": 13,
+  "미검증": 0,
+  "해당없음": 886,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 474,
-   "없음(판정 대기)": 22,
-   "기계(상속·집계)": 753,
-   "출처 미기록": 2,
-   "없음(미검증)": 17
+   "기계": 1239,
+   "없음(판정 대기)": 13,
+   "사람": 2,
+   "기계(상속·집계)": 412,
+   "출처 미기록": 9
   },
-  "fail_listed": 14,
+  "fail_listed": 25,
   "coverage": {
-   "rules": 77,
-   "measured": 122,
-   "not_run_error": 17,
-   "na": 230,
-   "suspect_na100": []
+   "rules": 91,
+   "measured": 474,
+   "not_run_error": 0,
+   "na": 248,
+   "suspect_na100": [
+    "E3"
+   ]
   }
  },
  "docs": {
-  "CheckList": "Doc/CheckList/SCP0096_ShipmentWorkingDayOsp_CheckList_v25.xlsx",
-  "ActionItemList": "Doc/CheckList/SCP0096_ShipmentWorkingDayOsp_ActionItemList_v25.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SCP0096_ShipmentWorkingDayOsp_CheckList_v38.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0096_ShipmentWorkingDayOsp_ActionItemList_v38.xlsx"
  },
  "evidence": [
   {
@@ -215,5 +353,5 @@
    "ref": "Doc/verify/SCP0096/e2e_results.json"
   }
  ],
- "note": ""
+ "note": "⚠ 경고(오류 아님): 검사기 회귀 오라클 위반 — Doc/verify/SCP0096/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음) / 커버리지 게이트 SUSPECT_NA100 E3 — Doc/verify/SCP0096/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

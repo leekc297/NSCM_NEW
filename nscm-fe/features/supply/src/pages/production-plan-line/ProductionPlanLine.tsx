@@ -31,7 +31,11 @@ import {
 import { MOCK_EDIT_INFO_DATA, MOCK_MAIN_DATA, MOCK_MAIN_ENABLED } from './production-plan-line.mock'; // ⚠ 임시 개발용 목데이터
 import type { EditInfoRow, FixMode, FixRow, MainRow } from './production-plan-line.types';
 import styles from './ProductionPlanLine.module.scss';
-import { deriveEditContext, useProductionPlanLineStore } from './useProductionPlanLineStore';
+import {
+  deriveEditContext,
+  SEARCH_SAVE_EXCLUDE_KEYS,
+  useProductionPlanLineStore,
+} from './useProductionPlanLineStore';
 import { applyRatio, orderRowsByMeasure } from './utils/productionPlanLineDerive';
 import {
   buildFixKey,
@@ -64,6 +68,12 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   const editTrackerRef = useRef<EditTracker>();
 
   const sc = useProductionPlanLineStore(s => s.searchCondition);
+  // Condition(F6) 저장용 조회조건 — Plan Date/Type/Seq 는 저장 대상이 아니라 제외한다(I-01). 공용
+  //   EXCLUDED_DATE_PARAM 은 'yyyymmdds'(복수형)·planType/planSeq 를 못 걸러 그대로 저장되므로 여기서 뺀다.
+  const searchParamForSave = useMemo(
+    () => Object.fromEntries(Object.entries(sc).filter(([k]) => !SEARCH_SAVE_EXCLUDE_KEYS.has(k))),
+    [sc]
+  );
   const filters = useProductionPlanLineStore(s => s.filters);
   const setFilter = useProductionPlanLineStore(s => s.setFilter);
   const clearFilters = useProductionPlanLineStore(s => s.clearFilters);
@@ -78,6 +88,9 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   const restoreSearchConditions = useProductionPlanLineStore(s => s.restoreSearchConditions);
   const latestPlanStart = useProductionPlanLineStore(s => s.latestPlanStart);
   const latestPlanSeq = useProductionPlanLineStore(s => s.latestPlanSeq);
+  // 계획구간(SCP구간) — Form 이 선택 Plan Date 행에서 올린 HORIZON_END_DATE/PLAN_WEEKS. 조회검증이 소비.
+  const horizonEndYyyymmdd = useProductionPlanLineStore(s => s.horizonEndYyyymmdd);
+  const planWeeks = useProductionPlanLineStore(s => s.planWeeks);
 
   const [openItem, setOpenItem] = useState(false);
   // Material/Model·Nickname 두 픽커가 같은 팝업을 연다 — 어느 쪽에서 열었는지로 팝업 초기 검색어(seed)를
@@ -289,7 +302,27 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: requiredMsg(t(LBL.PLAN_DATE, '_Plan-date')) });
       return false;
     }
-    return validateSearch(sc).ok; // chkLineAssign → Material 필수(MSG00290) + 기간 from<=to
+    if (!validateSearch(sc).ok) return false; // chkLineAssign → Material 필수(MSG00290) + 기간 from<=to
+    // 계획구간(SCP구간) 초과 조회 차단 — AS-IS SCP0013 FindData_Main → CheckPlanPeriodRange(cs:1989~1994):
+    //   Period 끝날짜가 선택 Plan Date 의 계획구간 끝(SCM_MST_PLAN.HORIZON_END_DATE)을 넘으면 MSG00402 안내 +
+    //   Period 끝날짜를 계획구간 끝으로 보정 + 조회 차단. AS-IS 는 bucket 무관(PLAN_CYCLE='WEEKLY' 고정, 실측
+    //   2026-11-18). 계획구간은 사업부·Plan Date(주차)마다 가변. horizonEnd 미확정(콤보 미로드/plan master 없음)이면 skip.
+    const horizonEnd = horizonEndYyyymmdd.replace(/\D/g, '');
+    const toDate = sc.toYyyymmdd.replace(/\D/g, '');
+    if (horizonEnd && toDate && toDate > horizonEnd) {
+      // MSG00402: "SCP구간 내 Plan 조회가 가능합니다\n(~계획수립주차 + {0}주 = {1})" ({0}=주수, {1}=계획구간끝).
+      //   TO-BE 미등록이라 t() fallback(EN) 표시 → design/NN_register_msg.sql 로 등록.
+      const content = t(
+        MSG.PLAN_PERIOD_LIMIT,
+        '_You can search plans within the SCP section\n(~planning week + {0} weeks = {1})'
+      )
+        .replace('{0}', String(planWeeks))
+        .replace('{1}', horizonEnd);
+      void setAlert({ type: 'alert', content });
+      setSearchCondition({ toYyyymmdd: horizonEnd }); // AS-IS dCalendar.Text2 = plan_end_date (끝날짜 보정)
+      return false; // 조회 차단
+    }
+    return true;
   };
 
   const handleSearch = () => {
@@ -337,9 +370,18 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 요청2(2026-11-04): Plan Date/Type/Seq 선택이 조회확정분(filters[MAIN])과 달라지면 메인 그리드 clear.
   //   선택과 조회결과 불일치 상태로 편집·저장되는 사고 방지 — 재조회(Search) 전까지 빈 상태로 둔다.
   //   filters 가 비면(division 변경·초기) early-return. 편집잠금(요청1)은 Form 이 콤보로 stageEditable 을 갱신해 담당.
+  //   Bucket(2026-11-18): 조회조건 Bucket 이 조회확정분과 달라지면도 clear 한다 — AS-IS 는 버킷 변경 시
+  //   cboBucketType_SelectedIndexChanged(cs:800~813)가 InitSpread+ClearDataSource 로 그리드를 비우고
+  //   재조회를 요구한다(편집분 포함 clear). 이로써 "주합계만 수정하고 Daily 로 보면 일자는 이전값" 식의
+  //   버킷간 불일치 미리보기 상태를 만들지 않는다(사용자 지시 2026-11-18, AS-IS 1:1).
   useEffect(() => {
     const f = mainFilter as
-      | { planStartYyyymmdd?: string | null; planType?: string | null; seq?: string | null }
+      | {
+          planStartYyyymmdd?: string | null;
+          planType?: string | null;
+          seq?: string | null;
+          bucket?: string | null;
+        }
       | undefined;
     if (!f) return;
     const norm = (v: unknown): string =>
@@ -347,11 +389,12 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (
       norm(f.planStartYyyymmdd) !== (sc.planStartYyyymmdds[0] ?? '') ||
       norm(f.planType) !== (sc.planTypes[0] ?? '') ||
-      norm(f.seq) !== (sc.planSeqs[0] ?? '')
+      norm(f.seq) !== (sc.planSeqs[0] ?? '') ||
+      norm(f.bucket) !== (sc.bucket as string)
     ) {
       clearFilters();
     }
-  }, [mainFilter, sc.planStartYyyymmdds, sc.planTypes, sc.planSeqs, clearFilters]);
+  }, [mainFilter, sc.planStartYyyymmdds, sc.planTypes, sc.planSeqs, sc.bucket, clearFilters]);
 
   const handleSave = async () => {
     const dirty = dirtyRows();
@@ -359,7 +402,7 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.SAVE_SUCCESS, '_No changes.') });
       return;
     }
-    if (!validateSave(dirty).ok) return; // 수량 범위 / 신규행 붉은셀
+    if (!validateSave(dirty, sc.bucket).ok) return; // 수량 범위(입력 kind 셀만) / 신규행 붉은셀
     // 서버 SAVE_YN 가드 (design 01 R3 / 00 §4-D #30 — AS-IS SaveButton Get_PlanTypeSaveYn/MSG00182). New/Fix/Unfix
     //   와 동일하게 저장가능 plan type(EDIT_YN='Y')만 통과 — 확정/임시 버전(SAVE_YN=N) 저장 차단.
     if (!(await checkServerSaveYn())) {
@@ -520,7 +563,7 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='ProductionPlanLine'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        searchParam={sc}
+        searchParam={searchParamForSave}
         customButtons={[
           // 라벨 실측 LBL 코드(lbl-dict): Fix=LBL00771 / Unfix=LBL00772 / New=LBL01028 / Load=LBL00773 / Measure=LBL00310.
           //   순서 = AS-IS Designer 상단행 New(X=1119) → Fix(1189) → Unfix(1239) (사용자 지시 2026-10-02).
@@ -544,12 +587,12 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
             buttonLabel: '',
           },
         ]}
-        // Sum(SUM 컬럼 토글) — 조회조건 폼에서 그리드 건수 툴바로 이동(사용자 지시 2026-11-11). afterCount 는
-        //   건수 배지 바로 오른쪽(좌측 클러스터)에 렌더되므로 "건수 표시 오른쪽"에 위치한다.
-        //   라벨은 다국어 처리 없이 영어 'Weekly / Monthly Sum' 고정(사용자 지시 2026-11-11).
+        // Sum(SUM 컬럼 토글)을 그리드 건수 표시 오른쪽으로 배치(사용자 지시 2026-11-18). afterCount 는
+        //   건수 배지 바로 오른쪽(좌측 클러스터)에 렌더되므로 "건수 오른쪽"에 위치한다. 라벨은 폼에 있던 것과
+        //   동일하게 t(LBL.SUM)='Sum' 을 유지(2026-11-16 폼 복귀분을 다시 툴바로 되돌림).
         afterCount={
           <Checkbox
-            labelText='Weekly / Monthly Sum'
+            labelText={t(LBL.SUM, '_Sum')}
             checked={sc.chkSum}
             onChange={checked => setSearchCondition({ chkSum: checked })}
           />

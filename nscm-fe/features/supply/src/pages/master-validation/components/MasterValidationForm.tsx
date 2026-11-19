@@ -117,9 +117,11 @@ export const MasterValidationForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Model/Nickname — 텍스트(다건) + 돋보기 팝업(선택적). SCP0039.md 조회조건 정리(v0.5)
+            {/* Model/Nickname — 텍스트 + 돋보기 팝업(선택적). SCP0039.md 조회조건 정리(v0.5)
                 변경=O: 명칭 Model -> Model/Nickname, 팝업 ItemByDivisionModal -> MaterialByDivisionModal(COM0013).
-                다건(개행/콤마) 입력 — 팝업 다건 선택 시 ITEM_ID csv 를 itemId(p_item_id)에 채운다. */}
+                단일행 입력 — 공용 조회조건 Model/Nickname(ScpBomForm 등) 파리티로 통일(테스터 지적 2026-11-16:
+                multiline 은 엔터 시 스크롤·행 증가로 타 화면과 달라 보임). 팝업 다건 선택 시 ITEM_ID csv 를
+                itemId(p_item_id)에 채운다(값 형식 불변 — 표시만 단일행). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -128,8 +130,6 @@ export const MasterValidationForm = ({ onSearch }: Props) => {
                 render={() => (
                   <InputField
                     fullWidth
-                    multiline
-                    maxRows={3}
                     disabled={noDivisionAuth}
                     className={commonStyles.popupSearchField}
                     value={searchParams.itemId}

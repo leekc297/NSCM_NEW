@@ -284,7 +284,9 @@ export const CapaLineAssignModelModal = ({
     labelEn: string,
     value: string[],
     options: ComboOption[],
-    onPick: (codes: string[]) => void
+    onPick: (codes: string[]) => void,
+    // Line Type 처럼 `'-'` 가 유효 코드인 콤보만 공용 CustomDropdown 의 센티널 제외를 끈다.
+    dropdownProps?: { keepSentinelValues?: boolean }
   ) => (
     <Grid size={3}>
       <FormItem
@@ -299,6 +301,7 @@ export const CapaLineAssignModelModal = ({
             limitTags={1}
             value={value.join(',')}
             options={options}
+            {...dropdownProps}
             onChange={(_, picked) =>
               onPick(
                 String(picked ?? '')
@@ -395,7 +398,10 @@ export const CapaLineAssignModelModal = ({
                     'Line Type',
                     sel.electrodeTypes,
                     cascade.electrodeTypeOptions,
-                    codes => setSel(prev => ({ ...prev, electrodeTypes: codes }))
+                    codes => setSel(prev => ({ ...prev, electrodeTypes: codes })),
+                    // Line Type 은 `'-'` 가 유효 후보 — 공용 CustomDropdown 의 센티널 제외를 끈다
+                    //   (메인 화면 조회조건과 동일, AS-IS GetFilterElectrodeType 에 CODE<>'-' 없음).
+                    { keepSentinelValues: true }
                   )}
               </>
             }

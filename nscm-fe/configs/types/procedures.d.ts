@@ -4087,6 +4087,25 @@ interface RawProcedureMap extends Base {
       };
     };
   };
+  /**
+   * DMF0021_01 — Sales Plan_01 (DMF0021 복제 화면, 조회 전용 칸 Group Id · Prod. Country ·
+   * Prod. Country Option · Model Group · Price Representative 추가)
+   *
+   * 패키지 PKG_DMF0021_01. 시트와 버튼, 프로시저 인자 이름은 DMF0021 과 같아서
+   * (SCM_ADM_MNU_BTN_MPG_M · SCM_ADM_PROC_M 대조, 2026-11-16 조회) 계약을 그대로 쓴다.
+   * 조회 결과에 더 붙는 칸은 response 의 index signature 로 받는다.
+   */
+  DMF0021_01: RawProcedureMap['DMF0021'];
+  /**
+   * DMF0035_01 — Demand Plan Waterfall_01 (DMF0035 복제 화면, MKT FCST · SALES 에 조회 전용 칸
+   * Group Id · Prod. Country · Prod. Country Option · Model Group · Price Representative 추가)
+   *
+   * 패키지 PKG_DMF0035_01(MKT · 버전 저장) · PKG_DMF0022_01(SALES), BIZ 는 원본과 같은 PKG_DMF0051.
+   * 시트와 버튼, 프로시저 인자 이름은 DMF0035 와 같아서
+   * (SCM_ADM_MNU_BTN_MPG_M · SCM_ADM_PROC_M 대조, 2026-11-16 조회) 계약을 그대로 쓴다.
+   * 조회 결과에 더 붙는 칸은 response 의 index signature 로 받는다.
+   */
+  DMF0035_01: RawProcedureMap['DMF0035'];
   DMF0049: {
     'MDF Reports': {
       request: {

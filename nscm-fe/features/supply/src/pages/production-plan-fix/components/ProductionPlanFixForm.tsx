@@ -4,7 +4,7 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -169,18 +169,7 @@ export const ProductionPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
       isHidden={!openSearchArea}
       onSearch={onSearch}
       // 2줄 상시 노출(접힘 없음). Row0: Division* / Operation Group* / Plant Site / Line. Row1: Electrode / Period* / Bucket / Item.
-      // SUM 은 Search 버튼 위(aboveSearch).
-      aboveSearch={
-        // SUM 체크박스 - W_/M_ SUM 롤업 컬럼 가시성 토글(design 03 §2.4, 재조회 없음).
-        //   라벨 = 실측 재사용 LBL(ora.py 2026-09-24: SCM_ADM_MSG_M LBL00687='Sum' EN/KO/CN 전건 존재) - 하드코딩 금지(Hook #87§L).
-        <div className={commonStyles.customCheckbox}>
-          <Checkbox
-            labelText={t(LBL.SUM, '_Sum')}
-            checked={sc.chkSum}
-            onChange={checked => set({ chkSum: checked })}
-          />
-        </div>
-      }
+      // SUM(chkSum)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18, SCP0013 동형).
       conditions={
         <>
           {single(t(LBL.DIVISION, '_Div'), sc.divisionId, divisionOptions, setDivision, true)}

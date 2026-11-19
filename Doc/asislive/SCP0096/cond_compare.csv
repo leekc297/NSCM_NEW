@@ -1,0 +1,13 @@
+﻿sheet,asis_sp,param,asis,tobe,verdict,note
+dayRange,SCM0001_GET_SCP_MONTH_PERIOD,division_id,81,81,SAME,
+dayRange,SCM0001_GET_SCP_MONTH_PERIOD,from_date,,,SAME,
+dayRange,SCM0001_GET_SCP_MONTH_PERIOD,offset_month,12,12,SAME,
+dayRange,SCM0001_GET_SCP_MONTH_PERIOD,plan_cycle,DAILY,DAILY,SAME,
+dayRange,SCM0001_GET_SCP_MONTH_PERIOD,time_zone,,AM073,TOBE_ONLY,
+dayRange,SCM0001_GET_SCP_MONTH_PERIOD,timezone,AS054,,ASIS_ONLY,
+calendar,,,,,NO_PAIR,AS-IS 호출 중 인자 이름이 겹치는 SP 없음 · TO-BE 조건 2종
+Shipment Working Day OSP,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,debug_mode,F,,ASIS_ONLY,
+Shipment Working Day OSP,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,division_id,81,81,SAME,
+Shipment Working Day OSP,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,from_yyyymmdd,20261118,20261118,SAME,
+Shipment Working Day OSP,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,plant_site_id,KR02239900_81-P,ALL,DIFF,
+Shipment Working Day OSP,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,to_yyyymmdd,20271114,20271114,SAME,

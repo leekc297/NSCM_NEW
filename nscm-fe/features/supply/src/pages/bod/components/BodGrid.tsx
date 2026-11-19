@@ -59,13 +59,21 @@ const SAVE_ERROR_PERIOD_COLUMNS: string[] = [
   BOD_COLUMN.REMARKS,
   BOD_COLUMN.TO_YYYYMMDD,
 ];
-// 위반 행 매칭 키 — 그리드 값과 응답 값이 동일한 식별자만 사용(TRANSPORT_MODE 는 그리드=명칭·응답=코드라 제외).
-const SAVE_ERROR_MATCH_KEYS: string[] = [
-  BOD_COLUMN.DIVISION_ID,
-  BOD_COLUMN.FROM_SITE_CODE,
-  BOD_COLUMN.TO_SITE_CODE,
-  BOD_COLUMN.INCOTERMS,
-  BOD_COLUMN.PRIORITY,
+// 위반 행 매칭 키 — AS-IS SCP0007_BOD.cs errStr/cpStr(L868-903, 99030) 과 동일한 식별자 집합.
+//   DIVISION+CUSTOMER+FROM_SITE+TO_SITE+INCOTERMS+INCOTERMS_SSP+TRANSPORT_MODE 까지 같은 행만 강조하고
+//   FROM/TO_YYYYMMDD·PRIORITY 는 키에서 뺀다(AS-IS 동일). 과거엔 PRIORITY 를 넣고 TRANSPORT_MODE 를
+//   빼서 Trans Mode 가 다른데 Div·Incoterms·Priority 만 같은 행까지 강조되는 버그가 있었다(2026-11-18 신고:
+//   FRY 오류인데 같은 Priority 의 SEA 행 BOD_ID 11290 까지 강조). gridKey=그리드 행 필드, errKey=오류 커서
+//   필드 — TRANSPORT_MODE 만 그리드=코드컬럼(TRANSPORT_MODE_CODE)·커서=TRANSPORT_MODE(Route 코드)로 이름이
+//   달라 쌍으로 선언하고, 나머지는 양쪽 동명이라 errKey 를 생략한다.
+const SAVE_ERROR_MATCH_KEYS: { gridKey: string; errKey: string }[] = [
+  { gridKey: BOD_COLUMN.DIVISION_ID, errKey: BOD_COLUMN.DIVISION_ID },
+  { gridKey: BOD_COLUMN.CUSTOMER, errKey: BOD_COLUMN.CUSTOMER },
+  { gridKey: BOD_COLUMN.FROM_SITE_CODE, errKey: BOD_COLUMN.FROM_SITE_CODE },
+  { gridKey: BOD_COLUMN.TO_SITE_CODE, errKey: BOD_COLUMN.TO_SITE_CODE },
+  { gridKey: BOD_COLUMN.INCOTERMS, errKey: BOD_COLUMN.INCOTERMS },
+  { gridKey: BOD_COLUMN.INCOTERMS_SSP, errKey: BOD_COLUMN.INCOTERMS_SSP },
+  { gridKey: BOD_COLUMN.TRANSPORT_MODE_CODE, errKey: BOD_COLUMN.TRANSPORT_MODE },
 ];
 
 // 인접 행 값이 같으면 세로로 셀을 병합하는 컬럼 — AS-IS SmartColMerge (SCP0007_BOD.cs InitSpread
@@ -88,7 +96,9 @@ const MERGE_COLUMNS = new Set<string>([
 ]);
 
 const rowMatchesSaveError = (dataItem: WijmoRowItem, err: BodSaveErrorRow): boolean =>
-  SAVE_ERROR_MATCH_KEYS.every(key => String(dataItem[key] ?? '') === String(err[key] ?? ''));
+  SAVE_ERROR_MATCH_KEYS.every(
+    ({ gridKey, errKey }) => String(dataItem[gridKey] ?? '') === String(err[errKey] ?? '')
+  );
 
 const isSaveErrorColumn = (binding: string, errCode: string): boolean => {
   if (SAVE_ERROR_BASE_COLUMNS.includes(binding)) return true;

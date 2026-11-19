@@ -1,9 +1,8 @@
-import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, SearchArea } from '@shared/components';
+import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -271,15 +270,19 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
             true,
             noDivisionAuth
           )}
-          {/* Period(from~to) — 공용 PeriodField(캘린더 스냅/경계 검증 내장, design 02 §5). 기본값은 Plan-date
-              변경 시 applyPlanDate 가 W52 산식(planDate+363일)으로 채운다. from+to 한 슬롯(gridSize 3). */}
-          <PeriodField
-            gridSize={3}
-            start={sc.fromYyyymmdd}
-            end={sc.toYyyymmdd}
-            onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
-            label={t(LBL.PERIOD, 'Period')}
-          />
+          {/* Period(from~to) — 공용 PeriodRangePicker(달력, 일-범위 YYYYMMDD, 사용자 지시 2026-11-18).
+              기본값은 Plan-date 변경 시 applyPlanDate 가 W52 산식(planDate+363일)으로 채운다.
+              PeriodRangePicker 는 자체 Grid 가 없어 Grid size=3 으로 래핑한다. */}
+          <Grid size={3}>
+            <PeriodRangePicker
+              className={commonStyles.formItem}
+              label={t(LBL.PERIOD, 'Period')}
+              required
+              start={sc.fromYyyymmdd}
+              end={sc.toYyyymmdd}
+              onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
+            />
+          </Grid>
           {single(
             t(LBL.BUCKET, 'Bucket'),
             sc.bucket,

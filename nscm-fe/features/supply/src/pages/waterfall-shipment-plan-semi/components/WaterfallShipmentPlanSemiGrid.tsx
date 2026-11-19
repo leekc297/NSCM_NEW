@@ -475,7 +475,9 @@ export const WaterfallShipmentPlanSemiGrid = ({
       //   (헤더 다단 병합·식별열 세로 병합 활성), 실제 세로 병합 범위는 위 WaterfallSemiMergeManager 가
       //   restricted + 빈 셀 끊김 규칙으로 정한다(사용자 확인 2026-11-03).
       allowMerging={AllowMerging.All}
-      headerRowHeight={dynColMetas.length === 0 ? HEADER_TOTAL_HEIGHT : HEADER_TOTAL_HEIGHT / 3}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체(rAF) applyHeaderHeight 의 동적 tier 보정이 충돌해
+      //   무한 invalidate 가 됐다. HEADER_TOTAL_HEIGHT 은 rAF 헤더 높이 effect 에서 계속 쓰인다.
       alternatingRowStep={1}
       useHotkey
     />

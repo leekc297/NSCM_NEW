@@ -1491,3 +1491,57 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 - 2026-11-18 10:52 공용 변경(다른 세션 알림): 권한 검사 계정을 화면별로 지정하는 설정 추가. tools/E2E/users.json screens.<ID>.accounts {역할: 계정} 이 있으면 영역 명부 대신 그 계정만 씀(key SCR/<ID>/<역할>). 반영 파일 facts_auth.py(account_facts·btn_auth_div), facts_auth_combo.py(uid_of), lib/authprobe.ts(accountId). 설정 없는 화면은 기존과 같음. SCP0111 = SYSTEM ADMIN minyonglee1, SCM PI Admin dwhong1012, SCP Planner bottle(사용자 지정). 백업 *.bak_20261118_scracct.
 - 2026-11-18 11:09 정정: 11-18 10:17 기록 'TO-BE integrationPsiEditLock.ts 도 SCM PI Admin BOH 편집 허용 · 원인 미확인' 은 호출부를 안 본 판단. 원인 = IntegrationPsi.tsx:182~183 isPiAdmin·isPlanner false 고정. FE_GUIDE_20261118_0636.md G6 추가(FE 수정 안 함 · DB MODE). 11-17 FE_GUIDE_20261117_1759 G1(ADMIN 저장)도 FE 미반영(integrationPsiSave.ts 수정 시각 11-03 10:18 · unfoldAdminModifyCells 0건).
 - 2026-11-18 11:23 공용 변경(다른 세션 필독): CheckList 설명 칸 = SCP0104 틀 전 화면 적용(사용자 지시). ① 규칙 tools/VibeManager/rules/50_DOC_STYLE.md 'CheckList 설명 칸 틀' 신설(작성 절차 1~5: 조치 필요·판정 필요 행 전부 Doc/verify/<ID>/action_summary.csv 작성 → --resume-docs → '[설명 정리 필요] 0건' 확인). ② make_verify_docs.py 끝에 '[설명 정리 필요] N건 · 행 ID' 출력, 판정 필요 시트도 group 묶음. ③ plain_detail.build_gap: 정리 파일 없는 행도 ' - AS-IS / - TO-BE / - GAP' 틀로 채움(임시). 저장 분류 행은 종전 틀(위치·AS-IS·TO-BE·GAP·조치). 백업 *.bak_20261118_gapfmt, 50_DOC_STYLE.md.bak_20261118_cldesc. SCP0111 v56 설명 정리 필요 0건.
+
+## 2026-11-18 16:24 미검증 자동 해소 라운드 1 (SCP0096)
+- CheckList 뒤 미검증 해소 기능(unverified_resolve.py · VM 체인 checklist) 첫 실측. SCP0096 원장 미검증 270 → 186.
+- 공용 엔진 보완 5: gen_param_map(프레임워크 경유 AS-IS SP 짝 · SP 선언 기본값) · diff_verify(이름 없는 AS-IS 컬럼 위치 대응) · diff_ingest(DIFF 호출 ORDER 판정) · ensureRows minRows + _verify K3·K1 대안 조회. 기록 Doc/verify/SCP0096/_unverified_work.md
+- 다른 화면 영향(대응표 기준 실측): SP 선언 기본값으로 풀리는 인자 11개(SCP0005·SCP0007·SCP0020·SCP0096 @debug_mode 등). 다른 화면 재실행은 안 함.
+
+## 2026-11-18 16:45 미검증 자동 해소 라운드 2 (SCP0096)
+- 원장 미검증 186 → 133(v30) · FAIL 15 유지. 공용 엔진 보완: findSearchBox(메뉴 글자 제외) · combo_oracle local_rhs(지역 변수 대입식) · judge(결함 유형 대상 컬럼·Insert 없음 → NA 근거) · golden.py(SP 선언 기본값·빈 값=전체·실측 인자) · gen_param_map asis_result_unused(AS-IS 결과 미사용 SP) · 신규 asis_sp_src.py · K3·K1 시간 제한 600초. 기록 Doc/verify/SCP0096/_unverified_work.md
+
+## 2026-11-18 18:19 미검증 해소 라운드 1 (SCP0111)
+- 입력: CheckList 16:34~17:44 결과 원장 미검증 47(처리 대상 26 · 사람 3 · 집계 18). 행별 조치 Doc/verify/SCP0111/_unverified_plan.md · 결정 목록 _unverified_decisions.md(D 10 · A 3) · 기록 _unverified_work.md
+- 공용 엔진 보완(검사기 결함 T314~T319): save_audit 기존 행 수정형 저장 판정(restore_touched save_trace.json) · AS-IS 저장 SP 대상 표 주석·별칭 해석 · run_verify I2 언어 전환 재실행(lang_retry · langRetryMaxMin 기본 45분) · 분리형 월 기간 칸(smoke-extra isSplitPeriod·pickSplitMonth · _verify E2·M2) · crud 가상화 그리드 Insert 판정·editonly 저장 보류 · menu_auth_sync.py 신설(체인 post · post 예정 단계 40) · judge J4 결함원장 연결·K4 CR-070
+- 분류표 unverified_classes.csv: 저장보류(45, 사람) · 판단(95, '기계 판정 불가 — 수동 검수 대상')
+- 다른 화면 영향: editonly 화면 신규 행 저장 시험 보류(최근 결과 신규 행 모드 SCP0111·SSP0023·SSP0060, 셋 다 종전에도 inserted=N) · AS-IS 저장 SP 대상 표 74개 중 10개 바뀜(SSP0003 주석 안 SSP_ANL_SHIP_PLAN 제외 등) · I2 생략 화면은 다음 실행부터 재실행 대기
+- 재측정: VM 체인 CheckList 전체 1회(묶음별 --only 안 함). engine_selfcheck 18:16 PASS
+
+## 2026-11-18 19:51 미검증 해소 라운드 2 (SCP0111)
+- --only 재측정 4회(18:23~19:50). 원장 미검증 47 → 32 · 처리 대상 26 → 13(판단 8 · 엔진 4 · 대조표 1) · 사람 5 · 집계 14
+- 추가 보완 T320~T322: _verify E2 asisGuard DateTime.Compare 형태 · restore_touched --keep-trace(--only 때 지난 저장 기록 유지) · _trace W4 E4 판정 넘김이 앞 실행 확정 판정을 덮지 않음(PREV)
+- 화면 결함: 기간 역전 조회 미차단(V-c73d3323 · V-ce8459b6) → FE_GUIDE_20261118_1859.md G8 · fixlist 보류(가이드)
+
+### 2026-11-18 20:1x 공용 변경 · 미검증 해소 반복 · 재실행 행 넘김 (VM 세션)
+- unverified_resolve.py: 앞선 원장에서도 재실행이던 행 = 담당 엔진. triage.json continue·stalled·prev_actionable·ledger_mtime 추가. 체인 checklist 가 continue>0 동안 보완·재수행을 최대 3회 반복(quick.json).
+- 다른 세션 영향: triage.json 키 추가만(기존 키 유지). 백업 *.bak_20261118_loop.
+
+### 2026-11-18 20:2x 공용 검사기 3곳 · SCP0096 판단 행 확인 결과 반영 (VM 세션)
+- db_ref_check.py: 화면 ID 가 이름에 없는 공용 패키지(PKG_COM0000 등)는 proc_meta 의 화면 호출 프로시저 구간만 검사. 구간을 못 찾으면 ERROR(측정 경로 없음).
+- i18n_static.py: 같은 문구 다른 코드 = 화면이 묶음 중 코드 1개만 쓰고 그 KO 문구가 나머지와 다르면 제외.
+- master_sweep.py: AS-IS 표의 ATTRIBUTE* 값이 'ASISLIVE_TEST%' 인 시험 행은 키 대조에서 제외, 제외 행 수를 why 에 기록.
+- 다른 화면 영향: 공용 패키지 기반 EG 행(EMPTY_EQ·LIKE_NULL·TEAM_SRC 등) 건수가 줄 수 있음. selftest 65/65 · 21/21 · engine_selfcheck PASS(20:26). 백업 *.bak_20261118_judge13.
+
+## 2026-11-18 23:0x 계정 미검증 해소(SCP0096 EG032 · EG380 · 공용)
+- facts_auth.py: 화면별 SCM_MST_TITLESET_USER 행 수(TO-BE·AS-IS)·PKG 참조 수를 사실 파일 db.titleset 에 기록. users.json guestAccount(공용 GUEST 전용 계정)를 계정 풀에 key GUEST/-/GUEST 로 추가
+- authprobe.ts: accountId 가 GUEST 키 처리 · distinctAccounts 는 GUEST 키 제외(계정 순회 결과 불변)
+- eg_auth.spec.ts EG032: AS-IS·TO-BE 칸 설정 0행이면 NA(근거 행 수). EG380: 게스트 안내창이 있으면 확인 뒤 화면까지 재고 안내 문구를 근거에 남김 · '권한 신청' 문구 일치 판정 제거(안내 문구로 허위 PASS 방지)
+- users.json: guestAccount = Guest(사내 ZIOUI1 GUEST 그룹만 · BE 로그인 200)
+- 확인: SCP0096 단독 실행 EG032 NA · EG380 FAIL · 변이 guest_home FAIL(23:07~23:08). 백업 *.bak_20261118_acct2
+
+
+## 2026-11-19 00:0x~00:2x SCP0096 미검증 해소 라운드 4(VM 체인 · 일괄 보완)
+- restore_touched.py: 키 있는 복원도 save_trace.json 기록(T323) · prereq.py: 골든에 빠진 AS-IS 호출 SP 있으면 재생성(T324 · SCP0096·SSP0005)
+- tools/E2E/lib/smoke-extra.ts findRowAcrossDivisions(T325) · inputcheck.ts asisBlankDefault·judgeBlankReject(T326) · scenario.ts NOT_APPLICABLE_TAG(T327) · Doc/e2e/specs/_verify.spec.ts 경계값·빈값·@DYNVAL 연결
+- judge.py _meta_req_none(T328) · mapping_trace.py commented_only_sps(T329)·기준표 제외 정적 NA 우선(T330)·reason_fact(T331) · menu_auth_sync.py empty_overrides(T331) · combo_oracle.py resolve_names · a1_live.py 사용자 인자 없는 SP NA(T332) · unverified_classes.csv 72·78
+- 다른 화면 영향: 주석 호출 SP 추출 제외 · 기준표 제외 NA 우선 · 빈값 거부 판정(SCP0037·SCP0122·SCP0127 같은 증상)이 다음 CheckList 부터 반영
+- 확인: 자기 시험 inputcheck 17/17 · scenario 33/33 · menu_auth_sync 9/9 · a1_live 17/17 · restore_touched 8/8 · 단위 함수 시험(resolve_names · golden_missing_sps · commented_only_sps · reason_fact · judge_trace) · engine_selfcheck PASS. 백업 *.bak_20261119_unvr4
+
+### 2026-11-19 01:0x SCP0096 미검증 해소 라운드 5
+- recheck 결과 51 → 18. 처리 대상 1행(F6 빈값) · inputcheck.ts judgeBlankReject pathOk · _verify.spec.ts 빈값 판정 보강(T333). 자기 시험 19/19 · engine_selfcheck PASS(01:05)
+
+### 2026-11-19 07:1x 체인 반복 중단 보완(SCP0096 · 공용)
+- _verify.spec.ts flushRt 부분 실행 합침(T334) · unverified_resolve.py progress()·DB MODE 대조표 행 가이드 담당(T335). selftest OK · engine_selfcheck PASS(07:18). 백업 *.bak_20261119_unvr6
+
+### 2026-11-19 09:0x 사람 확인 행 권장안 판정(사용자 승인 · 공용)
+- mapping_trace.py X-REASON 근거 없음 = FAIL · judge.py 선행 결함 종속 = FAIL(T337) · harness.json snapAutoApprove=true + run_verify 사후 snap_approve(OK·NA). engine_selfcheck PASS(09:09). 다른 화면 X-REASON 사람 확인 행(66화면)이 다음 CheckList 부터 FAIL

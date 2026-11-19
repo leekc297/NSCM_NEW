@@ -107,6 +107,9 @@ def keyless(mid, fp, tables, at, why='키 없는 복원'):
     fp=None 이면 기록 파일을 옮기지 않는다(키 있는 화면에서 시작 기록 처리 뒤 키 복원이 이어질 때)"""
     from dbconn import connect
     bad = 0; left = []
+    # 2026-11-18 SCP0111 F7·F8 미검증: 기존 행 수정형 저장(cleanup_spec mode=editonly · 키 없음)은 정리 백업(cleanup_*.sql)이 없어 save_audit 가
+    #   '저장 미실행' 으로 지나갔다. 되돌리기 전에 찾은 시험 계정 변경 행 = 저장 1회가 실제로 쓴 표·행 → 표별 행 수와 감사 칸 판정(judge_audit)을 save_trace.json 에 남긴다
+    trace = {'mode': 'keyless', 'at': str(at), 'account': ACCOUNT, 'tables_scanned': [], 'changed': {}, 'created': {}, 'audit': []}
     print(f'[restore_touched] {mid}: {why} · 기준 시각 {at} · 계정 {ACCOUNT}')
     with connect('tobe', write=True) as cx:
         cur = cx.cursor()
@@ -117,6 +120,7 @@ def keyless(mid, fp, tables, at, why='키 없는 복원'):
             if {'CREATED_BY', 'CREATION_DATE'} <= cols: conds.append('(LOWER(CREATED_BY)=:u AND CREATION_DATE>=:a)')
             if not conds:
                 print(f'[restore_touched] {t}: 키 없는 복원 불가 — 감사 칸 없음(변경 여부 확인 불가)'); left.append((t, '감사 칸 없음')); continue
+            trace['tables_scanned'].append(t.split('.')[-1].upper())
             cur.execute(f"SELECT ROWIDTOCHAR(ROWID) FROM {t} WHERE {' OR '.join(conds)}", u=ACCOUNT, a=at); rids = [x[0] for x in cur.fetchall()]
             if not rids:
                 print(f'[restore_touched] {t}: 키 없는 복원 · 시험 계정 변경 행 0'); continue
@@ -137,6 +141,7 @@ def keyless(mid, fp, tables, at, why='키 없는 복원'):
             for rid in made:
                 cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); n_del += cur.rowcount
             if made:
+                trace['created'][t.split('.')[-1].upper()] = len(made)
                 print(f'[restore_touched] {t}: 시험 계정이 {at} 뒤 생성한 행 {len(made)} → 삭제 {n_del} · 백업 {bk}')
             for rid in rids:
                 if rid in made:
@@ -154,19 +159,36 @@ def keyless(mid, fp, tables, at, why='키 없는 복원'):
                     print(f'[restore_touched] {t} {rid}: 기록 시각에 행 없음(AS OF) → 삭제 · 백업 {bk1}'); continue
                 o, c = dict(zip(names, o1)), dict(zip(names, c1)); ch = [k for k in names if str(c[k]) != str(o[k])]
                 if ch:
+                    tn = t.split('.')[-1].upper(); trace['changed'][tn] = trace['changed'].get(tn, 0) + 1
+                    ra, wa = judge_audit(o, c, at, tn); trace['audit'].append({'target': f'{tn}|{rid}', 'result': ra, 'why': wa})
                     cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); n_up += 1
             print(f'[restore_touched] {t}: 키 없는 복원 · 시험 계정 변경 행 {len(rids)} → 되돌림 {n_up} · 새 행 삭제 {n_del}')
         cx.commit()
     print(f'[restore_touched] {mid}: 한계 — 저장이 지운 행(감사 칸으로 못 찾음)은 복원 대상 밖 · save_residue 와 별도 확인 필요')
     for t, why in left:
         print(f'[restore_touched] 미복원 {t}: {why}')
+    write_trace(mid, trace)
     if fp:
         os.replace(fp, fp.replace('.json', '.done.json'))
     return 1 if bad or left else 0
 
 
+def write_trace(mid, trace):
+    """save_trace.json(save_audit 의 기존 행 수정형 저장 원천) — 변경 행이 있을 때만 쓴다"""
+    if not (trace['changed'] or trace['created']):
+        return
+    trace['generated'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'save_trace.json'), 'w', encoding='utf-8') as f:
+        json.dump(trace, f, ensure_ascii=False, indent=1, default=str)
+    print(f"[restore_touched] {mid}: 저장 기록 save_trace.json · 변경 {trace['changed']} · 생성 {trace['created']} · 감사 판정 {len(trace['audit'])}건")
+
+
 def main(mid):
     fp = os.path.join(ROOT, 'Doc', 'verify', mid, 'touched_rows.json')
+    st = os.path.join(ROOT, 'Doc', 'verify', mid, 'save_trace.json')
+    if os.path.exists(st) and '--keep-trace' not in sys.argv:
+        os.remove(st)  # 2026-11-18: 지난 실행의 저장 기록이 이번 판정에 섞이지 않게(이번 실행에 저장이 없으면 save_audit = 저장 미실행)
+        # 부분 재판정(run_verify --only → --keep-trace)은 저장 시험을 고르지 않을 수 있어 지난 기록을 둔다(SCP0111 --only E2 뒤 F7·F8 이 미검증으로 되돌아간 실측 19:20)
     if not os.path.exists(fp):
         print(f'[restore_touched] {mid}: 기록 없음'); return 0
     entries = json.load(open(fp, encoding='utf-8'))
@@ -190,6 +212,11 @@ def main(mid):
             print(f'[restore_touched] {mid}: 시작 기록 복원 ERROR — 키 복원은 계속')
     from dbconn import connect
     bad = 0; audit = []
+    # 2026-11-19 SCP0096 F7·F8 미검증: 키 있는 복원도 저장이 쓴 표·행과 감사 판정을 save_trace.json 에 남긴다(전에는 save_audit_cols.csv 만 써서 save_audit 가 '저장 미실행' NOT_RUN)
+    trace = {'mode': 'keyset', 'at': str(min(datetime.datetime.fromisoformat(e['at']) for e in entries)), 'account': ACCOUNT, 'tables_scanned': [], 'changed': {}, 'created': {}, 'audit': []}
+
+    def _mark(kind, t):
+        tn = t.split('.')[-1].upper(); trace[kind][tn] = trace[kind].get(tn, 0) + 1
     with connect('tobe', write=True) as cx:
         cur = cx.cursor()
         for e in entries:
@@ -202,6 +229,8 @@ def main(mid):
                 cur.execute('SELECT COLUMN_NAME, DATA_TYPE FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=:t', t=t); ctype = {x[0]: x[1] for x in cur.fetchall()}; cols = set(ctype)
                 if not set(tkeys) <= cols:
                     continue
+                if not t.upper().endswith('_H') and t.split('.')[-1].upper() not in trace['tables_scanned']:
+                    trace['tables_scanned'].append(t.split('.')[-1].upper())
                 # 2026-11-07 T158(SCP0127): 그리드 행의 날짜 칸은 Date 객체라 기록이 ISO(UTC) '2026-12-31T15:00:00.000Z' 로 남는데 DB 키는 VARCHAR2 'YYYYMMDD'(또는 DATE)
                 #   → WHERE 불일치로 '행 수 0 · SAME' 이 나와 안전망이 행을 못 찾았다. 키 값을 DB 컬럼 타입에 맞춰 정규화한다(UTC → 로컬 날짜)
                 kv = {f'k{i}': _key_value(e['item'].get(k), k, ctype.get(k, '')) for i, k in enumerate(tkeys)}
@@ -220,6 +249,7 @@ def main(mid):
                         cur.execute(f"DELETE FROM {t} WHERE {where} AND LOWER(CREATED_BY)=:u AND CREATION_DATE>=:a", {**kv, 'u': ACCOUNT, 'a': at}); nd = cur.rowcount
                     if {'LAST_UPDATED_BY', 'LAST_UPDATE_DATE'} <= cols:
                         cur.execute(f"SELECT COUNT(*) FROM {t} WHERE {where} AND LOWER(LAST_UPDATED_BY)=:u AND LAST_UPDATE_DATE>=:a", {**kv, 'u': ACCOUNT, 'a': at}); nm = cur.fetchone()[0]
+                    if nd: trace['created'][t.split('.')[-1].upper()] = trace['created'].get(t.split('.')[-1].upper(), 0) + nd
                     print(f'[restore_touched] {t} {list(kv.values())}: flashback 불가 {str(ex)[:60]} · 시험 생성 행 삭제 {nd}' + (f' · ERROR 시험 계정 수정 행 {nm} — 이전 값 미상·수동 복원 필요' if nm else ' · 수정 행 0'))
                     if nm: bad += 1
                     continue
@@ -244,7 +274,7 @@ def main(mid):
                                 cn = dict(zip(names, c1))
                                 if str(cn.get('CREATED_BY') or '').lower() == ACCOUNT and cn.get('CREATION_DATE') and cn['CREATION_DATE'] >= at:
                                     bk1 = backup_rows(cur, t, [rid], mid, 'test_created_deleted')
-                                    cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); okn += 1
+                                    cur.execute(f'DELETE FROM {t} WHERE ROWID = CHARTOROWID(:r)', r=rid); okn += 1; _mark('created', t)
                                     print(f'[restore_touched] {t} {list(kv.values())} ROWID {rid}: DELETE 시험 계정이 기록 시각 뒤 생성한 행 · 백업 {bk1}'); continue
                             if not o1 or not c1:
                                 print(f'[restore_touched] {t} {rid}: ERROR flashback 행 없음 — 수동 확인'); bad += 1; continue
@@ -252,7 +282,7 @@ def main(mid):
                             ra, wa = judge_audit(o, c, at, t); audit.append({'target': f"{t}|{'/'.join(kv.values())}|{rid}", 'result': ra, 'why': wa})
                             if act == 'RESTORE':
                                 ch = [k for k in names if str(c[k]) != str(o[k])]
-                                cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); okn += 1
+                                cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); okn += 1; _mark('changed', t)
                             elif act == 'SKIP':
                                 bad += 1
                             print(f'[restore_touched] {t} {list(kv.values())} ROWID {rid}: {act} {why}')
@@ -264,13 +294,15 @@ def main(mid):
                 ra, wa = judge_audit(o, c, at, t); audit.append({'target': f"{t}|{'/'.join(kv.values())}", 'result': ra, 'why': wa})
                 if act == 'RESTORE':
                     ch = [k for k in names if str(c[k]) != str(o[k])]
-                    cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE {where}", {**kv, **{f'v{i}': o[k] for i, k in enumerate(ch)}})
+                    cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE {where}", {**kv, **{f'v{i}': o[k] for i, k in enumerate(ch)}}); _mark('changed', t)
                 print(f'[restore_touched] {t} {list(kv.values())}: {act} {why}')
                 if act == 'SKIP':
                     bad += 1
         cx.commit()
     with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'save_audit_cols.csv'), 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, ['target', 'result', 'why']); w.writeheader(); w.writerows(audit)
+    trace['audit'] = audit
+    write_trace(mid, trace)
     os.replace(fp, fp.replace('.json', '.done.json'))
     return 1 if bad or rc0 else 0
 

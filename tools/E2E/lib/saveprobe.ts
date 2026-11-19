@@ -15,8 +15,20 @@ export async function nextOf(nscm: Nscm, row: number, b: string, cur: string): P
   const cands = await probe.candidates(nscm.page, row, b);
   if (cands && cands.length) return cands.find(v => v.trim() && !same(v, cur) && !same(v.split(/\s+/)[0], cur)) ?? null;
   const t = norm(cur);
-  if (t === '') return '1';
-  if (!isNaN(Number(t))) return String(Number(t) + 1);
+  // 2026-11-18 미검증 해소(SCP0096 WORKING_TIME_DEFAULT 원값 7 → 8 입력 거부 · AS-IS 최대 7): AS-IS 셀 규칙(cell_rules.csv min·max) 범위 안에서 다른 값을 고른다
+  let lo = -Infinity, hi = Infinity;
+  try {
+    const menu = String((nscm as unknown as { curMenu?: string }).curMenu || '').toUpperCase();
+    const fp = path.join(__dirname, '..', '..', '..', 'Doc', 'asisfacts', 'screens', menu, 'cell_rules.csv');
+    if (menu && fs.existsSync(fp)) {
+      const lines = fs.readFileSync(fp, 'utf8').replace(/^﻿/, '').split(/\r?\n/); const hd = (lines[0] || '').split(',').map(x => x.replace(/"/g, ''));
+      const iC = hd.indexOf('column'), iMin = hd.indexOf('min'), iMax = hd.indexOf('max');
+      const hitLine = lines.slice(1).map(l => l.split(',')).find(c => (c[iC] || '').replace(/"/g, '') === b);
+      if (hitLine) { const mn = Number((hitLine[iMin] || '').replace(/"/g, '')), mx = Number((hitLine[iMax] || '').replace(/"/g, '')); if ((hitLine[iMin] || '') !== '' && !isNaN(mn)) lo = mn; if ((hitLine[iMax] || '') !== '' && !isNaN(mx)) hi = mx; }
+    }
+  } catch { /* 규칙 없음 = 종전 동작 */ }
+  if (t === '') return String(Math.max(lo === -Infinity ? 1 : lo, Math.min(1, hi)));
+  if (!isNaN(Number(t))) { const n = Number(t); if (n + 1 <= hi) return String(n + 1); if (n - 1 >= lo) return String(n - 1); return null; }
   if (/^\d{4}[-./]\d{2}[-./]\d{2}/.test(t)) return null;  // 날짜 왕복은 E2 경로
   return t + 'X';
 }

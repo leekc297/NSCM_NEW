@@ -55,7 +55,10 @@ export const evalEtcReportCell = (params: {
   // BP(REPORT_BP_M)는 Plan/Result 값과 무관하게 Plan 입력 조건을 적용한다 (2026-09-22 사용자 확정
   //   — "BP 일 때는 Result 도 Plan 입력조건과 맞춰줘"). BP 기준월(201801) 고정 아래에서 Result 축을
   //   그대로 쓰면 R1(ym>=기준월)이 전 월을 잠그므로, BP 는 Result 여도 Plan 분기(P1/P2/P3)를 타게 한다.
-  const usePlanRule = planResult === PLAN_RESULT.PLAN || mdfType === REPORT_TYPE.BP_M;
+  const usePlanRule =
+    planResult === PLAN_RESULT.PLAN ||
+    planResult === PLAN_RESULT.ALL ||
+    mdfType === REPORT_TYPE.BP_M;
   // 회색 축 — Plan=과거(기준월 미만) / Result=미래(기준월 이상) (L580~596). BP 는 Plan 축을 따른다.
   const isPast = usePlanRule ? ym < baseYm : ym >= baseYm;
 
@@ -67,6 +70,11 @@ export const evalEtcReportCell = (params: {
   const measure = typeof row.MEASURE === 'string' ? row.MEASURE : '';
   // 시점 창 내 편집 조건 — 40 무관 개방 / 비40 = MEASURE===sEditMeasure (L427~438/L448~459 §3)
   const measureOpen = d40 || (sEditMeasure !== '' && measure === sEditMeasure);
+
+  // ALL — 실적·계획 구간 모두 편집 (2026-11-17 사용자테스트 개선 요청). 시점 잠금(P1 과거년도 ·
+  //   P2 과거 구간 · R1 미래 구간)만 풀고, 그룹 게이트(G0)와 Measure 조건(measureOpen)은 Plan/Result
+  //   와 같게 유지한다. Report Type(SP/BP) 무관. 회색 축은 Plan 축(usePlanRule 분기)을 따른다.
+  if (planResult === PLAN_RESULT.ALL) return { editable: measureOpen, isPast };
 
   if (usePlanRule) {
     // P1 — Plan && 과거년도 → 전 구간 잠금 (L421~424 [C20201223-000448]. BP 포함 — fallthrough 파리티)

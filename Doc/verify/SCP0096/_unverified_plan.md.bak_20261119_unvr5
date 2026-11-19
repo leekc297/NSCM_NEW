@@ -1,0 +1,66 @@
+# SCP0096 미검증 전체 목록 (라운드 4 · 2026-11-19 00:1x)
+
+- 원천: unverified_triage.csv 23:56:32(CheckList v33 원장) · 목록 51행 · 원장 미검증(ERROR) 51행
+- 집계 행은 하위 행을 따라가므로 따로 고치지 않음. 하위 원인 열에 해당 묶음을 적음
+
+| 행 | 규칙 | 담당 | 유형 | 묶음 | 원인(실측) | 조치(고친 파일) |
+|---|---|---|---|---|---|---|
+| V-36c8d524 | F8 | 엔진 | 검사기공백 | F7·F8 저장 감사 | 검사기 결함. 23:29 저장 시험이 OSP 2행·DEFAULT 1행을 바꿨고 감사 판정 4건(save_audit_cols.csv)이 남았으나 키 있는 복원 경로가 save_trace.json 을 쓰지 않음 | restore_touched.py(키 있는 복원도 save_trace.json 기록) |
+| V-7a4e6087 | F7 | 엔진 | 검사기공백 | F7·F8 저장 감사 | 위와 같음. 추가로 golden_cases.csv(11-17 생성)에 저장 SP SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP 행이 없어 F7 원천 없음 | restore_touched.py · prereq.py(골든에 빠진 AS-IS 호출 SP 가 있으면 재생성) |
+| V-d8f314e2 | H2 | 보완 | 선행결함 | 선행 결함 | Sum 체크박스 없음(V-eb856b69 FAIL) 뒤에만 측정 가능 | 처리 안 함 · 결정 목록 · FE 가이드 |
+| V-ca0b2246 | D2 | 엔진 | 검사기공백 | D2 동적 칸 수량 편집 | 시나리오 전제 불성립. @DYNVAL 은 0 아닌 숫자 값 칸을 고르는데 일자 칸(D_)은 Y/N | scenario.ts NOT_APPLICABLE_TAG · _verify.spec.ts 동적 칸 메타 dataType·값 종류 실측 뒤 숫자 칸 0이면 NA |
+| V-70799fba | F6 | 엔진 | 미분류 | F6 빈값 | 검사기 공백. 빈값이 키보드 Delete·편집기 둘 다 안 들어감(7 유지). AS-IS 는 빈칸을 0 으로 저장(cs:568~569). 화면 범위 검사(ShipmentWorkingDayOspGrid.tsx:288)는 빈값 통과 | inputcheck.ts asisBlankDefault·judgeBlankReject 신설 · _verify.spec.ts 빈값 거부 시 칸 설정(isRequired) 실측 뒤 AS-IS 대조 · 분류표 72·78 |
+| V-e663a76c | F4 | 엔진 | 검사기공백 | F4 경계값 | 검사기 결함. 사내 기본 근무시간 표 값: Div 40 7행 모두 7, Div 81 1행 7, Div 82 7이 6행·5가 2행. Division 하나만 바꿔 보고 끝남 | smoke-extra.ts findRowAcrossDivisions 신설 · _verify.spec.ts 경계값 시험이 Division 후보 전부 순회 |
+| V-9e29a0e2 | D3 | 보완 | 선행결함 | 선행 결함 | 위와 같음 | 처리 안 함 · 결정 목록 · FE 가이드 |
+| V-65a3c78c | J4 | 엔진 | 미분류 | J4 권한 대조 | 검사기 공백. AS-IS InsertButton·DeleteButton 재정의 본문 없음(cs:274·cs:278). C·D 권한에 대응 동작 없음 | menu_auth_sync.py empty_overrides · 분류표 72 |
+| V-24927c17 | E3 | 엔진 | 검사기공백 | E3 필수 칸 메타 | 메타 근거 미반영. sheet_columns.csv SCP0096 6칸 USER_SELECTABLE_FLAG=N 0칸(사내 DB 조회 동일) | judge.py _meta_req_none 분기 |
+| V-0d52121b | G4 | 사람 | 스냅샷승인 | 스냅샷 승인 | snap_validate 00:14 OK(누락·순서 차이 0) | 처리 안 함 · 결정 목록(승인 요청) |
+| V-06af9fa9 | K4 | 사람 | 스냅샷승인 | 스냅샷 승인 | snap_validate 00:14 OK(누락·순서 차이 0) | 처리 안 함 · 결정 목록(승인 요청) |
+| V-74ab8496 | A5 | 사람 | 스냅샷승인 | 스냅샷 승인 | snap_validate 00:14 OK(누락·순서 차이 0) | 처리 안 함 · 결정 목록(승인 요청) |
+| V-b36b0750 | H4 | 사람 | 스냅샷승인 | 스냅샷 승인 | snap_validate 00:14 NA(화면샷 기대 없음) | 처리 안 함 · 결정 목록(사람 확인) |
+| V-308cf4c5 | H4 | 사람 | 스냅샷승인 | 스냅샷 승인 | snap_validate 00:14 NA(화면샷 기대 없음) | 처리 안 함 · 결정 목록(사람 확인) |
+| T-8cdb4616 | X-REASON | 대조표 | 대조표사유 | 대조표 사유 | 대조표 기재 오류. AS-IS cs:405 는 W_·M_ 합계 칸 잠금(SetLockSumColumn), 대조표는 제목 시트 잠금으로 적음 | 가이드(DB MODE) · 결정 목록 |
+| T-428f2fa6 | X-REASON | 대조표 | 대조표사유 | 대조표 사유 | 사유가 미이식 결정(향후 재설계)뿐이고 룰·지시 근거 없음 | 가이드(DB MODE) · 결정 목록 |
+| T-af133d05 | X-REASON | 대조표 | 대조표사유 | 대조표 사유 | 주장(팝업 없음)이 AS-IS files.csv 팝업 파일 0 · 화면 열기 문장 프레임워크 폼만으로 확인됨 | mapping_trace.py reason_fact |
+| T-15cf757f | X-REASON | 대조표 | 대조표사유 | 대조표 사유 | 사유 문장이 있으나 키워드 불일치. 주장(신규행 Insert 없음)이 AS-IS InsertButton 빈 재정의로 확인됨 | mapping_trace.py reason_fact |
+| T-52a2cd25 | A6 | 엔진 | 검사기공백 | 주석 호출 SP | 검사기 결함. AS-IS cs:456 주석 안 호출이 문장 원문 칸에 합쳐져 SP 로 추출됨(commented_calls.csv 기록 있음) | mapping_trace.py commented_only_sps |
+| T-e1d6f057 | F4 | 엔진 | 검사기공백 | 주석 호출 SP | 위와 같음 | mapping_trace.py commented_only_sps |
+| EG-938ba32f | A1 | 사람 | 계정 | A1 같은 사용자 | 검사기 결함. 조회 SP 인자에 사용자 칸 없음(p_division_id·p_plant_site_id·기간·debug_mode)인데 같은 사용자 재실행을 ERROR 로 남김 | a1_live.py same_user_rows NA(SP 인자 근거) |
+| EG-7b487474 | C1 | 판단 | 판단 | C1 연쇄 후보 | 검사기 공백. TO-BE 이름 INFAC_40 을 AS-IS 원천으로만 코드로 바꿈. 사내 SCM_MST_SITE.SITE_DESCRIPTION 으로 PL01279700_40-P, AS-IS DEV 에 없음 | combo_oracle.py resolve_names |
+| V-154fdd71 | C1 | 집계 | 집계 | 하위 행 따라감 | 규칙 C1 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-7b487474] SCP0096 연쇄 후보 Plant Site: TO-BE 표시값  | 따로 고치지 않음(C1 연쇄 후보(EG-7b487474)) |
+| V-6a1bd3fd | C1 | 집계 | 집계 | 하위 행 따라감 | 규칙 C1 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-7b487474] SCP0096 연쇄 후보 Plant Site: TO-BE 표시값  | 따로 고치지 않음(C1 연쇄 후보(EG-7b487474)) |
+| V-9e271808 | C1 | 집계 | 집계 | 하위 행 따라감 | 규칙 C1 판정 2행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [EG-7b487474] SCP0096 연쇄 후보 Plant Site: TO-BE 표시값  | 따로 고치지 않음(C1 연쇄 후보(EG-7b487474)) |
+| T-359eae16 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-1-010 '§1 usrConditionPanel1 / UsrConditionPanel' 의 G1 7요소: NA:3 · PASS:2 · | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-3168aa6e | D3 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-1-011 '§1 usrButton1 / UsrButton' 의 D3 8요소: PASS:7 · ERROR:1 | 따로 고치지 않음(선행 결함(V-9e29a0e2) · 주석 호출 SP) |
+| T-24ceca0e | A6 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-3-021 '§3 Query / 470 (FindData_Main 조회)' 의 A6 3요소: PASS:2 · ERROR:1 | 따로 고치지 않음(주석 호출 SP(T-52a2cd25)) |
+| T-6e15d550 | F4 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-3-021 '§3 Query / 470 (FindData_Main 조회)' 의 F4 5요소: PASS:3 · ERROR:1 · NA:1 | 따로 고치지 않음(주석 호출 SP(T-e1d6f057)) |
+| T-8f2b45bf | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-3-021 '§3 Query / 470 (FindData_Main 조회)' 의 G1 7요소: NA:3 · PASS:2 · ERROR:2 | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-74681de3 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-3-023 '§3 SmartColMerge / 477 (조회 후 재병합)' 의 G1 7요소: NA:3 · PASS:2 · ERROR:2 | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-380f8184 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-3-024 '§3 Get / 683 (Columns.Get(0).Visible 조회 전 차단)' 의 G1 7요소: NA:3 · PASS | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-7bd5223f | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-3-026 '§3 GetModelColumnFromViewColumn / 735' 의 G1 7요소: NA:3 · PASS:2 · ERR | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-58be2562 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-4d-001 '§4d BtnInput_Click 가드 #1 조회 전(MSG00135)' 의 G1 7요소: NA:3 · PASS:2 ·  | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-cf17d66b | D3 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-4d-002 '§4d BtnInput_Click 가드 편집모드 아님' 의 D3 8요소: PASS:7 · ERROR:1 | 따로 고치지 않음(선행 결함(V-9e29a0e2) · 주석 호출 SP) |
+| T-5618d74a | D3 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 D00-4d-006 '§4d BtnInput_Click 권한(!CanModelChange, 무메시지)' 의 D3 8요소: PASS:7 · ER | 따로 고치지 않음(선행 결함(V-9e29a0e2) · 주석 호출 SP) |
+| T-3431496c | A6 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 CRUD:SEARCH 'Main 조회(FindData_Main)' 의 A6 3요소: PASS:2 · ERROR:1 | 따로 고치지 않음(주석 호출 SP(T-52a2cd25)) |
+| T-505aaadf | F4 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 CRUD:SEARCH 'Main 조회(FindData_Main)' 의 F4 5요소: PASS:3 · ERROR:1 · NA:1 | 따로 고치지 않음(주석 호출 SP(T-e1d6f057)) |
+| T-70b6eb4e | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 CRUD:SEARCH 'Main 조회(FindData_Main)' 의 G1 7요소: NA:3 · PASS:2 · ERROR:2 | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-f8ce6e75 | F4 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 CRUD:SAVE '저장(SaveData_Main, M-only 7 CLOB)' 의 F4 5요소: PASS:3 · ERROR:1 · NA:1 | 따로 고치지 않음(주석 호출 SP(T-e1d6f057)) |
+| T-41297850 | D3 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 COMMON:UC-02 '수정 중 재조회 시 confirm (MSG00703)' 의 D3 8요소: PASS:7 · ERROR:1 | 따로 고치지 않음(선행 결함(V-9e29a0e2) · 주석 호출 SP) |
+| T-94526ab7 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 COMMON:UC-02 '수정 중 재조회 시 confirm (MSG00703)' 의 G1 7요소: NA:3 · PASS:2 · ERROR:2 | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-5c3ea305 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 COMMON:UC-03 '컬럼 설정 적용 시 Reset 후 재조회' 의 G1 7요소: NA:3 · PASS:2 · ERROR:2 | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-f77f12ff | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 COMMON:UC-06 'Key-in 조회조건 콤마 다중 입력 전건 조회' 의 G1 7요소: NA:3 · PASS:2 · ERROR:2 | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-61721b66 | G1 | 집계 | 집계 | 하위 행 따라감 | 행 집계 — 대조표 COMMON:UC-07 '필터 걸린 상태 재조회 시 필터 유지 (rebindFilterColumns)' 의 G1 7요소: NA:3 · PASS | 따로 고치지 않음(하위: G1|COND:cboDayWeek·cboInputValue 기준표 제외 NA 가 E2E ERROR 에 짐 · mapping_trace.py 우선순위 보완) |
+| T-64d83c17 | X-ROW | 집계 | 집계 | 하위 행 따라감 | 진입점 집계 7검사 — PASS:5 · ERROR:1 · WARN:1 | 따로 고치지 않음(하위: K4 스냅샷 버튼 승인 대기(V-06af9fa9 · 사람)) |
+| T-342ea234 | X-ROW | 집계 | 집계 | 하위 행 따라감 | 진입점 집계 9검사 — PASS:6 · ERROR:2 · REVIEW:1 | 따로 고치지 않음(하위: 주석 호출 SP(T-52a2cd25·T-e1d6f057)) |
+| T-7312ac1d | X-ROW | 집계 | 집계 | 하위 행 따라감 | 진입점 집계 19검사 — PASS:12 · NA:3 · ERROR:2 · REVIEW:1 · WARN:1 | 따로 고치지 않음(하위: G1 기준표 제외 조건 2칸(cboDayWeek·cboInputValue) · 주석 호출 SP) |
+| T-bea62187 | X-ROW | 집계 | 집계 | 하위 행 따라감 | 진입점 집계 18검사 — PASS:10 · NA:5 · ERROR:2 · WARN:1 | 따로 고치지 않음(하위: F6 빈값(V-70799fba)) |
+| T-03dcfd08 | X-ROW | 집계 | 집계 | 하위 행 따라감 | 진입점 집계 3검사 — NA:2 · ERROR:1 | 따로 고치지 않음(하위: 선행 결함(V-9e29a0e2 · 보완)) |
+| T-fcedc149 | X-ROW | 집계 | 집계 | 하위 행 따라감 | 진입점 집계 1검사 — ERROR:1 | 따로 고치지 않음(하위: H4 스냅샷 화면샷 승인 대기(V-b36b0750·V-308cf4c5 · 사람)) |
+
+## 집계 하위 원인 확인(mapping_trace_instances.csv 23:56)
+- G1 11행: 하위 ERROR 2요소 = G1|COND:cboDayWeek·cboInputValue. 정적 판정 NA(기준표 search_cond.csv BUTTON_AREA, CR-071)인데 E2E @trace '칸을 찾지 못함' ERROR 가 우선함 → mapping_trace.py 수정
+- D3 4행: 하위 ERROR = D3|LEDGER:V-9e29a0e2(선행 결함) → 보완 뒤 측정
+- F4 3행·A6 2행: 하위 = PKG_SCP0019 주석 호출 SP
+- C1 3행: 하위 = EG-7b487474
+
+행 수 대조: 목록 51행 = 원장 미검증 51행

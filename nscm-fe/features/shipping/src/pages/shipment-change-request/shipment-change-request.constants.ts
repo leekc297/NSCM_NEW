@@ -321,10 +321,13 @@ export const MSG = {
   //   AS-IS MSG00173('확정 출하 계획 변경 요청이 완료되었습니다') -> TO-BE 등가 MSG01188
   //   'Your confirmed shipment plan change request has been completed.'(EN 실측, 자매 SSP0200 동일 번호).
   REQUEST_COMPLETED: 'MSG01188',
-  // 아래 2종은 TO-BE 미등록(역조회 0건) — AS-IS 번호 유지 + 영문 fallback.
-  //   완료 SP 결과 커서의 실패 사유 분기다(AS-IS cs:2305~2320).
-  APPROVER_UNAVAILABLE: 'MSG01317', // 'Unauthorized' — 모델 담당자 미등록으로 승인자 지정 불가
-  MODEL_PIC_MISMATCH: 'MSG01347', // 'UnModelPic'/'UnModelItem' — 서로 다른 PIC·Model 혼재
+  // 완료 SP 결과 커서의 실패 사유 분기다(AS-IS cs:2305~2320).
+  //   APPROVER_UNAVAILABLE: 2026-11-17 MSG01317→MSG01500 교체. MSG01317 의 DB 문구와 화면 fallback
+  //   ("No model owner is registered...")이 불일치해, 그 fallback 문구를 MSG01500 으로 신규 등록
+  //   (33_register_msg01500_... / QA 등록분). 이제 DB 문구 = fallback 이라 KO 세션에서도 정합.
+  //   (자매 SSP0200 UNAUTHORIZED_APPROVER 는 MSG01317 유지 — 그 fallback 은 MSG01317 과 일치.)
+  APPROVER_UNAVAILABLE: 'MSG01500', // 'No model owner is registered...' — 모델 담당자 미등록으로 승인자 지정 불가
+  MODEL_PIC_MISMATCH: 'MSG01347', // 'UnModelPic'/'UnModelItem' — 서로 다른 PIC·Model 혼재(미등록 시 fallback)
 } as const;
 
 // ====================================================================================

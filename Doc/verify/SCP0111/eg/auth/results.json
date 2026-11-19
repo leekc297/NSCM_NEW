@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 15912,
+                      "duration": 15316,
                       "errors": [],
                       "stdout": [
                         {
@@ -145,7 +145,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:57:58.575Z",
+                      "startTime": "2026-11-18T08:36:53.237Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -176,7 +176,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 28006,
+                      "duration": 26433,
                       "errors": [],
                       "stdout": [
                         {
@@ -192,7 +192,7 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCR/SCP0111/SCM PI Admin 9s\n"
+                          "text": "[eg_auth] SCR/SCP0111/SCM PI Admin 8s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -212,7 +212,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:58:17.399Z",
+                      "startTime": "2026-11-18T08:37:11.418Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -243,7 +243,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 8910,
+                      "duration": 8671,
                       "errors": [],
                       "stdout": [
                         {
@@ -255,7 +255,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:58:48.310Z",
+                      "startTime": "2026-11-18T08:37:40.510Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -286,7 +286,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20749,
+                      "duration": 20813,
                       "errors": [],
                       "stdout": [
                         {
@@ -313,7 +313,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:58:59.930Z",
+                      "startTime": "2026-11-18T08:37:51.785Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -344,7 +344,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 30139,
+                      "duration": 27185,
                       "errors": [],
                       "stdout": [
                         {
@@ -357,37 +357,13 @@
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG377 FAIL\":1,\"EG124 FAIL\":1,\"EG378 FAIL\":1,\"EG123 FAIL\":1}\n"
-                        },
-                        {
-                          "text": "  EG377 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG124 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG378 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG123 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCM PI Admin · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
+                          "text": "[eg_auth] SCP0111 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
                         },
                         {
-                          "text": "[eg_auth] SCP0111 {\"EG377 FAIL\":1,\"EG124 FAIL\":1,\"EG378 FAIL\":1,\"EG123 FAIL\":1}\n"
-                        },
-                        {
-                          "text": "  EG377 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCP Planner · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG124 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCP Planner · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG378 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCP Planner · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
-                        },
-                        {
-                          "text": "  EG123 FAIL 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) [SCR/SCP0111/SCP Planner · Div 81] 기대 규칙 9컬럼 · 평가 불가 0 · 실측 대조 6셀 · 불일치 1 · BOH_QTY r1 편집=false/AS-IS 가능(EditButton:652 !(GROUP==\"ADMIN\") && DIV!=\"82\" · edit_expect.csv \n"
+                          "text": "[eg_auth] SCP0111 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
                         },
                         {
                           "text": "[eg_auth] SCP0111 {}\n"
@@ -395,7 +371,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:59:23.382Z",
+                      "startTime": "2026-11-18T08:38:15.405Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -426,7 +402,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6245,
+                      "duration": 5780,
                       "errors": [],
                       "stdout": [
                         {
@@ -438,7 +414,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:59:56.270Z",
+                      "startTime": "2026-11-18T08:38:45.128Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -469,7 +445,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 157,
+                      "duration": 153,
                       "errors": [],
                       "stdout": [
                         {
@@ -481,7 +457,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T02:00:05.211Z",
+                      "startTime": "2026-11-18T08:38:53.470Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -512,7 +488,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6131,
+                      "duration": 5802,
                       "errors": [],
                       "stdout": [
                         {
@@ -524,7 +500,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T02:00:08.034Z",
+                      "startTime": "2026-11-18T08:38:56.180Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -555,7 +531,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 201,
+                      "duration": 154,
                       "errors": [],
                       "stdout": [
                         {
@@ -567,7 +543,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T02:00:16.853Z",
+                      "startTime": "2026-11-18T08:39:04.453Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -587,8 +563,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-18T01:57:57.623Z",
-    "duration": 142727.32799999998,
+    "startTime": "2026-11-18T08:36:52.724Z",
+    "duration": 134911.97,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

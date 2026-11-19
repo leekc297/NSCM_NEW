@@ -138,13 +138,25 @@ export const useCapaLineCascade = () => {
   const progStat = str(currentVersionRow?.PROG_STAT) || '0';
 
   // ── 마스터 파생 4축 (D07/D08) ────────────────────────────────────────────────────────
-  //   `GetFilteredPackCell`(ScpCapaBL.cs:35-42) — CELL 은 SHOP_GROUP_ID='A', MODULE_PACK 은 'P'.
-  //   ELTR 은 EE 콤보 자체가 이미 전극 마스터라 추가 필터가 없다.
+  //   `GetFilteredPackCell`(ScpCapaBL.cs:35-42) — CELL 은 SHOP_GROUP_ID='A', MODULE_PACK 은 'P' 로
+  //   마스터 전체를 선필터한다(Site 포함 전 축이 shop_group 로 좁혀진다).
+  //   ELTR(EE 마스터)은 이 선필터를 걸지 않는다 — AS-IS 가 Site 축은 shop_group 로 좁히지 않기
+  //   때문이다(design 02 §3.3: Site = `DIVISION_ID IN && CODE<>'-'`, shop 조건 없음). 다만 EE
+  //   마스터에는 SHOP_GROUP_ID(=ATTRIBUTE1)가 'E' 가 아닌 행이 섞여 있어(실측: MI03 'MI Michigan
+  //   HP Auto Prod' 는 '-' 행만 존재), Plant/Building/Line 축은 **축별로** shop_group='E' 를 걸어야
+  //   AS-IS `RefreshPlant`(`SHOP_GROUP_ID IN(_shop_group)`, cs:1621-1629)와 같아진다 — 안 걸면
+  //   MI03 가 Plant 후보에 더 떠 Div 81 기준 7건이 8건이 된다(2026-11-18 실측).
   const masterRows = useMemo<ComboRow[]>(() => {
     const rows = rowsOf(masterRowsRaw);
     if (divisionType === DIVISION_TYPE.ELTR) return rows;
     return rows.filter(row => str(row.SHOP_GROUP_ID) === shopGroup);
   }, [masterRowsRaw, divisionType, shopGroup]);
+
+  // Plant/Building/Line 축 전용 shop_group 필터(design 02 §3.3·§5.4 S07~S09).
+  //   CELL/PACK 은 masterRows 가 이미 shop 선필터돼 있어 무해한 멱등 조건이고, ELTR 은 EE 마스터의
+  //   비-'E' 행(MI03 등)을 이 단계에서 떨군다. Site(S06)에는 걸지 않는다 — AS-IS 가 Site 를 shop 로
+  //   좁히지 않는다.
+  const inShopGroup = (row: ComboRow): boolean => str(row.SHOP_GROUP_ID) === shopGroup;
 
   const siteSet = useMemo(() => pickedSet(sc.siteIds), [sc.siteIds]);
   const plantSet = useMemo(() => pickedSet(sc.plantIds), [sc.plantIds]);
@@ -167,14 +179,19 @@ export const useCapaLineCascade = () => {
           masterRows,
           'PLANT_ID',
           'PLANT_NAME',
-          row => inDivision(row) && inSet(siteSet, str(row.SITE_ID))
+          row => inDivision(row) && inShopGroup(row) && inSet(siteSet, str(row.SITE_ID))
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [masterRows, sc.divisionId, siteSet]
   );
 
-  // 주의: Building 은 **Site 조건이 없다** — Plant 를 통한 간접 종속이다(`GetFilterFactory`, V-10).
+  // Building/Line 은 직속 부모(Plant/Building)뿐 아니라 **Site 로도 좁힌다**. AS-IS 는 Site 선택 시
+  //   좁혀진 Plant 후보 CSV 를 `GetFilterFactory` 의 `_plant` 인자로 넘겨(Plant 무선택이어도 ALL→후보
+  //   CSV) Building 을 간접 종속시킨다(RefreshFactory cs:1631, `_plant`). TO-BE 는 Site 선택 시 하위를
+  //   'ALL'(=무필터)로 리셋하므로 plantSet 만 보면 전체가 떠 **Site 만 골라도 Building·Line 이 안
+  //   좁혀지던 버그**(SCP0104 테스트 No.1, 2026-11-18). 마스터가 행마다 SITE_ID 를 들고 있어 siteSet
+  //   직접 필터가 "그 Site 의 Plant 들" 슬라이스와 등가다(Site⊃Plant⊃Factory 계층). 자매 SCP0105/0106 동일.
   const factoryOptions = useMemo<ComboOption[]>(
     () =>
       sortMasterCodes(
@@ -182,11 +199,15 @@ export const useCapaLineCascade = () => {
           masterRows,
           'FACTORY_ID',
           'FACTORY_NAME',
-          row => inDivision(row) && inSet(plantSet, str(row.PLANT_ID))
+          row =>
+            inDivision(row) &&
+            inShopGroup(row) &&
+            inSet(siteSet, str(row.SITE_ID)) &&
+            inSet(plantSet, str(row.PLANT_ID))
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, sc.divisionId, plantSet]
+    [masterRows, sc.divisionId, siteSet, plantSet]
   );
 
   const lineOptions = useMemo<ComboOption[]>(
@@ -200,13 +221,15 @@ export const useCapaLineCascade = () => {
             'LINE_NAME',
             row =>
               inDivision(row) &&
+              inShopGroup(row) &&
+              inSet(siteSet, str(row.SITE_ID)) &&
               inSet(plantSet, str(row.PLANT_ID)) &&
               inSet(factorySet, str(row.FACTORY_ID))
           )
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, sc.divisionId, plantSet, factorySet]
+    [masterRows, sc.divisionId, siteSet, plantSet, factorySet]
   );
 
   // ── Operation (D04/D05) ──────────────────────────────────────────────────────────────
@@ -263,7 +286,12 @@ export const useCapaLineCascade = () => {
     const seen = new Map<string, number>();
     for (const row of electrodeRows.filter(row => inSet(operationSet, str(row.OPERATION_ID)))) {
       const code = str(row.CODE);
-      if (!code || code === EMPTY_CODE || seen.has(code)) continue;
+      // Line Type 은 다른 축과 달리 `'-'` 를 후보에서 빼지 않는다 — AS-IS `GetFilterElectrodeType`
+      //   (ScpCapaBL.cs:370-403)에는 `CODE <> '-'` 가 없다(Site/Plant 류의 `GetFilterDummySite`
+      //   cs:414 에만 있음). `'-'` 는 유효 Line Type 이고(Operation A9000/AFFFF/P5500/P9500 은 '-'
+      //   1건만 존재), 빼면 Cell 후보가 10→9 로 줄고 ALL 펼침 CSV 에서도 빠져 Line Type='-' SOP
+      //   행이 조회되지 않는다(2026-11-18 DB 실측). 빈 NAME 만 제외(DeleteEmptyName 등가).
+      if (!code || seen.has(code)) continue;
       seen.set(code, Number(str(row.DISPLAY_SEQ)) || 0);
     }
     return [...seen.entries()]

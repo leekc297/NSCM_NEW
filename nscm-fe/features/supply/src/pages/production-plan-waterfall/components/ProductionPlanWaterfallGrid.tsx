@@ -367,7 +367,9 @@ export const ProductionPlanWaterfallGrid = ({
       // AS-IS SmartColMerge — 데이터 행 세로 병합 + 헤더 3단 그룹 병합(WaterfallMergeManager 로 교체).
       allowMerging={AllowMerging.All}
       comboParams={comboParams}
-      headerRowHeight={headerRowHeight}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체 applyHeaderHeight 의 동적 tier 보정이 충돌해 무한
+      //   invalidate 가 됐다. headerRowHeight 지역값은 applyHeaderHeight effect deps 로 계속 쓰인다.
       excelFileName='ProductionPlanWaterfall'
     />
   );

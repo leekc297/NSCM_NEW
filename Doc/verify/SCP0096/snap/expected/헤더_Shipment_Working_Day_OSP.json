@@ -1,0 +1,25 @@
+{
+ "kind": "헤더",
+ "scope": "Shipment Working Day OSP",
+ "columns": [
+  "Div",
+  "Plant Site ID",
+  "Plant Site",
+  "Working Time Default",
+  "Last Input Date",
+  "Measure"
+ ],
+ "meta_hidden": [],
+ "headerSpec": {
+  "rows": 3,
+  "spans": 10,
+  "literals": [
+   "SUM"
+  ],
+  "maxRowPx": 32
+ },
+ "dynamicHeader": true,
+ "src": "plan.json expectedCols[Shipment Working Day OSP][40](SHEET_COLUMNS)",
+ "personalized": null,
+ "note": "동적 기간 컬럼은 {YM}/{YMD}/{W} 토큰 · TO-BE 추가 컬럼(이름 컬럼 등)은 extra 로 보고(결함 아님 · 사람 확인)"
+}

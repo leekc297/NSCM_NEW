@@ -70,7 +70,10 @@ const makeInitState = (): State => ({
 //   fcstYn 은 'true'/'false' 문자열을 boolean 으로 되돌린다. Period(fromYyyymm/toYyyymm)는 저장 단계의
 //   EXCLUDED_DATE_PARAM 로 애초에 빠져 복원 대상이 아니다(init '' 유지). Division/OperationGroup/
 //   Bucket/CellTypeGr 는 OnShown 고정값이라 복원하지 않고 init(FIXED_SEARCH)을 권위값으로 둔다.
-const RESTORE_STRING_KEYS = ['team', 'fromSite', 'planDate', 'gapDate', 'itemId', 'nickName'] as const;
+//   planDate/gapDate(주 단위 Plan/Gap Date)는 **조건 저장 복원 대상에서 뺀다** — AS-IS 는 날짜류를
+//   저장 대상에서 제외해 재진입 시 기본 주로 뜬다(테스트 I-06). 필드명이 EXCLUDED_DATE_PARAM 정규식에
+//   안 걸려 저장은 되지만, 여기서 복원하지 않으면 init(기본 주 계산)이 권위값이 된다(Period 와 동형 결과).
+const RESTORE_STRING_KEYS = ['team', 'fromSite', 'itemId', 'nickName'] as const;
 const buildSearchConditionFromSaved = (
   saved: readonly { paramNm: string; paramCtn: string }[],
   init: SearchCondition

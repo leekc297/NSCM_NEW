@@ -40,6 +40,15 @@ const ERROR_ROW_COLOR = '#ffd7d7';
 const str = (v: unknown): string =>
   typeof v === 'string' || typeof v === 'number' ? String(v) : '';
 
+// 업로드 결과 건수(Success/Error/Total) 천단위 콤마 — '1785'→'1,785', 비숫자는 원본 유지(#201).
+const formatCount = (v: string): string => {
+  const trimmed = v.trim();
+  if (!/^-?\d+(\.\d+)?$/.test(trimmed)) return v;
+  const [intPart, decPart] = trimmed.split('.');
+  const withComma = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decPart !== undefined ? `${withComma}.${decPart}` : withComma;
+};
+
 const getCI = (row: Record<string, unknown>, key: string): unknown => {
   if (key in row) return row[key];
   const lower = key.toLowerCase();
@@ -153,6 +162,26 @@ export const ExcelUploadModal = ({
       });
       const listRows = (r.O_CUR_LIST ?? r.o_cur_list ?? []) as Record<string, unknown>[];
       setErrorRows(listRows.map(toErrorRow));
+
+      // 필수항목 누락 안내(#201-1) — 업로드 검증은 9개 컬럼(Div~Incoterms) 전부 필수다(AS-IS SSP0022_SHIPMENT_
+      //   REQUEST_EXCEL_UPLOAD:184-186 / TO-BE PKG_SSP0022:4760-4762, 'Invalid Column Data'). 어떤 필수칸이
+      //   비어 떨어졌는지 컬럼명까지 모아 알려준다(사용자 지시 2026-11-18).
+      const missingCols = new Set<string>();
+      for (const row of listRows) {
+        if (!str(getCI(row, 'MESSAGE_TEXT')).toLowerCase().includes('invalid column')) continue;
+        headerLabels.forEach((label, i) => {
+          if (str(getCI(row, `ATTRIBUTE${i + 1}`)).trim() === '') missingCols.add(label);
+        });
+      }
+      if (missingCols.size > 0) {
+        void setAlert({
+          type: 'alert',
+          content: t(
+            'FE_EXCEL_REQUIRED_COLUMN_MISSING',
+            '_Required columns are missing: {0}'
+          ).replace('{0}', [...missingCols].join(', ')),
+        });
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : t('MSG00618', '_An error occurred while uploading.');
       void setAlert({ type: 'alert', content: msg });
@@ -276,18 +305,24 @@ export const ExcelUploadModal = ({
           <div className={styles.statusContainer}>
             <FormItem
               label={t('LBL00755', '_Success')}
-              labelAlign='left'
-              render={() => <TextField className={styles.statusInput} value={result.success} fullWidth />}
+              labelAlign='right'
+              render={() => (
+                <TextField className={styles.statusInput} value={formatCount(result.success)} fullWidth />
+              )}
             />
             <FormItem
               label={t('LBL00756', '_Error')}
-              labelAlign='left'
-              render={() => <TextField className={styles.statusInput} value={result.error} fullWidth />}
+              labelAlign='right'
+              render={() => (
+                <TextField className={styles.statusInput} value={formatCount(result.error)} fullWidth />
+              )}
             />
             <FormItem
               label={t('LBL00757', '_Total')}
-              labelAlign='left'
-              render={() => <TextField className={styles.statusInput} value={result.total} fullWidth />}
+              labelAlign='right'
+              render={() => (
+                <TextField className={styles.statusInput} value={formatCount(result.total)} fullWidth />
+              )}
             />
           </div>
           {errorRows.length > 0 && (

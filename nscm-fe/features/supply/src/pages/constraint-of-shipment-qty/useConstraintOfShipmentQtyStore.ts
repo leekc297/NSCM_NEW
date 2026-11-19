@@ -2,8 +2,14 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { ADMIN_SHEET_NAME, MENU_ID, SHEETS, VALID_DEFAULT } from './constraint-of-shipment-qty.constants';
+import {
+  ADMIN_SHEET_NAME,
+  MENU_ID,
+  SHEETS,
+  VALID_DEFAULT,
+} from './constraint-of-shipment-qty.constants';
 import type { SearchCondition } from './constraint-of-shipment-qty.types';
+import { type SearchOptions, toSearchParam } from './utils/constraint-of-shipment-qty.cascadeCombo';
 
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
@@ -28,7 +34,7 @@ interface Action {
   reset: () => void;
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
-  setFilter: () => void;
+  setFilter: (options: SearchOptions) => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
@@ -40,8 +46,9 @@ interface Action {
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
 //   멀티셀렉트 5종(planGroup/fromSite/toSite/stage/modelGroup) = 콤마 결합 → split 역직렬화.
-//   불리언 조회조건 없음. 날짜키 fromDate/toDate 는 EXCLUDED_DATE_PARAM(date(fr|to)$ 등)에 안 걸려
-//   저장·복원된다(끝이 "Date" — 자매 SCP0130 fromDate 동형) → 평문 문자열 patch.
+//   불리언 조회조건 없음.
+//   Period(fromDate/toDate)는 저장 대상이 아니다(갭분석 C-11) — 화면이 F6 저장 조건에서 빼고, 이미 저장된
+//   행이 남아 있어도 여기서 복원하지 않아 진입마다 AS-IS 기본 기간(setDefaultPeriod)이 적용된다.
 const RESTORE_ARRAY_KEYS = new Set<string>([
   'planGroupIds',
   'fromSiteIds',
@@ -49,6 +56,8 @@ const RESTORE_ARRAY_KEYS = new Set<string>([
   'stageIds',
   'modelGroupIds',
 ]);
+
+const RESTORE_EXCLUDED_KEYS = new Set<string>(['fromDate', 'toDate']);
 
 const initSearch: SearchCondition = {
   divisionId: '',
@@ -100,37 +109,39 @@ export const useConstraintOfShipmentQtyStore = createPersistedStoreWithTab<State
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
       }),
-    // Division 변경(싱글 콤보) = TO-BE 공통 요건: Division·기간(from/to) 을 제외한 검색조건을 전부 초기화하고
+    // Division 변경(싱글 콤보) = TO-BE 공통 요건: Division·기간(from/to)·Active 를 제외한 검색조건을 전부 초기화하고
     //   그리드도 초기화(filters clear)한다(사용자 지시 2026-10-02 — TO-BE 공통 요건이 AS-IS 핸들러보다 우선).
-    //   기간(fromDate/toDate)·Division(새 값)만 유지하고 planGroup/fromSite/toSite/stage/modelGroup/item/valid 는
-    //   initSearch 로 되돌린다(종전 onChange 는 cascade 로 5갈래만 비웠다 — item/valid 잔존 + 그리드 미초기화 결함 해소).
+    //   Active 는 AS-IS 도 유지하고 표준도 「Div 변경 시 초기화 N」이다(.cs ClbDivision_SelectedIndexChanged, 갭분석 표-09).
+    //   planGroup/fromSite/toSite/stage/modelGroup/item 은 initSearch 로 되돌린다.
     //   편집중(dirty) 확인 가드(MSG00704)는 Form 의 onChange 가 confirmIfDirtyKey 로 처리한다(commit 51d4e9fa 패턴).
     //   그리드는 itemsSource=rows(=filters 기반 쿼리)라 filters 를 비우면 신규행·미저장 편집이 함께 폐기된다(자매 SCP0131 동형).
     setDivision: divisionId =>
       set(state => {
         const cur = get().searchCondition;
         state.searchCondition = {
-          ...initSearch, // Division·기간 제외 전 조건 초기화(planGroup/fromSite/toSite/stage/modelGroup/item/valid)
+          ...initSearch, // Division·기간·Active 제외 전 조건 초기화(planGroup/fromSite/toSite/stage/modelGroup/item)
           divisionId,
           fromDate: cur.fromDate,
           toDate: cur.toDate,
+          validYn: cur.validYn,
         };
         state.filters = {}; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태
       }),
     // GET SP 파라미터 매핑(design 03 §4, SCP0132_GET_CONSTRAINT_OF_SHIPMENT_QTY 10 param):
     //   Division/PlanGroup/FromSite/ToSite/ModelGroupName/Item/Stage/FromDate/ToDate/ValidYn
-    setFilter: () => {
+    //   목록 전체 선택(SELECT ALL)은 빈 값으로 보낸다(AS-IS .cs:444~449, toSearchParam, 갭분석 C-05).
+    setFilter: options => {
       set(state => {
         const c = state.searchCondition;
         state.filters = {
           [SHEETS.MAIN]: {
             divisionId: c.divisionId,
-            planGroupId: c.planGroupIds.join(','),
-            fromSiteId: c.fromSiteIds.join(','),
-            toSiteId: c.toSiteIds.join(','),
-            modelGroupName: c.modelGroupIds.join(','),
+            planGroupId: toSearchParam(c.planGroupIds, options.planGroup),
+            fromSiteId: toSearchParam(c.fromSiteIds, options.fromSite),
+            toSiteId: toSearchParam(c.toSiteIds, options.toSite),
+            modelGroupName: toSearchParam(c.modelGroupIds, options.modelGroup),
             itemId: c.itemId,
-            stage: c.stageIds.join(','),
+            stage: toSearchParam(c.stageIds, options.stage),
             fromDate: c.fromDate,
             toDate: c.toDate,
             // AS-IS .cs:452 pValidYn = sValidYn.Equals("ALL") ? string.Empty : sValidYn —
@@ -191,8 +202,10 @@ export const useConstraintOfShipmentQtyStore = createPersistedStoreWithTab<State
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearch)) continue; // SearchCondition 필드만 allowlist
+          if (RESTORE_EXCLUDED_KEYS.has(paramNm)) continue;
           const val = paramCtn ?? '';
-          if (RESTORE_ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
+          if (RESTORE_ARRAY_KEYS.has(paramNm))
+            patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
           else patch[paramNm] = val;
         }
         set(state => {

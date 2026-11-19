@@ -1,0 +1,292 @@
+{
+ "screen": "SCP0096",
+ "made": "2026-11-19 09:32",
+ "checklist": {
+  "version": 37,
+  "total": 1675,
+  "totals": {
+   "PASS": 745,
+   "FAIL": 19,
+   "판정필요": 9,
+   "미검증": 16,
+   "해당없음": 886
+  },
+  "axes": [
+   {
+    "axis": "1.디자인·다국어",
+    "total": 245,
+    "PASS": 120,
+    "FAIL": 0,
+    "판정필요": 1,
+    "미검증": 5,
+    "해당없음": 119
+   },
+   {
+    "axis": "2.AS-IS 로직",
+    "total": 173,
+    "PASS": 67,
+    "FAIL": 7,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 99
+   },
+   {
+    "axis": "3.SMOKE",
+    "total": 618,
+    "PASS": 276,
+    "FAIL": 2,
+    "판정필요": 5,
+    "미검증": 6,
+    "해당없음": 329
+   },
+   {
+    "axis": "4.CRUD",
+    "total": 403,
+    "PASS": 98,
+    "FAIL": 2,
+    "판정필요": 1,
+    "미검증": 5,
+    "해당없음": 297
+   },
+   {
+    "axis": "5.권한별 CRUD",
+    "total": 39,
+    "PASS": 21,
+    "FAIL": 1,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 17
+   },
+   {
+    "axis": "분류 없음",
+    "total": 197,
+    "PASS": 163,
+    "FAIL": 7,
+    "판정필요": 2,
+    "미검증": 0,
+    "해당없음": 25
+   }
+  ],
+  "action": [
+   [
+    "EG-807044ce",
+    "J1",
+    "SCP0096 EG365 자동 선택 SCP/40/SCP Planner"
+   ],
+   [
+    "V-f95f27ac",
+    "J4",
+    "Home / Auth Request 메뉴"
+   ],
+   [
+    "EG-ad36724d",
+    "J1",
+    "SCP0096 EG365 자동 선택 SCP/40/SCM Viewer"
+   ],
+   [
+    "EG-c63a0d42",
+    "J1",
+    "SCP0096 EG365 자동 선택 SCP/82/SCM Viewer"
+   ],
+   [
+    "EG-a24f3b24",
+    "J4",
+    "SCP0096 EG380 무권한 첫 화면 GUEST/-/GUEST"
+   ],
+   [
+    "V-4a2afe1f",
+    "F5",
+    "SCP0096 화면"
+   ],
+   [
+    "V-70799fba",
+    "F6",
+    "SCP0096 빈값 저장"
+   ],
+   [
+    "V-eb856b69",
+    "A3",
+    "SCP0096 체크박스 Sum"
+   ],
+   [
+    "EG-cac7a1b1",
+    "N1",
+    "SCP0096 기준정보 키 존재 SCM_MST_PLAN_DETAIL"
+   ],
+   [
+    "EG-85b47891",
+    "N1",
+    "SCP0096 기준정보 키 존재 SCM_MST_PROJECT"
+   ],
+   [
+    "EG-a184f82b",
+    "N1",
+    "SCP0096 기준정보 키 존재 SCM_MST_SITE_ITEM"
+   ]
+  ],
+  "review": [
+   [
+    "V-2a948121",
+    "A1",
+    "SCP0096 화면"
+   ],
+   [
+    "V-9a4ab0ac",
+    "H11",
+    "SCP0096 저장 중 로딩"
+   ],
+   [
+    "V-b713388c",
+    "A6",
+    "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+   ],
+   [
+    "V-a007d973",
+    "A6",
+    "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+   ],
+   [
+    "V-4ccf9d80",
+    "A7",
+    "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+   ],
+   [
+    "T-a8c0dab9",
+    "F5",
+    "SCP0096 화면"
+   ],
+   [
+    "T-7312ac1d",
+    "X-ROW",
+    "SCP0096_Shipment_Working_Day_OSP.FindData_Main"
+   ],
+   [
+    "EG-e0881be0",
+    "A1",
+    "SCP0096 실전송 건수 Shipment Working Day OSP"
+   ],
+   [
+    "EG-d965ca33",
+    "A6",
+    "SCP0096 문자 정렬 PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+   ]
+  ],
+  "ledger": {
+   "미검증": 326,
+   "PASS": 61,
+   "FAIL": 8
+  },
+  "unverified_sheet_rows": 491
+ },
+ "fe_mapping": {
+  "total": 91,
+  "by_state": {
+   "구현": 66,
+   "제외": 23,
+   "해당없음": 2
+  }
+ },
+ "asis_actions": {
+  "total": 139,
+  "blank_state": 135,
+  "meaning_needed": 7,
+  "by_state": {
+   "빈칸": 135,
+   "그리드 속성/값 설정": 3,
+   "그리드 편집 잠금/해제": 1
+  }
+ },
+ "counts": {
+  "menu_id": "SCP0096",
+  "unverified_sheet": 491,
+  "unverified_by_reason": {
+   "측정못함": 11,
+   "시험검사": 1,
+   "상속생략": 462,
+   "대상불명": 12,
+   "승인대기(스냅샷)": 5
+  },
+  "direct_unmeasured": 285
+ },
+ "ledger": {
+  "menu_id": "SCP0096",
+  "generated": "2026-11-19T08:36:31",
+  "instances": 372,
+  "done": 341,
+  "open": 31,
+  "by_type": {
+   "W3": 3,
+   "W6": 2,
+   "W7": 5,
+   "W9": 21
+  },
+  "by_owner": {
+   "화면 FE": 2,
+   "DB 객체": 1,
+   "E2E": 2,
+   "사람 판정 / AS-IS 원문 확인 → 재판정": 3,
+   "대조표": 2,
+   "하네스·환경": 21
+  },
+  "suspect_not_implemented": 0,
+  "by_check": {
+   "F5": {
+    "W3": 1
+   },
+   "F6": {
+    "W3": 1
+   },
+   "X-ROW": {
+    "W3": 1,
+    "W7": 1,
+    "W9": 6
+   },
+   "G4": {
+    "W6": 2,
+    "W9": 2
+   },
+   "H5": {
+    "W7": 1,
+    "W9": 6
+   },
+   "I1": {
+    "W7": 1
+   },
+   "X-REASON": {
+    "W7": 2
+   },
+   "K4": {
+    "W9": 1
+   },
+   "H4": {
+    "W9": 1
+   },
+   "D3": {
+    "W9": 5
+   }
+  }
+ },
+ "name": "Shipment_Working_Day_OSP",
+ "sources": [
+  {
+   "file": "Doc/UI_CHECKLIST/SCP0096_ShipmentWorkingDayOsp_CheckList_v37.xlsx",
+   "time": "2026-11-19 08:36"
+  },
+  {
+   "file": "nscm-fe/features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md",
+   "time": "2026-10-22 18:50"
+  },
+  {
+   "file": "Doc/asisfacts/screens/SCP0096/__asis-actions__.md",
+   "time": "2026-10-23 11:29"
+  },
+  {
+   "file": "Doc/verify/SCP0096/checklist_counts.json",
+   "time": "2026-11-19 08:36"
+  },
+  {
+   "file": "Doc/verify/SCP0096/work_ledger_summary.json",
+   "time": "2026-11-19 08:36"
+  }
+ ]
+}

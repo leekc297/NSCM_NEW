@@ -452,18 +452,47 @@ export const parseErpErrors = (eMessage: string): { confirmId: string; message: 
     .filter(e => e.confirmId !== '');
 };
 
-// 변경사유 필수 판정 — AS-IS Validation_Check(SSP0021_ShipmentPlan.cs L2961~3186, SSP0060 동일 구조).
-//   수정 행('M')은 출하수량·출하일·운송수단 중 하나라도 바뀌었을 때만 사유를 요구한다(MSG00285 → TO-BE MSG01289).
-//   비고(REMARKS·REMARKS2)만 바뀐 행과 신규 행('I')은 사유 검사를 하지 않는다(신규 행 분기 L3189~ 에 사유 검사 없음).
-//   original 은 EditTracker 가 보관한 "현재 값과 다른 컬럼의 원본값" 맵이라, 키가 있으면 그 컬럼이 바뀐 것이다
-//   (되돌리면 키가 지워진다). 종전엔 저장 대상 전 행에 사유를 강제했다(결함 B10).
-export const SHIPMENT_CHANGE_KEYS = ['SHIPMENT_CONFIRM_QTY', 'SHIPMENT_DATE', 'TRANSPORT_MODE'] as const;
+// 변경사유(CHANGE_REASON_CODE/DETAIL) 필수는 findMissingRequired(DETAIL_REQUIRED_FIELDS)가 I/M 공통으로
+//   담당한다 — AS-IS checkRequiredOfSpread 가 조건부 Validation_Check(MSG00285)보다 먼저 돌아 모든 편집에
+//   Reason Detail 을 요구하기 때문. 종전 조건부 needsChangeReason(수량·일자·운송수단 변경 시에만)은
+//   그 뒤라 가려지는 과소 구현이라 제거했다(사용자 실측 2026-11-16).
 
-export const needsChangeReason = (
-  row: Record<string, unknown>,
-  original: Record<string, unknown> | undefined
-): boolean => {
-  if (str(row.CRUD_TYPE) === 'I') return false;
-  if (!original) return false;
-  return SHIPMENT_CHANGE_KEYS.some(key => key in original);
+// 공백만 있는 문자열도 미입력으로 본다(AS-IS string.IsNullOrWhiteSpace / 공용 useSaveWithValidation.isBlank 동일).
+//   숫자 0 은 미입력이 아니다(String(0)='0' → 통과, AS-IS GetValue().ToString() 과 동일 — 수량 0 은 최소수량
+//   검증 MSG00425 의 몫이지 필수검증 대상이 아니다).
+const isBlank = (v: unknown): boolean =>
+  v === null || v === undefined || (typeof v === 'string' && v.trim() === '');
+
+// 필수 필드 1종 — 값이 실린 후보 컬럼들과 alert 라벨. 사이트는 code(FROM_SITE)/description
+//   (FROM_SITE_DESCRIPTION) 이 분리돼(조회행은 code, 신규행 셀콤보는 description 에 값) 둘 중 하나라도
+//   채워졌으면 입력된 것으로 본다 — 화면 전역의 `code || description` 폴백과 동일(openCellPopup·transMode).
+export interface RequiredField {
+  cols: readonly string[];
+  label: string;
+}
+
+/**
+ * 하단 Plan Detail 저장 전 필수(*) 컬럼 빈값 검사 — AS-IS DataUtil.checkRequiredOfSpread(cs:3120 →
+ *   DataUtil.cs:23~65) 등가. AS-IS 는 "헤더 라벨에 '*' 가 있는 컬럼"을 action I/M 행 전수로 돌며 빈 셀이
+ *   하나라도 있으면 MSG00002 로 저장을 차단한다(D 행만 제외, cs:33~36). I/M 을 구분하지 않으므로 신규·수정
+ *   양쪽에 같은 '*' 집합(변경사유 2종 포함)을 적용한다 — 신규행은 Validation_Check 가 검사하지 않고
+ *   (cs:3827~3830), 수정행도 조회값 CHANGE_REASON_DETAIL=NULL 이라 결국 이 검사가 변경사유를 강제한다
+ *   (사용자 실측 2026-11-16: 신규·기존행 모두 AS-IS 가 Reason Detail 입력 요구). TO-BE 는 '*' 집합을
+ *   DETAIL_REQUIRED_FIELDS 로 고정하고 메시지만 MSG00429(REQUIRED_VALUE)로 바꿔(= TO-BE MSG00002 는
+ *   "저장 성공" 대사라 재사용 금지) 첫 미입력 필드를 돌려준다(없으면 null). 한 필드의 후보 컬럼이 전부
+ *   비었을 때만 미입력으로 본다(사이트 code||description 분리 대응). isBlank 는 AS-IS IsNullOrWhiteSpace 와
+ *   동일 — CHANGE_REASON_CODE 의 '-'(미선택)는 공백이 아니라 통과하고 그다음 CHANGE_REASON_DETAIL(공백)에서
+ *   걸린다(AS-IS 와 동일 순서). 자매 SSP0033 findMissingRequired 선례.
+ */
+export const findMissingRequired = (
+  saveTargets: Record<string, unknown>[],
+  requiredFields: readonly RequiredField[]
+): RequiredField | null => {
+  for (const r of saveTargets) {
+    if (detailActionOf(r) === 'D') continue; // 삭제행 제외(AS-IS checkRequiredOfSpread cs:33~36)
+    for (const field of requiredFields) {
+      if (field.cols.every(col => isBlank(r[col]))) return field;
+    }
+  }
+  return null;
 };

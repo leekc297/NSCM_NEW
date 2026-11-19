@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 75,
+  "at": "2026-11-19T00:30:49.462Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 92,
+  "at": "2026-11-19T00:30:54.757Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261118\",\"endYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 99,
+  "at": "2026-11-19T00:30:54.769Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "Shipment Working Day OSP",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/Shipment%20Working%20Day%20OSP/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"ALL\",\"fromYyyymmdd\":\"20261118\",\"toYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 192,
+  "at": "2026-11-19T00:30:54.869Z",
+  "user": "minyonglee1",
+  "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
+ }
+]

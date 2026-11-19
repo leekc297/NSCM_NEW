@@ -18,6 +18,7 @@ import {
   FALLBACK_LABEL,
   LBL,
   MENU_ID,
+  SHOP_GROUP_BY_DIVISION_TYPE,
 } from '../../capa-line-assign.constants';
 import type { ComboOption, ComboRow, GridRow } from '../../capa-line-assign.types';
 import { useCapaLineAssignStore } from '../../useCapaLineAssignStore';
@@ -132,6 +133,13 @@ export const CapaLineModal = ({
   const inDivision = (row: ComboRow): boolean =>
     !localDivisionId || str(row.DIVISION_ID) === localDivisionId;
 
+  // Plant/Building/Line 축 전용 shop_group 필터 — AS-IS `GetFilterPlant/Factory/Line`(`SHOP_GROUP_ID
+  //   IN(_shop_group)`). 부모가 넘기는 masterRows 는 CELL/PACK 이면 이미 shop 선필터돼 멱등, ELTR
+  //   (EE 마스터)이면 raw 라 비-'E' 행(MI03 등)이 섞여 있어 여기서 떨군다 — 안 걸면 ELTR Plant 가
+  //   7건 대신 8건(2026-11-18 실측, 메인 useCapaLineCascade 와 동일). Site 에는 걸지 않는다.
+  const shopGroup = SHOP_GROUP_BY_DIVISION_TYPE[divisionType];
+  const inShopGroup = (row: ComboRow): boolean => str(row.SHOP_GROUP_ID) === shopGroup;
+
   const siteSet = useMemo(() => pickedSet(siteIds), [siteIds]);
   const plantSet = useMemo(() => pickedSet(plantIds), [plantIds]);
   const factorySet = useMemo(() => pickedSet(factoryIds), [factoryIds]);
@@ -149,14 +157,18 @@ export const CapaLineModal = ({
           masterRows,
           'PLANT_ID',
           'PLANT_NAME',
-          row => inDivision(row) && inSet(siteSet, str(row.SITE_ID))
+          row => inDivision(row) && inShopGroup(row) && inSet(siteSet, str(row.SITE_ID))
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, localDivisionId, siteSet]
+    [masterRows, localDivisionId, siteSet, shopGroup]
   );
 
-  // 주의: Building 은 Site 가 아니라 Plant 에 종속된다(`GetFilterFactory`, V-10).
+  // Building/Line 은 직속 부모(Plant/Building)뿐 아니라 **Site 로도 좁힌다**. AS-IS 는 Site 선택 시
+  //   좁혀진 Plant 후보 CSV 를 `GetFilterFactory` 의 `_plant` 인자로 넘겨 Building 을 간접 종속시키는데,
+  //   TO-BE 는 Site 변경 시 하위를 'ALL'(무필터)로 리셋하므로 plantSet 만 보면 Site 만 골라도 Building·
+  //   Line 이 안 좁혀진다(메인 useCapaLineCascade 와 동일 보완, 2026-11-18). 마스터가 행마다 SITE_ID 를
+  //   들고 있어 siteSet 직접 필터가 "그 Site 의 Plant 들" 슬라이스와 등가다(Site⊃Plant⊃Factory 계층).
   const factoryOptions = useMemo<ComboOption[]>(
     () =>
       sortMasterCodes(
@@ -164,11 +176,15 @@ export const CapaLineModal = ({
           masterRows,
           'FACTORY_ID',
           'FACTORY_NAME',
-          row => inDivision(row) && inSet(plantSet, str(row.PLANT_ID))
+          row =>
+            inDivision(row) &&
+            inShopGroup(row) &&
+            inSet(siteSet, str(row.SITE_ID)) &&
+            inSet(plantSet, str(row.PLANT_ID))
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, localDivisionId, plantSet]
+    [masterRows, localDivisionId, siteSet, plantSet, shopGroup]
   );
 
   const lineOptions = useMemo<ComboOption[]>(
@@ -181,13 +197,15 @@ export const CapaLineModal = ({
             'LINE_NAME',
             row =>
               inDivision(row) &&
+              inShopGroup(row) &&
+              inSet(siteSet, str(row.SITE_ID)) &&
               inSet(plantSet, str(row.PLANT_ID)) &&
               inSet(factorySet, str(row.FACTORY_ID))
           )
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, localDivisionId, plantSet, factorySet]
+    [masterRows, localDivisionId, siteSet, plantSet, factorySet, shopGroup]
   );
 
   const buildFilters = (): LineFilters => ({

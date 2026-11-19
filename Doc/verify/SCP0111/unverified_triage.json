@@ -1,0 +1,57 @@
+{
+ "menu_id": "SCP0111",
+ "at": "2026-11-18 19:52:56",
+ "round": 8,
+ "ledger": "Doc\\verify\\SCP0111\\verify_ledger.csv",
+ "before": {
+  "total": 32,
+  "by_actor": {
+   "판단": 8,
+   "엔진": 4,
+   "집계": 14,
+   "사람": 5,
+   "대조표": 1
+  },
+  "by_class": {
+   "판단": 8,
+   "데이터전제": 2,
+   "집계": 14,
+   "계정": 4,
+   "검사기공백": 2,
+   "대조표사유": 1,
+   "저장보류": 1
+  },
+  "actionable": 13,
+  "human": 5,
+  "aggregate": 14,
+  "blocked": 0
+ },
+ "after": {
+  "total": 32,
+  "by_actor": {
+   "판단": 8,
+   "엔진": 4,
+   "집계": 14,
+   "사람": 5,
+   "대조표": 1
+  },
+  "by_class": {
+   "판단": 8,
+   "데이터전제": 2,
+   "집계": 14,
+   "계정": 4,
+   "검사기공백": 2,
+   "대조표사유": 1,
+   "저장보류": 1
+  },
+  "actionable": 13,
+  "human": 5,
+  "aggregate": 14,
+  "blocked": 0
+ },
+ "actionable": 13,
+ "human": 5,
+ "rerun": null,
+ "unverified_sheet": 535,
+ "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
+}

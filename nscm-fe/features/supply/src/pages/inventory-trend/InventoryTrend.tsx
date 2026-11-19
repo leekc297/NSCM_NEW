@@ -9,12 +9,14 @@ import { queryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
 import { ColumnLayoutModal, MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useUIStore } from '@shared/stores';
 
 import { InventoryTrendForm } from './components/InventoryTrendForm';
 import { InventoryTrendGrid } from './components/InventoryTrendGrid';
 import {
   ADMIN_SHEET_NAME,
+  DETAIL_LABEL,
   LBL,
   MENU_ID,
   MSG,
@@ -140,6 +142,16 @@ export const InventoryTrend = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
         customButtons={customButtons}
+        // Detail(상세 22컬럼 토글) — 조회조건 폼에서 그리드 건수 툴바로 이동(사용자 지시 2026-11-16).
+        //   체크박스(좌) + 'Detail'(우): lges Checkbox labelText 가 박스 뒤 라벨. SCP0085 Devaluation Age 동형.
+        afterCount={
+          <Checkbox
+            labelText={DETAIL_LABEL}
+            checked={searchParams.detail}
+            disabled={noDivisionAuth}
+            onChange={checked => setSearchParams({ detail: checked })}
+          />
+        }
       />
       <InventoryTrendGrid
         gridRef={gridRef}

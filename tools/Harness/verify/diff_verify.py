@@ -363,6 +363,14 @@ def main():
                         if alias:
                             a_n, t_n = golden._apply_norm(a_sets[0], t_data[0], alias, None) if a_sets and t_data else ((None,), (None,))
                             if a_n and a_n[0] is not None: a1c = {nkey(x) for x in a_n[0]}; t1c = {nkey(x) for x in t_n[1]}
+                        # 2026-11-18 미검증 해소(SCP0096 기간 SP COLSET 허위 FAIL 8): AS-IS 별칭 없는 식 컬럼은 이름이 '' 라 이름 대조가 안 된다 →
+                        #   AS-IS 전용이 이름 없는 컬럼뿐이고 양쪽 컬럼 수가 같고 그 수 = TO-BE 전용 수이면 위치 대응으로 보고 집합 차이에서 뺀다(값은 compare 가 대조)
+                        if a1c - t1c and not any(a1c - t1c):
+                            _ac = list(a_sets[0][0]) if a_sets else []; _tc = list(t_data[0][1]) if t_data else []
+                            _un = [x for x in _ac if not nkey(x)]
+                            if _ac and len(_ac) == len(_tc) and len(t1c - a1c) == len(_un):
+                                md.append(f"- AS-IS 이름 없는 컬럼 {len(_un)}개 ↔ TO-BE {sorted(t1c - a1c)}: 컬럼 수 {len(_ac)} 같음 → 위치 대응(이름 대조 제외)")
+                                a1c = (a1c - {''}) | (t1c - a1c)
                         row.update(key_source=ksrc if keys else kp.get('key_source', 'auto'), keys=kp.get('keys', ''), asis_rows=kp.get('asis_rows', ''), tobe_rows=kp.get('tobe_rows', ''),
                                    common=kp.get('key_rows', ''), asis_only=kp.get('asis_only_keys', ''), tobe_only=kp.get('tobe_only_keys', ''),
                                    cols_only_a=','.join(sorted(a1c - t1c))[:200], cols_only_t=','.join(sorted(t1c - a1c))[:200], diff_cells=kp.get('diff_cells', ''), order=op.get('order', ''))

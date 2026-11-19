@@ -5,7 +5,7 @@ import dayjs from '@foundation/dayjs';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useSessionStore } from '@shared/stores';
@@ -224,11 +224,11 @@ export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch, searchDirtyKey
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={`${t(LBL.DIVISION, '_Div')}*`}
+              label={t(LBL.DIVISION, '_Div')}
+              required
               labelAlign='right'
               render={() => (
                 <CustomDropdown
-                  useClearIcon
                   value={sc.divisionId}
                   options={divisionOptions}
                   // Division 변경 = 검색조건(Div·기간/날짜 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
@@ -249,11 +249,11 @@ export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch, searchDirtyKey
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={`${t(LBL.COMPANY, '_Company')}*`}
+              label={t(LBL.COMPANY, '_Company')}
+              required
               labelAlign='right'
               render={() => (
                 <CustomDropdown
-                  useClearIcon
                   value={sc.companyId}
                   options={companyOptions}
                   // Company 변경도 그리드·편집분을 초기화하므로 Division 과 동일하게 미저장 가드(gap-audit G11).
@@ -316,7 +316,8 @@ export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch, searchDirtyKey
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={`${t(LBL.PLAN_DATE, '_Plan Date')}*`}
+              label={t(LBL.PLAN_DATE, '_Plan Date')}
+              required
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -394,29 +395,11 @@ export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch, searchDirtyKey
               )}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Sum — chkSum (W_/M_ 집계 컬럼 표시 토글, 01 R9 / 03 §2.3) */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-              )}
-            />
-          </Grid>
 
-          {/* Tot PSI(chkTotPSI)는 그리지 않는다 — AS-IS 디자이너가 숨김이다(SSP0060_ShipmentPlan.Designer.cs
-              L649 `chkTotPSI.Visible = false`, 런타임에 다시 보이게 하는 코드 없음). 종전엔 노출돼 있었다(결함 E2).
-              상태값 sc.chkTotPsi 는 기본값 그대로 남겨 조회 파라미터·행 필터 동작은 AS-IS 숨김 상태와 같다. */}
+          {/* Sum(chkSum)·Tot PSI(chkTotPSI) 체크박스는 그리드 건수 오른쪽(SubTitle afterCount)으로 이동
+              (사용자 지시 2026-11-18, SCP0013 동형). 폼 extraConditions 에서 제거. Tot PSI 는 AS-IS 디자이너가
+              Visible=false 로 숨겼으나(SSP0060_ShipmentPlan.Designer.cs L649) 사용자 지시로 노출 복원한다 —
+              상태 sc.chkTotPsi 는 ShipmentPlan.tsx mainRows SEQ<12/21 행 필터에 그대로 연결돼 있다(03 §2.3). */}
         </>
       }
     />

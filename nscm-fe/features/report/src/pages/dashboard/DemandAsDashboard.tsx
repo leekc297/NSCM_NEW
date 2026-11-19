@@ -12,28 +12,32 @@ import { KpiSummary } from './components/KpiSummary';
 import { MapeChart } from './components/MapeChart';
 import { ProductStatusGrid } from './components/ProductStatusGrid';
 import { RiskHeatMap } from './components/RiskHeatMap';
-import type { MENU_ID } from './demand-as-dashboard.constants';
-import { BASE_MONTH, FOOTER_NOTE, type ProductKey } from './demand-as-dashboard.mock';
+import { FIXED_DIVISION, type MENU_ID } from './demand-as-dashboard.constants';
+import { BASE_MONTH, type ProductKey } from './demand-as-dashboard.mock';
 import styles from './DemandAsDashboard.module.scss';
 
 // DMD0001 (Demand > Demand AS Dashboard) — 목업. 무스크롤 고정 레이아웃.
 //   검색조건(기준월/BizType/OEM) 변경 → refreshKey 갱신 → 차트 재생성("재조회").
 //   차트별 제품 드롭다운 변경 → 해당 차트 시리즈 스왑. (데이터는 정적 목업)
 export const DemandAsDashboard = (_props: PageProps<MENU_ID>) => {
+  // 현재는 Div=81 고정 조회(선택 불가). 콤보는 라벨 표시용으로만 로드한다.
+  const [div, setDiv] = useState(FIXED_DIVISION);
   const [baseMonth, setBaseMonth] = useState(BASE_MONTH);
   const [bizType, setBizType] = useState('전체');
   const [oem, setOem] = useState('전체');
   const [demandProduct, setDemandProduct] = useState<ProductKey>('P30B');
   const [invProduct, setInvProduct] = useState<ProductKey>('N2.2A');
 
-  const refreshKey = `${baseMonth}|${bizType}|${oem}`;
+  const refreshKey = `${div}|${baseMonth}|${bizType}|${oem}`;
 
   return (
     <div className={styles.root}>
       <DashboardHeader
+        div={div}
         baseMonth={baseMonth}
         bizType={bizType}
         oem={oem}
+        onDivChange={setDiv}
         onBaseMonthChange={setBaseMonth}
         onBizTypeChange={setBizType}
         onOemChange={setOem}
@@ -65,8 +69,6 @@ export const DemandAsDashboard = (_props: PageProps<MENU_ID>) => {
         <MapeChart />
         <ForecastInfo />
       </div>
-
-      <div className={styles.footer}>{FOOTER_NOTE}</div>
     </div>
   );
 };

@@ -1,3 +1,190 @@
+## (판 번호 없음, VM 저장소 + 설치 폴더) 답변·결과 = Markdown 정리 형태로 표시 (2026-11-19 10:2x)
+- 사용자(11-19): "답변이나 작업 결과를 나열할 때 Claude Code 처럼 정리된 형태로 · 지금은 나열된 text 안에서 결과를 찾아야 함".
+- 원인: 답변 글을 textContent(일반 글자)로 그려 제목·굵게·목록·표·코드가 구분되지 않음(addText · showFinal · 대화 assistant).
+- 웹뷰 mdHtml/mdInline/mdEl: 제목(#) · 굵게(**) · 인라인 코드 · 코드 블록 · 목록(중첩·번호 시작값) · 표 · 인용 · 구분선 · 링크. 글 안 HTML 은 모두 글자로 바꿔 그림(스크립트 실행 없음). 링크 클릭 = mdlink → URL 은 브라우저, 파일은 프로젝트 기준 경로 + #L줄.
+- CSS .md(목록 들여쓰기·표 테두리·코드 배경 = VS Code 테마 색). 최종 보고(📄) 영역도 같은 형태.
+- 확인: node --check · 웹뷰 스크립트 문법 OK · Chrome 렌더링 캡처(목록·중첩 번호·표·코드·링크) · '<script>' 글자 처리 확인. VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_md.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 단계 안 작업 = 하위 단계 표시 · 🧪 미검증 해소 메뉴 = 보완까지만, CheckList 재수행은 승인 때만 (2026-11-19 10:1x)
+- 사용자(11-19): "미검증 해소 후 CheckList 수행 때 진행 step 이 제대로 보이지 않음 · 하나의 동작에서 다른 job 을 수행할 때 sub 단위 step 으로" · "CheckList 체인 안 미검증 해소 = 해소 뒤 CheckList 자동 재수행 · 미검증 해소 메뉴 직접 실행 = 해소만, CheckList 는 사용자 승인 때만".
+- 원인(09:22 실행 기록 .vibe/logs/2026-11-19T09-22-15_claude_wb1.log): 메뉴 단독 실행이라 프롬프트 [4] 대로 Claude 가 Bash 로 run_verify.py SCP0096 을 직접 돌림(출력은 로그 파일) → VM 이 진행을 단계로 보여 줄 수 없었음.
+- quick.json 🧪 미검증 해소: preTask 대신 flow(1. 미검증 분류 S8.unverified → 2. 검사엔진 보완 Claude · 처리 대상 있을 때만 → 3. CheckList 재수행 S8.checklistRecheck · askUser 승인 때만). 프롬프트 [4]: CheckList(run_verify·checklist_run)를 직접 실행하지 않음.
+- workbench.js: quick 항목 flow = 체인으로 실행(Flow 보드 단계). 체인 단계 askUser = 모달로 승인 받을 때만 단계 추가·실행(창 닫기·취소 = 실행 안 함). 수선 루프(repair · rerunTask)가 fb 'sub' 로 하위 단계(🧪 보완 r/n · 전체 재검증 · 다시 실행)를 보냄. 웹뷰 subStart/subEnd/subRender/flowSub: 단계 카드 안 '단계-하위' 목록 · 진행 표시(단계·세부·테스트)는 지금 하위 단계 기준 · 작업 출력 '[작업 k/K] 이름' 줄도 하위 단계로 그림.
+- checklist_run.py: '[작업 k/K]' 줄 출력(CheckList 전체 또는 --only 재측정 → 미검증 분류 · --only 시험 없음이면 3작업).
+- 🔎 CheckList 체인은 그대로(2단계 보완 뒤 3단계 재수행 자동).
+- 확인: node --check · 웹뷰 스크립트 문법 OK · 하위 단계 함수 단독 시험(수선 흐름 = 처음 실행 ⚠ → 🧪 보완 ✅ → 전체 재검증 ✅ → CheckList 전체 ✅ → 미검증 분류 ✅ · 체인 1단계 = CheckList 전체 → 미검증 분류) · checklist_run.py 컴파일 OK. VS Code 실행·승인 창 미확인.
+- 되돌리기: workbench.js · quick.json · checklist_run.py 의 .bak_20261119_substep.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Console 현황판 글자 축소 · 후속 작업 안내 접기 (2026-11-19 09:3x)
+- 사용자(11-19): "건수 표기 DASHBOARD 만 폰트가 큼 · 줄여 달라" · "후속 작업 안내(프로세스 17개 목록)는 줄여 표기하고 클릭할 때만 상세".
+- 현황판: 대화 글자 12px · 안내 줄 11px 인데 현황판 HTML(tools/Docs/screen_status.py)은 본문 13px · KPI 숫자 18px. hvTheme 이 iframe 안에 html{zoom:0.85}(HV_ZOOM)를 넣음. 높이 맞춤(fit)은 scrollHeight 대신 본문이 실제 그려진 높이로 계산(Chrome 실측: zoom 0.85 에서 scrollHeight 708 · 본문 끝 602 → 종전 방식이면 아래 약 106px 빈칸). 브라우저로 열기는 원래 크기.
+- 후속 작업 안내: '⏳ 보고 뒤 띄워 둔 작업 N개 진행 중 (종류별 개수 · 주요 작업)' 한 줄 + 클릭하면 펼치는 프로세스 목록(addMetaDetail · details). 중지 때 '함께 종료되는 후속 작업' 안내도 같은 방식.
+- 확인(09:3x): node --check · 웹뷰 스크립트 문법 OK · 요약 시험(캡처와 같은 17개 = 'chrome 8, bash 5, python 2, node 2 · run_verify.py SCP0096, e2e_suite.py SCP0096, playwright test SCP0096' · 상세 17줄) · Chrome 에서 현황판 iframe 축소·높이 확인. VS Code 화면 표시 미확인.
+- 되돌리기: workbench.js.bak_20261119_hvfold.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 체인 조건부 단계 = 실행이 정해질 때 STEP 추가 (2026-11-19 09:1x)
+- 사용자(11-19): "CheckList 작업 시 최초부터 3단계 보완까지 전체 STEP 으로 표기됨 · CheckList 작업만 진행하고 필요할 때 STEP 추가".
+- 원인: 체인 시작 때 quick.json 의 단계 7개(1 · 2 · 3 · 2-2 · 3-2 · 2-3 · 3-3)를 모두 보드에 올리고 번호를 '[i/7]' 로 표기함. 조건이 안 맞은 단계는 '건너뜀'으로 남음.
+- workbench.js _runChain: 조건부 단계(ifJsonGt · ifPrevRan)는 시작 STEP 수에서 뺌. 조건이 맞을 때 fb 'add' 로 카드를 붙이고 번호·총 STEP 수를 다시 셈. 조건이 안 맞은 단계는 번호 없이 '⏭ 추가 단계 없음' 로그 한 줄. FULLRUN.md 표도 보드에 올라간 단계만.
+- 웹뷰: flowCard(카드 생성 · 정의 순서대로 끼움) · flowRenum(화면 번호 = 보드 위치 · 총 STEP 수) · flowAdd · flowHead 현재 번호 = 보드 위치. 다른 체인(ifMissing · ifExists · ifOk 단계)은 종전대로 처음부터 표시.
+- quick.json 체인 checklist 안내 문구: '3단계 체인' → '1단계로 시작 · 2·3단계는 처리 대상이 있을 때만 추가'.
+- 확인(09:1x): node --check · 웹뷰 스크립트 문법 검사 OK · 번호 모의(처리 대상 0 → 1/1, 보완 1회 → 2/2 · 3/3). VS Code 체인 실행 미확인.
+- 되돌리기: workbench.js.bak_20261119_dynstep · quick.json.bak_20261119_dynstep.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) CheckList 체인 미검증 보완 반복 · 재실행 행 처리 누락 정정 (2026-11-18 20:1x)
+- 사용자(11-18): "SCP0096 전체 미검증 제거 요청 뒤 34건 남음 · 한 번에 제거하지 못한 사유 확인 후 보완".
+- 34건 구성(v32 원장 미검증 85 중 집계 44, 스냅샷 승인 5, 선행 결함 2 제외): 판단 13, 엔진 9, 대조표 4, 계정 4, 재실행 4.
+- 원인 1: 체인이 보완 → 재수행을 1회만 함. SCP0096 기록(unverified_history.csv)은 전체 재측정마다 새 원인이 드러나 270 → 186 → 133 → 115 → 85 로 줄었고, 85 뒤 재측정은 18:48 사용자 지시로 중단됨.
+- 원인 2: 체인 1단계 분류가 --no-rerun 이라 재실행 유형(A5 Div 선택 81_HD·81_ST·81_HM·81_UC 4행)을 아무도 다시 재지 않았고, 🧪 프롬프트 처리 목록도 담당 엔진·대조표·판단만 넣어 이 4행이 빠짐.
+- 원인 3: 판단 13, 대조표 4, 계정 4 = 설계상 결정 목록·시험 계정·대조표 수정(DB MODE 에서는 가이드만)이 있어야 풀리는 행. 보완 회차를 늘려도 기계가 지우지 못함.
+- unverified_resolve.py: 직전 분류가 앞선 원장에서 나왔고 그때도 재실행이던 행 = 담당 엔진(검사기 보완). triage.json 에 ledger_mtime, prev_actionable, continue, stalled. 처리 대상이 남고 직전 기록보다 줄었으면 continue=1, 줄지 않았으면 stalled(반복 중단).
+- quick.json 체인 checklist: 2-2·3-2·2-3·3-3 단계 추가(continue>0 일 때만 보완, 보완했을 때만 재수행) · 🧪 프롬프트에 자동(재실행) 행 처리 항목 추가.
+- 확인(20:11): selftest OK · SCP0096 재분류 처리 대상 30, continue 1 · 사본 원장 시간만 바꿔 재분류 = 재실행 4행 → 엔진, stalled True, continue 0(사본 삭제). 설치 폴더 quick.json cmp 일치. VS Code 체인 실행 미확인.
+- 되돌리기: tools/Harness/verify/unverified_resolve.py.bak_20261118_loop · quick.json.bak_20261118_loop(저장소·설치 폴더).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 실행 중 프롬프트 = 중지 없이 진행 중인 응답에 추가 지시로 반영 (2026-11-18 19:0x)
+- 사용자(11-18): "VM 작업 진행 중 프롬프트를 입력하면 돌고 있던 작업이 중지되고 새로 입력한 명령이 수행됨 · 클로드코드처럼 중지되지 않고 추가되도록".
+- 원인: claude -p 실행 때 프롬프트를 쓰고 입력(stdin)을 바로 닫아, 실행 중에는 같은 프로세스에 글을 넣을 수 없었음. 대기열의 '지금 보내기'는 진행 중인 Claude 를 taskkill 로 끝내고 보냈음(.vibe/logs 15:18:44 실행 exit 1 → 1초 뒤 15:21:36 새 실행).
+- workbench.js: claudeArgs 에 --input-format stream-json. askClaude 는 첫 프롬프트를 사용자 메시지 1줄로 쓰고 입력을 열어 둠. 결과(result) 뒤 2.5초 동안 새 출력·새 입력이 없으면 입력을 닫음.
+- 실행 중 입력창 전송 = claudeInject(같은 프로세스에 사용자 메시지 추가, 상황판에 '➕ 추가 지시' 표시). 결과 직후 2.5초 안의 입력 = 새 응답(새 상황판). 입력이 닫혔거나 일괄 작업의 작업(task) 단계만 도는 중이면 종전처럼 대기열.
+- 대기열 '지금 보내기' = 추가 지시로 넣음. 넣을 수 없으면 중지하지 않고 대기열 맨 앞에 둠(taskkill 경로 폐지). ⏹ 중지 버튼은 그대로.
+- 확인(18:5x~19:0x, Claude Code 2.1.318, haiku): 도구 실행 중 보낸 지시가 같은 응답 결과 1건에 반영됨. 결과 뒤 1.4초에 보낸 입력은 결과 2건으로 끝남. 2.5초 뒤 입력 닫힘, exit 0. --resume 과 함께 동작함. node --check 통과, 설치 폴더 cmp 일치. VS Code 실화면 미확인(창 다시 로드 필요).
+- 되돌리기: workbench.js.bak_20261118_inject(저장소·설치 폴더).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 숫자 답 현황판을 턴마다 표시 (2026-11-18 20:00, VS Code 창 다시 로드 필요)
+- 사용자(11-18 19:5x): "간단한 질문에 답이 숫자가 있을때는 DASHBOARD 을 요청했었는데 그게 표현되지 않았습니다".
+- 원인(19:5x 확인): 15:41 autoStatusHtml 은 Claude 프로세스가 끝날 때(close) 첫 질문(prompt)으로만 검사함. 11-18 변경으로 진행 중 질문은 같은 프로세스에 이어 넣음(claudeInject). 19:54 'CHECKLIST 건수 확인해주세요' 가 이어 넣은 질문이라 close 때 첫 질문(미검증 해소 지시, '건수' 없음)으로 검사해 건너뜀. screen_status.py SCP0111 은 정상 출력(19:59 '@@HTML SCP0111 건수 현황').
+- workbench.js askClaude: 턴마다 그 턴의 질문(turnPrompt)을 기억하고 결과(result) 때 autoStatusHtml 1회. 이어 넣은 질문이 새 턴이면 turnPrompt 교체·그린 HTML 기록 초기화. close 때는 그 턴에 아직 안 했을 때만.
+- 조건 단어 추가: 몇 건·몇 개·개수·수치·진행율·진행률·count(종전 건수·현황·대시보드·dashboard).
+- 확인(20:00): node --check OK. 조건 문장 시험 5건(건수·몇 건·진행율 = 그림, 원인 확인 2건 = 안 그림). 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261118_dashturn(저장소·설치 폴더), CHANGELOG.md.bak_20261118_dashturn.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 🔎 CheckList 체인 = 1. CheckList 수행 → 2. 검증 보완 → 3. CheckList 재수행 (2026-11-18 18:3x)
+- 사용자(11-18): "미검증 있으면 미검증에 대한 보완을 진행하고, 다시 CHECKLIST 수행 · 미검증 항목에 대해서만 별도 CHECK 가능하면 가장 좋고, 그게 아니면 처음부터 · 1 단계 CHECKLIST수행, 2단계 검증 보완, 3단계 CHECKLIST 재수행으로 보이면".
+- 신규 tools/Harness/verify/checklist_run.py <ID> [--recheck]: 1단계 = run_verify 전체 → unverified_resolve --no-rerun. 3단계(--recheck) = 처리 대상 행이 모두 --only 로 다시 도는 E2E 시험 규칙이면 run_verify --only <규칙>, 차등(ASIS_DIFF)·팝업 권한(EG-)·E2E 4종(ES-) 행이 있거나 --only 가 rc 3 이면 처음부터 전체 → 재분류.
+- steps.json S8.checklistRun · S8.checklistRecheck. quick.json 체인 checklist 3단계: 1(okCodes 10 · 분류 파일 확인) → 2 🧪 미검증 해소(ifJsonGt actionable>0 · 선택) → 3(ifPrevRan · 선택). 다른 체인(full 등)의 S8.unverified 수선 방식은 그대로.
+- workbench.js 체인 조건 ifJsonGt(파일 이번 체인 중 갱신 + 키 값 > 기준) · ifPrevRan(앞 단계 SKIP·NOT_RUN 이면 건너뜀).
+- 확인: recheck_rules(SCP0096 = 처리 대상 66행 중 33행이 차등·팝업권한·E2E 4종 → 전체) · ifJsonGt 판단식 4경우 · node --check · engine_selfcheck PASS · 설치 폴더 cmp 일치. VS Code 실화면·실제 체인 실행 미확인.
+- 18:4x 사용자 "미검증 대상이 없으면 1단계에서 끝남": 처리 대상 0 이면 2단계 SKIP(안내 '미검증 처리 대상 없음 — 1단계에서 종료') · 3단계 SKIP('검증 보완을 하지 않음 — 재수행 필요 없음') · ifJsonGt.skipNote·step.skipNote 추가.
+- 되돌리기: steps.json·quick.json·workbench.js *.bak_20261118_3step(저장소·설치 폴더), checklist_run.py 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 단계 수선(🧪 미검증 해소 등) Claude 실행을 그 단계 카드 안 하위로 표시 (2026-11-18 18:1x)
+- 사용자(11-18 화면 캡처): CheckList 체인의 '미검증 해소' 단계가 수선 중일 때 Claude 실행 카드가 단계 밖 별도 블록으로 그려짐 → 하위 프로세스로 보이게.
+- 원인: runContainer() 가 진행 중 단계 종류가 claude 일 때만 단계 카드(body) 안에 그리고, 작업(task) 단계의 수선(REPAIR) Claude 실행은 채팅 영역에 그림.
+- workbench.js: runContainer 조건에 FLOW.active.status==='REPAIR' 추가 · flowStep 에서 REPAIR 시작 시 단계 카드 펼침 · repair.rerunTask 전체 재검증 직전에 단계 상태 RUN 전송.
+- 확인: runContainer 단위 시험 5건(task+REPAIR → 단계 카드 · task+RUN → 채팅 · claude → 단계 카드 · 보드 끝남 → 채팅 · 보드 없음 → 채팅) · node --check · 설치 폴더 cmp 일치. VS Code 실화면 미확인(창 다시 로드 필요 — 진행 중 체인은 다시 로드하면 끊김).
+- 되돌리기: workbench.js.bak_20261118_repairnest(저장소·설치 폴더).
+
+## (판 번호 없음, 하네스 + 설치 폴더 quick.json) CheckList 시작 때 화면 UI 소스 Download & Merge (DB MODE 만) (2026-11-18 18:0x)
+- 사용자(11-18): "CHECKLIST 수행 시 UI 해당 소스에 대해서 GIT 확인 후 최신소스 변경 분 있으면 다운로드" · "DOWNLOAD & MERGE 되어야 합니다. (DB MODE 일때만)".
+- tools/CommonSync/common_sync.py --paths: FE 받기 범위를 경로로 좁힘(SCOPE 최상위 아래만 · 기준선 state.json 미갱신). 백업 common_sync.py.bak_20261118_paths.
+- 신규 tools/CommonSync/screen_sync.py <ID>: harness.json repairScope=DB_ONLY 일 때만 화면 FE 페이지 폴더를 미리보기(--dry-run --overwrite-local) → 변경 있으면 같은 커밋으로 적용(--apply --target). 결과 Doc/verify/<ID>/screen_sync.json.
+- tools/Harness/verify/run_verify.py: 사전 작업 직전에 screen_sync 실행(--only 제외 · 실패해도 CheckList 계속). VM 메뉴·Flow·체인·셸 어느 경로든 적용.
+- 확인(17:56): SCP0096 미리보기 = 공통 f53b06bfe 기준 화면 파일 11건 동일 · 받을 것 0 · 기준선 미변경.
+- quick.json 🔎 CheckList 설명에 표기.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 미검증 해소 = 전체 목록 → 일괄 보완 → CheckList 전체 1회 (2026-11-18 17:0x)
+- 사용자(11-18): "전체 목록을 보고, 미검사 대상에 대해서는 필요한 작업을 일괄로 먼저 한 후에 미검사 없이 전체 검증 절차" · "CHECKLIST 의 로직에 반영되어서 앞으로도 이렇게".
+- workbench.js 체인 repair 에 rerunTask·rerunOkCodes: 보완(Claude) 뒤 지정 작업(S8.verify = CheckList 전체)을 먼저 실행하고 단계(분류)를 다시 실행.
+- quick.json: S8.unverified 단계 10곳 = args --no-rerun(묶음별 --only 재측정 없음) · repair {🧪 미검증 해소, rounds 2, rerunTask S8.verify, rerunOkCodes [10]}. 🧪 프롬프트: [1] 행별 조치 전체 목록(Doc/verify/<ID>/_unverified_plan.md) 먼저 · [4] 목록 전체 일괄 보완, 재측정은 자기 시험·engine_selfcheck 만, 전체 CheckList 는 체인이 1회.
+- 분류표 unverified_classes.csv: 선행결함(담당 보완, '[선행 결함' — 화면 기능 FAIL 뒤에만 잴 수 있는 행) · 대조표 '[대조표 오기 의심]' · 계정 '설정이 있는 사용자 없음'. unverified_resolve.py counts 에 blocked(보완).
+- 되돌리기: workbench.js·quick.json *.bak_20261118_unverified(이전 판) · 하네스 변경은 Doc/verify/_ENGINE_MASTER.md 2026-11-18 라운드 3 절.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 도구) Console 탭 HTML 틀 = VS Code 테마 색 따름 (2026-11-18 15:48, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "DARK THEME 일 때는 테마에 맞춰서 BACKCOLOR 을 맞춰주세요".
+- 원인: 틀(iframe) 안 HTML 은 OS 색 설정(prefers-color-scheme)만 따름. OS 밝은 색 + VS Code 어두운 테마면 흰 바탕으로 나옴.
+- workbench.js hvTheme·hvWatch: 틀을 그릴 때 VS Code 테마 종류(vscode-dark·vscode-high-contrast = dark, 그 밖 light)를 틀 문서 html data-theme 에 넣고, 바탕·글자·선·흐린 글자 색을 VS Code 테마 색(editor-background·editor-foreground·panel-border·editorWidget-background·descriptionForeground)으로 덮음. 테마를 바꾸면 열린 틀 전부 다시 맞춤.
+- tools/Docs/screen_status.py CSS: :root[data-theme=light]·[data-theme=dark] 색 묶음 추가(PASS·FAIL 등 막대 색도 테마별). doc_style 위반 0.
+- 확인(15:4x): node --check OK. Chrome 모의 실행(OS 밝은 색 고정): vscode-dark = 바탕 rgb(31,31,31)·글자 rgb(204,204,204)·PASS #3fb950, vscode-light 로 바꾸면 바탕 rgb(255,255,255)·PASS #1a7f37. 캡처 Doc/verify/SCP0096/status_console_dark.png. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261118_htmltheme(저장소·설치 폴더), CHANGELOG.md.bak_20261118_htmltheme, tools/Docs/screen_status.py.bak_20261118_htmltheme.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 건수 현황 질문 = VM 이 현황판 HTML 을 Console 탭에 직접 표시 (2026-11-18 15:41, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "DASHBOARD 형태의 HTML 이 CONSOLE 창에 보이도록 보완요청했는데, 계속 TEXT BASE 로만 보입니다".
+- 원인(15:3x 확인): 15:23 변경은 답변·도구 출력에 '@@HTML' 줄이 있을 때만 그림. 15:35 SCP0096 건수 현황 답변 턴에서 Claude 가 screen_status.py 를 실행하지 않아 '@@HTML' 줄이 없었음. 설치 폴더 workbench.js 는 저장소와 같았음(cmp).
+- workbench.js autoStatusHtml: Claude 턴이 끝날 때 질문 본문('참고 후:' 뒤)에 건수·현황·대시보드·dashboard 가 있고 그 턴에 그린 HTML 이 없으면 python tools/Docs/screen_status.py <화면ID> 를 실행해 출력의 '@@HTML' 줄로 Console 탭에 그림. 화면ID = 질문 본문의 화면ID, 없으면 선택 화면. 실패하면 Console 에 실패 줄 1개.
+- 확인(15:4x): node --check OK. 모의 실행 3건 일치(SCP0096 건수현황 질문 = 현황판 1개 · 저장 오류 질문 = 그리지 않음 · 'SSP0020 현황' = SSP0020 현황판). 시험 중 Doc/verify/SSP0020/status.json·status.html 생성됨. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261118_htmlauto(저장소·설치 폴더), CHANGELOG.md.bak_20261118_htmlauto.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 도구) Console 탭 HTML 표시, 화면 건수 현황판 (2026-11-18 15:23, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "건수 현황 같은 답변은 GRID 나 DASHBOARD 형태로", "생성된 html 을 Console 창에 보이도록", "필요한 정보만 Simple 하게".
+- 신규 tools/Docs/screen_status.py <화면ID>: 원천 파일(최신 CheckList xlsx 검증 전체·조치 필요 시트, FE 대조표, AS-IS 액션 대조표, checklist_counts.json, work_ledger_summary.json)만 읽어 Doc/verify/<ID>/status.json·status.html 생성. 화면 = 결과 6칸, 축별 표와 막대, 대조표 한 줄, 조치 필요 목록, 출처 한 줄. 마지막 줄에 '@@HTML <ID> 건수 현황|경로' 출력.
+- workbench.js: 답변 문장이나 도구 출력에 '@@HTML 라벨|경로' 줄이 있으면 그 HTML 을 Console 탭 진행 보드 안에 틀(iframe, 스크립트 실행 없음)로 그림. 프로젝트 폴더 안 .html, 3MB 이하만. 한 턴에 같은 파일 1회. 머리줄에 접기·브라우저로 열기 버튼. 내용 높이에 맞춰 늘어남.
+- 확인(15:22): node --check, 워크벤치 화면 스크립트 new Function 검사 OK, 브라우저 모의 실행(SCP0096 status.html 표시, 오류 0, 브라우저로 열기 메시지 전송) 캡처 Doc/verify/SCP0096/status_console.png. doc_style screen_status.py 위반 0. VS Code 실화면과 어두운 테마 표시 미확인.
+- 되돌리기: workbench.js.bak_20261118_htmlview(저장소·설치 폴더), CHANGELOG.md.bak_20261118_htmlview, 신규 screen_status.py 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) CheckList 뒤 미검증 자동 해소 (2026-11-18 15:13)
+- 사용자(11-18): "CHECKLIST 생성 시 미검증 항목이 발생하면 미검증을 해소하도록 하는 기능을 CHECKLIST 에 추가". 화면 공용 기능. SCP0096(원장 미검증 281)은 시험 대상으로만 사용.
+- 조사(15:0x, 원장 39화면 실측): 원장 ERROR 17,116행. 증거 문구 기준 분류 = 집계 6,543 · 검사기공백 5,582 · 미분류 2,047 · 데이터전제 892 · 차등짝 799 · 대조표사유 480 · 판단 465 · 스냅샷승인 138 · 재실행 119 · 계정 51.
+- 신규 tools/Harness/verify/unverified_classes.csv: 증거 정규식 → 유형·담당(집계·자동·엔진·대조표·판단·사람)·처리 방법. 맞는 정규식이 없으면 미분류(담당 엔진, 분류표 보강 대상).
+- 신규 tools/Harness/verify/unverified_resolve.py <ID> [--no-rerun]: 원장 ERROR 행 분류 → 담당 '자동' 행은 run_verify --only <규칙>(E2E 결과 없음은 e2e_suite --kinds) 1회 재측정(같은 원장 판에서 같은 규칙은 다시 돌리지 않고 엔진 담당으로 넘김) → Doc/verify/<ID>/unverified_triage.csv·md·json, unverified_history.csv. 판정을 바꾸지 않음. selftest 13건.
+- VM:
+  - steps.json S8.unverified(S8.verify 뒤).
+  - quick.json 🔎 CheckList = 체인 checklist(S8.verify → S8.unverified, 검증 unverifiedOpen, 처리 대상이 남으면 repair 🧪 미검증 해소 최대 2회, 선택 단계라 남아도 WARN).
+  - 신규 Claude 메뉴 🧪 미검증 해소(preTask S8.unverified): 분류 묶음별 원인 실측 → 공용 검사엔진 신설·보완(화면 독립, FE·BE·AS-IS 소스 수정 없음, 판정 낮추기·NA 전환 금지) → engine_selfcheck → 해당 규칙만 재측정 → _unverified_work.md·_unverified_decisions.md.
+  - full·new-asis-full·new-design-full·autofix-full·testreport 체인의 S8.verify·S8.verifyIfStale 뒤마다 같은 단계 추가.
+  - workbench.js: verifyStep 'unverifiedOpen' · S8.verify 를 Flow 단계 버튼 등 체인 밖에서 실행하면 checklist 체인으로 실행.
+  - extension.js: CheckList 결과 없음 항목 → 🔎 CheckList 메뉴(체인) · CheckList 트리에 '미검증 해소: 처리 대상 n · 사람 확인 n' 줄.
+- 확인(15:0x~15:13): selftest OK · 임시 원장 사본으로 재측정 경로(e2e_suite·--only 호출, 2회차 중복 방지·엔진 담당 전환) 확인 · SCP0096 분류(재측정 없음) = 281행 중 처리 대상 175 · 사람 확인 7 · 집계 99 · verifyStep 3경우 · engine_selfcheck PASS · 등록부 갱신 · node --check · 설치 폴더 cmp 일치. 실제 CheckList 체인·Claude 보완 실행과 VS Code 실화면은 미확인.
+- 되돌리기: *.bak_20261118_unverified(steps.json·quick.json·workbench.js·extension.js 저장소·설치 폴더, CHANGELOG.md), 신규 2개 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Status E2E 4종 타일 삭제 (2026-11-18 13:4x, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "checklist는 테스트의 전 단계를 포함하므로, Status 의 순서상 3.CheckList 는 9번 자리로 이동하고, Smoke 부터 권한별 CRUD 의 4단계 테스트는 없어도".
+- workbench.js statusHtml: E2E Smoke · CRUD · 권한 · 권한별 CRUD 타일 4개 삭제. 단계는 13:35 변경분 그대로(종전 '3 CheckList' → 생성·등록SQL·PKG·게이트 뒤 '8 테스트(CheckList)', 종전 9~12 Smoke·CRUD·Auth·Auth×CRUD 단계 없음). E2E_TILES 상수는 남김(참조 0).
+- 확인: node --check, SSP0020 Status 출력 = 타일 7개(진행률·CheckList·AS-IS 실측·DoD·FE 게이트·PKG 게이트·보완 남음) · 단계 11개. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261118_noe2etile, CHANGELOG.md.bak_20261118_noe2etile.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) CheckList = 테스트 단계: E2E 4종 포함 · 판정에 빠져 있던 E2E 기능 시험 반입 (2026-11-18 13:43)
+- 사용자(11-18): "CheckList 생성 시 테스트의 모든 단계까지를 테스트하고 CheckList 을 생성 · 테스트 4단계가 CheckList에 포함되고 CheckList가 테스트 단계로 · 누락된 기능테스트가 있으면 CheckList에 넣도록".
+- 조사(13:3x, 코드·결과 실측): 종전 CheckList 전체 실행 = smoke 만 실행(prereq.py, 결과 없거나 FE 소스·smoke 엔진보다 오래되면). crud·auth·authcrud 는 실행 안 함(auth·authcrud 기존 결과가 있으면 J1·J2·C1 판정에 읽음 · --only J1/J2/C1 때만 재실행). 전 화면 E2E 요약 집계: 판정이 읽는 기록 = smoke cond·common·columns·i18n, auth access·buttons·authcrud·cascade. 읽지 않던 기능 시험 = crud(crud 종류 5건·authcrud 안 30건) · auth division 42건 · dberr 35건 · gap 14건 · smoke labels 113건 · header 43건.
+- 신규 tools/Harness/verify/e2e_suite.py <ID>: crud · auth · authcrud 를 run-e2e.cmd <종류> <ID> --mode <모드> 로 실행(화면별 잠금, 잠금이면 30초 간격 최대 60분 대기). 결과가 FE 소스·그 종류 스펙·tools/E2E/lib 보다 새로우면 재사용. 모드 = users.json screens[<ID>].mode, 없으면 admin(사용자 지시 10-27 검증 기본 계정 1개 · 권한×Division 은 지정 화면만). VERIFY_NO_SAVE=1 이면 crud·authcrud 실행 안 함. 결과 Doc/verify/<ID>/e2e_suite.json.
+- 신규 tools/Harness/verify/e2e_suite_ingest.py <ID>: 위 미반입 기록 → 원장 ES- 행(RULE_SCREEN). crud → F1 · auth division → J1(계정 표시) · dberr → F4(이 화면 경로 5xx 만 FAIL, 공통 경로만이면 NA 참고) · gap → J4 NA 참고(판정 근거 = eg_auth 새 세션 측정, 11-17 지시) · smoke labels → G4 · header → H3. 허위 오류 방지: 실행 예외(시간 초과·브라우저 닫힘)·시험 행 저장 요청 없음 = ERROR(측정 전제 미충족) · 복원 실패 = ERROR '[수동 복원 확인 필요]' · 라벨 누락·헤더 행 수 차이 = 판정필요(TO-BE 룰 해당 여부 확인). 결과 기록이 없는 종류 = ERROR '[미측정]' 행 1개.
+- run_verify.py: 사전 작업(smoke) 직후 e2e_suite.py 실행(--skip-e2e·--static·--only 는 건너뜀) · eg_ingest 두 곳 뒤 e2e_suite_ingest.py(세부 수 집계 밖 subprocess). 백업 run_verify.py.bak_20261118_e2esuite.
+- VM: 단계 8 'CheckList' → '테스트(CheckList)'(flow-panel STAGES·COLS, Status 영문 '8 Test (CheckList)'). steps.json 6 CheckList 그룹 + 7 E2E 개별 실행 그룹 → '6. 테스트 · UI CheckList (E2E 4종 포함)' 하나(작업 125개 유지, 그룹 11 → 10, 번호 다시 매김). quick.json 🔎 CheckList 이름·설명에 테스트 4종 포함 표기(상단 아이콘 접두 '🔎 CheckList' 유지).
+- 확인(13:4x): 반입기 = 원장 사본 4화면 실행 — SCP0007 ES 12행(ERROR 9: Division 조회 0행·선택 불가 7, CRUD 실행 예외 2 · PASS 1 라벨 · NA 1 gap · 판정필요 1 헤더 2행↔1행), SCP0111 6행(PASS 2 Division 40 1898행 · ERROR 3 · 판정필요 1 라벨 'Qty < 0'), SCP0104 4행(PASS 1 · ERROR 3 결과 없음), SSP0020 4행(판정필요 1 라벨 'All' · ERROR 3 결과 없음). 실행기 = 가짜 ID ZZZ9999 로 스펙 없음·VERIFY_NO_SAVE 분기 확인(폴더 삭제). 실제 E2E 4종 실행·CheckList 전체 실행은 하지 않음(CheckList 재실행은 사용자가 직접 · 11-04 지시). node --check, ast 파싱, 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 영향(다음 CheckList 전체 실행부터): crud·authcrud 가 사내 DB 에 실제 저장(마커 행 추가·삭제, 편집 저장형은 값 변경 후 복원 · touched_rows 기록). 실행 시간 증가 미측정. 결과가 없던 화면은 ES 미검증 행 3개가 생기고 실행 뒤 판정으로 바뀜.
+- 되돌리기: *.bak_20261118_teststage(flow-panel.js·workbench.js·steps.json·quick.json 저장소·설치 폴더, CHANGELOG.md), run_verify.py.bak_20261118_e2esuite, 신규 2개 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Status · Flow 단계를 파싱부터 완료까지 바뀐 순서로 (2026-11-18 13:35, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "파싱부터 완료까지의 변경된 순서를 Status, Flow 에도 변경된 Task로 보완".
+- flow-panel.js STAGES 13 → 11단계(🚀 ID 하나로 전체 체인 순서): 1 파싱(S1.packone) · 2 실측(S1.liveScreen) · 3 문서(S3.agent) · 4 생성(S5.pipelinedry) · 5 등록SQL(S5.regsql) · 6 PKG(S5.pkgrepair) · 7 게이트(S8.feGate) · 8 CheckList(S8.verify) · 9 보완(S8.repairClose) · 10 TestResultList(S8.report) · 11 문서 Excel(S3.xlsx). E2E 4종은 단계에서 빼고 Status E2E 타일로만 표시(판정 값은 그대로 계산).
+- 판정(stageStatus) 추가·변경: 실측 = Doc/asislive/<ID>/screen_bundle.json(OK·NA ok · PARTIAL warn · ERROR bad) · CheckList = run_verify.result.json FAIL·판정필요·미검증 + checklist_counts.json 미검증 시트(전부 0 이고 completed 일 때만 ok) · 보완 = fixlist 조치 필요 행 처리 수(종전 CheckList 칸 계산을 보완으로 옮김, fixlist 없으면 종전 REPAIR.md) · 게이트 = fe_gate.json 있으면 그것, 없으면 CHECK.md · TestResultList = Doc/테스트결과서/<ID>_*.xlsx(CheckList 보다 오래되면 warn) · 문서 Excel = Doc/화면설계서·화면분석서·단위테스트(종전 Doc/documents/<ID> 만 봄).
+- Flow 표 열 8 → 11(Parse · Live · Docs · Build · META · PKG · Gate · CheckList · Fix · Result · Excel). 문서 MD 와 Excel 을 체인 순서대로 분리.
+- Status(workbench.js): 단계 이름 사전 STAGE_EN 새 순서, 타일 'CheckList'(FAIL · 판정필요 · 미검증 · 미검증 시트)와 'AS-IS 실측' 추가, 'CheckList 조치 필요' → '보완 남음'. 보완 남음 값은 flow 의 CSV 해석값을 씀(종전 쉼표 단순 분할로 SSP0020 1/1 오표시 → 2/2).
+- 확인(13:3x): node --check 2개. 노드로 판정 출력 — SSP0020 파싱 ok · 실측 ok(OK) · 문서 ok · CheckList warn(F 6) · 보완 bad(0/2) · 문서 Excel ok(3/3) / SCP0104 CheckList warn(F 210) · 보완 bad(0/11). Flow 머리글 11열 · 행 86. Status 타일·단계 버튼 작업 ID 출력 확인. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: flow-panel.js.bak_20261118_stages, workbench.js.bak_20261118_stages(저장소·설치 폴더), CHANGELOG.md.bak_20261118_stages.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Workbench 상단 탭 순서 Console · Status · Log · History (2026-11-18 13:31, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "workbench 의 tabpage순서를 Console / UI Status(Status 로 변경) / Log / History 로 변경".
+- workbench.js: 상단 탭 버튼 순서 변경, 'UI Status' → 'Status'(버튼·문구 사전 tab_status·체인 끝 안내 '다음 할 일: Status 탭의 단계…'). 탭 키(data-t="status")는 그대로라 기존 호출 영향 없음.
+- 확인: node --check, 탭 이름 순서 출력 Console·Status·Log·History, 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261118_taborder, CHANGELOG.md.bak_20261118_taborder.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Workbench Log 하위 탭(Task·FE·BE) + 공통 최신·지우기 · History 탭 하나(Revision·Task) (2026-11-18 13:26, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "LOG TABPAGE 내 TASK LOG, FE LOG, BE LOG 3개을 TABPAGE 로 LAYOUT 변경 · 최신과 지우기 기능은 공통 적용", "Revision, Task History 를 History 하나로 · 내부에 Revision, Task 2개의 Tabpage".
+- Log 탭: 세로 3칸 + 분할 막대(11-17) → 하위 탭 3개(🧾 Task Log · 🎨 FE Log · ☕ BE Log). FE·BE 기동 상태 문구는 탭 이름 옆. 오른쪽 '⤓ 최신' · '🧹 지우기' 2개가 선택된 하위 탭에 적용(종전 창별 버튼·FE/BE 전용 지우기 제거). 안 보이는 하위 탭에 출력이 오면 N 표시. 선택한 하위 탭은 웹뷰 상태 logTab 에 저장. 탭 줄이 좁으면 하위 탭만 가로로 밀리고 두 버튼은 항상 보임. 분할 막대 스크립트·logSplit 저장 제거.
+- History 탭: 상단 'Revision' · 'Task History' 2개 → 'History' 1개, 안에 하위 탭 Revision · Task. 하위 탭을 고르면 그 목록을 다시 읽음(history:refresh view rev|task). 선택은 웹뷰 상태 histTab 에 저장. 기존 호출 showTab('hist'|'thist')·markNew·명령 vibeManager.openHistory·openTaskHistory 는 History 탭의 해당 하위 탭으로 연결. UI Status 의 수정 이력 링크는 지정 항목 1회만 요청(HSEL).
+- 로그 하위 탭 스크립트 선택자를 #logs 안으로 한정(History 하위 탭과 같은 모양 클래스 사용).
+- 확인(13:2x): node --check. 워크벤치 HTML 을 그대로 뽑아 내장 브라우저에서 실행 — 출력 모의로 N 표시(Task·BE), FE 선택 후 지우기 = FE 만 비움, BE 200줄 뒤 최신 = 맨 아래(2832/2832), 새로 불러오면 Task Log 선택, 탭 줄 폭 260px 에서 지우기 버튼 줄 안(212~268/270), History 클릭 = rev 요청, Task 클릭 = task 요청, showTab('hist'/'thist') 연결, 로그 BE 선택이 History 하위 탭을 바꾸지 않음. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: workbench.js.bak_20261118_logtabs(저장소·설치 폴더, Log 작업 전), workbench.js.bak_20261118_histtab(History 작업 전), CHANGELOG.md.bak_20261118_logtabs.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) NSCM 전환 단계 · 완료 정의(현재 화면) · 룰·Hook·하네스 최신 기준 정리 (2026-11-18 13:21, VS Code 창 다시 로드 필요)
+- 사용자(11-18): "VM 의 NSCM 전환 단계, 완료 정의 - 현재 화면, 룰,Hook,하네스 3개 CATEGORY 에 대한 기능 및 메뉴을 최신 기준으로 맞도록 보완".
+- NSCM 전환 단계(steps.json): 8개 그룹 → 실제 작업 순서 11개 그룹으로 재배치. 작업 124개 전부 이동(ID 그대로, 누락 0 단언) + 1개 신설 = 125개.
+  - 1 AS-IS 분석(파서·대조표) 10 · 2 AS-IS 실측(런처) 27(종전 S1 안에 섞여 있던 S1.live* 분리) · 3 TO-BE 분석·RULE 11 · 4 문서 9(S6.docs 이동) · 5 신규 UI 개발 24(S8.precheck 이동) · 6 UI CheckList 10 · 7 E2E 개별 실행 12(4단계 메뉴 폐지 반영 문구) · 8 보완 5(S8.scope·diagnose·repairSnapshot·repairClose·repairCompare) · 9 테스트 결과 5(S8.report·S8.uitest·골든) · 10 룰 보완 8 · 11 클라우드 이관 4.
+  - 신설 S8.uitest = make_ui_test_sheet.py <ID>(UI 테스트 Excel). S3.xlsx 의 옛 게이트(Doc/documents/<ID>) 제거.
+  - 그룹 ID 는 화면 표시·상태 계산에만 쓰임(코드 참조 0 확인). 작업 ID 를 쓰는 quick.json 체인은 영향 없음.
+- 완료 정의(현재 화면, extension.js DodProvider): 맨 위에 최신 기준 4묶음 추가.
+  - CheckList(완료 기준): run_verify.result.json 의 FAIL·판정필요·미검증 + '미검증' 시트 행 수(사유별·직접 실측 없음) · CheckList·ActionItemList·FE 가이드 열기 · FAIL 상위 40행.
+  - AS-IS 실측: Doc/asislive/<ID>/screen_bundle.json 상태와 단계별 rc(재사용 단계는 '재사용').
+  - 화면·PKG·메타 게이트: fe_gate.json · pkg_gate.json · meta_live_check.csv.
+  - 테스트 결과·문서: TestResultList · UI 테스트 Excel · 화면설계서 · 화면분석서 · 단위테스트 최신 파일 + 🚀 ID 하나로 전체 실행.
+  - 기존 DoD(B01~B25)·check.js·check-pkg.js·파이프라인 묶음은 아래로 접어 둠. 'ID 하나로 끝까지 (pipeline.js)' → 'pipeline.js 단독 실행(생성 8단계만)'.
+- 룰·Hook·하네스(HarnessProvider): 그룹 5 → 9. 추가 = 룰 진입점(CLAUDE.md, anti-simplification, TRIGGER_ROUTER, UI_MANDATORY_CHECKLIST, RULESET_MASTER, _rules_v2/00_INDEX, TOBE_RULES_DEV, 사용자 문장 규칙, .claude/rules 4개) · CheckList 검사 규칙(detect_rules·mapping_checkdefs·expected_source_rank·diff_rule_map·tobe_rule_registry·design_decisions·label_alias·_user_verdicts_direct·_checker_defects·doc_style_rules, 행 수) · Hook 문서(Doc/_rules_v2/hooks 156개, 접힘) · 하네스 실행 Hook(tools/Harness/hooks 3개 + .claude/hooks/README.md). 참고자료에서 없는 Doc/_dev_rules/00_INDEX.md 제거, _ENGINE_MASTER·_proof_backlog·CHANGELOG 추가.
+- tools/Harness/verify/make_verify_docs.py: '미검증' 시트를 만들 때 Doc/verify/<ID>/checklist_counts.json(행 수·사유별·직접 실측 없음) 기록. 기존 화면 3개(SCP0104 467·SSP0020 401·SCP0111 549)는 최신 CheckList Excel 미검증 시트를 세어 1회 생성(source 필드에 표시).
+- 확인: node --check, JSON 파싱, 가짜 vscode 모듈로 세 트리 출력(SCP0104·SSP0020) — 그룹·건수·열기 명령 확인. 설치 폴더 cmp 일치. VS Code 실화면 미확인.
+- 되돌리기: steps.json.bak_20261118_reorg, extension.js = git HEAD(설치본 extension.js.bak_20261118_menu3), CHANGELOG.md.bak_20261118_menu3.
+
 ## (판 번호 없음, VM 저장소 + 설치 폴더) 자동 보완 = CheckList 기준으로만: 사전 단계 실패 시 중단, 최신 판단 보강, 같은 원인 묶음 (2026-11-18 13:11, VS Code 창 다시 로드 필요)
 - 사용자(11-18): "보완 > 자동보완, 자동보완 반복 의 경우에 CheckList을 확인해서 보완을 진행할 수 있도록 하는 Rule" 점검 후 "1,2,3,4 의 추천안으로 진행".
 - 1) workbench.js quick 실행: 메뉴 속성 preTaskRequired 가 있으면 사전 단계(S8.verifyIfStale) 종료코드≠0(4 = 같은 화면 CheckList 실행 중) 또는 Doc/verify/<ID>/fixlist.csv 없음일 때 보완을 실행하지 않고 사유 표시. 🧯 자동 보완에만 설정. 🔗·🩺·🧾 는 종전대로 경고 후 계속.

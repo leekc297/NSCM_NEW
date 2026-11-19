@@ -50,7 +50,10 @@ export const ExcessStatus = () => {
       grid.refresh();
       const n = grid.rows.length;
       if (n === 0) return;
-      const avail = host.clientHeight - grid.columnHeaders.height;
+      // 1px 하단 가드: 행 합을 host 높이에 꼭 맞추면 마지막 행 하단 그리드선이 클립 경계에 걸려,
+      //   컨트롤 하단 테두리를 제거한 탓에 분수 배율(Windows 125/150%)에서 host 가 커질 때 반올림으로
+      //   잘린다. 1px 남겨 하단선을 항상 클립 안쪽에 둔다(ProductStatusGrid 와 동일 패턴).
+      const avail = host.clientHeight - grid.columnHeaders.height - 1;
       if (avail <= n) return;
       const base = Math.floor(avail / n);
       grid.rows.defaultSize = base;

@@ -70,7 +70,6 @@ export const ConstraintMgmtForm = ({ onSearch }: ConstraintMgmtFormProps) => {
                   allOption
                   useClearIcon
                   limitTags={1}
-                  sortBy='label'
                   value={searchParams.planGroupNames.join(',')}
                   options={
                     planGroups?.map(item => ({
@@ -106,7 +105,15 @@ export const ConstraintMgmtForm = ({ onSearch }: ConstraintMgmtFormProps) => {
                       value: String(item.CODE ?? ''),
                     })) ?? []
                   }
-                  onChange={(_, option) => setSearchParams({ validYn: String(option ?? '') })}
+                  // 단일 allOption 의 ALL 값은 공용 컴포넌트가 ''(SINGLE_ALL_OPTION.value)로 내보낸다.
+                  //   화면 전역(store·handleSearch·setFilters·CustomDropdown singleValue)은 ALL 을
+                  //   'ALL' sentinel 로 가정하므로 빈값을 'ALL' 로 정규화해 저장한다. 이렇게 해야
+                  //   Condition(F6) 저장 payload 에 validYn='ALL' 이 실려(빈값은 personalizeCondition
+                  //   이 drop) 저장·복원이 되고, 드롭다운도 ALL 로 다시 표시된다. Yes/No 콤보는
+                  //   'Y'/'N' 만 내보내 ''가 ALL 외 경로로 오지 않는다.
+                  onChange={(_, option) =>
+                    setSearchParams({ validYn: String(option ?? '') || 'ALL' })
+                  }
                 />
               )}
             />

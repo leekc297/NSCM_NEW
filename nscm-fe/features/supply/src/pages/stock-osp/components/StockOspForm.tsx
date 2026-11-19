@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo } from 'react';
 
 import type { ComboResponse, LookupResponse } from '@foundation/models';
@@ -211,13 +210,18 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
   //   배치 순서: Cutoff Date → Inspection → Status(사용자 지시 2026-10-28).
   const packExtra = isPack ? (
     <>
-      <PeriodField
-        gridSize={3}
-        start={sc.cutoffFromYyyymmdd}
-        end={sc.cutoffToYyyymmdd}
-        onChange={(start, end) => set({ cutoffFromYyyymmdd: start, cutoffToYyyymmdd: end })}
-        label={t(LBL.CUTOFF_DATE, '_Cutoff Date')}
-      />
+      {/* Cutoff Date — Inventory Date 와 동일 picker(공용 PeriodRangePicker, 일-범위 YYYYMMDD)로 통일
+          (사용자 지시 2026-11-18). PeriodRangePicker 는 자체 Grid 가 없어 Grid size=3 으로 래핑한다. */}
+      <Grid size={3}>
+        <PeriodRangePicker
+          className={commonStyles.formItem}
+          label={t(LBL.CUTOFF_DATE, '_Cutoff Date')}
+          required
+          start={sc.cutoffFromYyyymmdd}
+          end={sc.cutoffToYyyymmdd}
+          onChange={(start, end) => set({ cutoffFromYyyymmdd: start, cutoffToYyyymmdd: end })}
+        />
+      </Grid>
       <Grid size={3}>
         <FormItem
           className={commonStyles.formItem}

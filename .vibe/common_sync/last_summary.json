@@ -1,65 +1,50 @@
 {
  "ok": true,
  "mode": "apply",
- "stamp": "20261112_100911",
- "tip": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
- "tip_info": "61c936ba4 2026-11-12 09:52 eunjoo_hwang feat(login): 로그인 성공 시 SCM_ADM_USER_M.LOGN_DTM 갱신",
- "base": "1d476295b879af038aea42993d30cdf9c800a353",
+ "stamp": "20261119_095426",
+ "areas_sel": "fe",
+ "be_login": [],
+ "tip": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+ "tip_info": "06e7d22de 2026-11-19 09:47 eunjoo_hwang fix(combo): 단일 선택 콤보 dirty-confirm 취소 시 표시값이 store와 어긋나는 문제 전역 교정",
+ "base": "724a6155065f07664677fd7819e26033b806930a",
  "ancestor": true,
- "commits": 2,
- "changed": 74,
+ "commits": 24,
+ "changed": 50,
  "counts": {
-  "동일": 2796,
-  "공통 변경분 — 공통 원문 적용(로컬 보호 안 함)": 3,
-  "로컬 전용(공통에 없음) — 유지": 104,
-  "로컬만 다름 — 공통 원문으로 복원(로컬 보호 안 함)": 53,
-  "공통 파일 — 로컬 부재": 18,
-  "로컬 환경 파일 — 항상 로컬 유지(접속 정보)": 9
+  "동일": 2722,
+  "공통 변경분 — 공통 원문 적용(로컬 보호 안 함)": 50,
+  "로컬 전용(공통에 없음) — 유지": 102
  },
  "actions": {
-  "none": 2796,
-  "write": 74,
-  "keep": 113,
+  "none": 2722,
+  "write": 50,
+  "keep": 102,
   "merge": 0,
   "delete": 0
  },
  "pending": 0,
  "areas": {
   "fe": {
-   "base": "1d476295b879af038aea42993d30cdf9c800a353",
-   "changed": 3,
+   "base": "724a6155065f07664677fd7819e26033b806930a",
+   "changed": 50,
    "actions": {
-    "none": 2704,
-    "write": 3,
-    "keep": 98
+    "none": 2722,
+    "write": 50,
+    "keep": 102
    },
    "pending": 0,
-   "local_only": 98,
+   "local_only": 102,
    "env_keep": 0
-  },
-  "be": {
-   "base": null,
-   "changed": 71,
-   "actions": {
-    "none": 92,
-    "write": 71,
-    "keep": 15
-   },
-   "pending": 0,
-   "local_only": 6,
-   "env_keep": 9
   }
  },
  "overwrite_local": true,
- "local_only": 104,
- "report": "c:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261112_100911\\README.md",
- "backup": "c:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261112_100911",
+ "local_only": 102,
+ "report": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261119\\README.md",
+ "backup": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261119",
  "verify": [
-  "공통 원문 적용 74건 — 개행 정규화 후 공통 원문과 불일치 0건",
+  "공통 원문 적용 50건 — 개행 정규화 후 공통 원문과 불일치 0건",
   "적용 파일 충돌 마커 잔존 0건",
   "삭제 0건 — 잔존 0",
-  "procedures.d.ts `declare global` 1건(기대 1)",
-  "BE 환경 파일 항상 로컬 유지 9건 — 적용 전과 다른 파일 0건",
-  "BE 대상 밖(build.gradle·settings.gradle·gradle/·lib/ 등) 변경 0건"
+  "procedures.d.ts `declare global` 1건(기대 1)"
  ]
 }

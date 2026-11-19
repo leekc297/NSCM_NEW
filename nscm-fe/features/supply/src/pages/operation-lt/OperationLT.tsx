@@ -14,7 +14,7 @@ import {
   useTabBtnPermissions,
   useTabProcQuery,
 } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { OperationLTForm } from './components/OperationLTForm';
 import { OperationLTGrid } from './components/OperationLTGrid';
@@ -79,6 +79,9 @@ export const OperationLT = ({ tabId, title }: PageProps<MENU_ID>) => {
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
+    // SP 가 Project Route 미존재 등 업무 거부를 결과 커서 RESULT_CODE('N')에만 담아 돌려주므로
+    //   그 커서를 들여다봐 실패면 서버 메시지 Alert·재조회 생략(false-success 방지, 테스트 No.1).
+    checkResultCode: true,
   });
 
   const rows = useMemo<OperationLTRow[]>(() => data?.o_rc1 ?? [], [data]);
@@ -148,9 +151,18 @@ export const OperationLT = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // 4키 중복 검증(AS-IS checkValidN1, design 01 R9 / 03 §3-4) — 전 행 대상 스캔.
     if (!validateSaveRows(src).ok) return;
+    // 신규행 감사 컬럼 주입 — AS-IS SetQueryInfoSave(cs:456~462): 신규행은 CREATED_BY=로그인유저,
+    //   CREATION_DATE=공란(SP 가 1900-01-01 로 대체). 기존행은 GET 원본 CREATED_BY/CREATION_DATE 를 그대로
+    //   보낸다. SCM_ADM_PROC_M 실측: P_CREATED_BY(#7)·P_CREATION_DATE(#8)는 그리드 컬럼 매핑이라 FE 가
+    //   보내야 하고(안 보내면 NULL → ORA-01400 으로 저장 전체 차단), P_LAST_UPDATED_BY(#9)는 sesUserId^
+    //   로 BE 가 세션 주입하므로 FE 가 싣지 않는다.
+    const userId = useSessionStore.getState().session?.userId ?? '';
+    const payload = dirty.map(r =>
+      s(r.CRUD_TYPE) === CRUD_TYPE.INSERT ? { ...r, CREATED_BY: userId, CREATION_DATE: '' } : r
+    );
     // 필수값 메타검증(라벨 '*'/INPUT_TP_CD) 통과 시 mutate — "[라벨] 값은 필수 입력 항목입니다"(MSG00429)
     //   저장 성공/실패 toast·재조회는 useProcMutation 표준 onSuccess.
-    saveWithValidation(dirty as unknown as OperationLTRow[], staticColumns[SHEETS.MAIN], mutate);
+    saveWithValidation(payload as unknown as OperationLTRow[], staticColumns[SHEETS.MAIN], mutate);
   };
 
   const hotkeyConfig: HotkeyConfig = {

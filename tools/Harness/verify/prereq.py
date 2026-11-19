@@ -18,6 +18,7 @@
   실행하지 않는 것 = 생성 절차(gen.js · pipeline.js) · FE/BE/DB 객체 변경 → 해당 입력이 없으면 MANUAL
 """
 import argparse, csv, datetime, glob, json, os, re, subprocess, sys, time
+HERE_PR = os.path.dirname(os.path.abspath(__file__))
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
@@ -26,6 +27,26 @@ D = lambda *a: os.path.join(ROOT, *a)  # noqa: E731
 PACK_CORE = ['controls.csv', 'actions.csv', 'files.csv', 'endpoints.csv']   # ledger·facts_*·combo 원천이 읽는 Fact Pack 핵심
 TOBE_META = ['menu.csv', 'msg_master.csv', 'sheet_columns.csv', 'btn_auth.csv', 'proc_meta.csv']  # judge·ledger·gen-e2e 가 읽는 TO-BE 메타
 META_MAX_AGE_H = 12  # TO-BE 메타는 DB 작업으로 바뀐다(DB 작업 = 새로 조회한 최신 원문 원칙) — 이보다 오래되면 다시 export
+
+
+def golden_missing_sps(mid, asis, have):
+    """endpoints.csv(현행 · status MATCH · 'SP 이름') SP 중 golden_cases 화면 행에 없는 것, gen_golden_cases.py 와 같은 선택 규칙"""
+    d = D('Doc', 'asisfacts', 'screens', asis or mid)
+    if not os.path.exists(os.path.join(d, 'endpoints.csv')):
+        return []
+    try:
+        sys.path.insert(0, HERE_PR); from asis_variant import is_main
+    except Exception:
+        return []
+    got = {(r.get('asis_sp') or '').split('.')[-1].upper() for r in have}
+    out = []
+    for r in read_csv(os.path.join(d, 'endpoints.csv')):
+        m = re.match(r'^SP\s+(\S+)', r.get('sp_or_sql', '') or '')
+        if m and r.get('status') == 'MATCH' and is_main(r, d):
+            sp = m.group(1).split('.')[-1].upper()
+            if sp not in got and sp not in out:
+                out.append(sp)
+    return out
 
 
 def read_csv(p):
@@ -219,6 +240,12 @@ def main():
     # P8 골든 케이스 — A1 건수·A7 컬럼별 값·F7/F8 저장 대조·B7(a) 의 입력
     gc = D('Doc', 'golden', 'golden_cases.csv')
     have = [r for r in read_csv(gc) if (r.get('screen') or '').upper() == mid]
+    # 2026-11-19 SCP0096 F7·F8 미검증: 화면 행이 1건이라도 있으면 다시 만들지 않아, 뒤에 추가된 AS-IS 호출 SP(저장 SP 등)가 골든에 빠진 채 남았다
+    #   (golden_cases 11-17 생성본에 SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP 없음 → save_audit F7 '저장 SP 없음'). endpoints.csv 의 현행 MATCH SP 가 빠졌으면 다시 만든다(수동 지정 행·다른 화면 행은 생성기가 보존)
+    missing = golden_missing_sps(mid, asis, have)
+    if missing:
+        print(f"[prereq] 골든 케이스에 없는 AS-IS 호출 SP {len(missing)}개({', '.join(missing[:5])}), gen_golden_cases.py 다시 실행")
+        have = []
     if not have:
         rc, ev = producer_lock('golden_cases', lambda: run([PY, D('tools', 'DbConn', 'gen_golden_cases.py'), mid]), skip_if_waited=False)  # 공용 golden_cases.csv 동시 쓰기 방지(11-06)
         have = [r for r in read_csv(gc) if (r.get('screen') or '').upper() == mid]

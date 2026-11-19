@@ -248,8 +248,7 @@ export const POPUP = {
 } as const;
 
 // 저장결과 'X'(기준정보/BOD 미등록) → MSG01321 '예' 시 여는 SSP 기준정보 매뉴얼 — AS-IS
-//   AddHelpButton("Standard Information SSP Manual")(BaseForm.cs L3501→FileDownLoad L3406) 대응.
-//   자매 shipment-plan-electrode·SSP0060·SSP0021 상수와 같은 사내 Help 서버 파일(동일 값).
-export const STANDARD_MANUAL_URL = encodeURI(
-  'http://gscm-battery.lgensol.com/GSCM_HELP/Standard Information SSP Manual.pptx'
-);
+//   AddHelpButton("Standard Information SSP Manual")(BaseForm.cs L3501→FileDownLoad L3406)은 사내 Help 서버의
+//   구 매뉴얼(구)SCM 화면 내용)을 받았으나, 신 매뉴얼을 FE 정적 호스팅(nscm-fe/public/manual/)에 동봉해 제공한다.
+//   자매 SSP0060·SSP0021·SSP0023 상수와 같은 값.
+export const STANDARD_MANUAL_URL = encodeURI('/manual/Standard Information SSP Manual.pptx');

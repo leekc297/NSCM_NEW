@@ -1,0 +1,45 @@
+{
+ "mode": "keyless",
+ "at": "2026-11-18 19:45:33",
+ "account": "minyonglee1",
+ "tables_scanned": [
+  "SCP_ANL_PSI_INTEGRATION"
+ ],
+ "changed": {
+  "SCP_ANL_PSI_INTEGRATION": 6
+ },
+ "created": {},
+ "audit": [
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAT",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAU",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAV",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAW",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAX",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_ANL_PSI_INTEGRATION|AAAclcAAFAAKQiFAAY",
+   "result": "PASS",
+   "why": "SCP_ANL_PSI_INTEGRATION 생성 칸 불변 · 수정 칸 정상"
+  }
+ ],
+ "generated": "2026-11-18 19:47:47"
+}

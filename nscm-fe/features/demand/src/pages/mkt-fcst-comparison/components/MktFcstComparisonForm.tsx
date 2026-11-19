@@ -258,7 +258,7 @@ export const MktFcstComparisonForm = ({
                     onChange={(_, option) => {
                       const picked = String(option ?? '');
                       if (picked === searchParams.divisionId) return;
-                      // AS-IS L1032~1041: 하위 cascade 클리어 + 텍스트 4종 클리어 + 기본 Version 재세팅('' → effect)
+                      // AS-IS L1032~1041: 하위 cascade 클리어 + 텍스트 4종 클리어 + Version 기본값('Current') 복귀
                       setSearchParams({
                         divisionId: picked,
                         deptIds: [],
@@ -269,7 +269,8 @@ export const MktFcstComparisonForm = ({
                         projectCodes: [],
                         itemIds: [],
                         owners: [],
-                        version: '',
+                        // 사업부가 바뀌면 이전 사업부 버전은 무의미하므로 기본 'Current' 로 되돌린다 (2026-11-19)
+                        version: 'Current',
                       });
                       // UM-01 — AS-IS L954 InitSpread(): 남은 조회 결과는 새 division 과 어긋나므로 비운다
                       onDivisionChange?.();

@@ -93,6 +93,7 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   tabId,
   filters,
   enabled = false,
+  stream = false,
   queryOptions,
 }: {
   menuId: M;
@@ -101,6 +102,12 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   tabId: string;
   filters?: ProcRequest<M, S>;
   enabled?: boolean;
+  /**
+   * true 면 `/call-proc-stream`(서버 스트리밍 + fetchSize 1000) 으로 조회한다. 응답 형태는
+   * 동일하다. 대용량 결과(수십만 행) 시트에만 켠다 — 일반 조회는 기본 `/call-proc` 가 맞다.
+   * 주의: 스트림 엔드포인트는 BUTTON 로그를 남기지 않는다.
+   */
+  stream?: boolean;
   queryOptions?: Omit<UseQueryOptions<ProcResponse<M, S>>, 'queryKey' | 'queryFn'>;
 }) => {
   const { t } = useTranslation();
@@ -114,7 +121,9 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   const queryResult = useQuery<ProcResponse<M, S>>({
     queryKey, // eslint-disable-line tanstack-query/exhaustive-deps
     queryFn: async () => {
-      const response = await apiClient.callProc<M, S>(menuId, sheetName, procedureAction, filters);
+      const response = stream
+        ? await apiClient.callProcStream<M, S>(menuId, sheetName, procedureAction, filters)
+        : await apiClient.callProc<M, S>(menuId, sheetName, procedureAction, filters);
       if (response.code !== '0')
         void setAlert({
           type: 'alert',
@@ -163,6 +172,53 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
   return queryResult;
 };
 
+/**
+ * SAVE 응답의 결과 커서(o_rc1 / o_result_cursor) RESULT_CODE 로 비즈니스 실패를 판정한다.
+ *
+ * envelope `code` 와 O_RESULT_CURSOR 의 **`CODE`** 는 responseInterceptor 가 이미 보지만, 일부 SAVE SP 는
+ * 실패를 결과 커서의 **`RESULT_CODE`** 에만 담아 돌려준다(o_rc1.RESULT_CODE='N' / o_result_cursor.
+ * RESULT_CODE='1' 등) — 인터셉터가 못 걸러 false-success 토스트가 뜬다
+ * ([[direct-post-saverequest-false-success-inner-cursor]]). 성공 조건은 두 커서 모두 RESULT_CODE 가
+ * 없거나 '0'/'S' 인 경우이고, 그 외는 거부로 보고 RESULT_MESSAGE(없으면 MSG)를 안내 문구로 쓴다.
+ */
+const pickResultRows = (result: unknown, key: string): Record<string, unknown>[] | undefined => {
+  if (!result || typeof result !== 'object') return undefined;
+  const obj = result as Record<string, unknown>;
+  const found = Object.keys(obj).find(k => k.toLowerCase() === key.toLowerCase());
+  const val = found ? obj[found] : undefined;
+  return Array.isArray(val) ? (val as Record<string, unknown>[]) : undefined;
+};
+const resultCell = (row: Record<string, unknown> | undefined, key: string): string => {
+  if (!row) return '';
+  const found = Object.keys(row).find(k => k.toLowerCase() === key.toLowerCase());
+  const v = found ? row[found] : undefined;
+  if (typeof v === 'string') return v;
+  if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+  return '';
+};
+export const readSaveRejection = (result: unknown): { rejected: boolean; message: string } => {
+  const head = pickResultRows(result, 'O_RESULT_CURSOR')?.[0];
+  const rc1 = pickResultRows(result, 'O_RC1')?.[0];
+  const headCode = resultCell(head, 'RESULT_CODE').trim();
+  const rc1Code = resultCell(rc1, 'RESULT_CODE').trim();
+  const ok = (headCode === '' || headCode === '0') && (rc1Code === '' || rc1Code === 'S');
+  if (ok) return { rejected: false, message: '' };
+  // SP 마다 거부 문구를 담는 컬럼이 다르다 — O_RESULT_CURSOR 는 RESULT_MESSAGE/ERR_MESSAGE/MSG,
+  //   O_RC1 은 RESULT_MESSAGE/ERR_MESSAGE 또는 **RESULT_CNT 에 문구를 과적**(SCP0037 Project Route
+  //   거부: ERR_MESSAGE/RESULT_CNT). 거부 분기에서만 읽으므로 RESULT_CNT 를 문구로 써도 안전하다.
+  const message = (
+    resultCell(head, 'RESULT_MESSAGE').trim() ||
+    resultCell(head, 'ERR_MESSAGE').trim() ||
+    resultCell(head, 'MSG').trim() ||
+    resultCell(rc1, 'RESULT_MESSAGE').trim() ||
+    resultCell(rc1, 'ERR_MESSAGE').trim() ||
+    resultCell(rc1, 'RESULT_CNT').trim()
+  )
+    .replace(/^ORA-\d+:\s*/, '')
+    .trim();
+  return { rejected: true, message };
+};
+
 export const useProcMutation = <
   M extends MenuId,
   S extends SheetName<M> = SheetName<M>,
@@ -174,6 +230,7 @@ export const useProcMutation = <
   tabId,
   onSuccess,
   onError,
+  checkResultCode = false,
 }: {
   menuId: M;
   sheetName: S;
@@ -181,6 +238,12 @@ export const useProcMutation = <
   tabId: string;
   onSuccess?: () => void;
   onError?: (error?: Error) => void;
+  /**
+   * 결과 커서(o_rc1/o_result_cursor)의 RESULT_CODE 로 비즈니스 실패를 재판정할지(기본 false).
+   * SAVE SP 가 실패를 envelope/O_RESULT_CURSOR.CODE 가 아니라 결과 커서 RESULT_CODE 에만 담는
+   * 화면만 true 로 켠다(false-success 방지). 켜면 실패 시 성공 토스트 대신 서버 메시지 Alert.
+   */
+  checkResultCode?: boolean;
 }) => {
   const { t } = useTranslation();
   const { setToast } = useMessageStore.getState();
@@ -198,7 +261,23 @@ export const useProcMutation = <
 
     onSuccess:
       onSuccess ??
-      (() => {
+      // response 는 annotation 을 달지 않는다 — 달면 react-query 가 TData 를 그 타입으로 좁혀
+      //   mutateAsync 반환형이 오염된다(admin DynamicQuery 회귀). 컨텍스트 추론(= TData)에 맡긴다.
+      (response => {
+        // 결과 커서에만 담겨 오는 비즈니스 실패를 재판정한다(checkResultCode 화면만). 실패면 서버
+        //   메시지로 Alert 하고 재조회를 건너뛴다 — 편집행이 사라지지 않게(false-success 방지).
+        if (checkResultCode) {
+          const { rejected, message } = readSaveRejection(
+            (response as { result?: unknown } | undefined)?.result
+          );
+          if (rejected) {
+            void setAlert({
+              type: 'alert',
+              content: message || t('MSG00003', '_저장에 실패하였습니다.'),
+            });
+            return;
+          }
+        }
         void queryClient.invalidateQueries({ queryKey: [tabId] });
         setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
       }),

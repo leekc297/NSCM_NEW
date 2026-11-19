@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 98,
+  "at": "2026-11-19T00:30:59.211Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 90,
+  "at": "2026-11-19T00:31:04.426Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261118\",\"endYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 124,
+  "at": "2026-11-19T00:31:04.457Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "Shipment Working Day OSP",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/Shipment%20Working%20Day%20OSP/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"ALL\",\"fromYyyymmdd\":\"20261118\",\"toYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 162,
+  "at": "2026-11-19T00:31:04.503Z",
+  "user": "minyonglee1",
+  "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+ }
+]

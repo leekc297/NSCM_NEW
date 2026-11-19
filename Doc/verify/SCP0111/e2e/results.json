@@ -7,7 +7,7 @@
       "_verify",
       "_trace",
       "--grep",
-      "문서\\ 시나리오|저장\\ 경로\\(F1\\ 실패·H10\\ 취소·H11\\ 로딩·F2\\ 붙여넣기\\)",
+      "CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)|W4\\ E4\\ 업무\\ 검증\\ 메시지\\ =\\ AS\\-IS\\(저장\\ 차단\\)|W4b\\ H3·F5·F3·M3·J1·H4|W4c\\ 정밀\\ 판정\\ —\\ 판정필요\\ 해소|W4d\\ 잔여\\ 판정필요\\ 실측|W9\\ 대조표\\ 미구현\\ 행\\ 실측|문서\\ 시나리오|버튼\\ 경로\\ 메시지·모달\\ 조건\\(E4·B3·B4·G4\\)|신규행\\ 검증\\(E3\\ 컬럼별\\ 필수·E4\\ 키\\ 중복\\)|조회조건\\ 콤보\\ 후보\\ 품질\\(B1·B2\\)",
       "--workers",
       "1",
       "--reporter=list,json"
@@ -104,23 +104,204 @@
   },
   "suites": [
     {
-      "title": "_verify.spec.ts",
-      "file": "_verify.spec.ts",
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "정합검증 SCP0111 @verify",
-          "file": "_verify.spec.ts",
-          "line": 253,
+          "title": "검증엔진 SCP0111 @trace",
+          "file": "_trace.spec.ts",
+          "line": 149,
           "column": 6,
           "specs": [
             {
-              "title": "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)",
+              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
               "ok": true,
               "tags": [
-                "verify"
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9988,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:39:59.972Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-8df86dadb99a612dd88e",
+              "file": "_trace.spec.ts",
+              "line": 814,
+              "column": 7
+            },
+            {
+              "title": "W4b H3·F5·F3·M3·J1·H4",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14869,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:40:12.482Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-69c035b336751c63c906",
+              "file": "_trace.spec.ts",
+              "line": 1075,
+              "column": 7
+            },
+            {
+              "title": "W4c 정밀 판정 — 판정필요 해소",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 85588,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:40:29.531Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-13f31f34b20929395390",
+              "file": "_trace.spec.ts",
+              "line": 1363,
+              "column": 7
+            },
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 200500,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:41:57.305Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-223d9b5b8842d2e1eaf5",
+              "file": "_trace.spec.ts",
+              "line": 1858,
+              "column": 7
+            },
+            {
+              "title": "W9 대조표 미구현 행 실측",
+              "ok": true,
+              "tags": [
+                "trace"
               ],
               "tests": [
                 {
@@ -134,7 +315,113 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 191538,
+                      "duration": 190,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:45:20.008Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-5e24d2ba34f2e8cb9b23",
+              "file": "_trace.spec.ts",
+              "line": 2223,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SCP0111 @verify",
+          "file": "_verify.spec.ts",
+          "line": 267,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [2s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 알림=Saved successfully. · [4s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [6s] 원복 입력 · [7s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 20622,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:45:22.673Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 고정 18칸(1415px) ≥ 가시 폭 1543px 의 85% → 측정 동안 고정 해제 · [0s] 수정 입력 완료 · [2s] 저장 응답 SAVEDETAIL:200 요청={\"activeFlag\":\"M^M^M^M^M^M\",\"planType\":\"FN^FN^FN^FN^FN^FN\",\"divisionId\":\"81^81^81^81^81^81\",\"companyId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"plantId\":\"MI00^MI00^MI00^MI00^MI00^MI00\",\"o 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":6,\"CODE\":\"0\",\"RESULT_CODE\":\"S | SEARCH:200 알림=Saved successfully. · [4s] 재조회 · [4s] 행 찾기 0 · 행 [FN|81|Pack] BOH_QTY: '0' → '1' 저장 성공 · 재조회 값 '1' 반영 확인 · [6s] 원복 입력 · [7s] 원복 저장 응답 · 원복 '0' 저장 성공 · 재조회 값 '0' 복원 확인"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-79c9e86213c94b65859b",
+              "file": "_verify.spec.ts",
+              "line": 927,
+              "column": 7
+            },
+            {
+              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 57072,
                       "errors": [],
                       "stdout": [
                         {
@@ -143,7 +430,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:32:23.126Z",
+                      "startTime": "2026-11-18T10:45:45.514Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -151,9 +438,49 @@
                   "status": "expected"
                 }
               ],
-              "id": "d557cdbda6ec1bc6afb1-36b1b845e90840b9c165",
+              "id": "d557cdbda6ec1bc6afb1-b77e6fb1936af24c0515",
               "file": "_verify.spec.ts",
-              "line": 1651,
+              "line": 1795,
+              "column": 7
+            },
+            {
+              "title": "버튼 경로 메시지·모달 조건(E4·B3·B4·G4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6407,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:46:44.792Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-119a50c591f28d6ee6ca",
+              "file": "_verify.spec.ts",
+              "line": 2471,
               "column": 7
             },
             {
@@ -174,11 +501,11 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9984,
+                      "duration": 13221,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[시나리오] SCP0111 '[자동] 조회 중 Loading 토스트 없음' 시작 10:35:40\n"
+                          "text": "[시나리오] SCP0111 '[자동] 기존 행 BOH_QTY 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 19:46:55\n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
@@ -186,7 +513,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-18T01:35:37.332Z",
+                      "startTime": "2026-11-18T10:46:53.420Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -196,7 +523,65 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-dd2cb6e7c9123fcae2ab",
               "file": "_verify.spec.ts",
-              "line": 2516,
+              "line": 2600,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 31132,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T10:47:08.860Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-be4a5854fc854f92c0ef",
+              "file": "_verify.spec.ts",
+              "line": 3671,
               "column": 7
             }
           ]
@@ -206,9 +591,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-18T01:32:20.963Z",
-    "duration": 209956.03,
-    "expected": 2,
+    "startTime": "2026-11-18T10:39:58.330Z",
+    "duration": 464964.713,
+    "expected": 10,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

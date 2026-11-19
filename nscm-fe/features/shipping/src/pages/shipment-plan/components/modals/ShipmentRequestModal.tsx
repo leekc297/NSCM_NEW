@@ -103,6 +103,16 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
   useEffect(() => {
     if (open) void refetch();
   }, [open, refetch]);
+  // 팝업이 항상 마운트된 채 open prop 만 토글되므로(ShipmentPlan.tsx) 상단 툴바 입력(Auto Set
+  //   Change Reason/Reason Detail) state 가 닫아도 살아남는다. 입력 후 취소→재오픈 시 이전 값이
+  //   남던 문제(2026-11-16 사용자 신고)를 막기 위해 열릴 때마다 초기화한다. 그리드 셀은 refetch 로
+  //   새로 받은 rows 가 clone 되어 저절로 초기화된다.
+  useEffect(() => {
+    if (open) {
+      setAutoReason('');
+      setAutoDetail('');
+    }
+  }, [open]);
   // 그리드가 행 객체를 직접 수정(NEW 수량/일자·사유)하므로 react-query 캐시를 건드리지 않도록 복제한다.
   const rows = useMemo(
     () => (data?.o_rc1 ?? []).map(r => ({ ...(r as Record<string, unknown>) })),
@@ -474,6 +484,13 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
       title={t(LBL.REQUEST, '_Shipment Request')}
       customContentArea={
         <Box sx={{ position: 'relative' }}>
+          {/* Change Reason 셀 콤보 드롭다운(Wijmo 그리드 DataMap, body 에 append 되는 .wj-grid-listbox)은
+              Wijmo 가 작은 인라인 max-height(실측 80px, 약 4행)를 박아 사유코드가 다 안 보였다 — 셀
+              에디터가 ComboBox 컨트롤이 아니라 그리드 내장 드롭다운이라 maxDropDownHeight API 로는 못
+              바꾼다. 공통 스타일(foundation)을 건드리지 않도록, 이 팝업이 열려 있는 동안에만 전역 규칙을
+              심어 상한만 키운다(검토 지적 2026-11-16). 모달이 배경을 막으므로 이 사이 열릴 수 있는
+              .wj-grid-listbox 는 이 팝업의 셀 콤보뿐이고, 닫히면 규칙이 사라져 다른 화면엔 영향이 없다. */}
+          {open && <style>{'.wj-grid-listbox{max-height:320px !important;}'}</style>}
           {/* 저장 중 팝업 Dim+클릭 차단(placement='parent' 백드롭이 부모 전체를 덮어 버튼 재클릭까지 막음) —
               하단 그리드만 Dim 되어 중복 클릭 가능하던 문제 해소(사용자 요청 2026-11-10, FcstUploadModal 패턴). */}
           <ProgressIndicator
@@ -488,9 +505,16 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
             <Button appearance='outlined' priority='normal' disabled={saving} onClick={handleAutoSet}>
               Auto Set
             </Button>
+            {/* 필수표기는 하드코딩 '*' 가 아니라 FormItem required(디자인시스템 표준 빨간 마커)로 —
+                메인 검색폼 Div/Company/Plan Date 와 동일 표기로 통일(검토 지적 2026-11-16). */}
             <FormItem
-              label={`${t('LBL01060', '_Change Reason')}*`}
+              label={t('LBL01060', '_Change Reason')}
+              required
               labelAlign='right'
+              // 기본 라벨 칸(96px)에서 'Change Reason' 이 2줄로 래핑되면 required 마커(라벨의 형제
+              //   요소)가 2줄 옆 위로 떠 '글자와 떨어진' 것처럼 보였다(검토 지적 2026-11-16). 라벨을
+              //   한 줄로 고정해 마커가 글자 옆에 붙게 한다.
+              sx={{ '& label': { whiteSpace: 'nowrap' } }}
               render={() => (
                 <Box sx={{ width: 200 }}>
                   <CustomDropdown
@@ -503,8 +527,10 @@ export const ShipmentRequestModal = ({ open, modalClose, tabId }: Props) => {
               )}
             />
             <FormItem
-              label={`${t('LBL01104', '_Reason Detail')}*`}
+              label={t('LBL01104', '_Reason Detail')}
+              required
               labelAlign='right'
+              sx={{ '& label': { whiteSpace: 'nowrap' } }}
               render={() => (
                 <InputField value={autoDetail} onChange={e => setAutoDetail(e.target.value)} />
               )}

@@ -8,7 +8,7 @@ import { apiClient } from '@foundation/apis';
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { useQueryClient } from '@foundation/query-client';
+import { useMutation, useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import {
   type ColumnLayoutRow,
@@ -19,6 +19,7 @@ import {
   toColumnLayoutSettings,
 } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { FixReasonModal } from './components/modals/FixReasonModal';
@@ -170,6 +171,20 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   EE+operationGroup A 조합 차단으로 위임한다.
   const canCreateNew = !isLockedPlan && !(sc.divisionId.startsWith('EE') && sc.operationGroupId === 'A');
 
+  // 저장 SP 호출(SAVE/FIX/UNFIX)을 useMutation 으로 감싼다 — raw apiClient.post 는 react-query 밖이라
+  //   MDIContainer 의 useIsBusy([activeTabId])(=useIsMutating/useIsFetching) 공통 로딩 스피너(프로그래스)가
+  //   뜨지 않는다. mutationKey 를 [tabId,...] 로 두어 저장 트랜잭션 동안 전역 프로그래스가 표시되게 한다
+  //   (SCP0134/PlanManagement·ShipmentPlanMobilityIt 선례, 테스터 지적 2026-11-16). 성패 분기(토스트/알럿)는
+  //   호출부(handleSave/saveFixDataset)에서 res 로 종전과 동일하게 처리하므로 payload 계약·분기 로직은 불변이다.
+  //   저장은 비멱등이라 재시도 금지(retry:0) — 전역 mutations.retry 기본값이 타임아웃 실패분을 재전송하면
+  //   중복 저장으로 이어진다(Bod 선례).
+  const { mutateAsync: saveProcAsync } = useMutation({
+    mutationKey: [tabId, SHEETS.MAIN, 'SAVE'],
+    retry: 0,
+    mutationFn: (args: { path: string; payload: ReturnType<typeof buildSavePayload> }) =>
+      apiClient.post<{ o_rc1?: { RESULT_CODE?: string; ERR_MESSAGE?: string }[] }>(args.path, args.payload),
+  });
+
   // 서버 저장가능 판정 — AS-IS Get_IsSaveYn(.cs:3661-3705). PKG_SCP0013.P_SCP0013_GET_PLAN_SAVE_YN 이 O_RC1.EDIT_YN 으로
   //   'Y' 를 줄 때만 통과한다. division 이 비면 호출·메시지 없이 false(.cs:3670), 호출 실패는 저장 불가로 본다(안전측).
   //   주의: SCP0009/saveYn/SEARCH 라우팅·권한이 DB 에 등록돼 있어야 한다(05_register.sql 끝). 미등록이면 항상 false 다.
@@ -227,10 +242,10 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
       seq: sc.planSeq,
       bucketType: sc.bucketType,
     });
-    const res = await apiClient.post<{ o_rc1?: { RESULT_CODE?: string; ERR_MESSAGE?: string }[] }>(
-      `/${MENU_ID}/${SHEETS.MAIN}/${action}/call-proc`,
-      buildSavePayload(rows)
-    );
+    const res = await saveProcAsync({
+      path: `/${MENU_ID}/${SHEETS.MAIN}/${action}/call-proc`,
+      payload: buildSavePayload(rows),
+    });
     if (isSaveResultFailure(res)) {
       void setAlert({
         type: 'alert',
@@ -402,10 +417,10 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
       return;
     }
-    const res = await apiClient.post<{ o_rc1?: { RESULT_CODE?: string; ERR_MESSAGE?: string }[] }>(
-      `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
-      buildSavePayload(rows)
-    );
+    const res = await saveProcAsync({
+      path: `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
+      payload: buildSavePayload(rows),
+    });
     if (isSaveResultFailure(res)) {
       void setAlert({
         type: 'alert',
@@ -505,6 +520,14 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
             buttonLabel: '',
           },
         ].filter((b): b is Exclude<typeof b, false> => b !== false)}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={checked => set({ chkSum: checked })}
+          />
+        }
       />
 
       <ShipmentPlanFgGrid

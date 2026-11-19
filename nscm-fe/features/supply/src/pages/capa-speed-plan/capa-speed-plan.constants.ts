@@ -234,6 +234,19 @@ export const ASSEMBLY_SCALE_VIEW: Record<string, number> = {
  * `EQP_SPED` 로 고칠지는 사용자 결정 — 04 리포트 백로그.
  */
 
+/**
+ * 기간 칸 정수부 입력 자릿수 상한 — Operation group(조회조건) 선택이 곧 시트이고, 시트별로 기간 셀
+ * 정수부 입력을 제한한다. Cell/Module·Pack(ASSEMBLY 시트) = 10자리(±9,999,999,999),
+ * Electrode(ELTR 시트) = 14자리(±99,999,999,999,999). AS-IS GSCM 동작(SCP0105 테스트 자릿수 케이스,
+ * 2026-11-12 조치 요청)을 재현한다. 기간 컬럼은 런타임 동적 조립이라 admin 메타(`DATA_MAX_LENGTH`)
+ * 배선이 닿지 않으므로 화면 입력 가드(CapaSpeedPlanGrid 의 beforeinput/input/pastingCell)로 직접 건다.
+ * 정수부만 제한하고 부호·소수부는 건드리지 않는다.
+ */
+export const PERIOD_MAX_INT_DIGITS: Record<GridSheet, number> = {
+  [SHEETS.ASSEMBLY]: 10,
+  [SHEETS.ELTR]: 14,
+};
+
 // ====================================================================================
 // 3단 헤더 (design 03 §2.4 / hook #93)
 // ====================================================================================

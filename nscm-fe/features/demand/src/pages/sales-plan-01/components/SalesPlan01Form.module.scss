@@ -1,0 +1,7 @@
+// 조회조건 2행 체크박스 가로 배치 (Sum / Color / Include Internal Txn)
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px; // hook #94 — 조회조건 객체 높이 36px 동일화
+}

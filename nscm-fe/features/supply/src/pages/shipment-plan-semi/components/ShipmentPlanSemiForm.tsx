@@ -4,9 +4,9 @@ import { useEffect, useMemo } from 'react';
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { CustomDropdown, over52WeekPreset, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { FormItem, InputField, Button, Checkbox } from '@shared/lges';
+import { FormItem, InputField, Button } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
@@ -376,20 +376,7 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
               )}
             />
           </Grid> */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-              )}
-            />
-          </Grid>
+          {/* Sum(chkSum)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18, SCP0013 동형). */}
 
           {/* Plan Date → Type → Seq — AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 §2.6). 공용
               PlanVersionCascade(종속 콤보 + 공유 캐스케이더). combined 단일 입력칸(기본) — 클릭하면
@@ -431,8 +418,9 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
               }}
             />
           </Grid>
-          {/* Period* — SCP0013 과 동일 PeriodRangePicker(Today/W26/W52/W82 전부 클라 계산). Plan Date
-              변경 시 위 effect 가 W52 구간(from=Plan date, to=+52*7-1일)으로 자동 세팅(AS-IS GetDayRange(W52) 파리티). */}
+          {/* Period* — SCP0013 과 동일 PeriodRangePicker. W26/W52 고정 + 선택 Plan Date 행 OVER_52W_YN='Y' 면
+              동적 W{PLAN_WEEKS}(DATE_WEEKLY1_SCP_ALL, 사용자 지시 2026-11-17). Plan Date 변경 시 위 effect 가
+              W52 구간(from=Plan date, to=+52*7-1일)으로 자동 세팅(AS-IS GetDayRange(W52) 파리티). */}
           <Grid size={3}>
             <PeriodRangePicker
               className={commonStyles.formItem}
@@ -440,6 +428,8 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
               end={sc.toYyyymmdd}
               onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
               label={t(LBL.PERIOD, '_Period')}
+              quickWeeks={[26, 52]}
+              lastWeeks={over52WeekPreset(planDates, sc.planStartYyyymmdd)}
             />
           </Grid>
 

@@ -72,8 +72,11 @@ export const YIELD_MAX = 100;
 
 /**
  * 음수 입력 자체를 막는 컬럼 — AS-IS InitSpread 의 NumberCellType MinimumValue=0 재현
- * (SCP0022_Formation.cs L223 LT_FORMATION·L225~227 수율, MinimumValue=0 은 편집기가 '-' 입력을
- * 거부한다). ADD_LT_FORMATION 만 MinimumValue=-9999999999(L224)라 음수 허용이므로 제외한다.
+ * (SCP0022_Formation.cs L306 LT_FORMATION·L308~309 수율, MinimumValue=0 은 편집기가 '-' 입력을
+ * 거부한다). ADD_LT_FORMATION 은 그리드마다 최소값이 달라 여기서 제외하고 그리드별로 처리한다:
+ *   - 메인 Formation 그리드: L307 SetReNumerCellType(DefMain.ADD_LT_FORMATION, -9999999999, 0) → 음수 허용.
+ *   - Formation Except LT 탭: L338 SetReNumerCellType(DefExceptLT.ADD_LT_FORMATION, 0, 0) → 음수 차단
+ *     (EXCEPT_LT_NEGATIVE_BLOCKED_COLUMNS 로 그 그리드에만 추가 적용).
  */
 export const NEGATIVE_BLOCKED_COLUMNS: readonly string[] = [
   'LT_FORMATION',
@@ -83,14 +86,28 @@ export const NEGATIVE_BLOCKED_COLUMNS: readonly string[] = [
 ];
 
 /**
+ * Formation Except LT 탭 전용 추가 음수 차단 컬럼 — 이 탭의 ADD_LT_FORMATION 은 AS-IS 최소값 0
+ * (SCP0022_Formation.cs L338)이라 메인 그리드(음수 허용, L307)와 달리 '-' 입력을 막아야 한다.
+ */
+export const EXCEPT_LT_NEGATIVE_BLOCKED_COLUMNS: readonly string[] = ['ADD_LT_FORMATION'];
+
+/**
  * 소수점 입력 자체를 막는 컬럼 — AS-IS InitSpread 의 NumberCellType 소수 자릿수 0 재현
  * (SCP0022_Formation.cs L223 LT_FORMATION 기본 0자리 · L224 ADD_LT_FORMATION 명시 0자리).
  */
 export const DECIMAL_BLOCKED_COLUMNS: readonly string[] = ['LT_FORMATION', 'ADD_LT_FORMATION'];
 
-/** 해당 컬럼에 들어갈 수 없는 문자('-' 또는 '.')가 text 에 있으면 true. */
-const hasBlockedChar = (binding: string, text: string): boolean =>
-  (NEGATIVE_BLOCKED_COLUMNS.includes(binding) && text.includes('-')) ||
+/**
+ * 해당 컬럼에 들어갈 수 없는 문자('-' 또는 '.')가 text 에 있으면 true.
+ * extraNegativeBlocked 는 그리드별 추가 음수 차단 컬럼(예: Except LT 탭의 ADD_LT_FORMATION).
+ */
+const hasBlockedChar = (
+  binding: string,
+  text: string,
+  extraNegativeBlocked: readonly string[] = []
+): boolean =>
+  ((NEGATIVE_BLOCKED_COLUMNS.includes(binding) || extraNegativeBlocked.includes(binding)) &&
+    text.includes('-')) ||
   (DECIMAL_BLOCKED_COLUMNS.includes(binding) && text.includes('.'));
 
 /**
@@ -101,15 +118,22 @@ const hasBlockedChar = (binding: string, text: string): boolean =>
  *   - paste: 편집기 안에서 Ctrl+V(브라우저 기본 붙여넣기라 pastingCell 을 타지 않음).
  * DataGrid 의 initialized 콜백에 그대로 전달해 각 그리드에 1회 부착한다. initialized 는 DataGrid
  * 내부 설정 이후 호출되므로 pastingCell 핸들러는 기본 편집가능 판정 뒤에 실행된다.
+ *
+ * extraNegativeBlocked 는 그 그리드에만 음수를 추가로 막을 컬럼이다(예: Except LT 탭의
+ * ADD_LT_FORMATION). 생략하면 공용 규칙만 적용하므로 기존 그리드는 그대로 initialized 에 함수 참조를
+ * 넘기면 되고, 추가 차단이 필요한 그리드는 initialized={g => attachNumberInputBlock(g, COLS)} 로 쓴다.
  */
-export const attachNumberInputBlock = (grid: FlexGrid): void => {
+export const attachNumberInputBlock = (
+  grid: FlexGrid,
+  extraNegativeBlocked: readonly string[] = []
+): void => {
   const currentBinding = () => grid.columns[grid.selection.col]?.binding ?? '';
 
   grid.hostElement.addEventListener(
     'keydown',
     event => {
       if (event.key !== '-' && event.key !== '.') return;
-      if (hasBlockedChar(currentBinding(), event.key)) event.preventDefault();
+      if (hasBlockedChar(currentBinding(), event.key, extraNegativeBlocked)) event.preventDefault();
     },
     true
   );
@@ -119,13 +143,13 @@ export const attachNumberInputBlock = (grid: FlexGrid): void => {
     event => {
       if (!grid.activeEditor) return;
       const text = event.clipboardData?.getData('text') ?? '';
-      if (hasBlockedChar(currentBinding(), text)) event.preventDefault();
+      if (hasBlockedChar(currentBinding(), text, extraNegativeBlocked)) event.preventDefault();
     },
     true
   );
 
   grid.pastingCell.addHandler((sender: FlexGrid, e: CellRangeEventArgs) => {
     const binding = sender.columns[e.col]?.binding ?? '';
-    if (hasBlockedChar(binding, String(e.data ?? ''))) e.cancel = true;
+    if (hasBlockedChar(binding, String(e.data ?? ''), extraNegativeBlocked)) e.cancel = true;
   });
 };

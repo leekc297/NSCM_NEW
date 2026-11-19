@@ -240,7 +240,9 @@ export const useEtcSalesReportsStore = createPersistedStoreWithTab<State & Actio
           },
         };
         state.thisMonth = dayjs().format('YYYYMM'); // 조회 시점 고정
-        // ⭐ resultMonth 스냅샷 — Result 조회 시 전월 yyyymm (AS-IS L602~609) / Plan ''
+        // ⭐ resultMonth 스냅샷 — Result 조회 시 전월 yyyymm (AS-IS L602~609) / Plan·ALL ''
+        //   (저장 SP P_DMF0049_SAVE_SALES_ETC_REPORT_C 는 이 값을 v_result_month 로 읽기만 하고
+        //    판정에 쓰지 않는다 — 2026-11-17 개발 DB 본문 확인)
         state.resultMonth =
           c.planResult === PLAN_RESULT.RESULT ? dayjs().subtract(1, 'month').format('YYYYMM') : '';
       });

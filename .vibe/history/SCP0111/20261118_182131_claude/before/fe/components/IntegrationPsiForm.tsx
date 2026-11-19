@@ -1,0 +1,336 @@
+import { PeriodField } from 'features/master/src/components';
+import { useEffect, useMemo } from 'react';
+
+import type { ComboResponse } from '@foundation/models';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { CustomDropdown, SearchArea } from '@shared/components';
+import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
+import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
+import { Grid } from '@shared/mui';
+import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
+
+import {
+  COMBO,
+  DEFAULT_PERIOD_LOOKUP,
+  DEFAULT_PERIOD_MONTHS,
+  DIVISION_EE_EXCLUDE,
+  LBL,
+  PLAN_DATE_ALLOWED_PLAN_TYPES,
+} from '../integration-psi.constants';
+import { useIntegrationPsiStore } from '../useIntegrationPsiStore';
+
+interface Props {
+  onSearch: () => void;
+  // 팝업 오픈 — btnNickName / btnItemId 는 SCM0002 ItemByDivisionModal(division 기준 Item 조회)을 연다.
+  onItemSearch: () => void;
+}
+
+interface Option {
+  label: string;
+  value: string;
+}
+
+// design 02 §2 조회조건 combo 상세 (칸-콤보 대응표 — 검색조건 Form 상단 상시 유지 규칙):
+//   Division           → COMBO.DIVISION('Division_SCP') + FE 후처리 EE 제외(ATTRIBUTE3<>'EE', design 02 §2 #1)
+//   Plan-date          → COMBO.PLAN_DATE('DATE_WEEKLY1_SCP_ALL') 소스풀 + Division·SE/FN PlanType PLANDATE 교집합(§3.1)
+//   Plan-type          → COMBO.PLAN_TYPE('PlanType1_SCP_ALL') 소스풀. AS-IS PlanType.Visibility=Never 라 화면 미표시.
+//                        (자동재조회 비활성 + 조회 param "" 고정 §4.4 — store 값만 유지, UI 렌더 없음)
+//   Period(From ~ To)  → 월(YYYYMM) 구간. 프로젝트 표준 PeriodField mode='month'(features/master, 내부
+//                        DatePickerCalendar usecase='month')로 통일 — Capa(SCP0049)/OptCapa(SCP0047)/
+//                        ProjectRoute(SCP0006) 선례 동일. AS-IS 월 콤보 2개의 TO-BE 표준형이다.
+//                        초기 선택만 AS-IS 와 같다 — from = PlanDate 의 YYYYMM, to = from+(기본기간-1)월(§3.2 cs:293~294).
+//                        AS-IS 의 월 목록 조회(CalendarMonth)·목록 상한(HORIZON_END)은 월 피커에 적용할 곳이 없어 제거.
+//   Qty < 0            → 체크박스(콤보 아님) → p_qty_yn(§2.1). AS-IS chkQty.Text "Qty < 0"
+//   Nick Name / Model  → Text + SCM0002 팝업(§4.6). Cell Model = Text (btnCellItem_Id AS-IS NO-OP §4.6)
+//                        AS-IS Designer 라벨: Item ID="Model"(lblItemId), CellItem ID="Cell Model"(lblCellItem)
+// DB 실측(SQL_ID 5종)은 design 02 §7 게이트차단으로 미확정 — 이름 유사 재사용 후보로 취급(convert-core §2.6).
+
+const str = (v: unknown): string =>
+  typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+const toOptions = (rows: ComboResponse[] | undefined): Option[] =>
+  (rows ?? []).map(r => ({ label: str(r.NAME) || str(r.CODE), value: str(r.CODE) }));
+
+// YYYYMM 문자열에 개월수를 더한다(월 롤오버). '202601' + 5 = '202606'. 기간 To 기본값 산정용(design 02 §3.2).
+const addMonths = (yyyymm: string, months: number): string => {
+  if (!/^\d{6}$/.test(yyyymm)) return yyyymm;
+  const y = Number(yyyymm.slice(0, 4));
+  const m = Number(yyyymm.slice(4, 6));
+  const total = y * 12 + (m - 1) + months;
+  const ny = Math.floor(total / 12);
+  const nm = (total % 12) + 1;
+  return `${ny}${String(nm).padStart(2, '0')}`;
+};
+
+// AS-IS SCP0111_IntegrationPSI.cs 조회조건 패널(pnlCondition) — design 02 §5.1 SearchArea 매핑.
+//   AS-IS 는 _ALL SP 로 소스풀을 한 번 로드하고 DBUtils.Filter 로 클라 후처리(§3.1) — TO-BE 도 동일하게
+//   useTabComboQueries 로 소스풀을 받아 FE 후처리로 cascade 를 재현한다(convert-core §2.6, PPL 선례 동일).
+export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
+  const { t } = useTranslation();
+
+  const sc = useIntegrationPsiStore(s => s.searchCondition);
+  const set = useIntegrationPsiStore(s => s.setSearchCondition);
+  const setDivision = useIntegrationPsiStore(s => s.setDivision);
+  const setPlanDate = useIntegrationPsiStore(s => s.setPlanDate);
+  const openSearchArea = useIntegrationPsiStore(s => s.openSearchArea);
+
+  const tabId = useTabid();
+
+  // Division / PlanDate 소스풀 / PlanType 소스풀 — AS-IS CommonAll 전량 로드(§2). Division 은 EE 제외 후처리.
+  const [divisions, planDatesAll, planTypesAll] = useTabComboQueries({
+    filters: [COMBO.DIVISION, COMBO.PLAN_DATE, COMBO.PLAN_TYPE],
+  });
+
+  // 통합PSI Default 조회기간(개월수) — AS-IS Data.Common(LookupCommon,"INTEGRATION_PSI_DEFAULT_PERIOD") (cs:66).
+  //   To "선택값" 산정 전용(목록 범위 아님). 부재 시 fallback DEFAULT_PERIOD_MONTHS(cs:256-264).
+  //   응답 필드명 주의(2026-11-16 ora.py 실측): admin/lookup(PR_GET_LOOKUP_INFO_LIST)은 동적 PIVOT 이라
+  //   결과 컬럼명이 SCM_ADM_LOOKUP_MASTER 의 **헤더값(SEGMENT1)** 이 된다. 이 룩업은 master SEGMENT1='PERIOD'
+  //   → 컬럼 **`PERIOD`**, 값은 detail SEGMENT1(현재 '6'). 종전 `.CODE` 는 존재하지 않는 필드라 항상 undefined→
+  //   fallback 6 으로 떨어져 **룩업값이 무시**됐다(값이 우연히 6 이라 증상이 가려짐, 사용자 신고 2026-11-16).
+  const [defaultPeriodRows] = useTabLookupQueries({
+    filters: [{ lookupType: DEFAULT_PERIOD_LOOKUP }],
+  });
+  const periodCode = Number(str(defaultPeriodRows?.[0]?.PERIOD));
+  const periodCount = Number.isFinite(periodCode) && periodCode > 0 ? periodCode : DEFAULT_PERIOD_MONTHS;
+
+  // Period 는 표준 PeriodField mode='month'(월 피커)로 바뀌어 **선택 가능한 월 목록 자체가 없다**(월 피커는
+  //   연·월 그리드에서 자유 선택). 그래서 AS-IS SetChangedPeriod 의 "목록 상한" 산정(HORIZON_END_DATE via
+  //   SCPPlanPeriod_SCP, 없으면 시작월+11월, cs:267~278)과 월 목록 조회(CalendarMonth, cs:287~291)는 함께
+  //   제거했다 — 월 피커에는 적용할 곳이 없다(표준 Capa/OptCapa 도 상한 없이 자유 월선택).
+  //   남은 것은 **초기 선택값**(아래 기간 기본선택 effect, cs:293~294)뿐이고 그 계산은 horizon 과 무관하다.
+  //   divergence: 상한을 넘는 월도 고를 수 있다. SP 는 해당 월을 빈 컬럼으로 돌려주므로 오류는 아니다(__asis-mapping__ U-6).
+
+  // Division — EE division(ATTRIBUTE3='EE') FE 후처리 제외(design 02 §2 #1 / convert-core §2.6 4계층).
+  const divisionOptions = toOptions(
+    (divisions ?? []).filter(r => str(r.ATTRIBUTE3) !== DIVISION_EE_EXCLUDE)
+  );
+
+  // PlanDate — "Division 하위 + PlanType 이 SE/FN 인 PLANDATE" 교집합만 노출(design 02 §3.1). 단순 Division 필터 아님.
+  const planDateOptions = useMemo<Option[]>(() => {
+    const div = sc.divisionId;
+    if (!div) return [];
+    // 1단: 소스풀 PlanType 에서 Division·SE/FN 인 PLANDATE 집합 산출(§3.1 line 408).
+    const allowed = new Set(PLAN_DATE_ALLOWED_PLAN_TYPES as readonly string[]);
+    const sefnPlanDates = new Set(
+      (planTypesAll ?? [])
+        .filter(r => str(r.DIVISION_ID) === div && allowed.has(str(r.CODE)))
+        .map(r => str(r.PLANDATE))
+        .filter(Boolean)
+    );
+    // 2단: PlanDate 소스풀을 Division 하위로 거르되, SE/FN PLANDATE 가 있으면 그 교집합으로 제한(§3.1 line 426).
+    //   SE/FN 이 하나도 없으면 fallback = Division 전체 PlanDate(§3.1 line 430).
+    const inDivision = (planDatesAll ?? []).filter(r => str(r.DIVISION_ID) === div);
+    const filtered =
+      sefnPlanDates.size > 0
+        ? inDivision.filter(r => sefnPlanDates.has(str(r.CODE)))
+        : inDivision;
+    return toOptions(filtered);
+  }, [planDatesAll, planTypesAll, sc.divisionId]);
+
+  // PlanType 은 AS-IS PlanType.Visibility=Never 라 화면에 렌더하지 않으므로 옵션 목록을 만들지 않는다.
+  //   (planTypesAll 소스풀은 PlanDate 산출용으로만 사용 — design 02 §3.1. 조회 param 은 "" 고정 §4.4)
+
+  // Division 기본 바인딩 = **조회된 목록의 첫 항목**. AS-IS 는 cs:235 setListBox 로 DataSource 만 걸고
+  //   명시 지정(cs:237 `cboDivision.ControlValues = "81"`)은 주석 처리돼 있어 UsrCombo 가 첫 행을 자동선택한다.
+  //   store 초기값이 빈 문자열이라(useIntegrationPsiStore makeInitSearch) 진입 시 이 effect 가 첫 division 을
+  //   채우고, 이후에는 "값이 옵션에 없을 때"(권한 변경 등)만 재교정한다 — 사용자가 고른 division 은 보존.
+  const firstDivision = divisionOptions[0]?.value ?? '';
+  const hasDivision = divisionOptions.some(o => o.value === sc.divisionId);
+  useEffect(() => {
+    if (firstDivision && !hasDivision) setDivision(firstDivision);
+  }, [firstDivision, hasDivision, setDivision]);
+
+  // PlanDate 기본값 = 목록 첫/최신(design 02 §4.2 RefreshPlanDate 후 setListBox 434). 단일 필수 콤보.
+  //   PlanDate 가 옵션에 없을 때(최초 진입 / F10 초기화)만 첫/최신 PlanDate + 기간 기본선택을 **함께** 넣는다.
+  //   F6 복원으로 PlanDate 가 이미 옵션에 있으면(hasPlanDate=true) skip → 복원된 PlanDate·Period 를 보존한다.
+  //   종전엔 기간 전용 effect 가 PlanDate 파생값(시작월~+N월)으로 Period 를 매번 덮어써, F6 로 Period 를
+  //   저장해도 복원 직후 기본값으로 덮여 "저장이 안 되는" 것처럼 보였다(2026-10-19 수정). PlanDate 변경 시의
+  //   기간 재설정(AS-IS SetChangedPeriod 무조건 재계산)은 아래 PlanDate onChange 가 동기로 담당한다.
+  const firstPlanDate = planDateOptions[0]?.value ?? '';
+  const hasPlanDate = planDateOptions.some(o => o.value === sc.planStartYyyymmdd);
+  useEffect(() => {
+    if (!firstPlanDate || hasPlanDate) return;
+    const fm = firstPlanDate.slice(0, 6);
+    set({
+      planStartYyyymmdd: firstPlanDate,
+      fromYyyymm: fm,
+      toYyyymm: addMonths(fm, periodCount - 1),
+    });
+  }, [firstPlanDate, hasPlanDate, periodCount, set]);
+
+  const single = (
+    labelText: string,
+    value: string,
+    options: Option[],
+    onPick: (code: string) => void,
+    required?: boolean
+  ) => (
+    <Grid size={3}>
+      <FormItem
+        className={commonStyles.formItem}
+        label={labelText}
+        labelAlign='right'
+        required={required}
+        render={() => (
+          <CustomDropdown
+            value={value}
+            options={options}
+            onChange={(_, picked) => onPick(String(picked ?? ''))}
+          />
+        )}
+      />
+    </Grid>
+  );
+
+  // Period — 월(YYYYMM) 구간 선택. 프로젝트 표준 PeriodField mode='month'(features/master, 내부
+  //   DatePickerCalendar usecase='month')로 구현한다 — 같은 feature 의 Capa(SCP0049)/OptCapa(SCP0047)/
+  //   ProjectRoute(SCP0006) 선례 동일. 값(start/end/onChange)이 **월 단위 YYYYMM** 이라 store(fromYyyymm/
+  //   toYyyymm)·SP param(p_from_yyyymm/p_to_yyyymm)과 1:1 — 종전 자유 달력(PeriodRangePicker)이 요구하던
+  //   일 단위(YYYYMMDD) 환산이 사라진다.
+  //   사용자 신고(2026-11-16): monthOnly PeriodRangePicker 는 표기만 YYYY-MM 이고 팝업은 **일 셀 달력**이라
+  //   "월 선택인데 일자 달력" 혼란 → 월 피커 표준으로 교체. 초기 선택값(§3.2 from=PlanDate 의 YYYYMM,
+  //   to=from+(기본기간-1)월)은 아래 PlanDate effect/onChange 가 그대로 유지한다.
+  //   PeriodField 는 자체 <Grid size={gridSize}> 로 렌더하므로 바깥 Grid 로 감싸지 않는다(gridSize=3).
+  const period = (
+    <PeriodField
+      gridSize={3}
+      mode='month'
+      label={t(LBL.PERIOD, '_Period')}
+      start={sc.fromYyyymm}
+      end={sc.toYyyymm}
+      onChange={(start, end) => set({ fromYyyymm: start, toYyyymm: end })}
+    />
+  );
+
+  // 팝업버튼 endAdornment 부착 텍스트 필드 — Nick Name / Model(SCM0002 팝업이 채움, design 02 §4.6).
+  const popupField = (
+    labelText: string,
+    value: string,
+    onChange: (v: string) => void,
+    onPopup: () => void
+  ) => (
+    <Grid size={3}>
+      <FormItem
+        className={commonStyles.formItem}
+        label={labelText}
+        labelAlign='right'
+        render={() => (
+          <InputField
+            fullWidth
+            className={commonStyles.popupSearchField}
+            value={value}
+            InputProps={{
+              endAdornment: (
+                <Button
+                  appearance='outlined'
+                  priority='normal'
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onPopup}
+                />
+              ),
+            }}
+            onChange={e => onChange(e.target.value)}
+          />
+        )}
+      />
+    </Grid>
+  );
+
+  return (
+    <SearchArea
+      searchButtonLabel={t(LBL.SEARCH, '_Search')}
+      isHidden={!openSearchArea}
+      onSearch={onSearch}
+      conditions={
+        <>
+          {/* Row0 — Division* / Nick Name(팝업) / Cell Model / Model(팝업)
+              AS-IS Plan-type 은 PlanType.Visibility=Never 라 화면에 렌더하지 않는다(store 값만 유지, 조회 param "" 고정 §4.4). */}
+          {single(
+            t(LBL.DIVISION, '_Div'),
+            sc.divisionId,
+            divisionOptions,
+            // Division 변경 = 검색조건(Div 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건). 편집중(dirty)이면
+            //   MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴).
+            v => {
+              void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                if (ok) setDivision(v);
+              });
+            },
+            true
+          )}
+          {/* Model/Nickname — AS-IS 의 txtNickName + txtItemId **2필드를 하나로 통합**(사용자 지시 2026-10-12).
+              값은 `itemId`(= SP `P_ITEM_ID`) 한 축으로만 보낸다. `P_NICK_NAME` 은 공백 고정이다 —
+              SP 가 두 조건을 **AND** 로 걸기 때문이다(PKG_SCP0111 BODY L317~319 nick / L324~326 item).
+              같은 문자열을 양쪽에 넣으면 "코드도 같고 닉네임도 같은 행"을 요구해 0건이 된다.
+              Nickname 으로 찾는 경로는 팝업(MaterialByDivisionModal)이 담당한다 — 팝업이 Model·Nickname
+              양쪽으로 검색해 **Model 코드**를 돌려주므로 입력칸에는 항상 코드가 들어온다. */}
+          {popupField(
+            t(LBL.MODEL_NICKNAME, '_Model/Nickname'),
+            sc.itemId,
+            v => set({ itemId: v }),
+            onItemSearch
+          )}
+          {/* Cell Model — btnCellItem_Id AS-IS NO-OP(§4.6). 텍스트 입력만, 팝업 미배선. */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.CELL_ITEM_ID, '_Cell Model')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  value={sc.cellItemId}
+                  onChange={e => set({ cellItemId: e.target.value })}
+                />
+              )}
+            />
+          </Grid>
+
+          {/* Row1 — Plan-date* / Period(From ~ To) / Qty < 0 */}
+          {/* Plan Date 는 AS-IS UsrCombo 단일선택. SP p_plan_start_yyyymmdd 에 그대로 TO_DATE 되므로 단일값.
+              변경 시 하위 cascade(기간) 재계산 + 그리드 초기화(§3 ClearDataSource) — filters clear 는 handleSearch 재조회로 재현. */}
+          {single(
+            t(LBL.PLAN_DATE, '_Plan-date'),
+            sc.planStartYyyymmdd,
+            planDateOptions,
+            // PlanDate 변경 = 기간을 그 PlanDate 기준 기본값(시작월 ~ 시작월+(기본개월수-1))으로 **동기 재설정** +
+            //   **그리드 초기화**(사용자 지시 2026-10-30, setPlanDate 가 filters clear). AS-IS SetChangedPeriod
+            //   무조건 재계산(cs:1859→293~294) + 조회결과 clear(ClearDataSource) 파리티. 종전엔 period 만 재설정하고
+            //   그리드는 이전 PlanDate 조회결과가 남아 조건과 어긋났다(사용자 신고 2026-10-30).
+            //   편집중(dirty)이면 그리드 clear 가 미저장 신규행/수정을 날리므로 MSG00704 confirm 후에만 실행한다
+            //   (Division 변경과 동일 가드 — commit 51d4e9fa 패턴). 취소 시 controlled 콤보가 이전 PlanDate 로 복귀.
+            v => {
+              void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                if (!ok) return;
+                const fm = v.slice(0, 6);
+                setPlanDate(v, fm, addMonths(fm, periodCount - 1));
+              });
+            },
+            true
+          )}
+          {period}
+          {/* Qty < 0 — Row1 Period 옆 빈 자리에 상시 노출(사용자 지시 2026-10-23). 조건 하나뿐이라 하단
+              확장영역으로 접어두면 펼쳐야만 보여 불편 → 메인 조회조건으로 올린다.
+              alignSelf:center — conditions 그리드는 align-items:stretch 라 36px 입력 FormItem 이 행 높이를
+                채우는데, 체크박스 FormItem(~20px)은 스트레치 셀 상단에 붙어 위로 치우쳐 보인다.
+                셀을 세로 중앙정렬해 같은 행 Period·입력칸의 수직 중심에 맞춘다(폭은 stretch 유지). */}
+          <Grid size={3} sx={{ alignSelf: 'center' }}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={' '}
+              labelAlign='right'
+              render={() => (
+                <Checkbox
+                  labelText={t(LBL.QTY, '_Qty < 0')}
+                  checked={sc.qtyYn}
+                  onChange={checked => set({ qtyYn: checked })}
+                />
+              )}
+            />
+          </Grid>
+        </>
+      }
+    />
+  );
+};

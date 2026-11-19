@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 88,
+  "at": "2026-11-19T00:38:58.628Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 89,
+  "at": "2026-11-19T00:39:01.827Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261118\",\"endYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 101,
+  "at": "2026-11-19T00:39:01.854Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "Shipment Working Day OSP",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/Shipment%20Working%20Day%20OSP/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"ALL\",\"fromYyyymmdd\":\"20261118\",\"toYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 160,
+  "at": "2026-11-19T00:39:01.905Z",
+  "user": "minyonglee1",
+  "test": "기간 동적 컬럼(A8)"
+ }
+]

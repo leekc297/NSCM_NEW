@@ -166,6 +166,83 @@ describe('unfoldSaveCells — action 산출', () => {
   });
 });
 
+describe('unfoldSaveCells — ADMIN 수정은 절대값(일반은 가감값)', () => {
+  // 회귀 방지(사용자 신고 2026-11-17): ADMIN SP 는 QTY/BOH_QTY 를 절대 대입하므로
+  //   수정셀 modiQty 는 절대값이어야 한다. 종전엔 가감값을 보내 ① BOH 저장 시 INV 가 깨지고
+  //   ② 특정월 INV 변경이 delta 만 반영돼 "안 됨"이었다. AS-IS cs:1283~1369.
+  const invRow = (over: Row = {}): Row => ({
+    CRUD_TYPE: 'M',
+    OPERATION_GROUP: 'Cell',
+    MEASURE: 'INV',
+    SEQ_FLAG: '360',
+    ITEM_ID: 'ITEM9',
+    BOH_QTY: 120,
+    '202608': 1000,
+    '202609': 1100,
+    '202610': 1200,
+    ...over,
+  });
+
+  it('특정월 INV 변경 — 절대값(now)을 보낸다, delta 아님', () => {
+    const row = invRow({ '202609': 1150 }); // 1100 -> 1150
+    const cells = unfoldSaveCells({
+      source: [row],
+      tracker: trackerOf([[row, { '202609': 1100 }]]),
+      fixedBindings: FIXED,
+      planStartYyyymmdd: '20260801',
+      horizonEndYyyymmdd: '20261031',
+      isAdmin: true,
+    }).cells;
+    expect(cells).toHaveLength(1);
+    expect(cells[0].yyyymm).toBe('202609');
+    expect(cells[0].modiQty).toBe('1150'); // 절대값 — 종전 버그면 '50'(delta)
+    expect(cells[0].bohQty).toBe('120'); // BOH 미변경 — 현재 BOH 유지
+  });
+
+  it('BOH 변경 — 기간 전체 월에 새 BOH + 각 월 절대 QTY 를 전개한다', () => {
+    const row = invRow({ BOH_QTY: 130 }); // 120 -> 130
+    const cells = unfoldSaveCells({
+      source: [row],
+      tracker: trackerOf([[row, { BOH_QTY: 120 }]]),
+      fixedBindings: FIXED,
+      planStartYyyymmdd: '20260801',
+      horizonEndYyyymmdd: '20261031',
+      isAdmin: true,
+    }).cells;
+    // 공백 아닌 월 3개 전체 — 종전 버그면 plan-start월 1건(modiQty=BOH delta=10)만 나왔다.
+    expect(cells.map(c => c.yyyymm)).toEqual(['202608', '202609', '202610']);
+    expect(cells.map(c => c.modiQty)).toEqual(['1000', '1100', '1200']); // 각 월 절대 QTY 유지
+    expect(cells.every(c => c.bohQty === '130')).toBe(true); // 새 BOH 를 전월에 전파
+  });
+
+  it('BOH 변경 시 공백 월은 건너뛴다(AS-IS 공백 skip cs:1301)', () => {
+    const row = invRow({ BOH_QTY: 130, '202609': '' }); // 202609 공백
+    const cells = unfoldSaveCells({
+      source: [row],
+      tracker: trackerOf([[row, { BOH_QTY: 120 }]]),
+      fixedBindings: FIXED,
+      planStartYyyymmdd: '20260801',
+      horizonEndYyyymmdd: '20261031',
+      isAdmin: true,
+    }).cells;
+    expect(cells.map(c => c.yyyymm)).toEqual(['202608', '202610']);
+  });
+
+  it('일반 저장은 그대로 가감값(비ADMIN) — ADMIN 분기가 일반 경로를 건드리지 않는다', () => {
+    const row = invRow({ '202609': 1150 });
+    const cells = unfoldSaveCells({
+      source: [row],
+      tracker: trackerOf([[row, { '202609': 1100 }]]),
+      fixedBindings: FIXED,
+      planStartYyyymmdd: '20260801',
+      horizonEndYyyymmdd: '20261031',
+      // isAdmin 생략 = false
+    }).cells;
+    expect(cells).toHaveLength(1);
+    expect(cells[0].modiQty).toBe('50'); // 가감값 유지(일반 SP 는 누적)
+  });
+});
+
 describe('buildGeneralPayload — P_ACTIVE_FLAG 계약', () => {
   // 회귀 방지: SP 는 P_ACTIVE_FLAG 토큰을 'I'/'M' 으로 분기한다
   //   (PKG_SCP0111 BODY L751 `IF V_ACTIVE_FLAG = 'I'` / L3359 `= 'M'`).

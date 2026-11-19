@@ -85,16 +85,21 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   → 그리드가 데이터 행 union 으로 폴백(globalPsiElecColumns).
   // 필수: filters 는 useMemo 로 참조 고정 — useTabProcQuery 가 filters 를 참조비교로 재조회 판정하므로
   //   렌더 본문 객체 리터럴을 넘기면 매 렌더 새 참조 → 무한 refetch 루프(SCP0031/SCP0100 동일 선례).
+  // 그리드 3단 헤더(calendar)는 **조회 확정(setFilter) 시점의 Period** 로만 생성한다. 직전 구현은 live
+  //   searchCondition(sc.from/toYyyymmdd)을 읽어, 조회 전에 Period 를 타이핑하기만 해도 헤더가 재생성됐다
+  //   (사용자 지적 2026-11-18). 메인 데이터와 동일하게 applied filters[MAIN] 의 기간을 쓴다.
+  const appliedFrom = filters[SHEETS.MAIN]?.fromYyyymmdd ?? '';
+  const appliedTo = filters[SHEETS.MAIN]?.toYyyymmdd ?? '';
   const calendarFilters = useMemo(
-    () => ({ startYyyymmdd: sc.fromYyyymmdd, endYyyymmdd: sc.toYyyymmdd }),
-    [sc.fromYyyymmdd, sc.toYyyymmdd]
+    () => ({ startYyyymmdd: appliedFrom, endYyyymmdd: appliedTo }),
+    [appliedFrom, appliedTo]
   );
   const calendarQuery = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.CALENDAR,
     tabId,
     filters: calendarFilters,
-    enabled: !!sc.fromYyyymmdd && !!sc.toYyyymmdd,
+    enabled: !!appliedFrom && !!appliedTo,
   });
   const calendarRows = useMemo<Record<string, unknown>[]>(
     () => (calendarQuery.data as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? [],
@@ -123,6 +128,15 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
       void useMessageStore.getState().setAlert({
         type: 'alert',
         content: t(MSG.REQUIRE_CONDITION, '_Please enter the required fields.'),
+      });
+      return false;
+    }
+    // 기간 역전(종료일 < 시작일) 차단(사용자 지적 2026-11-18) — 역전 시 조회 금지. 위 필수검증을 통과했으므로
+    //   from/to 는 비어 있지 않다(YYYYMMDD 숫자 비교). AS-IS Check_PeriodDate from>to 가드 등가.
+    if (Number(sc.toYyyymmdd) < Number(sc.fromYyyymmdd)) {
+      void useMessageStore.getState().setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_ORDER, '_The start date can not be later than the end date.'),
       });
       return false;
     }

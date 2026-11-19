@@ -88,7 +88,15 @@ def main():
     mm = rd(os.path.join(DOC, 'tobefacts', 'db', 'msg_master.csv')); by = collections.defaultdict(set)
     for x in mm:
         if (x.get('msg_id') or '').startswith('MSG') and x.get('use_yn') != 'N': by[(x.get('lang_cd'), (x.get('msg_nm') or '').strip())].add(x['msg_id'])
+    # 2026-11-18(SCP0096 EG-46e1377f·EG-e3aded01): 화면이 묶음 중 코드 1개만 쓰고 그 코드의 한글 문구가 나머지 코드와 다르면
+    #   번역 문구만 겹친 다른 메시지 — 화면 판정 대상 아님(MSG00002 '성공적으로 저장되었습니다.' ↔ MSG00606 '저장되었습니다.')
+    ko = {x['msg_id']: (x.get('msg_nm') or '').strip() for x in mm if x.get('lang_cd') == 'KO' and (x.get('msg_id') or '').startswith('MSG')}
     for (lg, txt), codes in by.items():
+        used = codes & ids
+        if len(used) == 1 and lg != 'KO':
+            u = next(iter(used))
+            if ko.get(u) and all(ko.get(c) and ko.get(c) != ko[u] for c in codes - used):
+                continue
         if len(codes) > 1 and txt and codes & ids:
             rows.append({'menu_id': mid, 'kind': 'DUP', 'where': ','.join(sorted(codes)[:6]), 'text': f'[{lg}] {txt[:80]}'})
     uniq = {(r['kind'], r['where'], r['text']): r for r in rows}; rows = list(uniq.values())

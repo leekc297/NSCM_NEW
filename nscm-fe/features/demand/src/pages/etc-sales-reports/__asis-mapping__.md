@@ -139,7 +139,7 @@
 |---|---|---|
 | clbDivision (MyDivision) | DivisionField — 변경 시 Version 초기화+Grid reset | ✅ |
 | clbType (MDF_TYPE) | CustomDropdown 'MDF_TYPE' | ✅ |
-| clbPlanResult (정적, 기본 Plan L207) | 정적 콤보 Plan/Result (CMBO 불요) | ✅ |
+| clbPlanResult (정적, 기본 Plan L207) | 정적 콤보 ALL/Plan/Result (CMBO 불요). ALL = TO-BE 신설(2026-11-17 사용자테스트 개선) — 시점 잠금 해제, G0·Measure 조건 유지(editLock) | ✅ |
 | usrYear (CALENDAR_YYYY, 기본 올해 — [E20250121] SP화) | CustomDropdown 'CALENDAR_YYYY' | ✅ |
 | txtSPVersion + btnSPVer | readonly + '...' → UnitedVersionModal 주입 (조회 MSG00283/저장 MSG00688) | ✅ |
 | btnMeasure | TitleSet 'M' 모달 (customButtons) | ✅ |

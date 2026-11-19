@@ -3,13 +3,13 @@
   "key": "조회조건_Div_40",
   "kind": "조회조건",
   "scope": "Div 40",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0111\\snap\\golden\\조회조건_Div_40.aria.yml",
   "received": "Doc\\verify\\SCP0111\\snap\\received\\조회조건_Div_40.aria.yml",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\조회조건_Div_40.aria.yml 와 일치 · 조회영역 aria(18줄 · formItem 공통 조상) · 시각 순서 6칸",
-  "at": "2026-11-18T01:17:58.660Z"
+  "diff": "Doc\\verify\\SCP0111\\snap\\diff\\조회조건_Div_40.txt",
+  "lines": 13,
+  "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\조회조건_Div_40.aria.yml 와 13줄 다름(Doc\\verify\\SCP0111\\snap\\diff\\조회조건_Div_40.txt) — 첫 차이: - [골든 2] - text: Div · 조회영역 aria(24줄 · formItem 공통 조상) · 시각 순서 6칸",
+  "at": "2026-11-18T09:31:23.633Z"
  },
  {
   "key": "버튼_Div_40",
@@ -20,8 +20,8 @@
   "received": "Doc\\verify\\SCP0111\\snap\\received\\버튼_Div_40.aria.yml",
   "diff": "",
   "lines": 0,
-  "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(11줄) · 보이는 버튼 KOR,이 이민용,Home,Integration PSI,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel",
-  "at": "2026-11-18T01:17:58.788Z"
+  "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(11줄) · 보이는 버튼 ENG,M MINYONG LEE,Home,Integration PSI,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,calendar,Search(F5),Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel",
+  "at": "2026-11-18T09:31:23.778Z"
  },
  {
   "key": "헤더_Integration_PSI",
@@ -33,42 +33,42 @@
   "diff": "",
   "lines": 0,
   "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\헤더_Integration_PSI.txt 와 일치 · 헤더 1행 · 칸 28",
-  "at": "2026-11-18T01:18:08.389Z"
+  "at": "2026-11-18T09:31:34.407Z"
  },
  {
   "key": "팝업_Model_Nickname",
   "kind": "팝업",
   "scope": "Model/Nickname",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0111\\snap\\golden\\팝업_Model_Nickname.aria.yml",
   "received": "Doc\\verify\\SCP0111\\snap\\received\\팝업_Model_Nickname.aria.yml",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\팝업_Model_Nickname.aria.yml 와 일치 · 팝업 aria(29줄)",
-  "at": "2026-11-18T01:18:17.337Z"
+  "diff": "Doc\\verify\\SCP0111\\snap\\diff\\팝업_Model_Nickname.txt",
+  "lines": 3,
+  "detail": "골든 Doc\\verify\\SCP0111\\snap\\golden\\팝업_Model_Nickname.aria.yml 와 3줄 다름(Doc\\verify\\SCP0111\\snap\\diff\\팝업_Model_Nickname.txt) — 첫 차이: - [골든 3]   - text: Div · 팝업 aria(28줄)",
+  "at": "2026-11-18T09:31:44.079Z"
  },
  {
   "key": "화면샷_1920",
   "kind": "화면샷",
   "scope": "1920",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0111\\snap\\golden\\화면샷_1920.png",
-  "received": "",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 8938 pixels (ratio 0.02 of all image pixels) are different. Snapshot: SCP0111\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
   "at": ""
  },
  {
   "key": "화면샷_1366",
   "kind": "화면샷",
   "scope": "1366",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0111\\snap\\golden\\화면샷_1366.png",
-  "received": "",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 8641 pixels (ratio 0.03 of all image pixels) are different. Snapshot: SCP0111\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
   "at": ""
  }
 ]

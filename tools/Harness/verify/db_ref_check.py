@@ -305,6 +305,16 @@ def main(mid):
                 continue
             cur.execute("SELECT TEXT FROM ALL_SOURCE WHERE OWNER=:o AND NAME=:n AND TYPE='PACKAGE BODY' ORDER BY LINE", o=m[0], n=pkg)
             _body = strip_comments(''.join(x[0] for x in cur.fetchall()))
+            # 2026-11-18(SCP0096 EG-33c91716·EG-365577cd·EG-ce8f8757): 화면 전용이 아닌 공용 패키지(이름에 화면 ID 없음 · 예 PKG_COM0000)는
+            #   본문 전체가 아니라 이 화면이 부르는 프로시저(proc_meta) 구간만 본다. 전체를 보면 다른 화면 팝업 프로시저의 줄이 이 화면 행으로 잡힌다
+            if mid.upper() not in pkg.upper():
+                _ps = sorted({r['proc'].split('.')[1] for r in pm if r['proc'].split('.')[0].upper() == pkg})
+                _parts = [proc_body(_body, p_) for p_ in _ps]
+                if all(_parts):
+                    _body = chr(10).join(_parts)
+                else:
+                    res.append({'kind': 'TB_FX', 'target': pkg, 'result': 'ERROR', 'why': f"[측정 경로 없음] 공용 패키지 {pkg} 에서 화면 호출 프로시저 구간 못 찾음: {[p_ for p_, x in zip(_ps, _parts) if not x]}"})
+                    continue
             r, why = judge_tbfx(_body)
             res.append({'kind': 'TB_FX', 'target': pkg, 'result': r, 'why': why})
             _h = sentinel_inserts(_body)

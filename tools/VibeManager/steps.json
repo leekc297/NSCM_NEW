@@ -3,8 +3,9 @@
   "steps": [
     {
       "id": "S1",
-      "title": "1. AS-IS 분석 (C# 파서)",
-      "detail": "Roslyn·ScriptDom·MSSQL → Fact Pack. 교차검증 불일치 0 이 완료 기준.",
+      "title": "1. AS-IS 분석 (C# 파서 · 대조표)",
+      "title_en": "1. AS-IS Analysis (C# parser · mapping)",
+      "detail": "Roslyn·ScriptDom·MSSQL → Fact Pack. 교차검증 불일치 0 이 완료 기준. 개발대상 대조표(Doc/recon)로 누락 화면 확인.",
       "tasks": [
         {
           "id": "S1.run",
@@ -86,6 +87,63 @@
           "title_en": "Rebuild Fact Pack for one screen — ID (pack.ps1 <ID>, seconds)"
         },
         {
+          "id": "S1.screen",
+          "title": "화면 Fact Pack 열기 — 화면ID",
+          "kind": "open",
+          "path": "${outDir}/screens/${input:id}",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "title_en": "Open screen Fact Pack — ID"
+        },
+        {
+          "id": "S1.review",
+          "title": "검수 체크포인트 열기",
+          "kind": "open",
+          "path": "${outDir}/_review",
+          "title_en": "Open review checkpoints"
+        },
+        {
+          "id": "S1.recon",
+          "title": "개발대상 대조표 — 누락 재확인 (xlsx→csv → recon.js)",
+          "kind": "node",
+          "script": "${reconDir}/recon.js",
+          "args": [],
+          "gate": {
+            "type": "fileExists",
+            "file": "${reconOutDir}/대사표.md",
+            "label": "대조표"
+          },
+          "title_en": "Target reconciliation — recheck omissions (xlsx→csv → recon.js)"
+        },
+        {
+          "id": "S1.reconx",
+          "title": "개발대상 xlsx → CSV/map_screen.csv (xlsx_to_csv.py)",
+          "kind": "python",
+          "script": "${reconDir}/xlsx_to_csv.py",
+          "args": [],
+          "title_en": "Target xlsx → CSV/map_screen.csv (xlsx_to_csv.py)"
+        },
+        {
+          "id": "S1.recondash",
+          "title": "대조표 대시보드 열기 (Doc/recon/index.html)",
+          "kind": "browser",
+          "path": "${reconOutDir}/index.html",
+          "title_en": "Open reconciliation dashboard (Doc/recon/index.html)"
+        }
+      ]
+    },
+    {
+      "id": "S1L",
+      "title": "2. AS-IS 실측 (런처 구동)",
+      "title_en": "2. AS-IS Live Run (launcher)",
+      "detail": "AS-IS 런처를 실제로 띄워 화면 열기·조회·분기 시나리오·저장 시나리오를 실행하고 호출 SP·인자·건수·캡처를 모음(Doc/asislive/<ID>). CheckList 실행 때도 같은 묶음(S1.liveScreen)이 자동 구동됨. 24시간 안의 정상 실측은 재사용.",
+      "tasks": [
+        {
           "id": "S1.liveCheck",
           "title": "AS-IS 실행 환경 점검 — 로컬 서버(8086)·런처 접속 주소·사본 DB 대상·화면 DLL·FoxQuery 정의 (읽기 전용)",
           "kind": "python",
@@ -105,6 +163,27 @@
             8086
           ],
           "title_en": "AS-IS run environment check — local server (8086) · launcher address · DB target · screen DLL · FoxQuery (read-only)"
+        },
+        {
+          "id": "S1.liveScreen",
+          "title": "AS-IS 실측 묶음(화면 1개) — 기본 실측 → 소스 분기 시나리오 → 버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기) → 실행 현황 → TO-BE 조건 대조 · CheckList 전체 실행 때 자동 구동되는 것과 같은 묶음",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_screen.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0028)",
+              "default": "SCP0028"
+            }
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "AS-IS live bundle (one screen) — basic run → source-branch scenarios → button branches (record & close popups/messages/Excel) → coverage → TO-BE condition compare"
         },
         {
           "id": "S1.live",
@@ -157,6 +236,27 @@
             8086
           ],
           "title_en": "AS-IS live run with required conditions filled by most recent values"
+        },
+        {
+          "id": "S1.liveGroups",
+          "title": "AS-IS 런처 그룹(권한) 목록 읽기 — 로그인 계정이 가진 그룹과 현재 그룹(화면은 열지 않음)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
+          "args": [
+            "--groups-list"
+          ],
+          "requireServers": [
+            8086
+          ],
+          "title_en": "Read AS-IS launcher groups (roles) of the logged-in account"
+        },
+        {
+          "id": "S1.liveRuleMap",
+          "title": "AS-IS 관찰 문구→TO-BE 룰 대응표 다시 만들기 — 룰 원장의 메시지 코드 + AS-IS 메시지 사전(룰 원장을 고친 뒤 실행)",
+          "kind": "python",
+          "script": "${root}/tools/AsisLive/asis_live_rule_map.py",
+          "args": [],
+          "title_en": "Rebuild AS-IS message → TO-BE rule map"
         },
         {
           "id": "S1.liveCond",
@@ -268,14 +368,6 @@
             }
           ],
           "title_en": "Branch scenario spec (every source branch)"
-        },
-        {
-          "id": "S1.liveRuleMap",
-          "title": "AS-IS 관찰 문구→TO-BE 룰 대응표 다시 만들기 — 룰 원장의 메시지 코드 + AS-IS 메시지 사전(룰 원장을 고친 뒤 실행)",
-          "kind": "python",
-          "script": "${root}/tools/AsisLive/asis_live_rule_map.py",
-          "args": [],
-          "title_en": "Rebuild AS-IS message → TO-BE rule map"
         },
         {
           "id": "S1.liveScenRun",
@@ -636,109 +728,15 @@
             }
           ],
           "title_en": "Compare branch-run results across groups and Divisions"
-        },
-        {
-          "id": "S1.liveGroups",
-          "title": "AS-IS 런처 그룹(권한) 목록 읽기 — 로그인 계정이 가진 그룹과 현재 그룹(화면은 열지 않음)",
-          "kind": "python",
-          "script": "${root}/tools/AsisLive/asis_live_scen_run.py",
-          "args": [
-            "--groups-list"
-          ],
-          "requireServers": [
-            8086
-          ],
-          "title_en": "Read AS-IS launcher groups (roles) of the logged-in account"
-        },
-        {
-          "id": "S1.liveScreen",
-          "title": "AS-IS 실측 묶음(화면 1개) — 기본 실측 → 소스 분기 시나리오 → 버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기) → 실행 현황 → TO-BE 조건 대조 · CheckList 전체 실행 때 자동 구동되는 것과 같은 묶음",
-          "kind": "python",
-          "script": "${root}/tools/AsisLive/asis_live_screen.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0028)",
-              "default": "SCP0028"
-            }
-          ],
-          "requireServers": [
-            8086
-          ],
-          "title_en": "AS-IS live bundle (one screen) — basic run → source-branch scenarios → button branches (record & close popups/messages/Excel) → coverage → TO-BE condition compare"
-        },
-        {
-          "id": "S1.screen",
-          "title": "화면 Fact Pack 열기 — 화면ID",
-          "kind": "open",
-          "path": "${outDir}/screens/${input:id}",
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "DMF0052"
-            }
-          ],
-          "title_en": "Open screen Fact Pack — ID"
-        },
-        {
-          "id": "S1.review",
-          "title": "검수 체크포인트 열기",
-          "kind": "open",
-          "path": "${outDir}/_review",
-          "title_en": "Open review checkpoints"
-        },
-        {
-          "id": "S1.recon",
-          "title": "개발대상 대조표 — 누락 재확인 (xlsx→csv → recon.js)",
-          "kind": "node",
-          "script": "${reconDir}/recon.js",
-          "args": [],
-          "gate": {
-            "type": "fileExists",
-            "file": "${reconOutDir}/대사표.md",
-            "label": "대조표"
-          },
-          "title_en": "Target reconciliation — recheck omissions (xlsx→csv → recon.js)"
-        },
-        {
-          "id": "S1.reconx",
-          "title": "개발대상 xlsx → CSV/map_screen.csv (xlsx_to_csv.py)",
-          "kind": "python",
-          "script": "${reconDir}/xlsx_to_csv.py",
-          "args": [],
-          "title_en": "Target xlsx → CSV/map_screen.csv (xlsx_to_csv.py)"
-        },
-        {
-          "id": "S1.recondash",
-          "title": "대조표 대시보드 열기 (Doc/recon/index.html)",
-          "kind": "browser",
-          "path": "${reconOutDir}/index.html",
-          "title_en": "Open reconciliation dashboard (Doc/recon/index.html)"
         }
-      ],
-      "title_en": "1. AS-IS Analysis (C# parser)"
+      ]
     },
     {
       "id": "S2",
-      "title": "2. TO-BE 분석 · RULE",
-      "detail": "TobeFacts(FE+BE) 로 같은 스키마의 Fact 를 뽑고, 룰은 CSV 사전으로 관리.",
+      "title": "3. TO-BE 분석 · RULE",
+      "title_en": "3. TO-BE Analysis · Rules",
+      "detail": "TobeFacts(FE+BE)와 사내 Oracle 메타 export 로 같은 스키마의 Fact 를 뽑고, 룰은 CSV 사전으로 관리.",
       "tasks": [
-        {
-          "id": "S2.genI18n",
-          "requireServers": [
-            8080
-          ],
-          "title": "다국어 JSON 재생성 (pnpm gen 내용 — gen:icons + gen:i18n, 로컬 BE 메시지만 · pnpm 미사용)",
-          "kind": "python",
-          "script": "${root}/tools/Env/fe_gen_i18n.py",
-          "args": [],
-          "title_en": "Regenerate i18n JSON (pnpm gen equivalent — local BE messages only, no pnpm)"
-        },
         {
           "id": "S2.probe",
           "title": "DB 접속 점검 (asis MSSQL / tobe Oracle) — probe.py",
@@ -772,6 +770,17 @@
             "label": "교차검증 불일치"
           },
           "title_en": "Run To-Be parser (extract → cross-check → pack)"
+        },
+        {
+          "id": "S2.genI18n",
+          "requireServers": [
+            8080
+          ],
+          "title": "다국어 JSON 재생성 (pnpm gen 내용 — gen:icons + gen:i18n, 로컬 BE 메시지만 · pnpm 미사용)",
+          "kind": "python",
+          "script": "${root}/tools/Env/fe_gen_i18n.py",
+          "args": [],
+          "title_en": "Regenerate i18n JSON (pnpm gen equivalent — local BE messages only, no pnpm)"
         },
         {
           "id": "S2.rules",
@@ -832,13 +841,13 @@
           "path": "${tobeOutDir}/framework/INDEX.md",
           "title_en": "Open catalog (Doc/tobefacts/framework/INDEX.md)"
         }
-      ],
-      "title_en": "2. TO-BE Analysis · Rules"
+      ]
     },
     {
       "id": "S3",
-      "title": "3. 문서 초안 생성 (Agent)",
-      "detail": "Fact Pack → 분석서 5종 + 업무분석서·화면설계서·단위테스트. 게이트 total PASS.",
+      "title": "4. 문서 (분석서·설계서·TestCases)",
+      "title_en": "4. Documents (analysis · design · TestCases)",
+      "detail": "Fact Pack → 분석서·화면설계서·단위테스트 MD(Agent) → Excel(Doc/화면설계서 · Doc/화면분석서 · Doc/단위테스트). 게이트 total PASS.",
       "tasks": [
         {
           "id": "S3.prep",
@@ -911,6 +920,30 @@
           "title_en": "Regenerate 3 docs only — ID (-Phase docs)"
         },
         {
+          "id": "S6.docs",
+          "title": "문서 3종 확정 — 화면ID (Agent -Phase docs 재실행)",
+          "kind": "powershell",
+          "script": "${toolsDir}/agent.ps1",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "-Phase",
+            "docs",
+            "-Driver",
+            "${agentDriver}",
+            "-Model",
+            "${agentModel}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "title_en": "Finalize 3 docs — ID (Agent -Phase docs)"
+        },
+        {
           "id": "S3.xlsx",
           "title": "문서 Excel 생성 — 화면ID (make_docs.py → 설계서·분석서·TestCases4, 팀 양식)",
           "kind": "python",
@@ -926,11 +959,6 @@
             }
           ],
           "splitArgs": true,
-          "gate": {
-            "type": "fileExists",
-            "file": "${root}/Doc/documents/${input:id}",
-            "label": "Excel"
-          },
           "title_en": "Generate Excel docs — ID (make_docs.py → design · analysis · TestCases4, team format)"
         },
         {
@@ -974,70 +1002,32 @@
           ],
           "title_en": "Open Agent results — ID"
         }
-      ],
-      "title_en": "3. Draft Documents (Agent)"
-    },
-    {
-      "id": "S4",
-      "title": "4. 골든 테스트 (GAP 분석 폐지 2026-10-30 — CheckList 로 대체)",
-      "detail": "As-is Fact ↔ To-Be Fact 대사. COVERED/INTENDED/MISSING/UNMAPPED + 대시보드.",
-      "tasks": [
-        {
-          "id": "S4.goldgen",
-          "title": "골든 케이스 생성 (As-is SP ↔ To-Be PROC 짝) — gen_golden_cases.py",
-          "kind": "python",
-          "script": "${dbconnDir}/gen_golden_cases.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (비우면 전체)",
-              "default": ""
-            }
-          ],
-          "title_en": "Generate golden cases (As-is SP ↔ To-Be PROC pairs) — gen_golden_cases.py"
-        },
-        {
-          "id": "S4.golden",
-          "title": "골든 테스트 실행 (양쪽 SP 결과 대조) — golden.py",
-          "kind": "python",
-          "script": "${dbconnDir}/golden.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (비우면 전체 GET)",
-              "default": "DMF0003"
-            }
-          ],
-          "gate": {
-            "type": "fileExists",
-            "file": "${goldenDir}/_summary.md",
-            "label": "골든 요약"
-          },
-          "title_en": "Run golden tests (compare both SP results) — golden.py"
-        },
-        {
-          "id": "S4.goldopen",
-          "title": "골든 결과 열기 (Doc/golden/_summary.md)",
-          "kind": "open",
-          "path": "${goldenDir}/_summary.md",
-          "title_en": "Open golden results (Doc/golden/_summary.md)"
-        }
-      ],
-      "title_en": "4. Golden test (GAP analysis retired 2026-10-30 — replaced by CheckList)"
+      ]
     },
     {
       "id": "S5",
       "title": "5. 신규 UI 개발 (하네스)",
-      "detail": "프로그램 ID 하나로: 골격 생성 → nscm-fe 적용 → 게이트 → Claude Code 가 TODO 만 채움.",
+      "title_en": "5. New UI Development (Harness)",
+      "detail": "프로그램 ID 하나로: 사전 점검 → 골격 생성 → 메타 등록 SQL → PKG 골격·이식 → FE 수선 → E2E 스펙 → 대조표. 생성 뒤 CheckList(6단계)로 판정.",
       "tasks": [
+        {
+          "id": "S8.precheck",
+          "title": "신규 화면 사전 점검 — 생성 전에 AS-IS 사실 묶음·SP 원문·호출 해석·컬럼 메타·분석 문서·사내 DB 메타 구비 여부를 실측(precheck.csv · 아무것도 만들거나 고치지 않음)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/new_screen_precheck.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "New-screen pre-check — measure whether generation inputs exist (read-only)"
+        },
         {
           "id": "S5.pipeline",
           "newScreen": true,
@@ -1227,6 +1217,26 @@
           "title_en": "Final gate (--final, zero unimplemented)"
         },
         {
+          "id": "S5.tsc",
+          "title": "컴파일·린트 게이트 — 화면 폴더 (check.js --tsc --lint)",
+          "kind": "node",
+          "script": "${harnessDir}/check.js",
+          "args": [
+            "--page",
+            "${input:dir}",
+            "--tsc",
+            "--lint"
+          ],
+          "inputs": [
+            {
+              "name": "dir",
+              "prompt": "nscm-fe 페이지 폴더 절대경로",
+              "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
+            }
+          ],
+          "title_en": "Compile · lint gate — page folder (check.js --tsc --lint)"
+        },
+        {
           "id": "S5.notes",
           "title": "GEN_NOTES 열기 — 화면ID",
           "kind": "open",
@@ -1266,26 +1276,6 @@
             }
           ],
           "title_en": "Open repair log — ID (REPAIR.md)"
-        },
-        {
-          "id": "S5.tsc",
-          "title": "컴파일·린트 게이트 — 화면 폴더 (check.js --tsc --lint)",
-          "kind": "node",
-          "script": "${harnessDir}/check.js",
-          "args": [
-            "--page",
-            "${input:dir}",
-            "--tsc",
-            "--lint"
-          ],
-          "inputs": [
-            {
-              "name": "dir",
-              "prompt": "nscm-fe 페이지 폴더 절대경로",
-              "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
-            }
-          ],
-          "title_en": "Compile · lint gate — page folder (check.js --tsc --lint)"
         },
         {
           "id": "S5.regsql",
@@ -1458,189 +1448,232 @@
             }
           ],
           "title_en": "Open Definition of Done — ID (DOD.md)"
-        },
-        {
-          "id": "S5.cloudMod",
-          "title": "클라우드 이관 패키지(수정본) — 이관 완료 표시 이후 바뀐 것 전부 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
-          "kind": "python",
-          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
-          "args": [
-            "${input:id}",
-            "--mode",
-            "auto"
-          ],
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "SCP0100"
-            }
-          ],
-          "title_en": "Cloud package — modified only (scope follows work mode)"
-        },
-        {
-          "id": "S5.cloudFull",
-          "title": "클라우드 이관 패키지(전체) — 화면 소유 전부 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
-          "kind": "python",
-          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
-          "args": [
-            "${input:id}",
-            "--mode",
-            "auto",
-            "--full"
-          ],
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "SCP0100"
-            }
-          ],
-          "title_en": "Cloud package — full (scope follows work mode)"
-        },
-        {
-          "id": "S5.cloudApplied",
-          "title": "클라우드 이관 완료 표시 — 마지막 생성 패키지를 이관 기준선으로 확정 · 범위 = 작업 모드",
-          "kind": "python",
-          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
-          "args": [
-            "${input:id}",
-            "--mode",
-            "auto",
-            "--applied"
-          ],
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "SCP0100"
-            }
-          ],
-          "title_en": "Mark cloud package applied (moves the baseline)"
-        },
-        {
-          "id": "S5.cloudStage",
-          "title": "클라우드 이관 파일 사전 생성(작업 모드 기준 수정본·전체) · 생성/보완 끝 단계",
-          "kind": "python",
-          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
-          "args": [
-            "${input:id}",
-            "--stage"
-          ],
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "SCP0100"
-            }
-          ],
-          "title_en": "Pre-build cloud packages (modified + full, scope follows work mode)"
         }
-      ],
-      "title_en": "5. New UI Development (Harness)"
+      ]
     },
     {
-      "id": "S6",
-      "title": "6. GAP 확정 · 룰 보완 · 문서 확정",
-      "detail": "GAP 반복 항목을 룰(CSV) 로 흡수해 원천 차단. 문서 3종 확정.",
+      "id": "S8",
+      "title": "6. 테스트 · UI CheckList (E2E 4종 smoke·crud·auth·authcrud 포함 → CheckList · ActionItemList)",
+      "title_en": "6. Test · UI CheckList (E2E smoke·crud·auth·authcrud included → CheckList · ActionItemList)",
+      "detail": "CheckList 전체 실행 = 사실 보강 → 원장 → E2E 4종(smoke 는 사전 작업, crud·auth·authcrud 는 e2e_suite.py) → @verify·@trace → 팝업·권한 검사기 → 차등 검증(AS-IS 실측 포함) → 판정 → CheckList·ActionItemList(Doc/UI_CHECKLIST). 판정에 안 들어가던 E2E 기능 시험(CRUD 저장 왕복·Division 조회·BE 5xx·라벨·헤더 행)은 e2e_suite_ingest.py 가 원장 ES- 행으로 넣음. 아래 S7.* = E2E 종류별 단독 재현용. 미검증 0 보고 전 CheckList '미검증' 시트 행 수도 확인.",
       "tasks": [
         {
-          "id": "S6.vibekeep",
-          "title": "이관 룰셋 열기 — 10_RULES_KEEP.md (지켜야 하는 룰 · 게이트 코드 매핑)",
-          "kind": "open",
-          "path": "${root}/tools/VibeManager/rules/10_RULES_KEEP.md",
-          "title_en": "Open migration rule set — 10_RULES_KEEP.md (rules to keep · gate code map)"
-        },
-        {
-          "id": "S6.vibeskip",
-          "title": "제외 룰 열기 — 20_RULES_SKIP.md (제외/보류 사유)",
-          "kind": "open",
-          "path": "${root}/tools/VibeManager/rules/20_RULES_SKIP.md",
-          "title_en": "Open excluded rules — 20_RULES_SKIP.md"
-        },
-        {
-          "id": "S6.vibeenv",
-          "title": "환경 단일 출처 열기 — 00_ENV.md",
-          "kind": "open",
-          "path": "${root}/tools/VibeManager/rules/00_ENV.md",
-          "title_en": "Open environment single source — 00_ENV.md"
-        },
-        {
-          "id": "S6.suggest",
-          "title": "룰 보완 후보 산출 (suggest-rules.js → rules/_candidates.md)",
-          "kind": "node",
-          "script": "${harnessDir}/suggest-rules.js",
-          "gate": {
-            "type": "fileExists",
-            "file": "${harnessDir}/rules/_candidates.md",
-            "label": "후보 파일"
-          },
-          "title_en": "Produce rule-update candidates (suggest-rules.js → rules/_candidates.md)"
-        },
-        {
-          "id": "S6.cand",
-          "title": "후보 열기 (_candidates.md)",
-          "kind": "open",
-          "path": "${harnessDir}/rules/_candidates.md",
-          "title_en": "Open candidates (_candidates.md)"
-        },
-        {
-          "id": "S6.allowed",
-          "title": "allowed_gaps.csv 편집",
-          "kind": "open",
-          "path": "${harnessDir}/rules/allowed_gaps.csv",
-          "title_en": "Edit allowed_gaps.csv"
-        },
-        {
-          "id": "S6.docs",
-          "title": "문서 3종 확정 — 화면ID (Agent -Phase docs 재실행)",
-          "kind": "powershell",
-          "script": "${toolsDir}/agent.ps1",
+          "id": "S8.verify",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "UI CheckList 전체 — 사실 보강→원장→E2E(@verify)→판정→CheckList·ActionItemList xlsx (보완 적용은 안 함)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/run_verify.py",
           "splitArgs": true,
           "args": [
-            "${input:ids}",
-            "-Phase",
-            "docs",
-            "-Driver",
-            "${agentDriver}",
-            "-Model",
-            "${agentModel}"
+            "${input:ids}"
           ],
           "inputs": [
             {
               "name": "ids",
-              "prompt": "화면ID",
-              "default": "DMF0052"
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
             }
           ],
-          "title_en": "Finalize 3 docs — ID (Agent -Phase docs)"
+          "title_en": "Screen verification — facts→ledger→E2E(@verify)→judge→verification sheet·fix list xlsx (no repair applied)"
         },
         {
-          "id": "S6.snapshot",
-          "title": "생성기 회귀 스냅샷 비교 (snapshot.js)",
-          "kind": "node",
-          "script": "${harnessDir}/snapshot.js",
-          "args": [],
-          "title_en": "Generator regression snapshot compare (snapshot.js)"
-        },
-        {
-          "id": "S6.snapupd",
-          "title": "생성기 스냅샷 기준선 갱신 (snapshot.js --update)",
-          "kind": "node",
-          "script": "${harnessDir}/snapshot.js",
-          "args": [
-            "--update"
+          "id": "S8.unverified",
+          "requireServers": [
+            8080,
+            5173
           ],
-          "confirm": "현재 생성 결과를 기준선으로 저장합니다. 룰 변경이 의도한 것일 때만 실행하세요.",
-          "title_en": "Update generator snapshot baseline (snapshot.js --update)"
-        }
-      ],
-      "title_en": "6. GAP Sign-off · Rule Updates · Final Docs"
-    },
-    {
-      "id": "S7",
-      "title": "7. 테스트 (E2E: Smoke · CRUD · 권한 · 권한별 CRUD)",
-      "tasks": [
+          "title": "미검증 해소 1단계: 원장 미검증 분류 + 같은 조건 재측정(--only) → 남은 처리 대상은 🧪 미검증 해소(검사엔진 보완)",
+          "title_en": "Unverified resolve step 1: classify ledger ERROR rows + re-measure (--only) → remaining rows go to engine supplement",
+          "kind": "python",
+          "script": "${harnessDir}/verify/unverified_resolve.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.checklistRecheck",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "CheckList 재수행 — 미검증 행만 가능하면 그 규칙만(--only), 아니면 처음부터 → 재분류 · 🔎 CheckList 체인 3단계",
+          "kind": "python",
+          "script": "${harnessDir}/verify/checklist_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--recheck"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.checklistRun",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "CheckList 수행 — run_verify 전체 → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+          "kind": "python",
+          "script": "${harnessDir}/verify/checklist_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.verifyStatic",
+          "title": "UI CheckList (E2E 없이) — 서버 없이 정적·메타 판정만, E2E 행은 미검증으로 표시",
+          "kind": "python",
+          "script": "${harnessDir}/verify/run_verify.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--skip-e2e"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Screen verification without E2E (static·meta only)"
+        },
+        {
+          "id": "S8.verifyIfStale",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "CheckList — 최신이 아닐 때만 실행 (FE 소스·PKG DDL·화면 메타가 직전 CheckList 이후 바뀌었거나 결과 없음 → run_verify · 최신이면 건너뜀) — 보완 메뉴 첫 단계",
+          "kind": "python",
+          "script": "${harnessDir}/verify/verify_if_stale.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Verification if stale — run_verify only when FE source·PKG DDL·screen meta changed since the last verification (first step of Fix menus)"
+        },
+        {
+          "id": "S8.metaLive",
+          "title": "메타·배선 실시간 검증 — 메뉴·FE 호출 배선·PROC 실재/유효·인자 메타·컬럼 메타·콤보를 사내 DB 로 실측(meta_live_check.csv)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/meta_live_check.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Live meta·wiring check against the corporate DB"
+        },
+        {
+          "id": "S8.pkgGate",
+          "title": "PKG 게이트 — 원문 반영·컴파일·시그니처·AS-IS↔TO-BE 실행 대조(화면 실전송 인자)를 실측(pkg_gate.json · SKIP 은 미측정으로 표시)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/pkg_gate.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "PKG gate — source applied·compile·signature·AS-IS↔TO-BE execution diff"
+        },
+        {
+          "id": "S8.feGate",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "FE 게이트 — 실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회를 실측(fe_gate.json · 서버가 내려가 있으면 미측정으로 표시)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/fe_gate.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "FE gate — open the screen in a real browser, 0 fatal console errors, one base search"
+        },
+        {
+          "id": "S8.defects",
+          "title": "결함 원장(사람 단위테스트 결과) 재반입 — C:\\TRANFILE\\RECEIVE 원장 xlsx → Doc/verify/defects_baseline.csv",
+          "kind": "python",
+          "script": "${harnessDir}/verify/defects_import.py",
+          "args": [],
+          "title_en": "Re-import human unit-test defect ledgers → Doc/verify/defects_baseline.csv"
+        },
+        {
+          "id": "S8.sources",
+          "title": "원천 xlsx 3개(DM 단위테스트 · GAP 분석 종합 · SCP&SSP DMF0045) → Doc/verify/sources MD+CSV+이미지 (누락 0 보고)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/sources_extract.py",
+          "args": [],
+          "title_en": "Extract 3 source xlsx (DM unit test · GAP analysis · SCP&SSP DMF0045) → Doc/verify/sources MD+CSV+images"
+        },
+        {
+          "id": "S8.merge",
+          "title": "원천 분류 병합 — sources/_classified → defects_baseline·defects_classified 확장 + design_decisions.csv",
+          "kind": "python",
+          "script": "${harnessDir}/verify/defects_sources_merge.py",
+          "args": [],
+          "title_en": "Merge classified sources → defects_baseline/classified + design_decisions.csv"
+        },
+        {
+          "id": "S8.folder",
+          "title": "CheckList·ActionItemList 폴더 열기 (Doc/UI_CHECKLIST)",
+          "kind": "open",
+          "path": "${root}/Doc/UI_CHECKLIST",
+          "title_en": "Open CheckList folder"
+        },
         {
           "id": "S7.accounts",
           "title": "테스트계정/권한매트릭스 추출 (gen-accounts.py)",
@@ -1939,93 +1972,31 @@
           "path": "${e2eOutDir}/specs/_matrix.csv",
           "title_en": "Open account × Division matrix (_matrix.csv)"
         }
-      ],
-      "title_en": "7. Tests (E2E: Smoke · CRUD · Auth · Auth×CRUD)"
+      ]
     },
     {
-      "id": "S8",
-      "title": "8. UI CheckList (AS-IS vs TO-BE → CheckList · ActionItemList)",
+      "id": "S9",
+      "title": "7. 보완 (CheckList 조치 필요 행 기준)",
+      "title_en": "7. Fix (based on CheckList action rows)",
+      "detail": "작업 모드(DB MODE·UI/DB MODE) 설정 → 원인 계층 진단 → 보완 전 스냅샷 → 보완(🧯·🚒 메뉴) → 보완분 재판정 → 보완 결과 증명(종결·미종결·회귀).",
       "tasks": [
         {
-          "id": "S8.verify",
-          "requireServers": [
-            8080,
-            5173
-          ],
-          "title": "UI CheckList 전체 — 사실 보강→원장→E2E(@verify)→판정→CheckList·ActionItemList xlsx (보완 적용은 안 함)",
+          "id": "S8.scope",
+          "title": "작업 모드 설정 (DB = DB MODE: DB·META 만, FE·BE 는 가이드 / UIDB = UI/DB MODE: 제약 없음)",
           "kind": "python",
-          "script": "${harnessDir}/verify/run_verify.py",
+          "script": "${harnessDir}/verify/set_scope.py",
           "splitArgs": true,
           "args": [
-            "${input:ids}"
+            "${input:scope}"
           ],
           "inputs": [
             {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
+              "name": "scope",
+              "prompt": "작업 모드 DB 또는 UIDB (비우면 현재 값만 표시)",
+              "default": ""
             }
           ],
-          "title_en": "Screen verification — facts→ledger→E2E(@verify)→judge→verification sheet·fix list xlsx (no repair applied)"
-        },
-        {
-          "id": "S8.verifyStatic",
-          "title": "UI CheckList (E2E 없이) — 서버 없이 정적·메타 판정만, E2E 행은 미검증으로 표시",
-          "kind": "python",
-          "script": "${harnessDir}/verify/run_verify.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}",
-            "--skip-e2e"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
-            }
-          ],
-          "title_en": "Screen verification without E2E (static·meta only)"
-        },
-        {
-          "id": "S8.report",
-          "title": "TestResultList — 직전 UI CheckList 결과를 그룹(영역 → 검사 규칙 → 항목)별 테스트 내역·결과 Excel 로(실패 상세·캡처·실행 테스트 포함 · 새로 측정하지 않음)",
-          "kind": "python",
-          "script": "${harnessDir}/verify/make_test_report.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
-            }
-          ],
-          "title_en": "Test result report — group the latest UI CheckList result (area → rule → item) into a readable Excel with details·captures·executed tests (no re-measurement)"
-        },
-        {
-          "id": "S8.verifyIfStale",
-          "requireServers": [
-            8080,
-            5173
-          ],
-          "title": "CheckList — 최신이 아닐 때만 실행 (FE 소스·PKG DDL·화면 메타가 직전 CheckList 이후 바뀌었거나 결과 없음 → run_verify · 최신이면 건너뜀) — 보완 메뉴 첫 단계",
-          "kind": "python",
-          "script": "${harnessDir}/verify/verify_if_stale.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
-            }
-          ],
-          "title_en": "Verification if stale — run_verify only when FE source·PKG DDL·screen meta changed since the last verification (first step of Fix menus)"
+          "title_en": "Set work mode (DB / UIDB)"
         },
         {
           "id": "S8.diagnose",
@@ -2065,25 +2036,6 @@
           "title_en": "Pre-repair snapshot of the ledger (baseline for closed/regressed comparison)"
         },
         {
-          "id": "S8.repairCompare",
-          "title": "보완 결과 증명 — 보완 전 스냅샷 ↔ 재판정 원장 비교(종결·미종결·회귀 수 · repair_close.json · 재실행 없음)",
-          "kind": "python",
-          "script": "${harnessDir}/verify/repair_close.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}",
-            "--compare"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
-            }
-          ],
-          "title_en": "Repair proof — compare pre-repair snapshot with the re-verified ledger (closed/open/regressed)"
-        },
-        {
           "id": "S8.repairClose",
           "title": "보완분만 재판정 — 직전 CheckList 이후 바뀐 DB 객체·메타·FE 에서 영향 규칙을 계산해 그 규칙만 다시 검사하고 종결·회귀를 기록",
           "kind": "python",
@@ -2102,10 +2054,37 @@
           "title_en": "Re-verify only the rules impacted by changes since the last CheckList; record closed/regressed"
         },
         {
-          "id": "S8.metaLive",
-          "title": "메타·배선 실시간 검증 — 메뉴·FE 호출 배선·PROC 실재/유효·인자 메타·컬럼 메타·콤보를 사내 DB 로 실측(meta_live_check.csv)",
+          "id": "S8.repairCompare",
+          "title": "보완 결과 증명 — 보완 전 스냅샷 ↔ 재판정 원장 비교(종결·미종결·회귀 수 · repair_close.json · 재실행 없음)",
           "kind": "python",
-          "script": "${harnessDir}/verify/meta_live_check.py",
+          "script": "${harnessDir}/verify/repair_close.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--compare"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Repair proof — compare pre-repair snapshot with the re-verified ledger (closed/open/regressed)"
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "8. 테스트 결과 (TestResultList · UI 테스트 Excel · 골든)",
+      "title_en": "8. Test results (TestResultList · UI test Excel · golden)",
+      "detail": "최종 CheckList 결과 → TestResultList(Doc/테스트결과서) · UI 테스트 Excel(Doc/UI_TEST(SCP&SSP)). 골든 테스트 = AS-IS SP ↔ TO-BE PROC 결과 대조(CheckList 차등 검증 입력).",
+      "tasks": [
+        {
+          "id": "S8.report",
+          "title": "TestResultList — 직전 UI CheckList 결과를 그룹(영역 → 검사 규칙 → 항목)별 테스트 내역·결과 Excel 로(실패 상세·캡처·실행 테스트 포함 · 새로 측정하지 않음)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/make_test_report.py",
           "splitArgs": true,
           "args": [
             "${input:ids}"
@@ -2117,13 +2096,13 @@
               "default": "SCP0007"
             }
           ],
-          "title_en": "Live meta·wiring check against the corporate DB"
+          "title_en": "Test result report — group the latest UI CheckList result (area → rule → item) into a readable Excel with details·captures·executed tests (no re-measurement)"
         },
         {
-          "id": "S8.pkgGate",
-          "title": "PKG 게이트 — 원문 반영·컴파일·시그니처·AS-IS↔TO-BE 실행 대조(화면 실전송 인자)를 실측(pkg_gate.json · SKIP 은 미측정으로 표시)",
+          "id": "S8.uitest",
+          "title": "UI 테스트 Excel — 최신 CheckList 의 조치 필요 행 → Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_<ID>(<메뉴명>).xlsx (기존 행은 두고 새 행만 추가 · SCP·SSP 화면)",
           "kind": "python",
-          "script": "${harnessDir}/verify/pkg_gate.py",
+          "script": "${harnessDir}/verify/make_ui_test_sheet.py",
           "splitArgs": true,
           "args": [
             "${input:ids}"
@@ -2131,21 +2110,17 @@
           "inputs": [
             {
               "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
+              "prompt": "화면ID (예 SCP0104)",
+              "default": "SCP0104"
             }
           ],
-          "title_en": "PKG gate — source applied·compile·signature·AS-IS↔TO-BE execution diff"
+          "title_en": "UI test Excel — latest CheckList action rows → Doc/UI_TEST(SCP&SSP) (append new rows only · SCP·SSP screens)"
         },
         {
-          "id": "S8.feGate",
-          "requireServers": [
-            8080,
-            5173
-          ],
-          "title": "FE 게이트 — 실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회를 실측(fe_gate.json · 서버가 내려가 있으면 미측정으로 표시)",
+          "id": "S4.goldgen",
+          "title": "골든 케이스 생성 (As-is SP ↔ To-Be PROC 짝) — gen_golden_cases.py",
           "kind": "python",
-          "script": "${harnessDir}/verify/fe_gate.py",
+          "script": "${dbconnDir}/gen_golden_cases.py",
           "splitArgs": true,
           "args": [
             "${input:ids}"
@@ -2153,81 +2128,202 @@
           "inputs": [
             {
               "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
-            }
-          ],
-          "title_en": "FE gate — open the screen in a real browser, 0 fatal console errors, one base search"
-        },
-        {
-          "id": "S8.precheck",
-          "title": "신규 화면 사전 점검 — 생성 전에 AS-IS 사실 묶음·SP 원문·호출 해석·컬럼 메타·분석 문서·사내 DB 메타 구비 여부를 실측(precheck.csv · 아무것도 만들거나 고치지 않음)",
-          "kind": "python",
-          "script": "${harnessDir}/verify/new_screen_precheck.py",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (예 SCP0007)",
-              "default": "SCP0007"
-            }
-          ],
-          "title_en": "New-screen pre-check — measure whether generation inputs exist (read-only)"
-        },
-        {
-          "id": "S8.scope",
-          "title": "작업 모드 설정 (DB = DB MODE: DB·META 만, FE·BE 는 가이드 / UIDB = UI/DB MODE: 제약 없음)",
-          "kind": "python",
-          "script": "${harnessDir}/verify/set_scope.py",
-          "splitArgs": true,
-          "args": [
-            "${input:scope}"
-          ],
-          "inputs": [
-            {
-              "name": "scope",
-              "prompt": "작업 모드 DB 또는 UIDB (비우면 현재 값만 표시)",
+              "prompt": "화면ID (비우면 전체)",
               "default": ""
             }
           ],
-          "title_en": "Set work mode (DB / UIDB)"
+          "title_en": "Generate golden cases (As-is SP ↔ To-Be PROC pairs) — gen_golden_cases.py"
         },
         {
-          "id": "S8.defects",
-          "title": "결함 원장(사람 단위테스트 결과) 재반입 — C:\\TRANFILE\\RECEIVE 원장 xlsx → Doc/verify/defects_baseline.csv",
+          "id": "S4.golden",
+          "title": "골든 테스트 실행 (양쪽 SP 결과 대조) — golden.py",
           "kind": "python",
-          "script": "${harnessDir}/verify/defects_import.py",
-          "args": [],
-          "title_en": "Re-import human unit-test defect ledgers → Doc/verify/defects_baseline.csv"
+          "script": "${dbconnDir}/golden.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (비우면 전체 GET)",
+              "default": "DMF0003"
+            }
+          ],
+          "gate": {
+            "type": "fileExists",
+            "file": "${goldenDir}/_summary.md",
+            "label": "골든 요약"
+          },
+          "title_en": "Run golden tests (compare both SP results) — golden.py"
         },
         {
-          "id": "S8.sources",
-          "title": "원천 xlsx 3개(DM 단위테스트 · GAP 분석 종합 · SCP&SSP DMF0045) → Doc/verify/sources MD+CSV+이미지 (누락 0 보고)",
-          "kind": "python",
-          "script": "${harnessDir}/verify/sources_extract.py",
-          "args": [],
-          "title_en": "Extract 3 source xlsx (DM unit test · GAP analysis · SCP&SSP DMF0045) → Doc/verify/sources MD+CSV+images"
-        },
-        {
-          "id": "S8.merge",
-          "title": "원천 분류 병합 — sources/_classified → defects_baseline·defects_classified 확장 + design_decisions.csv",
-          "kind": "python",
-          "script": "${harnessDir}/verify/defects_sources_merge.py",
-          "args": [],
-          "title_en": "Merge classified sources → defects_baseline/classified + design_decisions.csv"
-        },
-        {
-          "id": "S8.folder",
-          "title": "CheckList·ActionItemList 폴더 열기 (Doc/UI_CHECKLIST)",
+          "id": "S4.goldopen",
+          "title": "골든 결과 열기 (Doc/golden/_summary.md)",
           "kind": "open",
-          "path": "${root}/Doc/UI_CHECKLIST",
-          "title_en": "Open CheckList folder"
+          "path": "${goldenDir}/_summary.md",
+          "title_en": "Open golden results (Doc/golden/_summary.md)"
         }
-      ],
-      "title_en": "8. Screen verification (AS-IS vs TO-BE → verification sheet · fix list)"
+      ]
+    },
+    {
+      "id": "S6",
+      "title": "9. 룰 보완 (반복 결함 → 룰·검사기)",
+      "title_en": "9. Rule updates (recurring defects → rules · checkers)",
+      "detail": "CheckList 에서 반복된 결함을 룰(CSV)·검사기로 흡수해 원천 차단. 생성기 회귀 스냅샷 확인.",
+      "tasks": [
+        {
+          "id": "S6.vibekeep",
+          "title": "이관 룰셋 열기 — 10_RULES_KEEP.md (지켜야 하는 룰 · 게이트 코드 매핑)",
+          "kind": "open",
+          "path": "${root}/tools/VibeManager/rules/10_RULES_KEEP.md",
+          "title_en": "Open migration rule set — 10_RULES_KEEP.md (rules to keep · gate code map)"
+        },
+        {
+          "id": "S6.vibeskip",
+          "title": "제외 룰 열기 — 20_RULES_SKIP.md (제외/보류 사유)",
+          "kind": "open",
+          "path": "${root}/tools/VibeManager/rules/20_RULES_SKIP.md",
+          "title_en": "Open excluded rules — 20_RULES_SKIP.md"
+        },
+        {
+          "id": "S6.vibeenv",
+          "title": "환경 단일 출처 열기 — 00_ENV.md",
+          "kind": "open",
+          "path": "${root}/tools/VibeManager/rules/00_ENV.md",
+          "title_en": "Open environment single source — 00_ENV.md"
+        },
+        {
+          "id": "S6.suggest",
+          "title": "룰 보완 후보 산출 (suggest-rules.js → rules/_candidates.md)",
+          "kind": "node",
+          "script": "${harnessDir}/suggest-rules.js",
+          "gate": {
+            "type": "fileExists",
+            "file": "${harnessDir}/rules/_candidates.md",
+            "label": "후보 파일"
+          },
+          "title_en": "Produce rule-update candidates (suggest-rules.js → rules/_candidates.md)"
+        },
+        {
+          "id": "S6.cand",
+          "title": "후보 열기 (_candidates.md)",
+          "kind": "open",
+          "path": "${harnessDir}/rules/_candidates.md",
+          "title_en": "Open candidates (_candidates.md)"
+        },
+        {
+          "id": "S6.allowed",
+          "title": "allowed_gaps.csv 편집",
+          "kind": "open",
+          "path": "${harnessDir}/rules/allowed_gaps.csv",
+          "title_en": "Edit allowed_gaps.csv"
+        },
+        {
+          "id": "S6.snapshot",
+          "title": "생성기 회귀 스냅샷 비교 (snapshot.js)",
+          "kind": "node",
+          "script": "${harnessDir}/snapshot.js",
+          "args": [],
+          "title_en": "Generator regression snapshot compare (snapshot.js)"
+        },
+        {
+          "id": "S6.snapupd",
+          "title": "생성기 스냅샷 기준선 갱신 (snapshot.js --update)",
+          "kind": "node",
+          "script": "${harnessDir}/snapshot.js",
+          "args": [
+            "--update"
+          ],
+          "confirm": "현재 생성 결과를 기준선으로 저장합니다. 룰 변경이 의도한 것일 때만 실행하세요.",
+          "title_en": "Update generator snapshot baseline (snapshot.js --update)"
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "title": "10. 클라우드 이관",
+      "title_en": "10. Cloud migration",
+      "detail": "작업 모드 범위(DB MODE: DB·META / UI/DB MODE: + FE·BE)의 수정본·전체 이관 패키지 생성 → 이관 완료 표시로 기준선 확정.",
+      "tasks": [
+        {
+          "id": "S5.cloudStage",
+          "title": "클라우드 이관 파일 사전 생성(작업 모드 기준 수정본·전체) · 생성/보완 끝 단계",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--stage"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Pre-build cloud packages (modified + full, scope follows work mode)"
+        },
+        {
+          "id": "S5.cloudMod",
+          "title": "클라우드 이관 패키지(수정본) — 이관 완료 표시 이후 바뀐 것 전부 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--mode",
+            "auto"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Cloud package — modified only (scope follows work mode)"
+        },
+        {
+          "id": "S5.cloudFull",
+          "title": "클라우드 이관 패키지(전체) — 화면 소유 전부 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--mode",
+            "auto",
+            "--full"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Cloud package — full (scope follows work mode)"
+        },
+        {
+          "id": "S5.cloudApplied",
+          "title": "클라우드 이관 완료 표시 — 마지막 생성 패키지를 이관 기준선으로 확정 · 범위 = 작업 모드",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--mode",
+            "auto",
+            "--applied"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Mark cloud package applied (moves the baseline)"
+        }
+      ]
     }
   ]
 }

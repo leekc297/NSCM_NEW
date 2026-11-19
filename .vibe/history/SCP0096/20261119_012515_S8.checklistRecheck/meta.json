@@ -1,0 +1,17 @@
+{
+  "id": "SCP0096",
+  "task": "S8.checklistRecheck",
+  "scope": "none",
+  "note": "checklist_run.py SCP0096 --recheck",
+  "start": "2026-11-19T01:25:15+09:00",
+  "end": "2026-11-19T01:34:45+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "chain",
+  "label": "CheckList 재수행 — 미검증 행만 가능하면 그 규칙만(--only), 아니면 처음부터 → 재분류 · 🔎 CheckList 체인 3단계",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "changed": []
+}

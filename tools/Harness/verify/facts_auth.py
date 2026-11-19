@@ -233,7 +233,24 @@ def db_facts(cx, mid):
     f['lookupMeasure'] = q("SELECT SEGMENT1, SEGMENT3, SEGMENT4, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, VALID_YN FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE='GET_ADMIN_GROUP_MEASURE' AND SEGMENT2=:m", m=mid)
     f['lookupAdmin'] = q("SELECT SEGMENT1, SEGMENT2, VALID_YN FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE='GET_ADMIN_GROUP' AND SEGMENT2 IN ('ALL',:m) AND VALID_YN='Y'", m=mid)
     f['now'] = q("SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI') NOW_, TO_CHAR(SYSDATE,'DY','NLS_DATE_LANGUAGE=ENGLISH') DOW, TO_CHAR(SYSDATE,'HH24MI') HM FROM DUAL")[0]
+    # 2026-11-18 미검증 해소(SCP0096 EG032 '명부에 쌍 없음'): 이 화면 칸 설정(TITLESET_USER) 행 수 · 화면 PKG 참조 수 — AS-IS·TO-BE 모두 0행이면 보유 계정이 있을 수 없어 계정쌍 검사 대상 아님
+    c.execute("SELECT COUNT(*), COUNT(DISTINCT USER_ID) FROM SCM_MGR.SCM_MST_TITLESET_USER WHERE PROGRAM_ID=:m", m=mid); _n, _u = c.fetchone()
+    c.execute("SELECT COUNT(*) FROM ALL_SOURCE WHERE NAME LIKE :p AND TYPE='PACKAGE BODY' AND UPPER(TEXT) LIKE '%TITLESET_USER%'", p=f'PKG_{mid}%'); _r = c.fetchone()[0]
+    f['titleset'] = {'tobeRows': int(_n), 'tobeUsers': int(_u), 'pkgRefs': int(_r), 'asisRows': None}
     return f
+
+
+def asis_titleset_rows(mid):
+    """AS-IS 개발 DB 의 이 화면 칸 설정 행 수 — 접속 실패는 None(미측정)"""
+    try:
+        from dbconn import connect
+        with connect('asis') as acx:
+            a = getattr(acx, 'cx', acx).cursor()
+            a.execute('SELECT COUNT(*) FROM dbo.SCM_MST_TITLESET_USER WITH(NOLOCK) WHERE PROGRAM_ID = ?', mid)
+            return int(a.fetchone()[0])
+    except Exception as e:  # noqa: BLE001
+        print(f'[facts_auth] AS-IS TITLESET_USER 미측정: {str(e)[:120]}')
+        return None
 
 
 def account_facts(cx, mid, sid):
@@ -250,6 +267,11 @@ def account_facts(cx, mid, sid):
         for dv, roles in (uj['areas'][area].get('divisions') or {}).items():
             for role, uid in roles.items():
                 if uid: pool.setdefault(uid, []).append(f'{area}/{dv}/{role}')
+    # 2026-11-18 미검증 해소(SCP0096 EG380 'GUEST 전용 계정 없음'): users.json guestAccount = 전 화면 공용 GUEST 전용 계정 · key GUEST/-/GUEST
+    #   무권한 첫 화면(EG380)만 쓴다 — 계정 순회(distinctAccounts)에서는 빠진다(authprobe.ts)
+    _g = str(uj.get('guestAccount') or '').strip()
+    if _g and _g not in pool:
+        pool[_g] = ['GUEST/-/GUEST']
     c = cx.cursor()
     for uid, keys in pool.items():
         c.execute("SELECT USER_GR_ID FROM SCM_MGR.SCM_ADM_USER_GR_MPG_M WHERE USER_ID=:u AND USE_YN='Y'", u=uid); groups = sorted(r[0] for r in c.fetchall())
@@ -282,7 +304,7 @@ def btn_auth_div(cx, mid, acc):
         return res
     out['__default__'] = call(cfg.get('defaultAccount'), alld)
     for a in acc:
-        area, dv, role = a['key'].split('/', 2); uid = uj['screens'][dv]['accounts'][role] if area == 'SCR' else uj['areas'][area]['divisions'][dv][role]
+        area, dv, role = a['key'].split('/', 2); uid = uj['screens'][dv]['accounts'][role] if area == 'SCR' else uj.get('guestAccount') if area == 'GUEST' else uj['areas'][area]['divisions'][dv][role]
         out[a['key']] = call(uid, a['divsMenu'] or [])
     return out
 
@@ -294,7 +316,7 @@ def main():
     with connect('tobe') as cx:
         for sid in ids:
             a = asis_facts(sid)
-            d = db_facts(cx, sid); acc = account_facts(cx, sid, sid)
+            d = db_facts(cx, sid); d['titleset']['asisRows'] = asis_titleset_rows(sid); acc = account_facts(cx, sid, sid)
             btn_div = btn_auth_div(cx, sid, acc)
             o = {'id': sid, 'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'asis': a, 'db': d, 'accounts': acc, 'btnDiv': btn_div}
             with open(os.path.join(OUT, f'{sid}.json'), 'w', encoding='utf-8') as fp: json.dump(o, fp, ensure_ascii=False, indent=0)

@@ -42,12 +42,19 @@ export interface StaticColumnMeta {
   [key: string]: unknown;
 }
 
-// 동적열 파생 원천 — 컬럼명({name})만 쓴다(type 은 호환 보존용 optional).
+// 동적열 파생 원천 — 컬럼명(name) + 3SPAN SP 라벨.
 //   원천은 CALENDAR(3SPAN) SP O_RC1 의 COLUMN_NAME(D_/W_/M_). GET 데이터 커서(o_rc1)는
 //   call-proc 경로에서 컬럼 메타 사이드카를 주지 않으므로 이 목록이 동적 컬럼의 단일 원천이다.
+//   월/주차 머지헤더의 그룹·라벨은 SP 가 주는 라벨(SCM_SYS_CALENDAR_M 유래)이 정본이다 — 아래 3필드.
 export interface DynColumnMeta {
   name: string;
   type?: string;
+  // SMALL_CLASS_LABEL_NAME — 주차 라벨(WEEK_NAME, 예 'W48'. ISO 주차·월요일 시작·연속).
+  weekName?: string;
+  // LARGE_CLASS_LABEL_NAME — 월 라벨(MONTH_NAME, 예 '2026-11').
+  monthName?: string;
+  // DAY_CODE — 요일(MON~SUN). 현재 요일색/요일별 입력은 yyyymmdd 파싱(weekday)을 쓰므로 보존만.
+  dayCode?: string;
 }
 
 // CALENDAR(3SPAN) SP O_RC1 행 — PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(공용, VALID) 반환.
@@ -73,10 +80,12 @@ export interface DynDayColumn {
   dayLabel: string;
   // 0=일 ~ 6=토 (요일색·btnInput 요일별 분기)
   weekday: number;
-  // 대(월 yyyymm) 그룹 키 — 3단 머지헤더 상단
+  // 대(월) 그룹 — SP LARGE_CLASS_LABEL_NAME('2026-11'). 그룹 키이자 라벨.
   monthKey: string;
-  // 소(주차) 그룹 키 — 3단 머지헤더 중단
+  // 소(주차) 그룹 키 — 월 내 유일(월경계 넘는 ISO 주는 월별로 분리). `${monthKey}/${weekLabel}`.
   weekKey: string;
+  // 소(주차) 헤더 라벨 — SP SMALL_CLASS_LABEL_NAME('W48', ISO 주차·월요일 시작).
+  weekLabel: string;
 }
 
 // 동적 SUM 열(W_/M_) 파생 결과 — chkSum 토글 대상.

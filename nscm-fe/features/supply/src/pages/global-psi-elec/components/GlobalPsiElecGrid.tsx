@@ -213,8 +213,11 @@ export const GlobalPsiElecGrid = ({
       staticColumns={fixedColumns}
       dynamicColumns={pivotColumns}
       allowMerging={AllowMerging.All}
-      // 초기 예측값(pivot 있으면 3단 16, 없으면 1단 48). 실제 tier 수 보정은 applyHeaderHeight effect 가 담당.
-      headerRowHeight={pivotColumns.length > 0 ? HEADER_TOTAL_HEIGHT / 3 : HEADER_TOTAL_HEIGHT}
+      // headerRowHeight 를 넘기지 않는다(SCP0100 동형 무한루프 교정 2026-11-18). 공용 DataGrid 가
+      //   updatedLayout 마다 이 정적값(48/3=16, 3단 가정)으로 headerRows.defaultSize 를 되돌리는데,
+      //   applyHeaderHeight 는 실제 tier 수(48/hdrRows.length)로 설정해, 실제 헤더가 3단이 아니면 둘이
+      //   defaultSize 를 서로 다른 값으로 매 updatedLayout 엎어쓰며 무한 invalidate(CPU 100%·DOM 폭증)가 된다.
+      //   동적 tier 보정은 applyHeaderHeight 단독이 수렴 담당 → 정적 prop 미전달로 충돌 제거.
       dblClick={onCellDblClick}
     />
   );

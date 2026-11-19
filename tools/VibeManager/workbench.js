@@ -48,7 +48,8 @@ function claudeArgs(p, resume, overrides) {
   overrides = overrides || {};
   const mode = overrides.permissionMode || p.permissionMode || 'bypassPermissions';
   const model = overrides.model || p.claudeModel;
-  const a = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', mode, '--allowedTools', 'Read,Edit,Write,Glob,Grep,Bash(node *),Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(python *),Bash(git status*),Bash(git diff*),Bash(git log*)'];
+  // 2026-11-18: --input-format stream-json = 입력을 열어 두고 실행 중에 보낸 프롬프트를 진행 중인 응답에 추가 지시로 넣는다(injectPrompt)
+  const a = ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose', '--permission-mode', mode, '--allowedTools', 'Read,Edit,Write,Glob,Grep,Bash(node *),Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(python *),Bash(git status*),Bash(git diff*),Bash(git log*)'];
   if (model) a.push('--model', model);
   if (resume) a.push('--resume', resume);
   return a;
@@ -113,6 +114,14 @@ function verifyStep(p, v, id) {
       if (ai < 0) return { ok: false, why: 'fixlist.csv 에 action_needed 열 없음', from: 'run' };
       const body = rowsAll.slice(1); const open = body.filter(r => String(r[ai] || '').trim().toUpperCase() === 'Y').length;
       return open ? { ok: false, why: `CheckList 조치 필요 ${open}행 남음(전체 ${body.length}행)` } : { ok: true, why: `CheckList 조치 필요 0행(전체 ${body.length}행)` };
+    }
+    // 2026-11-18 사용자: CheckList 뒤 미검증 자동 해소 — 이번 실행이 만든 unverified_triage.json 의 처리 대상(엔진·대조표·판단·미분류·자동 남음)이 0 이어야 통과(남으면 repair = 🧪 미검증 해소 → 재측정)
+    if (v.type === 'unverifiedOpen') {
+      const f = path.join(p.root, 'Doc', 'verify', id, 'unverified_triage.json'); if (!fs.existsSync(f)) return { ok: false, why: `미검증 분류 결과 없음: ${path.relative(p.root, f)}`, from: 'run' };
+      const since = v._since || 0; if (since && fs.statSync(f).mtimeMs < since) return { ok: false, why: `미검증 분류가 이번 실행에서 갱신되지 않음 — ${path.relative(p.root, f)}`, from: 'run' };
+      const j = JSON.parse(fs.readFileSync(f, 'utf8')); const a = j.after || {}; const n = Number(j.actionable || 0);
+      const tail = `원장 미검증 ${(j.before || {}).total ?? '?'} → ${a.total ?? '?'}행 · 사람 확인 ${a.human || 0} · 집계 ${a.aggregate || 0}${j.unverified_sheet != null ? ` · 미검증 시트 ${j.unverified_sheet}` : ''}`;
+      return n ? { ok: false, why: `미검증 처리 대상 ${n}행 남음(${tail})` } : { ok: true, why: `미검증 처리 대상 0(${tail})` };
     }
     if (v.type === 'fileExists') { const f = String(v.file || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root).replace(/\$\{genDir\}/g, p.genDir); return fs.existsSync(f) ? { ok: true, why: `산출물 있음 ${path.relative(p.root, f)}` } : { ok: false, why: `산출물 없음 ${f}` }; }
     return { ok: true, why: '검증 규칙 없음' };
@@ -212,7 +221,7 @@ function mShort(id) {
 }
 // ── 1.8.3: UI 텍스트 사전 (vibeManager.language: en 기본 / ko) ──
 const UI = {
-  tab_claude: ['Claude', 'Claude'], tab_log: ['Log', 'Log'], tab_task: ['Task Log', 'Task Log'], tab_status: ['UI Status', 'UI Status'], tab_flow: ['FLOW', 'FLOW'], tab_hist: ['Revision', 'Revision'], tab_thist: ['Task History', 'Task History'],
+  tab_claude: ['Claude', 'Claude'], tab_log: ['Log', 'Log'], tab_task: ['Task Log', 'Task Log'], tab_status: ['Status', 'Status'], tab_flow: ['FLOW', 'FLOW'], tab_hist: ['Revision', 'Revision'], tab_thist: ['Task History', 'Task History'],
   send: ['📤 Send (Enter)', '📤 전송 (Enter)'], sending: ['⌛ Responding…', '⌛ 응답 중…'], stop: ['⏹️ Stop', '⏹️ 중지'], clear: ['🧹 Clear', '🧹 지우기'], attach: ['📎 Attach', '📎 첨부'],
   noid: ['(no ID)', '(ID 없음)'], mode_auto: ['🤖 Auto (accept edits)', '🤖 자동 (수용)'], mode_manual: ['🖐️ Manual', '🖐️ 수동'], mode_plan: ['📋 PLAN', '📋 PLAN'], mode_bypass: ['🔓 Auto-approve (all)', '🔓 자동승인 (전부허용)'],
   model_default: ['Default (Claude Code /model · settings)', '기본 (Claude Code /model·settings)'], model_default_set: ['Default (setting: ', '기본 (설정: '], model_custom: ['✏️ Enter model…', '✏️ 직접 입력…'], inuse: ['in use', '사용중'], after_send: ['(shown after first send)', '(전송 후 표시)'],
@@ -220,16 +229,18 @@ const UI = {
   latest: ['⤓ Latest', '⤓ 최신'], belog: ['☕ BE Log', '☕ BE Log'], felog: ['🎨 FE Log', '🎨 FE Log'], tasklog: ['🧾 Task Log', '🧾 Task Log'],
   ph: ['Enter to send · Shift+Enter for new line', 'Enter to send · Shift+Enter for new line'], // 2026-11-12 사용자: 입력 전 안내를 짧게 · 영문(언어 설정과 무관)
   chat_hint: ['Send a prompt — Claude replies and tool use appear here (session kept).', '프롬프트를 보내면 Claude 응답·도구 사용이 여기 표시됩니다 (세션 유지).'], flow_hint: ['Loads when the FLOW tab is opened…', 'FLOW 탭 선택 시 자동 로드됩니다…'], hist_hint: ['Loads when the Revision tab is opened…', 'Revision 탭 선택 시 자동 로드됩니다…'],
-  st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_chk: ['CheckList open', 'CheckList 조치 필요'], st_e2e: ['E2E', 'E2E'],
+  st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_chk: ['Fix left', '보완 남음'], st_cl: ['CheckList', 'CheckList'], st_live: ['AS-IS Live', 'AS-IS 실측'], st_e2e: ['E2E', 'E2E'],
   st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
   tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', stage: 'Stage', sub: 'sub', runN: 'run', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', stage: '단계', sub: '세부', runN: '번째 실행', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', stage: 'Stage', sub: 'sub', runN: 'run', firstRun: 'First run', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', stage: '단계', sub: '세부', runN: '번째 실행', firstRun: '처음 실행', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
-const STAGE_EN = { pack: '1 Parse', docs: '2 Docs', xlsx: '2x Excel', chk: '3 CheckList', gen: '4 Build', gate: '5 Gate', repair: '6 Fix', pkg: '7 PKG', reg: '8 Reg SQL', e2e: '9 E2E', smoke: '9 Smoke', crud: '10 CRUD', auth: '11 Auth', authcrud: '12 Auth×CRUD' };
+// 2026-11-18: 파싱부터 완료까지 바뀐 순서(flow-panel.js STAGES 와 같은 키)
+const STAGE_EN = { pack: '1 Parse', live: '2 Live', docs: '3 Docs', gen: '4 Build', reg: '5 Reg SQL', pkg: '6 PKG', gate: '7 Gate', chk: '8 Test (CheckList)', repair: '9 Fix', report: '10 TestResultList', xlsx: '11 Excel', e2e: 'E2E', smoke: 'Smoke', crud: 'CRUD', auth: 'Auth', authcrud: 'Auth×CRUD' };
 // 1.8.8: UI Status 의 테스트 타일 4종(단계 키 → 라벨)
+// 2026-11-18: 4종 모두 CheckList(테스트 단계) 안에서 실행 — 타일 이름은 그대로, 위치는 CheckList 타일 뒤
 const E2E_TILES = [['smoke', 'Smoke', 'Smoke'], ['crud', 'CRUD', 'CRUD'], ['auth', 'Auth', '권한'], ['authcrud', 'Auth×CRUD', '권한별 CRUD']];
 
 // ── 화면 현황(UI Status) — 1.8.3 대시보드 ──
@@ -247,17 +258,21 @@ function statusHtml(p, id) {
   let pageRel = ''; try { const r = JSON.parse(rd(path.join(g, 'register.json'))); pageRel = `features/${r.feature}/src/pages/${r.pageDir}`; } catch { }
   const dod = /(\d+)\/(\d+) 충족/.exec(rd(path.join(g, 'DOD.md'))); const fe = /BLOCK (\d+) \/ WARN (\d+)/.exec(rd(path.join(g, 'CHECK.md'))); const pk = /BLOCK (\d+) \/ WARN (\d+)/.exec(rd(path.join(g, 'CHECK_PKG.md')));
   // 2026-10-30 GAP 분석 폐지 → CheckList 조치 필요(Doc/verify/<ID>/fixlist.csv action_needed=Y 중 미적용) — 변수명은 타일 코드 호환
-  let gapOpen = null, gapTot = 0; try { const fx = rd(path.join(p.root, 'Doc', 'verify', id, 'fixlist.csv')).replace(/^\uFEFF/, '').split(/\r?\n/).filter(Boolean); if (fx.length > 1) { const hh = fx[0].split(','); const ai = hh.indexOf('action_needed'), si2 = hh.indexOf('status'); const rowsY = fx.slice(1).map(l => l.split(',')).filter(c => (c[ai] || '').toUpperCase() === 'Y'); gapTot = rowsY.length; gapOpen = rowsY.filter(c => !/^(적용|검증완료)/.test(c[si2] || '')).length; } } catch { }
+  // 2026-11-18: CSV 를 쉼표로만 나누면 따옴표 안 쉼표로 열이 밀림(SSP0020 1/1 오표시) — flow.stageStatus 의 CSV 해석값(fixOpen·fixTot)을 쓴다
+  const gapOpen = s.fixOpen == null ? null : s.fixOpen, gapTot = s.fixTot || 0;
   const stages = flow.STAGES; const done = stages.filter(st => s[st.key] === 'ok').length; const pct = Math.round(done / stages.length * 100);
   const tile = (label, value, sub, cls) => `<div class="kpi ${cls || ''}"><div class="kv">${value}</div><div class="kl">${label}</div>${sub ? `<div class="ks">${sub}</div>` : ''}</div>`;
   const kpis = [
     tile(t(p, 'st_progress'), `${pct}%`, `${done}/${stages.length} ${t(p, 'st_stages')}`, pct === 100 ? 'ok' : pct ? 'mid' : ''),
+    // 2026-11-18: 완료 기준 = CheckList(FAIL·판정필요·미검증·미검증 시트) · AS-IS 실측 상태를 앞에
+    (() => { const c = s.chkCounts; if (!c) return tile(t(p, 'st_cl'), '–', t(p, 'st_notrun'), ''); const ko2 = p.language === 'ko'; return tile(t(p, 'st_cl'), `FAIL ${c.FAIL}`, `${ko2 ? '판정필요' : 'Review'} ${c['판정필요']} · ${ko2 ? '미검증' : 'Unverified'} ${c['미검증']} · ${ko2 ? '미검증 시트' : 'Unverified sheet'} ${c['미검증시트'] == null ? '–' : c['미검증시트']}`, s.chk === 'ok' ? 'ok' : s.chk === 'bad' ? 'bad' : 'mid'); })(),
+    tile(t(p, 'st_live'), s.liveN || '–', s.liveN ? '' : t(p, 'st_notrun'), s.live === 'ok' ? 'ok' : s.live === 'bad' ? 'bad' : s.live === 'warn' ? 'mid' : ''),
     tile(t(p, 'st_dod'), dod ? `${dod[1]}/${dod[2]}` : '–', dod ? '' : t(p, 'st_notrun'), dod ? (dod[1] === dod[2] ? 'ok' : 'mid') : ''),
     tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''),
     tile(t(p, 'st_pkg'), pk ? `B ${pk[1]} · W ${pk[2]}` : '–', pk ? '' : t(p, 'st_notrun'), pk ? (pk[1] === '0' ? 'ok' : 'bad') : ''),
     tile(t(p, 'st_chk'), gapOpen == null ? '–' : String(gapOpen), gapOpen == null ? t(p, 'st_notrun') : `/ ${gapTot} ${t(p, 'st_items')}`, gapOpen == null ? '' : (gapOpen === 0 ? 'ok' : 'bad')),
-    // 1.8.8: 테스트 4단계 타일 — 결과 있음 n/m(ok/bad) · 스펙만 있음 '미실행' · 스펙 없음 '–'
-    ...E2E_TILES.map(([k, en, ko2]) => { const st = s[k] || 'none', n = s[k + 'N']; return tile(`E2E ${p.language === 'ko' ? ko2 : en}`, n || '–', n ? '' : (st === 'warn' ? t(p, 'st_notrun') : t(p, 'st_nospec')), n ? (st === 'ok' ? 'ok' : st === 'warn' ? 'mid' : 'bad') : ''); }),
+
+    // 2026-11-18 사용자: E2E 4종(Smoke·CRUD·Auth·Auth×CRUD) 타일 삭제 — 테스트 전 단계를 CheckList 가 포함(단계 8 테스트(CheckList) · CheckList 타일)
   ].join('');
   const SYM = { ok: '✓', warn: '◐', bad: '✖', none: '' };
   const stepper = stages.map(st => { const stt = s[st.key] || 'none'; const lbl = p.language === 'ko' ? st.label : (STAGE_EN[st.key] || st.label); return `<div class="stp ${stt}" data-task="${esc(st.task || '')}" title="${esc(lbl)}${s[st.key + 'N'] ? ' — ' + esc(s[st.key + 'N']) : ''}"><span class="dot">${SYM[stt] || ''}</span><span class="sl">${esc(lbl)}</span>${s[st.key + 'N'] ? `<span class="sn">${esc(s[st.key + 'N'])}</span>` : ''}</div>`; }).join('<span class="stc"></span>');
@@ -332,6 +347,14 @@ function killTree(pid) {
 // 1.9.30(2026-10-29 사용자: VM#2 가 '완료' 로 표시된 뒤에도 백그라운드 검증(run_verify SCP0020 r41)이 돌고 있었고, 중지하자 23/23 직전에 함께 죽어 결과 소실):
 //   Claude 가 result 를 보낸 뒤에도 살아 있는 자식 프로세스 트리(run_verify.py·playwright·bash·chrome …) = '후속 작업'. 셸 래퍼(cmd/conhost)와 claude 자체는 제외.
 //   조회 실패(권한·시간초과)는 null — 모르면 '완료' 로 바꾸지 않고 '확인 불가' 로 적는다. Windows 는 부모가 죽어도 ParentProcessId 가 남으므로 고아도 같은 걸음으로 찾는다
+// 2026-11-19 사용자: 후속 작업 안내 = 요약 한 줄(종류별 개수 · 주요 스크립트) + 클릭하면 펼치는 상세 목록
+function procSummary(ds) {
+  const cnt = {}; for (const x of ds) { const n = String(x.name || '').replace(/\.exe$/i, ''); cnt[n] = (cnt[n] || 0) + 1; }
+  const kinds = Object.entries(cnt).sort((a, b) => b[1] - a[1]).map(([n, c]) => `${n} ${c}`).join(', ');
+  const mains = [...new Set(ds.filter(x => /python|node/i.test(x.name || '')).map(x => { const m = /([\w.-]+\.py)\s+(\S+)?/.exec(x.cmd || '') || /\btest\s+(\S+)/.exec(x.cmd || ''); return m ? (m[2] && /\.py$/.test(m[1]) ? `${m[1]} ${m[2]}` : (/playwright/i.test(x.cmd || '') ? `playwright ${m[0]}` : m[0])) : ''; }).filter(Boolean))].slice(0, 3).join(', ');
+  return `${kinds}${mains ? ` · ${mains}` : ''}`;
+}
+const procDetail = ds => ds.map(x => `· ${x.name}(${x.pid}) ${String(x.cmd || '').slice(0, 160)}`).join('\n');
 function liveDescendants(pid) {
   if (!pid) return [];
   try {
@@ -383,6 +406,36 @@ class WB {
     this.post({ type: 'busy', procs: busy.length, claude: !!this.claudeProc, labels });
   }
 
+  // 2026-11-18: 답변·도구 출력에 '@@HTML 라벨|경로' 줄이 있으면 그 HTML 을 Console 탭 안에 그대로 그린다(건수 현황판 tools/Docs/screen_status.py 등)
+  //   프로젝트 폴더 안 .html 만, 3MB 이하만. 같은 파일은 한 턴에 한 번만 그린다
+  postHtmlMarks(p, txt) {
+    const re = /^\s*@@HTML\s+([^|\r\n]+)\|([^\r\n]+?)\s*$/gm; let m;
+    this._htmlSeen = this._htmlSeen || new Set();
+    while ((m = re.exec(String(txt || '')))) {
+      const f = path.resolve(p.root, m[2].trim()); const label = m[1].trim();
+      if (this._htmlSeen.has(f)) continue; this._htmlSeen.add(f);
+      try {
+        if (!/\.html?$/i.test(f) || path.relative(p.root, f).startsWith('..')) throw new Error('프로젝트 폴더 안 .html 파일만 표시함');
+        const st = fs.statSync(f); if (st.size > 3 * 1024 * 1024) throw new Error(`파일 크기 ${st.size} 바이트, 3MB 초과`);
+        this.post({ type: 'html', label, file: f, time: history.nowLocal().slice(0, 16).replace('T', ' '), html: fs.readFileSync(f, 'utf8') });
+      } catch (e) { this.post({ type: 'chat', role: 'meta', text: `HTML 표시 안 함: ${f} (${e.message})` }); }
+    }
+  }
+  // 2026-11-18(사용자: 건수 현황을 DASHBOARD 형태로 Console 창에 · 15:35 답변이 글로만 나옴): Claude 가 screen_status.py 를 돌리지 않아 '@@HTML' 줄이 없던 것이 원인.
+  //   질문(화면 문맥 뒤 본문)에 건수·현황·대시보드가 있고 이 턴에 그린 HTML 이 없으면 VM 이 tools/Docs/screen_status.py <화면ID> 를 직접 실행해 그린다
+  autoStatusHtml(p, id, prompt) {
+    try {
+      let q = String(prompt || ''); const k = q.indexOf(' — 참고 후: '); if (k >= 0) q = q.slice(k + ' — 참고 후: '.length);
+      const m = /\b([A-Z]{2,4}\d{4}[A-Z]?)\b/.exec(q.toUpperCase()); const sid = (m && m[1]) || id;
+      if (!sid || !/건수|현황|대시보드|dashboard|몇\s*건|몇\s*개|개수|수치|진행\s*[율률]|count/i.test(q)) return; // 2026-11-18 사용자: 숫자로 답하는 간단한 질문도 현황판
+      if (this._htmlSeen && this._htmlSeen.size) return;
+      const py = path.join(p.root, 'tools', 'Docs', 'screen_status.py'); if (!fs.existsSync(py)) return;
+      cp.execFile(p.python || 'python', [py, sid], { cwd: p.root, windowsHide: true, timeout: 120000, maxBuffer: 8 * 1024 * 1024, env: Object.assign({}, process.env, { PYTHONIOENCODING: 'utf-8' }) }, (err, out, errOut) => {
+        if (err) { this.post({ type: 'chat', role: 'meta', text: `HTML 현황판 생성 실패: screen_status.py ${sid} (${String(errOut || err.message).trim().split(/\r?\n/).pop()})` }); return; }
+        if (String(out).includes('@@HTML')) this.postHtmlMarks(p, String(out));
+      });
+    } catch (e) { this.post({ type: 'chat', role: 'meta', text: `HTML 현황판 생성 실패: ${e.message}` }); }
+  }
   spawnStream(p, cmd, args, opts, stream, label) {
     const id = ++seq; const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true });
     const logF = path.join(logDir, `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}_${(label || 'run').replace(/[^\w.-]/g, '_')}.log`); // 1.8.2: 로컬 시간
@@ -553,7 +606,7 @@ class WB {
 
   stopAll() {
     // 1.9.30: 중지 전에 Claude 가 띄운 후속 작업을 보여 준다 — 함께 종료되어 결과가 소실되는 것을 사용자가 알 수 있게
-    if (this.claudeProc) { try { const ds = liveDescendants(this.claudeProc.pid); if (ds && ds.length) this.post({ type: 'chat', role: 'meta', text: `⏹ 중지 — 함께 종료되는 후속 작업 ${ds.length}개:\n${ds.map(x => `· ${x.name}(${x.pid}) ${x.cmd.slice(0, 110)}`).join('\n')}` }); } catch { } }
+    if (this.claudeProc) { try { const ds = liveDescendants(this.claudeProc.pid); if (ds && ds.length) this.post({ type: 'chat', role: 'meta', text: `⏹ 중지: 함께 종료되는 후속 작업 ${ds.length}개 (${procSummary(ds)})`, detail: procDetail(ds) }); } catch { } }
     for (const [, pr] of this.procs) try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(pr.child.pid), '/T', '/F']); else pr.child.kill('SIGTERM'); } catch { }
     if (this.claudeProc) try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(this.claudeProc.pid), '/T', '/F']); else this.claudeProc.kill(); } catch { }
   }
@@ -575,7 +628,7 @@ class WB {
   }
   askClaude(p, prompt, harness, hmeta = {}) {
     if (this.claudeProc) { vscode.window.showWarningMessage(`워크벤치 #${this.inst}: Claude 가 아직 응답 중입니다 — 중지 후 다시 보내세요.`); return Promise.resolve(null); }
-    return new Promise(resolveDone => { let resultError = false;
+    return new Promise(resolveDone => { let resultError = false; this._htmlSeen = new Set();
     // 첨부 파일 → Claude Code 에 @path 토큰으로 전달
     const atPrefix = this.attached.length ? this.attached.map(f => `@${f.path.replace(/\\/g, '/')}`).join(' ') + '\n' : '';
     const full = atPrefix + prompt;
@@ -595,7 +648,7 @@ class WB {
     // 1.9.30(2026-10-29 사용자: VM#2 '완료' 표시 뒤에도 검증이 돌고 있었고 중단으로 소실): result 가 와도 Claude 가 띄운 자식이 살아 있으면 '완료' 가 아니라
     //   '보고 완료 · 후속 작업 진행 중'(run pending). 10초마다 다시 보고 전부 끝났을 때 '완료'. 조회 실패면 완료로 바꾸지 않고 '확인 불가' 를 적는다
     let doneMsg = null, finished = false, pendTimer = null, pendSince = 0;
-    const descText = ds => ds.map(x => `· ${x.name}(${x.pid}) ${x.cmd.slice(0, 110)}`).join('\n');
+    const descText = procDetail;
     const finish = (ok, text) => { if (finished) return; finished = true; if (pendTimer) { clearInterval(pendTimer); pendTimer = null; } this.post({ type: 'run', state: 'done', ok, text }); };
     const settle = () => {
       if (finished || !doneMsg) return;
@@ -609,12 +662,39 @@ class WB {
       if (!pendSince) {
         pendSince = Date.now();
         this.post({ type: 'run', state: 'pending', text: `${doneMsg.text} · 후속 작업 ${ds.length}개 진행 중` });
-        this.post({ type: 'chat', role: 'meta', text: `⏳ Claude 는 보고를 끝냈지만 띄워 둔 작업이 아직 돌고 있습니다 — 끝날 때까지 '완료' 로 바꾸지 않습니다. 지금 중지하면 함께 종료되어 결과가 소실됩니다:\n${descText(ds)}` });
+        this.post({ type: 'chat', role: 'meta', text: `⏳ 보고 뒤 띄워 둔 작업 ${ds.length}개 진행 중 (${procSummary(ds)}). 끝나면 '완료'로 바뀝니다. 지금 중지하면 결과가 없어집니다.`, detail: descText(ds) });
         pendTimer = setInterval(settle, 10000);
       }
     };
+    // 2026-11-18 사용자: "VM 작업 진행 중 프롬프트를 입력하면 돌고 있던 작업이 중지된다 · 클로드코드처럼 중지되지 않고 추가되도록".
+    //   입력(stdin)을 stream-json 으로 열어 두고, 실행 중에 보낸 프롬프트는 같은 프로세스에 사용자 메시지 1줄로 쓴다. Claude Code 가 진행 중인 응답의
+    //   다음 도구 경계에서 추가 지시로 반영한다(11-18 18:5x 2.1.318 실측: 도구 실행 중 보낸 지시가 같은 응답 결과 1건에 반영).
+    //   결과(result) 뒤 IDLE_MS 동안 새 출력·새 입력이 없으면 입력을 닫아 종전처럼 프로세스가 끝나게 한다.
+    const IDLE_MS = 2500; let idleTimer = null; let inputOpen = true; let afterResult = false;
+    // 2026-11-18 사용자 '숫자 답은 DASHBOARD 로 — 표현되지 않음': 같은 프로세스에 이어 넣은 질문(claudeInject)은 close 때 검사하던 첫 질문(prompt)과 달라 현황판 조건을 못 탔다
+    //   → 턴마다 그 턴의 질문(turnPrompt)으로 결과(result) 때 검사 · 한 턴 1회(turnStatusDone)
+    let turnPrompt = prompt; let turnStatusDone = false;
+    const closeInput = () => { if (!inputOpen) return; inputOpen = false; if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } try { child.stdin.end(); } catch { } };
+    const writeUser = text => { try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text }] } }) + '\n'); return true; } catch { return false; } };
+    this.claudeInject = text => {
+      if (!inputOpen || child.exitCode != null || child.killed) return false;
+      if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+      const ap = this.attached.length ? this.attached.map(f => `@${f.path.replace(/\\/g, '/')}`).join(' ') + '\n' : '';
+      if (!writeUser(ap + text)) return false;
+      turnPrompt = afterResult ? text : `${turnPrompt}
+${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
+      if (this.attached.length) { this.attached = []; this.post({ type: 'attached', files: [] }); }
+      if (logWs) try { logWs.write(`\n--- inject ${history.nowLocal().slice(11, 19)} ---\n${(ap + text).slice(0, 2000)}\n`); } catch { }
+      if (afterResult) { // 결과를 낸 뒤라면 새 응답 = 새 상황판
+        afterResult = false; doneMsg = null; finished = false; pendSince = 0; if (pendTimer) { clearInterval(pendTimer); pendTimer = null; }
+        this.post({ type: 'chat', role: 'user', text: ap + text });
+      } else this.post({ type: 'chat', role: 'meta', text: `➕ 추가 지시 — 진행 중인 응답에 이어서 반영합니다(중지 없음): ${text.replace(/\s+/g, ' ').slice(0, 160)}` });
+      return true;
+    };
     const handle = line => {
       let j; try { j = JSON.parse(line); } catch { this.out('claude', line + '\n'); return; }
+      if (j.type === 'result') { afterResult = true; if (idleTimer) clearTimeout(idleTimer); idleTimer = setTimeout(closeInput, IDLE_MS); }
+      else if (!(j.type === 'system' && j.subtype === 'thinking_tokens') && idleTimer) { clearTimeout(idleTimer); idleTimer = null; afterResult = false; }
       if (j.type === 'system' && j.session_id) {
         this.claudeSession = j.session_id;
         this.post({ type: 'session', id: this.claudeSession });
@@ -624,7 +704,7 @@ class WB {
       else if (j.type === 'assistant' && j.message && Array.isArray(j.message.content)) {
         if (j.message.model) this.post({ type: 'model', name: String(j.message.model) });
         for (const c of j.message.content) {
-          if (c.type === 'text' && c.text) { any = true; this.post({ type: 'chat', role: 'assistant', text: c.text }); }
+          if (c.type === 'text' && c.text) { any = true; this.post({ type: 'chat', role: 'assistant', text: c.text }); if (c.text.includes('@@HTML')) this.postHtmlMarks(p, c.text); }
           else if (c.type === 'tool_use') {
             // 1.8.4: 할 일 목록(TodoWrite) = Step 총수/현재 Step 의 원천 → 상황판 헤더로. 그 외 도구는 이름·요약을 분리해 Step 카드 안에 묶는다
             if (c.name === 'TodoWrite' && c.input && Array.isArray(c.input.todos)) this.post({ type: 'todos', items: c.input.todos.map(x => ({ content: String(x.content || ''), status: String(x.status || ''), active: String(x.activeForm || '') })) });
@@ -636,6 +716,7 @@ class WB {
         for (const c of j.message.content) if (c.type === 'tool_result') {
           const t = typeof c.content === 'string' ? c.content : Array.isArray(c.content) ? c.content.map(x => x.text || '').join('\n') : '';
           if (t) this.post({ type: 'chat', role: 'result', text: t.length > 1200 ? t.slice(0, 1200) + ` … (+${t.length - 1200})` : t });
+          if (t && t.includes('@@HTML')) this.postHtmlMarks(p, t);
         }
       }
       else if (j.type === 'result') {
@@ -643,6 +724,7 @@ class WB {
         if (j.is_error && j.result && !any) this.post({ type: 'chat', role: 'assistant', text: String(j.result) });
         // 1.8.4: 최종 결과 = 상황판 마감(run done) — 헤더 상태·진행바 100%·최종 보고 펼침
         // 1.9.30: 자식 프로세스가 살아 있으면 마감하지 않고 '보고 완료 · 후속 작업 진행 중' (settle 이 끝을 확인한 뒤 마감)
+        if (!turnStatusDone) { turnStatusDone = true; this.autoStatusHtml(p, (s.id || '').toUpperCase(), turnPrompt); }
         doneMsg = { ok: !j.is_error, text: `${j.is_error ? '✖ 오류' : '✓ 완료'} · ${j.num_turns || ''}턴 · ${Math.round((j.duration_ms || 0) / 1000)}s${j.total_cost_usd != null ? ` · ${Number(j.total_cost_usd).toFixed(3)}` : ''}` };
         settle();
       }
@@ -654,11 +736,13 @@ class WB {
     try { const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true }); logF = path.join(logDir, `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}_claude_wb${this.inst}.log`); logWs = fs.createWriteStream(logF); logWs.write(`$ ${p.claude} ${claudeArgs(p, this.claudeSession, overrides).join(' ')}\n--- prompt ---\n${full.slice(0, 2000)}\n--- output ---\n`); } catch { logWs = null; }
     child.stdout.on('data', d => { onData(d); if (logWs) try { logWs.write(d); } catch { } });
     child.stderr.on('data', d => { const t = d.toString('utf8'); this.out('claude', t); if (logWs) try { logWs.write('[stderr] ' + t); } catch { } for (const ln of t.split(/\r?\n/)) if (ln.trim()) { errTail.push(ln.trim().slice(0, 200)); if (errTail.length > 6) errTail.shift(); } });
+    try { child.stdin.on('error', () => { inputOpen = false; }); } catch { } // 입력을 닫은 뒤 쓰기(EPIPE)로 확장이 죽지 않게
     child.on('error', e => { errTail.push(`spawn 실패: ${e.message}`); this.out('claude', `spawn 실패: ${e.message}\n`, 'bad'); });
     { const wm = workMode(p); if (wm.db) this.post({ type: 'chat', role: 'meta', text: '🧭 작업 모드 DB MODE — DB·META 만 수정, FE·BE 는 가이드만' }); }
-    child.stdin.write(workModePrefix(p, (s.id || '').toUpperCase()) + full); child.stdin.end();
+    writeUser(workModePrefix(p, (s.id || '').toUpperCase()) + full); // 2026-11-18: 입력을 닫지 않음 — 결과 뒤 IDLE_MS 가 지나면 closeInput
     child.on('close', code => {
       if (buf.trim()) handle(buf);
+      inputOpen = false; if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } this.claudeInject = null;
       this.claudeProc = null;
       // 1.9.30: 보고 뒤 후속 작업이 돌던 중 종료 코드≠0 = 중지(taskkill /T) — 후속 작업도 함께 죽었음을 적는다. 정상 종료면 고아가 남아 있을 수 있으므로 settle 이 끝을 확인
       if (doneMsg && !finished) { if (code !== 0 && pendSince) finish(false, `⏹ 중지 — 보고 뒤 돌고 있던 후속 작업 ${Math.round((Date.now() - pendSince) / 1000)}s 만에 함께 종료됨(그 작업의 결과는 소실·재실행 필요)`); else settle(); }
@@ -670,6 +754,7 @@ class WB {
         const hint = isResume ? '이전 세션을 이어받지 못함 → "새 세션" 후 다시 보내세요' : /not logged in|authentication|401|login/i.test(why) ? 'Claude Code 로그인 만료 → 터미널에서 `claude` 실행해 다시 로그인' : /is not recognized|ENOENT|cannot find/i.test(why) ? `Claude CLI 경로 문제(${p.claude}) → 설정 vibeManager.claudePath 확인` : /ETIMEDOUT|ECONNRESET|fetch failed|network|EAI_AGAIN/i.test(why) ? '네트워크/API 연결 실패 → VPN·프록시·PC 부하 확인 후 재시도' : '"새 세션" 으로 해결되는 문제가 아닐 수 있음 — 아래 stderr 와 로그를 확인';
         this.post({ type: 'chat', role: 'meta', text: `✖ claude 종료 코드 ${code} — ${hint}\nstderr: ${why}${logF ? `\n로그: ${path.relative(p.root, logF)}` : ''}` });
       }
+      if (!turnStatusDone) { turnStatusDone = true; this.autoStatusHtml(p, (s.id || '').toUpperCase(), turnPrompt); } // 2026-11-18: 건수 현황 질문 = 답변에 현황판 표시 줄이 없어도 VM 이 현황판을 그린다(턴 결과 때 이미 했으면 생략)
       if (hdir) { try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), hdir, code, 'end'); const hm = JSON.parse(fs.readFileSync(path.join(hdir, 'meta.json'), 'utf8')); const n = (hm.changed || []).length; if (hm.scope !== 'none') this.post({ type: 'chat', role: 'meta', text: `🕒 수정 이력 저장 — 변경 ${n}개 파일 (이력 탭에서 수정전 ↔ 수정후 비교)` }); } catch { } this.post({ type: 'history', html: history.innerHtml(p, 'screen', '') }); }
       resolveDone({ code, ok: code === 0 && !resultError, error: resultError });
       setTimeout(() => this.drainQueue(), 500); // 2026-11-13: 응답이 끝나면 대기열의 다음 프롬프트를 보낸다
@@ -745,9 +830,10 @@ class WB {
     if ((this.chainN || 0) > 0) { this.post({ type: 'chat', role: 'meta', text: '⏸ 일괄 작업 중에는 지금 보내기를 할 수 없습니다 — 작업이 끝나면 대기열 순서대로 자동 전송됩니다(바로 보내려면 ⏹ 중지 후 전송).' }); return; }
     const it = this.pq.splice(i, 1)[0]; this.pq.unshift(it); this.postQueue();
     if (!this.claudeProc) { this.drainQueue(); return; }
-    let ds = []; try { ds = liveDescendants(this.claudeProc.pid) || []; } catch { }
-    this.post({ type: 'chat', role: 'meta', text: `⏭ 지금 보내기 — 진행 중인 응답을 멈추고 이 프롬프트를 보냅니다${ds.length ? `\n함께 종료되는 후속 작업 ${ds.length}개(결과 소실):\n${ds.map(x => `· ${x.name}(${x.pid}) ${String(x.cmd || '').slice(0, 110)}`).join('\n')}` : ''}` });
-    try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(this.claudeProc.pid), '/T', '/F']); else this.claudeProc.kill(); } catch { }
+    // 2026-11-18: 응답 중인 Claude 의 입력이 열려 있으면 멈추지 않고 추가 지시로 넣는다
+    if (this.claudeInject && this.claudeInject(it.text)) { this.pq.shift(); this.postQueue(); return; }
+    // 입력이 이미 닫힘(보고를 끝내고 띄운 후속 작업만 도는 중 등) = 멈추지 않고 대기열 맨 앞에 둔다 — 중지하면 후속 작업 결과가 소실된다(종전 taskkill 경로 폐지)
+    this.post({ type: 'chat', role: 'meta', text: '⏭ 지금 넣을 수 없음 — Claude 가 보고를 끝내 입력이 닫혔습니다. 멈추지 않고 대기열 맨 앞에 두었다가 프로세스가 끝나면 바로 보냅니다(즉시 보내려면 ⏹ 중지 후 전송).' });
   }
   async runChain(p, item, id, harness) {
     this.chainN = (this.chainN || 0) + 1; this.postQueue();
@@ -765,39 +851,66 @@ class WB {
     const genDir = path.join(p.genDir, id); try { fs.mkdirSync(genDir, { recursive: true }); } catch { }
     const mdPath = path.join(genDir, 'FULLRUN.md');
     const nameOf = st => st.title || (st.task ? `${st.task} ${(this.api.findTask(st.task) || {}).title || ''}`.trim() : (st.claudeOf || 'Claude'));
+    // 2026-11-19 사용자: 조건부 단계(ifJsonGt · ifPrevRan — CheckList 의 검증 보완·재수행 회차)는 처음 STEP 수에 넣지 않고 실행 조건이 맞을 때 보드에 추가한다.
+    //   번호·총 STEP 수 = 보드에 올라간 단계 기준(shown) · 조건이 안 맞아 건너뛴 조건부 단계는 번호 없이 로그 한 줄만 남긴다
+    const isCond = st => !!(st.ifJsonGt || st.ifPrevRan || st.askUser); // askUser = 사용자 승인 때만 실행(2026-11-19)
+    const condN = steps.filter(isCond).length;
+    const shown = new Set(steps.map((st, k) => (isCond(st) ? -1 : k)).filter(k => k >= 0));
+    const shownN = () => shown.size;
+    const pos = k => [...shown].filter(x => x <= k).length;
+    let fid = 0;
+    const addStep = k => { if (shown.has(k)) return; shown.add(k); const st = steps[k]; this.post({ type: 'fb', state: 'add', id: fid, step: { no: k + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional } }); };
     const writeMd = (final) => {
       const stamp = history.nowLocal ? history.nowLocal().slice(0, 16).replace('T', ' ') : new Date().toISOString();
       const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const warn = res.some(r => r.status === 'WARN');
       const holdM = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '전부 완료' 가 아니다
       const head = !final ? '⏳ 진행 중' : fail ? `✖ ${fail.no}단계에서 중단 (${fail.name})` : holdM ? `⏸ 사람 확인 필요 ${holdM}단계(Doc/e2e/_human_review.md)` : warn ? '⚠ 경고 포함 완료' : '✅ 전부 완료';
-      const rows = steps.map((st, i) => { const r = res[i]; return `| ${i + 1} | ${nameOf(st)}${st.optional ? ' (선택)' : ''}${r && r.repairs ? ` (수선 ${r.repairs}회)` : ''}${r && r.note ? ` — ${r.note}` : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; });
-      const next = fail ? `다음 할 일: ${fail.no}단계 '${fail.name}' 의 원인을 Task Log 에서 확인하고 그 단계 메뉴를 다시 실행 → 이후 단계는 이 체인을 다시 누르면 처음부터(완료 단계는 각 도구가 보존/건너뜀) 진행됩니다.` : (final ? '다음 할 일: UI Status 의 단계·E2E 타일과 Doc/gen/' + id + '/PIPELINE.md · Doc/e2e/results/_summary.md 확인' : '');
+      const rows = steps.map((st, i) => { if (!shown.has(i)) return null; const r = res[i]; return `| ${pos(i)} | ${nameOf(st)}${st.optional ? ' (선택)' : ''}${r && r.repairs ? ` (수선 ${r.repairs}회)` : ''}${r && r.note ? ` — ${r.note}` : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; }).filter(Boolean);
+      const next = fail ? `다음 할 일: ${fail.no}단계 '${fail.name}' 의 원인을 Task Log 에서 확인하고 그 단계 메뉴를 다시 실행 → 이후 단계는 이 체인을 다시 누르면 처음부터(완료 단계는 각 도구가 보존/건너뜀) 진행됩니다.` : (final ? '다음 할 일: Status 탭의 단계·E2E 타일과 Doc/gen/' + id + '/PIPELINE.md · Doc/e2e/results/_summary.md 확인' : '');
       const md = [`# FULLRUN ${id} — ${stamp} ${head}`, '', `체인: ${item.label} · 총 ${Math.round((Date.now() - t0) / 1000)}s`, '', '| # | 단계 | 결과 | exit | 소요 |', '|---|---|---|---|---|', ...rows, '', next, ''].join('\n');
       try { fs.writeFileSync(mdPath, md, 'utf8'); } catch { }
     };
     // 1.8.9: Flow 보드 — Console 탭(2026-11-13 Claude → Console 이름 변경)에 체인 전체(Step 수·현재 Step·진행바)와 Step 별 상태 카드. 작업 출력은 Task Log 에 그대로 남고 카드에는 최근 줄만
-    const fid = ++flowSeq; try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'chat', auto: true }); } catch { }
-    this.post({ type: 'fb', state: 'start', id: fid, title: item.label, screen: id, steps: steps.map((st, i) => ({ no: i + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional })), md: `Doc/gen/${id}/FULLRUN.md` });
-    this.out('task', `\n🚀 체인 시작 — ${item.label} · ${id} · ${steps.length}단계\n`, 'cmd');
+    fid = ++flowSeq; try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'chat', auto: true }); } catch { }
+    this.post({ type: 'fb', state: 'start', id: fid, title: item.label, screen: id, steps: steps.map((st, i) => ({ no: i + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional })).filter((_, i) => shown.has(i)), md: `Doc/gen/${id}/FULLRUN.md` });
+    this.out('task', `\n🚀 체인 시작 — ${item.label} · ${id} · ${shownN()}단계${condN ? ` (조건이 맞으면 최대 ${condN}단계 추가)` : ''}\n`, 'cmd');
     this.api.record(`chain:${item.chainId || item.label}`, id);
     for (let i = 0; i < steps.length; i++) {
       const st = steps[i]; const name = nameOf(st); const no = i + 1;
-      if (stopped) { res.push({ no, name, status: 'NOT_RUN', code: null, sec: 0 }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
+      if (stopped) { res.push({ no, name, status: 'NOT_RUN', code: null, sec: 0 }); if (shown.has(i)) this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
       if (st.ifMissing) { // 2026-10-22: 자료가 이미 있으면 이 단계는 건너뛴다(문서 생성 체인의 선행 분석 등)
         const why = missingInput(p, st.ifMissing, id);
-        if (!why) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: '자료 있음' }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — 자료 있음, 건너뜀\n`, ''); writeMd(false); continue; }
-        this.out('task', `\nℹ [${no}/${steps.length}] ${name} — 자료 부족(${why}) → 실행\n`, 'warn');
+        if (!why) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: '자료 있음' }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${pos(i)}/${shownN()}] ${name} — 자료 있음, 건너뜀\n`, ''); writeMd(false); continue; }
+        this.out('task', `\nℹ [${pos(i)}/${shownN()}] ${name} — 자료 부족(${why}) → 실행\n`, 'warn');
       }
       if (st.ifExists) { // 2026-11-14: 입력 자료가 있어야 실행하는 단계(저장 시나리오 정의·TO-BE 호출 기록) — 없으면 SKIP 하고 사유를 남긴다
         const why = missingInput(p, st.ifExists, id);
-        if (why) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — ${why}, 건너뜀\n`, ''); writeMd(false); continue; }
+        if (why) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${pos(i)}/${shownN()}] ${name} — ${why}, 건너뜀\n`, ''); writeMd(false); continue; }
+      }
+      if (st.ifJsonGt) { // 2026-11-18: JSON 값이 기준보다 클 때만 실행(예 미검증 처리 대상 actionable > 0 → 🧪 검증 보완) · 파일이 없거나 이번 체인 전 파일이면 SKIP
+        const c = st.ifJsonGt; const fp = String(c.file || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root); let v = null, fresh = false;
+        try { fresh = fs.statSync(fp).mtimeMs >= t0 - 1000; v = String(c.key || '').split('.').reduce((o, k) => (o == null ? o : o[k]), JSON.parse(fs.readFileSync(fp, 'utf8'))); } catch { }
+        const go = fresh && typeof v === 'number' && v > Number(c.gt || 0);
+        if (!go) { const why = !fresh ? `${path.relative(p.root, fp)} 이번 실행 결과 없음` : (c.skipNote ? `${c.skipNote}(${c.key} = ${v})` : `${c.key} = ${v}`); res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.out('task', `\n⏭ 추가 단계 없음 · ${name} — ${why}\n`, ''); writeMd(false); continue; }
+        if (!st.askUser) addStep(i); this.out('task', `\nℹ [${pos(i)}/${shownN()}] ${name} — ${c.key} = ${v} → 단계 추가·실행\n`, 'warn');
+      }
+      if (st.ifPrevRan) { // 2026-11-18: 바로 앞 단계가 건너뜀(SKIP)이 아닐 때만 실행 — 검증 보완을 안 했으면 CheckList 재수행도 안 한다
+        const pr = res[i - 1];
+        if (!pr || pr.status === 'SKIP' || pr.status === 'NOT_RUN') { const why = st.skipNote || `앞 단계 ${i} ${pr ? pr.status : '없음'}`; res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.out('task', `\n⏭ 추가 단계 없음 · ${name} — ${why}\n`, ''); writeMd(false); continue; }
+        if (!st.askUser) addStep(i);
+      }
+      if (st.askUser) { // 2026-11-19 사용자: 메뉴에서 직접 실행한 🧪 미검증 해소는 보완까지만 — CheckList 재수행은 사용자가 승인할 때만(창 닫기·취소 = 실행 안 함)
+        const yes = st.askYes || '실행'; let ans;
+        try { ans = await vscode.window.showInformationMessage(substQ(st.askUser, { root: p.root, id }), { modal: true }, yes); } catch { ans = undefined; }
+        if (ans !== yes) { const why = '사용자 승인 안 함'; res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.out('task', `\n⏭ 추가 단계 없음 · ${name} — ${why}\n`, ''); writeMd(false); continue; }
+        addStep(i); this.out('task', `\nℹ [${pos(i)}/${shownN()}] ${name} — 사용자 승인 → 단계 추가·실행\n`, 'warn');
       }
       if (st.ifOk) { // 2026-11-14: 앞 단계(작업 id)가 OK 일 때만 실행 — 저장 연습이 통과해야 저장 실행
         const di = steps.findIndex((x, k) => k < i && x.task === st.ifOk);
         if (di >= 0 && res[di] && res[di].status !== 'OK') {
           const why = `앞 단계 ${di + 1} ${res[di].status}`;
           res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' });
-          this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — ${why}, 건너뜀\n`, 'warn'); writeMd(false); continue;
+          this.out('task', `\n⏭ [${pos(i)}/${shownN()}] ${name} — ${why}, 건너뜀\n`, 'warn'); writeMd(false); continue;
         }
       }
       { // 2026-10-22: CRUD(S7.crud) 가 OK 가 아니면(실패·경고) 권한별 CRUD(S7.authcrud) 는 SKIP 하고 다음 단계로
@@ -805,15 +918,15 @@ class WB {
         const di = dep ? steps.findIndex((x, k) => k < i && x.task === `S7.${dep}`) : -1;
         if (di >= 0 && res[di] && res[di].status !== 'OK') {
           res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: `${dep} ${res[di].status} → 실행 안 함` }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' });
-          this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — SKIP (${dep} ${res[di].status})\n`, 'warn'); writeMd(false); continue;
+          this.out('task', `\n⏭ [${pos(i)}/${shownN()}] ${name} — SKIP (${dep} ${res[di].status})\n`, 'warn'); writeMd(false); continue;
         }
       }
       // 1.9.37: DB MODE 는 FE 를 만들지 않으므로 페이지가 없는 화면의 E2E 는 실행할 대상이 없다(CheckList 단계는 건너뛰지 않는다)
       if (/^S7\./.test(st.task || '') && workMode(p).db) {
         const pd = this.api.pageDirOf(id);
-        if (!pd || !fs.existsSync(pd)) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: 'DB MODE · FE 페이지 없음' }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — DB MODE · FE 페이지 없음, 건너뜀\n`, 'warn'); writeMd(false); continue; }
+        if (!pd || !fs.existsSync(pd)) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: 'DB MODE · FE 페이지 없음' }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${pos(i)}/${shownN()}] ${name} — DB MODE · FE 페이지 없음, 건너뜀\n`, 'warn'); writeMd(false); continue; }
       }
-      this.out('task', `\n── [${no}/${steps.length}] ${name}\n`, 'cmd'); const s0 = Date.now(); let code = null, cancelled = false;
+      this.out('task', `\n── [${pos(i)}/${shownN()}] ${name}\n`, 'cmd'); const s0 = Date.now(); let code = null, cancelled = false;
       this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
       const kind = st.task ? String(st.task).split('.').pop() : '';
       // 단계 1회 실행(작업 또는 Claude) + verify — 1.9.7: 수선 뒤 재실행을 위해 함수로 분리
@@ -827,7 +940,7 @@ class WB {
             const q = st.claudeOf ? all.find(x => x.label === st.claudeOf || x.label_en === st.claudeOf) : null;
             const prompt = st.claude || (q && q.prompt);
             if (!prompt) { this.out('task', `프롬프트 없음: ${st.claudeOf || '(claude)'}\n`, 'bad'); c = 2; }
-            else { const r = await this.askClaudeWhenIdle(p, substQ(prompt, { root: p.root, id, kind, step: name }), harness !== false, 60 * 60 * 1000, `[${no}/${steps.length}] ${name}`); c = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) { cancelled = true; this.out('task', `⛔ [${no}/${steps.length}] ${name} 취소 — Claude 를 쓸 수 없음(다른 응답이 끝나지 않음)\n`, 'bad'); } }
+            else { const r = await this.askClaudeWhenIdle(p, substQ(prompt, { root: p.root, id, kind, step: name }), harness !== false, 60 * 60 * 1000, `[${pos(i)}/${shownN()}] ${name}`); c = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) { cancelled = true; this.out('task', `⛔ [${pos(i)}/${shownN()}] ${name} 취소 — Claude 를 쓸 수 없음(다른 응답이 끝나지 않음)\n`, 'bad'); } }
           }
         } catch (e) { c = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
         // 1.9.5: 단계 결과 검증(verify) — 종료코드 0 이어도 산출물이 없으면 실패로 본다(E2E 가 시작도 못 했는데 '완료' 로 닫힌 SCP0100 사고)
@@ -850,9 +963,11 @@ class WB {
         if (!rq || !rq.prompt) this.out('task', `⚠ 수선 프롬프트 없음(quick.json): ${st.repair.claudeOf}\n`, 'warn');
         else for (let r = 1; r <= rounds && code !== 0 && !cancelled; r++) {
           // 2026-11-04: repair.on='verify' — 판정 결과(조치 필요 남음)일 때만 보완. 실행 실패(서버 미기동·CheckList 미생성)는 화면 보완 대상이 아니다
-          if (st.repair.on === 'verify' && failFrom !== 'verify') { this.out('task', `⏭ [${no}/${steps.length}] ${name} — 실행 실패(exit ${code})라 보완하지 않음(원인 확인 후 다시 실행)${failWhy ? `\n   원인: ${failWhy.split('\n').join('\n   ')}` : ''}\n`, 'bad'); break; }
+          if (st.repair.on === 'verify' && failFrom !== 'verify') { this.out('task', `⏭ [${pos(i)}/${shownN()}] ${name} — 실행 실패(exit ${code})라 보완하지 않음(원인 확인 후 다시 실행)${failWhy ? `\n   원인: ${failWhy.split('\n').join('\n   ')}` : ''}\n`, 'bad'); break; }
           repairs++;
-          this.out('task', `\n🩹 [${no}/${steps.length}] ${name} 실패(exit ${code}) → 수선 ${r}/${rounds}: ${rq.label}\n`, 'warn');
+          this.out('task', `\n🩹 [${pos(i)}/${shownN()}] ${name} 실패(exit ${code}) → 수선 ${r}/${rounds}: ${rq.label}\n`, 'warn');
+          // 2026-11-19 사용자: 단계 안에서 이어지는 작업 = 하위 단계(카드 안 '단계-하위' 목록 · 진행 표시는 하위 단계 기준)
+          this.post({ type: 'fb', state: 'sub', id: fid, no, name: `${rq.label} ${r}/${rounds}`, prev: failFrom === 'verify' ? 'warn' : 'bad' });
           this.post({ type: 'fb', state: 'step', id: fid, no, status: 'REPAIR', round: r, rounds });
           this.post({ type: 'chat', role: 'meta', text: `🩹 ${name} 실패 → 수선 ${r}/${rounds} (${rq.label})` });
           const rr = await this.askClaudeWhenIdle(p, substQ(rq.prompt, { root: p.root, id, kind, step: name, round: r }), harness !== false, 60 * 60 * 1000, `수선 ${r}/${rounds}`);
@@ -871,7 +986,8 @@ class WB {
             }
           }
           if (xids.length) { // 시험 기준(E2E 생성기·스펙) 보정 — 근거가 확인된 기대값 결함 항목만 · 전후 테스트 약화 검사
-            this.out('task', `🔧 [${no}/${steps.length}] ${name} — 시험 기준 보정(근거 확인 항목 ${xids.join(',')})\n`, 'warn');
+            this.out('task', `🔧 [${pos(i)}/${shownN()}] ${name} — 시험 기준 보정(근거 확인 항목 ${xids.join(',')})\n`, 'warn');
+            this.post({ type: 'fb', state: 'sub', id: fid, no, name: `🔧 시험 기준 보정 ${r}`, prev: rr.ok ? 'done' : 'bad' });
             await this.weakenCheck(p, id, '--snapshot');
             const xr = await this.askClaudeWhenIdle(p, substQ(rq.expectPrompt, { root: p.root, id, kind, step: name, round: r, xids: xids.join(',') }), harness !== false, 60 * 60 * 1000, `시험 기준 보정 ${r}`);
             if (!xr) { cancelled = true; this.out('task', `⛔ 시험 기준 보정 취소 — Claude 를 쓸 수 없음 → 단계 CANCEL\n`, 'bad'); break; }
@@ -879,8 +995,18 @@ class WB {
             const w = await this.weakenCheck(p, id, '--compare');
             if (w.state !== 'completed') { weakened = true; hold.push(w.state === 'error' ? `테스트 약화 검사 불가(${w.why || '-'})` : `테스트 약화 의심 ${(w.summary && w.summary.weakened) || '?'}건(Doc/gen/${id}/E2E_EXPECTFIX.result.json)`); }
           }
-          this.out('task', `↻ [${no}/${steps.length}] ${name} 재실행 (수선 ${r} 뒤)\n`, 'cmd');
+          this.out('task', `↻ [${pos(i)}/${shownN()}] ${name} 재실행 (수선 ${r} 뒤)\n`, 'cmd');
           this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
+          // 2026-11-18 사용자: 미검증 해소 = 전체 목록 → 일괄 보완 → 전체 검증 1회. repair.rerunTask(예 S8.verify = CheckList 전체)가 있으면 보완 뒤 그 작업을 먼저 돌리고 이 단계(분류)를 다시 실행한다
+          if (st.repair.rerunTask) {
+            this.out('task', `↻ [${pos(i)}/${shownN()}] 보완 ${r} 뒤 전체 재검증: ${st.repair.rerunTask}\n`, 'cmd');
+            this.post({ type: 'fb', state: 'sub', id: fid, no, name: `전체 재검증: ${st.repair.rerunTask} ${((this.api.findTask(st.repair.rerunTask) || {}).title || '').slice(0, 40)}`.trim(), prev: rr.ok ? 'done' : 'bad' });
+            this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
+            const rc = await this.runTaskStreaming(p, st.repair.rerunTask, id, { noConfirm: true, inFlow: true });
+            const okRc = rc === 0 || (Array.isArray(st.repair.rerunOkCodes) && st.repair.rerunOkCodes.includes(rc));
+            if (!okRc) { this.out('task', `✖ 전체 재검증 ${st.repair.rerunTask} 실패(exit ${rc}) — 분류는 직전 결과로 다시 실행\n`, 'bad'); }
+            this.post({ type: 'fb', state: 'sub', id: fid, no, name: `다시 실행 (보완 ${r} 뒤)`, prev: okRc ? 'done' : 'bad' });
+          } else this.post({ type: 'fb', state: 'sub', id: fid, no, name: `다시 실행 (보완 ${r} 뒤)`, prev: rr.ok ? 'done' : 'bad' });
           code = await runOnce();
         }
       }
@@ -895,7 +1021,7 @@ class WB {
       const note = [note0, okCodeNote, why ? `원인: ${why.split('\n')[0]}` : ''].filter(Boolean).join(' · ');
       res.push({ no, name: `${repairs ? `${name} (수선 ${repairs}회)` : name}${note ? ' — ' + note : ''}`, status, code, sec, repairs, note, why });
       this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec, repairs });
-      this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${no}/${steps.length}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''}${repairs ? ` · 수선 ${repairs}회` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
+      this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${pos(i)}/${shownN()}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''}${repairs ? ` · 수선 ${repairs}회` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
       if (status === 'FAIL' || status === 'CANCEL') stopped = true;
       writeMd(false);
     }
@@ -904,7 +1030,7 @@ class WB {
     if (chHist) try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), chHist, fail ? 1 : 0); } catch { } const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
     const repN = res.reduce((n, r) => n + (r.repairs || 0), 0);
     const holdN = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '✅ 완료' 로 보고하지 않는다
-    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}` : ''} · ${total}s${fail.why && fail.why.includes('\n') ? `\n원인:\n${fail.why}` : ''}` : `${holdN ? '⏸ 체인 종료(사람 확인 필요)' : '✅ 체인 완료'} — ${steps.length}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}(Doc/e2e/_human_review.md)` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
+    const summary = fail ? `✖ 체인 중단 — ${pos(fail.no - 1)}/${shownN()} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}` : ''} · ${total}s${fail.why && fail.why.includes('\n') ? `\n원인:\n${fail.why}` : ''}` : `${holdN ? '⏸ 체인 종료(사람 확인 필요)' : '✅ 체인 완료'} — ${shownN()}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}(Doc/e2e/_human_review.md)` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
     this.out('task', `\n${summary}\n   → ${path.relative(p.root, mdPath)}\n`, fail ? 'bad' : 'ok');
     this.post({ type: 'fb', state: 'end', id: fid, ok: !fail && !holdN, warn: res.some(r => r.status === 'WARN' || r.status === 'HOLD'), summary, sec: total });
     try { (fail || holdN ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
@@ -916,6 +1042,11 @@ class WB {
     const api = this.api;
     const task0 = api.findTask(taskId); if (!task0) { this.out('task', `작업 없음: ${taskId}\n`, 'bad'); return null; }
     if (GEN_TASK.test(taskId) && dbModeBlock(p, `${taskId} ${task0.title || ''}`.trim(), t => this.out('task', t, 'bad'))) return null; // 2026-11-12: DB MODE = 일괄 생성 작업 차단
+    // 2026-11-18 사용자: CheckList 를 단독으로 실행해도(Flow 단계 버튼 등) 미검증 해소까지 이어서 — quick.json 체인 'checklist'(CheckList → 미검증 분류·재측정 → 🧪 검사엔진 보완)로 실행
+    if (taskId === 'S8.verify' && !opts.inFlow && !opts.plain && id) {
+      const ch = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.kind === 'chain' && x.chainId === 'checklist');
+      if (ch) { this.out('task', `ℹ CheckList → 미검증 해소까지 이어서 실행(체인 ${ch.label})\n`, 'cmd'); await this.runChain(p, ch, id, effectiveHarness(undefined, null, ch, id)); return 0; }
+    }
     const task = opts.noConfirm && task0.confirm ? Object.assign({}, task0, { confirm: '' }) : task0;
     if (task.kind === 'claude') {
       const vars0 = await api.collectInputs(task, { id, ids: id }); if (!vars0) return;
@@ -1201,11 +1332,32 @@ body.lsdrag{cursor:row-resize;user-select:none}
 .loghead .latest{font-size:10px;padding:1px 6px;margin:0}
 .logbody{flex:1;overflow:auto;background:var(--vscode-editor-background);border:1px solid var(--b);padding:6px;white-space:pre-wrap;font-family:var(--vscode-editor-font-family);font-size:12px;min-height:0}
 #logwrap .loghead .latest{margin-left:auto}
+/* 2026-11-18: Log 하위 탭(Task · FE · BE) + 공통 최신·지우기 */
+.ltabs{display:flex;align-items:flex-end;gap:4px;padding:2px 2px 0;border-bottom:1px solid var(--b);flex:none}
+.ltabs .ltl{flex:1;min-width:0;display:flex;gap:2px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.ltabs .ltb{background:transparent;color:var(--vscode-foreground);border:1px solid transparent;border-bottom:none;border-radius:4px 4px 0 0;padding:3px 10px;font-size:11px;cursor:pointer;opacity:.7;display:flex;align-items:center;gap:6px;margin:0;white-space:nowrap;flex:none}
+.ltabs .ltb.on{opacity:1;font-weight:700;border-color:var(--b);background:var(--vscode-editor-background)}
+.ltabs .ltb .logst{opacity:.65;font-weight:400;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ltabs .ltb .logst:empty{display:none}
+.ltabs .ltb .nb{font-size:9px;background:var(--vscode-badge-background);color:var(--vscode-badge-foreground);border-radius:6px;padding:0 4px}
+.ltabs .latest{font-size:10px;padding:1px 6px;margin:0 0 2px;white-space:nowrap;flex:none}
+#logs .lpane{flex:1;min-height:0;border-top:none}
+#history{flex:1;display:flex;flex-direction:column;min-height:0}
+#history .hpane{border-top:none}
+.htabs .ltb svg{width:12px;height:12px}
 #chat,#status,#flow,#hist,#thist{white-space:normal;font-family:var(--vscode-font-family)}
 .m{margin:4px 0;padding:4px 6px;border-radius:4px;white-space:pre-wrap}
 .m.user{background:var(--vscode-input-background);border-left:3px solid var(--vscode-focusBorder)}
 .m.assistant{border-left:3px solid #3fb950}
 .m.meta{opacity:.6;font-size:11px}
+.m.mdet summary{cursor:pointer;white-space:normal}
+.m.mdet .mb{white-space:pre-wrap;font-size:10.5px;margin:3px 0 0 14px;max-height:240px;overflow:auto;font-family:var(--vscode-editor-font-family)}
+.m.htmlv{padding:0;border:1px solid var(--vscode-panel-border,#8884);border-radius:4px;white-space:normal;overflow:hidden;margin:6px 0}
+.m.htmlv .hvh{display:flex;align-items:center;gap:8px;padding:3px 8px;background:var(--vscode-sideBarSectionHeader-background,#8882);font-size:11.5px}
+.m.htmlv .hvh b{font-weight:600}.m.htmlv .hvh .hvt{opacity:.65}.m.htmlv .hvh .sp{flex:1}
+.m.htmlv .hvh button{font-size:11px;padding:1px 8px;cursor:pointer}
+.m.htmlv iframe{display:block;width:100%;height:480px;border:0;background:transparent}
+.m.htmlv.fold iframe{display:none}
 details.m{padding:3px 6px;background:transparent;opacity:1;max-height:none;overflow:visible}
 details.m summary{cursor:pointer;list-style:revert;font-size:11px;opacity:.8;white-space:pre-wrap;font-weight:400}
 details.m[open] summary{opacity:1;font-weight:600}
@@ -1293,6 +1445,7 @@ details.bfinal summary{cursor:pointer;font-weight:700;font-size:12px}
 body.vscode-light .ftail{background:rgba(0,0,0,calc(.035*var(--kf,1)))}
 .ftail:empty{display:none}
 .e2elist{margin:0 0 4px;font-size:11px;max-height:240px;overflow:auto}
+.subl{margin:2px 0 4px;font-size:11px}.subrow{padding:1px 0;opacity:.85}.subrow.run{opacity:1;font-weight:600}.subrow.bad{color:var(--vscode-errorForeground,#f85149)}.subrow.warn{color:var(--vscode-editorWarning-foreground,#d29922)}
 .e2elist .e2ehead{font-weight:700;margin:2px 0 3px}
 .e2elist .e2erow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 0}
 .e2elist .e2erow.fail{color:#f85149}.e2elist .e2erow.flaky{color:#d29922}.e2elist .e2erow.skip{opacity:.6}
@@ -1327,6 +1480,8 @@ table.csvt.folder a{cursor:pointer;color:var(--vscode-textLink-foreground,#58a6f
 table.difft tr.dadd td.cd{background:rgba(63,185,80,.15)}table.difft tr.ddel td.cd{background:rgba(248,81,73,.15)}table.difft tr.gap td{text-align:center;opacity:.45;font-size:10px;padding:2px}table.difft tr.ctxh{display:none}.diffw.all table.difft tr.ctxh{display:table-row}.diffw.all table.difft tr.gap{display:none}
 .imgw{display:flex;justify-content:center;padding:10px}.imgw img{max-width:100%;border:1px solid var(--b)}
 details.bfinal .ft{white-space:pre-wrap;font-size:12px;max-height:420px;overflow:auto;margin-top:6px;padding:6px 8px;border-left:3px solid #3fb950;background:var(--vscode-editor-background)}
+.md{white-space:normal;line-height:1.5}.md>:first-child{margin-top:0}.md>:last-child{margin-bottom:0}.md .mdp{margin:4px 0}.md .mdh{font-weight:700;margin:10px 0 4px}.md .mdh1{font-size:1.25em}.md .mdh2{font-size:1.15em}.md .mdh3{font-size:1.05em}.md .mdh4{font-size:1em}.md .mdlist{margin:3px 0;padding-left:22px}.md li{margin:2px 0}.md .mdc{font-family:var(--vscode-editor-font-family);font-size:.95em;padding:0 4px;border-radius:3px;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.18))}.md .mdpre{margin:6px 0;padding:6px 8px;overflow:auto;border-radius:4px;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.15));font-family:var(--vscode-editor-font-family);font-size:11px;white-space:pre}.md .mdtw{overflow:auto;margin:6px 0}.md .mdt{border-collapse:collapse;font-size:11.5px}.md .mdt th,.md .mdt td{border:1px solid var(--vscode-panel-border,rgba(127,127,127,.35));padding:3px 8px;text-align:left;vertical-align:top}.md .mdt th{font-weight:600;background:var(--vscode-editorWidget-background,rgba(127,127,127,.12))}.md .mdq{margin:4px 0;padding:2px 8px;border-left:3px solid var(--vscode-textBlockQuote-border,#888);opacity:.9}.md .mdhr{border:0;border-top:1px solid var(--vscode-panel-border,#8884);margin:8px 0}.md a.mdl{color:var(--vscode-textLink-foreground);cursor:pointer;text-decoration:none}.md a.mdl:hover{text-decoration:underline}.md b{font-weight:700}
+details.bfinal .ft.md{white-space:normal}
 
 /* 1.8.3: UI Status 대시보드 */
 .dash{display:flex;flex-direction:column;gap:10px;padding:2px}
@@ -1456,23 +1611,26 @@ ${flow.FLOW_CSS}
 </style></head><body>
 <div id="top">
   <!-- 1.8.0: '작업 출력' → Log. Log 탭 = BE Log | FE Log 두 창(서버 기동 스트림) · Task Log 탭 = 그 외 작업(gap.js·pipeline 등) 출력. 각 창에 ⤓ 최신 버튼 -->
-  <div class="rtabs"><button class="rtb on" data-t="chat">${TI.chat}<span>Console</span></button><button class="rtb" data-t="logs">${TI.logs}<span>Log</span></button><button class="rtb" data-t="status">${TI.status}<span>UI Status</span></button><button class="rtb" data-t="hist">${TI.hist}<span>Revision</span></button><button class="rtb" data-t="thist">${TI.thist}<span>Task History</span></button><span id="dtabs"></span><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
+  <div class="rtabs"><button class="rtb on" data-t="chat">${TI.chat}<span>Console</span></button><button class="rtb" data-t="status">${TI.status}<span>Status</span></button><button class="rtb" data-t="logs">${TI.logs}<span>Log</span></button><button class="rtb" data-t="history">${TI.hist}<span>History</span></button><span id="dtabs"></span><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
   <div id="chat">
     <div class="hint">${t(p, 'chat_hint')}</div>
     <div id="thinking" class="thinking"><span class="pulse">✻</span><span>Thinking…</span></div>
   </div>
-  <!-- 2026-11-17 사용자: Log·Task Log 탭 통합 — Log 탭 안에 Task · FE · BE 세로 배치 + 사이 분할 막대(.lsplit)로 높이 조절 -->
+  <!-- 2026-11-18 사용자: Log 탭 안 Task · FE · BE 를 하위 탭으로(세로 3칸·분할 막대 폐지) · ⤓ 최신 · 🧹 지우기 = 선택된 하위 탭에 공통 적용 -->
   <div id="logs" style="display:none">
-    <div id="logwrap" class="logpane" data-lp="task"><div class="loghead"><span class="logttl">${t(p, 'tasklog')}</span><button class="sec latest" data-for="log" title="${p.language === 'ko' ? '마지막(최신) 로그로 이동' : 'Jump to latest log'}">${t(p, 'latest')}</button></div><div id="log" class="logbody"></div></div>
-    <div class="lsplit" role="separator" aria-orientation="horizontal" title="${p.language === 'ko' ? '끌어서 높이 조절 · 두 번 누르면 같은 높이' : 'Drag to resize · double-click to reset'}"></div>
-    <div class="logpane" data-lp="fe"><div class="loghead"><span class="logttl">${t(p, 'felog')}</span><span class="logst" id="felogst"></span><button class="sec latest" data-for="felog" title="${p.language === 'ko' ? '마지막(최신) 로그로 이동' : 'Jump to latest log'}">${t(p, 'latest')}</button><button class="sec latest" data-clear="felog" title="FE Log 지우기">🧹</button></div><div id="felog" class="logbody"></div></div>
-    <div class="lsplit" role="separator" aria-orientation="horizontal" title="${p.language === 'ko' ? '끌어서 높이 조절 · 두 번 누르면 같은 높이' : 'Drag to resize · double-click to reset'}"></div>
-    <div class="logpane" data-lp="be"><div class="loghead"><span class="logttl">${t(p, 'belog')}</span><span class="logst" id="belogst"></span><button class="sec latest" data-for="belog" title="${p.language === 'ko' ? '마지막(최신) 로그로 이동' : 'Jump to latest log'}">${t(p, 'latest')}</button><button class="sec latest" data-clear="belog" title="BE Log 지우기">🧹</button></div><div id="belog" class="logbody"></div></div>
+    <div class="ltabs"><span class="ltl" role="tablist"><button class="ltb on" role="tab" data-lp="log">${t(p, 'tasklog')}</button><button class="ltb" role="tab" data-lp="felog">${t(p, 'felog')}<span class="logst" id="felogst"></span></button><button class="ltb" role="tab" data-lp="belog">${t(p, 'belog')}<span class="logst" id="belogst"></span></button></span><button class="sec latest" id="logLatest" title="${p.language === 'ko' ? '선택한 로그의 마지막(최신) 줄로 이동' : 'Jump to the latest line of the selected log'}">${t(p, 'latest')}</button><button class="sec latest" id="logClear" title="${p.language === 'ko' ? '선택한 로그 지우기' : 'Clear the selected log'}">🧹 ${p.language === 'ko' ? '지우기' : 'Clear'}</button></div>
+    <div id="log" class="logbody lpane"></div>
+    <div id="felog" class="logbody lpane" style="display:none"></div>
+    <div id="belog" class="logbody lpane" style="display:none"></div>
   </div>
   <div id="status" style="display:none">${statusHtml(p, state.id)}</div>
   <div id="flow" style="display:none"><div class="hint">${t(p, 'flow_hint')}</div></div>
-  <div id="hist" style="display:none"><div class="hint">${t(p, 'hist_hint')}</div></div>
-  <div id="thist" style="display:none"><div class="hint">Task History 탭 선택 시 자동 로드됩니다…</div></div>
+  <!-- 2026-11-18 사용자: Revision · Task History 를 History 탭 하나로 — 안에 Revision · Task 하위 탭 -->
+  <div id="history" style="display:none">
+    <div class="ltabs htabs"><span class="ltl" role="tablist"><button class="ltb on" role="tab" data-hp="hist">${TI.hist}<span>Revision</span></button><button class="ltb" role="tab" data-hp="thist">${TI.thist}<span>Task</span></button></span></div>
+    <div id="hist" class="hpane"><div class="hint">${t(p, 'hist_hint')}</div></div>
+    <div id="thist" class="hpane" style="display:none"><div class="hint">Task 탭 선택 시 자동 로드됩니다…</div></div>
+  </div>
 </div>
 <div id="bottom">
   <div id="attached"></div>
@@ -1502,13 +1660,13 @@ ${flow.FLOW_CSS}
         <option value="bypassPermissions" title="Bypass — auto-approve all (bypassPermissions)"${curMode === 'bypassPermissions' ? ' selected' : ''}>Bypass</option>
       </select></span>
       <button class="pgo" id="stop" aria-label="${esc(noEm(t(p, 'stop')))}" title="실행 중인 자식 프로세스·Claude 요청 모두 중지">${PI.stop}</button>
-      <button class="pgo" id="send" aria-label="${esc(noEm(t(p, 'send')))}" title="프롬프트를 Claude 에 전송 (Enter · 줄바꿈 Shift+Enter) — 실행 중이면 대기열에 넣고 끝나면 자동 전송">${PI.up}</button>
+      <button class="pgo" id="send" aria-label="${esc(noEm(t(p, 'send')))}" title="프롬프트를 Claude 에 전송 (Enter · 줄바꿈 Shift+Enter) — Claude 응답 중이면 중지 없이 그 응답에 추가 지시로 반영(일괄 작업의 작업 단계 중이면 대기열)">${PI.up}</button>
     </div></div>
   </div>
   <div id="pq" aria-live="polite"></div>
 </div>
 <script>
-const PQ_L=${JSON.stringify(p.language === 'en' ? { head: 'Queued — sent in order when the current run ends', now: 'Send now', nowTip: 'Stop the current response and send this prompt now (same session)', del: 'Remove', chain: 'Batch run in progress — queued prompts are sent after it ends' } : { head: '대기 중 — 현재 작업이 끝나면 순서대로 자동 전송', now: '지금 보내기', nowTip: '진행 중인 응답을 멈추고 이 프롬프트를 바로 보냅니다(같은 세션)', del: '삭제', chain: '일괄 작업 중 — 끝난 뒤 대기열을 보냅니다' })};
+const PQ_L=${JSON.stringify(p.language === 'en' ? { head: 'Queued — sent in order when the current run ends', now: 'Send now', nowTip: 'Add this prompt to the running response now (no stop)', del: 'Remove', chain: 'Batch run in progress — queued prompts are sent after it ends' } : { head: '대기 중 — 현재 작업이 끝나면 순서대로 자동 전송', now: '지금 보내기', nowTip: '진행 중인 응답을 멈추지 않고 이 프롬프트를 추가 지시로 바로 넣습니다', del: '삭제', chain: '일괄 작업 중 — 끝난 뒤 대기열을 보냅니다' })};
 const vscode=acquireVsCodeApi();const $=i=>document.getElementById(i);
 const UI_SEND=${JSON.stringify(t(p, 'send'))},UI_SENDING=${JSON.stringify(t(p, 'sending'))},UI_SESS=${JSON.stringify(t(p, 'sess'))},UI_NOSESS=${JSON.stringify(t(p, 'nosess'))},UI_NOID=${JSON.stringify(t(p, 'noid'))},UI_AFTERSEND=${JSON.stringify(t(p, 'after_send'))},UI_BD=${JSON.stringify(t(p, 'bd'))},UI_TB=${JSON.stringify(t(p, 'tb'))};
 let CUR_ID=${JSON.stringify(String(state.id || ''))};
@@ -1528,34 +1686,35 @@ $('model').addEventListener('change',()=>{const v=$('model').value;if(v==='__cus
 syncModelInfo();
 // 1.9.15: 자동 이벤트는 보고 있는 탭을 바꾸지 않고 그 탭 헤더에 'N' 표시(사용자 지시 2026-10-22). 탭을 열면 표시 제거
 function curTab(){const b=document.querySelector('.rtabs .rtb.on');return b?b.dataset.t:'';}
-function markNew(t){if(t==='log')t='logs';if(!t||curTab()===t)return;const b=document.querySelector('.rtabs .rtb[data-t="'+t+'"]');if(!b||b.querySelector('.nb'))return;const n=document.createElement('span');n.className='nb';n.textContent='N';b.appendChild(n);}
+function markNew(t){if(t==='log')t='logs';if(t==='hist'||t==='thist')t='history';if(!t||curTab()===t)return;const b=document.querySelector('.rtabs .rtb[data-t="'+t+'"]');if(!b||b.querySelector('.nb'))return;const n=document.createElement('span');n.className='nb';n.textContent='N';b.appendChild(n);}
 function showTab(t){
   if(t==='log')t='logs'; // 2026-11-17: Task Log 탭은 Log 탭 안으로 통합 — 기존 'log' 호출은 Log 탭으로
+  if(t==='hist'||t==='thist'){histPick(t);t='history';} // 2026-11-18: Revision·Task History → History 탭 하위 탭
   const nb=document.querySelector('.rtabs .rtb[data-t="'+t+'"] .nb');if(nb)nb.remove();
   if(t.startsWith('t:')){showDynTab(t);if(t==='t:flow')vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));return;}
   document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
-  [['logs','logs'],['chat','chat'],['status','status'],['hist','hist'],['thist','thist']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
-  if(t==='logs'){['log','felog','belog'].forEach(scrollLatest);}
-  if(t==='hist'||t==='thist') vscode.postMessage(Object.assign({type:'history:refresh',view:t==='thist'?'task':'rev',mode:'date',sel:''},st()));
+  [['logs','logs'],['chat','chat'],['status','status'],['history','history']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
+  if(t==='logs'){scrollLatest(logCur());const n=document.querySelector('.ltabs .ltb.on .nb');if(n)n.remove();}
+  if(t==='history'){if(!HSEL)vscode.postMessage(Object.assign({type:'history:refresh',view:histCur()==='thist'?'task':'rev',mode:'date',sel:''},st()));HSEL=false;}
   else if(t==='status') vscode.postMessage(Object.assign({type:'status'},st()));
 }
 document.querySelectorAll('.rtabs .rtb').forEach(b=>b.onclick=()=>showTab(b.dataset.t));
-// 2026-11-17: Log 탭 분할 막대 — 끌면 위·아래 두 칸의 높이를 나눠 갖고(최소 48px), 두 번 누르면 3칸 같은 높이. 비율은 웹뷰 상태(logSplit)에 저장
-(function(){const box=$('logs');if(!box)return;const panes=[...box.querySelectorAll(':scope > .logpane')];const MIN=48;
-  const apply=r=>panes.forEach((p,i)=>{p.style.flex=(r&&r[i]>0?r[i]:1)+' 1 0';});
-  const saveR=()=>{try{const tot=panes.reduce((a,p)=>a+p.getBoundingClientRect().height,0)||1;vscode.setState(Object.assign({},vscode.getState()||{},{logSplit:panes.map(p=>+(p.getBoundingClientRect().height/tot).toFixed(4))}));}catch(_){}};
-  try{apply(((vscode.getState()||{}).logSplit)||null);}catch(_){apply(null);}
-  box.querySelectorAll(':scope > .lsplit').forEach(sp=>{
-    const a=sp.previousElementSibling,b=sp.nextElementSibling;
-    sp.addEventListener('dblclick',()=>{apply(null);saveR();});
-    sp.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();sp.setPointerCapture(e.pointerId);
-      const hs=panes.map(p=>p.getBoundingClientRect().height);panes.forEach((p,i)=>p.style.flex=hs[i]+' 1 0');
-      const ha=a.getBoundingClientRect().height,hb=b.getBoundingClientRect().height,y0=e.clientY;sp.classList.add('drag');document.body.classList.add('lsdrag');
-      const mv=ev=>{let d=ev.clientY-y0;d=Math.max(MIN-ha,Math.min(hb-MIN,d));a.style.flex=(ha+d)+' 1 0';b.style.flex=(hb-d)+' 1 0';};
-      const up=()=>{sp.removeEventListener('pointermove',mv);sp.removeEventListener('pointerup',up);sp.removeEventListener('pointercancel',up);sp.classList.remove('drag');document.body.classList.remove('lsdrag');saveR();};
-      sp.addEventListener('pointermove',mv);sp.addEventListener('pointerup',up);sp.addEventListener('pointercancel',up);});
-  });})();
+// 2026-11-18: History 하위 탭(Revision · Task) — 선택은 웹뷰 상태(histTab)에 저장 · 고르면 그 목록을 새로 읽음
+var HSEL=false;
+function histCur(){const b=document.querySelector('#history .ltb.on');return b?b.dataset.hp:'hist';}
+function histPick(id){if(id!=='thist')id='hist';document.querySelectorAll('#history .ltb').forEach(x=>{const on=x.dataset.hp===id;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
+  ['hist','thist'].forEach(k=>{const e=$(k);if(e)e.style.display=k===id?'':'none';});try{vscode.setState(Object.assign({},vscode.getState()||{},{histTab:id}));}catch(_){}}
+document.querySelectorAll('#history .ltb').forEach(b=>b.onclick=()=>{histPick(b.dataset.hp);vscode.postMessage(Object.assign({type:'history:refresh',view:b.dataset.hp==='thist'?'task':'rev',mode:'date',sel:''},st()));});
+try{histPick(((vscode.getState()||{}).histTab)||'hist');}catch(_){histPick('hist');}
+// 2026-11-18: Log 하위 탭 — 선택은 웹뷰 상태(logTab)에 저장 · 안 보이는 탭에 출력이 오면 N 표시 · ⤓ 최신·🧹 지우기는 선택된 탭에 적용
+function logCur(){const b=document.querySelector('#logs .ltabs .ltb.on');return b?b.dataset.lp:'log';}
+function logShow(id){if(!$(id))id='log';document.querySelectorAll('#logs .ltabs .ltb').forEach(x=>{const on=x.dataset.lp===id;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');if(on){const n=x.querySelector('.nb');if(n)n.remove();}});
+  ['log','felog','belog'].forEach(k=>{const e=$(k);if(e)e.style.display=k===id?'':'none';});scrollLatest(id);
+  try{vscode.setState(Object.assign({},vscode.getState()||{},{logTab:id}));}catch(_){}}
+function logMark(id){if(logCur()===id&&curTab()==='logs')return;const b=document.querySelector('#logs .ltabs .ltb[data-lp="'+id+'"]');if(!b||b.querySelector('.nb'))return;const n=document.createElement('span');n.className='nb';n.textContent='N';b.appendChild(n);}
+document.querySelectorAll('#logs .ltabs .ltb').forEach(b=>b.onclick=()=>logShow(b.dataset.lp));
+try{logShow(((vscode.getState()||{}).logTab)||'log');}catch(_){logShow('log');}
 
 
 // 1.9.29(2026-10-29 사용자): 프롬프트 ↑/↓ 이력 — 캐럿이 첫 줄일 때 ↑ = 이전 명령, 마지막 줄일 때 ↓ = 다음 명령(마지막 다음은 작성 중이던 초안 복원). 창을 다시 열어도 유지(webview state, 최근 200건)
@@ -1606,8 +1765,8 @@ $('editQ').onclick=()=>vscode.postMessage({type:'editQuick'});
 $('newWin').onclick=()=>vscode.postMessage({type:'newWindow'});
 // 1.8.0: ⤓ 최신 = 해당 로그창 맨 아래로 · 🧹 = 그 창만 지우기
 function scrollLatest(id){const b=$(id);if(b)b.scrollTop=b.scrollHeight;}
-document.querySelectorAll('.latest[data-for]').forEach(b=>b.onclick=()=>scrollLatest(b.dataset.for));
-document.querySelectorAll('.latest[data-clear]').forEach(b=>b.onclick=()=>{$(b.dataset.clear).innerHTML='';});
+$('logLatest').onclick=()=>scrollLatest(logCur());
+$('logClear').onclick=()=>{const b=$(logCur());if(b)b.innerHTML='';};
 $('clear').onclick=()=>{if(RUN&&RUN.timer)clearInterval(RUN.timer);RUN=null;if(FLOW&&FLOW.timer)clearInterval(FLOW.timer);FLOW=null;$('log').innerHTML='';$('belog').innerHTML='';$('felog').innerHTML='';$('chat').innerHTML='<div class="hint">새 대화 (대화 지움). 전송하면 Claude 응답이 여기 표시됩니다.</div><div id="thinking" class="thinking"><span class="pulse">✻</span><span>Thinking…</span></div>';};
 $('stop').onclick=()=>vscode.postMessage({type:'stop'});
 
@@ -1671,6 +1830,53 @@ function newStep(title,idx,isTodo){
   return st;
 }
 function curStep(){const r=RUN;if(!r)return null;if(r.cur>=0&&r.steps[r.cur])return r.steps[r.cur];const st=newStep('',null,false);updateHead();return st;}
+// 2026-11-19 사용자: 답변·작업 결과 = Claude Code 처럼 정리된 형태로(제목·굵게·목록·표·코드). Markdown 을 화면 요소로 그린다.
+//   글 안의 HTML 은 모두 글자로 바꿔 그림(스크립트 실행 없음). 링크는 클릭하면 파일(줄 번호 #L)·URL 을 연다(mdlink)
+const MD_BT=String.fromCharCode(96);
+function mdEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function mdInline(s){
+  const parts=String(s).split(MD_BT);let out='';
+  for(let i=0;i<parts.length;i++){
+    if(i%2===1&&i<parts.length-1){out+='<code class="mdc">'+mdEsc(parts[i])+'</code>';continue;}
+    let t=mdEsc(i%2===1?MD_BT+parts[i]:parts[i]);
+    t=t.replace(/[*][*]([^*]+)[*][*]/g,'<b>$1</b>');
+    t=t.replace(/\\[([^\\]]+)\\]\\(([^)\\s]+)\\)/g,(m0,a,h)=>'<a class="mdl" href="#" data-href="'+h+'">'+a+'</a>');
+    out+=t;
+  }
+  return out;
+}
+function mdHtml(src){
+  const L=String(src||'').replace(/\\r/g,'').split('\\n');const fence=MD_BT+MD_BT+MD_BT;const stack=[];let h='';let i=0;
+  const close=lvl=>{while(stack.length>lvl)h+='</li></'+stack.pop()+'>';};
+  const isList=s=>/^( *)([-*+]|[0-9]+[.)]) +/.test(s);
+  while(i<L.length){
+    const ln=L[i];const tr=ln.trim();
+    if(tr.startsWith(fence)){close(0);const buf=[];i++;while(i<L.length&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}i++;h+='<pre class="mdpre"><code>'+mdEsc(buf.join('\\n'))+'</code></pre>';continue;}
+    if(!tr){if(!(stack.length&&i+1<L.length&&isList(L[i+1])))close(0);i++;continue;}
+    let m=/^(#{1,6}) +(.*)$/.exec(ln);
+    if(m){close(0);h+='<div class="mdh mdh'+Math.min(m[1].length,4)+'">'+mdInline(m[2])+'</div>';i++;continue;}
+    if(/^ *([-*_])( *[-*_]){2,} *$/.test(ln)&&!/[^-*_ ]/.test(ln)){close(0);h+='<hr class="mdhr">';i++;continue;}
+    if(tr.startsWith('|')&&i+1<L.length&&/^ *[|]?[ :|-]+[|]? *$/.test(L[i+1])&&L[i+1].includes('-')){
+      close(0);const row=s=>s.trim().replace(/^[|]/,'').replace(/[|]$/,'').split('|').map(c=>c.trim());
+      let t='<div class="mdtw"><table class="mdt"><thead><tr>'+row(ln).map(c=>'<th>'+mdInline(c)+'</th>').join('')+'</tr></thead><tbody>';i+=2;
+      while(i<L.length&&L[i].trim().startsWith('|')){t+='<tr>'+row(L[i]).map(c=>'<td>'+mdInline(c)+'</td>').join('')+'</tr>';i++;}
+      h+=t+'</tbody></table></div>';continue;}
+    m=/^( *)([-*+]|[0-9]+[.)]) +(.*)$/.exec(ln);
+    if(m){
+      const lvl=Math.floor(m[1].length/2)+1;const ty=/[0-9]/.test(m[2])?'ol':'ul';const stt=ty==='ol'?' start="'+parseInt(m[2],10)+'"':'';
+      if(stack.length<lvl){while(stack.length<lvl){h+='<'+ty+(stack.length===lvl-1?stt:'')+' class="mdlist">';stack.push(ty);}}
+      else{close(lvl);if(stack[lvl-1]!==ty){h+='</li></'+stack.pop()+'><'+ty+stt+' class="mdlist">';stack.push(ty);}else h+='</li>';}
+      h+='<li>'+mdInline(m[3]);i++;continue;}
+    if(/^> ?/.test(ln)){close(0);const buf=[];while(i<L.length&&/^> ?/.test(L[i])){buf.push(L[i].replace(/^> ?/,''));i++;}h+='<blockquote class="mdq">'+buf.map(mdInline).join('<br>')+'</blockquote>';continue;}
+    if(stack.length&&/^ {2,}/.test(ln)){h+='<br>'+mdInline(tr);i++;continue;}
+    close(0);const buf=[ln];i++;
+    while(i<L.length&&L[i].trim()&&!/^(#{1,6} |> ?)/.test(L[i])&&!isList(L[i])&&!L[i].trim().startsWith('|')&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}
+    h+='<p class="mdp">'+buf.map(mdInline).join('<br>')+'</p>';
+  }
+  close(0);return h;
+}
+function mdEl(cls,txt){const d=el('div',cls+' md');d.innerHTML=mdHtml(txt);return d;}
+document.addEventListener('click',e=>{const a=e.target&&e.target.closest?e.target.closest('a.mdl'):null;if(!a)return;e.preventDefault();vscode.postMessage({type:'mdlink',href:a.getAttribute('data-href')||''});});
 function addText(txt){
   const r=RUN;if(!r)return;const f=firstLine(txt);r.lastText=txt;
   const lm=liteMark(txt);if(lm!==null)setLite(r,lm,true);
@@ -1679,7 +1885,7 @@ function addText(txt){
   if(!r.todos&&(!st||st.tools.length>0||marker)){st=newStep(f.slice(0,90),null,false);}
   else if(!st){st=curStep();}
   else if(!st.title&&!st.todo){st.title=f.slice(0,90);st.sum.querySelector('.sttl').textContent=st.title;}
-  st.body.appendChild(el('div','stext',txt));
+  st.body.appendChild(mdEl('stext',txt));
   st.sum.querySelector('.slast').textContent='💬 '+f.slice(0,80);
   r.board.querySelector('.bnow').textContent='💬 '+f.slice(0,120);
   updateHead();
@@ -1742,7 +1948,7 @@ function endRun(text,ok){
   if(text)addMeta(text);
   updateHead();
 }
-function showFinal(r){if(!r.lastText||r.finalShown)return;r.finalShown=true;const fd=el('details','bfinal');fd.open=true;fd.appendChild(el('summary',null,'📄 '+UI_BD.final));fd.appendChild(el('div','ft',r.lastText));r.board.insertBefore(fd,r.board.querySelector('.bfoot'));}
+function showFinal(r){if(!r.lastText||r.finalShown)return;r.finalShown=true;const fd=el('details','bfinal');fd.open=true;fd.appendChild(el('summary',null,'📄 '+UI_BD.final));fd.appendChild(mdEl('ft',r.lastText));r.board.insertBefore(fd,r.board.querySelector('.bfoot'));}
 // 1.9.30: 보고 완료 · 후속 작업 진행 중 — 최종 보고는 바로 펼치되 상태·경과 시계는 '진행 중' 으로 유지(끝나면 run done 이 마감)
 function pendRun(text){
   const r=RUN;if(!r||r.done)return;r.pending=true;
@@ -1750,7 +1956,43 @@ function pendRun(text){
   setStatus(UI_BD.pending,'running');r.board.querySelector('.bnow').textContent='';
   showFinal(r);if(text)addMeta(text);
 }
+// 2026-11-18: '@@HTML 라벨|경로' 로 받은 HTML 을 Console 안 틀(iframe)에 그린다. 스크립트 실행 없음(sandbox), 내용 높이에 맞춰 늘어남
+// 2026-11-18(사용자: DARK THEME 일 때는 테마에 맞춰서 BACKCOLOR): 틀 안 HTML 은 OS 색 설정(prefers-color-scheme)만 따라 VS Code 테마와 어긋남.
+//   VS Code 테마 종류를 html data-theme(dark·light)로 넘기고, 바탕·글자·선·흐린 글자 색을 VS Code 테마 색으로 덮는다. 테마를 바꾸면 열린 틀 전부 다시 맞춤
+function hvMode(){const c=document.body.classList;return (c.contains('vscode-dark')||c.contains('vscode-high-contrast'))&&!c.contains('vscode-high-contrast-light')?'dark':'light';}
+// 2026-11-19 사용자: Console 현황판 글자가 대화(12px)보다 큼(본문 13 · KPI 18px) → 화면 안 HTML 을 0.85 배로(본문 약 11 · KPI 약 15px). 브라우저로 열기는 원래 크기
+const HV_ZOOM=0.85;
+function hvTheme(fr){
+  try{
+    const d=fr.contentDocument;if(!d||!d.documentElement)return;
+    const mode=hvMode();const cs=getComputedStyle(document.body);const v=(k,dv)=>(cs.getPropertyValue(k)||'').trim()||dv;
+    const bg=v('--vscode-editor-background',mode==='dark'?'#1e1e1e':'#ffffff');const fg=v('--vscode-editor-foreground',mode==='dark'?'#d4d4d4':'#1f2328');
+    const line=v('--vscode-panel-border',mode==='dark'?'#3c3c3c':'#e1e4e8');const soft=v('--vscode-editorWidget-background',mode==='dark'?'#252526':'#f6f8fa');const mut=v('--vscode-descriptionForeground',mode==='dark'?'#9d9d9d':'#6e7781');
+    d.documentElement.setAttribute('data-theme',mode);
+    let st=d.getElementById('vm-theme');if(!st){st=d.createElement('style');st.id='vm-theme';(d.head||d.documentElement).appendChild(st);}
+    st.textContent=':root,:root[data-theme]{--bg:'+bg+';--fg:'+fg+';--line:'+line+';--soft:'+soft+';--mut:'+mut+';color-scheme:'+mode+'}html,body{background:'+bg+';color:'+fg+'}html{zoom:'+HV_ZOOM+'}';
+  }catch(e){}
+}
+let HV_WATCH=null;
+function hvWatch(){if(HV_WATCH||!window.MutationObserver)return;HV_WATCH=new MutationObserver(()=>document.querySelectorAll('.m.htmlv iframe').forEach(hvTheme));HV_WATCH.observe(document.body,{attributes:true,attributeFilter:['class']});}
+function addHtmlView(m){
+  const stick=chatStick();
+  const box=el('div','m htmlv','');const hd=el('div','hvh','');
+  hd.appendChild(el('b',null,'📊 '+(m.label||'HTML')));hd.appendChild(el('span','hvt',(m.time||'')+' · '+(m.file||'')));hd.appendChild(el('span','sp',''));
+  const bf=el('button',null,'접기');bf.onclick=()=>{box.classList.toggle('fold');bf.textContent=box.classList.contains('fold')?'펼치기':'접기';};
+  const bo=el('button',null,'브라우저로 열기');bo.onclick=()=>vscode.postMessage({type:'openExternal',file:m.file});
+  hd.appendChild(bf);hd.appendChild(bo);box.appendChild(hd);
+  const fr=document.createElement('iframe');fr.setAttribute('sandbox','allow-same-origin');fr.title=m.label||'HTML';
+  // 2026-11-19: 축소(zoom) 뒤에는 scrollHeight 가 줄지 않아 아래가 비므로 본문이 실제 그려진 높이로 맞춘다(Chrome 실측: zoom .85 에서 scrollHeight 708 · 본문 끝 602)
+  const fit=()=>{try{const d=fr.contentDocument;if(!d||!d.documentElement||!d.body)return;const bb=d.body.getBoundingClientRect();const mb=parseFloat(getComputedStyle(d.body).marginBottom)||0;const h=Math.ceil(bb.bottom+mb*HV_ZOOM);if(h>0)fr.style.height=(h+4)+'px';}catch(e){}};
+  fr.onload=()=>{hvTheme(fr);fit();try{const d=fr.contentDocument;if(d&&d.body&&window.ResizeObserver)new ResizeObserver(fit).observe(d.body);if(d)d.addEventListener('toggle',fit,true);}catch(e){}};
+  fr.srcdoc=String(m.html||'');box.appendChild(fr);hvWatch();
+  if(RUN){const ft=RUN.board.querySelector('.bfoot');RUN.board.insertBefore(box,ft);}else $('chat').appendChild(box);
+  chatScroll(stick);
+}
 function addMeta(text){const d=el('div','m meta',text);if(RUN)RUN.board.querySelector('.bfoot').appendChild(d);else $('chat').appendChild(d);}
+// 2026-11-19 사용자: 긴 안내(후속 작업 프로세스 목록 등) = 요약 한 줄만 보이고 클릭하면 상세
+function addMetaDetail(text,detail){const d=el('details','m meta mdet');const sm=el('summary',null,text);d.appendChild(sm);d.appendChild(el('div','mb',detail));if(RUN)RUN.board.querySelector('.bfoot').appendChild(d);else $('chat').appendChild(d);}
 
 // ── 1.8.9 Flow 보드: 체인/단일 작업 = 전체 Step 수·현재 Step·진행바·경과 + Step 카드(대기/진행/완료/실패/경고). Claude 단계의 상황판(run)은 그 Step 카드 안에 ──
 let FLOW=null;
@@ -1767,25 +2009,37 @@ function flowStart(m){
   b.querySelector('.btitle').textContent='🧭 '+f.title+(f.screen?' · '+f.screen:'');
   b.querySelector('.bk-st').textContent=UI_BD.running;
   f.board=b;f.el.appendChild(b);
-  const list=b.querySelector('.bsteps');
-  (m.steps||[]).forEach(s=>{
-    const d=el('details','step wait');const sm=el('summary');
-    sm.innerHTML='<span class="sno"></span><span class="sttl"></span><span class="sdur"></span><span class="slast"></span>';
-    sm.querySelector('.sno').textContent=s.no;sm.querySelector('.sttl').textContent=(s.kind==='claude'?'✴️ ':'')+s.name+(s.optional?' ('+UI_BD.optional+')':'');
-    d.appendChild(sm);const body=el('div','sbody');const tail=el('pre','ftail');body.appendChild(tail);d.appendChild(body);list.appendChild(d);
-    f.steps.push({no:s.no,el:d,sum:sm,body:body,tail:tail,status:'WAIT',lines:[],kind:s.kind});
-  });
+  f.list=b.querySelector('.bsteps');
+  (m.steps||[]).forEach(s=>flowCard(f,s));
+  flowRenum(f);
   $('chat').appendChild(f.el);const th=$('thinking');if(th)$('chat').appendChild(th);
   FLOW=f;flowHead();
   f.timer=setInterval(()=>{if(FLOW!==f||f.done){clearInterval(f.timer);return;}f.board.querySelector('.bk-time').textContent=fmtSec((Date.now()-f.t0)/1000);},1000);
   chatScroll(true);
 }
+// 2026-11-19 사용자: 단계 카드 = 실행할 단계만. 조건부 단계(검증 보완·재수행 회차)는 실행이 정해질 때 flowAdd 로 붙고 번호·총 STEP 수를 다시 센다
+//   s.no = 체인 정의 순번(메시지 키) · 화면 번호 = 보드 안 위치(flowRenum)
+function flowCard(f,s){
+  const d=el('details','step wait');const sm=el('summary');
+  sm.innerHTML='<span class="sno"></span><span class="sttl"></span><span class="sdur"></span><span class="slast"></span>';
+  sm.querySelector('.sttl').textContent=(s.kind==='claude'?'✴️ ':'')+s.name+(s.optional?' ('+UI_BD.optional+')':'');
+  d.appendChild(sm);const body=el('div','sbody');const tail=el('pre','ftail');body.appendChild(tail);d.appendChild(body);
+  const st={no:s.no,el:d,sum:sm,body:body,tail:tail,status:'WAIT',lines:[],kind:s.kind};
+  const k=f.steps.findIndex(x=>x.no>s.no);
+  if(k<0){f.list.appendChild(d);f.steps.push(st);}else{f.list.insertBefore(d,f.steps[k].el);f.steps.splice(k,0,st);}
+  return st;
+}
+function flowRenum(f){f.steps.forEach((s,k)=>{s.sum.querySelector('.sno').textContent=k+1;});f.total=f.steps.length;const t=f.board.querySelector('.btot');if(t)t.textContent=f.total;}
+function flowAdd(m){
+  const f=FLOW;if(!f||f.id!==m.id||!m.step||f.steps.some(x=>x.no===m.step.no))return;
+  flowCard(f,m.step);flowRenum(f);flowHead();
+}
 function flowStepEl(no){return FLOW?FLOW.steps.find(s=>s.no===no):null;}
 function flowStep(m){
   const f=FLOW;if(!f||f.id!==m.id)return;const s=flowStepEl(m.no);if(!s)return;
-  s.status=m.status;s.el.className='step '+(FST[m.status]||'wait');
+  s.status=m.status;s.el.className='step '+(FST[m.status]||'wait');if(m.status==='REPAIR'&&!s.el.open)s.el.open=true; // 2026-11-18: 수선 시작 = 단계 카드 펼침(하위 Claude 실행이 보이게)
   if(m.status==='RUN'||m.status==='REPAIR'){f.cur=m.no;f.active=s;s.sum.querySelector('.slast').textContent=m.status==='REPAIR'?('🩹 '+(UI_BD.fs&&UI_BD.fs.REPAIR||'repair')+' '+(m.round||1)+'/'+(m.rounds||1)):'';}
-  else{if(f.active===s)f.active=null;s.sum.querySelector('.sdur').textContent=(m.sec!=null?fmtSec(m.sec):'')+(m.code!=null&&m.code!==0?' · exit '+m.code:'');s.sum.querySelector('.slast').textContent=FSI[m.status]+' '+(UI_BD.fs[m.status]||m.status)+(s.e2e?' · '+e2eSum(s):'');if(s.e2e)e2eRender(s);}
+  else{if(f.active===s)f.active=null;subEnd(s,m.status==='OK'?'done':(m.status==='WARN'||m.status==='HOLD')?'warn':(m.status==='SKIP'||m.status==='NOT_RUN')?'done':'bad');s.sum.querySelector('.sdur').textContent=(m.sec!=null?fmtSec(m.sec):'')+(m.code!=null&&m.code!==0?' · exit '+m.code:'');s.sum.querySelector('.slast').textContent=FSI[m.status]+' '+(UI_BD.fs[m.status]||m.status)+(s.e2e?' · '+e2eSum(s):'');if(s.e2e)e2eRender(s);}
   flowHead();
 }
 // 1.9.17: E2E 단계 카드 — Task Log 로 흘러온 Playwright 결과 줄(ok/x N [chromium] › spec › 제목 (시간))을 테스트별로 집계.
@@ -1793,16 +2047,38 @@ function flowStep(m){
 // 1.9.42(2026-11-06 사용자 지시): CheckList 진행 = 전체 단계 안의 위치 — 대분류 '[단계 i/N] 이름' · 중분류 '[세부 j/M] 도구'(run_verify.py·prereq.py 출력) ·
 //   테스트 n/N 은 Playwright 실행('Running N tests')마다 따로 센다. 종전엔 한 작업 안에서 Playwright 가 여러 번 돌면(smoke 3 → 검증엔진 72 → 팝업·권한 9)
 //   전체 수만 새 값으로 바뀌고 완료 목록은 누적돼 '73/9' 처럼 전체가 사라졌다. 테스트 목록은 실행(구간)별 머리줄로 나눠 보여 준다.
+// 2026-11-19 사용자: 한 단계 안에서 다른 작업이 이어질 때(분류 → 🧪 보완 → CheckList 재검증 → 재분류 · checklist_run.py 의 run_verify → 미검증 분류)
+//   단계 카드 안에 하위 단계 목록(번호 '단계-하위')을 두고, 진행 표시(단계·세부·테스트)는 지금 하위 단계 기준으로 다시 센다.
+//   하위 단계 시작 = 백엔드 fb 'sub' 또는 작업 출력 '[작업 k/K] 이름' 줄
+function subStart(s,name,prev){
+  if(!s.subs){s.subs=[];s.subel=el('div','subl');s.body.insertBefore(s.subel,s.body.firstChild);}
+  const e=s.e2e;
+  if(!s.subs.length&&(prev||(e&&(e.order.length||e.stage))))s.subs.push({name:UI_BD.firstRun,st:prev||'done'});
+  else if(s.subs.length){const x=s.subs[s.subs.length-1];if(x.st==='run')x.st=prev||'done';}
+  s.subs.push({name:name,st:'run'});
+  if(e){e.stage=null;e.sub=null;e.seg=null;}
+  subRender(s);
+}
+function subEnd(s,st){if(!s.subs||!s.subs.length)return;const x=s.subs[s.subs.length-1];if(x.st==='run')x.st=st;subRender(s);}
+function subRender(s){
+  if(!s.subel)return;const ic={run:'⏳',done:'✅',bad:'✖',warn:'⚠'};const f=FLOW;const n=f?f.steps.indexOf(s)+1:0;
+  s.subel.textContent='';
+  s.subs.forEach((x,k)=>s.subel.appendChild(el('div','subrow '+x.st,(n?n+'-':'')+(k+1)+' '+ic[x.st]+' '+x.name)));
+}
+function subCur(s){return s.subs&&s.subs.length?s.subs[s.subs.length-1]:null;}
+function flowSub(m){const s=flowStepEl(m.no);if(!s||(FLOW&&FLOW.id!==m.id))return;if(m.end)subEnd(s,m.end);else subStart(s,String(m.name||''),m.prev||'');if(FLOW&&FLOW.active===s){s.sum.querySelector('.slast').textContent='🧩 '+(s.subs.length)+' '+(m.name||'');}flowHead();}
 function e2eOf(s){if(!s.e2e){const d=el('div','e2elist');s.body.insertBefore(d,s.tail);s.e2e={tests:{},order:[],total:0,el:d,stage:null,sub:null,seg:null,segs:[]};}return s.e2e;}
 function e2eStageName(e){return e.stage?e.stage.name.replace(/\\s+—\\s.*$/,'').replace(/\\s+·\\s.*$/,''):'';}
 function e2eLine(s,ln){
   const L=String(ln).replace(/^\\s*│\\s?/,'');
-  let m=/^\\s*\\[단계 (\\d+)\\/(\\d+)\\]\\s*(.*)$/.exec(L);
+  let m=/^\\s*\\[작업 (\\d+)\\/(\\d+)\\]\\s*(.*)$/.exec(L);
+  if(m){e2eOf(s);subStart(s,m[3]+' ('+m[1]+'/'+m[2]+')','');e2eRender(s);return;}
+  m=/^\\s*\\[단계 (\\d+)\\/(\\d+)\\]\\s*(.*)$/.exec(L);
   if(m){const e=e2eOf(s);e.stage={i:+m[1],n:+m[2],name:m[3]};e.sub=null;e.seg=null;e2eRender(s);return;}
   m=/^\\s*\\[세부 (\\d+)\\/(\\d+)\\]\\s*(.*)$/.exec(L);
   if(m){const e=e2eOf(s);e.sub={j:+m[1],m:+m[2],name:m[3]};e2eRender(s);return;}
   m=/^\\s*Running (\\d+) tests?/.exec(L);
-  if(m){const e=e2eOf(s);e.seg={no:e.segs.length+1,total:+m[1],keys:[],label:e.stage?(UI_BD.stage+' '+e.stage.i+'/'+e.stage.n+' '+e2eStageName(e)):''};e.segs.push(e.seg);e.total=e.seg.total;e2eRender(s);return;}
+  if(m){const e=e2eOf(s);const sc=subCur(s);e.seg={no:e.segs.length+1,total:+m[1],keys:[],label:(sc?'🧩 '+s.subs.length+' '+sc.name+(e.stage?' · ':''):'')+(e.stage?(UI_BD.stage+' '+e.stage.i+'/'+e.stage.n+' '+e2eStageName(e)):'')};e.segs.push(e.seg);e.total=e.seg.total;e2eRender(s);return;}
   m=/^\\s*(ok|x|✘|✓|-)\\s+\\d+\\s+\\[[^\\]]+\\]\\s+›\\s+(.+?)(?:\\s+\\(retry #(\\d+)\\))?(?:\\s+\\((\\d[\\d.]*(?:ms|s|m|h))\\))?\\s*$/.exec(L); // 소요시간 = 37.3s · 2.7m · 850ms
   if(!m)return;
   const e=e2eOf(s);if(!e.seg){e.seg={no:e.segs.length+1,total:0,keys:[],label:''};e.segs.push(e.seg);}
@@ -1814,6 +2090,7 @@ function e2eLine(s,ln){
 function e2eCount(e,keys){const c={ok:0,fail:0,flaky:0,skip:0};(keys||e.order).forEach(k=>{c[e.tests[k].st]++;});return c;}
 function e2eSum(s){
   const e=s.e2e;const c=e2eCount(e);const parts=[];
+  const sc=subCur(s);if(sc&&sc.st==='run')parts.push('🧩 '+s.subs.length+' '+sc.name);
   if(e.stage)parts.push('📍 '+UI_BD.stage+' '+e.stage.i+'/'+e.stage.n+' '+e2eStageName(e));
   if(e.sub)parts.push(UI_BD.sub+' '+e.sub.j+'/'+e.sub.m+' '+e.sub.name);
   if(e.seg)parts.push('🧪 '+e.seg.keys.length+'/'+(e.seg.total||'?')+(e.segs.length>1?' ('+e.seg.no+UI_BD.runN+')':''));
@@ -1843,7 +2120,7 @@ function flowHead(){
   const f=FLOW;if(!f)return;const b=f.board;
   const done=f.steps.filter(s=>s.status==='OK'||s.status==='WARN').length;
   const cur=f.done?done:Math.min(f.total,done+(f.active?1:0));
-  b.querySelector('.bcur').textContent=f.active?f.active.no:cur;b.querySelector('.bk-done').textContent=done;
+  b.querySelector('.bcur').textContent=f.active?(f.steps.indexOf(f.active)+1):cur;b.querySelector('.bk-done').textContent=done;
   const ae=f.active&&f.active.e2e;const part=e2ePart(ae); // 1.9.17: E2E 단계는 테스트 완료 비율만큼 · 1.9.42: CheckList 는 단계·세부·테스트 비율
   const prog=f.done?done:Math.max(0,done+(f.active?part:0));
   b.querySelector('.bbar i').style.width=(f.total?Math.round(100*prog/f.total):0)+'%';
@@ -1871,7 +2148,7 @@ function flowEnd(m){
   if(m.links&&m.links.length){const d=el('div','m meta','');m.links.forEach(l=>{const a=document.createElement('a');a.className='chip';a.textContent=l.label;a.title=l.file;a.style.cursor='pointer';a.style.marginRight='6px';a.onclick=()=>vscode.postMessage(l.dir?{type:'openExternal',file:l.file}:{type:'show',file:l.file});d.appendChild(a);});f.board.querySelector(':scope > .bfoot').appendChild(d);}
 }
 // Claude 상황판(run)이 들어갈 컨테이너 — Flow 의 진행 중 Step 이 있으면 그 카드 안, 없으면 chat
-function runContainer(){return (FLOW&&!FLOW.done&&FLOW.active&&FLOW.active.kind==='claude')?FLOW.active.body:$('chat');}
+function runContainer(){return (FLOW&&!FLOW.done&&FLOW.active&&(FLOW.active.kind==='claude'||FLOW.active.status==='REPAIR'))?FLOW.active.body:$('chat');} // 2026-11-18 사용자: 단계 수선(🧪 미검증 해소 등) Claude 실행도 그 단계 카드 안 하위로
 
 // ── 1.9.0 Workbench 내부 탭(파일 뷰어/편집·폴더·diff) ──
 const TABS={};
@@ -1929,7 +2206,7 @@ function showDynTab(t){
   const key=t.slice(2);
   document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
   // 1.9.8: 요소가 없어도 죽지 않게 + 탭 안에 들어가 있는 #flow 는 숨기지 않는다(FLOW 탭 내용이 비던 원인)
-  ['logs','chat','status','flow','hist','thist'].forEach(id=>{const e=$(id);if(!e)return;if(id==='flow'&&e.closest('.dtab'))return;e.style.display='none';});
+  ['logs','chat','status','flow','history'].forEach(id=>{const e=$(id);if(!e)return;if(id==='flow'&&e.closest('.dtab'))return;e.style.display='none';});
   const T=TABS[key];if(T)T.pane.style.display='flex';
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
 }
@@ -1948,7 +2225,7 @@ function bindStatus(){
   document.querySelectorAll('#status .stp[data-task]').forEach(e=>e.onclick=()=>{if(e.dataset.task)vscode.postMessage(Object.assign({type:'task',task:e.dataset.task},st()));});
   document.querySelectorAll('#status a[data-f]').forEach(a=>a.onclick=()=>vscode.postMessage({type:'show',file:a.dataset.f}));
   document.querySelectorAll('#status a[data-open]').forEach(a=>a.onclick=()=>vscode.postMessage({type:'openExternal',file:a.dataset.open}));
-  document.querySelectorAll('#status a[data-hist]').forEach(a=>a.onclick=()=>{showTab('hist');vscode.postMessage({type:'history:refresh',view:'rev',mode:'date',sel:a.dataset.hist});});
+  document.querySelectorAll('#status a[data-hist]').forEach(a=>a.onclick=()=>{HSEL=true;showTab('hist');vscode.postMessage({type:'history:refresh',view:'rev',mode:'date',sel:a.dataset.hist});});
 }
 function bindFlow(){
   document.querySelectorAll('#flow td.fc').forEach(td=>td.onclick=()=>vscode.postMessage({type:'flow:task',task:td.dataset.task,id:td.dataset.id}));
@@ -1984,19 +2261,21 @@ bindStatus();
 
 const procs={};
 window.addEventListener('message',e=>{const m=e.data;
- if(m.type==='out'){if(m.stream==='task')flowOut(m.text);const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;markNew(m.stream==='be'||m.stream==='fe'?'logs':'log');}
+ if(m.type==='out'){if(m.stream==='task')flowOut(m.text);const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');logMark(box.id);const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;markNew(m.stream==='be'||m.stream==='fe'?'logs':'log');}
  else if(m.type==='server'){const st=$(m.name&&/BE/i.test(m.name)?'belogst':'felogst');if(st)st.textContent=m.state==='stopped'?'⏹ 종료됨':(m.ok?'✅ 기동 완료 ':'✖ 실패 ')+(m.sec!=null?m.sec+'s':'');}
+ else if(m.type==='html'){addHtmlView(m);}
  else if(m.type==='chat'){
    const stick=chatStick();
    if(m.role==='user'){newRun(String(m.text));}
-   else if(m.role==='assistant'){if(RUN&&!RUN.done)addText(String(m.text));else{const d=document.createElement('div');d.className='m assistant';d.textContent=m.text;$('chat').appendChild(d);}}
+   else if(m.role==='assistant'){if(RUN&&!RUN.done)addText(String(m.text));else{$('chat').appendChild(mdEl('m assistant',String(m.text)));}}
    else if(m.role==='tool'){if(RUN&&!RUN.done)addTool(m);else{const d=document.createElement('details');d.className='m tool';const sm=document.createElement('summary');sm.textContent='🔧 '+(m.brief||firstLine(m.text));d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);$('chat').appendChild(d);}}
    else if(m.role==='result'){if(RUN&&!RUN.done)addResult(String(m.text));else{const d=document.createElement('details');d.className='m result';const sm=document.createElement('summary');sm.textContent='↳ '+firstLine(m.text).slice(0,160);d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);$('chat').appendChild(d);}}
+   else if(m.detail){addMetaDetail(String(m.text),String(m.detail));}
    else {addMeta(String(m.text));}
    chatScroll(stick||m.role==='user');
    markNew('chat');
  }
- else if(m.type==='fb'){const stick=chatStick();if(m.state==='start')flowStart(m);else if(m.state==='step')flowStep(m);else if(m.state==='end')flowEnd(m);chatScroll(stick||m.state==='start');markNew('chat');}
+ else if(m.type==='fb'){const stick=chatStick();if(m.state==='start')flowStart(m);else if(m.state==='add')flowAdd(m);else if(m.state==='sub')flowSub(m);else if(m.state==='step')flowStep(m);else if(m.state==='end')flowEnd(m);chatScroll(stick||m.state==='start');markNew('chat');}
  else if(m.type==='todos'){const stick=chatStick();if(RUN&&!RUN.done)applyTodos(m.items||[]);chatScroll(stick);markNew('chat');}
  else if(m.type==='run'){const stick=chatStick();if(m.state==='done')endRun(m.text||'',m.ok!==false);else if(m.state==='pending')pendRun(m.text||'');chatScroll(stick);markNew('chat');}
  else if(m.type==='tab'){
@@ -2256,10 +2535,19 @@ function open(api, opts) {
           break;
         }
         case 'openExternal': openWithOS(p, wb, m.file); break;
+        case 'mdlink': { // 2026-11-19: 답변 Markdown 링크 — URL 은 브라우저, 파일은 프로젝트 기준 경로(#L줄 · #L줄-줄)로 연다
+          const href = String(m.href || '').trim(); if (!href) break;
+          if (/^https?:\/\//i.test(href)) { vscode.env.openExternal(vscode.Uri.parse(href)); break; }
+          const mm = /^(.*?)(?:#L(\d+)(?:-L?\d+)?)?$/.exec(href); let fp = decodeURIComponent(mm[1] || '');
+          if (!path.isAbsolute(fp)) fp = path.join(p.root, fp);
+          wb.openTab(p, fp, { line: mm[2] ? Number(mm[2]) : 0 }); break;
+        }
         case 'prompt': {
           // 1.6: ctx/harness 체크박스 제거 — ID 가 있으면 자동 컨텍스트, 자동 하네스는 effectiveHarness 가 판정.
           const ptxt = m.text; const prun = () => { const h = effectiveHarness(false, null, null, id); api.record('prompt', ptxt.slice(0, 120)); return wb.askClaude(p, withCtx(p, id, ptxt, true), h, { source: 'prompt', text: ptxt }); };
-          if (wb.claudeProc || (wb.chainN || 0) > 0) wb.enqueuePrompt(ptxt, prun); else prun(); // 2026-11-13: 실행 중이면 대기열
+          // 2026-11-18: Claude 가 응답 중이면 중지 없이 그 응답에 추가 지시로 넣는다(claudeInject). 입력이 이미 닫혔거나 작업(task) 단계만 도는 중이면 종전처럼 대기열
+          if (wb.claudeProc && wb.claudeInject && wb.claudeInject(ptxt)) { api.record('prompt:inject', ptxt.slice(0, 120)); }
+          else if (wb.claudeProc || (wb.chainN || 0) > 0) wb.enqueuePrompt(ptxt, prun); else prun(); // 2026-11-13: 실행 중이면 대기열
           break;
         }
         case 'pq:now': wb.sendQueuedNow(m.qid); break;
@@ -2332,6 +2620,11 @@ function open(api, opts) {
           //   웹뷰가 보낸 item 에는 새 속성이 빠질 수 있어 quick.json 원본에서 다시 찾는다. 사전 단계가 실패해도 보완은 계속(CheckList 결과 없으면 기존 방식)
           {
             const src = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.label === item.label) || item;
+            // 2026-11-19 사용자: 메뉴 하나가 여러 작업(분류 → Claude 보완 → CheckList)을 하면 Flow 보드에 단계로 보이게 — quick 항목 flow(체인 steps 와 같은 형식)가 있으면 체인으로 실행
+            if (Array.isArray(src.flow) && src.flow.length && item.kind === 'claude' && effId) {
+              await wb.runChain(p, { label: item.label, chainId: src.flowId || 'menuFlow', steps: src.flow }, effId, effectiveHarness(m.harness, null, item, effId));
+              break;
+            }
             if (src.preTask && item.kind === 'claude' && effId) {
               wb.out('task', `\n── 사전 단계: ${src.preTask} (${effId}) — ${item.label}\n`, 'cmd');
               const pc = await wb.runTaskStreaming(p, src.preTask, effId, { noConfirm: true, inFlow: true });

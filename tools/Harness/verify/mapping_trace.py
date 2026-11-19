@@ -197,6 +197,25 @@ def known_procs():
     return _KNOWN_PROCS
 
 
+_COMMENTED_ONLY = None
+
+
+def commented_only_sps():
+    """2026-11-19 미검증 해소(SCP0096 T-52a2cd25·T-e1d6f057): AS-IS 문장 원문 칸은 여러 줄을 한 줄로 합쳐 주석 호출('//var req = new FoxDataRequest("SCP.SCP0019_GET_WORKING_TIME")')까지 담는다.
+    AS-IS 사실팩 commented_calls.csv(주석 안 호출)에만 있고 endpoints.csv(현행 호출)에 없는 SP 이름 = 이 화면이 부르지 않는 SP → 추출에서 뺀다"""
+    global _COMMENTED_ONLY
+    if _COMMENTED_ONLY is None:
+        d = os.path.join(DOC, 'asisfacts', 'screens', asis_id())
+        try:
+            com = {(c.get('key') or c.get('candidate') or '').split('.')[-1].upper() for c in rdcsv(os.path.join(d, 'commented_calls.csv')) if is_main(c, d)}
+            live = {m.group(1).split('.')[-1].upper() for e in rdcsv(os.path.join(d, 'endpoints.csv')) if is_main(e, d)
+                    for m in [re.match(r'^SP\s+(\S+)', e.get('sp_or_sql') or '')] if m}
+        except Exception:
+            com, live = set(), set()
+        _COMMENTED_ONLY = {x for x in com - live if x}
+    return _COMMENTED_ONLY
+
+
 def sp_tokens(text):
     """SP·엔드포인트 이름 — 추출기 말줄임('…')으로 잘린 이름 제외 · 그리드 컬럼명(ROUTE_CHK 처럼 _CHK 로 끝나는 컬럼)은 SP 가 아니다(2026-10-26 F4 오판)"""
     cols = set(E.cols) if E else set()
@@ -209,6 +228,7 @@ def sp_tokens(text):
         # 'P_…' 는 TO-BE 프로시저 접두이지만 패키지명(P_SCM0002)·바인드 변수(@P_BUCKET·P_FROM_SITE)도 같은 모양이다 → 동사 세그먼트(_GET/_SAVE…)가 있거나 proc_meta 에 있는 것만 SP (2026-10-29 SCP0100 F4 허위 FAIL 5건)
         if tok.startswith('P_') and not re.search(r'_(GET|SAVE|SET|INS|UPD|DEL|CHK|CHECK|PROC|EXEC|CALC|GEN|MAKE|LOAD|SYNC|UPLOAD|DOWN)', tok) and tok.upper() not in known_procs(): continue
         if text[max(0, m.start() - 1):m.start()] == '@': continue
+        if tok.upper() in commented_only_sps(): continue  # AS-IS 주석 안 호출만 있는 SP(2026-11-19)
         out.append(tok)
     return list(dict.fromkeys(out))
 
@@ -617,6 +637,50 @@ def judge(rs):
     return 'NA' if all(x == 'NA' for x in rs) else 'NOT_RUN'
 
 
+def _asis_popup_facts():
+    """AS-IS 화면 팝업 사실, (팝업 파일 수, 화면이 여는 비프레임워크 폼 목록). files.csv(POPUP_RX) · actions.csv kind=POPUP 의 'new X(' (GSCM.Windows.Forms.* 프레임워크 폼 제외)"""
+    from asis_variant import POPUP_RX
+    d = os.path.join(DOC, 'asisfacts', 'screens', asis_id())
+    nf = sum(1 for f in rdcsv(os.path.join(d, 'files.csv')) if POPUP_RX.search(f.get('file') or ''))
+    forms = set()
+    for a in rdcsv(os.path.join(d, 'actions.csv')):
+        if a.get('kind') != 'POPUP':
+            continue
+        for m in re.finditer(r'new\s+([A-Za-z_][A-Za-z0-9_.]*)\s*\(', a.get('raw') or ''):
+            if not m.group(1).startswith('GSCM.Windows.Forms.') and m.group(1).split('.')[-1] not in ('ProgressForm', 'MessageBox'):
+                forms.add(m.group(1))
+    return nf, sorted(forms)
+
+
+def _asis_empty_btns():
+    """AS-IS 본문 없는 버튼 재정의 {ACL 글자: '파일:줄 메서드'}, menu_auth_sync.empty_overrides 와 같은 규칙"""
+    from menu_auth_sync import empty_overrides
+    out = {}
+    for f in sorted(main_files(os.path.join(DOC, 'asisfacts', 'screens', asis_id())) or []):
+        rel = f.replace(chr(92), '/')
+        p = next((q for q in (os.path.join(ROOT, 'GSCM', rel), os.path.join(ROOT, 'GSCM_20260512', rel)) if os.path.exists(q)), '')
+        if p and p.lower().endswith('.cs'):
+            out.update(empty_overrides(open(p, encoding='utf-8-sig', errors='ignore').read(), os.path.basename(p)))
+    return out
+
+
+def reason_fact(rid, why):
+    """2026-11-19 미검증 해소(SCP0096 X-REASON T-af133d05·T-15cf757f): 제외·해당없음 사유가 키워드(RX_REASON)에 안 걸려도 주장 자체를 AS-IS 사실로 확인되면 근거.
+    ① 팝업 없음(MODAL 행) = AS-IS 팝업 파일 0 · 화면이 여는 폼은 프레임워크 폼뿐 ② 신규행 Insert 없음 = AS-IS InsertButton 재정의 본문 없음. 확인 못 하면 ''"""
+    try:
+        if rid.startswith('MODAL:') and re.search(r'팝업|모달', why) and re.search(r'없', why):
+            nf, forms = _asis_popup_facts()
+            if nf == 0 and not forms:
+                return 'AS-IS 팝업 화면 0(files.csv 팝업 파일 0 · actions.csv 화면 열기 문장은 프레임워크 폼만)'
+        if re.search(r'Insert|신규행', why) and re.search(r'없음|NO-OP|부재', why):
+            e = _asis_empty_btns()
+            if 'C' in e:
+                return f"AS-IS {e['C']} 본문 없음(신규행 추가 동작 없음)"
+    except Exception:
+        return ''
+    return ''
+
+
 RX_REASON = re.compile(r'대체|이동|공통|룰|rule|hook|#\d+|지시|결정|AS-IS (?:미사용|주석|dead)|미사용|주석|디자이너|레이아웃|컨테이너|리소스|서버측|프레임워크|동일 사유|위와 동일|대응 요소 없|구조로|흡수|불필요|조회 전용|dead|개념 자체가 없|단일 뷰|단일 그리드|탭 자체|시트 1개|무의미|읽기 ?전용|read-?only|Enabled\s*=\s*false|disabled|기준표|search_cond|SC1|SC2|BUTTON_AREA|IN_CALENDAR|COLUMN_PERSONAL|COMMON_BUTTON', re.I)
 
 
@@ -865,7 +929,10 @@ def main():
                         w = (rmap[k].get('why') or '').strip()
                         if w and not re.search(r'위와\s*동일|동일\s*사유', w): inh = (k, w); break
             if inh: d['static'] = ('PASS', f"사유 상속({inh[0]}): {inh[1][:120]}")
-            else: d['static'] = ('PASS', f"사유 있음: {r.get('why', '')[:60]}") if RX_REASON.search(why) and len(norm(r.get('why') or r['text'])) >= 8 else ('REVIEW', '제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인')
+            elif reason_fact(r['id'], why): d['static'] = ('PASS', f"사유 주장 AS-IS 사실 확인: {reason_fact(r['id'], why)} · 사유 {(r.get('why') or '')[:60]}")
+            # 2026-11-19 사용자('사람 확인으로 넘길 항목 중 일반 항목은 권장안으로 처리 · 필요할 때만 판정필요 · 미검증으로 남으면 안 됨'):
+            #   근거 없는 제외·해당없음 = AS-IS 동작(대조표 요소)을 근거 없이 뺀 것 → 조치 대상(FAIL)으로 추출. 권장 조치 = AS-IS 동작 구현, 미이식이 맞으면 대조표 사유에 근거(룰·지시·이동 위치) 보강
+            else: d['static'] = ('PASS', f"사유 있음: {r.get('why', '')[:60]}") if RX_REASON.search(why) and len(norm(r.get('why') or r['text'])) >= 8 else ('FAIL', f"[대조표 근거 없음] 요소 '{(r.get('label') or r['text'] or '')[:60]}' 제외 사유 '{(r.get('why') or '')[:80]}' 에 룰·지시·AS-IS 원문·이동 위치 근거 없음 · 권장 조치: AS-IS 동작 구현, 미이식이 맞으면 대조표 사유에 근거 보강")
         elif c == 'X-LOC':
             r = rmap[d['name']]; loc = r.get('loc', '') or r['text']  # 위치 열이 없는 표는 행 전체에서 파일 참조를 찾는다
             files = re.findall(r'([A-Za-z0-9_.\-/@]+\.(?:tsx?|scss|sql|java|xml))(?::(\d+)(?:\s*[-~]\s*(\d+))?)?', loc)
@@ -932,6 +999,10 @@ def main():
         na71_ = cr071_na(d['hits']) if d['et'] == 'COND' and not d['static'] else ''   # 2026-11-13 T286: 기준표 제외(CR-071) 판정이 다른 증거의 FAIL 보다 우선
         if na71_ and j not in (None, 'NA'):
             j = 'NA'; d['static'] = ('NA', na71_[:400])
+        # 2026-11-19 미검증 해소(SCP0096 G1|COND:cboDayWeek·cboInputValue): 기준표 제외(CR-071 · 버튼 영역 이동) 정적 NA 가 있어도
+        #   E2E @trace 가 조회영역에서 칸을 못 찾은 ERROR 가 judge() 에서 이겼다(T286 은 정적 판정이 없을 때만 적용) → 기준표 제외 정적 NA 를 우선
+        if d['static'] and d['static'][0] == 'NA' and str(d['static'][1]).startswith('기준표 제외(') and j not in (None, 'NA'):
+            j = 'NA'
         df = DEFS.get(d['check'], {})
         if j is None or j == 'NOT_RUN':
             runners = set(split(df.get('runner', 'verify').replace('|', ';')))
@@ -942,9 +1013,15 @@ def main():
             if all(rid in blocked_rows for rid in d['rows']) and d['check'] != 'X-NOTIMPL':
                 bl = [rid for rid in d['rows'] if rid in rmap][:2]
                 j, why = 'BLOCKED', '선행 미구현에 종속 — ' + ' / '.join(f"대조표 {rid} '{(rmap[rid].get('label') or '')[:60]}'({(rmap[rid].get('why') or '')[:110]})" for rid in bl) + f" — 이 {d['check']} 검사는 그 기능이 구현된 뒤 검증(같은 결함의 종속 항목)"
-            elif d['check'] in ('B1', 'B2', 'B3', 'B4') and not d['hits'] and combo_applicable(d['et'], d['name'], (E.crule.get(d['name'].split(' / ')[0].strip(), {}) or {}).get('cell_type', ''), E.combo_targets)[0] is False:
+            elif d['check'] in ('B1', 'B2', 'B3', 'B4') and not d['hits'] and combo_applicable(d['et'], d['name'], (E.crule.get(d['name'].split(' / ')[0].strip(), {}) or {}).get('cell_type', ''), E.combo_targets, set(E.geff))[0] is False:
                 # 2026-11-12 T271: 콤보가 아닌 대상에 붙은 콤보 검사 — 사실 근거로 해당없음(종전 = '실행 경로 없음')
-                j, why = 'NA', '실측: ' + d['name'].split(' / ')[0].strip() + ' 은 콤보 검사 대상 아님 — ' + combo_applicable(d['et'], d['name'], (E.crule.get(d['name'].split(' / ')[0].strip(), {}) or {}).get('cell_type', ''), E.combo_targets)[1]
+                j, why = 'NA', '실측: ' + d['name'].split(' / ')[0].strip() + ' 은 콤보 검사 대상 아님 — ' + combo_applicable(d['et'], d['name'], (E.crule.get(d['name'].split(' / ')[0].strip(), {}) or {}).get('cell_type', ''), E.combo_targets, set(E.geff))[1]
+            elif d['et'] == 'SP' and not d['hits'] and _sp_unused(d['name']):
+                # 2026-11-18 미검증 해소(SCP0096 DM0003 DB-SYN): 짝 표가 'AS-IS 결과 미사용'(source=unused)으로 정한 SP — 이 화면 동작에 쓰이지 않아 시노님·권한·정렬 검사 대상 아님
+                j, why = 'NA', f"실측: {d['name']} 은 AS-IS 결과 미사용 SP — 짝 표: {_sp_unused(d['name'])[:200]}"
+            elif d['et'] == 'SP' and not d['hits'] and _sp_other_menu(d):
+                # 2026-11-18 미검증 해소(SCP0096 P_SCP0019_GET_WORKING_TIME F4·A6): 대조표가 다른 화면 PROC 를 이 화면 구현으로 적었고 이번 실행 호출 기록에도 없다 — 대조표 기재 확인 대상
+                j, why = 'NOPATH', f"[대조표 오기 의심] {d['name']} — 배선 메뉴 {_sp_other_menu(d)} · 이 화면 실행 중 호출 0건(Doc/verify/{MENU}/sqllog_calls.json) · 대조표 해당 행의 구현 위치 확인"
             elif df.get('impl') != 'Y': j, why = 'TODO', f"검사기 미구현 — 검증 엔진 구현 대상: {df.get('how', '?')}"
             elif runners & {'trace', 'smoke', 'crud', 'auth', 'meta'} or linked:
                 j, why = 'NOT_RUN', f"검사기 있음({df.get('checker', '')}) — 실행 필요: " + ('원장 행 실행(@verify)' if linked else '·'.join(sorted(runners & {'trace', 'smoke', 'crud', 'auth', 'meta'})))
@@ -1106,7 +1183,7 @@ def cascade_src(r, rmap, depth=0):
     return ''
 
 
-def combo_applicable(et, name, cell_type, combo_targets):
+def combo_applicable(et, name, cell_type, combo_targets, grid_cols=None):
     """콤보 검사(B1·B2·B3·B4)가 이 대상에 해당하는가 → (True|False|None, 근거). None = 사실 부족(판정 안 함). T271
     cell_type = cell_rules.csv 의 그 컬럼 셀 유형('' = 사실 없음) · combo_targets = combo_src.csv 의 target 집합"""
     nm = (name or '').split(' / ')[0].strip()
@@ -1114,6 +1191,9 @@ def combo_applicable(et, name, cell_type, combo_targets):
         return True, 'combo_src.csv 에 AS-IS 콤보 원천 있음'
     if et in ('COL', 'PCOL'):
         ct = (cell_type or '').upper()
+        # 2026-11-18 미검증 해소(SCP0096 COLUMN_NAME·DAY_CODE B3·B4 '실행 경로 없음'): AS-IS 그리드 컬럼(grid_effective)도 셀 규칙도 콤보 원천도 없는 이름 = 데이터 테이블 컬럼(GetDayOfWeek 의 dt.Select 등) — 콤보 아님
+        if not ct and grid_cols and nm not in grid_cols and not re.match(r'^(<DYNAMIC|[A-Z]{1,2}_?[0-9]{6,8}$)', nm):  # 사실 파일이 비었거나 동적 칸이면 판정 안 함
+            return False, f"AS-IS 그리드 컬럼 아님(grid_effective.csv {len(grid_cols)}개·cell_rules.csv 에 없음) · combo_src.csv 에 콤보 원천 없음 — 데이터 테이블 컬럼"
         if not ct:
             return None, ''
         if 'COMBO' in ct:
@@ -1124,6 +1204,39 @@ def combo_applicable(et, name, cell_type, combo_targets):
             return False, f"AS-IS 조회조건 컨트롤 {nm} = 콤보류 아님(이름 접두) · combo_src.csv 에 콤보 원천 없음"
         return None, ''
     return None, ''
+
+
+_SP_UNUSED = None
+_SQL_CALLED = None
+
+
+def _sp_unused(name):
+    """2026-11-18: 짝 표 source=unused(AS-IS 결과 미사용) 인 이 화면 AS-IS SP 면 그 note · 아니면 ''"""
+    global _SP_UNUSED
+    if _SP_UNUSED is None:
+        _SP_UNUSED = {(r.get('asis_sp') or '').upper(): r.get('note') or '' for r in rdcsv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'sp_pair.csv'))
+                      if (r.get('menu_id') or '').upper() == MENU.upper() and r.get('source') == 'unused'}
+    return _SP_UNUSED.get((name or '').split('.')[-1].upper(), '')
+
+
+def _sp_other_menu(d):
+    """2026-11-18: 추적 요소 SP 의 배선(callProc)이 모두 다른 메뉴이고 이번 실행 호출 기록(sqllog_calls.json)에 없으면 그 메뉴 목록 · 아니면 ''"""
+    global _SQL_CALLED
+    try:
+        pm, _via = resolve_call_proc(d.get('name') or '')  # F4·A6 조건 생성과 같은 배선 해석
+    except Exception:
+        pm = []
+    menus = sorted({(r.get('menu_id') or '').upper() for r in pm if (r.get('menu_id') or '')})
+    if not menus or MENU.upper() in menus:
+        return ''
+    if _SQL_CALLED is None:
+        try:
+            _SQL_CALLED = {str(c.get('proc') or '').upper() for c in (json.load(open(os.path.join(ROOT, 'Doc', 'verify', MENU, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or [])}
+        except (OSError, ValueError):
+            _SQL_CALLED = None
+    if not _SQL_CALLED or (d.get('name') or '').upper() in _SQL_CALLED:
+        return ''
+    return ','.join(menus)
 
 
 _SP_PAIR = None
@@ -1593,12 +1706,12 @@ def engine_condition(d, rmap):
         j['sortNone'] = bool(srs) and not any(r['keys'] for r in srs)
         pm, via = resolve_call_proc(d['name'])  # F4 와 같은 배선 해석(API_ID·축약명 포함)
         if via: j['callProcVia'] = via
-        j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in pm][:4]
+        j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in sorted(pm, key=lambda r: (r['menu_id'] or '').upper() != MENU.upper())][:4]  # 2026-11-18: 공통 PROC 는 여러 화면 배선 — 이 화면 배선을 앞에 두고 자른다(SCP0096 달력 SP 허위 FAIL)
     if d['et'] == 'SP' and c == 'F4':
         # 배선 해석 = resolve_call_proc(프로시저명·API_ID·골든·정규화·토큰 1:1) — 2026-10-29 SCP0020 GET_TACT_TIME_EXCEPT · SCP0111 API_ID/축약명 허위 '배선 없음'
         pm, via = resolve_call_proc(d['name'])
         if via: j['callProcVia'] = via
-        j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in pm][:4]
+        j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in sorted(pm, key=lambda r: (r['menu_id'] or '').upper() != MENU.upper())][:4]  # 2026-11-18: 공통 PROC 는 여러 화면 배선 — 이 화면 배선을 앞에 두고 자른다(SCP0096 달력 SP 허위 FAIL)
     if c == 'A10':
         acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'actions.csv'))
         # 2026-11-09 T173(SSP0025 13번 허위 FAIL): 팝업 파일(SSP0025_ItembyDivisionPopup.cs Form_Load:182 FindData)의 로드 조회를 화면 진입 자동 조회로 잡았다

@@ -62,11 +62,15 @@ export const ProductStatusGrid = () => {
       grid.refresh();
       const n = grid.rows.length;
       if (n === 0) return;
-      const avail = host.clientHeight - grid.columnHeaders.height;
+      // 1px 하단 가드: 행 합을 host 높이에 꼭 맞추면 마지막 행의 하단 그리드선이 클립 경계
+      //   (panel overflow:hidden)에 걸린다. 컨트롤 하단 테두리를 제거해(.wj-content border-bottom:none)
+      //   이 그리드선이 곧 테두리라, 분수 배율(Windows 125/150%)에서 host 가 커질 때 반올림으로
+      //   경계 밖으로 밀려 잘린다. 1px 남겨 하단선을 항상 클립 안쪽에 둔다(여백 1px 는 눈에 안 띔).
+      const avail = host.clientHeight - grid.columnHeaders.height - 1;
       if (avail <= n) return;
       const base = Math.floor(avail / n);
       grid.rows.defaultSize = base;
-      // floor 나머지를 마지막 행이 흡수 → 바닥 여백 0(오버플로도 없음).
+      // floor 나머지를 마지막 행이 흡수 → 바닥 여백 1px 고정(오버플로 없음).
       grid.rows[n - 1].height = base + (avail - base * n);
     };
     let raf = 0;

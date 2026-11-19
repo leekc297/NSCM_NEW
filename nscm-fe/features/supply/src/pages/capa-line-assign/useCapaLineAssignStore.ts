@@ -182,17 +182,19 @@ export const useCapaLineAssignStore = createPersistedStoreWithTab<State & Action
       }),
 
     /**
-     * Division 변경(싱글 콤보) — TO-BE 공통 요건: Division 을 제외한 검색조건을 전부 기본값으로
-     * 초기화하고 두 그리드를 모두 비운다(재조회(Search) 전까지 빈 상태). 이 화면엔 기간/날짜
-     * 조회조건이 없어 유지 대상은 Division 뿐이다(기존 inline onChange 가 놓치던 `itemId`/`validYn`
-     * 도 함께 초기화된다). `divisionType` 은 조회조건이 아니라 화면 모드 스위치라 유지하고
-     * (R-01 — 모드 전환만 두 탭을 바꾸는 트리거), 숨는 축(operation·electrode)은 현재 모드 규약과
-     * 동일하게 ELTR 이면 `[]`, 아니면 `[ALL]` 로 둔다(`changeDivisionType`·`handleResetCondition` 과 일치).
-     * 편집중(dirty) 가드(MSG00704)는 Form onChange 의 `confirmIfDirtyKey` 가 처리한다(commit 51d4e9fa).
+     * Division 변경(싱글 콤보) — AS-IS `cboDivision_SelectedIndexChanged`(cs:5510) 가 실제로 하는 것만
+     * 재현한다: `RefreshVersion/VersionSeq/PlanType/ProgressStatus` + `RefreshAll`(Site/Plant/Factory/
+     * Line/Operation/ElectrodeType 후보 재생성). **`cboValid`(Active)·`txtItem`(Basic Nickname)은 건드리지
+     * 않는다**(cboValid 는 init 1회 바인딩 cs:1737, cboDivision 핸들러에 등장 0건) → 두 값은 **유지**한다.
+     * 종전엔 "Division=전 조건 초기화" 공통 요건을 과적용해 `validYn`/`itemId` 까지 ALL/''로 날렸으나,
+     * AS-IS 는 Div 를 바꿔도 Active 가 고른 값 그대로였다(SCP0104 테스트 No.2, 2026-11-18 — 소스 실측).
+     * `divisionType` 은 조회조건이 아니라 화면 모드 스위치라 유지하고(R-01), 숨는 축(operation·electrode)은
+     * 현재 모드 규약대로 ELTR 이면 `[]`, 아니면 `[ALL]`. Site~Line 은 RefreshAll 이 후보를 교체하므로 ALL
+     * 리셋이 등가다. 편집중(dirty) 가드(MSG00704)는 Form onChange 의 `confirmIfDirtyKey` 가 처리한다.
      */
     setDivision: divisionId =>
       set(state => {
-        const { divisionType } = get().searchParams;
+        const { divisionType, validYn, itemId } = get().searchParams;
         const isEltr = divisionType === DIVISION_TYPE.ELTR;
         state.searchParams = {
           ...initSearchParams,
@@ -200,6 +202,9 @@ export const useCapaLineAssignStore = createPersistedStoreWithTab<State & Action
           divisionType,
           operationIds: isEltr ? [] : [ALL],
           electrodeTypes: isEltr ? [] : [ALL],
+          // AS-IS cboDivision 핸들러가 손대지 않는 축 — 선택값 유지(테스트 No.2).
+          validYn,
+          itemId,
         };
         state.filters = {};
         state.applied = null;

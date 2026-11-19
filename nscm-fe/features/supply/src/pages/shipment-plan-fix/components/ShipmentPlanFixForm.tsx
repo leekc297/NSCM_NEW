@@ -4,7 +4,7 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
@@ -231,23 +231,7 @@ export const ShipmentPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
             bucketOptions,
             v => set({ bucket: v as BUCKET_TYPE })
           )}
-          {/* SUM 체크박스 — W_/M_ SUM 롤업 컬럼 가시성 토글(design 03 §2.6, 재조회 없음).
-              체크박스 앞·라벨 뒤(Checkbox labelText), FormItem 라벨 칸은 공백으로 두어 다른 필드와 동일한
-              간격 확보 — 바로 앞 Period 와 붙어 보이던 문제 해소(자매 ShipmentPsiForm Sum 과 동형). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-              )}
-            />
-          </Grid>
+          {/* SUM(chkSum)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18, SCP0013 동형). */}
         </>
       }
     />

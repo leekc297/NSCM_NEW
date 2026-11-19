@@ -191,21 +191,25 @@ export const Delegate = ({ tabId, title }: PageProps<MENU_ID>) => {
     void (async () => {
       if (savingRef.current) return;
 
-      // 위임자 실존 검증(UserName_Search, cs:341-344). AS-IS BtnSave_Click(cs:344):
+      // 위임자 실존 검증(UserName_Search, cs:341-344). AS-IS BtnSave_Click(cs:344, 패치본):
       //   `string.IsNullOrEmpty(sDelegateeID) && UserName_Search(txtDelegatee.Text) == false → return`
-      //   — 확정 id(sDelegateeID)가 비어 있으면 txtDelegatee.Text 로 UserName_Search 를 돌린다.
-      //   이름이 빈값이어도 예외 없이 그대로 서버로 흘려(P_USER_CHECK), 빈 검색어가 전체 매칭돼 다건
-      //   (MSG00302) 다이얼로그가 뜬다 — 화면 열자마자 Save 시 AS-IS 가 "다중검색된 User… 검색창
-      //   여시겠습니까?" 를 띄우는 동작이다(사용자 지시 2026-11-10 — 완전 파리티, 빈값도 검색에 태운다).
-      //   그래서 가드는 "이름이 있을 때"가 아니라 "확정 id 가 없을 때"다. 이름이 있으면 id 확정 여부와
-      //   무관하게 항상 재검색해 동명이인(다건) 다이얼로그도 유지한다. 1건이면 그 UserID 로 확정(cs:795)
-      //   / 다건 MSG00302 / 0건 MSG00301 로 검색창 유도.
+      //   — **확정 id(sDelegateeID)가 비어 있을 때만** txtDelegatee.Text 로 UserName_Search 를 돌린다(&&
+      //   단축평가). 팝업에서 이름을 고르면 sDelegateeID 가 확정되므로(cs:849) 저장 시 재검색을 하지 않고
+      //   그 UserID 로 바로 저장한다. 이름을 수동 편집하면 sDelegateeID='' 로 리셋되고(cs:951 =
+      //   DelegateForm onChange delegateeId:''), 그때만 재검색한다. 주석 cs:342 "원본 … UserName_Search
+      //   무조건 호출" 은 동명이인(다건) 선택이 저장 때 뒤집히던 버그 [E20261001-001262] 라 이 가드로 고쳤다.
+      //   TO-BE 도 동일하게 "확정 id 가 없을 때만" 재검색한다 — 직전 구현의 `|| input.delegatee.trim()`
+      //   은 선택(id 확정) 후에도 이름만 있으면 재검색해 그 버그를 되살렸다(사용자 확인 2026-11-18).
+      //   빈값 저장(화면 열자마자 Save)은 delegateeId 가 빈값이라 여전히 빈 검색 → 다건(MSG01305)로 간다
+      //   (2026-11-10 "빈값도 검색에 태운다" 파리티 유지). 1건=UserID 확정(cs:795) / 다건=MSG00302 / 0건=MSG00301.
       let delegateeId = input.delegateeId;
-      if (!delegateeId || input.delegatee.trim()) {
+      if (!delegateeId) {
         const found = await searchDelegatee(input.delegatee);
         if (found.status === 'one') {
           delegateeId = found.userId;
-          setInput({ delegateeId: found.userId });
+          // AS-IS cs:796-799 — 1건 확정 시 입력칸을 타이핑값(ID 등) 대신 정식 사용자명으로 치환한다.
+          //   (팝업 선택 경로는 handleUserSelected 가 이미 이름을 넣으므로 불변.)
+          setInput({ delegateeId: found.userId, delegatee: found.userName });
         } else if (found.status === 'many' || found.status === 'none') {
           // AS-IS: 다건=MSG00302 / 0건=MSG00301 "검색창 여시겠습니까?" Yes → 팝업 오픈.
           const key = found.status === 'many' ? MSG.DELEGATEE_MULTI : MSG.DELEGATEE_NOTFOUND;

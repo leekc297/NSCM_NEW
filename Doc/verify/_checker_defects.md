@@ -570,3 +570,41 @@
 - 원인(코드): 여러 도구가 번갈아 읽고 고쳐 쓰는 공용 파일(e2e_results.json·verify_ledger.csv)을 재시도 없이 'w' 로 연다. diff_ingest 는 읽기 실패도 빈 목록으로 넘겨 덮어쓰기 위험이 있었다.
 - 조치: `safe_io.py`(재시도 → 'r+b' · 못 읽으면 예외) · diff_ingest·eg_ingest 4곳. 자기 시험 6/6 · 신·구판 출력 바이트 동일.
 - 재발 방지: 공용 결과 파일을 고쳐 쓰는 도구는 safe_io 를 쓴다 · '못 읽음' 과 '없음' 을 구분한다 · 파이썬 소스 치환은 셸 heredoc 이 아니라 파일로 쓴 스크립트로(역슬래시 변형 사고 11-13 16:02).
+
+## T314~T319 (2026-11-18 18:1x · SCP0111 미검증 해소 라운드 1)
+| ID | 증상(실측) | 원인 | 조치 |
+|---|---|---|---|
+| T314 | SCP0111 F7·F8 '저장 미실행' NOT_RUN. 같은 실행 restore_touched '시험 계정 변경 행 12 → 되돌림 12' | save_audit.py 가 신규 행 정리 백업(cleanup_*.sql)만 근거로 씀. 기존 행 수정형(editonly) 저장 기록을 안 봄 | restore_touched.py 키 없는 복원이 되돌리기 전 save_trace.json(표별 변경 행 · 감사 판정) 기록, save_audit.py 가 백업 없을 때 이 기록으로 판정(자기 시험 6/6) |
+| T315 | AS-IS 저장 SP 대상 표에 'X'·'A'·'DATE' 같은 별칭이 들어감(74개 SP 중 10개 차이) · 블록 주석 안 INSERT 를 대상 표로 셈 | 줄 단위 '--' 자르기 뒤 블록 주석 처리 · UPDATE 별칭 미해석 | strip_tsql_comments(문자열·줄 주석·중첩 블록 주석) · UPDATE/DELETE 별칭을 같은 문장 FROM/JOIN 표로 바꿈. SSP0003 SSP_ANL_SHIP_PLAN(966~1492줄 주석 안) 제외 · SCP0005 'INSERT 줄바꿈 INTO' 포착 |
+| T316 | I2 언어 전환 3언어 생략(T200) — 다른 화면 E2E 와 겹치면 6분 뒤 생략, I3 도 같이 미검증 | 언어 전환 재시도 경로 없음 | run_verify.py lang_retry: 본 E2E 뒤 다른 화면 종료를 최대 langRetryMaxMin(기본 45분) 기다려 I2 만 재실행 · 대기 표식(_run.langwait.<ID>.lock)으로 교착 방지 |
+| T317 | 시작·끝 월 칸 분리형 기간(_periodSplit_ · MUI 월 팝오버)에서 G1 '달력이 열리지 않음' · E2 역전 '못 넣음' · M2 'calendar' 무반응 | 기간 함수가 범위 달력(_popup_ · monthPanel)만 다룸 · E2 는 키보드 입력만 · M2 가 조회조건 칸 안 달력 아이콘을 전용 버튼으로 셈 | smoke-extra.ts isSplitPeriod·pickSplitMonth · periodShiftEnd·periodReverseTry 분리형 경로 · _verify E2 달력 보조 경로 · M2 조회조건 칸 안 글자 없는 아이콘 버튼 제외 |
+| T318 | crud 'Insert 후 행 증가 없음'(SCP0111·SSP0023·SSP0060). 실측 DOM 37 → 37, 그리드 1259 → 1260 | 화면에 그려진 행(.wj-row) 수로 판단(가상화) · 빈 행 못 찾으면 0번(기존 행)에 마커 입력 경로 | 그리드 행 수 병행 · 신규 행은 CRUD_TYPE=I 행 위치로 · 못 찾으면 중단 · editonly 화면은 저장 시험 보류(정리 경로 없음 · 분류 '저장보류') |
+| T319 | 결함원장 J4 행 '측정 코드 없음' 고정(GAPSELF-22 · DM-247) | 그룹×메뉴 대조 도구가 체인 밖 · 같은 결함을 재는 EG 행과 연결 없음 | menu_auth_sync.py 신설(체인 post) · judge.py J4 결함원장 행 연결 · K4 추가 노출 버튼 CR-070 판정 경로 |
+
+## T320~T322 (2026-11-18 19:1x~19:4x · SCP0111 미검증 해소 라운드 2)
+| ID | 증상(실측) | 원인 | 조치 |
+|---|---|---|---|
+| T320 | E2 기간 역전 V-ce8459b6 '[확인 대상] 조회 요청 나감 — AS-IS 기간 검사 근거 못 찾음'. AS-IS cs:845 `if (DateTime.Compare(dtFrom, dtTo) > 0)` MSG00344 | _verify E2 asisGuard 정규식이 `DateTime.Compare(from, to) > 0` 형태를 못 잡음(_trace G1 역전 판정은 잡음) | asisGuard 에 같은 패턴(raw·guard 칸) 추가 → V-ce8459b6 FAIL(화면 결함 · FE 가이드 G8) |
+| T321 | --only E2 실행 뒤 F7·F8 PASS → 미검증으로 되돌아감(19:20) | restore_touched 가 저장 없는 실행에서 지난 save_trace.json 을 지움(T314 의 낡은 기록 방지) | run_verify --only 는 restore_touched --keep-trace(지난 기록 유지) |
+| T322 | --only F1 실행 뒤 E4 2행(V-f679aa42·V-8f1324a1) NA → 판정필요(미검증) | W4 E4 시험이 '다른 시나리오에서 판정' 행에 판정필요를 써서, 같은 실행에 W4d 가 안 돌면 앞 실행의 확정 NA 를 덮음 | _trace.spec.ts PREV(실행 전 결과 파일) · 확정 판정(PASS·FAIL·NA)이 있으면 넘김 문구를 쓰지 않음. 전체 실행은 결과 파일을 .prev 로 옮긴 뒤 시작하므로 종전과 같음 |
+
+
+## T323~T332 (2026-11-19 00:0x~00:2x · SCP0096 미검증 해소 라운드 4)
+| ID | 증상(실측) | 원인 | 조치 |
+|---|---|---|---|
+| T323 | F7·F8 '저장 정리 기록 없음' NOT_RUN. 같은 실행에서 저장 시험이 OSP 2행·DEFAULT 1행을 바꾸고 감사 판정 4건 PASS | restore_touched 키 있는 복원 경로가 save_trace.json 을 쓰지 않음(키 없는 경로만 씀) | 키 있는 경로도 tables_scanned·changed·created·audit 를 save_trace.json 에 기록 |
+| T324 | F7 '저장 SP 없음' NA 후보(golden_cases 에 저장 SP 행 없음) | prereq 가 화면 행이 1건이라도 있으면 골든을 다시 만들지 않음(뒤에 추가된 AS-IS 호출 SP 누락 · SCP0096·SSP0005) | prereq.golden_missing_sps: endpoints.csv 현행 MATCH SP 가 빠졌으면 재생성 |
+| T325 | 경계값 저장 '원값이 경계값·빈칸이 아닌 편집 행 없음'(Div 82 에 5 행 2개 있음) | 행 수 기준 Division 1개만 바꿔 봄 | findRowAcrossDivisions: 쓸 행 기준으로 Division 후보 전부 순회 |
+| T326 | 빈값 저장 '입력 경로 실패'(같은 증상 SCP0037·SCP0122·SCP0127) | 빈값을 그리드가 거부하는 화면 동작을 측정 실패로 기록 | 칸 설정 isRequired·dataType 실측 + AS-IS 빈값 처리(같은 칸 검증 · 빈값 기본값) 대조(judgeBlankReject) |
+| T327 | D2 '@DYNVAL 에 맞는 편집 가능 동적 칸 없음'(일자 칸 Y/N) | 수량 칸 전제 시나리오를 숫자 칸 없는 화면에도 생성 | 동적 칸 메타 dataType 숫자 0 · 숫자 값 0 이면 NA(NOT_APPLICABLE_TAG) |
+| T328 | E3 확정 요건 '자동 실측 없음' ERROR | 메타 필수 칸(USER_SELECTABLE_FLAG=N) 0개 화면을 판정할 분기 없음 | judge._meta_req_none 메타 근거 NA |
+| T329 | 다른 화면 PROC(PKG_SCP0019)가 이 화면 SP 로 추적됨 → F4 ERROR · A6 NOPATH · 집계 7행 | AS-IS 문장 원문 칸에 합쳐진 주석 안 호출('//var req = ...')을 SP 로 추출 | commented_calls.csv 에만 있는 SP 는 추출 제외(commented_only_sps) |
+| T330 | G1 집계 11행 ERROR(하위 Day of the week·Input Value) | 기준표 제외 정적 NA 가 있어도 E2E @trace '칸을 찾지 못함' ERROR 가 우선(T286 은 정적 판정 없을 때만) | 기준표 제외 정적 NA 우선 |
+| T331 | J4 권한 대조 PARTIAL('TO-BE 메뉴에 INSERT·DELETE 버튼 정의 없음') | AS-IS 버튼 메서드 본문 없음(동작 없는 버튼)을 고려하지 않음 | menu_auth_sync.empty_overrides: 빈 재정의 버튼은 비교 제외(근거 기록) · 대조표 사유 주장 확인(reason_fact)에도 사용 |
+| T332 | C1 '?INFAC_40' 판정필요 · A1 같은 사용자 '측정 경로 없음' | TO-BE 이름을 AS-IS 원천으로만 환산 · 사용자 인자 없는 SP 에 같은 사용자 재실행 요구 | combo_oracle.resolve_names(사내 마스터 이름 칸 자기 검증) · a1_live 사용자 인자 없으면 NA(SP 인자 근거) |
+
+| T333 | 빈값 저장 '[입력 경로 실패] 칸 설정 isRequired=false · 거부 원인 미확인'(SCP0096 · 같은 칸 0·6 입력은 성공) | 칸·편집기 필수 설정만 화면 거부 근거로 봄 · 같은 칸 같은 키보드 경로의 다른 값 입력 성공을 근거로 쓰지 않음 | judgeBlankReject pathOk: 같은 칸 0 왕복 입력 성공이면 화면 빈값 거부로 판정 · 편집기 isRequired 기록 |
+| T334 | --only 부분 재수행 뒤 콤보 순서 B3 2행 '실행 경로 없음'(SCP0096 Bulk Update 창 콤보) | flushRt 가 채운 구역을 통째로 교체 · 부분 실행에서 안 돈 시험의 콤보 항목 소실 | VERIFY_ONLY 이면 항목 단위 합침 |
+| T335 | 체인 반복이 재수행 2에서 중단(처리 대상 3 → 4 · 1행 해소 + 새 2행) | 건수만 비교 · DB MODE 에서 줄 수 없는 대조표 행을 처리 대상에 포함 | progress() 행 단위 비교 · DB_ONLY 대조표 행 = 담당 가이드 |
+| T336 | 시나리오 KO 언어 저장 '언어 변경 실패(ENG→ENG)'(SCP0096 07:21 · 00:25 같은 코드 PASS) | 언어 단계 1회 클릭 + 2.5초 고정 대기 · 재시도 없음 | 바뀔 때까지 최대 8초 · 메뉴 다시 열어 최대 3회 · 회차 기록 |
+| T337 | 대조표 근거 없는 제외 행·선행 결함 종속 행이 '사람 확인'·'화면 보완 뒤 측정' 미검증으로 남음(SCP0096 4행) | 판정을 사람에게 넘기는 분기 | 사용자 승인 11-19: 권장안 판정 FAIL(근거 없는 제외 = 구현·사유 보강 · 선행 결함 종속 = 같은 원인) |

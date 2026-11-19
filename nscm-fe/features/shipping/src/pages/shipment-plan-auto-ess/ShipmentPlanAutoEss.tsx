@@ -22,6 +22,7 @@ import type { EditTracker } from '@foundation/utils';
 import { GridAction, GridUtils, sessionTimeZone } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SsoUserModal, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import {
   registerDirtyCheck,
@@ -826,6 +827,14 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
         searchParam={sc}
         searchDirtyKey={mainDirtyKey}
         customButtons={customButtons}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={checked => set({ chkSum: checked })}
+          />
+        }
       />
 
       {/* splitContainer1 — Main(상) / Detail(하) 수직 드래그 분할 (design 01 §1).

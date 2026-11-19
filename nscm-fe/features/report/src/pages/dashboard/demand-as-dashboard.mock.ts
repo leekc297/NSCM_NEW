@@ -1,12 +1,21 @@
 // DMD0001 Demand AS Dashboard — 목업 더미 데이터.
 //   실제 SP/BE 연동 전 단계. 모든 값은 시안(기준월 2025-05) 기준 하드코딩이다.
 //   검색조건/제품 드롭다운 변경 시 아래 제품 키(PRODUCTS)로 시리즈를 스왑해 "재조회"를 재현한다.
+//   권고 Action·Excess 등 '결정된 산출 규칙'은 demand-as-dashboard.rules 로 분리했다(Main 시트 결정사항).
+
+import { ACTION_BY_CODE, computeExcessEa } from './demand-as-dashboard.rules';
+import type { ActionCode, ActionTone, StatusDot } from './demand-as-dashboard.rules';
+
+// 권고 Action 톤·상태 신호등 타입은 규칙 모듈이 정본 — 소비 컴포넌트 호환 위해 재노출한다.
+export type { ActionTone, StatusDot };
 
 export const PRODUCTS = ['P30B', 'N2.2A', 'P39', 'F2'] as const;
 export type ProductKey = (typeof PRODUCTS)[number];
 
 // ----- 검색조건 바 -----
-export const BIZ_TYPE_OPTIONS = ['전체', 'Module', 'Pack', 'Cell'] as const;
+// Biz Type — SCM_MST_ITEM.MATERIAL_CLASS 기준 Cell/Pack/Module (Main R4 결정사항, 순서 포함).
+export const BIZ_TYPE_OPTIONS = ['전체', 'Cell', 'Pack', 'Module'] as const;
+// OEM — 실데이터는 SSPM Master 의 End Customer (Main R5). 아래는 목업 샘플값.
 export const OEM_OPTIONS = ['전체', 'Volvo', 'GM', 'Ford', 'HKMC'] as const;
 export const BASE_MONTH = '2025-05';
 export const LAST_UPDATED = '2025-05-12 08:30';
@@ -97,9 +106,6 @@ export const KPI_CARDS: KpiCard[] = [
 ];
 
 // ----- 제품별 현황 (FlexGrid) -----
-export type StatusDot = 'green' | 'orange' | 'red';
-export type ActionTone = 'keep' | 'review' | 'produce';
-
 export interface ProductStatusRow {
   product: string;
   oem: string;
@@ -107,17 +113,25 @@ export interface ProductStatusRow {
   stock: string; // 현재 재고 (EA)
   cover: string; // Inventory Cover (개월)
   shortageMonth: string; // 예상 부족월
-  action: string; // 권고 Action
+  action: string; // 권고 Action — Inventory Cover 로 산출(deriveAction)
   actionTone: ActionTone;
   status: StatusDot;
 }
 
-export const PRODUCT_STATUS_ROWS: ProductStatusRow[] = [
-  { product: 'P30B', oem: 'Volvo', bizType: 'Module', stock: '1,200', cover: '18.0', shortageMonth: '–', action: '유지', actionTone: 'keep', status: 'green' },
-  { product: 'N2.2A', oem: 'GM', bizType: 'Pack', stock: '500', cover: '4.0', shortageMonth: '2026-03', action: '생산 필요', actionTone: 'produce', status: 'red' },
-  { product: 'P39', oem: 'Ford', bizType: 'Module', stock: '2,100', cover: '26.0', shortageMonth: '–', action: '감산 검토', actionTone: 'review', status: 'orange' },
-  { product: 'F2', oem: 'HKMC', bizType: 'Cell', stock: '300', cover: '3.0', shortageMonth: '2026-01', action: '생산 필요', actionTone: 'produce', status: 'red' },
+// 권고 Action 분류 코드(actionCode)는 백엔드가 내려준다 — 비즈니스 임계값은 백엔드 소유
+//   (사용자 결정 2026-11-16). FE 는 코드를 라벨·신호등 색으로만 매핑한다(ACTION_BY_CODE).
+//   예상 부족월은 월별 재고 투영(음수 전환 시점, Main R17)이 필요해 실데이터 연결 후 채운다 — 현재는 샘플.
+const PRODUCT_STATUS_BASE: (Omit<ProductStatusRow, 'action' | 'actionTone' | 'status'> & {
+  actionCode: ActionCode;
+})[] = [
+  { product: 'P30B', oem: 'Volvo', bizType: 'Module', stock: '1,200', cover: '18.0', shortageMonth: '–', actionCode: 'KEEP' },
+  { product: 'N2.2A', oem: 'GM', bizType: 'Pack', stock: '500', cover: '4.0', shortageMonth: '2026-03', actionCode: 'PRODUCE' },
+  { product: 'P39', oem: 'Ford', bizType: 'Module', stock: '2,100', cover: '26.0', shortageMonth: '–', actionCode: 'REVIEW' },
+  { product: 'F2', oem: 'HKMC', bizType: 'Cell', stock: '300', cover: '3.0', shortageMonth: '2026-01', actionCode: 'PRODUCE' },
 ];
+export const PRODUCT_STATUS_ROWS: ProductStatusRow[] = PRODUCT_STATUS_BASE.map(
+  ({ actionCode, ...row }) => ({ ...row, ...ACTION_BY_CODE[actionCode] })
+);
 
 // ----- 리스크 Heat Map -----
 export type RiskLevel = 'low' | 'medium' | 'high';
@@ -230,14 +244,49 @@ export interface ExcessRow {
   excessEa: string; // Excess (EA)
   excessAmount: string; // Excess 금액 (억원)
 }
-export const EXCESS_ROWS: ExcessRow[] = [
-  { product: 'P39', stock: '2,100', demand12m: '800', excessEa: '1,300', excessAmount: '10.4' },
-  { product: 'P30B', stock: '1,200', demand12m: '1,100', excessEa: '100', excessAmount: '0.8' },
-  { product: 'N2.2A', stock: '500', demand12m: '1,200', excessEa: '–', excessAmount: '–' },
-  { product: 'F2', stock: '300', demand12m: '1,000', excessEa: '–', excessAmount: '–' },
-  { product: '합계', stock: '–', demand12m: '–', excessEa: '1,400', excessAmount: '11.2' },
+// 과재고 base — 현재 재고·예상 수요(12M)·Excess 금액(억원). Excess(EA)·합계·폐기위험금액은 규칙으로 산출.
+//   Excess 금액 = Excess 수량 × 재고단가[SCP_ANL_MONTH_END_STOCK_R] (Main R33) — 단가 데이터가 필요해 현재는 샘플값.
+const EXCESS_BASE: { product: string; stock: number; demand12m: number; excessAmount: number | null }[] = [
+  { product: 'P39', stock: 2100, demand12m: 800, excessAmount: 10.4 },
+  { product: 'P30B', stock: 1200, demand12m: 1100, excessAmount: 0.8 },
+  { product: 'N2.2A', stock: 500, demand12m: 1200, excessAmount: null },
+  { product: 'F2', stock: 300, demand12m: 1000, excessAmount: null },
 ];
-export const EXCESS_RISK_AMOUNT = '11.2'; // 예상 폐기 위험 금액 (12M) 억원
+
+const fmtEa = (n: number) => n.toLocaleString('en-US'); // 천단위 구분
+const fmtAmount = (n: number) => n.toFixed(1); // 억원 소수 1자리
+
+// Excess(EA) = 현재 재고 − 예상 수요(12M) (Main R32), 0 이하는 '–'.
+const excessProductRows: ExcessRow[] = EXCESS_BASE.map(row => {
+  const ea = computeExcessEa(row.stock, row.demand12m);
+  return {
+    product: row.product,
+    stock: fmtEa(row.stock),
+    demand12m: fmtEa(row.demand12m),
+    excessEa: ea == null ? '–' : fmtEa(ea),
+    excessAmount: row.excessAmount == null ? '–' : fmtAmount(row.excessAmount),
+  };
+});
+
+// 합계 — Excess(EA) 총합 · 예상 폐기 위험 금액 = Excess 금액의 총합 (Main R34).
+const totalExcessEa = EXCESS_BASE.reduce(
+  (sum, row) => sum + (computeExcessEa(row.stock, row.demand12m) ?? 0),
+  0
+);
+const totalExcessAmount = EXCESS_BASE.reduce((sum, row) => sum + (row.excessAmount ?? 0), 0);
+
+export const EXCESS_ROWS: ExcessRow[] = [
+  ...excessProductRows,
+  {
+    product: '합계',
+    stock: '–',
+    demand12m: '–',
+    excessEa: fmtEa(totalExcessEa),
+    excessAmount: fmtAmount(totalExcessAmount),
+  },
+];
+// 예상 폐기 위험 금액 (12M) 억원 = Excess 금액의 총합 (Main R34).
+export const EXCESS_RISK_AMOUNT = fmtAmount(totalExcessAmount);
 
 // ----- 예측 정확도 (MAPE) -----
 export interface MapeBar {
@@ -268,6 +317,3 @@ export const FORECAST_INFO: { label: string; value: string }[] = [
   { label: '최근 모델 학습', value: '2025-05-05' },
   { label: '다음 업데이트', value: '2025-05-19 (예정)' },
 ];
-
-export const FOOTER_NOTE =
-  '※ 본 데이터는 참고용이며 실제 의사결정은 담당자 확인 후 진행 바랍니다.';

@@ -1,941 +1,946 @@
-﻿row_id,rule_id,target,result,evidence_head,saved_at
-V-ec851fa3,DB-SYN,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-bd1659ea,K6,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-88336e2b,A1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-0a7e1092,A2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-2bf8d6ab,A4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-b92c4f4a,A5,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-b1719833,F1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-eb1a6f39,F2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-c504d65e,F4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-9ce92210,F5,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-c6e2fa33,F6,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-d255e233,G3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-0bfa0acc,H4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-d741150d,H7,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-b9443e02,I1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-b62ed69f,I2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-558141af,I3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-20296eca,I4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-a72f36f0,J1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-d10cb90a,J2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-d73492ae,K1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-e8a469ef,K2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-90416cfc,K3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-e69ae6b3,E6,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-a65eeb5c,L1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-36c8d524,F8,SCP0096 저장 감사 필드,NOT_RUN,,2026-11-06 16:22
-V-7a4e6087,F7,SCP0096 저장 연계 테이블,NOT_RUN,,2026-11-06 16:22
-V-921d237e,F6,SCP0096 저장 행 수 불변,NOT_RUN,,2026-11-06 16:22
-V-1b71768b,F8,SCP0096 수정 감사 컬럼,NOT_RUN,,2026-11-06 16:22
-V-12687ffe,F7,SCP0096 저장 연계·이력 표,NOT_RUN,,2026-11-06 16:22
-V-39d20e0a,F1,SCP0096 컬럼별 저장 왕복,NOT_RUN,,2026-11-06 16:22
-V-920d61ad,F6,SCP0096 빈값 저장,NOT_RUN,,2026-11-06 16:22
-V-6ea5a5b3,F1,SCP0096 저장 실패 처리,NOT_RUN,,2026-11-06 16:22
-V-0a7854f3,H10,SCP0096 저장 취소 요청 없음,NOT_RUN,,2026-11-06 16:22
-V-3f046706,H11,SCP0096 저장 중 로딩,NOT_RUN,,2026-11-06 16:22
-V-a41e23ed,F2,SCP0096 붙여넣기 저장 인식,NOT_RUN,,2026-11-06 16:22
-V-0b386124,E4,SCP0096 키 중복 신규행,NOT_RUN,,2026-11-06 16:22
-V-a56a90e1,F7,SCP0096 2회 저장 행 수,NOT_RUN,,2026-11-06 16:22
-V-0d4e6b7d,F8,SCP0096 이력 행 값,NOT_RUN,,2026-11-06 16:22
-V-252a8840,E1,SCP0096 입력검증 음수 WORKING_TIME_DEFAULT,NOT_RUN,,2026-11-06 16:22
-V-c8c1219d,F1,SCP0096 2행 동시 저장,NOT_RUN,,2026-11-06 16:22
-V-9ee88c64,F6,SCP0096 0 값 저장,NOT_RUN,,2026-11-06 16:22
-V-06bf0ac0,H11,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-59d2ffab,H12,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-5c6d415a,J3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22
-V-6ff7c5a4,F10,PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22
-V-b713388c,A6,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22
-V-a007d973,A6,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22
-V-6393dee9,A6,DM0003_GET_BUCKET_TYPE_CODE,NOT_RUN,,2026-11-06 16:22
-V-33cc7445,A6,SCP0009_GET_SHEET_CALENDAR_3SPAN,NOT_RUN,,2026-11-06 16:22
-V-9ff07d45,A7,DM0003_GET_BUCKET_TYPE_CODE,NOT_RUN,,2026-11-06 16:22
-V-4ccf9d80,A7,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22
-V-63f41719,A7,SCP0009_GET_SHEET_CALENDAR_3SPAN,NOT_RUN,,2026-11-06 16:22
-V-2ff88be6,B1,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-cf76f5b2,B2,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-55c97f16,B3,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-e1a1ffe9,B4,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-5dedc1c3,B6,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-a241478b,B7,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-7a825d8e,G1,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-77ff74c9,G2,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-5814a68d,G4,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-aaf5204f,G7,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-f03c037f,H5,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-f360d4f6,C1,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-7e604b02,J1,조회조건 Div,NOT_RUN,,2026-11-06 16:22
-V-d01b01e7,B1,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-0943c85f,B2,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-b76a3794,B3,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-9cbddc43,B4,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-9f450894,B6,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-3a399051,B7,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-958874b6,G1,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-1a251f88,G2,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-e5df6715,G4,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-5f2cb6c0,G7,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-c9529229,H5,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22
-V-6f3a1fb0,G1,조회조건 Period,NOT_RUN,,2026-11-06 16:22
-V-5368d75a,G2,조회조건 Period,NOT_RUN,,2026-11-06 16:22
-V-9f0c58c6,G4,조회조건 Period,NOT_RUN,,2026-11-06 16:22
-V-4e5fd4ed,H5,조회조건 Period,NOT_RUN,,2026-11-06 16:22
-V-7c7e18e4,G8,조회조건 Period,NOT_RUN,,2026-11-06 16:22
-V-bf4654ef,D1,Shipment Working Day OSP.DIVISION_ID (Div),NOT_RUN,,2026-11-06 16:22
-V-48d656f6,H2,Shipment Working Day OSP.DIVISION_ID (Div),NOT_RUN,,2026-11-06 16:22
-V-cc8f7c51,D1,Shipment Working Day OSP.PLANT_SITE_ID (Plant Site ID),NOT_RUN,,2026-11-06 16:22
-V-567b421e,H2,Shipment Working Day OSP.PLANT_SITE_ID (Plant Site ID),NOT_RUN,,2026-11-06 16:22
-V-8daee420,D1,Shipment Working Day OSP.PLANT_SITE_NAME (Plant Site),NOT_RUN,,2026-11-06 16:22
-V-3ba10472,H2,Shipment Working Day OSP.PLANT_SITE_NAME (Plant Site),NOT_RUN,,2026-11-06 16:22
-V-75647788,D1,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-3ceff9c4,D5,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-7889b183,E1,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-9b73a42b,H8,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-d74723cb,H2,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-4b5367f5,H13,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-ac68ff83,D1,Shipment Working Day OSP.LAST_INPUT_DATE (Last Input Date),NOT_RUN,,2026-11-06 16:22
-V-d1546794,H2,Shipment Working Day OSP.LAST_INPUT_DATE (Last Input Date),NOT_RUN,,2026-11-06 16:22
-V-46a138cc,D1,Shipment Working Day OSP.MEASURE (Measure),NOT_RUN,,2026-11-06 16:22
-V-4e8e8924,H2,Shipment Working Day OSP.MEASURE (Measure),NOT_RUN,,2026-11-06 16:22
-V-66111d89,D1,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22
-V-7acef6b1,D1,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22
-V-f3503c61,A9,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22
-V-3c421015,H2,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22
-V-52c55752,H1,.dr[DefColumns.COLUMN_NAME] (dr[DefColumns.COLUMN_LABEL_NAME]),NOT_RUN,,2026-11-06 16:22
-V-7c369967,H1,Shipment Working Day OSP.DIVISION_ID (Division),NOT_RUN,,2026-11-06 16:22
-V-cc72550e,H1,Shipment Working Day OSP.LAST_INPUT_DATE (Last Input Date),NOT_RUN,,2026-11-06 16:22
-V-5c379304,H1,Shipment Working Day OSP.MEASURE (Measure),NOT_RUN,,2026-11-06 16:22
-V-b726662b,H1,Shipment Working Day OSP.PLANT_SITE_ID (Plant Site ID),NOT_RUN,,2026-11-06 16:22
-V-5335e699,H1,Shipment Working Day OSP.PLANT_SITE_NAME (Plant Site),NOT_RUN,,2026-11-06 16:22
-V-b0d1d082,H1,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22
-V-6d695172,MS1,MSG00134,NOT_RUN,,2026-11-06 16:22
-V-e82d924c,MS1,MSG00134,NOT_RUN,,2026-11-06 16:22
-V-fef5f373,MS1,MSG00004,NOT_RUN,,2026-11-06 16:22
-V-5403aadf,E4,MSG00135,NOT_RUN,,2026-11-06 16:22
-V-68bd0ef2,MS1,MSG00135,NOT_RUN,,2026-11-06 16:22
-V-ee57bb7a,E4,MSG00134,NOT_RUN,,2026-11-06 16:22
-V-131ad121,MS1,MSG00134,NOT_RUN,,2026-11-06 16:22
-V-42ede860,D3,siMain.SwitchLock,NOT_RUN,,2026-11-06 16:22
-V-cede8e21,D3,"DIVISION_ID,PLANT_SITE_NAME",NOT_RUN,,2026-11-06 16:22
-V-a4ba2e32,D3,"LAST_INPUT_DATE,MEASURE",NOT_RUN,,2026-11-06 16:22
-V-1f439558,E3,DataUtil.checkRequiredOfSearch,NOT_RUN,,2026-11-06 16:22
-V-11851cf7,D1,siMain.LockColumn,NOT_RUN,,2026-11-06 16:22
-V-6ba1bcea,G1,(동적 메시지),NOT_RUN,,2026-11-06 16:22
-V-5971c412,J1,this.SetDivisionAuthCheck,NOT_RUN,,2026-11-06 16:22
-V-5bf21eb5,E3,DataUtil.checkRequiredOfSpread,NOT_RUN,,2026-11-06 16:22
-V-b0948ec4,E4,MSG00004,NOT_RUN,,2026-11-06 16:22
-V-0c636878,MS1,MSG00004,NOT_RUN,,2026-11-06 16:22
-V-03bcbbd8,E4,(동적 메시지),NOT_RUN,,2026-11-06 16:22
-V-58504ac4,E4,(동적 메시지),NOT_RUN,,2026-11-06 16:22
-V-9e29a0e2,D3,spreadInfo.LockColumn,NOT_RUN,,2026-11-06 16:22
-V-2b2d62b2,E3,SCP0096 신규행 필수 공란 저장,NOT_RUN,,2026-11-06 16:22
-V-3a9cbaea,A5,컬럼/Measure 셋팅(개인화 Default),NOT_RUN,,2026-11-06 16:22
-V-95a50541,K2,컬럼/Measure 셋팅(개인화 Default),NOT_RUN,,2026-11-06 16:22
-V-ec0cd74c,B4,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22
-V-154fdd71,C1,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22
-V-f8a41f6a,B8,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22
-V-711f513a,H4,Main Grid 컬럼 폭,NOT_RUN,,2026-11-06 16:22
-V-6b798c0b,H9,Main Grid 컬럼 폭,NOT_RUN,,2026-11-06 16:22
-V-40b8c92a,G5,팝업 연결 조회조건·그리드 컬럼,NOT_RUN,,2026-11-06 16:22
-V-2728ec46,H6,전체 팝업 버튼 순서,NOT_RUN,,2026-11-06 16:22
-V-69c51d21,H7,Excel Download 양식(공통 모듈),NOT_RUN,,2026-11-06 16:22
-V-38535b9d,H6,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22
-V-a8bed1eb,K1,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22
-V-abe19a87,K3,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22
-V-de85e28c,I1,팝업 메시지 다국어(MSG00445 등),NOT_RUN,,2026-11-06 16:22
-V-b20f4611,I2,팝업 메시지 다국어(MSG00445 등),NOT_RUN,,2026-11-06 16:22
-V-80814eff,K1,그리드 필터(F4),NOT_RUN,,2026-11-06 16:22
-V-8bd60dd7,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22
-V-8d132d34,B3,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22
-V-961dfbab,B4,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22
-V-2131d48b,I1,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22
-V-f1a09c35,N1,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22
-V-2ceb2cdd,I4,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22
-V-ebddaf2c,K3,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함),NOT_RUN,,2026-11-06 16:22
-V-aa082a14,H4,화면 축소 시 조회조건·스크롤,NOT_RUN,,2026-11-06 16:22
-V-ecb097ed,G2,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,NOT_RUN,,2026-11-06 16:22
-V-0d4d1a4f,B6,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,NOT_RUN,,2026-11-06 16:22
-V-97e852bb,M4,팝업 입력 컬럼,NOT_RUN,,2026-11-06 16:22
-V-65ac7048,K3,그리드 헤더 클릭,NOT_RUN,,2026-11-06 16:22
-V-8cfb643a,H4,조회조건·버튼 배치 / 조회조건 콤보 드롭다운,NOT_RUN,,2026-11-06 16:22
-V-f7638a0a,L2,조회조건 텍스트 입력 중 그리드,NOT_RUN,,2026-11-06 16:22
-V-ddbe0a9b,L1,조회조건 텍스트 입력 중 그리드,NOT_RUN,,2026-11-06 16:22
-V-81765b2a,F5,Delete 버튼·CRUD Status D Flag,NOT_RUN,,2026-11-06 16:22
-V-abe4c038,K2,Measure 순서·메저셋팅 순서 저장,NOT_RUN,,2026-11-06 16:22
-V-8aa8c198,B4,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname),NOT_RUN,,2026-11-06 16:22
-V-f95f27ac,J4,Home / Auth Request 메뉴,NOT_RUN,,2026-11-06 16:22
-V-ae5ead24,H6,From City 검색 버튼,NOT_RUN,,2026-11-06 16:22
-V-82010ade,G5,From City 검색 버튼,NOT_RUN,,2026-11-06 16:22
-V-778a2f6b,I2,조회 결과 총/건 표기,NOT_RUN,,2026-11-06 16:22
-V-97b95ba1,I1,조회 결과 총/건 표기,NOT_RUN,,2026-11-06 16:22
-V-0dc16d28,H8,총 건수 표시,NOT_RUN,,2026-11-06 16:22
-V-c434cb81,E6,텍스트 입력 컨트롤(TEXT BOX · FPText) 마우스 드래그 선택 후 Delete/Backspace,NOT_RUN,,2026-11-06 16:22
-V-ea4d557d,A7,RTF Measure 금액(AMT) 계산 시 적용 LOC(판가) 기준(RTF · AMT · LOC),NOT_RUN,,2026-11-06 16:22
-V-4996771f,M4,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택),NOT_RUN,,2026-11-06 16:22
-V-5c9911c4,H6,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택),NOT_RUN,,2026-11-06 16:22
-V-db8f1de8,DB-SYN,TO-BE PKG 소스(PKG_DMF0003·PKG_DMF0021·PKG_DMF0042·PKG_DMF0045·PKG_DMF0049·PKG_DMF,NOT_RUN,,2026-11-06 16:22
-V-e7192bbf,J1,사용자 Division 권한 콤보 쿼리(DIVISION_ID · 권한 USE_YN) 필터,NOT_RUN,,2026-11-06 16:22
-V-65a3c78c,J4,그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화,NOT_RUN,,2026-11-06 16:22
-V-804bbd3b,J2,그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화,NOT_RUN,,2026-11-06 16:22
-V-89d56eff,A5,[SYS0002 결함 유형] User 화면 Group 컬럼,NOT_RUN,,2026-11-06 16:22
-V-71866a38,H1,[DMF0043 결함 유형] Contribution Version Valid_YN 컬럼,NOT_RUN,,2026-11-06 16:22
-V-5926d711,B6,[DMF0043_01 결함 유형] 조회조건 Product Group·Biz Type,NOT_RUN,,2026-11-06 16:22
-V-0ad0a9bf,G2,[DMF0043_01 결함 유형] 조회조건 Product Group·Biz Type,NOT_RUN,,2026-11-06 16:22
-V-198eae94,L1,[DMF0043_01 결함 유형] Customer Group 조회조건 텍스트 입력 · 그리드 셀 클릭 응답,NOT_RUN,,2026-11-06 16:22
-V-4d61d60d,C2,[DMF0007 결함 유형] 그리드 End Customer→Sales Site cascade,NOT_RUN,,2026-11-06 16:22
-V-ec955775,B4,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22
-V-6b42f03d,F1,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22
-V-cd193731,F2,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22
-V-4654f6d1,F6,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22
-V-65ae0310,B1,[DMF0007 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-9a8a30ca,B2,[DMF0007 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-d00659eb,B3,[DMF0007 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-df393704,B5,[DMF0007 결함 유형] Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/,NOT_RUN,,2026-11-06 16:22
-V-eee433c3,N1,[DMF0007 결함 유형] Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/,NOT_RUN,,2026-11-06 16:22
-V-b582e0ff,A4,[DMF0008 결함 유형] ERP EDI Master Validation 2·3번 Sheet,NOT_RUN,,2026-11-06 16:22
-V-721262b2,A1,[DMF0048 결함 유형] 조회 결과 건수,NOT_RUN,,2026-11-06 16:22
-V-4fed20fa,F2,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-21828c62,F1,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-f102f158,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-6603853d,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-543371e2,F2,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-ba4c88bf,F1,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-ceef74d1,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-ad5796e9,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-9171349a,F2,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-a7cca467,F1,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-69d61549,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-304dfe8e,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-dd7c08a1,M3,[DMF0005 결함 유형] Team 팝업,NOT_RUN,,2026-11-06 16:22
-V-05e4d0e1,G5,[DMF0005 결함 유형] Team 팝업,NOT_RUN,,2026-11-06 16:22
-V-50081974,C3,[DMF0005 결함 유형] Team·Owner 컬럼,NOT_RUN,,2026-11-06 16:22
-V-6cf4c95a,F6,[DMF0005 결함 유형] Team·Owner 컬럼,NOT_RUN,,2026-11-06 16:22
-V-5a36e94d,F1,[DMF0005 결함 유형] 하단 Purchase 탭 EDI Incoterms,NOT_RUN,,2026-11-06 16:22
-V-c150ca88,B1,[DMF0005 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-2b20f133,B2,[DMF0005 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-2e8057ad,B3,[DMF0005 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-8ca93d3f,G2,[DMF0004 결함 유형] 조회조건 Active,NOT_RUN,,2026-11-06 16:22
-V-4728cc98,E3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22
-V-2541ae8a,F3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22
-V-18f6d7ef,D1,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22
-V-ceeeff0a,K3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22
-V-eb32d9dd,B1,[DMF0072 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-fbbf42d7,B2,[DMF0072 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-746c054d,B3,[DMF0072 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-3a459b1e,B4,[DMF0006 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-8220f5f5,B4,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22
-V-6a1bd3fd,C1,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22
-V-42deb7b3,B2,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22
-V-ad68aaae,B8,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22
-V-422195b2,G5,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22
-V-3f575ec9,M3,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22
-V-8669764c,N1,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22
-V-2a38a8e9,A8,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22
-V-a88b4856,D1,[DMF0020 결함 유형] Team·End Customer 컬럼,NOT_RUN,,2026-11-06 16:22
-V-1289ecaa,C3,[DMF0020 결함 유형] Team·End Customer 컬럼,NOT_RUN,,2026-11-06 16:22
-V-35b5ece6,D1,[DMF0020 결함 유형] Price Exist 컬럼,NOT_RUN,,2026-11-06 16:22
-V-e5d019bd,D2,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22
-V-960446fa,F6,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22
-V-94552e32,F4,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22
-V-6508530f,M3,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22
-V-0720a2ba,A5,[DMF0020 결함 일반화] 컬럼셋팅 팝업 Default,NOT_RUN,,2026-11-06 16:22
-V-e062dec7,K2,[DMF0020 결함 일반화] 컬럼셋팅 팝업 Default,NOT_RUN,,2026-11-06 16:22
-V-cccc7864,A1,[DMF0020 결함 유형] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정,NOT_RUN,,2026-11-06 16:22
-V-8ca96514,A2,[DMF0020 결함 유형] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정,NOT_RUN,,2026-11-06 16:22
-V-9a10ddcf,K2,[DMF0020 결함 유형] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정,NOT_RUN,,2026-11-06 16:22
-V-8dd7af07,J2,[DMF0020 결함 유형] Price Batch Input 버튼,NOT_RUN,,2026-11-06 16:22
-V-19b8be50,K4,[DMF0020 결함 유형] Price Batch Input 버튼,NOT_RUN,,2026-11-06 16:22
-V-b4b8c091,M3,[DMF0020 결함 유형] Price Batch Input 팝업,NOT_RUN,,2026-11-06 16:22
-V-d9bc75b5,G5,[DMF0020 결함 유형] Price Batch Input 팝업,NOT_RUN,,2026-11-06 16:22
-V-79140c2e,A8,[DMF0020 결함 유형] Price Batch Input 팝업,NOT_RUN,,2026-11-06 16:22
-V-a37f0dbc,G4,[DMF0020 결함 유형] 조회조건 Project,NOT_RUN,,2026-11-06 16:22
-V-12fa9269,G4,[DMF0068 결함 유형] Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭,NOT_RUN,,2026-11-06 16:22
-V-62837002,H6,[DMF0068 결함 유형] Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭,NOT_RUN,,2026-11-06 16:22
-V-50337591,B4,[DMF0004 결함 유형] Sales Site 그리드 End Customer·Sold to Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-a2538cda,B7,[DMF0004 결함 유형] Sales Site 그리드 End Customer·Sold to Customer 콤보,NOT_RUN,,2026-11-06 16:22
-V-6fe0288d,C2,[DMF0004 결함 일반화] 그리드 End Customer→Sold-to Customer cascade,NOT_RUN,,2026-11-06 16:22
-V-d141fdb5,N1,[DMF0004 결함 일반화] Company 컬럼 공란 데이터,NOT_RUN,,2026-11-06 16:22
-V-f7ca24d5,K1,[DMF0004 결함 일반화] Company 컬럼 공란 데이터,NOT_RUN,,2026-11-06 16:22
-V-3cf24130,C2,[DMF0005 결함 일반화] 그리드 Sales Company→Sales Plant · Sales Site→Company/Plant,NOT_RUN,,2026-11-06 16:22
-V-b59cff60,C2,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,NOT_RUN,,2026-11-06 16:22
-V-7caf57ad,B2,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,NOT_RUN,,2026-11-06 16:22
-V-3f67f49e,K1,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,NOT_RUN,,2026-11-06 16:22
-V-bead1b86,E4,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,NOT_RUN,,2026-11-06 16:22
-V-a8207eef,F6,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,NOT_RUN,,2026-11-06 16:22
-V-db224d7f,C2,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,NOT_RUN,,2026-11-06 16:22
-V-4f5ba6ab,B4,[DMF0006 결함 유형] Team·End Customer·Sales Site 후보,NOT_RUN,,2026-11-06 16:22
-V-9e271808,C1,[DMF0006 결함 유형] Team·End Customer·Sales Site 후보,NOT_RUN,,2026-11-06 16:22
-V-29e5bf00,D4,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22
-V-64a1d9bc,D1,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22
-V-1ec39235,K1,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22
-V-996d6292,D6,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22
-V-88d3fdd8,H2,[DMF0068 결함 일반화] 입력 불가 컬럼 배경색,NOT_RUN,,2026-11-06 16:22
-V-e27ee635,M1,[DMF0014 결함 일반화] Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수,NOT_RUN,,2026-11-06 16:22
-V-da221ceb,M1,[DMF0014 결함 유형] Excel Form 입력 버킷,NOT_RUN,,2026-11-06 16:22
-V-21ca140b,G5,[DMF0014 결함 유형] Excel Form 입력 버킷,NOT_RUN,,2026-11-06 16:22
-V-6df80b08,M1,[DMF0014 결함 유형] Excel Form 양식,NOT_RUN,,2026-11-06 16:22
-V-73753f8f,B5,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),NOT_RUN,,2026-11-06 16:22
-V-e84a8a4f,D3,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),NOT_RUN,,2026-11-06 16:22
-V-1eb0de4c,C2,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),NOT_RUN,,2026-11-06 16:22
-V-ce49ec8a,H2,[DMF0003 결함 일반화] 실적 구간 배경색,NOT_RUN,,2026-11-06 16:22
-V-50ee50da,D2,[DMF0003 결함 일반화] 실적 구간 배경색,NOT_RUN,,2026-11-06 16:22
-V-324da769,C2,[DMF0003 결함 유형] AS From Site 입력 후 W35~W38 수량,NOT_RUN,,2026-11-06 16:22
-V-5da06a75,F6,[DMF0003 결함 유형] AS From Site 입력 후 W35~W38 수량,NOT_RUN,,2026-11-06 16:22
-V-b9a64e28,B8,[DMF0003 결함 일반화] Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22
-V-ec53f07d,C3,[DMF0003 결함 일반화] Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22
-V-ea9424a2,A2,[DMF0003 결함 일반화] Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22
-V-b26007f0,N1,[DMF0003 결함 일반화] AS From Site 공란 데이터,NOT_RUN,,2026-11-06 16:22
-V-0ee42ffc,A1,[DMF0003 결함 유형] 조회 건수,NOT_RUN,,2026-11-06 16:22
-V-d28da74b,G5,[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw),NOT_RUN,,2026-11-06 16:22
-V-dd9236af,M3,[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw),NOT_RUN,,2026-11-06 16:22
-V-83d070cd,J1,[DMF0003 결함 일반화] Division 조회조건 후보,NOT_RUN,,2026-11-06 16:22
-V-69d957ab,B5,[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능,NOT_RUN,,2026-11-06 16:22
-V-fc5da86b,D3,[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능,NOT_RUN,,2026-11-06 16:22
-V-93ffca4b,E1,[DMF0003 결함 유형] MKT FCST[R+P] 수량,NOT_RUN,,2026-11-06 16:22
-V-79f2d86f,A5,[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼,NOT_RUN,,2026-11-06 16:22
-V-3494d85c,K2,[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼,NOT_RUN,,2026-11-06 16:22
-V-56781cf1,N1,[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼,NOT_RUN,,2026-11-06 16:22
-V-36ecff30,A1,[DMF0082 결함 유형] 조회 건수,NOT_RUN,,2026-11-06 16:22
-V-ee1419c8,E1,[DMF0082 결함 유형] MKT_FCST[R+P]·AS_In_Request[R+P]·Unit_Price(LOC),NOT_RUN,,2026-11-06 16:22
-V-0e99ed45,F5,[DMF0082 결함 유형] CRUD Status · 대량 저장,NOT_RUN,,2026-11-06 16:22
-V-358a7f7a,F4,[DMF0082 결함 유형] CRUD Status · 대량 저장,NOT_RUN,,2026-11-06 16:22
-V-4b6b88c1,M3,[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합,NOT_RUN,,2026-11-06 16:22
-V-b9fa7cd8,H3,[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합,NOT_RUN,,2026-11-06 16:22
-V-f26ec911,G4,[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합,NOT_RUN,,2026-11-06 16:22
-V-e41a8adf,H10,[DMF0082 결함 일반화] 편집 중 타 기능 실행 메시지(MSG00680),NOT_RUN,,2026-11-06 16:22
-V-6ee1d02e,L2,[DMF0082 결함 일반화] 조회조건(Model·Owner 등) 키 입력 · Main Grid,NOT_RUN,,2026-11-06 16:22
-V-63cc05e8,H3,[DMF0082 결함 유형] 셀병합(Unit Price Currency 등),NOT_RUN,,2026-11-06 16:22
-V-13aa7d71,M3,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22
-V-578d2ecc,F4,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22
-V-572f17e0,F3,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22
-V-8006d06a,F1,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22
-V-a1e4f7df,M2,[DMF0082 결함 유형] BPS I/F 버튼 · Last Update Date/By 컬럼,NOT_RUN,,2026-11-06 16:22
-V-93042a98,F1,[DMF0082 결함 유형] BPS I/F 버튼 · Last Update Date/By 컬럼,NOT_RUN,,2026-11-06 16:22
-V-8b84d747,A5,[DMF0082 결함 유형] BPS I/F 버튼 · Last Update Date/By 컬럼,NOT_RUN,,2026-11-06 16:22
-V-e69d90d4,A2,[DMF0082 결함 유형] Cell Prod Site 셀,NOT_RUN,,2026-11-06 16:22
-V-04a588c1,E4,[DMF0082 결함 유형] Biz Type 미존재 검증 팝업 메시지,NOT_RUN,,2026-11-06 16:22
-V-f5414309,E4,[DMF0082 결함 유형] MKT FCST 수량 입력 시 Unit Price 필수,NOT_RUN,,2026-11-06 16:22
-V-b12cbdfd,E1,[DMF0082 결함 유형] QTY ≥ 0 검증,NOT_RUN,,2026-11-06 16:22
-V-58907ce8,A5,[DMF0082 결함 일반화] 필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22
-V-012fc288,K2,[DMF0082 결함 일반화] 필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22
-V-6f1ccce2,F6,[DMF0082 결함 일반화] 필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22
-V-d4d5a308,A5,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),NOT_RUN,,2026-11-06 16:22
-V-57cc3d5c,K2,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),NOT_RUN,,2026-11-06 16:22
-V-d99fa380,N1,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),NOT_RUN,,2026-11-06 16:22
-V-42050def,G1,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22
-V-192ad4a8,G8,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22
-V-c62b4512,L2,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22
-V-d1629d47,H4,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22
-V-972264bd,J3,[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE),NOT_RUN,,2026-11-06 16:22
-V-bf89205a,B5,[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE),NOT_RUN,,2026-11-06 16:22
-V-0fa38c1b,D2,[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE),NOT_RUN,,2026-11-06 16:22
-V-e70c35f0,J1,[DMF0082 결함 일반화] Division 기본값 · 메뉴 트리(Admin-System),NOT_RUN,,2026-11-06 16:22
-V-a1628d98,J4,[DMF0082 결함 일반화] Division 기본값 · 메뉴 트리(Admin-System),NOT_RUN,,2026-11-06 16:22
-V-72c91774,J2,[DMF0082 결함 유형] Insert·Save 버튼,NOT_RUN,,2026-11-06 16:22
-V-dfdec974,J3,[DMF0082 결함 유형] MKT_FCST[R+P] 편집,NOT_RUN,,2026-11-06 16:22
-V-2460e982,D2,[DMF0082 결함 유형] MKT_FCST[R+P] 편집,NOT_RUN,,2026-11-06 16:22
-V-e9b00c7f,N1,[DMF0007 결함 유형] Customer FCST Master 기준정보,NOT_RUN,,2026-11-06 16:22
-V-30e173bc,A1,[DMF0007 결함 유형] Customer FCST Master 기준정보,NOT_RUN,,2026-11-06 16:22
-V-07d772e7,N1,[DMF0004 결함 유형] Sales Site 조회조건 표시값,NOT_RUN,,2026-11-06 16:22
-V-800a389b,B4,[DMF0004 결함 유형] Sales Site 조회조건 표시값,NOT_RUN,,2026-11-06 16:22
-V-63c567f8,C3,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22
-V-a0b0a188,C2,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22
-V-666a5d77,E4,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22
-V-d8c1f6c7,E5,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22
-V-d3469260,D4,[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22
-V-c6d20524,C4,[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22
-V-4215bf67,A5,[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22
-V-47ce1be8,F4,[DMF0044 결함 유형] 붙여넣기 후 저장 · 자릿수,NOT_RUN,,2026-11-06 16:22
-V-031efaeb,F3,[DMF0044 결함 유형] 붙여넣기 후 저장 · 자릿수,NOT_RUN,,2026-11-06 16:22
-V-1a9441a8,E1,[DMF0044 결함 유형] 붙여넣기 후 저장 · 자릿수,NOT_RUN,,2026-11-06 16:22
-V-d03d2403,F4,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,NOT_RUN,,2026-11-06 16:22
-V-faa52c47,E1,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,NOT_RUN,,2026-11-06 16:22
-V-ae9e7fe8,E4,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,NOT_RUN,,2026-11-06 16:22
-V-79856a2d,G3,[DMF0020 결함 일반화] Condition(F6) 저장 · Sales Report ETC Insert 기능,NOT_RUN,,2026-11-06 16:22
-V-fedb7937,K4,[DMF0020 결함 일반화] Condition(F6) 저장 · Sales Report ETC Insert 기능,NOT_RUN,,2026-11-06 16:22
-V-4c2a832a,E4,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22
-V-90e6493d,C3,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22
-V-192047d8,F1,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22
-V-d3fa4321,L1,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22
-V-3e654289,L1,[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-3a57e322,F5,[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-5896743c,H3,[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-365db505,C1,[DMF0044 결함 유형] 조회조건 Report Type→Data Type,NOT_RUN,,2026-11-06 16:22
-V-a903eb5b,K4,[DMF0044 결함 유형] Delete 버튼,NOT_RUN,,2026-11-06 16:22
-V-5124105e,J2,[DMF0044 결함 유형] Delete 버튼,NOT_RUN,,2026-11-06 16:22
-V-49aa0c57,F6,[DMF0044 결함 유형] Biz Plan Cutoff Data 저장 값,NOT_RUN,,2026-11-06 16:22
-V-6c6ef129,F1,[DMF0044 결함 유형] Biz Plan Cutoff Data 저장 값,NOT_RUN,,2026-11-06 16:22
-V-f323f57e,D2,[DMF0044 결함 유형] 입력 가능 Measure(Business Plan·Unit Price(LOC)),NOT_RUN,,2026-11-06 16:22
-V-c93a23b2,G5,[DMF0044 결함 유형] Version 팝업 Div 조건,NOT_RUN,,2026-11-06 16:22
-V-5aabadec,E4,[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회,NOT_RUN,,2026-11-06 16:22
-V-7bb9e54c,F1,[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회,NOT_RUN,,2026-11-06 16:22
-V-855a05b7,C5,[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회,NOT_RUN,,2026-11-06 16:22
-V-7e49d7be,B6,[DMF0042 결함 일반화] 조회조건 Item Type,NOT_RUN,,2026-11-06 16:22
-V-1846018e,G2,[DMF0042 결함 일반화] 조회조건 Item Type,NOT_RUN,,2026-11-06 16:22
-V-9ccb1668,G7,[DMF0042 결함 일반화] 조회조건 Item Type,NOT_RUN,,2026-11-06 16:22
-V-6c986299,D1,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22
-V-1b20ebc1,E4,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22
-V-d8e9a819,D6,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22
-V-7e402c0c,K4,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22
-V-cc8a96f7,A5,[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더,NOT_RUN,,2026-11-06 16:22
-V-8ad47d7a,G4,[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더,NOT_RUN,,2026-11-06 16:22
-V-55280e01,G1,[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더,NOT_RUN,,2026-11-06 16:22
-V-ead95f82,L1,[DMF0042 결함 유형] 조회,NOT_RUN,,2026-11-06 16:22
-V-d2b7ecf3,F4,[DMF0042 결함 유형] 조회,NOT_RUN,,2026-11-06 16:22
-V-71494ad6,M3,[DMF0005 결함 유형] Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건,NOT_RUN,,2026-11-06 16:22
-V-30a614ff,G1,[DMF0005 결함 유형] Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건,NOT_RUN,,2026-11-06 16:22
-V-2e247185,G5,[DMF0042 결함 유형] Replace 버튼 팝업 Period·조회,NOT_RUN,,2026-11-06 16:22
-V-b56ddcd3,M2,[DMF0042 결함 유형] Replace 버튼 팝업 Period·조회,NOT_RUN,,2026-11-06 16:22
-V-eac0f326,M3,[DMF0042 결함 유형] Replace 버튼 팝업 Period·조회,NOT_RUN,,2026-11-06 16:22
-V-46a46aa5,G5,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-c181e3f6,G4,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-a621cd01,H6,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-8dc6721f,H4,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-5c2f9baf,H6,[DMF0042 결함 유형] Cutoff 완료 후 버전 팝업,NOT_RUN,,2026-11-06 16:22
-V-353b512b,H3,[DMF0042 결함 일반화] 그리드 셀 병합(신규 입력 중),NOT_RUN,,2026-11-06 16:22
-V-737b566a,D1,[DMF0042 결함 유형] Team·End Customer·Energy(WH) 컬럼,NOT_RUN,,2026-11-06 16:22
-V-fee185e4,C3,[DMF0042 결함 유형] Team·End Customer·Energy(WH) 컬럼,NOT_RUN,,2026-11-06 16:22
-V-061d0f12,M3,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22
-V-d797c037,M2,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22
-V-c9236ca1,E4,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22
-V-20f65aad,F1,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22
-V-b3ec2e3a,B3,[DMF0049 결함 유형] 버전 팝업 Version 목록 정렬,NOT_RUN,,2026-11-06 16:22
-V-e1cbd63f,M3,[DMF0049 결함 유형] 버전 팝업 Version 목록 정렬,NOT_RUN,,2026-11-06 16:22
-V-5c61025f,G4,[DMF0049 결함 유형] Version 조회조건 선택값 표시,NOT_RUN,,2026-11-06 16:22
-V-7fffc5ea,G7,[DMF0049 결함 유형] Version 조회조건 선택값 표시,NOT_RUN,,2026-11-06 16:22
-V-91f1dcf9,D1,[DMF0049 결함 유형] Cell Model·Cell Model Info 컬럼,NOT_RUN,,2026-11-06 16:22
-V-60e47cd4,H4,[DMF0004 결함 유형] 상/하 그리드 스크롤바,NOT_RUN,,2026-11-06 16:22
-V-2cdf4044,I3,[DMF0014 결함 유형] Team 명칭 데이터,NOT_RUN,,2026-11-06 16:22
-V-b41bcedf,I2,[DMF0014 결함 유형] Team 명칭 데이터,NOT_RUN,,2026-11-06 16:22
-V-36a45aad,B4,[DMF0014 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22
-V-fa00c43d,J1,[DMF0014 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22
-V-259399ae,G3,[DMF0014 결함 유형] Condition(F6) 조회조건 저장·복원,NOT_RUN,,2026-11-06 16:22
-V-eadd4062,K1,[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),NOT_RUN,,2026-11-06 16:22
-V-370f6473,K3,[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),NOT_RUN,,2026-11-06 16:22
-V-5b8ae308,G1,[DMF0020 결함 유형] Biz.Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-07620eed,K3,[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column,NOT_RUN,,2026-11-06 16:22
-V-fc9d9ec4,K1,[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column,NOT_RUN,,2026-11-06 16:22
-V-63be5ba2,G2,[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건,NOT_RUN,,2026-11-06 16:22
-V-85d1b693,M3,[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건,NOT_RUN,,2026-11-06 16:22
-V-e781b435,K1,[DMF0020 결함 일반화] 그리드 Sort 토글(동적 영역 포함),NOT_RUN,,2026-11-06 16:22
-V-6dc2d4d8,F3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22
-V-6586c3ea,K3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22
-V-6cec46e3,H3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22
-V-7e7b22ad,E6,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22
-V-a5313c0c,G5,[DMF0044 결함 유형] 팝업 Period,NOT_RUN,,2026-11-06 16:22
-V-d438b00f,M1,[DMF0014 결함 유형] Excel Form 버튼,NOT_RUN,,2026-11-06 16:22
-V-6bb180d8,M1,[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증,NOT_RUN,,2026-11-06 16:22
-V-f06e34ac,F4,[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증,NOT_RUN,,2026-11-06 16:22
-V-e2c15a55,E3,[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증,NOT_RUN,,2026-11-06 16:22
-V-b2740c6d,M1,[DMF0014 결함 유형] Excel Upload 수량 미입력 메시지,NOT_RUN,,2026-11-06 16:22
-V-b58da4bd,M1,[DMF0014 결함 일반화] Excel Upload 헤더 검증 메시지,NOT_RUN,,2026-11-06 16:22
-V-54c1f246,M1,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),NOT_RUN,,2026-11-06 16:22
-V-2e536040,E4,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),NOT_RUN,,2026-11-06 16:22
-V-263b15fd,M1,[DMF0074 결함 유형] Excel Form 버튼,NOT_RUN,,2026-11-06 16:22
-V-8ca90180,M1,[DMF0074 결함 유형] Excel Form 양식 헤더,NOT_RUN,,2026-11-06 16:22
-V-1e7b83e2,H7,[DMF0074 결함 유형] Excel Form 양식 헤더,NOT_RUN,,2026-11-06 16:22
-V-75e40201,M1,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,NOT_RUN,,2026-11-06 16:22
-V-7bbecba2,F1,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,NOT_RUN,,2026-11-06 16:22
-V-cd9e0ec7,E4,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,NOT_RUN,,2026-11-06 16:22
-V-3cce46bb,M1,[DMF0082 결함 유형] Excel Form 양식 Bucket,NOT_RUN,,2026-11-06 16:22
-V-83eea688,D1,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22
-V-64961062,B4,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22
-V-b9c7786e,E3,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22
-V-4ca1eeaf,D4,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22
-V-bfd2a033,A1,[SYS0013 결함 유형] Dynamic Query(ESS KWh 판가 계산 등),NOT_RUN,,2026-11-06 16:22
-V-4771df83,H4,[SYS0013 결함 유형] Dynamic Query(ESS KWh 판가 계산 등),NOT_RUN,,2026-11-06 16:22
-V-4036ab0b,F4,[SYS0013 결함 유형] Dynamic Query(ESS KWh 판가 계산 등),NOT_RUN,,2026-11-06 16:22
-V-c6b6cba8,H6,[SYS0012 결함 유형] Reject 팝업,NOT_RUN,,2026-11-06 16:22
-V-e7d8ff79,F8,[SYS0012 결함 유형] Request 데이터 Reject Reason·Request Date,NOT_RUN,,2026-11-06 16:22
-V-adda3c65,B4,[SYS0012 결함 유형] Approval Result 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-73d3ed9b,B6,[SYS0012 결함 유형] Approval Result 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-77cbd831,I2,[SYS0012 결함 유형] Approval Result 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-1e19abb1,D5,[SYS0003 결함 유형] Menu Type·Auth Unit 컬럼,NOT_RUN,,2026-11-06 16:22
-V-4bff0399,G4,[DMF0040 결함 유형] Version 조회조건 크기,NOT_RUN,,2026-11-06 16:22
-V-e361ed0b,H5,[DMF0040 결함 유형] Measure Version(A)/Version(B) 명칭,NOT_RUN,,2026-11-06 16:22
-V-5349ddae,A9,[DMF0040 결함 유형] Measure Version(A)/Version(B) 명칭,NOT_RUN,,2026-11-06 16:22
-V-ee9b5f28,H2,[DMF0040 결함 유형] 실적 구간 배경색,NOT_RUN,,2026-11-06 16:22
-V-6d28b76d,H3,[DMF0040 결함 일반화] 셀 병합(계층 병합),NOT_RUN,,2026-11-06 16:22
-V-7d0c7370,A1,[DMF0053 결함 유형] 조회 결과 건수,NOT_RUN,,2026-11-06 16:22
-V-b6c1a997,A3,[DMF0053 결함 유형] Sum 행,NOT_RUN,,2026-11-06 16:22
-V-3709e27e,K2,[DMF0042 결함 유형] Column Setting 팝업 Default 버튼,NOT_RUN,,2026-11-06 16:22
-V-cf19397d,C2,[DMF0042 결함 유형] Sales Site·End Customer 셀,NOT_RUN,,2026-11-06 16:22
-V-43bb2809,C3,[DMF0042 결함 유형] Sales Site·End Customer 셀,NOT_RUN,,2026-11-06 16:22
-V-1686f0ff,D1,[DMF0042 결함 유형] Sales Site·End Customer 셀,NOT_RUN,,2026-11-06 16:22
-V-4dc1e2b7,G4,[DMF0044 결함 유형] Year 조회조건,NOT_RUN,,2026-11-06 16:22
-V-f52f93dc,G6,[DMF0044 결함 유형] Year 조회조건,NOT_RUN,,2026-11-06 16:22
-V-e897eb1e,A5,[DMF0044 결함 유형] Measure 항목 구성,NOT_RUN,,2026-11-06 16:22
-V-715cf86d,N1,[DMF0044 결함 유형] Measure 항목 구성,NOT_RUN,,2026-11-06 16:22
-V-c85166cd,B5,[DMF0044 결함 유형] Measure 항목 구성,NOT_RUN,,2026-11-06 16:22
-V-148b4f51,M3,[DMF0005 결함 유형] Owner 팝업 사용자 목록,NOT_RUN,,2026-11-06 16:22
-V-82576b23,B4,[DMF0005 결함 유형] Owner 팝업 사용자 목록,NOT_RUN,,2026-11-06 16:22
-V-f69f7498,F3,[DMF0003 결함 유형] 복사/붙여넣기 후 저장,NOT_RUN,,2026-11-06 16:22
-V-9f6818fc,F2,[DMF0003 결함 유형] 복사/붙여넣기 후 저장,NOT_RUN,,2026-11-06 16:22
-V-97fdf5b8,A5,[DMF0020 결함 유형] Div별 컬럼 구성(COL_LIST 등),NOT_RUN,,2026-11-06 16:22
-V-4559cf12,K2,[DMF0020 결함 유형] Div별 컬럼 구성(COL_LIST 등),NOT_RUN,,2026-11-06 16:22
-V-63044a5b,D2,[DMF0021 결함 유형] Partial 주차 편집 구간·실적 구분선,NOT_RUN,,2026-11-06 16:22
-V-f16327f1,H2,[DMF0021 결함 유형] Partial 주차 편집 구간·실적 구분선,NOT_RUN,,2026-11-06 16:22
-V-fd9bcf39,E4,[DMF0082 결함 유형] Unit Price(LOC) 52주 Validation,NOT_RUN,,2026-11-06 16:22
-V-b6589305,F1,[DMF0082 결함 유형] Unit Price(LOC) 52주 Validation,NOT_RUN,,2026-11-06 16:22
-V-9891d01b,B5,[DMF0003 결함 유형] 신규 행 Measure 후보,NOT_RUN,,2026-11-06 16:22
-V-72cfffc8,C2,[DMF0003 결함 유형] 신규 행 Measure 후보,NOT_RUN,,2026-11-06 16:22
-V-251e2975,D3,[DMF0003 결함 유형] 신규 행 Measure 후보,NOT_RUN,,2026-11-06 16:22
-V-78540865,A5,[DMF0003 결함 유형] Measure 컬럼,NOT_RUN,,2026-11-06 16:22
-V-3a9abdff,B5,[DMF0003 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22
-V-8da4bd8f,J1,[DMF0003 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22
-V-7948c80f,A5,[DMF0082 결함 유형] 조회 그리드 컬럼 구성,NOT_RUN,,2026-11-06 16:22
-V-c677ff7f,K2,[DMF0082 결함 유형] 조회 그리드 컬럼 구성,NOT_RUN,,2026-11-06 16:22
-V-adf16cc1,G2,[DMF0040 결함 유형] End Customer 다중 선택 조회조건,NOT_RUN,,2026-11-06 16:22
-V-abe72677,I3,[DMF0040 결함 유형] Team 조회조건 vs 결과 컬럼 언어,NOT_RUN,,2026-11-06 16:22
-V-5ac032a3,I2,[DMF0040 결함 유형] Team 조회조건 vs 결과 컬럼 언어,NOT_RUN,,2026-11-06 16:22
-V-943b21f5,G1,[DMF0040 결함 유형] Owner 조회조건,NOT_RUN,,2026-11-06 16:22
-V-30d4e0ae,K2,[DMF0040 결함 유형] Column Setting 저장·Default,NOT_RUN,,2026-11-06 16:22
-V-f402479e,A5,[DMF0040 결함 유형] Column Setting 저장·Default,NOT_RUN,,2026-11-06 16:22
-V-6809d5f2,G4,[DMF0040 결함 유형] Ver. 조회조건 기본값,NOT_RUN,,2026-11-06 16:22
-V-130c6d78,G6,[DMF0040 결함 유형] Ver. 조회조건 기본값,NOT_RUN,,2026-11-06 16:22
-V-89016818,F4,[DMF0040 결함 유형] Plant Site 조회조건,NOT_RUN,,2026-11-06 16:22
-V-25b4b0c7,G1,[DMF0040 결함 유형] Plant Site 조회조건,NOT_RUN,,2026-11-06 16:22
-V-217dbcde,K2,[DMF0040 결함 유형] Measure Setting 버튼,NOT_RUN,,2026-11-06 16:22
-V-72e48183,J2,[DMF0040 결함 유형] Measure Setting 버튼,NOT_RUN,,2026-11-06 16:22
-V-cf5ef35b,G4,[DMF0040 결함 유형] Plant Site 조회조건,NOT_RUN,,2026-11-06 16:22
-V-7bff42c6,K2,[DMF0053 결함 일반화] Column Setting 필수 컬럼 표시·Div 전환 End Customer,NOT_RUN,,2026-11-06 16:22
-V-bd2c0ebe,A5,[DMF0053 결함 일반화] Column Setting 필수 컬럼 표시·Div 전환 End Customer,NOT_RUN,,2026-11-06 16:22
-V-9781fc65,B4,[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값,NOT_RUN,,2026-11-06 16:22
-V-290e71e8,G1,[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값,NOT_RUN,,2026-11-06 16:22
-V-6869e26c,G1,[DMF0053 결함 유형] Project·Owner 조회조건(Model/Nickname 정상),NOT_RUN,,2026-11-06 16:22
-V-38386c3c,M3,[DMF0053 결함 유형] 팝업 Filter 텍스트 입력창,NOT_RUN,,2026-11-06 16:22
-V-6a950bda,K1,[DMF0053 결함 유형] 팝업 Filter 텍스트 입력창,NOT_RUN,,2026-11-06 16:22
-V-f4e54628,D2,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22
-V-32c568c6,J3,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22
-V-e1895244,D3,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22
-V-a5f7ba17,B5,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22
-V-d24e5889,B4,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22
-V-80af94e5,C2,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22
-V-405f43e5,B5,[DMF0082 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22
-V-120069d2,B4,[DMF0082 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22
-V-8f1a803a,D2,[DMF0082 결함 유형] Daily Bucket 편집 Measure,NOT_RUN,,2026-11-06 16:22
-V-1d1c9810,D2,[DMF0082 결함 유형] Monthly Bucket 편집 구간,NOT_RUN,,2026-11-06 16:22
-V-6a98bb33,E4,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,NOT_RUN,,2026-11-06 16:22
-V-e8aeb458,N1,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,NOT_RUN,,2026-11-06 16:22
-V-92dda722,F1,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,NOT_RUN,,2026-11-06 16:22
-V-74ba3274,D2,[DMF0082 결함 유형] Bucket 유형별 MKT_FCST·Unit Price(LOC) 편집 구간,NOT_RUN,,2026-11-06 16:22
-V-e7cbcc73,F4,[DMF0082 결함 유형] Bucket 전환 후 저장,NOT_RUN,,2026-11-06 16:22
-V-d218a561,M3,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22
-V-dd260b7d,F2,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22
-V-abd86a01,M2,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22
-V-08a7ea72,M4,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22
-V-98ba330e,E4,[DMF0082 결함 유형] 신규 데이터셋 수량·판가 저장,NOT_RUN,,2026-11-06 16:22
-V-50516b17,F1,[DMF0082 결함 유형] 신규 데이터셋 수량·판가 저장,NOT_RUN,,2026-11-06 16:22
-V-3d3bc2ba,D2,[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건,NOT_RUN,,2026-11-06 16:22
-V-d8084c2e,J3,[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건,NOT_RUN,,2026-11-06 16:22
-V-6dd14a0b,E4,[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건,NOT_RUN,,2026-11-06 16:22
-V-c593e370,E4,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,NOT_RUN,,2026-11-06 16:22
-V-fdb8437e,F6,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,NOT_RUN,,2026-11-06 16:22
-V-2be77a90,F1,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,NOT_RUN,,2026-11-06 16:22
-V-96d32294,H7,[DMF0021 결함 일반화] Excel Download(TEAM·FCST Type·Measure·Project),NOT_RUN,,2026-11-06 16:22
-V-191425b7,A2,[DMF0021 결함 일반화] Excel Download(TEAM·FCST Type·Measure·Project),NOT_RUN,,2026-11-06 16:22
-V-526f31ee,D1,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22
-V-97676822,C3,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22
-V-eb81a6ca,B5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22
-V-a8532a53,M3,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22
-V-22adcc86,G5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22
-V-5e074809,D5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22
-V-8a83ba70,A5,[DMF0021 결함 일반화] Div 전환 컬럼 구성·컬럼셋팅 OK 반영,NOT_RUN,,2026-11-06 16:22
-V-34492d59,K2,[DMF0021 결함 일반화] Div 전환 컬럼 구성·컬럼셋팅 OK 반영,NOT_RUN,,2026-11-06 16:22
-V-e451a11d,D3,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22
-V-d499aced,C2,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22
-V-7fe4b8c7,B4,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22
-V-c820bf3c,B5,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22
-V-a6923ff3,J3,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22
-V-a707ce18,B4,[DMF0082 결함 유형] End Customer 셀 콤보 후보,NOT_RUN,,2026-11-06 16:22
-V-c605acd6,B5,[DMF0082 결함 유형] End Customer 셀 콤보 후보,NOT_RUN,,2026-11-06 16:22
-V-8fcaac93,A5,[DMF0082 결함 유형] Div 81 컬럼·Measure 구성(Project·Cust FCST 등),NOT_RUN,,2026-11-06 16:22
-V-6ff00758,N1,[DMF0082 결함 유형] Div 81 컬럼·Measure 구성(Project·Cust FCST 등),NOT_RUN,,2026-11-06 16:22
-V-00f50748,M3,[DMF0082 결함 유형] Excel Form 팝업 Search,NOT_RUN,,2026-11-06 16:22
-V-020776c2,M1,[DMF0082 결함 유형] Excel Form 팝업 Search,NOT_RUN,,2026-11-06 16:22
-V-02064e42,M1,[DMF0082 결함 유형] Excel Upload,NOT_RUN,,2026-11-06 16:22
-V-0599dd31,K2,[DMF0082 결함 일반화] 컬럼·메저 셋팅 Save/OK 재조회,NOT_RUN,,2026-11-06 16:22
-V-60ed2a40,B4,[DMF0082 결함 유형] Customs Handbook 콤보 후보,NOT_RUN,,2026-11-06 16:22
-V-063f4124,B4,[DMF0005 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22
-V-41f42ae5,B7,[DMF0005 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22
-V-fe48604a,A5,[DMF0020 결함 유형] 콤보 입력 컬럼·COL_LIST·Measure 위치,NOT_RUN,,2026-11-06 16:22
-V-1d9bc512,D5,[DMF0020 결함 유형] 콤보 입력 컬럼·COL_LIST·Measure 위치,NOT_RUN,,2026-11-06 16:22
-V-5e2418f9,F4,[DMF0020 결함 유형] Div 82→40 조회조건 전환,NOT_RUN,,2026-11-06 16:22
-V-8f7b82f6,H5,[DMF0035 결함 유형] Ver.·Waterfall Type 라벨,NOT_RUN,,2026-11-06 16:22
-V-d77d33ae,B4,[DMF0035 결함 유형] Version 조회조건,NOT_RUN,,2026-11-06 16:22
-V-ccd1301e,M3,[DMF0035 결함 유형] Version 조회조건,NOT_RUN,,2026-11-06 16:22
-V-c78bad08,H4,[DMF0035 결함 유형] 팝업 조회조건·버튼 레이아웃,NOT_RUN,,2026-11-06 16:22
-V-33a39313,H6,[DMF0035 결함 유형] 팝업 조회조건·버튼 레이아웃,NOT_RUN,,2026-11-06 16:22
-V-1d9642d6,A5,[DMF0035 결함 유형] Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등),NOT_RUN,,2026-11-06 16:22
-V-48b7999b,N1,[DMF0035 결함 유형] Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등),NOT_RUN,,2026-11-06 16:22
-V-3bf4550d,A1,[DMF0035 결함 유형] 조회 결과 건수,NOT_RUN,,2026-11-06 16:22
-V-cfea2140,A7,[DMF0035 결함 유형] 결과 컬럼 값(Plan Type=MKT FCST Version 컬럼 등),NOT_RUN,,2026-11-06 16:22
-V-6f119830,A3,[DMF0035 결함 일반화] Sum 행,NOT_RUN,,2026-11-06 16:22
-V-928ad4ad,A10,[DMF0035 결함 일반화] Sum 행,NOT_RUN,,2026-11-06 16:22
-V-a6af4923,F1,[DMF0082 결함 유형] Unit Price(LOC) 저장,NOT_RUN,,2026-11-06 16:22
-V-b5b22aea,F6,[DMF0082 결함 유형] Unit Price(LOC) 저장,NOT_RUN,,2026-11-06 16:22
-V-a051e0fd,A5,[DMF0082 결함 유형] 그리드 표시 컬럼(AS-IS 미존재 컬럼),NOT_RUN,,2026-11-06 16:22
-V-cb65873e,E4,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,NOT_RUN,,2026-11-06 16:22
-V-c85eb3ba,F1,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,NOT_RUN,,2026-11-06 16:22
-V-6641f800,F7,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,NOT_RUN,,2026-11-06 16:22
-V-c44a7708,G4,[DMF0035 결함 유형] Plan Type 조회조건 위치,NOT_RUN,,2026-11-06 16:22
-V-addfe9b7,H4,[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업,NOT_RUN,,2026-11-06 16:22
-V-136b3a22,H6,[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업,NOT_RUN,,2026-11-06 16:22
-V-10d27882,H6,[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name),NOT_RUN,,2026-11-06 16:22
-V-6794b810,M3,[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name),NOT_RUN,,2026-11-06 16:22
-V-6b0b7dfd,B4,[DMF0005 결함 유형] Sales Plant 셀 콤보(3050 Plant),NOT_RUN,,2026-11-06 16:22
-V-8234fa98,N1,[DMF0005 결함 유형] Sales Plant 셀 콤보(3050 Plant),NOT_RUN,,2026-11-06 16:22
-V-439c7307,H6,[DMF0005 결함 일반화] 팝업 No. 컬럼(Model/Owner/Project/Version 팝업),NOT_RUN,,2026-11-06 16:22
-V-aea401b2,F4,[DMF0005 결함 유형] 데이터 수정 저장,NOT_RUN,,2026-11-06 16:22
-V-a9ae27ae,F1,[DMF0005 결함 유형] 데이터 수정 저장,NOT_RUN,,2026-11-06 16:22
-V-d8daff90,G1,[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),NOT_RUN,,2026-11-06 16:22
-V-5eb0a96d,M3,[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),NOT_RUN,,2026-11-06 16:22
-V-0a505fc4,F1,[SYS0008 결함 일반화] Created By/Date·Updated By/Date 컬럼,NOT_RUN,,2026-11-06 16:22
-V-6e1cef90,F8,[SYS0008 결함 일반화] Created By/Date·Updated By/Date 컬럼,NOT_RUN,,2026-11-06 16:22
-V-54266d61,G1,[SYS0002 결함 유형] Active 조회조건(ALL)·User Group 다중선택,NOT_RUN,,2026-11-06 16:22
-V-1586b3a6,G2,[SYS0002 결함 유형] Active 조회조건(ALL)·User Group 다중선택,NOT_RUN,,2026-11-06 16:22
-V-4f7dcd3c,F4,[SYS0002 결함 유형] Active 조회조건(ALL)·User Group 다중선택,NOT_RUN,,2026-11-06 16:22
-V-2c870c4e,A5,[DMF0021 결함 일반화] 컬럼셋팅 Company ID(필수 표시·Invisible 이동),NOT_RUN,,2026-11-06 16:22
-V-692d0a01,K2,[DMF0021 결함 일반화] 컬럼셋팅 Company ID(필수 표시·Invisible 이동),NOT_RUN,,2026-11-06 16:22
-V-8e15c2f0,K2,[DMF0035 결함 유형] Measure 명칭 MKT FCST[R+P],NOT_RUN,,2026-11-06 16:22
-V-649db8db,H5,[DMF0035 결함 유형] Measure 명칭 MKT FCST[R+P],NOT_RUN,,2026-11-06 16:22
-V-dba2dfd3,A1,[DMF0035 결함 유형] 조회 결과 건수(SF_W_20260907_V001 W37),NOT_RUN,,2026-11-06 16:22
-V-0cab5fb7,H8,[SYS0012 결함 유형] Request Date 컬럼,NOT_RUN,,2026-11-06 16:22
-V-7ddcf74e,D1,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22
-V-64a83b3f,C3,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22
-V-47fa05fd,H3,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22
-V-ebbfb54f,H5,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22
-V-c4efdd24,F1,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22
-V-2c25b06d,F6,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22
-V-526cc760,A5,[SYS0014 결함 유형] Email 컬럼,NOT_RUN,,2026-11-06 16:22
-V-cae2e552,M3,[SYS0014 결함 유형] User 팝업(User Info),NOT_RUN,,2026-11-06 16:22
-V-6d131207,F1,[SYS0014 결함 유형] Division 시트 저장(JV Planner),NOT_RUN,,2026-11-06 16:22
-V-4dd9ca31,F6,[SYS0014 결함 유형] Division 시트 저장(JV Planner),NOT_RUN,,2026-11-06 16:22
-V-f8b32581,E4,[SYS0014 결함 유형] Division 시트 저장(JV Planner),NOT_RUN,,2026-11-06 16:22
-V-6d52e51c,D5,[SYS0010 결함 유형] System 컬럼 입력 방식,NOT_RUN,,2026-11-06 16:22
-V-92d26873,B4,[SYS0010 결함 유형] System 컬럼 입력 방식,NOT_RUN,,2026-11-06 16:22
-V-45331a66,K1,[COM0007 결함 일반화] Message ID 컬럼 필터,NOT_RUN,,2026-11-06 16:22
-V-e349ad52,K2,[DMF0003 결함 유형] Measure 표시 순서,NOT_RUN,,2026-11-06 16:22
-V-4a69e5d7,D1,[SYS0003 결함 유형] URL-ROUTE_PATH 컬럼,NOT_RUN,,2026-11-06 16:22
-V-a5041c49,A5,[SYS0003 결함 유형] URL-ROUTE_PATH 컬럼,NOT_RUN,,2026-11-06 16:22
-V-106b7f93,J4,[SCM0016 결함 유형] Batch log 화면(SCM0016),NOT_RUN,,2026-11-06 16:22
-V-bb572d1e,J4,[SCM0007 결함 유형] SMS Setup 화면(SCM0007),NOT_RUN,,2026-11-06 16:22
-V-5dcfc12f,B6,[SYS0005 결함 유형] Schema 조회조건,NOT_RUN,,2026-11-06 16:22
-V-75b107da,G2,[SYS0005 결함 유형] Schema 조회조건,NOT_RUN,,2026-11-06 16:22
-V-22731d51,G1,[SYS0005 결함 유형] Schema 조회조건,NOT_RUN,,2026-11-06 16:22
-V-1623d54c,B6,[SYS0006 결함 유형] API Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-a66f1381,B4,[SYS0006 결함 유형] API Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-30c8b76a,B1,[SYS0006 결함 유형] API Type 조회조건,NOT_RUN,,2026-11-06 16:22
-V-9690c606,G1,[SYS0003 결함 일반화] API Name 조회조건,NOT_RUN,,2026-11-06 16:22
-V-f8275d89,G8,[SYS0003 결함 일반화] API Name 조회조건,NOT_RUN,,2026-11-06 16:22
-V-c3991e0a,B4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-baf06663,B6,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-55c39493,G4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-0fc7129b,H5,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-9d55fb54,D4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-c7d18235,H6,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-0f33ecb5,K5,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22
-V-154af74f,B6,[SYS0017 결함 유형] Module / Sub Module 조회조건,NOT_RUN,,2026-11-06 16:22
-V-824cd115,G4,[SYS0017 결함 유형] Module / Sub Module 조회조건,NOT_RUN,,2026-11-06 16:22
-V-266c63f8,A5,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-4e2c7553,A2,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-30897138,F4,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-daaa9700,M2,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-1abe0061,F1,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-d4d2820b,D4,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-149a773c,C5,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-7d7869e7,H4,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-286a9874,M3,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22
-V-c0f0be94,H10,[DMF0014 결함 유형] Search 시 Loading.... 플로팅 메시지,NOT_RUN,,2026-11-06 16:22
-V-3bf60e69,H4,[DMF0014 결함 유형] Search 시 Loading.... 플로팅 메시지,NOT_RUN,,2026-11-06 16:22
-V-c7f4b218,A5,[DMF0005 결함 유형] Cell Prod. Site (S&OP Report) 컬럼,NOT_RUN,,2026-11-06 16:22
-V-ff2fdb31,B4,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22
-V-d27a9780,C2,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22
-V-6c3e9cf4,F2,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22
-V-966bf6eb,F1,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22
-V-c3837a23,H6,[DMF0005 결함 유형] Project 팝업(그리드),NOT_RUN,,2026-11-06 16:22
-V-71e87a7d,M3,[DMF0005 결함 유형] Project 팝업(그리드),NOT_RUN,,2026-11-06 16:22
-V-baa53e9d,G2,[DMF0005 결함 유형] Project 팝업(그리드),NOT_RUN,,2026-11-06 16:22
-V-76de5ea3,B3,[SYS0010 결함 유형] 메인화면 System admin 정보(SYSTEM_ADM Lookup),NOT_RUN,,2026-11-06 16:22
-V-71215823,E4,[DMF0004 결함 유형] Customer 탭 Sold to/Ship to 저장 검증,NOT_RUN,,2026-11-06 16:22
-V-8232a930,E3,[DMF0005 결함 유형] Project 컬럼 필수 검증,NOT_RUN,,2026-11-06 16:22
-V-c1dc6fb0,E4,[DMF0005 결함 유형] Project 컬럼 필수 검증,NOT_RUN,,2026-11-06 16:22
-V-5cfc65d1,B7,[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값,NOT_RUN,,2026-11-06 16:22
-V-d9f7c999,A2,[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값,NOT_RUN,,2026-11-06 16:22
-V-c3afc61a,B4,[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값,NOT_RUN,,2026-11-06 16:22
-V-9001ae6b,B7,[DMF0003 결함 유형] Team 정보(DEPT_ID),NOT_RUN,,2026-11-06 16:22
-V-d21bb618,A1,[DMF0003 결함 유형] Team 정보(DEPT_ID),NOT_RUN,,2026-11-06 16:22
-V-c02cdcc4,F7,[DMF0020 결함 유형] Unit Price(LOC) → Sales Price 연동,NOT_RUN,,2026-11-06 16:22
-V-55ad57af,F1,[DMF0020 결함 유형] Unit Price(LOC) → Sales Price 연동,NOT_RUN,,2026-11-06 16:22
-V-d70abb8a,A5,[DMF0008 결함 유형] 하단 그리드 CRUD Status 컬럼,NOT_RUN,,2026-11-06 16:22
-V-ea0dec3c,M3,[DMF0005 결함 유형] Model 팝업 조회,NOT_RUN,,2026-11-06 16:22
-V-1ce8c369,G5,[DMF0005 결함 유형] Model 팝업 조회,NOT_RUN,,2026-11-06 16:22
-V-1dc1dc13,A5,[DMF0005 결함 유형] Sold-to Cust(Report) 컬럼,NOT_RUN,,2026-11-06 16:22
-V-24a499ba,E3,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-3f585fbb,F4,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-8ee9846e,F1,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-e246d363,F5,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22
-V-884f605d,G5,[DMF0074 결함 유형] Version 팝업 Period,NOT_RUN,,2026-11-06 16:22
-V-543a4cbc,H3,[DMF0053 결함 유형] 셀병합 컬럼,NOT_RUN,,2026-11-06 16:22
-V-84d4bd1a,F5,[DMF0021 결함 유형] CRUD Status M,NOT_RUN,,2026-11-06 16:22
-V-57ad553d,F2,[DMF0021 결함 유형] CRUD Status M,NOT_RUN,,2026-11-06 16:22
-V-062e73f4,H5,[DMF0040 결함 유형] Version 조회조건 라벨,NOT_RUN,,2026-11-06 16:22
-V-a5b9d581,B5,[SYS0012 결함 유형] 권한 신청 가능 Group 목록,NOT_RUN,,2026-11-06 16:22
-V-bfc6a417,H10,[DMF0082 결함 일반화] 저장 완료 플로팅 팝업 배경색,NOT_RUN,,2026-11-06 16:22
-V-a69c913a,K3,[DMF0035 결함 유형] F5 단축키,NOT_RUN,,2026-11-06 16:22
-V-30cb5d24,A5,[DMF0035 결함 유형] Div별 제외 컬럼(Project Status·Owner·Department 등),NOT_RUN,,2026-11-06 16:22
-V-2b7cb2e6,C1,[DMF0035 결함 유형] 조회조건 전체(숫자·ITEM TYPE 포함),NOT_RUN,,2026-11-06 16:22
-V-b0447450,A5,[DMF0082 결함 유형] Project Name 컬럼,NOT_RUN,,2026-11-06 16:22
-V-1eae5726,F8,[SYS0011 결함 유형] Approval Date 컬럼,NOT_RUN,,2026-11-06 16:22
-V-996d5e17,F1,[SYS0011 결함 유형] Approval Date 컬럼,NOT_RUN,,2026-11-06 16:22
-V-edea51b9,C5,[SYS0017 결함 유형] Mail Setup 탭 사용자 좌/우 그리드,NOT_RUN,,2026-11-06 16:22
-V-5f1903ce,F1,[SYS0017 결함 유형] Mail Setup 탭 사용자 좌/우 그리드,NOT_RUN,,2026-11-06 16:22
-V-9132adb9,F5,[SYS0017 결함 유형] Mail Setup 탭 사용자 좌/우 그리드,NOT_RUN,,2026-11-06 16:22
-V-bface3b7,H4,[DMF0035 결함 유형] 그리드 헤더 높이,NOT_RUN,,2026-11-06 16:22
-V-02288e50,G4,[DMF0035 결함 유형] Version 조회조건 돋보기 버튼,NOT_RUN,,2026-11-06 16:22
-V-2ba35bde,H4,[DMF0035 결함 유형] Version 조회조건 돋보기 버튼,NOT_RUN,,2026-11-06 16:22
-V-e3f4d118,C1,[DMF0035 결함 유형] Version 조회조건 기본값,NOT_RUN,,2026-11-06 16:22
-V-20ba6c32,A5,[DMF0082 결함 유형] BIZ PLAN 제외 컬럼(Cust Group Dtl 등 7개),NOT_RUN,,2026-11-06 16:22
-V-9573af27,A5,[DMF0082 결함 유형] Cust Group Dtl 컬럼,NOT_RUN,,2026-11-06 16:22
-V-51460e99,K3,[DMF0035 결함 유형] 조회 버튼 단축키,NOT_RUN,,2026-11-06 16:22
-V-238ee6bf,K3,[DMF0035 결함 유형] Ctrl+클릭 다중선택,NOT_RUN,,2026-11-06 16:22
-V-e7ab8704,A3,[DMF0035 결함 유형] Sum 행 표기 / Sum·Qty≠0 체크박스,NOT_RUN,,2026-11-06 16:22
-V-7e6d460f,H5,[DMF0035 결함 유형] Sum 행 표기 / Sum·Qty≠0 체크박스,NOT_RUN,,2026-11-06 16:22
-V-d90b6d9b,G4,[DMF0035 결함 유형] Sum 행 표기 / Sum·Qty≠0 체크박스,NOT_RUN,,2026-11-06 16:22
-V-2b2c3afa,A5,[DMF0035 결함 유형] Version 컬럼,NOT_RUN,,2026-11-06 16:22
-V-f0a1b6a5,K2,[DMF0035 결함 일반화] Measure 순서,NOT_RUN,,2026-11-06 16:22
-V-28b723db,H3,[DMF0049 결함 유형] 병합 셀 콤보 입력,NOT_RUN,,2026-11-06 16:22
-V-6d1266ce,D1,[DMF0049 결함 유형] 병합 셀 콤보 입력,NOT_RUN,,2026-11-06 16:22
-V-fa0ec498,A1,[DMF0082 결함 유형] RTF[R+P] Measure 행,NOT_RUN,,2026-11-06 16:22
-V-b92c5771,F7,[DMF0021 결함 유형] RTF[R+P] → DM_PLN_MKT_FCST / DM_PLN_MKT_FCST_C 연동,NOT_RUN,,2026-11-06 16:22
-V-7fa4ebe7,F1,[DMF0021 결함 유형] RTF[R+P] → DM_PLN_MKT_FCST / DM_PLN_MKT_FCST_C 연동,NOT_RUN,,2026-11-06 16:22
-V-ca50ba37,I2,[SCP0028 결함 유형] 수정사항 없음 알림 메시지,NOT_RUN,,2026-11-06 16:22
-V-b5a0ed6e,I1,[SCP0028 결함 유형] 수정사항 없음 알림 메시지,NOT_RUN,,2026-11-06 16:22
-V-67be7a6f,G2,[SCP0028 결함 유형] From Site 조회조건,NOT_RUN,,2026-11-06 16:22
-V-efc27f5a,G1,[SCP0028 결함 유형] From Site 조회조건,NOT_RUN,,2026-11-06 16:22
-V-21b3bb3b,A6,[SCP0028 결함 유형] 메인 그리드 행 정렬,NOT_RUN,,2026-11-06 16:22
-V-d4a45c4e,M3,[SCP0028 결함 유형] 메인 그리드 행 정렬,NOT_RUN,,2026-11-06 16:22
-V-4bc6f625,L1,[SCP0005 결함 유형] 그리드 방향키 이동 응답,NOT_RUN,,2026-11-06 16:22
-V-b15d88bf,I2,[SCP0028 결함 유형] Lot Size<Increment 검증 메시지,NOT_RUN,,2026-11-06 16:22
-V-d4e04c72,I1,[SCP0028 결함 유형] Lot Size<Increment 검증 메시지,NOT_RUN,,2026-11-06 16:22
-V-6ac8a96e,E4,[SCP0028 결함 유형] Lot Size<Increment 검증 메시지,NOT_RUN,,2026-11-06 16:22
-V-a107a55c,E4,[SCP0005 결함 유형] 키 중복 저장 오류 메시지,NOT_RUN,,2026-11-06 16:22
-V-9f9209c4,A1,[SCP0006 결함 유형] BOM Explosion Plant Assign(MCCH125020A1/MACH125020A1),NOT_RUN,,2026-11-06 16:22
-V-d104c3b0,N1,[SCP0006 결함 유형] BOM Explosion Plant Assign(MCCH125020A1/MACH125020A1),NOT_RUN,,2026-11-06 16:22
-V-e02b00e2,D3,[SCP0006 결함 유형] Plant Assign 그리드 색상,NOT_RUN,,2026-11-06 16:22
-V-c1d036ed,H2,[SCP0006 결함 유형] Plant Assign 그리드 색상,NOT_RUN,,2026-11-06 16:22
-V-629f44fd,G5,[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant),NOT_RUN,,2026-11-06 16:22
-V-2573cae2,M3,[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant),NOT_RUN,,2026-11-06 16:22
-V-f0317fc0,L1,[SCP0006 결함 유형] Plant Assign 조회 시간,NOT_RUN,,2026-11-06 16:22
-V-20c5f697,H2,[SCP0006 결함 유형] Main Grid 배경색,NOT_RUN,,2026-11-06 16:22
-V-e23a67af,G4,[SCP0007 결함 일반화] 조회조건 명칭·순서 / 대응 컬럼명,NOT_RUN,,2026-11-06 16:22
-V-3abd06b9,H5,[SCP0007 결함 일반화] 조회조건 명칭·순서 / 대응 컬럼명,NOT_RUN,,2026-11-06 16:22
-V-583e1031,I1,[SCP0007 결함 유형] Route 검색 팝업 제목,NOT_RUN,,2026-11-06 16:22
-V-d4aec9fc,H6,[SCP0007 결함 유형] Route 검색 팝업 제목,NOT_RUN,,2026-11-06 16:22
-V-083fbbb7,H5,[SCP0007 결함 유형] Route 검색 팝업 제목,NOT_RUN,,2026-11-06 16:22
-V-8c2c9610,G5,[SCP0007 결함 유형] Route 검색 팝업 결과,NOT_RUN,,2026-11-06 16:22
-V-c7176ba1,D1,[SCP0007 결함 유형] Insert 행 Div 셀 / 하위 Site,NOT_RUN,,2026-11-06 16:22
-V-87376108,C2,[SCP0007 결함 유형] Insert 행 Div 셀 / 하위 Site,NOT_RUN,,2026-11-06 16:22
-V-621e7da3,B4,[SCP0007 결함 유형] To Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22
-V-53d07a84,G2,[SCP0007 결함 일반화] 멀티선택 조회조건 Select ALL,NOT_RUN,,2026-11-06 16:22
-V-506c637c,B6,[SCP0007 결함 일반화] 멀티선택 조회조건 Select ALL,NOT_RUN,,2026-11-06 16:22
-V-ec1622c0,G3,[SCP0007 결함 유형] Active 조회조건 저장·복원,NOT_RUN,,2026-11-06 16:22
-V-92e411d0,D4,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22
-V-b361e109,B4,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22
-V-04f9394c,C3,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22
-V-cca108fe,F1,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22
-V-cc58dd2c,E2,[SCP0007 결함 유형] Period 날짜,NOT_RUN,,2026-11-06 16:22
-V-34d7003c,F4,[SCP0007 결함 유형] Period 날짜,NOT_RUN,,2026-11-06 16:22
-V-50d3e3cc,I1,[SCP0007 결함 일반화] 메시지 문구,NOT_RUN,,2026-11-06 16:22
-V-3f28773b,I2,[SCP0007 결함 일반화] 메시지 문구,NOT_RUN,,2026-11-06 16:22
-V-ccb1b758,E1,[SCP0007 결함 유형] Additional Lead Time,NOT_RUN,,2026-11-06 16:22
-V-95653df7,H4,[DMF0021 결함 일반화] Main Grid 헤더(Header) 높이,NOT_RUN,,2026-11-06 16:22
-V-e90c4634,E5,[DMF0082 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22
-V-32e6c3d2,F3,[DMF0082 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22
-V-00ea04ac,E5,[DMF0003 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22
-V-3f0dee51,F3,[DMF0003 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22
-V-cfc0a387,J2,[DMF0082 결함 일반화] 공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET,NOT_RUN,,2026-11-06 16:22
-V-7f17518a,K4,[DMF0082 결함 일반화] 공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET,NOT_RUN,,2026-11-06 16:22
-V-a51de4f4,A5,[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼),NOT_RUN,,2026-11-06 16:22
-V-9ee29ccd,K2,[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼),NOT_RUN,,2026-11-06 16:22
-V-ebbbc248,H6,[DMF0005 결함 일반화] 팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노출,NOT_RUN,,2026-11-06 16:22
-V-535606a6,H4,[DMF0005 결함 일반화] 팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노출,NOT_RUN,,2026-11-06 16:22
-V-fc783c90,H6,[DMF0005 결함 일반화] Model Code Change 팝업(MODEL_CODE_CHANGE Modal) 상단 선(line),NOT_RUN,,2026-11-06 16:22
-V-0212e33e,H6,[DMF0082 결함 일반화] Batch Price Input 팝업(BATCH_PRICE Modal) 상단 LINE,NOT_RUN,,2026-11-06 16:22
-V-ec9a729b,G4,[DMF0021 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-a814764a,H4,[DMF0021 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-89d97337,K1,[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 ·,NOT_RUN,,2026-11-06 16:22
-V-eb47f8fe,C4,[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 ·,NOT_RUN,,2026-11-06 16:22
-V-5fb0a169,G4,[DMF0053 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 영역·너비,NOT_RUN,,2026-11-06 16:22
-V-3282ba6f,H4,[DMF0053 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 영역·너비,NOT_RUN,,2026-11-06 16:22
-V-3b538907,J1,[DMF0074 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기,NOT_RUN,,2026-11-06 16:22
-V-773a4914,G4,[DMF0074 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기,NOT_RUN,,2026-11-06 16:22
-V-753489ed,H11,[DMF0003 결함 일반화] 저장(Save) 실행 중 스피너(Spinner · Loading),NOT_RUN,,2026-11-06 16:22
-V-5dac092c,H11,[DMF0021 결함 일반화] 저장(Save) 실행 중 스피너(Spinner · Loading),NOT_RUN,,2026-11-06 16:22
-V-ef04ce6f,J1,[DMF0004 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 초기 선택값 · 사용자 권한,NOT_RUN,,2026-11-06 16:22
-V-444d80cd,D6,[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹,NOT_RUN,,2026-11-06 16:22
-V-7148a127,H3,[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹,NOT_RUN,,2026-11-06 16:22
-V-ae71ab92,J2,[DMF0004 결함 일반화] 공통 버튼 권한(btn_auth · PR_GET_MNU_BTN_AUTH_DIV) 적용,NOT_RUN,,2026-11-06 16:22
-V-05da3b07,J2,[DMF0006 결함 일반화] 공통 버튼 권한(btn_auth · PR_GET_MNU_BTN_AUTH_DIV) 적용,NOT_RUN,,2026-11-06 16:22
-V-bfe840b1,H6,[DMF0044 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22
-V-a0d10009,H4,[DMF0044 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22
-V-7f4cab59,K1,[DMF0020 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-b3fdc771,K1,[DMF0048 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-af5c28ba,K1,[DMF0014 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-cfc24de1,K1,[DMF0074 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-90f221d6,K1,[DMF0042 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-90104893,K1,[DMF0021 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-a689ecbc,K1,[DMF0044 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-f35911a4,K1,[DMF0049 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22
-V-26572bd4,H6,[DMF0082 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22
-V-ffe173f0,H4,[DMF0082 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22
-V-e835bb52,G4,[DMF0020 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-e1c244be,H4,[DMF0020 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-af49ae76,G4,[DMF0003 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-8c2cfc77,H4,[DMF0003 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-e57fd250,G4,[DMF0048 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-43103ebd,H4,[DMF0048 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-f60a1e96,G4,[DMF0014 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-8ec42176,H4,[DMF0014 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-f87c05a0,G4,[DMF0042 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-ca5f2c31,H4,[DMF0042 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-2472795d,G4,[DMF0021 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-e14dd80a,H4,[DMF0021 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-7ea73d99,G4,[DMF0082 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-c4fd0609,H4,[DMF0082 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-0c303f3e,G4,[DMF0035 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-bebc4572,H4,[DMF0035 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-42fc55f0,G4,[DMF0040 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-76946a2c,H4,[DMF0040 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22
-V-e32cc23c,C3,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,NOT_RUN,,2026-11-06 16:22
-V-2c8f579a,M4,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,NOT_RUN,,2026-11-06 16:22
-V-181a8076,B4,[DMF0004 결함 일반화] 조회조건 Sales Site 콤보(SCM_SITE_ID · SiteByEndCustomer_DM validYn ',NOT_RUN,,2026-11-06 16:22
-V-0a6b217c,J2,[DMF0005 결함 일반화] Insert·Save·Delete 버튼 노출 = 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG,NOT_RUN,,2026-11-06 16:22
-V-2fc2b313,J2,[DMF0007 결함 일반화] Insert·Save·Delete 버튼 표시 = 단추 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M ,NOT_RUN,,2026-11-06 16:22
-V-3babe85e,M1,[DMF0014 결함 일반화] 공용 업로드 창(Upload) 검증 완료 후 저장 전 Cancel · X 닫기 확인창 MSG00684 「취소하시겠,NOT_RUN,,2026-11-06 16:22
-V-e3cb37cf,MS1,[DMF0014 결함 일반화] 공용 업로드 창(Upload) 검증 완료 후 저장 전 Cancel · X 닫기 확인창 MSG00684 「취소하시겠,NOT_RUN,,2026-11-06 16:22
-V-4209f2cd,I1,[DMF0020 결함 일반화] 조회 단추 라벨 코드 LBL00112('Search(F5)' KO·EN·CN) 등록·사용 — 화면 기본값 'Sea,NOT_RUN,,2026-11-06 16:22
-V-cbde191a,H5,[DMF0020 결함 일반화] 조회 단추 라벨 코드 LBL00112('Search(F5)' KO·EN·CN) 등록·사용 — 화면 기본값 'Sea,NOT_RUN,,2026-11-06 16:22
-V-39708c09,B5,[DMF0021 결함 일반화] Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — Division 기준 ,NOT_RUN,,2026-11-06 16:22
-V-90ce3c97,K2,[DMF0021 결함 일반화] Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — Division 기준 ,NOT_RUN,,2026-11-06 16:22
-V-1d51d10f,MS1,[DMF0021 결함 일반화] 조회 검사 Division 빈 값 안내 메시지(MSG00667 「권한을 가진 Division이 없습니다.」 / A,NOT_RUN,,2026-11-06 16:22
-V-b394681f,E3,[DMF0021 결함 일반화] 신규 행 Team(DEPT_ID · LBL00044) 필수 검사 · MSG00429,NOT_RUN,,2026-11-06 16:22
-V-9fa04290,B3,[DMF0048 결함 일반화] 조회조건 Team(DEPT_ID)·End Customer(END_CUSTOMER)·Sales Site(SCM_SI,NOT_RUN,,2026-11-06 16:22
-V-47f2031d,H12,[DMF0048 결함 일반화] 그리드 좌측 고정(틀고정) 칸 범위 = SCM_MST_SHEET_COLUMNS 'Sales Monitoring' ,NOT_RUN,,2026-11-06 16:22
-V-1b9b6d3b,H7,"[DMF0049 결함 일반화] Excel Download 월 칸 서식(#,##0.000;[Red]-#,##0.000 · 메타 자릿수) · 음수 ",NOT_RUN,,2026-11-06 16:22
-V-737176cf,H8,"[DMF0049 결함 일반화] Excel Download 월 칸 서식(#,##0.000;[Red]-#,##0.000 · 메타 자릿수) · 음수 ",NOT_RUN,,2026-11-06 16:22
-V-96c659a2,G8,[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건,NOT_RUN,,2026-11-06 16:22
-V-ec5e5b2d,G9,[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건,NOT_RUN,,2026-11-06 16:22
-V-a6738774,C1,[DMF0053 결함 일반화] 조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterE,NOT_RUN,,2026-11-06 16:22
-V-638fb6dc,B4,[DMF0053 결함 일반화] 조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterE,NOT_RUN,,2026-11-06 16:22
-V-5bb6b0dc,G10,[DMF0072 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Pro,NOT_RUN,,2026-11-06 16:22
-V-a8213636,G10,[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Pro,NOT_RUN,,2026-11-06 16:22
-V-3e11e3ad,G5,[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Pro,NOT_RUN,,2026-11-06 16:22
-V-28252b73,I1,[DMF0074 결함 일반화] 공용 Excel Upload 창 안내 메시지 MSG00657(오류 행 저장 차단) · MSG00658 · MSG0,NOT_RUN,,2026-11-06 16:22
-V-d73de7f2,I2,[DMF0074 결함 일반화] 공용 Excel Upload 창 안내 메시지 MSG00657(오류 행 저장 차단) · MSG00658 · MSG0,NOT_RUN,,2026-11-06 16:22
-V-bc6ef156,M1,[DMF0074 결함 일반화] 공용 Excel Upload 창 2단계 — Upload(검사 · 분류) → OK(저장) · 오류 1건 이상이면 저,NOT_RUN,,2026-11-06 16:22
-V-e10c7749,M4,[DMF0074 결함 일반화] 조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 ,NOT_RUN,,2026-11-06 16:22
-V-4a43cd39,M3,[DMF0082 결함 일반화] Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_CODE ≠ '0' → R,NOT_RUN,,2026-11-06 16:22
-V-7142feab,H10,[DMF0082 결함 일반화] Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_CODE ≠ '0' → R,NOT_RUN,,2026-11-06 16:22
-V-8bdc1eb0,I1,[DMF0004 결함 일반화] 변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS,NOT_RUN,,2026-11-06 16:22
-V-94fb2d98,MS1,[DMF0004 결함 일반화] 변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS,NOT_RUN,,2026-11-06 16:22
-V-85f4f876,MS1,[DMF0014 결함 일반화] 조회 · 저장 안내 문구 코드(MSG00667 · MSG01135 · MSG01169 · MSG00672 ← AS,NOT_RUN,,2026-11-06 16:22
-V-5c302454,H10,[DMF0014 결함 일반화] 조회 · 저장 안내 문구 코드(MSG00667 · MSG01135 · MSG01169 · MSG00672 ← AS,NOT_RUN,,2026-11-06 16:22
-V-b00bd593,I2,[DMF0043_01 결함 일반화] Version 팝업 미선택 OK 안내 — 다국어 코드 MSG00701(AS-IS MSG00279) 「버전은 ,NOT_RUN,,2026-11-06 16:22
-V-177cfe38,MS1,[DMF0043_01 결함 일반화] Version 팝업 미선택 OK 안내 — 다국어 코드 MSG00701(AS-IS MSG00279) 「버전은 ,NOT_RUN,,2026-11-06 16:22
-V-5d9649c4,G1,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,NOT_RUN,,2026-11-06 16:22
-V-6689455d,G8,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,NOT_RUN,,2026-11-06 16:22
-V-72c5bc6a,G9,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,NOT_RUN,,2026-11-06 16:22
-V-c6fe11ad,E3,[DMF0045 결함 일반화] 신규행 필수 컬럼(ITEM_ID·FROM_SITE·TO_SITE·PROJECT_CODE·INCOTERMS·FCST,NOT_RUN,,2026-11-06 16:22
-V-5ae33225,A5,컬럼/Measure 셋팅(개인화 Default),NOT_RUN,,2026-11-06 16:22
-V-741424e9,B4,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22
-V-50446a27,H4,Main Grid 컬럼 폭,NOT_RUN,,2026-11-06 16:22
-V-f7ffcff4,G5,팝업 연결 조회조건·그리드 컬럼,NOT_RUN,,2026-11-06 16:22
-V-594a4386,H6,전체 팝업 버튼 순서,NOT_RUN,,2026-11-06 16:22
-V-14ce9caa,H7,Excel Download 양식(공통 모듈),NOT_RUN,,2026-11-06 16:22
-V-db2dfcff,H6,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22
-V-3f2de63c,I1,팝업 메시지 다국어(MSG00445 등),NOT_RUN,,2026-11-06 16:22
-V-fe9bc45b,K1,그리드 필터(F4),NOT_RUN,,2026-11-06 16:22
-V-c31a0ad5,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22
-V-fb167d94,A5,컬럼셋팅 팝업 Default,NOT_RUN,,2026-11-06 16:22
-V-11139cbe,C2,그리드 End Customer→Sold-to Customer cascade,NOT_RUN,,2026-11-06 16:22
-V-c7f9f89b,N1,Company 컬럼 공란 데이터,NOT_RUN,,2026-11-06 16:22
-V-611fde45,C2,그리드 Sales Company→Sales Plant · Sales Site→Company/Plant,NOT_RUN,,2026-11-06 16:22
-V-c63df093,D4,Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22
-V-650d7d7a,H2,입력 불가 컬럼 배경색,NOT_RUN,,2026-11-06 16:22
-V-0532c909,M1,Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수,NOT_RUN,,2026-11-06 16:22
-V-a97cabda,H2,실적 구간 배경색,NOT_RUN,,2026-11-06 16:22
-V-463fdd38,B8,Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22
-V-9e7fd8a5,N1,AS From Site 공란 데이터,NOT_RUN,,2026-11-06 16:22
-V-2fe087dc,J1,Division 조회조건 후보,NOT_RUN,,2026-11-06 16:22
-V-db7b82fb,H10,편집 중 타 기능 실행 메시지(MSG00680),NOT_RUN,,2026-11-06 16:22
-V-2a3037bb,L2,조회조건(Model·Owner 등) 키 입력 · Main Grid,NOT_RUN,,2026-11-06 16:22
-V-23b974ff,A5,필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22
-V-17ab97f5,G1,Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22
-V-315ed04b,J1,Division 기본값 · 메뉴 트리(Admin-System),NOT_RUN,,2026-11-06 16:22
-V-30b6120e,C3,Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22
-V-23fa75ea,D4,Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22
-V-1fe2695f,G3,Condition(F6) 저장 · Sales Report ETC Insert 기능,NOT_RUN,,2026-11-06 16:22
-V-4fd208e5,B6,조회조건 Item Type,NOT_RUN,,2026-11-06 16:22
-V-9bbf3f31,H3,그리드 셀 병합(신규 입력 중),NOT_RUN,,2026-11-06 16:22
-V-079078e4,I1,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22
-V-fe6aea1e,K1,결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),NOT_RUN,,2026-11-06 16:22
-V-16c0ef67,K1,그리드 Sort 토글(동적 영역 포함),NOT_RUN,,2026-11-06 16:22
-V-85b1c655,M1,Excel Upload 헤더 검증 메시지,NOT_RUN,,2026-11-06 16:22
-V-bfc270aa,M1,Excel Upload Validation 메시지(Sales Site/Project/Model),NOT_RUN,,2026-11-06 16:22
-V-ad63bbde,K3,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함),NOT_RUN,,2026-11-06 16:22
-V-fef95de0,H3,셀 병합(계층 병합),NOT_RUN,,2026-11-06 16:22
-V-9ff6b367,H4,화면 축소 시 조회조건·스크롤,NOT_RUN,,2026-11-06 16:22
-V-41982f0e,G2,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,NOT_RUN,,2026-11-06 16:22
-V-b96da8f3,K2,Column Setting 필수 컬럼 표시·Div 전환 End Customer,NOT_RUN,,2026-11-06 16:22
-V-65c5432f,M3,Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22
-V-0e2b882d,H7,Excel Download(TEAM·FCST Type·Measure·Project),NOT_RUN,,2026-11-06 16:22
-V-052fe1df,A5,Div 전환 컬럼 구성·컬럼셋팅 OK 반영,NOT_RUN,,2026-11-06 16:22
-V-1f7aa179,K2,컬럼·메저 셋팅 Save/OK 재조회,NOT_RUN,,2026-11-06 16:22
-V-540a7dfd,M4,팝업 입력 컬럼,NOT_RUN,,2026-11-06 16:22
-V-53919fe1,A3,Sum 행,NOT_RUN,,2026-11-06 16:22
-V-043e0bcd,K3,그리드 헤더 클릭,NOT_RUN,,2026-11-06 16:22
-V-a43374bc,H6,팝업 No. 컬럼(Model/Owner/Project/Version 팝업),NOT_RUN,,2026-11-06 16:22
-V-06ecdb82,G1,텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),NOT_RUN,,2026-11-06 16:22
-V-61eaab47,H4,조회조건·버튼 배치 / 조회조건 콤보 드롭다운,NOT_RUN,,2026-11-06 16:22
-V-396e1430,F1,Created By/Date·Updated By/Date 컬럼,NOT_RUN,,2026-11-06 16:22
-V-c4056b64,A5,컬럼셋팅 Company ID(필수 표시·Invisible 이동),NOT_RUN,,2026-11-06 16:22
-V-4043bfc3,K1,Message ID 컬럼 필터,NOT_RUN,,2026-11-06 16:22
-V-afd8faf4,G1,API Name 조회조건,NOT_RUN,,2026-11-06 16:22
-V-2927dec6,L2,조회조건 텍스트 입력 중 그리드,NOT_RUN,,2026-11-06 16:22
-V-3dc8d17a,F5,Delete 버튼·CRUD Status D Flag,NOT_RUN,,2026-11-06 16:22
-V-4c60c9b2,K2,Measure 순서·메저셋팅 순서 저장,NOT_RUN,,2026-11-06 16:22
-V-3c00cce7,B4,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname),NOT_RUN,,2026-11-06 16:22
-V-5d4f050e,H10,저장 완료 플로팅 팝업 배경색,NOT_RUN,,2026-11-06 16:22
-V-d02e0e8a,K2,Measure 순서,NOT_RUN,,2026-11-06 16:22
-V-7cda6ae9,H6,From City 검색 버튼,NOT_RUN,,2026-11-06 16:22
-V-353dd46d,I2,조회 결과 총/건 표기,NOT_RUN,,2026-11-06 16:22
-V-1cbd0d37,H8,총 건수 표시,NOT_RUN,,2026-11-06 16:22
-V-9ab01a7f,G4,조회조건 명칭·순서 / 대응 컬럼명,NOT_RUN,,2026-11-06 16:22
-V-91dac42e,G2,멀티선택 조회조건 Select ALL,NOT_RUN,,2026-11-06 16:22
-V-992aa07c,I1,메시지 문구,NOT_RUN,,2026-11-06 16:22
-V-14e52931,J2,공통버튼 Insert(F8)/Delete(F9)/Save(F7)/Upload 노출,NOT_RUN,,2026-11-06 16:22
-V-876213c0,H5,SCP·SSP 조회조건(순서·사용여부·라벨),NOT_RUN,,2026-11-06 16:22
-V-2f4ab765,H2,"팝업 입력 셀(FPModal · 더블클릭 팝업으로 값이 채워지는 셀, 예 BOD Route Id)",NOT_RUN,,2026-11-06 16:22
-V-fff82b7b,H3,그리드 셀 세로 병합 대상 컬럼,NOT_RUN,,2026-11-06 16:22
-V-0a562d37,D6,그리드 Insert 신규행 위치,NOT_RUN,,2026-11-06 16:22
-V-133caa0e,A6,그리드에 표시되는 조회 SP 의 결과 순서,NOT_RUN,,2026-11-06 16:22
-V-a6006f41,DB-SYN,앱 계정(SCMP_APP)이 쓰는 DB 객체(PKG·콤보 SQL 테이블/뷰)·메타(MNU·PROC_M·SHEET_COLUMNS)·시노님·권한,NOT_RUN,,2026-11-06 16:22
-V-ae6c185e,E3,그리드 컬럼 필수 표시(라벨 *),NOT_RUN,,2026-11-06 16:22
-V-b9ba890a,C1,조회조건 Division 콤보(DIVISION_ID 단일 선택 화면) · 하위 조회조건 · 전 그리드,NOT_RUN,,2026-11-06 16:22
-V-dc9acfe6,B4,조회조건 콤보 후보 · 그리드 셀 콤보 후보(combo SQL 원천),NOT_RUN,,2026-11-06 16:22
-V-11967d92,C1,조회조건 콤보 cascade(상위 → 하위 후보),NOT_RUN,,2026-11-06 16:22
-V-86ea4fda,G1,조회조건 콤보 single/multi select,NOT_RUN,,2026-11-06 16:22
-V-450ff270,G6,공통 버튼 Reset Condition(F10),NOT_RUN,,2026-11-06 16:22
-V-5235851c,G9,팝업 조회조건 텍스트(콤마 다중값),NOT_RUN,,2026-11-06 16:22
-V-25e113a8,D1,그리드 편집 가능 컬럼(INPUT_TP_CD · AS-IS EDIT(F2) 컬럼),NOT_RUN,,2026-11-06 16:22
-V-1fe28971,F5,공통 버튼 Delete(F9) · CRUD Status D · DB 삭제 반영,NOT_RUN,,2026-11-06 16:22
-V-97128678,D5,그리드 셀 에디터 유형(CELL_CONTROL_OBJECT_TYPE_CODE FPComboBox/FPModal),NOT_RUN,,2026-11-06 16:22
-V-fdacd2d1,F1,공통 버튼 Save(F7) 기존행 수정 + Insert 신규행,NOT_RUN,,2026-11-06 16:22
-V-64f94752,C5,다중 그리드 더블클릭 연동,NOT_RUN,,2026-11-06 16:22
-V-f6fb4d06,E7,그리드 팝업 셀 Key-in(FPModal 컬럼) 잘못된 값,NOT_RUN,,2026-11-06 16:22
-V-d41d6aa9,E3,그리드 필수 컬럼(USER_SELECTABLE_FLAG=N · 라벨 *) 미입력 저장,NOT_RUN,,2026-11-06 16:22
-V-24927c17,E3,그리드 필수 컬럼 Setting(Div 별 META) · 컬럼셋팅 필수 표시 · 저장 필수 검증,NOT_RUN,,2026-11-06 16:22
-V-5e984a1d,H5,SCP·SSP 컬럼·조회조건 라벨 Valid→Active,NOT_RUN,,2026-11-06 16:22
-V-03c696d6,K4,편집 모드 버튼(Edit F2) 없이 셀 직접 편집,NOT_RUN,,2026-11-06 16:22
-V-fdf7a285,G3,Reset Condition(F10),NOT_RUN,,2026-11-06 16:22
+﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
+V-ec851fa3,DB-SYN,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-bd1659ea,K6,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-88336e2b,A1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-0a7e1092,A2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-2bf8d6ab,A4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-b92c4f4a,A5,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-b1719833,F1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-eb1a6f39,F2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-c504d65e,F4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-9ce92210,F5,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-c6e2fa33,F6,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-d255e233,G3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-0bfa0acc,H4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-d741150d,H7,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-b9443e02,I1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-b62ed69f,I2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-558141af,I3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-20296eca,I4,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-a72f36f0,J1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-d10cb90a,J2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-d73492ae,K1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-e8a469ef,K2,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-90416cfc,K3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-e69ae6b3,E6,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-a65eeb5c,L1,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-36c8d524,F8,SCP0096 저장 감사 필드,NOT_RUN,,2026-11-06 16:22,,,
+V-7a4e6087,F7,SCP0096 저장 연계 테이블,NOT_RUN,,2026-11-06 16:22,,,
+V-921d237e,F6,SCP0096 저장 행 수 불변,NOT_RUN,,2026-11-06 16:22,,,
+V-1b71768b,F8,SCP0096 수정 감사 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-12687ffe,F7,SCP0096 저장 연계·이력 표,NOT_RUN,,2026-11-06 16:22,,,
+V-39d20e0a,F1,SCP0096 컬럼별 저장 왕복,NOT_RUN,,2026-11-06 16:22,,,
+V-920d61ad,F6,SCP0096 빈값 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-6ea5a5b3,F1,SCP0096 저장 실패 처리,NOT_RUN,,2026-11-06 16:22,,,
+V-0a7854f3,H10,SCP0096 저장 취소 요청 없음,NOT_RUN,,2026-11-06 16:22,,,
+V-3f046706,H11,SCP0096 저장 중 로딩,NOT_RUN,,2026-11-06 16:22,,,
+V-a41e23ed,F2,SCP0096 붙여넣기 저장 인식,NOT_RUN,,2026-11-06 16:22,,,
+V-0b386124,E4,SCP0096 키 중복 신규행,NOT_RUN,,2026-11-06 16:22,,,
+V-a56a90e1,F7,SCP0096 2회 저장 행 수,NOT_RUN,,2026-11-06 16:22,,,
+V-0d4e6b7d,F8,SCP0096 이력 행 값,NOT_RUN,,2026-11-06 16:22,,,
+V-252a8840,E1,SCP0096 입력검증 음수 WORKING_TIME_DEFAULT,NOT_RUN,,2026-11-06 16:22,,,
+V-c8c1219d,F1,SCP0096 2행 동시 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-9ee88c64,F6,SCP0096 0 값 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-06bf0ac0,H11,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-59d2ffab,H12,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-5c6d415a,J3,SCP0096 화면,NOT_RUN,,2026-11-06 16:22,,,
+V-6ff7c5a4,F10,PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22,,,
+V-b713388c,A6,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22,,,
+V-a007d973,A6,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,NOT_RUN,,2026-11-06 16:22,,,
+V-6393dee9,A6,DM0003_GET_BUCKET_TYPE_CODE,NOT_RUN,,2026-11-06 16:22,,,
+V-33cc7445,A6,SCP0009_GET_SHEET_CALENDAR_3SPAN,NOT_RUN,,2026-11-06 16:22,,,
+V-9ff07d45,A7,DM0003_GET_BUCKET_TYPE_CODE,NOT_RUN,,2026-11-06 16:22,,,
+V-4ccf9d80,A7,SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,판정필요,[사용자판정] 판정필요 — A7 메인 조회 D_20261121 같은 키(plantsiteid) 18행 중 1행 값 차이(CN00254300_40,2026-11-18 23:56,사용자(대화),2026-11-18 23:56,user
+V-63f41719,A7,SCP0009_GET_SHEET_CALENDAR_3SPAN,NOT_RUN,,2026-11-06 16:22,,,
+V-2ff88be6,B1,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-cf76f5b2,B2,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-55c97f16,B3,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-e1a1ffe9,B4,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-5dedc1c3,B6,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-a241478b,B7,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-7a825d8e,G1,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-77ff74c9,G2,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-5814a68d,G4,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-aaf5204f,G7,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-f03c037f,H5,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-f360d4f6,C1,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-7e604b02,J1,조회조건 Div,NOT_RUN,,2026-11-06 16:22,,,
+V-d01b01e7,B1,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-0943c85f,B2,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-b76a3794,B3,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-9cbddc43,B4,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-9f450894,B6,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-3a399051,B7,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-958874b6,G1,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-1a251f88,G2,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-e5df6715,G4,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-5f2cb6c0,G7,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-c9529229,H5,조회조건 Plant Site,NOT_RUN,,2026-11-06 16:22,,,
+V-6f3a1fb0,G1,조회조건 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-5368d75a,G2,조회조건 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-9f0c58c6,G4,조회조건 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-4e5fd4ed,H5,조회조건 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-7c7e18e4,G8,조회조건 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-bf4654ef,D1,Shipment Working Day OSP.DIVISION_ID (Div),NOT_RUN,,2026-11-06 16:22,,,
+V-48d656f6,H2,Shipment Working Day OSP.DIVISION_ID (Div),NOT_RUN,,2026-11-06 16:22,,,
+V-cc8f7c51,D1,Shipment Working Day OSP.PLANT_SITE_ID (Plant Site ID),NOT_RUN,,2026-11-06 16:22,,,
+V-567b421e,H2,Shipment Working Day OSP.PLANT_SITE_ID (Plant Site ID),NOT_RUN,,2026-11-06 16:22,,,
+V-8daee420,D1,Shipment Working Day OSP.PLANT_SITE_NAME (Plant Site),NOT_RUN,,2026-11-06 16:22,,,
+V-3ba10472,H2,Shipment Working Day OSP.PLANT_SITE_NAME (Plant Site),NOT_RUN,,2026-11-06 16:22,,,
+V-75647788,D1,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-3ceff9c4,D5,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-7889b183,E1,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-9b73a42b,H8,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-d74723cb,H2,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-4b5367f5,H13,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-ac68ff83,D1,Shipment Working Day OSP.LAST_INPUT_DATE (Last Input Date),NOT_RUN,,2026-11-06 16:22,,,
+V-d1546794,H2,Shipment Working Day OSP.LAST_INPUT_DATE (Last Input Date),NOT_RUN,,2026-11-06 16:22,,,
+V-46a138cc,D1,Shipment Working Day OSP.MEASURE (Measure),NOT_RUN,,2026-11-06 16:22,,,
+V-4e8e8924,H2,Shipment Working Day OSP.MEASURE (Measure),NOT_RUN,,2026-11-06 16:22,,,
+V-66111d89,D1,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-7acef6b1,D1,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-f3503c61,A9,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-3c421015,H2,Shipment Working Day OSP.<DYNAMIC:LOOP> (동적 LOOP 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-52c55752,H1,.dr[DefColumns.COLUMN_NAME] (dr[DefColumns.COLUMN_LABEL_NAME]),NOT_RUN,,2026-11-06 16:22,,,
+V-7c369967,H1,Shipment Working Day OSP.DIVISION_ID (Division),NOT_RUN,,2026-11-06 16:22,,,
+V-cc72550e,H1,Shipment Working Day OSP.LAST_INPUT_DATE (Last Input Date),NOT_RUN,,2026-11-06 16:22,,,
+V-5c379304,H1,Shipment Working Day OSP.MEASURE (Measure),NOT_RUN,,2026-11-06 16:22,,,
+V-b726662b,H1,Shipment Working Day OSP.PLANT_SITE_ID (Plant Site ID),NOT_RUN,,2026-11-06 16:22,,,
+V-5335e699,H1,Shipment Working Day OSP.PLANT_SITE_NAME (Plant Site),NOT_RUN,,2026-11-06 16:22,,,
+V-b0d1d082,H1,Shipment Working Day OSP.WORKING_TIME_DEFAULT (Working Time Default),NOT_RUN,,2026-11-06 16:22,,,
+V-6d695172,MS1,MSG00134,NOT_RUN,,2026-11-06 16:22,,,
+V-e82d924c,MS1,MSG00134,NOT_RUN,,2026-11-06 16:22,,,
+V-fef5f373,MS1,MSG00004,NOT_RUN,,2026-11-06 16:22,,,
+V-5403aadf,E4,MSG00135,NOT_RUN,,2026-11-06 16:22,,,
+V-68bd0ef2,MS1,MSG00135,NOT_RUN,,2026-11-06 16:22,,,
+V-ee57bb7a,E4,MSG00134,NOT_RUN,,2026-11-06 16:22,,,
+V-131ad121,MS1,MSG00134,NOT_RUN,,2026-11-06 16:22,,,
+V-42ede860,D3,siMain.SwitchLock,NOT_RUN,,2026-11-06 16:22,,,
+V-cede8e21,D3,"DIVISION_ID,PLANT_SITE_NAME",NOT_RUN,,2026-11-06 16:22,,,
+V-a4ba2e32,D3,"LAST_INPUT_DATE,MEASURE",NOT_RUN,,2026-11-06 16:22,,,
+V-1f439558,E3,DataUtil.checkRequiredOfSearch,NOT_RUN,,2026-11-06 16:22,,,
+V-11851cf7,D1,siMain.LockColumn,NOT_RUN,,2026-11-06 16:22,,,
+V-6ba1bcea,G1,(동적 메시지),NOT_RUN,,2026-11-06 16:22,,,
+V-5971c412,J1,this.SetDivisionAuthCheck,NOT_RUN,,2026-11-06 16:22,,,
+V-5bf21eb5,E3,DataUtil.checkRequiredOfSpread,NOT_RUN,,2026-11-06 16:22,,,
+V-b0948ec4,E4,MSG00004,NOT_RUN,,2026-11-06 16:22,,,
+V-0c636878,MS1,MSG00004,NOT_RUN,,2026-11-06 16:22,,,
+V-03bcbbd8,E4,(동적 메시지),NOT_RUN,,2026-11-06 16:22,,,
+V-58504ac4,E4,(동적 메시지),NOT_RUN,,2026-11-06 16:22,,,
+V-9e29a0e2,D3,spreadInfo.LockColumn,NOT_RUN,,2026-11-06 16:22,,,
+V-2b2d62b2,E3,SCP0096 신규행 필수 공란 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-3a9cbaea,A5,컬럼/Measure 셋팅(개인화 Default),NOT_RUN,,2026-11-06 16:22,,,
+V-95a50541,K2,컬럼/Measure 셋팅(개인화 Default),NOT_RUN,,2026-11-06 16:22,,,
+V-ec0cd74c,B4,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-154fdd71,C1,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-f8a41f6a,B8,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-711f513a,H4,Main Grid 컬럼 폭,NOT_RUN,,2026-11-06 16:22,,,
+V-6b798c0b,H9,Main Grid 컬럼 폭,NOT_RUN,,2026-11-06 16:22,,,
+V-40b8c92a,G5,팝업 연결 조회조건·그리드 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-2728ec46,H6,전체 팝업 버튼 순서,NOT_RUN,,2026-11-06 16:22,,,
+V-69c51d21,H7,Excel Download 양식(공통 모듈),NOT_RUN,,2026-11-06 16:22,,,
+V-38535b9d,H6,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-a8bed1eb,K1,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-abe19a87,K3,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-de85e28c,I1,팝업 메시지 다국어(MSG00445 등),NOT_RUN,,2026-11-06 16:22,,,
+V-b20f4611,I2,팝업 메시지 다국어(MSG00445 등),NOT_RUN,,2026-11-06 16:22,,,
+V-80814eff,K1,그리드 필터(F4),NOT_RUN,,2026-11-06 16:22,,,
+V-8bd60dd7,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22,,,
+V-8d132d34,B3,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22,,,
+V-961dfbab,B4,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22,,,
+V-2131d48b,I1,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22,,,
+V-f1a09c35,N1,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22,,,
+V-2ceb2cdd,I4,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22,,,
+V-ebddaf2c,K3,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함),NOT_RUN,,2026-11-06 16:22,,,
+V-aa082a14,H4,화면 축소 시 조회조건·스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-ecb097ed,G2,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,NOT_RUN,,2026-11-06 16:22,,,
+V-0d4d1a4f,B6,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,NOT_RUN,,2026-11-06 16:22,,,
+V-97e852bb,M4,팝업 입력 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-65ac7048,K3,그리드 헤더 클릭,NOT_RUN,,2026-11-06 16:22,,,
+V-8cfb643a,H4,조회조건·버튼 배치 / 조회조건 콤보 드롭다운,NOT_RUN,,2026-11-06 16:22,,,
+V-f7638a0a,L2,조회조건 텍스트 입력 중 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-ddbe0a9b,L1,조회조건 텍스트 입력 중 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-81765b2a,F5,Delete 버튼·CRUD Status D Flag,NOT_RUN,,2026-11-06 16:22,,,
+V-abe4c038,K2,Measure 순서·메저셋팅 순서 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-8aa8c198,B4,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname),NOT_RUN,,2026-11-06 16:22,,,
+V-f95f27ac,J4,Home / Auth Request 메뉴,NOT_RUN,,2026-11-06 16:22,,,
+V-ae5ead24,H6,From City 검색 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-82010ade,G5,From City 검색 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-778a2f6b,I2,조회 결과 총/건 표기,NOT_RUN,,2026-11-06 16:22,,,
+V-97b95ba1,I1,조회 결과 총/건 표기,NOT_RUN,,2026-11-06 16:22,,,
+V-0dc16d28,H8,총 건수 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-c434cb81,E6,텍스트 입력 컨트롤(TEXT BOX · FPText) 마우스 드래그 선택 후 Delete/Backspace,NOT_RUN,,2026-11-06 16:22,,,
+V-ea4d557d,A7,RTF Measure 금액(AMT) 계산 시 적용 LOC(판가) 기준(RTF · AMT · LOC),NOT_RUN,,2026-11-06 16:22,,,
+V-4996771f,M4,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택),NOT_RUN,,2026-11-06 16:22,,,
+V-5c9911c4,H6,그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택),NOT_RUN,,2026-11-06 16:22,,,
+V-db8f1de8,DB-SYN,TO-BE PKG 소스(PKG_DMF0003·PKG_DMF0021·PKG_DMF0042·PKG_DMF0045·PKG_DMF0049·PKG_DMF,NOT_RUN,,2026-11-06 16:22,,,
+V-e7192bbf,J1,사용자 Division 권한 콤보 쿼리(DIVISION_ID · 권한 USE_YN) 필터,NOT_RUN,,2026-11-06 16:22,,,
+V-65a3c78c,J4,그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화,NOT_RUN,,2026-11-06 16:22,,,
+V-804bbd3b,J2,그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화,NOT_RUN,,2026-11-06 16:22,,,
+V-89d56eff,A5,[SYS0002 결함 유형] User 화면 Group 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-71866a38,H1,[DMF0043 결함 유형] Contribution Version Valid_YN 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-5926d711,B6,[DMF0043_01 결함 유형] 조회조건 Product Group·Biz Type,NOT_RUN,,2026-11-06 16:22,,,
+V-0ad0a9bf,G2,[DMF0043_01 결함 유형] 조회조건 Product Group·Biz Type,NOT_RUN,,2026-11-06 16:22,,,
+V-198eae94,L1,[DMF0043_01 결함 유형] Customer Group 조회조건 텍스트 입력 · 그리드 셀 클릭 응답,NOT_RUN,,2026-11-06 16:22,,,
+V-4d61d60d,C2,[DMF0007 결함 유형] 그리드 End Customer→Sales Site cascade,NOT_RUN,,2026-11-06 16:22,,,
+V-ec955775,B4,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-6b42f03d,F1,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-cd193731,F2,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-4654f6d1,F6,[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-65ae0310,B1,[DMF0007 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-9a8a30ca,B2,[DMF0007 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-d00659eb,B3,[DMF0007 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-df393704,B5,[DMF0007 결함 유형] Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/,NOT_RUN,,2026-11-06 16:22,,,
+V-eee433c3,N1,[DMF0007 결함 유형] Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/,NOT_RUN,,2026-11-06 16:22,,,
+V-b582e0ff,A4,[DMF0008 결함 유형] ERP EDI Master Validation 2·3번 Sheet,NOT_RUN,,2026-11-06 16:22,,,
+V-721262b2,A1,[DMF0048 결함 유형] 조회 결과 건수,NOT_RUN,,2026-11-06 16:22,,,
+V-4fed20fa,F2,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-21828c62,F1,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-f102f158,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-6603853d,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-543371e2,F2,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-ba4c88bf,F1,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-ceef74d1,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-ad5796e9,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-9171349a,F2,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-a7cca467,F1,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-69d61549,B4,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-304dfe8e,B7,[DMF0004 결함 유형] 저장 · Sales Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-dd7c08a1,M3,[DMF0005 결함 유형] Team 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-05e4d0e1,G5,[DMF0005 결함 유형] Team 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-50081974,C3,[DMF0005 결함 유형] Team·Owner 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-6cf4c95a,F6,[DMF0005 결함 유형] Team·Owner 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-5a36e94d,F1,[DMF0005 결함 유형] 하단 Purchase 탭 EDI Incoterms,NOT_RUN,,2026-11-06 16:22,,,
+V-c150ca88,B1,[DMF0005 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-2b20f133,B2,[DMF0005 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-2e8057ad,B3,[DMF0005 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-8ca93d3f,G2,[DMF0004 결함 유형] 조회조건 Active,NOT_RUN,,2026-11-06 16:22,,,
+V-4728cc98,E3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22,,,
+V-2541ae8a,F3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22,,,
+V-18f6d7ef,D1,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22,,,
+V-ceeeff0a,K3,[DMF0005 결함 유형] Team(팝업 컬럼)·Project 컬럼 필수 Validation,NOT_RUN,,2026-11-06 16:22,,,
+V-eb32d9dd,B1,[DMF0072 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-fbbf42d7,B2,[DMF0072 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-746c054d,B3,[DMF0072 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-3a459b1e,B4,[DMF0006 결함 유형] 그리드 End Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-8220f5f5,B4,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-6a1bd3fd,C1,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-42deb7b3,B2,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-ad68aaae,B8,[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-422195b2,G5,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22,,,
+V-3f575ec9,M3,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22,,,
+V-8669764c,N1,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22,,,
+V-2a38a8e9,A8,[DMF0020 결함 유형] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE,NOT_RUN,,2026-11-06 16:22,,,
+V-a88b4856,D1,[DMF0020 결함 유형] Team·End Customer 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-1289ecaa,C3,[DMF0020 결함 유형] Team·End Customer 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-35b5ece6,D1,[DMF0020 결함 유형] Price Exist 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-e5d019bd,D2,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-960446fa,F6,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-94552e32,F4,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-6508530f,M3,[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-0720a2ba,A5,[DMF0020 결함 일반화] 컬럼셋팅 팝업 Default,NOT_RUN,,2026-11-06 16:22,,,
+V-e062dec7,K2,[DMF0020 결함 일반화] 컬럼셋팅 팝업 Default,NOT_RUN,,2026-11-06 16:22,,,
+V-cccc7864,A1,[DMF0020 결함 유형] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정,NOT_RUN,,2026-11-06 16:22,,,
+V-8ca96514,A2,[DMF0020 결함 유형] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정,NOT_RUN,,2026-11-06 16:22,,,
+V-9a10ddcf,K2,[DMF0020 결함 유형] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정,NOT_RUN,,2026-11-06 16:22,,,
+V-8dd7af07,J2,[DMF0020 결함 유형] Price Batch Input 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-19b8be50,K4,[DMF0020 결함 유형] Price Batch Input 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-b4b8c091,M3,[DMF0020 결함 유형] Price Batch Input 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-d9bc75b5,G5,[DMF0020 결함 유형] Price Batch Input 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-79140c2e,A8,[DMF0020 결함 유형] Price Batch Input 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-a37f0dbc,G4,[DMF0020 결함 유형] 조회조건 Project,NOT_RUN,,2026-11-06 16:22,,,
+V-12fa9269,G4,[DMF0068 결함 유형] Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭,NOT_RUN,,2026-11-06 16:22,,,
+V-62837002,H6,[DMF0068 결함 유형] Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭,NOT_RUN,,2026-11-06 16:22,,,
+V-50337591,B4,[DMF0004 결함 유형] Sales Site 그리드 End Customer·Sold to Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-a2538cda,B7,[DMF0004 결함 유형] Sales Site 그리드 End Customer·Sold to Customer 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-6fe0288d,C2,[DMF0004 결함 일반화] 그리드 End Customer→Sold-to Customer cascade,NOT_RUN,,2026-11-06 16:22,,,
+V-d141fdb5,N1,[DMF0004 결함 일반화] Company 컬럼 공란 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-f7ca24d5,K1,[DMF0004 결함 일반화] Company 컬럼 공란 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-3cf24130,C2,[DMF0005 결함 일반화] 그리드 Sales Company→Sales Plant · Sales Site→Company/Plant,NOT_RUN,,2026-11-06 16:22,,,
+V-b59cff60,C2,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,NOT_RUN,,2026-11-06 16:22,,,
+V-7caf57ad,B2,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,NOT_RUN,,2026-11-06 16:22,,,
+V-3f67f49e,K1,[DMF0005 결함 유형] 그리드 Cust Group→End Customer→Sales Site,NOT_RUN,,2026-11-06 16:22,,,
+V-bead1b86,E4,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-a8207eef,F6,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-db224d7f,C2,[DMF0005 결함 유형] Cust Group-End Customer-Sales Site 관계 · Active 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-4f5ba6ab,B4,[DMF0006 결함 유형] Team·End Customer·Sales Site 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-9e271808,C1,[DMF0006 결함 유형] Team·End Customer·Sales Site 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-29e5bf00,D4,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22,,,
+V-64a1d9bc,D1,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22,,,
+V-1ec39235,K1,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22,,,
+V-996d6292,D6,[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22,,,
+V-88d3fdd8,H2,[DMF0068 결함 일반화] 입력 불가 컬럼 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-e27ee635,M1,[DMF0014 결함 일반화] Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수,NOT_RUN,,2026-11-06 16:22,,,
+V-da221ceb,M1,[DMF0014 결함 유형] Excel Form 입력 버킷,NOT_RUN,,2026-11-06 16:22,,,
+V-21ca140b,G5,[DMF0014 결함 유형] Excel Form 입력 버킷,NOT_RUN,,2026-11-06 16:22,,,
+V-6df80b08,M1,[DMF0014 결함 유형] Excel Form 양식,NOT_RUN,,2026-11-06 16:22,,,
+V-73753f8f,B5,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),NOT_RUN,,2026-11-06 16:22,,,
+V-e84a8a4f,D3,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),NOT_RUN,,2026-11-06 16:22,,,
+V-1eb0de4c,C2,[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure),NOT_RUN,,2026-11-06 16:22,,,
+V-ce49ec8a,H2,[DMF0003 결함 일반화] 실적 구간 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-50ee50da,D2,[DMF0003 결함 일반화] 실적 구간 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-324da769,C2,[DMF0003 결함 유형] AS From Site 입력 후 W35~W38 수량,NOT_RUN,,2026-11-06 16:22,,,
+V-5da06a75,F6,[DMF0003 결함 유형] AS From Site 입력 후 W35~W38 수량,NOT_RUN,,2026-11-06 16:22,,,
+V-b9a64e28,B8,[DMF0003 결함 일반화] Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22,,,
+V-ec53f07d,C3,[DMF0003 결함 일반화] Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22,,,
+V-ea9424a2,A2,[DMF0003 결함 일반화] Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22,,,
+V-b26007f0,N1,[DMF0003 결함 일반화] AS From Site 공란 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-0ee42ffc,A1,[DMF0003 결함 유형] 조회 건수,NOT_RUN,,2026-11-06 16:22,,,
+V-d28da74b,G5,[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw),NOT_RUN,,2026-11-06 16:22,,,
+V-dd9236af,M3,[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw),NOT_RUN,,2026-11-06 16:22,,,
+V-83d070cd,J1,[DMF0003 결함 일반화] Division 조회조건 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-69d957ab,B5,[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능,NOT_RUN,,2026-11-06 16:22,,,
+V-fc5da86b,D3,[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능,NOT_RUN,,2026-11-06 16:22,,,
+V-93ffca4b,E1,[DMF0003 결함 유형] MKT FCST[R+P] 수량,NOT_RUN,,2026-11-06 16:22,,,
+V-79f2d86f,A5,[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-3494d85c,K2,[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-56781cf1,N1,[DMF0082 결함 유형] 컬럼셋팅 VERSION 컬럼 · AS FROM SITE 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-36ecff30,A1,[DMF0082 결함 유형] 조회 건수,NOT_RUN,,2026-11-06 16:22,,,
+V-ee1419c8,E1,[DMF0082 결함 유형] MKT_FCST[R+P]·AS_In_Request[R+P]·Unit_Price(LOC),NOT_RUN,,2026-11-06 16:22,,,
+V-0e99ed45,F5,[DMF0082 결함 유형] CRUD Status · 대량 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-358a7f7a,F4,[DMF0082 결함 유형] CRUD Status · 대량 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-4b6b88c1,M3,[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합,NOT_RUN,,2026-11-06 16:22,,,
+V-b9fa7cd8,H3,[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합,NOT_RUN,,2026-11-06 16:22,,,
+V-f26ec911,G4,[DMF0082 결함 유형] Price Batch Input 팝업 Model 조건 · End Customer 병합,NOT_RUN,,2026-11-06 16:22,,,
+V-e41a8adf,H10,[DMF0082 결함 일반화] 편집 중 타 기능 실행 메시지(MSG00680),NOT_RUN,,2026-11-06 16:22,,,
+V-6ee1d02e,L2,[DMF0082 결함 일반화] 조회조건(Model·Owner 등) 키 입력 · Main Grid,NOT_RUN,,2026-11-06 16:22,,,
+V-63cc05e8,H3,[DMF0082 결함 유형] 셀병합(Unit Price Currency 등),NOT_RUN,,2026-11-06 16:22,,,
+V-13aa7d71,M3,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-578d2ecc,F4,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-572f17e0,F3,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-8006d06a,F1,[DMF0082 결함 유형] Exchange Rate 팝업 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-a1e4f7df,M2,[DMF0082 결함 유형] BPS I/F 버튼 · Last Update Date/By 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-93042a98,F1,[DMF0082 결함 유형] BPS I/F 버튼 · Last Update Date/By 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-8b84d747,A5,[DMF0082 결함 유형] BPS I/F 버튼 · Last Update Date/By 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-e69d90d4,A2,[DMF0082 결함 유형] Cell Prod Site 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-04a588c1,E4,[DMF0082 결함 유형] Biz Type 미존재 검증 팝업 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-f5414309,E4,[DMF0082 결함 유형] MKT FCST 수량 입력 시 Unit Price 필수,NOT_RUN,,2026-11-06 16:22,,,
+V-b12cbdfd,E1,[DMF0082 결함 유형] QTY ≥ 0 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-58907ce8,A5,[DMF0082 결함 일반화] 필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-012fc288,K2,[DMF0082 결함 일반화] 필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-6f1ccce2,F6,[DMF0082 결함 일반화] 필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-d4d5a308,A5,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),NOT_RUN,,2026-11-06 16:22,,,
+V-57cc3d5c,K2,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),NOT_RUN,,2026-11-06 16:22,,,
+V-d99fa380,N1,[DMF0082 결함 유형] Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT),NOT_RUN,,2026-11-06 16:22,,,
+V-42050def,G1,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-192ad4a8,G8,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-c62b4512,L2,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-d1629d47,H4,[SYS0010 결함 일반화] Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-972264bd,J3,[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE),NOT_RUN,,2026-11-06 16:22,,,
+V-bf89205a,B5,[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE),NOT_RUN,,2026-11-06 16:22,,,
+V-0fa38c1b,D2,[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE),NOT_RUN,,2026-11-06 16:22,,,
+V-e70c35f0,J1,[DMF0082 결함 일반화] Division 기본값 · 메뉴 트리(Admin-System),NOT_RUN,,2026-11-06 16:22,,,
+V-a1628d98,J4,[DMF0082 결함 일반화] Division 기본값 · 메뉴 트리(Admin-System),NOT_RUN,,2026-11-06 16:22,,,
+V-72c91774,J2,[DMF0082 결함 유형] Insert·Save 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-dfdec974,J3,[DMF0082 결함 유형] MKT_FCST[R+P] 편집,NOT_RUN,,2026-11-06 16:22,,,
+V-2460e982,D2,[DMF0082 결함 유형] MKT_FCST[R+P] 편집,NOT_RUN,,2026-11-06 16:22,,,
+V-e9b00c7f,N1,[DMF0007 결함 유형] Customer FCST Master 기준정보,NOT_RUN,,2026-11-06 16:22,,,
+V-30e173bc,A1,[DMF0007 결함 유형] Customer FCST Master 기준정보,NOT_RUN,,2026-11-06 16:22,,,
+V-07d772e7,N1,[DMF0004 결함 유형] Sales Site 조회조건 표시값,NOT_RUN,,2026-11-06 16:22,,,
+V-800a389b,B4,[DMF0004 결함 유형] Sales Site 조회조건 표시값,NOT_RUN,,2026-11-06 16:22,,,
+V-63c567f8,C3,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-a0b0a188,C2,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-666a5d77,E4,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-d8c1f6c7,E5,[DMF0005 결함 일반화] Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-d3469260,D4,[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-c6d20524,C4,[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-4215bf67,A5,[DMF0004 결함 일반화] Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-47ce1be8,F4,[DMF0044 결함 유형] 붙여넣기 후 저장 · 자릿수,NOT_RUN,,2026-11-06 16:22,,,
+V-031efaeb,F3,[DMF0044 결함 유형] 붙여넣기 후 저장 · 자릿수,NOT_RUN,,2026-11-06 16:22,,,
+V-1a9441a8,E1,[DMF0044 결함 유형] 붙여넣기 후 저장 · 자릿수,NOT_RUN,,2026-11-06 16:22,,,
+V-d03d2403,F4,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-faa52c47,E1,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-ae9e7fe8,E4,[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-79856a2d,G3,[DMF0020 결함 일반화] Condition(F6) 저장 · Sales Report ETC Insert 기능,NOT_RUN,,2026-11-06 16:22,,,
+V-fedb7937,K4,[DMF0020 결함 일반화] Condition(F6) 저장 · Sales Report ETC Insert 기능,NOT_RUN,,2026-11-06 16:22,,,
+V-4c2a832a,E4,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22,,,
+V-90e6493d,C3,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22,,,
+V-192047d8,F1,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22,,,
+V-d3fa4321,L1,[DMF0044 결함 유형] Cell Prod Site 검증 · Application Gr·Country Name,NOT_RUN,,2026-11-06 16:22,,,
+V-3e654289,L1,[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-3a57e322,F5,[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-5896743c,H3,[DMF0044 결함 유형] Delete 속도 · 병합 셀 Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-365db505,C1,[DMF0044 결함 유형] 조회조건 Report Type→Data Type,NOT_RUN,,2026-11-06 16:22,,,
+V-a903eb5b,K4,[DMF0044 결함 유형] Delete 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-5124105e,J2,[DMF0044 결함 유형] Delete 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-49aa0c57,F6,[DMF0044 결함 유형] Biz Plan Cutoff Data 저장 값,NOT_RUN,,2026-11-06 16:22,,,
+V-6c6ef129,F1,[DMF0044 결함 유형] Biz Plan Cutoff Data 저장 값,NOT_RUN,,2026-11-06 16:22,,,
+V-f323f57e,D2,[DMF0044 결함 유형] 입력 가능 Measure(Business Plan·Unit Price(LOC)),NOT_RUN,,2026-11-06 16:22,,,
+V-c93a23b2,G5,[DMF0044 결함 유형] Version 팝업 Div 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-5aabadec,E4,[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-7bb9e54c,F1,[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-855a05b7,C5,[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-7e49d7be,B6,[DMF0042 결함 일반화] 조회조건 Item Type,NOT_RUN,,2026-11-06 16:22,,,
+V-1846018e,G2,[DMF0042 결함 일반화] 조회조건 Item Type,NOT_RUN,,2026-11-06 16:22,,,
+V-9ccb1668,G7,[DMF0042 결함 일반화] 조회조건 Item Type,NOT_RUN,,2026-11-06 16:22,,,
+V-6c986299,D1,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-1b20ebc1,E4,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-d8e9a819,D6,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-7e402c0c,K4,[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-cc8a96f7,A5,[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-8ad47d7a,G4,[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-55280e01,G1,[DMF0005 결함 유형] Cust Group 조회조건 · Div 파라미터 · 그리드 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-ead95f82,L1,[DMF0042 결함 유형] 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-d2b7ecf3,F4,[DMF0042 결함 유형] 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-71494ad6,M3,[DMF0005 결함 유형] Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-30a614ff,G1,[DMF0005 결함 유형] Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-2e247185,G5,[DMF0042 결함 유형] Replace 버튼 팝업 Period·조회,NOT_RUN,,2026-11-06 16:22,,,
+V-b56ddcd3,M2,[DMF0042 결함 유형] Replace 버튼 팝업 Period·조회,NOT_RUN,,2026-11-06 16:22,,,
+V-eac0f326,M3,[DMF0042 결함 유형] Replace 버튼 팝업 Period·조회,NOT_RUN,,2026-11-06 16:22,,,
+V-46a46aa5,G5,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-c181e3f6,G4,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-a621cd01,H6,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-8dc6721f,H4,[DMF0042 결함 유형] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-5c2f9baf,H6,[DMF0042 결함 유형] Cutoff 완료 후 버전 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-353b512b,H3,[DMF0042 결함 일반화] 그리드 셀 병합(신규 입력 중),NOT_RUN,,2026-11-06 16:22,,,
+V-737b566a,D1,[DMF0042 결함 유형] Team·End Customer·Energy(WH) 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-fee185e4,C3,[DMF0042 결함 유형] Team·End Customer·Energy(WH) 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-061d0f12,M3,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22,,,
+V-d797c037,M2,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22,,,
+V-c9236ca1,E4,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22,,,
+V-20f65aad,F1,[DMF0044 결함 유형] BP Version 팝업 Version Create,NOT_RUN,,2026-11-06 16:22,,,
+V-b3ec2e3a,B3,[DMF0049 결함 유형] 버전 팝업 Version 목록 정렬,NOT_RUN,,2026-11-06 16:22,,,
+V-e1cbd63f,M3,[DMF0049 결함 유형] 버전 팝업 Version 목록 정렬,NOT_RUN,,2026-11-06 16:22,,,
+V-5c61025f,G4,[DMF0049 결함 유형] Version 조회조건 선택값 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-7fffc5ea,G7,[DMF0049 결함 유형] Version 조회조건 선택값 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-91f1dcf9,D1,[DMF0049 결함 유형] Cell Model·Cell Model Info 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-60e47cd4,H4,[DMF0004 결함 유형] 상/하 그리드 스크롤바,NOT_RUN,,2026-11-06 16:22,,,
+V-2cdf4044,I3,[DMF0014 결함 유형] Team 명칭 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-b41bcedf,I2,[DMF0014 결함 유형] Team 명칭 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-36a45aad,B4,[DMF0014 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-fa00c43d,J1,[DMF0014 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-259399ae,G3,[DMF0014 결함 유형] Condition(F6) 조회조건 저장·복원,NOT_RUN,,2026-11-06 16:22,,,
+V-eadd4062,K1,[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),NOT_RUN,,2026-11-06 16:22,,,
+V-370f6473,K3,[DMF0020 결함 일반화] 결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),NOT_RUN,,2026-11-06 16:22,,,
+V-5b8ae308,G1,[DMF0020 결함 유형] Biz.Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-07620eed,K3,[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column,NOT_RUN,,2026-11-06 16:22,,,
+V-fc9d9ec4,K1,[DMF0020 결함 유형] Exchange Rate 그리드 Copy·Header Hide Column,NOT_RUN,,2026-11-06 16:22,,,
+V-63be5ba2,G2,[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-85d1b693,M3,[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-e781b435,K1,[DMF0020 결함 일반화] 그리드 Sort 토글(동적 영역 포함),NOT_RUN,,2026-11-06 16:22,,,
+V-6dc2d4d8,F3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22,,,
+V-6586c3ea,K3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22,,,
+V-6cec46e3,H3,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22,,,
+V-7e7b22ad,E6,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),NOT_RUN,,2026-11-06 16:22,,,
+V-a5313c0c,G5,[DMF0044 결함 유형] 팝업 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-d438b00f,M1,[DMF0014 결함 유형] Excel Form 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-6bb180d8,M1,[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-f06e34ac,F4,[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-e2c15a55,E3,[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-b2740c6d,M1,[DMF0014 결함 유형] Excel Upload 수량 미입력 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-b58da4bd,M1,[DMF0014 결함 일반화] Excel Upload 헤더 검증 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-54c1f246,M1,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),NOT_RUN,,2026-11-06 16:22,,,
+V-2e536040,E4,[DMF0014 결함 일반화] Excel Upload Validation 메시지(Sales Site/Project/Model),NOT_RUN,,2026-11-06 16:22,,,
+V-263b15fd,M1,[DMF0074 결함 유형] Excel Form 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-8ca90180,M1,[DMF0074 결함 유형] Excel Form 양식 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-1e7b83e2,H7,[DMF0074 결함 유형] Excel Form 양식 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-75e40201,M1,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-7bbecba2,F1,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-cd9e0ec7,E4,[DMF0074 결함 유형] Excel Upload Key 영역·Period From/To 컬럼·Validation 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-3cce46bb,M1,[DMF0082 결함 유형] Excel Form 양식 Bucket,NOT_RUN,,2026-11-06 16:22,,,
+V-83eea688,D1,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-64961062,B4,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-b9c7786e,E3,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-4ca1eeaf,D4,[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-bfd2a033,A1,[SYS0013 결함 유형] Dynamic Query(ESS KWh 판가 계산 등),NOT_RUN,,2026-11-06 16:22,,,
+V-4771df83,H4,[SYS0013 결함 유형] Dynamic Query(ESS KWh 판가 계산 등),NOT_RUN,,2026-11-06 16:22,,,
+V-4036ab0b,F4,[SYS0013 결함 유형] Dynamic Query(ESS KWh 판가 계산 등),NOT_RUN,,2026-11-06 16:22,,,
+V-c6b6cba8,H6,[SYS0012 결함 유형] Reject 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-e7d8ff79,F8,[SYS0012 결함 유형] Request 데이터 Reject Reason·Request Date,NOT_RUN,,2026-11-06 16:22,,,
+V-adda3c65,B4,[SYS0012 결함 유형] Approval Result 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-73d3ed9b,B6,[SYS0012 결함 유형] Approval Result 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-77cbd831,I2,[SYS0012 결함 유형] Approval Result 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-1e19abb1,D5,[SYS0003 결함 유형] Menu Type·Auth Unit 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-4bff0399,G4,[DMF0040 결함 유형] Version 조회조건 크기,NOT_RUN,,2026-11-06 16:22,,,
+V-e361ed0b,H5,[DMF0040 결함 유형] Measure Version(A)/Version(B) 명칭,NOT_RUN,,2026-11-06 16:22,,,
+V-5349ddae,A9,[DMF0040 결함 유형] Measure Version(A)/Version(B) 명칭,NOT_RUN,,2026-11-06 16:22,,,
+V-ee9b5f28,H2,[DMF0040 결함 유형] 실적 구간 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-6d28b76d,H3,[DMF0040 결함 일반화] 셀 병합(계층 병합),NOT_RUN,,2026-11-06 16:22,,,
+V-7d0c7370,A1,[DMF0053 결함 유형] 조회 결과 건수,NOT_RUN,,2026-11-06 16:22,,,
+V-b6c1a997,A3,[DMF0053 결함 유형] Sum 행,NOT_RUN,,2026-11-06 16:22,,,
+V-3709e27e,K2,[DMF0042 결함 유형] Column Setting 팝업 Default 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-cf19397d,C2,[DMF0042 결함 유형] Sales Site·End Customer 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-43bb2809,C3,[DMF0042 결함 유형] Sales Site·End Customer 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-1686f0ff,D1,[DMF0042 결함 유형] Sales Site·End Customer 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-4dc1e2b7,G4,[DMF0044 결함 유형] Year 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-f52f93dc,G6,[DMF0044 결함 유형] Year 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-e897eb1e,A5,[DMF0044 결함 유형] Measure 항목 구성,NOT_RUN,,2026-11-06 16:22,,,
+V-715cf86d,N1,[DMF0044 결함 유형] Measure 항목 구성,NOT_RUN,,2026-11-06 16:22,,,
+V-c85166cd,B5,[DMF0044 결함 유형] Measure 항목 구성,NOT_RUN,,2026-11-06 16:22,,,
+V-148b4f51,M3,[DMF0005 결함 유형] Owner 팝업 사용자 목록,NOT_RUN,,2026-11-06 16:22,,,
+V-82576b23,B4,[DMF0005 결함 유형] Owner 팝업 사용자 목록,NOT_RUN,,2026-11-06 16:22,,,
+V-f69f7498,F3,[DMF0003 결함 유형] 복사/붙여넣기 후 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-9f6818fc,F2,[DMF0003 결함 유형] 복사/붙여넣기 후 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-97fdf5b8,A5,[DMF0020 결함 유형] Div별 컬럼 구성(COL_LIST 등),NOT_RUN,,2026-11-06 16:22,,,
+V-4559cf12,K2,[DMF0020 결함 유형] Div별 컬럼 구성(COL_LIST 등),NOT_RUN,,2026-11-06 16:22,,,
+V-63044a5b,D2,[DMF0021 결함 유형] Partial 주차 편집 구간·실적 구분선,NOT_RUN,,2026-11-06 16:22,,,
+V-f16327f1,H2,[DMF0021 결함 유형] Partial 주차 편집 구간·실적 구분선,NOT_RUN,,2026-11-06 16:22,,,
+V-fd9bcf39,E4,[DMF0082 결함 유형] Unit Price(LOC) 52주 Validation,NOT_RUN,,2026-11-06 16:22,,,
+V-b6589305,F1,[DMF0082 결함 유형] Unit Price(LOC) 52주 Validation,NOT_RUN,,2026-11-06 16:22,,,
+V-9891d01b,B5,[DMF0003 결함 유형] 신규 행 Measure 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-72cfffc8,C2,[DMF0003 결함 유형] 신규 행 Measure 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-251e2975,D3,[DMF0003 결함 유형] 신규 행 Measure 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-78540865,A5,[DMF0003 결함 유형] Measure 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-3a9abdff,B5,[DMF0003 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-8da4bd8f,J1,[DMF0003 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-7948c80f,A5,[DMF0082 결함 유형] 조회 그리드 컬럼 구성,NOT_RUN,,2026-11-06 16:22,,,
+V-c677ff7f,K2,[DMF0082 결함 유형] 조회 그리드 컬럼 구성,NOT_RUN,,2026-11-06 16:22,,,
+V-adf16cc1,G2,[DMF0040 결함 유형] End Customer 다중 선택 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-abe72677,I3,[DMF0040 결함 유형] Team 조회조건 vs 결과 컬럼 언어,NOT_RUN,,2026-11-06 16:22,,,
+V-5ac032a3,I2,[DMF0040 결함 유형] Team 조회조건 vs 결과 컬럼 언어,NOT_RUN,,2026-11-06 16:22,,,
+V-943b21f5,G1,[DMF0040 결함 유형] Owner 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-30d4e0ae,K2,[DMF0040 결함 유형] Column Setting 저장·Default,NOT_RUN,,2026-11-06 16:22,,,
+V-f402479e,A5,[DMF0040 결함 유형] Column Setting 저장·Default,NOT_RUN,,2026-11-06 16:22,,,
+V-6809d5f2,G4,[DMF0040 결함 유형] Ver. 조회조건 기본값,NOT_RUN,,2026-11-06 16:22,,,
+V-130c6d78,G6,[DMF0040 결함 유형] Ver. 조회조건 기본값,NOT_RUN,,2026-11-06 16:22,,,
+V-89016818,F4,[DMF0040 결함 유형] Plant Site 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-25b4b0c7,G1,[DMF0040 결함 유형] Plant Site 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-217dbcde,K2,[DMF0040 결함 유형] Measure Setting 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-72e48183,J2,[DMF0040 결함 유형] Measure Setting 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-cf5ef35b,G4,[DMF0040 결함 유형] Plant Site 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-7bff42c6,K2,[DMF0053 결함 일반화] Column Setting 필수 컬럼 표시·Div 전환 End Customer,NOT_RUN,,2026-11-06 16:22,,,
+V-bd2c0ebe,A5,[DMF0053 결함 일반화] Column Setting 필수 컬럼 표시·Div 전환 End Customer,NOT_RUN,,2026-11-06 16:22,,,
+V-9781fc65,B4,[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값,NOT_RUN,,2026-11-06 16:22,,,
+V-290e71e8,G1,[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값,NOT_RUN,,2026-11-06 16:22,,,
+V-6869e26c,G1,[DMF0053 결함 유형] Project·Owner 조회조건(Model/Nickname 정상),NOT_RUN,,2026-11-06 16:22,,,
+V-38386c3c,M3,[DMF0053 결함 유형] 팝업 Filter 텍스트 입력창,NOT_RUN,,2026-11-06 16:22,,,
+V-6a950bda,K1,[DMF0053 결함 유형] 팝업 Filter 텍스트 입력창,NOT_RUN,,2026-11-06 16:22,,,
+V-f4e54628,D2,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22,,,
+V-32c568c6,J3,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22,,,
+V-e1895244,D3,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22,,,
+V-a5f7ba17,B5,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22,,,
+V-d24e5889,B4,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22,,,
+V-80af94e5,C2,[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI,NOT_RUN,,2026-11-06 16:22,,,
+V-405f43e5,B5,[DMF0082 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-120069d2,B4,[DMF0082 결함 유형] FCST Type 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-8f1a803a,D2,[DMF0082 결함 유형] Daily Bucket 편집 Measure,NOT_RUN,,2026-11-06 16:22,,,
+V-1d1c9810,D2,[DMF0082 결함 유형] Monthly Bucket 편집 구간,NOT_RUN,,2026-11-06 16:22,,,
+V-6a98bb33,E4,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,NOT_RUN,,2026-11-06 16:22,,,
+V-e8aeb458,N1,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,NOT_RUN,,2026-11-06 16:22,,,
+V-92dda722,F1,[DMF0082 결함 유형] MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID,NOT_RUN,,2026-11-06 16:22,,,
+V-74ba3274,D2,[DMF0082 결함 유형] Bucket 유형별 MKT_FCST·Unit Price(LOC) 편집 구간,NOT_RUN,,2026-11-06 16:22,,,
+V-e7cbcc73,F4,[DMF0082 결함 유형] Bucket 전환 후 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-d218a561,M3,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22,,,
+V-dd260b7d,F2,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22,,,
+V-abd86a01,M2,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22,,,
+V-08a7ea72,M4,[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22,,,
+V-98ba330e,E4,[DMF0082 결함 유형] 신규 데이터셋 수량·판가 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-50516b17,F1,[DMF0082 결함 유형] 신규 데이터셋 수량·판가 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-3d3bc2ba,D2,[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-d8084c2e,J3,[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-6dd14a0b,E4,[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-c593e370,E4,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-fdb8437e,F6,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-2be77a90,F1,[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-96d32294,H7,[DMF0021 결함 일반화] Excel Download(TEAM·FCST Type·Measure·Project),NOT_RUN,,2026-11-06 16:22,,,
+V-191425b7,A2,[DMF0021 결함 일반화] Excel Download(TEAM·FCST Type·Measure·Project),NOT_RUN,,2026-11-06 16:22,,,
+V-526f31ee,D1,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-97676822,C3,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-eb81a6ca,B5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-a8532a53,M3,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-22adcc86,G5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-5e074809,D5,[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-8a83ba70,A5,[DMF0021 결함 일반화] Div 전환 컬럼 구성·컬럼셋팅 OK 반영,NOT_RUN,,2026-11-06 16:22,,,
+V-34492d59,K2,[DMF0021 결함 일반화] Div 전환 컬럼 구성·컬럼셋팅 OK 반영,NOT_RUN,,2026-11-06 16:22,,,
+V-e451a11d,D3,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22,,,
+V-d499aced,C2,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22,,,
+V-7fe4b8c7,B4,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22,,,
+V-c820bf3c,B5,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22,,,
+V-a6923ff3,J3,"[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",NOT_RUN,,2026-11-06 16:22,,,
+V-a707ce18,B4,[DMF0082 결함 유형] End Customer 셀 콤보 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-c605acd6,B5,[DMF0082 결함 유형] End Customer 셀 콤보 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-8fcaac93,A5,[DMF0082 결함 유형] Div 81 컬럼·Measure 구성(Project·Cust FCST 등),NOT_RUN,,2026-11-06 16:22,,,
+V-6ff00758,N1,[DMF0082 결함 유형] Div 81 컬럼·Measure 구성(Project·Cust FCST 등),NOT_RUN,,2026-11-06 16:22,,,
+V-00f50748,M3,[DMF0082 결함 유형] Excel Form 팝업 Search,NOT_RUN,,2026-11-06 16:22,,,
+V-020776c2,M1,[DMF0082 결함 유형] Excel Form 팝업 Search,NOT_RUN,,2026-11-06 16:22,,,
+V-02064e42,M1,[DMF0082 결함 유형] Excel Upload,NOT_RUN,,2026-11-06 16:22,,,
+V-0599dd31,K2,[DMF0082 결함 일반화] 컬럼·메저 셋팅 Save/OK 재조회,NOT_RUN,,2026-11-06 16:22,,,
+V-60ed2a40,B4,[DMF0082 결함 유형] Customs Handbook 콤보 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-063f4124,B4,[DMF0005 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-41f42ae5,B7,[DMF0005 결함 유형] Team 조회조건 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-fe48604a,A5,[DMF0020 결함 유형] 콤보 입력 컬럼·COL_LIST·Measure 위치,NOT_RUN,,2026-11-06 16:22,,,
+V-1d9bc512,D5,[DMF0020 결함 유형] 콤보 입력 컬럼·COL_LIST·Measure 위치,NOT_RUN,,2026-11-06 16:22,,,
+V-5e2418f9,F4,[DMF0020 결함 유형] Div 82→40 조회조건 전환,NOT_RUN,,2026-11-06 16:22,,,
+V-8f7b82f6,H5,[DMF0035 결함 유형] Ver.·Waterfall Type 라벨,NOT_RUN,,2026-11-06 16:22,,,
+V-d77d33ae,B4,[DMF0035 결함 유형] Version 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-ccd1301e,M3,[DMF0035 결함 유형] Version 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-c78bad08,H4,[DMF0035 결함 유형] 팝업 조회조건·버튼 레이아웃,NOT_RUN,,2026-11-06 16:22,,,
+V-33a39313,H6,[DMF0035 결함 유형] 팝업 조회조건·버튼 레이아웃,NOT_RUN,,2026-11-06 16:22,,,
+V-1d9642d6,A5,[DMF0035 결함 유형] Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등),NOT_RUN,,2026-11-06 16:22,,,
+V-48b7999b,N1,[DMF0035 결함 유형] Div별 컬럼·Measure(End Cust(Report)·Project(S Report) 등),NOT_RUN,,2026-11-06 16:22,,,
+V-3bf4550d,A1,[DMF0035 결함 유형] 조회 결과 건수,NOT_RUN,,2026-11-06 16:22,,,
+V-cfea2140,A7,[DMF0035 결함 유형] 결과 컬럼 값(Plan Type=MKT FCST Version 컬럼 등),NOT_RUN,,2026-11-06 16:22,,,
+V-6f119830,A3,[DMF0035 결함 일반화] Sum 행,NOT_RUN,,2026-11-06 16:22,,,
+V-928ad4ad,A10,[DMF0035 결함 일반화] Sum 행,NOT_RUN,,2026-11-06 16:22,,,
+V-a6af4923,F1,[DMF0082 결함 유형] Unit Price(LOC) 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-b5b22aea,F6,[DMF0082 결함 유형] Unit Price(LOC) 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-a051e0fd,A5,[DMF0082 결함 유형] 그리드 표시 컬럼(AS-IS 미존재 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-cb65873e,E4,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,NOT_RUN,,2026-11-06 16:22,,,
+V-c85eb3ba,F1,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,NOT_RUN,,2026-11-06 16:22,,,
+V-6641f800,F7,[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화,NOT_RUN,,2026-11-06 16:22,,,
+V-c44a7708,G4,[DMF0035 결함 유형] Plan Type 조회조건 위치,NOT_RUN,,2026-11-06 16:22,,,
+V-addfe9b7,H4,[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-136b3a22,H6,[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업,NOT_RUN,,2026-11-06 16:22,,,
+V-10d27882,H6,[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name),NOT_RUN,,2026-11-06 16:22,,,
+V-6794b810,M3,[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name),NOT_RUN,,2026-11-06 16:22,,,
+V-6b0b7dfd,B4,[DMF0005 결함 유형] Sales Plant 셀 콤보(3050 Plant),NOT_RUN,,2026-11-06 16:22,,,
+V-8234fa98,N1,[DMF0005 결함 유형] Sales Plant 셀 콤보(3050 Plant),NOT_RUN,,2026-11-06 16:22,,,
+V-439c7307,H6,[DMF0005 결함 일반화] 팝업 No. 컬럼(Model/Owner/Project/Version 팝업),NOT_RUN,,2026-11-06 16:22,,,
+V-aea401b2,F4,[DMF0005 결함 유형] 데이터 수정 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-a9ae27ae,F1,[DMF0005 결함 유형] 데이터 수정 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-d8daff90,G1,[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),NOT_RUN,,2026-11-06 16:22,,,
+V-5eb0a96d,M3,[DMF0005 결함 일반화] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),NOT_RUN,,2026-11-06 16:22,,,
+V-0a505fc4,F1,[SYS0008 결함 일반화] Created By/Date·Updated By/Date 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-6e1cef90,F8,[SYS0008 결함 일반화] Created By/Date·Updated By/Date 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-54266d61,G1,[SYS0002 결함 유형] Active 조회조건(ALL)·User Group 다중선택,NOT_RUN,,2026-11-06 16:22,,,
+V-1586b3a6,G2,[SYS0002 결함 유형] Active 조회조건(ALL)·User Group 다중선택,NOT_RUN,,2026-11-06 16:22,,,
+V-4f7dcd3c,F4,[SYS0002 결함 유형] Active 조회조건(ALL)·User Group 다중선택,NOT_RUN,,2026-11-06 16:22,,,
+V-2c870c4e,A5,[DMF0021 결함 일반화] 컬럼셋팅 Company ID(필수 표시·Invisible 이동),NOT_RUN,,2026-11-06 16:22,,,
+V-692d0a01,K2,[DMF0021 결함 일반화] 컬럼셋팅 Company ID(필수 표시·Invisible 이동),NOT_RUN,,2026-11-06 16:22,,,
+V-8e15c2f0,K2,[DMF0035 결함 유형] Measure 명칭 MKT FCST[R+P],NOT_RUN,,2026-11-06 16:22,,,
+V-649db8db,H5,[DMF0035 결함 유형] Measure 명칭 MKT FCST[R+P],NOT_RUN,,2026-11-06 16:22,,,
+V-dba2dfd3,A1,[DMF0035 결함 유형] 조회 결과 건수(SF_W_20260907_V001 W37),NOT_RUN,,2026-11-06 16:22,,,
+V-0cab5fb7,H8,[SYS0012 결함 유형] Request Date 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-7ddcf74e,D1,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-64a83b3f,C3,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-47fa05fd,H3,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-ebbfb54f,H5,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-c4efdd24,F1,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-2c25b06d,F6,[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더,NOT_RUN,,2026-11-06 16:22,,,
+V-526cc760,A5,[SYS0014 결함 유형] Email 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-cae2e552,M3,[SYS0014 결함 유형] User 팝업(User Info),NOT_RUN,,2026-11-06 16:22,,,
+V-6d131207,F1,[SYS0014 결함 유형] Division 시트 저장(JV Planner),NOT_RUN,,2026-11-06 16:22,,,
+V-4dd9ca31,F6,[SYS0014 결함 유형] Division 시트 저장(JV Planner),NOT_RUN,,2026-11-06 16:22,,,
+V-f8b32581,E4,[SYS0014 결함 유형] Division 시트 저장(JV Planner),NOT_RUN,,2026-11-06 16:22,,,
+V-6d52e51c,D5,[SYS0010 결함 유형] System 컬럼 입력 방식,NOT_RUN,,2026-11-06 16:22,,,
+V-92d26873,B4,[SYS0010 결함 유형] System 컬럼 입력 방식,NOT_RUN,,2026-11-06 16:22,,,
+V-45331a66,K1,[COM0007 결함 일반화] Message ID 컬럼 필터,NOT_RUN,,2026-11-06 16:22,,,
+V-e349ad52,K2,[DMF0003 결함 유형] Measure 표시 순서,NOT_RUN,,2026-11-06 16:22,,,
+V-4a69e5d7,D1,[SYS0003 결함 유형] URL-ROUTE_PATH 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-a5041c49,A5,[SYS0003 결함 유형] URL-ROUTE_PATH 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-106b7f93,J4,[SCM0016 결함 유형] Batch log 화면(SCM0016),NOT_RUN,,2026-11-06 16:22,,,
+V-bb572d1e,J4,[SCM0007 결함 유형] SMS Setup 화면(SCM0007),NOT_RUN,,2026-11-06 16:22,,,
+V-5dcfc12f,B6,[SYS0005 결함 유형] Schema 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-75b107da,G2,[SYS0005 결함 유형] Schema 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-22731d51,G1,[SYS0005 결함 유형] Schema 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-1623d54c,B6,[SYS0006 결함 유형] API Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-a66f1381,B4,[SYS0006 결함 유형] API Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-30c8b76a,B1,[SYS0006 결함 유형] API Type 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-9690c606,G1,[SYS0003 결함 일반화] API Name 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-f8275d89,G8,[SYS0003 결함 일반화] API Name 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-c3991e0a,B4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-baf06663,B6,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-55c39493,G4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-0fc7129b,H5,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-9d55fb54,D4,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-c7d18235,H6,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-0f33ecb5,K5,[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / N,NOT_RUN,,2026-11-06 16:22,,,
+V-154af74f,B6,[SYS0017 결함 유형] Module / Sub Module 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-824cd115,G4,[SYS0017 결함 유형] Module / Sub Module 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-266c63f8,A5,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-4e2c7553,A2,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-30897138,F4,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-daaa9700,M2,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-1abe0061,F1,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-d4d2820b,D4,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-149a773c,C5,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-7d7869e7,H4,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-286a9874,M3,[SYS0017 결함 유형] Sub Module 컬럼·Category 코드 컬럼·SQL View·메시지설정 탭·Mail Setup 탭 사용자 그,NOT_RUN,,2026-11-06 16:22,,,
+V-c0f0be94,H10,[DMF0014 결함 유형] Search 시 Loading.... 플로팅 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-3bf60e69,H4,[DMF0014 결함 유형] Search 시 Loading.... 플로팅 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-c7f4b218,A5,[DMF0005 결함 유형] Cell Prod. Site (S&OP Report) 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-ff2fdb31,B4,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-d27a9780,C2,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-6c3e9cf4,F2,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-966bf6eb,F1,[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-c3837a23,H6,[DMF0005 결함 유형] Project 팝업(그리드),NOT_RUN,,2026-11-06 16:22,,,
+V-71e87a7d,M3,[DMF0005 결함 유형] Project 팝업(그리드),NOT_RUN,,2026-11-06 16:22,,,
+V-baa53e9d,G2,[DMF0005 결함 유형] Project 팝업(그리드),NOT_RUN,,2026-11-06 16:22,,,
+V-76de5ea3,B3,[SYS0010 결함 유형] 메인화면 System admin 정보(SYSTEM_ADM Lookup),NOT_RUN,,2026-11-06 16:22,,,
+V-71215823,E4,[DMF0004 결함 유형] Customer 탭 Sold to/Ship to 저장 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-8232a930,E3,[DMF0005 결함 유형] Project 컬럼 필수 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-c1dc6fb0,E4,[DMF0005 결함 유형] Project 컬럼 필수 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-5cfc65d1,B7,[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값,NOT_RUN,,2026-11-06 16:22,,,
+V-d9f7c999,A2,[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값,NOT_RUN,,2026-11-06 16:22,,,
+V-c3afc61a,B4,[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값,NOT_RUN,,2026-11-06 16:22,,,
+V-9001ae6b,B7,[DMF0003 결함 유형] Team 정보(DEPT_ID),NOT_RUN,,2026-11-06 16:22,,,
+V-d21bb618,A1,[DMF0003 결함 유형] Team 정보(DEPT_ID),NOT_RUN,,2026-11-06 16:22,,,
+V-c02cdcc4,F7,[DMF0020 결함 유형] Unit Price(LOC) → Sales Price 연동,NOT_RUN,,2026-11-06 16:22,,,
+V-55ad57af,F1,[DMF0020 결함 유형] Unit Price(LOC) → Sales Price 연동,NOT_RUN,,2026-11-06 16:22,,,
+V-d70abb8a,A5,[DMF0008 결함 유형] 하단 그리드 CRUD Status 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-ea0dec3c,M3,[DMF0005 결함 유형] Model 팝업 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-1ce8c369,G5,[DMF0005 결함 유형] Model 팝업 조회,NOT_RUN,,2026-11-06 16:22,,,
+V-1dc1dc13,A5,[DMF0005 결함 유형] Sold-to Cust(Report) 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-24a499ba,E3,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-3f585fbb,F4,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-8ee9846e,F1,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-e246d363,F5,[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status,NOT_RUN,,2026-11-06 16:22,,,
+V-884f605d,G5,[DMF0074 결함 유형] Version 팝업 Period,NOT_RUN,,2026-11-06 16:22,,,
+V-543a4cbc,H3,[DMF0053 결함 유형] 셀병합 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-84d4bd1a,F5,[DMF0021 결함 유형] CRUD Status M,NOT_RUN,,2026-11-06 16:22,,,
+V-57ad553d,F2,[DMF0021 결함 유형] CRUD Status M,NOT_RUN,,2026-11-06 16:22,,,
+V-062e73f4,H5,[DMF0040 결함 유형] Version 조회조건 라벨,NOT_RUN,,2026-11-06 16:22,,,
+V-a5b9d581,B5,[SYS0012 결함 유형] 권한 신청 가능 Group 목록,NOT_RUN,,2026-11-06 16:22,,,
+V-bfc6a417,H10,[DMF0082 결함 일반화] 저장 완료 플로팅 팝업 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-a69c913a,K3,[DMF0035 결함 유형] F5 단축키,NOT_RUN,,2026-11-06 16:22,,,
+V-30cb5d24,A5,[DMF0035 결함 유형] Div별 제외 컬럼(Project Status·Owner·Department 등),NOT_RUN,,2026-11-06 16:22,,,
+V-2b7cb2e6,C1,[DMF0035 결함 유형] 조회조건 전체(숫자·ITEM TYPE 포함),NOT_RUN,,2026-11-06 16:22,,,
+V-b0447450,A5,[DMF0082 결함 유형] Project Name 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-1eae5726,F8,[SYS0011 결함 유형] Approval Date 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-996d5e17,F1,[SYS0011 결함 유형] Approval Date 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-edea51b9,C5,[SYS0017 결함 유형] Mail Setup 탭 사용자 좌/우 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-5f1903ce,F1,[SYS0017 결함 유형] Mail Setup 탭 사용자 좌/우 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-9132adb9,F5,[SYS0017 결함 유형] Mail Setup 탭 사용자 좌/우 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-bface3b7,H4,[DMF0035 결함 유형] 그리드 헤더 높이,NOT_RUN,,2026-11-06 16:22,,,
+V-02288e50,G4,[DMF0035 결함 유형] Version 조회조건 돋보기 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-2ba35bde,H4,[DMF0035 결함 유형] Version 조회조건 돋보기 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-e3f4d118,C1,[DMF0035 결함 유형] Version 조회조건 기본값,NOT_RUN,,2026-11-06 16:22,,,
+V-20ba6c32,A5,[DMF0082 결함 유형] BIZ PLAN 제외 컬럼(Cust Group Dtl 등 7개),NOT_RUN,,2026-11-06 16:22,,,
+V-9573af27,A5,[DMF0082 결함 유형] Cust Group Dtl 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-51460e99,K3,[DMF0035 결함 유형] 조회 버튼 단축키,NOT_RUN,,2026-11-06 16:22,,,
+V-238ee6bf,K3,[DMF0035 결함 유형] Ctrl+클릭 다중선택,NOT_RUN,,2026-11-06 16:22,,,
+V-e7ab8704,A3,[DMF0035 결함 유형] Sum 행 표기 / Sum·Qty≠0 체크박스,NOT_RUN,,2026-11-06 16:22,,,
+V-7e6d460f,H5,[DMF0035 결함 유형] Sum 행 표기 / Sum·Qty≠0 체크박스,NOT_RUN,,2026-11-06 16:22,,,
+V-d90b6d9b,G4,[DMF0035 결함 유형] Sum 행 표기 / Sum·Qty≠0 체크박스,NOT_RUN,,2026-11-06 16:22,,,
+V-2b2c3afa,A5,[DMF0035 결함 유형] Version 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-f0a1b6a5,K2,[DMF0035 결함 일반화] Measure 순서,NOT_RUN,,2026-11-06 16:22,,,
+V-28b723db,H3,[DMF0049 결함 유형] 병합 셀 콤보 입력,NOT_RUN,,2026-11-06 16:22,,,
+V-6d1266ce,D1,[DMF0049 결함 유형] 병합 셀 콤보 입력,NOT_RUN,,2026-11-06 16:22,,,
+V-fa0ec498,A1,[DMF0082 결함 유형] RTF[R+P] Measure 행,NOT_RUN,,2026-11-06 16:22,,,
+V-b92c5771,F7,[DMF0021 결함 유형] RTF[R+P] → DM_PLN_MKT_FCST / DM_PLN_MKT_FCST_C 연동,NOT_RUN,,2026-11-06 16:22,,,
+V-7fa4ebe7,F1,[DMF0021 결함 유형] RTF[R+P] → DM_PLN_MKT_FCST / DM_PLN_MKT_FCST_C 연동,NOT_RUN,,2026-11-06 16:22,,,
+V-ca50ba37,I2,[SCP0028 결함 유형] 수정사항 없음 알림 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-b5a0ed6e,I1,[SCP0028 결함 유형] 수정사항 없음 알림 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-67be7a6f,G2,[SCP0028 결함 유형] From Site 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-efc27f5a,G1,[SCP0028 결함 유형] From Site 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-21b3bb3b,A6,[SCP0028 결함 유형] 메인 그리드 행 정렬,NOT_RUN,,2026-11-06 16:22,,,
+V-d4a45c4e,M3,[SCP0028 결함 유형] 메인 그리드 행 정렬,NOT_RUN,,2026-11-06 16:22,,,
+V-4bc6f625,L1,[SCP0005 결함 유형] 그리드 방향키 이동 응답,NOT_RUN,,2026-11-06 16:22,,,
+V-b15d88bf,I2,[SCP0028 결함 유형] Lot Size<Increment 검증 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-d4e04c72,I1,[SCP0028 결함 유형] Lot Size<Increment 검증 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-6ac8a96e,E4,[SCP0028 결함 유형] Lot Size<Increment 검증 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-a107a55c,E4,[SCP0005 결함 유형] 키 중복 저장 오류 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-9f9209c4,A1,[SCP0006 결함 유형] BOM Explosion Plant Assign(MCCH125020A1/MACH125020A1),NOT_RUN,,2026-11-06 16:22,,,
+V-d104c3b0,N1,[SCP0006 결함 유형] BOM Explosion Plant Assign(MCCH125020A1/MACH125020A1),NOT_RUN,,2026-11-06 16:22,,,
+V-e02b00e2,D3,[SCP0006 결함 유형] Plant Assign 그리드 색상,NOT_RUN,,2026-11-06 16:22,,,
+V-c1d036ed,H2,[SCP0006 결함 유형] Plant Assign 그리드 색상,NOT_RUN,,2026-11-06 16:22,,,
+V-629f44fd,G5,[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant),NOT_RUN,,2026-11-06 16:22,,,
+V-2573cae2,M3,[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant),NOT_RUN,,2026-11-06 16:22,,,
+V-f0317fc0,L1,[SCP0006 결함 유형] Plant Assign 조회 시간,NOT_RUN,,2026-11-06 16:22,,,
+V-20c5f697,H2,[SCP0006 결함 유형] Main Grid 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-e23a67af,G4,[SCP0007 결함 일반화] 조회조건 명칭·순서 / 대응 컬럼명,NOT_RUN,,2026-11-06 16:22,,,
+V-3abd06b9,H5,[SCP0007 결함 일반화] 조회조건 명칭·순서 / 대응 컬럼명,NOT_RUN,,2026-11-06 16:22,,,
+V-583e1031,I1,[SCP0007 결함 유형] Route 검색 팝업 제목,NOT_RUN,,2026-11-06 16:22,,,
+V-d4aec9fc,H6,[SCP0007 결함 유형] Route 검색 팝업 제목,NOT_RUN,,2026-11-06 16:22,,,
+V-083fbbb7,H5,[SCP0007 결함 유형] Route 검색 팝업 제목,NOT_RUN,,2026-11-06 16:22,,,
+V-8c2c9610,G5,[SCP0007 결함 유형] Route 검색 팝업 결과,NOT_RUN,,2026-11-06 16:22,,,
+V-c7176ba1,D1,[SCP0007 결함 유형] Insert 행 Div 셀 / 하위 Site,NOT_RUN,,2026-11-06 16:22,,,
+V-87376108,C2,[SCP0007 결함 유형] Insert 행 Div 셀 / 하위 Site,NOT_RUN,,2026-11-06 16:22,,,
+V-621e7da3,B4,[SCP0007 결함 유형] To Site 조회조건 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-53d07a84,G2,[SCP0007 결함 일반화] 멀티선택 조회조건 Select ALL,NOT_RUN,,2026-11-06 16:22,,,
+V-506c637c,B6,[SCP0007 결함 일반화] 멀티선택 조회조건 Select ALL,NOT_RUN,,2026-11-06 16:22,,,
+V-ec1622c0,G3,[SCP0007 결함 유형] Active 조회조건 저장·복원,NOT_RUN,,2026-11-06 16:22,,,
+V-92e411d0,D4,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22,,,
+V-b361e109,B4,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22,,,
+V-04f9394c,C3,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22,,,
+V-cca108fe,F1,[SCP0007 결함 유형] Insert 행 To Site 콤보·City,NOT_RUN,,2026-11-06 16:22,,,
+V-cc58dd2c,E2,[SCP0007 결함 유형] Period 날짜,NOT_RUN,,2026-11-06 16:22,,,
+V-34d7003c,F4,[SCP0007 결함 유형] Period 날짜,NOT_RUN,,2026-11-06 16:22,,,
+V-50d3e3cc,I1,[SCP0007 결함 일반화] 메시지 문구,NOT_RUN,,2026-11-06 16:22,,,
+V-3f28773b,I2,[SCP0007 결함 일반화] 메시지 문구,NOT_RUN,,2026-11-06 16:22,,,
+V-ccb1b758,E1,[SCP0007 결함 유형] Additional Lead Time,NOT_RUN,,2026-11-06 16:22,,,
+V-95653df7,H4,[DMF0021 결함 일반화] Main Grid 헤더(Header) 높이,NOT_RUN,,2026-11-06 16:22,,,
+V-e90c4634,E5,[DMF0082 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22,,,
+V-32e6c3d2,F3,[DMF0082 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22,,,
+V-00ea04ac,E5,[DMF0003 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22,,,
+V-3f0dee51,F3,[DMF0003 결함 일반화] 그리드 콤보형 셀 붙여넣기(Paste · CELL_COMBO) 후보 외 값 차단,NOT_RUN,,2026-11-06 16:22,,,
+V-cfc0a387,J2,[DMF0082 결함 일반화] 공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET,NOT_RUN,,2026-11-06 16:22,,,
+V-7f17518a,K4,[DMF0082 결함 일반화] 공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET,NOT_RUN,,2026-11-06 16:22,,,
+V-a51de4f4,A5,[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-9ee29ccd,K2,[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-ebbbc248,H6,[DMF0005 결함 일반화] 팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노출,NOT_RUN,,2026-11-06 16:22,,,
+V-535606a6,H4,[DMF0005 결함 일반화] 팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노출,NOT_RUN,,2026-11-06 16:22,,,
+V-fc783c90,H6,[DMF0005 결함 일반화] Model Code Change 팝업(MODEL_CODE_CHANGE Modal) 상단 선(line),NOT_RUN,,2026-11-06 16:22,,,
+V-0212e33e,H6,[DMF0082 결함 일반화] Batch Price Input 팝업(BATCH_PRICE Modal) 상단 LINE,NOT_RUN,,2026-11-06 16:22,,,
+V-ec9a729b,G4,[DMF0021 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-a814764a,H4,[DMF0021 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-89d97337,K1,[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 ·,NOT_RUN,,2026-11-06 16:22,,,
+V-eb47f8fe,C4,[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 ·,NOT_RUN,,2026-11-06 16:22,,,
+V-5fb0a169,G4,[DMF0053 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 영역·너비,NOT_RUN,,2026-11-06 16:22,,,
+V-3282ba6f,H4,[DMF0053 결함 일반화] 조회조건 공통 컴포넌트(SearchCondition) 영역·너비,NOT_RUN,,2026-11-06 16:22,,,
+V-3b538907,J1,[DMF0074 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기,NOT_RUN,,2026-11-06 16:22,,,
+V-773a4914,G4,[DMF0074 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 권한 자동 선택 · Period(PERIOD) 입력란 크기,NOT_RUN,,2026-11-06 16:22,,,
+V-753489ed,H11,[DMF0003 결함 일반화] 저장(Save) 실행 중 스피너(Spinner · Loading),NOT_RUN,,2026-11-06 16:22,,,
+V-5dac092c,H11,[DMF0021 결함 일반화] 저장(Save) 실행 중 스피너(Spinner · Loading),NOT_RUN,,2026-11-06 16:22,,,
+V-ef04ce6f,J1,[DMF0004 결함 일반화] 조회조건 Division 콤보(DIVISION_ID) 초기 선택값 · 사용자 권한,NOT_RUN,,2026-11-06 16:22,,,
+V-444d80cd,D6,[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹,NOT_RUN,,2026-11-06 16:22,,,
+V-7148a127,H3,[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹,NOT_RUN,,2026-11-06 16:22,,,
+V-ae71ab92,J2,[DMF0004 결함 일반화] 공통 버튼 권한(btn_auth · PR_GET_MNU_BTN_AUTH_DIV) 적용,NOT_RUN,,2026-11-06 16:22,,,
+V-05da3b07,J2,[DMF0006 결함 일반화] 공통 버튼 권한(btn_auth · PR_GET_MNU_BTN_AUTH_DIV) 적용,NOT_RUN,,2026-11-06 16:22,,,
+V-bfe840b1,H6,[DMF0044 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22,,,
+V-a0d10009,H4,[DMF0044 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22,,,
+V-7f4cab59,K1,[DMF0020 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-b3fdc771,K1,[DMF0048 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-af5c28ba,K1,[DMF0014 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-cfc24de1,K1,[DMF0074 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-90f221d6,K1,[DMF0042 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-90104893,K1,[DMF0021 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-a689ecbc,K1,[DMF0044 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-f35911a4,K1,[DMF0049 결함 일반화] 그리드 필터(Filter) 유지 · 건수(Count) 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-26572bd4,H6,[DMF0082 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22,,,
+V-ffe173f0,H4,[DMF0082 결함 일반화] Version 팝업(VERSION Modal) 레이아웃,NOT_RUN,,2026-11-06 16:22,,,
+V-e835bb52,G4,[DMF0020 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-e1c244be,H4,[DMF0020 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-af49ae76,G4,[DMF0003 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-8c2cfc77,H4,[DMF0003 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-e57fd250,G4,[DMF0048 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-43103ebd,H4,[DMF0048 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-f60a1e96,G4,[DMF0014 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-8ec42176,H4,[DMF0014 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-f87c05a0,G4,[DMF0042 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-ca5f2c31,H4,[DMF0042 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-2472795d,G4,[DMF0021 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-e14dd80a,H4,[DMF0021 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-7ea73d99,G4,[DMF0082 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-c4fd0609,H4,[DMF0082 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-0c303f3e,G4,[DMF0035 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-bebc4572,H4,[DMF0035 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-42fc55f0,G4,[DMF0040 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-76946a2c,H4,[DMF0040 결함 일반화] 조회조건 영역 공통 컴포넌트(SearchCondition) 너비,NOT_RUN,,2026-11-06 16:22,,,
+V-e32cc23c,C3,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,NOT_RUN,,2026-11-06 16:22,,,
+V-2c8f579a,M4,[DMF0003 결함 일반화] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJECT_STATUS·PROJ,NOT_RUN,,2026-11-06 16:22,,,
+V-181a8076,B4,[DMF0004 결함 일반화] 조회조건 Sales Site 콤보(SCM_SITE_ID · SiteByEndCustomer_DM validYn ',NOT_RUN,,2026-11-06 16:22,,,
+V-0a6b217c,J2,[DMF0005 결함 일반화] Insert·Save·Delete 버튼 노출 = 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG,NOT_RUN,,2026-11-06 16:22,,,
+V-2fc2b313,J2,[DMF0007 결함 일반화] Insert·Save·Delete 버튼 표시 = 단추 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M ,NOT_RUN,,2026-11-06 16:22,,,
+V-3babe85e,M1,[DMF0014 결함 일반화] 공용 업로드 창(Upload) 검증 완료 후 저장 전 Cancel · X 닫기 확인창 MSG00684 「취소하시겠,NOT_RUN,,2026-11-06 16:22,,,
+V-e3cb37cf,MS1,[DMF0014 결함 일반화] 공용 업로드 창(Upload) 검증 완료 후 저장 전 Cancel · X 닫기 확인창 MSG00684 「취소하시겠,NOT_RUN,,2026-11-06 16:22,,,
+V-4209f2cd,I1,[DMF0020 결함 일반화] 조회 단추 라벨 코드 LBL00112('Search(F5)' KO·EN·CN) 등록·사용 — 화면 기본값 'Sea,NOT_RUN,,2026-11-06 16:22,,,
+V-cbde191a,H5,[DMF0020 결함 일반화] 조회 단추 라벨 코드 LBL00112('Search(F5)' KO·EN·CN) 등록·사용 — 화면 기본값 'Sea,NOT_RUN,,2026-11-06 16:22,,,
+V-39708c09,B5,[DMF0021 결함 일반화] Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — Division 기준 ,NOT_RUN,,2026-11-06 16:22,,,
+V-90ce3c97,K2,[DMF0021 결함 일반화] Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — Division 기준 ,NOT_RUN,,2026-11-06 16:22,,,
+V-1d51d10f,MS1,[DMF0021 결함 일반화] 조회 검사 Division 빈 값 안내 메시지(MSG00667 「권한을 가진 Division이 없습니다.」 / A,NOT_RUN,,2026-11-06 16:22,,,
+V-b394681f,E3,[DMF0021 결함 일반화] 신규 행 Team(DEPT_ID · LBL00044) 필수 검사 · MSG00429,NOT_RUN,,2026-11-06 16:22,,,
+V-9fa04290,B3,[DMF0048 결함 일반화] 조회조건 Team(DEPT_ID)·End Customer(END_CUSTOMER)·Sales Site(SCM_SI,NOT_RUN,,2026-11-06 16:22,,,
+V-47f2031d,H12,[DMF0048 결함 일반화] 그리드 좌측 고정(틀고정) 칸 범위 = SCM_MST_SHEET_COLUMNS 'Sales Monitoring' ,NOT_RUN,,2026-11-06 16:22,,,
+V-1b9b6d3b,H7,"[DMF0049 결함 일반화] Excel Download 월 칸 서식(#,##0.000;[Red]-#,##0.000 · 메타 자릿수) · 음수 ",NOT_RUN,,2026-11-06 16:22,,,
+V-737176cf,H8,"[DMF0049 결함 일반화] Excel Download 월 칸 서식(#,##0.000;[Red]-#,##0.000 · 메타 자릿수) · 음수 ",NOT_RUN,,2026-11-06 16:22,,,
+V-96c659a2,G8,[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-ec5e5b2d,G9,[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건,NOT_RUN,,2026-11-06 16:22,,,
+V-a6738774,C1,[DMF0053 결함 일반화] 조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterE,NOT_RUN,,2026-11-06 16:22,,,
+V-638fb6dc,B4,[DMF0053 결함 일반화] 조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterE,NOT_RUN,,2026-11-06 16:22,,,
+V-5bb6b0dc,G10,[DMF0072 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Pro,NOT_RUN,,2026-11-06 16:22,,,
+V-a8213636,G10,[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Pro,NOT_RUN,,2026-11-06 16:22,,,
+V-3e11e3ad,G5,[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Pro,NOT_RUN,,2026-11-06 16:22,,,
+V-28252b73,I1,[DMF0074 결함 일반화] 공용 Excel Upload 창 안내 메시지 MSG00657(오류 행 저장 차단) · MSG00658 · MSG0,NOT_RUN,,2026-11-06 16:22,,,
+V-d73de7f2,I2,[DMF0074 결함 일반화] 공용 Excel Upload 창 안내 메시지 MSG00657(오류 행 저장 차단) · MSG00658 · MSG0,NOT_RUN,,2026-11-06 16:22,,,
+V-bc6ef156,M1,[DMF0074 결함 일반화] 공용 Excel Upload 창 2단계 — Upload(검사 · 분류) → OK(저장) · 오류 1건 이상이면 저,NOT_RUN,,2026-11-06 16:22,,,
+V-e10c7749,M4,[DMF0074 결함 일반화] 조회조건 Model/Nickname(MODEL) 팝업 Close(취소) 시 기존 값 유지 — 선택값이 있을 때만 ,NOT_RUN,,2026-11-06 16:22,,,
+V-4a43cd39,M3,[DMF0082 결함 일반화] Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_CODE ≠ '0' → R,NOT_RUN,,2026-11-06 16:22,,,
+V-7142feab,H10,[DMF0082 결함 일반화] Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_CODE ≠ '0' → R,NOT_RUN,,2026-11-06 16:22,,,
+V-8bdc1eb0,I1,[DMF0004 결함 일반화] 변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS,NOT_RUN,,2026-11-06 16:22,,,
+V-94fb2d98,MS1,[DMF0004 결함 일반화] 변경 없이 Save(F7) 시 안내 메시지 코드(MSG_NO_CHANGE 미등록 → MSG00004 · AS-IS,NOT_RUN,,2026-11-06 16:22,,,
+V-85f4f876,MS1,[DMF0014 결함 일반화] 조회 · 저장 안내 문구 코드(MSG00667 · MSG01135 · MSG01169 · MSG00672 ← AS,NOT_RUN,,2026-11-06 16:22,,,
+V-5c302454,H10,[DMF0014 결함 일반화] 조회 · 저장 안내 문구 코드(MSG00667 · MSG01135 · MSG01169 · MSG00672 ← AS,NOT_RUN,,2026-11-06 16:22,,,
+V-b00bd593,I2,[DMF0043_01 결함 일반화] Version 팝업 미선택 OK 안내 — 다국어 코드 MSG00701(AS-IS MSG00279) 「버전은 ,NOT_RUN,,2026-11-06 16:22,,,
+V-177cfe38,MS1,[DMF0043_01 결함 일반화] Version 팝업 미선택 OK 안내 — 다국어 코드 MSG00701(AS-IS MSG00279) 「버전은 ,NOT_RUN,,2026-11-06 16:22,,,
+V-5d9649c4,G1,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,NOT_RUN,,2026-11-06 16:22,,,
+V-6689455d,G8,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,NOT_RUN,,2026-11-06 16:22,,,
+V-72c5bc6a,G9,[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 —,NOT_RUN,,2026-11-06 16:22,,,
+V-c6fe11ad,E3,[DMF0045 결함 일반화] 신규행 필수 컬럼(ITEM_ID·FROM_SITE·TO_SITE·PROJECT_CODE·INCOTERMS·FCST,NOT_RUN,,2026-11-06 16:22,,,
+V-5ae33225,A5,컬럼/Measure 셋팅(개인화 Default),NOT_RUN,,2026-11-06 16:22,,,
+V-741424e9,B4,조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보,NOT_RUN,,2026-11-06 16:22,,,
+V-50446a27,H4,Main Grid 컬럼 폭,NOT_RUN,,2026-11-06 16:22,,,
+V-f7ffcff4,G5,팝업 연결 조회조건·그리드 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-594a4386,H6,전체 팝업 버튼 순서,NOT_RUN,,2026-11-06 16:22,,,
+V-14ce9caa,H7,Excel Download 양식(공통 모듈),NOT_RUN,,2026-11-06 16:22,,,
+V-db2dfcff,H6,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-3f2de63c,I1,팝업 메시지 다국어(MSG00445 등),NOT_RUN,,2026-11-06 16:22,,,
+V-fe9bc45b,K1,그리드 필터(F4),NOT_RUN,,2026-11-06 16:22,,,
+V-c31a0ad5,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer),NOT_RUN,,2026-11-06 16:22,,,
+V-fb167d94,A5,컬럼셋팅 팝업 Default,NOT_RUN,,2026-11-06 16:22,,,
+V-11139cbe,C2,그리드 End Customer→Sold-to Customer cascade,NOT_RUN,,2026-11-06 16:22,,,
+V-c7f9f89b,N1,Company 컬럼 공란 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-611fde45,C2,그리드 Sales Company→Sales Plant · Sales Site→Company/Plant,NOT_RUN,,2026-11-06 16:22,,,
+V-c63df093,D4,Insert 시 Project 컬럼 · Sort,NOT_RUN,,2026-11-06 16:22,,,
+V-650d7d7a,H2,입력 불가 컬럼 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-0532c909,M1,Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수,NOT_RUN,,2026-11-06 16:22,,,
+V-a97cabda,H2,실적 구간 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-463fdd38,B8,Team 컬럼(MKT FCST 조회·신규행),NOT_RUN,,2026-11-06 16:22,,,
+V-9e7fd8a5,N1,AS From Site 공란 데이터,NOT_RUN,,2026-11-06 16:22,,,
+V-2fe087dc,J1,Division 조회조건 후보,NOT_RUN,,2026-11-06 16:22,,,
+V-db7b82fb,H10,편집 중 타 기능 실행 메시지(MSG00680),NOT_RUN,,2026-11-06 16:22,,,
+V-2a3037bb,L2,조회조건(Model·Owner 등) 키 입력 · Main Grid,NOT_RUN,,2026-11-06 16:22,,,
+V-23b974ff,A5,필수 컬럼(Project Code·Plant Site) 표시 · 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-17ab97f5,G1,Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-315ed04b,J1,Division 기본값 · 메뉴 트리(Admin-System),NOT_RUN,,2026-11-06 16:22,,,
+V-30b6120e,C3,Sales Company·Sales Plant 셀,NOT_RUN,,2026-11-06 16:22,,,
+V-23fa75ea,D4,Insert 행 Div · Div 변경 시 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-1fe2695f,G3,Condition(F6) 저장 · Sales Report ETC Insert 기능,NOT_RUN,,2026-11-06 16:22,,,
+V-4fd208e5,B6,조회조건 Item Type,NOT_RUN,,2026-11-06 16:22,,,
+V-9bbf3f31,H3,그리드 셀 병합(신규 입력 중),NOT_RUN,,2026-11-06 16:22,,,
+V-079078e4,I1,LBL/MSG/MENU 코드 사전,NOT_RUN,,2026-11-06 16:22,,,
+V-fe6aea1e,K1,결과 그리드 Sort/Filter(동적 주차 컬럼 W37-0817 등),NOT_RUN,,2026-11-06 16:22,,,
+V-16c0ef67,K1,그리드 Sort 토글(동적 영역 포함),NOT_RUN,,2026-11-06 16:22,,,
+V-85b1c655,M1,Excel Upload 헤더 검증 메시지,NOT_RUN,,2026-11-06 16:22,,,
+V-bfc270aa,M1,Excel Upload Validation 메시지(Sales Site/Project/Model),NOT_RUN,,2026-11-06 16:22,,,
+V-ad63bbde,K3,그리드 Ctrl+클릭 다중 선택(Version 팝업 포함),NOT_RUN,,2026-11-06 16:22,,,
+V-fef95de0,H3,셀 병합(계층 병합),NOT_RUN,,2026-11-06 16:22,,,
+V-9ff6b367,H4,화면 축소 시 조회조건·스크롤,NOT_RUN,,2026-11-06 16:22,,,
+V-41982f0e,G2,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,NOT_RUN,,2026-11-06 16:22,,,
+V-b96da8f3,K2,Column Setting 필수 컬럼 표시·Div 전환 End Customer,NOT_RUN,,2026-11-06 16:22,,,
+V-65c5432f,M3,Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F),NOT_RUN,,2026-11-06 16:22,,,
+V-0e2b882d,H7,Excel Download(TEAM·FCST Type·Measure·Project),NOT_RUN,,2026-11-06 16:22,,,
+V-052fe1df,A5,Div 전환 컬럼 구성·컬럼셋팅 OK 반영,NOT_RUN,,2026-11-06 16:22,,,
+V-1f7aa179,K2,컬럼·메저 셋팅 Save/OK 재조회,NOT_RUN,,2026-11-06 16:22,,,
+V-540a7dfd,M4,팝업 입력 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-53919fe1,A3,Sum 행,NOT_RUN,,2026-11-06 16:22,,,
+V-043e0bcd,K3,그리드 헤더 클릭,NOT_RUN,,2026-11-06 16:22,,,
+V-a43374bc,H6,팝업 No. 컬럼(Model/Owner/Project/Version 팝업),NOT_RUN,,2026-11-06 16:22,,,
+V-06ecdb82,G1,텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN),NOT_RUN,,2026-11-06 16:22,,,
+V-61eaab47,H4,조회조건·버튼 배치 / 조회조건 콤보 드롭다운,NOT_RUN,,2026-11-06 16:22,,,
+V-396e1430,F1,Created By/Date·Updated By/Date 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-c4056b64,A5,컬럼셋팅 Company ID(필수 표시·Invisible 이동),NOT_RUN,,2026-11-06 16:22,,,
+V-4043bfc3,K1,Message ID 컬럼 필터,NOT_RUN,,2026-11-06 16:22,,,
+V-afd8faf4,G1,API Name 조회조건,NOT_RUN,,2026-11-06 16:22,,,
+V-2927dec6,L2,조회조건 텍스트 입력 중 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-3dc8d17a,F5,Delete 버튼·CRUD Status D Flag,NOT_RUN,,2026-11-06 16:22,,,
+V-4c60c9b2,K2,Measure 순서·메저셋팅 순서 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-3c00cce7,B4,Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname),NOT_RUN,,2026-11-06 16:22,,,
+V-5d4f050e,H10,저장 완료 플로팅 팝업 배경색,NOT_RUN,,2026-11-06 16:22,,,
+V-d02e0e8a,K2,Measure 순서,NOT_RUN,,2026-11-06 16:22,,,
+V-7cda6ae9,H6,From City 검색 버튼,NOT_RUN,,2026-11-06 16:22,,,
+V-353dd46d,I2,조회 결과 총/건 표기,NOT_RUN,,2026-11-06 16:22,,,
+V-1cbd0d37,H8,총 건수 표시,NOT_RUN,,2026-11-06 16:22,,,
+V-9ab01a7f,G4,조회조건 명칭·순서 / 대응 컬럼명,NOT_RUN,,2026-11-06 16:22,,,
+V-91dac42e,G2,멀티선택 조회조건 Select ALL,NOT_RUN,,2026-11-06 16:22,,,
+V-992aa07c,I1,메시지 문구,NOT_RUN,,2026-11-06 16:22,,,
+V-14e52931,J2,공통버튼 Insert(F8)/Delete(F9)/Save(F7)/Upload 노출,NOT_RUN,,2026-11-06 16:22,,,
+V-876213c0,H5,SCP·SSP 조회조건(순서·사용여부·라벨),NOT_RUN,,2026-11-06 16:22,,,
+V-2f4ab765,H2,"팝업 입력 셀(FPModal · 더블클릭 팝업으로 값이 채워지는 셀, 예 BOD Route Id)",NOT_RUN,,2026-11-06 16:22,,,
+V-fff82b7b,H3,그리드 셀 세로 병합 대상 컬럼,NOT_RUN,,2026-11-06 16:22,,,
+V-0a562d37,D6,그리드 Insert 신규행 위치,NOT_RUN,,2026-11-06 16:22,,,
+V-133caa0e,A6,그리드에 표시되는 조회 SP 의 결과 순서,NOT_RUN,,2026-11-06 16:22,,,
+V-a6006f41,DB-SYN,앱 계정(SCMP_APP)이 쓰는 DB 객체(PKG·콤보 SQL 테이블/뷰)·메타(MNU·PROC_M·SHEET_COLUMNS)·시노님·권한,NOT_RUN,,2026-11-06 16:22,,,
+V-ae6c185e,E3,그리드 컬럼 필수 표시(라벨 *),NOT_RUN,,2026-11-06 16:22,,,
+V-b9ba890a,C1,조회조건 Division 콤보(DIVISION_ID 단일 선택 화면) · 하위 조회조건 · 전 그리드,NOT_RUN,,2026-11-06 16:22,,,
+V-dc9acfe6,B4,조회조건 콤보 후보 · 그리드 셀 콤보 후보(combo SQL 원천),NOT_RUN,,2026-11-06 16:22,,,
+V-11967d92,C1,조회조건 콤보 cascade(상위 → 하위 후보),NOT_RUN,,2026-11-06 16:22,,,
+V-86ea4fda,G1,조회조건 콤보 single/multi select,NOT_RUN,,2026-11-06 16:22,,,
+V-450ff270,G6,공통 버튼 Reset Condition(F10),NOT_RUN,,2026-11-06 16:22,,,
+V-5235851c,G9,팝업 조회조건 텍스트(콤마 다중값),NOT_RUN,,2026-11-06 16:22,,,
+V-25e113a8,D1,그리드 편집 가능 컬럼(INPUT_TP_CD · AS-IS EDIT(F2) 컬럼),NOT_RUN,,2026-11-06 16:22,,,
+V-1fe28971,F5,공통 버튼 Delete(F9) · CRUD Status D · DB 삭제 반영,NOT_RUN,,2026-11-06 16:22,,,
+V-97128678,D5,그리드 셀 에디터 유형(CELL_CONTROL_OBJECT_TYPE_CODE FPComboBox/FPModal),NOT_RUN,,2026-11-06 16:22,,,
+V-fdacd2d1,F1,공통 버튼 Save(F7) 기존행 수정 + Insert 신규행,NOT_RUN,,2026-11-06 16:22,,,
+V-64f94752,C5,다중 그리드 더블클릭 연동,NOT_RUN,,2026-11-06 16:22,,,
+V-f6fb4d06,E7,그리드 팝업 셀 Key-in(FPModal 컬럼) 잘못된 값,NOT_RUN,,2026-11-06 16:22,,,
+V-d41d6aa9,E3,그리드 필수 컬럼(USER_SELECTABLE_FLAG=N · 라벨 *) 미입력 저장,NOT_RUN,,2026-11-06 16:22,,,
+V-24927c17,E3,그리드 필수 컬럼 Setting(Div 별 META) · 컬럼셋팅 필수 표시 · 저장 필수 검증,NOT_RUN,,2026-11-06 16:22,,,
+V-5e984a1d,H5,SCP·SSP 컬럼·조회조건 라벨 Valid→Active,NOT_RUN,,2026-11-06 16:22,,,
+V-03c696d6,K4,편집 모드 버튼(Edit F2) 없이 셀 직접 편집,NOT_RUN,,2026-11-06 16:22,,,
+V-fdf7a285,G3,Reset Condition(F10),NOT_RUN,,2026-11-06 16:22,,,
+V-0d52121b,G4,SCP0096 스냅샷 조회조건 Div 40,FAIL,[재실측 스냅샷 조회조건] 기준 Doc\verify\SCP0096\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 Doc\v,2026-11-19 10:02,사용자(대화),2026-11-19 10:02,user
+V-06af9fa9,K4,SCP0096 스냅샷 버튼 Div 40,PASS,[재실측 스냅샷 버튼] 기준 Doc\verify\SCP0096\snap\golden\버튼_Div_40.aria.yml ↔ 실측 일치 · 골든 D,2026-11-19 10:02,사용자(대화),2026-11-19 10:02,user
+V-74ab8496,A5,SCP0096 스냅샷 헤더 Shipment Working Day OSP,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0096\snap\golden\헤더_Shipment_Working_Day_OSP.txt ↔,2026-11-19 10:02,사용자(대화),2026-11-19 10:02,user
+V-b36b0750,H4,SCP0096 스냅샷 화면샷 1920,PASS,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0096\snap\golden\화면샷_1920.png ↔ 실측 일치 · 골든 화면샷과 일,2026-11-19 10:02,사용자(대화),2026-11-19 10:02,user
+V-308cf4c5,H4,SCP0096 스냅샷 화면샷 1366,PASS,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0096\snap\golden\화면샷_1366.png ↔ 실측 일치 · 골든 화면샷과 일,2026-11-19 10:02,사용자(대화),2026-11-19 10:02,user

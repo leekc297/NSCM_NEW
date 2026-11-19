@@ -135,7 +135,7 @@
                   "annotations": [
                     {
                       "type": "console",
-                      "description": "열림 직후 오류 48(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                      "description": "열림 직후 오류 50(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                     },
                     {
                       "type": "labels",
@@ -143,7 +143,7 @@
                     },
                     {
                       "type": "console",
-                      "description": "오류 51(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                      "description": "오류 53(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                     },
                     {
                       "type": "columns",
@@ -155,7 +155,7 @@
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"main\",\"SEARCH\",200,1899,1701]]"
+                      "description": "[[\"main\",\"SEARCH\",200,1899,1858]]"
                     },
                     {
                       "type": "i18n",
@@ -170,7 +170,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 13239,
+                      "duration": 13330,
                       "error": {
                         "message": "Error: 조회조건 'Qty ＜ 0' (Checkbox) — 후보 [Qty ＜ 0 | Qty ≥ 0]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: 조회조건 'Qty ＜ 0' (Checkbox) — 후보 [Qty ＜ 0 | Qty ≥ 0]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0111.smoke.spec.ts:31:110",
@@ -198,11 +198,11 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T23:01:49.854Z",
+                      "startTime": "2026-11-18T10:12:10.818Z",
                       "annotations": [
                         {
                           "type": "console",
-                          "description": "열림 직후 오류 48(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "열림 직후 오류 50(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "labels",
@@ -210,7 +210,7 @@
                         },
                         {
                           "type": "console",
-                          "description": "오류 51(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "오류 53(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "columns",
@@ -222,7 +222,7 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,1899,1700]]"
+                          "description": "[[\"main\",\"SEARCH\",200,1899,1762]]"
                         },
                         {
                           "type": "i18n",
@@ -256,7 +256,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 12921,
+                      "duration": 13924,
                       "error": {
                         "message": "Error: 조회조건 'Qty ＜ 0' (Checkbox) — 후보 [Qty ＜ 0 | Qty ≥ 0]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: 조회조건 'Qty ＜ 0' (Checkbox) — 후보 [Qty ＜ 0 | Qty ≥ 0]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0111.smoke.spec.ts:31:110",
@@ -284,11 +284,11 @@
                       ],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-17T23:02:06.228Z",
+                      "startTime": "2026-11-18T10:12:27.517Z",
                       "annotations": [
                         {
                           "type": "console",
-                          "description": "열림 직후 오류 48(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "열림 직후 오류 50(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "labels",
@@ -296,7 +296,7 @@
                         },
                         {
                           "type": "console",
-                          "description": "오류 51(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
+                          "description": "오류 53(치명 0): console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `ThemeProvider3`, expected a ReactNode. \n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5338:5)\n    at ThemeProviderNoVars (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NA || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `DefaultPropsProvider`, expected a ReactNode. \n    at DefaultPropsProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5186:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/c || console.error: Warning: Failed %s type: %s%s prop Invalid prop `children` supplied to `RtlProvider`, expected a ReactNode. \n    at RtlProvider (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v=c052376a:5162:3)\n    at ThemeProvider3 (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-KN2MCQZM.js?v"
                         },
                         {
                           "type": "columns",
@@ -308,7 +308,7 @@
                         },
                         {
                           "type": "calls",
-                          "description": "[[\"main\",\"SEARCH\",200,1899,1701]]"
+                          "description": "[[\"main\",\"SEARCH\",200,1899,1858]]"
                         },
                         {
                           "type": "i18n",
@@ -414,7 +414,7 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 28289,
+                      "duration": 34181,
                       "errors": [],
                       "stdout": [
                         {
@@ -423,7 +423,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T23:02:22.192Z",
+                      "startTime": "2026-11-18T10:12:44.798Z",
                       "annotations": [
                         {
                           "type": "cond",
@@ -513,15 +513,15 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 5"
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 'The search criteria have been saved. Confirm' · 저장 행 2"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — [참고·결함 아님] 기간 키가 저장 데이터에 있음: fromYmd, planStartYmd, toYmd — 기간 조건은 Condition 저장 대상 제외(CR-029)이며 복원 비교에서도 제외(사용자 판정 2026-11-09 SCP0131)"
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 2개 중 기간 키 0 (divisionId, qtyYn)"
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)(common) — 제외 조건 cboPlanDate, cboPlanType 저장 키에 없음(저장 키 5)"
+                      "description": "[OK] Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)(common) — 제외 조건 cboPlanDate, cboPlanType 저장 키에 없음(저장 키 2)"
                     },
                     {
                       "type": "common",
@@ -529,7 +529,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 'Would you like to reset the saved search' → 결과 'The search criteria have been reset. Con' · 남은 저장 행 0"
                     },
                     {
                       "type": "common",
@@ -537,7 +537,7 @@
                     },
                     {
                       "type": "common",
-                      "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261118_080336.xlsx' 6840B"
+                      "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261118_071354.xlsx' 6839B"
                     },
                     {
                       "type": "common",
@@ -564,14 +564,11 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 44808,
+                      "duration": 34724,
                       "errors": [],
                       "stdout": [
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
-                        },
-                        {
-                          "text": "[langlock] 다른 실행(SSP0020 I2 · pid 11064)이 언어 전환 중 — 끝날 때까지 대기\n"
                         },
                         {
                           "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
@@ -579,7 +576,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-17T23:02:52.822Z",
+                      "startTime": "2026-11-18T10:13:21.439Z",
                       "annotations": [
                         {
                           "type": "common",
@@ -599,15 +596,15 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 5"
+                          "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 'The search criteria have been saved. Confirm' · 저장 행 2"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — [참고·결함 아님] 기간 키가 저장 데이터에 있음: fromYmd, planStartYmd, toYmd — 기간 조건은 Condition 저장 대상 제외(CR-029)이며 복원 비교에서도 제외(사용자 판정 2026-11-09 SCP0131)"
+                          "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 2개 중 기간 키 0 (divisionId, qtyYn)"
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)(common) — 제외 조건 cboPlanDate, cboPlanType 저장 키에 없음(저장 키 5)"
+                          "description": "[OK] Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)(common) — 제외 조건 cboPlanDate, cboPlanType 저장 키에 없음(저장 키 2)"
                         },
                         {
                           "type": "common",
@@ -615,7 +612,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                          "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 'Would you like to reset the saved search' → 결과 'The search criteria have been reset. Con' · 남은 저장 행 0"
                         },
                         {
                           "type": "common",
@@ -623,7 +620,7 @@
                         },
                         {
                           "type": "common",
-                          "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261118_080336.xlsx' 6840B"
+                          "description": "[OK] Excel 다운로드(common) — 'IntegrationPsi_20261118_071354.xlsx' 6839B"
                         },
                         {
                           "type": "common",
@@ -660,8 +657,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-17T23:01:49.466Z",
-    "duration": 110498.5,
+    "startTime": "2026-11-18T10:12:10.390Z",
+    "duration": 108510.8,
     "expected": 2,
     "skipped": 0,
     "unexpected": 1,

@@ -29,8 +29,19 @@ import {
   buildVersionSeqOptions,
   derivePlanType,
   deriveCurrProgressStatus,
-  toFilterValue,
+  isAllSelected,
 } from '../utils/capaLobReport.combos';
+
+/**
+ * AS-IS `GetCheckedListValueNone(dt, "ALL")` 전개 재현(CString.cs:567~578).
+ * 다중선택 콤보에서 "ALL"(무선택)이면 **현재 후보 목록(dt)의 전체 CODE를 콤마 전개**해 SP로 보낸다 —
+ * 후보 목록은 Refresh 함수에서 이미 shop_group(=Division Type)·상위축으로 좁혀져 있어, 전개값이 곧
+ * "그 조건으로 좁혀진 전체"다. SP(`PKG_SCP0108` BODY:191~198)는 빈값·'ALL'을 무필터로 보므로, ''를
+ * 보내면 그 축이 통째로 빠져 Division Type 필터(60/318)·Site cascade가 조용히 사라진다.
+ * 선택값이 특정이면 그대로 쓴다(= 기존 `toFilterValue` 의 비-ALL 경로와 동일).
+ */
+const effectiveCodes = (selected: string, options: readonly ComboOption[]): string =>
+  isAllSelected(selected) ? options.map(option => option.value).join(',') : selected;
 
 /**
  * 조회조건 콤보 5종 + cascade 파생값의 단일 출처 (design 02 §2 / §3 / §5.1).
@@ -133,48 +144,66 @@ export const useCapaLobReportCombos = (): CapaLobReportCombos => {
   );
 
   /**
-   * 6축 마스터 슬라이스 — `GetFilterXxx` 술어를 축마다 그대로 재현한다(02 §3.3).
-   * 축별로 **걸리는 조건이 다르다**(통일하면 후보 집합이 달라진다):
+   * 6축 마스터 슬라이스 — `GetFilterXxx` 술어를 축마다 재현하되, **상위축이 ALL이면 그 축의 후보
+   * 전개값(effective)으로 하위를 좁힌다**(AS-IS Refresh 연쇄: `RefreshFactory` 는 `_plant`=`getPlant()`
+   * =dtPlant 전개를 쓰고, dtPlant 는 `_site` 로 좁혀져 있다 → Site만 체크해도 Building/Line이 그 Site의
+   * Plant로 좁혀진다, cs:1064~1096). raw 선택값(ALL)만으로 좁히면 상위 cascade가 끊겨 Building/Line이
+   * 전건으로 뜬다(Site 선택 시 Building 12개 버그).
+   * 축별로 걸리는 조건이 다르다(통일하면 후보 집합이 달라진다):
    *  - Site: DIVISION 만(shop group·상위 축 없음) -> DivisionType 을 바꿔도 목록이 안 변한다
-   *  - Plant: + SITE + SHOP_GROUP / Building: + SHOP_GROUP + PLANT (**SITE 축 없음**)
-   *  - Line: + SHOP_GROUP + PLANT + FACTORY / Operation: + LINE 까지
-   *  - Line Type: DIVISION + OPERATION 만(shop group 없음)
+   *  - Plant: + effSite + SHOP_GROUP / Building: + SHOP_GROUP + effPlant
+   *  - Line: + SHOP_GROUP + effPlant + effFactory / Operation: + effLine 까지
+   *  - Line Type: DIVISION + OPERATION 스냅샷만(shop group 없음, G-16 유지)
    */
   const siteOptions = useMemo(
     () => buildSiteOptions({ rows: master, divisionId: sp.divisionId, shopGroupId }),
     [master, sp.divisionId, shopGroupId]
   );
+  const effSite = useMemo(() => effectiveCodes(sp.siteId, siteOptions), [sp.siteId, siteOptions]);
+
   const plantOptions = useMemo(
     () =>
       buildPlantOptions({
         rows: master,
         divisionId: sp.divisionId,
         shopGroupId,
-        siteId: sp.siteId,
+        siteId: effSite,
       }),
-    [master, sp.divisionId, shopGroupId, sp.siteId]
+    [master, sp.divisionId, shopGroupId, effSite]
   );
+  const effPlant = useMemo(
+    () => effectiveCodes(sp.plantId, plantOptions),
+    [sp.plantId, plantOptions]
+  );
+
   const buildingOptions = useMemo(
     () =>
       buildBuildingOptions({
         rows: master,
         divisionId: sp.divisionId,
         shopGroupId,
-        plantId: sp.plantId,
+        plantId: effPlant,
       }),
-    [master, sp.divisionId, shopGroupId, sp.plantId]
+    [master, sp.divisionId, shopGroupId, effPlant]
   );
+  const effFactory = useMemo(
+    () => effectiveCodes(sp.factoryId, buildingOptions),
+    [sp.factoryId, buildingOptions]
+  );
+
   const lineOptions = useMemo(
     () =>
       buildLineOptions({
         rows: master,
         divisionId: sp.divisionId,
         shopGroupId,
-        plantId: sp.plantId,
-        factoryId: sp.factoryId,
+        plantId: effPlant,
+        factoryId: effFactory,
       }),
-    [master, sp.divisionId, shopGroupId, sp.plantId, sp.factoryId]
+    [master, sp.divisionId, shopGroupId, effPlant, effFactory]
   );
+  const effLine = useMemo(() => effectiveCodes(sp.lineId, lineOptions), [sp.lineId, lineOptions]);
+
   const operationOptions = useMemo(
     () =>
       buildOperationOptions(
@@ -182,13 +211,17 @@ export const useCapaLobReportCombos = (): CapaLobReportCombos => {
           rows: master,
           divisionId: sp.divisionId,
           shopGroupId,
-          plantId: sp.plantId,
-          factoryId: sp.factoryId,
-          lineId: sp.lineId,
+          plantId: effPlant,
+          factoryId: effFactory,
+          lineId: effLine,
         },
         sp.divisionType
       ),
-    [master, sp.divisionId, shopGroupId, sp.plantId, sp.factoryId, sp.lineId, sp.divisionType]
+    [master, sp.divisionId, shopGroupId, effPlant, effFactory, effLine, sp.divisionType]
+  );
+  const effOperation = useMemo(
+    () => effectiveCodes(sp.operationId, operationOptions),
+    [sp.operationId, operationOptions]
   );
   /**
    * Line Type 만 `searchParams.operationId` 가 아니라 **스냅샷**(`lineTypeOperationId`)으로 만든다.
@@ -245,6 +278,12 @@ export const useCapaLobReportCombos = (): CapaLobReportCombos => {
    * Status 기본선택 — AS-IS `cboProgressStatus.SelectedIndex = Items.Count - 1`(cs:1048~1051).
    * 목록이 항상 1건이므로 결과적으로 **그 버전의 현재 진행상태**가 그대로 선택된다.
    * 이 값이 `sheetName`(CURRENT/CUTOFF)·GET SP 분기를 결정하므로 후보와 같은 effect 에서 확정한다.
+   *
+   * `sp.progressStatus` 를 dep 에 반드시 포함한다 — `setDivision` 은 Division 변경 시 progressStatus 를
+   * `''` 로 리셋하는데, **새 Division 의 현재버전 진행상태가 이전과 같으면**(예: 둘 다 Current '0')
+   * `currProgressStatus` 값이 불변이라 `statusOptions` memo 참조도 그대로여서 이 effect 가 깨어나지
+   * 않는다 -> progressStatus 가 `''` 에 갇히고 `sheetOf('')`=CUTOFF 로 Current 데이터가 0건 조회된다
+   * (Division 변경 후 Status 빈 칸 버그). 리셋된 빈 값을 dep 로 감지해 재도출한다.
    */
   useEffect(() => {
     setDerivedVersionInfo(planType, currProgressStatus);
@@ -253,13 +292,15 @@ export const useCapaLobReportCombos = (): CapaLobReportCombos => {
     const preferred = statusOptions.find(option => option.value === currProgressStatus);
     setSearchParams({ progressStatus: (preferred ?? statusOptions[0]).value });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planType, currProgressStatus, statusOptions]);
+  }, [planType, currProgressStatus, statusOptions, sp.progressStatus]);
 
   /**
    * GET SP payload — IN 15개 중 FE 가 싣는 13건(02 §1.1 / §5.4).
    * `p_user_id` 는 BE `@LoginUser` 자동 주입이라 FE 가 싣지 않는다(03 R-20). `debug_mode` 는 SP 본문
    * 미참조 리터럴이라 제외한다(03 §4.2 #15 / C-11). `planType` 은 파라미터가 아니다(02 §1.1).
-   * 무선택 6축 = `''`(무필터) — 후보 전체 CODE 전개 금지(SCP0105 와 다르다).
+   * 무선택 6축(Site~Operation·Line Type)은 `''`(무필터)가 아니라 **shop_group·상위축으로 좁혀진 후보
+   * 전개값**을 보낸다(AS-IS `GetCheckedListValueNone` 전개 — `effectiveCodes`). ''를 보내면 SP가 축을
+   * 통째로 건너뛰어 Division Type(60/318)·Site cascade 필터가 사라진다(바로 위 cascade와 같은 값).
    */
   const buildGetPayload = (): CapaLobFilters => ({
     // 1  p_version      — Plan Month(VER_ID)
@@ -268,20 +309,20 @@ export const useCapaLobReportCombos = (): CapaLobReportCombos => {
     versionSeq: Number(sp.verSeq) || 0,
     // 3  p_division_id
     divisionId: String(sp.divisionId ?? ''),
-    // 4  p_site_id      — 이하 6축은 무선택('ALL') 이면 ''
-    siteId: toFilterValue(sp.siteId),
+    // 4  p_site_id      — 이하 6축은 무선택('ALL') 이면 후보 전개값(effective)
+    siteId: effSite,
     // 5  p_plant_id
-    plantId: toFilterValue(sp.plantId),
+    plantId: effPlant,
     // 6  p_factory_id   — 라벨은 Building, 파라미터는 factory (hook #112 rename)
-    factoryId: toFilterValue(sp.factoryId),
+    factoryId: effFactory,
     // 7  p_line_id
-    lineId: toFilterValue(sp.lineId),
-    // 8  p_operation_id — ELTR 에서 필드는 숨지만 값은 이미 비어 있다(02 §3.4 결론 2)
-    operationId: toFilterValue(sp.operationId),
+    lineId: effLine,
+    // 8  p_operation_id — 전개값이 shop_group('A'Cell/'P'Module·Pack)으로 좁혀져 Division Type 필터가 된다
+    operationId: effOperation,
     // 9  p_nick_name    — 팝업 다중선택 결과 `,` join. UPPER() 임의 추가 금지(공통 QA)
     nickName: String(sp.nickName ?? ''),
-    // 10 p_electrode_type
-    electrodeType: toFilterValue(sp.electrodeType),
+    // 10 p_electrode_type — Line Type 후보 스냅샷(G-16) 전개
+    electrodeType: effectiveCodes(sp.electrodeType, lineTypeOptions),
     // 11 p_bottleneck_flag — 'ALL' -> '' 치환(cs:586~601)
     bottleneckFlag: sp.bottleneckFlag === BOTTLENECK_ALL ? '' : String(sp.bottleneckFlag ?? ''),
     // 12 p_program_id

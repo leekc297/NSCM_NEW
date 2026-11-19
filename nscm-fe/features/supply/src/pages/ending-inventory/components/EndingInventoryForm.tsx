@@ -7,7 +7,6 @@ import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import {
   Button,
-  Checkbox,
   DatePickerCalendar,
   FormItem,
   InputField,
@@ -19,7 +18,6 @@ import { useMessageStore } from '@shared/stores';
 
 import {
   COMBO,
-  DEVALUATION_AGE_LABEL,
   LBL,
   LOOKUP,
   MONTH_MIN,
@@ -354,43 +352,6 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* 좌측 라디오 칼럼(일별 아래) 비움 — Devaluation Age 를 Item Type 아래로 정렬하기 위한 스페이서(size 2) */}
-          <Grid size={2} className={commonStyles.customGrid} />
-
-          {/* 재고월령 컬럼 표시 토글 — AS-IS chkDetail("Devaluation Age"). Item Type(col2~) 아래 배치.
-              FormItem 라벨을 공백(truthy)으로 둬 140px 라벨칼럼을 유지(빈 문자열 ''는 칼럼이 접혀
-              체크박스가 라벨영역에 남음) → 체크박스를 Item Type 입력열(모든 입력의 좌측 경계)에 정렬 */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={DEVALUATION_AGE_LABEL}
-                  checked={sc.devaluationAge}
-                  disabled={noDivisionAuth}
-                  onChange={checked => set({ devaluationAge: checked })}
-                />
-              )}
-            />
-          </Grid>
-
-          {/* ERP 집계 안내문 — Devaluation Age 오른쪽(같은 행). 모드별(월마감 MSG01371 / 일별 MSG01370).
-              AS-IS 조회조건 우측 안내문(cs:541~545). */}
-          <Grid size={7} className={commonStyles.customGrid}>
-            <span>
-              {isDaily
-                ? t(
-                    MSG.DAILY_ERP_NOTICE,
-                    '_일별 기준 데이터는 매일 각 법인별 시업시간 기준 ERP(ZMMCMR6014) 재고를 가져옵니다.'
-                  )
-                : t(
-                    MSG.MONTH_ERP_NOTICE,
-                    '_월마감 기준 데이터는 매월 본사 4 영업일에 집계하며, ERP(ZMMCMR6014) 전월말 재고를 가져옵니다.'
-                  )}
-            </span>
-          </Grid>
         </>
       }
     />

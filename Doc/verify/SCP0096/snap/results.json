@@ -1,0 +1,62 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "DIFF",
+  "golden": "Doc\\verify\\SCP0096\\snap\\golden\\조회조건_Div_40.aria.yml",
+  "received": "Doc\\verify\\SCP0096\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "Doc\\verify\\SCP0096\\snap\\diff\\조회조건_Div_40.txt",
+  "lines": 4,
+  "detail": "골든 Doc\\verify\\SCP0096\\snap\\golden\\조회조건_Div_40.aria.yml 와 4줄 다름(Doc\\verify\\SCP0096\\snap\\diff\\조회조건_Div_40.txt) — 첫 차이: - [골든 2] - text: Div. · 조회영역 aria(16줄 · formItem 공통 조상) · 시각 순서 3칸",
+  "at": "2026-11-19T00:28:32.806Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0096\\snap\\golden\\버튼_Div_40.aria.yml",
+  "received": "Doc\\verify\\SCP0096\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SCP0096\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(10줄) · 보이는 버튼 KOR,이 이민용,Home,Shipment Working Day(OSP),Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Bulk Update,Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel",
+  "at": "2026-11-19T00:28:32.881Z"
+ },
+ {
+  "key": "헤더_Shipment_Working_Day_OSP",
+  "kind": "헤더",
+  "scope": "Shipment Working Day OSP",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0096\\snap\\golden\\헤더_Shipment_Working_Day_OSP.txt",
+  "received": "Doc\\verify\\SCP0096\\snap\\received\\헤더_Shipment_Working_Day_OSP.txt",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SCP0096\\snap\\golden\\헤더_Shipment_Working_Day_OSP.txt 와 일치 · 헤더 3행 · 칸 368",
+  "at": "2026-11-19T00:28:40.100Z"
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0096\\snap\\golden\\화면샷_1920.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SCP0096\\snap\\golden\\화면샷_1366.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "at": ""
+ }
+]

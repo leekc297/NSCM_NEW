@@ -1,8 +1,9 @@
+import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -35,9 +36,11 @@ interface Option {
 //   Plan-date          → COMBO.PLAN_DATE('DATE_WEEKLY1_SCP_ALL') 소스풀 + Division·SE/FN PlanType PLANDATE 교집합(§3.1)
 //   Plan-type          → COMBO.PLAN_TYPE('PlanType1_SCP_ALL') 소스풀. AS-IS PlanType.Visibility=Never 라 화면 미표시.
 //                        (자동재조회 비활성 + 조회 param "" 고정 §4.4 — store 값만 유지, UI 렌더 없음)
-//   Period(From ~ To)  → 콤보 아님. SCP 공통 PeriodRangePicker(자유 달력, 사용자 지시 2026-10-12).
+//   Period(From ~ To)  → 월(YYYYMM) 구간. 프로젝트 표준 PeriodField mode='month'(features/master, 내부
+//                        DatePickerCalendar usecase='month')로 통일 — Capa(SCP0049)/OptCapa(SCP0047)/
+//                        ProjectRoute(SCP0006) 선례 동일. AS-IS 월 콤보 2개의 TO-BE 표준형이다.
 //                        초기 선택만 AS-IS 와 같다 — from = PlanDate 의 YYYYMM, to = from+(기본기간-1)월(§3.2 cs:293~294).
-//                        AS-IS 의 월 목록 조회(CalendarMonth)·목록 상한(HORIZON_END)은 달력에 적용할 곳이 없어 제거.
+//                        AS-IS 의 월 목록 조회(CalendarMonth)·목록 상한(HORIZON_END)은 월 피커에 적용할 곳이 없어 제거.
 //   Qty < 0            → 체크박스(콤보 아님) → p_qty_yn(§2.1). AS-IS chkQty.Text "Qty < 0"
 //   Nick Name / Model  → Text + SCM0002 팝업(§4.6). Cell Model = Text (btnCellItem_Id AS-IS NO-OP §4.6)
 //                        AS-IS Designer 라벨: Item ID="Model"(lblItemId), CellItem ID="Cell Model"(lblCellItem)
@@ -60,20 +63,6 @@ const addMonths = (yyyymm: string, months: number): string => {
   return `${ny}${String(nm).padStart(2, '0')}`;
 };
 
-// YYYYMM ↔ YYYYMMDD 환산 — 공통 PeriodRangePicker 는 값이 **일 단위(YYYYMMDD)** 인데 SCP0111 조회 param 은
-//   `p_from_yyyymm`/`p_to_yyyymm`(월 단위)다. store 는 SP 계약대로 YYYYMM 을 유지하고 경계에서만 환산한다.
-//   From = 해당월 1일, To = 해당월 **말일** — 선택 구간이 그 달 전체를 덮게 해야 달력 표시와 조회범위가 어긋나지 않는다.
-const monthStart = (yyyymm: string): string => (/^\d{6}$/.test(yyyymm) ? `${yyyymm}01` : '');
-const monthEnd = (yyyymm: string): string => {
-  if (!/^\d{6}$/.test(yyyymm)) return '';
-  const y = Number(yyyymm.slice(0, 4));
-  const m = Number(yyyymm.slice(4, 6));
-  if (m < 1 || m > 12) return '';
-  // Date.UTC(y, m, 0) = "m+1월의 0일" = m월 말일(윤년 포함 자동).
-  const lastDay = new Date(Date.UTC(y, m, 0)).getUTCDate();
-  return `${yyyymm}${String(lastDay).padStart(2, '0')}`;
-};
-
 // AS-IS SCP0111_IntegrationPSI.cs 조회조건 패널(pnlCondition) — design 02 §5.1 SearchArea 매핑.
 //   AS-IS 는 _ALL SP 로 소스풀을 한 번 로드하고 DBUtils.Filter 로 클라 후처리(§3.1) — TO-BE 도 동일하게
 //   useTabComboQueries 로 소스풀을 받아 FE 후처리로 cascade 를 재현한다(convert-core §2.6, PPL 선례 동일).
@@ -94,16 +83,21 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
   });
 
   // 통합PSI Default 조회기간(개월수) — AS-IS Data.Common(LookupCommon,"INTEGRATION_PSI_DEFAULT_PERIOD") (cs:66).
-  //   응답 CODE=개월수. To "선택값" 산정 전용(목록 범위 아님). 부재 시 fallback DEFAULT_PERIOD_MONTHS(cs:256-264).
+  //   To "선택값" 산정 전용(목록 범위 아님). 부재 시 fallback DEFAULT_PERIOD_MONTHS(cs:256-264).
+  //   응답 필드명 주의(2026-11-16 ora.py 실측): admin/lookup(PR_GET_LOOKUP_INFO_LIST)은 동적 PIVOT 이라
+  //   결과 컬럼명이 SCM_ADM_LOOKUP_MASTER 의 **헤더값(SEGMENT1)** 이 된다. 이 룩업은 master SEGMENT1='PERIOD'
+  //   → 컬럼 **`PERIOD`**, 값은 detail SEGMENT1(현재 '6'). 종전 `.CODE` 는 존재하지 않는 필드라 항상 undefined→
+  //   fallback 6 으로 떨어져 **룩업값이 무시**됐다(값이 우연히 6 이라 증상이 가려짐, 사용자 신고 2026-11-16).
   const [defaultPeriodRows] = useTabLookupQueries({
     filters: [{ lookupType: DEFAULT_PERIOD_LOOKUP }],
   });
-  const periodCode = Number(str(defaultPeriodRows?.[0]?.CODE));
+  const periodCode = Number(str(defaultPeriodRows?.[0]?.PERIOD));
   const periodCount = Number.isFinite(periodCode) && periodCode > 0 ? periodCode : DEFAULT_PERIOD_MONTHS;
 
-  // Period 는 공통 PeriodRangePicker(자유 달력)로 바뀌어 **선택 가능한 월 목록 자체가 없다**(사용자 지시 2026-10-12).
-  //   그래서 AS-IS SetChangedPeriod 의 "목록 상한" 산정(HORIZON_END_DATE via SCPPlanPeriod_SCP, 없으면 시작월+11월,
-  //   cs:267~278)과 월 목록 조회(CalendarMonth, cs:287~291)는 함께 제거했다 — 달력에는 적용할 곳이 없다.
+  // Period 는 표준 PeriodField mode='month'(월 피커)로 바뀌어 **선택 가능한 월 목록 자체가 없다**(월 피커는
+  //   연·월 그리드에서 자유 선택). 그래서 AS-IS SetChangedPeriod 의 "목록 상한" 산정(HORIZON_END_DATE via
+  //   SCPPlanPeriod_SCP, 없으면 시작월+11월, cs:267~278)과 월 목록 조회(CalendarMonth, cs:287~291)는 함께
+  //   제거했다 — 월 피커에는 적용할 곳이 없다(표준 Capa/OptCapa 도 상한 없이 자유 월선택).
   //   남은 것은 **초기 선택값**(아래 기간 기본선택 effect, cs:293~294)뿐이고 그 계산은 horizon 과 무관하다.
   //   divergence: 상한을 넘는 월도 고를 수 있다. SP 는 해당 월을 빈 컬럼으로 돌려주므로 오류는 아니다(__asis-mapping__ U-6).
 
@@ -189,24 +183,24 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
     </Grid>
   );
 
-  // Period — SCP 화면 공통 PeriodRangePicker 로 통일한다(사용자 지시 2026-10-12). 같은 feature 의
-  //   capa-mobility-it / production-plan / safety-stock 등과 동일한 사용법(@shared/components).
-  //   store 는 SP 계약대로 YYYYMM(`p_from_yyyymm`/`p_to_yyyymm`)을 유지하고 picker 경계에서만 일 단위로 환산한다.
-  //   `monthOnly` — 표기를 AS-IS 와 같은 `2026-09 ~ 2027-02` 로 맞춘다(cs L841 `ParseExact(...,"yyyy-MM")`).
-  //   picker 가 확정값을 월 경계로 정규화해 주므로 되돌려받은 값의 앞 6자리만 취하면 된다.
+  // Period — 월(YYYYMM) 구간 선택. 프로젝트 표준 PeriodField mode='month'(features/master, 내부
+  //   DatePickerCalendar usecase='month')로 구현한다 — 같은 feature 의 Capa(SCP0049)/OptCapa(SCP0047)/
+  //   ProjectRoute(SCP0006) 선례 동일. 값(start/end/onChange)이 **월 단위 YYYYMM** 이라 store(fromYyyymm/
+  //   toYyyymm)·SP param(p_from_yyyymm/p_to_yyyymm)과 1:1 — 종전 자유 달력(PeriodRangePicker)이 요구하던
+  //   일 단위(YYYYMMDD) 환산이 사라진다.
+  //   사용자 신고(2026-11-16): monthOnly PeriodRangePicker 는 표기만 YYYY-MM 이고 팝업은 **일 셀 달력**이라
+  //   "월 선택인데 일자 달력" 혼란 → 월 피커 표준으로 교체. 초기 선택값(§3.2 from=PlanDate 의 YYYYMM,
+  //   to=from+(기본기간-1)월)은 아래 PlanDate effect/onChange 가 그대로 유지한다.
+  //   PeriodField 는 자체 <Grid size={gridSize}> 로 렌더하므로 바깥 Grid 로 감싸지 않는다(gridSize=3).
   const period = (
-    <Grid size={3}>
-      <PeriodRangePicker
-        className={commonStyles.formItem}
-        label={t(LBL.PERIOD, '_Period')}
-        monthOnly
-        start={monthStart(sc.fromYyyymm)}
-        end={monthEnd(sc.toYyyymm)}
-        onChange={(start, end) =>
-          set({ fromYyyymm: start.slice(0, 6), toYyyymm: end.slice(0, 6) })
-        }
-      />
-    </Grid>
+    <PeriodField
+      gridSize={3}
+      mode='month'
+      label={t(LBL.PERIOD, '_Period')}
+      start={sc.fromYyyymm}
+      end={sc.toYyyymm}
+      onChange={(start, end) => set({ fromYyyymm: start, toYyyymm: end })}
+    />
   );
 
   // 팝업버튼 endAdornment 부착 텍스트 필드 — Nick Name / Model(SCM0002 팝업이 채움, design 02 §4.6).

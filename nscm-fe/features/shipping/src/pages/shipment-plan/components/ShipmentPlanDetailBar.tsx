@@ -85,13 +85,19 @@ export const ShipmentPlanDetailBar = ({
   return (
     <Stack direction='row' alignItems='center' className={styles.detailBar}>
       <Grid container columns={12} className={styles.detailBarFields} sx={DETAIL_CONDITIONS_SX}>
-        {/* Shipment Date (drpPeriod2 — PlanDetail 전용). 범위 이탈 시 무메시지 clamp(buttonGuard #37) */}
+        {/* Shipment Date (drpPeriod2 — PlanDetail 전용). AS-IS DrpPeriod2_ValueChanged(cs:2187~2202)는
+            Shipment Date 범위를 상단 Period 보다 좁히면(시작>Period시작 or 종료<Period종료) Period 값으로
+            되돌린다. 종전 무메시지 snap-back 은 "입력이 잘 안됨" 불편의 원인이라 제거됐었는데(2026-10-16),
+            사용자 재확인(2026-11-16)으로 **picker 에서 범위 밖 날짜를 아예 비활성화**해 AS-IS 의도를
+            살린다 — 시작일 max=Period 시작일, 종료일 min=Period 종료일. */}
         {fieldSet.period2 && (
           <PeriodField
             gridSize={3}
             label={t(LBL.SHIPMENT_DATE, '_Shipment Date')}
             start={sc.period2From}
             end={sc.period2To}
+            startMax={sc.periodFrom}
+            endMin={sc.periodTo}
             onChange={(start, end) => setPeriod2(start, end)}
           />
         )}

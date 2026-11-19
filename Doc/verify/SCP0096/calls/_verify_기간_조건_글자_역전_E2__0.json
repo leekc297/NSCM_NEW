@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 87,
+  "at": "2026-11-19T00:43:29.408Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 99,
+  "at": "2026-11-19T00:43:34.694Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ }
+]

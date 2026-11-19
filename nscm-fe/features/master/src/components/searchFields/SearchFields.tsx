@@ -1123,6 +1123,16 @@ interface PeriodFieldProps {
   disabledStart?: boolean;
   /** From/To 두 피커 모두 비활성화 (예: SSP0015 Packer 시트 — Period 편집 불가). 기본 false(회귀 0). */
   disabled?: boolean;
+  /**
+   * 시작(From) 피커의 최대 선택일, 종료(To) 피커의 최소 선택일(값 형식은 start/end 와 동일 —
+   * date=YYYYMMDD / month=YYYYMM). 범위 밖 날짜를 picker 에서 아예 비활성화한다.
+   * SSP0060 상세 Shipment Date 를 상단 Period 범위보다 좁히지 못하게 하는 AS-IS 제약
+   * (DrpPeriod2_ValueChanged clamp cs:2187~2202) 의 picker-disable 재현용. endMin 은 기존
+   * mindate(startValue=From 이후)와 함께 더 늦은 쪽을 적용한다. 둘 다 기본 undefined — 미지정 시 회귀 0
+   * (미전달 = maxdate/mindate 가 undefined 로 기존과 동일, 다른 사용처 영향 없음).
+   */
+  startMax?: string;
+  endMin?: string;
 }
 export const PeriodField = ({
   start,
@@ -1133,6 +1143,8 @@ export const PeriodField = ({
   mode,
   disabledStart,
   disabled,
+  startMax,
+  endMin,
 }: PeriodFieldProps) => {
   const L = useL();
   // 시작일/종료일을 각각 독립 달력 2개로 분리 (mode='month' 는 월 달력).
@@ -1142,6 +1154,17 @@ export const PeriodField = ({
   const outFormat = isMonth ? 'YYYYMM' : 'YYYYMMDD';
   const startValue = start ? parse(start) : null;
   const endValue = end ? parse(end) : null;
+  // 범위 밖 선택 차단용 bound (SSP0060 Shipment Date — AS-IS clamp 의 picker-disable 버전).
+  //   미지정 시 undefined → 기존 동작과 동일(다른 사용처 영향 0).
+  const startMaxValue = startMax ? parse(startMax) : undefined;
+  const endMinBound = endMin ? parse(endMin) : undefined;
+  // 종료 피커 mindate = From 이후(startValue)와 endMin 중 더 늦은 쪽. endMin 없으면 기존과 동일(startValue).
+  const endMinValue =
+    endMinBound && startValue
+      ? endMinBound.isAfter(startValue)
+        ? endMinBound
+        : startValue
+      : (endMinBound ?? startValue ?? undefined);
   return (
     // Period 칸 최소폭(날짜범위 겹침 방지, ~388px)은 PeriodField 전역이 아니라 '조회조건 Grid'
     //   (SearchArea·MUI-Grid 하단바)에서 :has 로 스코프해 건다(CONDITIONS_GRID_LAYOUT_SX 주석 참조).
@@ -1164,6 +1187,7 @@ export const PeriodField = ({
                 format={isMonth ? 'YYYY.MM' : 'YYYY.MM.DD'}
                 value={startValue}
                 disabled={disabled || disabledStart}
+                maxdate={startMaxValue}
                 onChange={
                   ((date: Dayjs | null) => {
                     onChange(date?.format(outFormat) ?? '', end);
@@ -1180,7 +1204,7 @@ export const PeriodField = ({
                 format={isMonth ? 'YYYY.MM' : 'YYYY.MM.DD'}
                 value={endValue}
                 disabled={disabled}
-                mindate={startValue ?? undefined}
+                mindate={endMinValue}
                 onChange={
                   ((date: Dayjs | null) => {
                     onChange(start, date?.format(outFormat) ?? '');

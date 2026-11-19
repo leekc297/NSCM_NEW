@@ -97,13 +97,34 @@ export const PlanActivityMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     savingRef.current = true;
     try {
       const payload = buildSavePayload(rowsToSave, sessionUserId ?? '');
-      const res = await apiClient.post<unknown>(`/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`, payload);
-      const body = res.data as { code?: string | number; message?: string } | undefined;
+      const res = await apiClient.post<Record<string, unknown>>(
+        `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
+        payload
+      );
       // false-success 판별 — 인터셉터가 500/403 도 resolve(nscm-patterns §5-10).
-      if (res.status >= 400 || Number(body?.code)) {
-        void useMessageStore.getState().setToast({
-          type: 'error',
-          message: str(body?.message) || t('MSG00043', '_Save failed.'),
+      if (res.status >= 400 || Number((res.data as { code?: string | number })?.code)) {
+        void useMessageStore.getState().setAlert({
+          type: 'alert',
+          content: str((res.data as { message?: string })?.message) || t('MSG00043', '_Save failed.'),
+        });
+        return;
+      }
+      // SAVE SP 는 O_RESULT_CURSOR 로 RESULT_CODE('S'/'F')+RESULT_CNT 를 돌려주고 'S' 만 성공이다.
+      //   BaseResponse.code 는 SP 예외가 없으면 늘 '0' 이라, PK중복(ORA-00001) 롤백('F')을 top-level 로만
+      //   판정하면 success 로 샌다 — 성공 판정은 커서의 RESULT_CODE 로 한다(자매 CapaLineMaster 2026-11-02 실측).
+      //   result 에 빈 배열·복수 커서가 섞여 오므로 전 커서를 펼쳐 RESULT_CODE 를 담은 행을 찾는다.
+      const cursors = (res.data as { result?: Record<string, unknown> })?.result;
+      const resultRows = cursors
+        ? (Object.values(cursors).filter(Array.isArray) as Record<string, unknown>[][]).flat()
+        : [];
+      const head = resultRows.find(
+        row => row && (row.result_code != null || row.RESULT_CODE != null)
+      );
+      const resultCode = head ? str(head.result_code ?? head.RESULT_CODE) : '';
+      if (resultCode && resultCode !== 'S') {
+        void useMessageStore.getState().setAlert({
+          type: 'alert',
+          content: t('MSG00043', '_Save failed.'),
         });
         return;
       }

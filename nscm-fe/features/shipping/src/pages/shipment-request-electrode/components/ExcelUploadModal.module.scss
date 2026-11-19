@@ -37,6 +37,11 @@
   & > div {
     border: none !important;
   }
+
+  // 업로드 결과 건수(Success/Error/Total) 우측정렬(#201 — 수량 포멧터·정렬).
+  input {
+    text-align: right;
+  }
 }
 
 .resultGridWrap {

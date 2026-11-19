@@ -101,7 +101,10 @@ const initSearchParams: SearchParams = {
   itemIds: [],
   itemTypes: [],
   owners: [],
-  version: '', // 기본 = Division 결정 후 최근 MF_W 2개 자동 세팅 (AS-IS GetDefaultVersion — Form 담당)
+  // 기본 'Current' (2026-11-19 사용자 지정, metal-link-price 관례). 필수 조건인데 펼침 영역에 숨어
+  // 비어 있으면 매번 MSG00283 이 떠서다. 대소문자 주의: PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON 은
+  // UPPER 없이 TOKEN = 'Current' 로 비교하므로 'CURRENT' 를 넘기면 현재 버전이 0행이 된다.
+  version: 'Current',
   ...defaultPeriod(),
   bucket: BUCKET_TYPE.MONTHLY, // AS-IS DefineProperty L370
   qty: '1',
@@ -237,6 +240,8 @@ export const useMktFcstComparisonStore = createPersistedStoreWithTab<
           if (!(paramNm in initSearchParams)) continue;
           if (PERIOD_KEYS.has(paramNm)) continue; // 기간은 항상 오늘 기준 기본값이 이긴다
           const val = paramCtn ?? '';
+          // 저장된 빈 Version 은 기본 'Current' 를 덮지 않는다 (기본값 도입 전에 저장된 조건 대비)
+          if (paramNm === 'version' && !val) continue;
           if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
           else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
           else patch[paramNm] = val;

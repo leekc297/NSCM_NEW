@@ -975,6 +975,14 @@ def main():
         print(f'  [WARN] 설계 결정(GAP) 시트 생략: {_ex}')
     # W8-A(플랜 1-5 · G3): 미검증 = 측정못함(ERROR/NOT_RUN) + 상속생략 + 시험검사 + 대상불명 — 적용 불가(대상 없음) 행은 제외(요약에 건수만)
     unv = [r for r in rows if unverified_reason(r) in ('측정못함', '상속생략', '시험검사', '대상불명', '승인대기(스냅샷)')]
+    # 2026-11-18 VM 완료 정의(현재 화면)가 '미검증' 시트 행 수를 사유별로 보여 주도록 기록(Excel 을 열지 않고 읽음 · 실패해도 문서 생성 계속)
+    try:
+        with open(P('Doc', 'verify', mid, 'checklist_counts.json'), 'w', encoding='utf-8') as f:
+            json.dump({'menu_id': mid, 'unverified_sheet': len(unv), 'unverified_by_reason': dict(Counter(unverified_reason(r) for r in unv)),
+                       'direct_unmeasured': sum(1 for r in unv if '직접 실측 없음' in ((r.get('tobe_ref') or '') + (r.get('evidence') or '')))},
+                      f, ensure_ascii=False, indent=1)
+    except Exception as _ex:
+        print(f'  [WARN] checklist_counts.json 기록 생략: {_ex}')
     write_sheet(wb, '미검증', LH + ['사유'], [lrow(i, r) + [f"{unverified_reason(r)} · " + (r['evidence'] or ('E2E 미구현 규칙 — 판정기 확장 대상' if 'E2E' in r['method'] else '판정기 미구현'))] for i, r in enumerate(unv, 1)],
                 LW + [40], result_col=RESULT_COL)
     write_sheet(wb, '검출 규칙', ['규칙', '유형', '명칭', '정답', '방법', '기대 원천', '판정 방법'],

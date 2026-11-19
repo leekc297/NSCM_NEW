@@ -53,7 +53,15 @@ export const COMBO = {
   DIVISION: 'Division_SCP', // AS-IS SCP0016 = BLUtils.GetDivision(false,"") → Type.Division(133) → UP_FX_GetCommonDataList_SCP @Code='Division' → FN_GET_DIVISION, ORDER BY ATTRIBUTE1(기본 81). 권한 WHERE 는 MyDivisionInEE_SCP 와 동일하고 정렬만 ATTRIBUTE1 → Division_SCP 가 등가(이전 MyDivisionInEE_SCP 는 ORDER BY DIVISION_ID·기본 40 로 불일치). EE 포함. @mnuId
   OP_GROUP_EE: 'OperationGroupEE_SCP', // EE (SEGMENT1 IN ('A','E'))
   OP_GROUP: 'OperationGroup_SCP', // 비EE (SEGMENT1 IN ('P','A'))
-  VERSION: 'WaterfallVer_FG2_SCP', // @divisionId=division. CODE=SP_W_YYYYMMDD, 최신10
+  // Version — AS-IS SCP0016 은 `Data_SCP.CommonAll(WaterfallVer_FG21, "", "")`(.cs:55) 로 전 사업부
+  //   버전을 1회 로드한 뒤 `DBUtils.Filter(DIVISION_ID=division)`(.cs:237) 로 클라에서 좁힌다 — 그
+  //   SP 분기(UP_FX_GetCommonDataList_SCP_ALL @Code='WaterfallVer_FG21')에는 TOP 캡이 없다(SP 주석
+  //   'FnVersionByDivisionId1 : TOP 제약 제거'). 따라서 사업부의 확정(FN/Y) 버전을 '전부' 표시한다.
+  //   종전 `WaterfallVer_FG2_SCP` 는 자매 SCP0018(semi, .cs:595 `Common(WaterfallVer_FG2,division)`)이
+  //   쓰는 TOP 10 분기라 SCP0016 소스와 불일치였다(버전 10건만 표시되는 사용자 신고 2026-11-17 원인).
+  //   공유 콤보를 건드리면 SCP0018 의 10건 캡이 깨지므로, SCP0016 은 캡 없는 전용 _ALL 콤보로 분리.
+  //   CODE=SP_W_YYYYMMDD, ORDER BY CODE DESC(최신순). 전량 로드 + DIVISION_ID 클라 필터(convert-core §2.6).
+  VERSION: 'WaterfallVer_FG21_SCP_ALL',
   BUCKET: 'BucketISO_SCP', // DAILY/WEEKLY/MONTHLY/WEEKLY_ISO
 } as const;
 // clbElecType — lookup ELECTRODE_TYPE (ANODE/CATHODE/ONESIDE — design 02 §2 C3 실측). enable=isEE.
@@ -101,6 +109,11 @@ export const LBL = {
 
 // Version 코드 형식 — 'SP_W_YYYYMMDD'(13자, design 02 §2 C4). 뒤 8자 = 계획시작일(GetDayRange fromDate).
 export const VERSION_CODE_LENGTH = 13;
+
+// 조회조건(F6) 개인화 저장 제외 키 — AS-IS ConditionNotUseList(.cs:195 `ConditionNotUseList.Add(clbVersion)`)
+//   재현. Version 은 시점 종속(계획 버전은 주마다 새로 생겨 과거 선택이 더 이상 존재하지 않을 수 있다)이라
+//   세션 간 보존하면 안 된다 — 저장 payload 에서 빼고(Page → SubTitle) 복원 시에도 건너뛴다(restoreSearchConditions).
+export const CONDITION_NOT_SAVED: readonly string[] = ['versionNos'];
 
 // 기간(버킷) 컬럼 판정 — D_yyyymmdd / W_yyyymm+ISO주차 / M_yyyymm (design 03 §2).
 export const PERIOD_COLUMN_REGEX = /^(D_|W_|M_)\d/;

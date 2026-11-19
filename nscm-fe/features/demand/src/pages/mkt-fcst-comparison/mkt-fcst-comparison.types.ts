@@ -13,7 +13,7 @@ export interface SearchParams {
   itemIds: string[]; // Model/Nickname (검색 모달)
   itemTypes: string[]; // Item Type (다중)
   owners: string[]; // Owner (검색 모달)
-  version: string; // Version* (readOnly — 모달 전용, 콤마 최대 2. 기본 = 최근 MF_W 2개)
+  version: string; // Version* (readOnly — 모달 전용, 콤마 최대 2. 기본 = 'Current')
   startYyyymmdd: string; // Period* from
   endYyyymmdd: string; // Period* to
   bucket: string; // Bucket (기본 MONTHLY)

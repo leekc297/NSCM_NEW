@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
@@ -121,17 +121,34 @@ export const PlanGroupMasterForm = ({
     setSearchParams(patch);
   };
 
-  // Operation/Plant/Building/Plan Group 변경 = 그리드 비움(AS-IS ClearDataSource cs:861-886, 갭분석 F-01).
-  //   결과를 지우므로 Division 과 같이 저장 안 한 변경이 있으면 MSG00704 확인 후에만 진행한다.
-  const changeAndClearGrid = (patch: Partial<typeof searchParams>) => {
+  // 체크리스트(Op/Plant/Building/Plan Group)는 체크할 때마다 조건만 갱신하고, 그리드 clear 는
+  //   드롭다운을 '닫을 때'로 미룬다(AS-IS 파리티). AS-IS UsrCheckedList2 는 개별 체크
+  //   (clb_SelectedIndexChanged)로는 이벤트를 쏘지 않고(해당 발화 주석처리 cs:814-837), 드롭다운이
+  //   닫히며 origin(열 때 값) 대비 '실제로 바뀐 경우에만' SelectedIndexChanged → ClearDataSource 를
+  //   1회 발화한다(cs:1455 `origin_chk == cbo.Text → return`, 1489-1498). 체크 즉시 비우거나 같은 값으로
+  //   되돌려 닫을 때도 비우면 AS-IS 와 달라 사용자 신고(2026-11-13).
+  //
+  //   열 때 그 콤보의 값을 스냅샷해 두고, 닫을 때 현재 값과 비교해 다를 때만 비운다. 한 번에 하나만
+  //   열리므로 ref 하나로 충분하고, axis 는 콤보별로 바인딩한다.
+  const openValueRef = useRef<string | null>(null);
+
+  const handleConditionOpen = (axis: keyof typeof searchParams) => () => {
+    openValueRef.current = searchParams[axis];
+  };
+
+  // 드롭다운 닫힘 — 열 때 대비 값이 실제로 바뀐 경우에만 그리드를 비운다(AS-IS 닫힘 시 ClearDataSource).
+  //   같은 값으로 되돌려 닫으면 비우지 않는다. 저장 안 한 변경이 있으면 MSG00704 확인 후에만 진행(TO-BE 안전장치).
+  const handleConditionClose = (axis: keyof typeof searchParams) => () => {
+    const opened = openValueRef.current;
+    openValueRef.current = null;
+    if (opened === null || searchParams[axis] === opened) return;
     void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
       if (!ok) return;
-      setSearchParams(patch);
       clearMainFilters();
     });
   };
 
-  // 상위축(Op/Plant/Building) 변경 → Line 재필터 + Line 선택 prune (02 §3).
+  // 상위축(Op/Plant/Building) 변경 → Line 재필터 + Line 선택 prune (02 §3). 그리드 clear 는 닫힘으로 미룸.
   const changeLineParent = (patch: Partial<typeof searchParams>) => {
     const next = { ...searchParams, ...patch };
     const nextLineOptions = buildLineOptions(
@@ -141,7 +158,7 @@ export const PlanGroupMasterForm = ({
       next.plant,
       next.building
     );
-    changeAndClearGrid({ ...patch, line: pruneSelection(next.line, nextLineOptions) });
+    setSearchParams({ ...patch, line: pruneSelection(next.line, nextLineOptions) });
   };
 
   const disabled = noDivision;
@@ -192,6 +209,8 @@ export const PlanGroupMasterForm = ({
                   value={searchParams.operation}
                   options={operationOptions}
                   onChange={(_, value) => changeLineParent({ operation: value || ALL })}
+                  onOpen={handleConditionOpen('operation')}
+                  onClose={handleConditionClose('operation')}
                 />
               )}
             />
@@ -211,6 +230,8 @@ export const PlanGroupMasterForm = ({
                   value={searchParams.plant}
                   options={plantOptions}
                   onChange={(_, value) => changeLineParent({ plant: value || ALL })}
+                  onOpen={handleConditionOpen('plant')}
+                  onClose={handleConditionClose('plant')}
                 />
               )}
             />
@@ -230,6 +251,8 @@ export const PlanGroupMasterForm = ({
                   value={searchParams.building}
                   options={buildingOptions}
                   onChange={(_, value) => changeLineParent({ building: value || ALL })}
+                  onOpen={handleConditionOpen('building')}
+                  onClose={handleConditionClose('building')}
                 />
               )}
             />
@@ -267,7 +290,9 @@ export const PlanGroupMasterForm = ({
                   disabled={disabled}
                   value={searchParams.planGroup}
                   options={planGroupOptions}
-                  onChange={(_, value) => changeAndClearGrid({ planGroup: value || ALL })}
+                  onChange={(_, value) => changeCondition({ planGroup: value || ALL })}
+                  onOpen={handleConditionOpen('planGroup')}
+                  onClose={handleConditionClose('planGroup')}
                 />
               )}
             />

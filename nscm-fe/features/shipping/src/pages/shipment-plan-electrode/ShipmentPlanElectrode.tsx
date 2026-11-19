@@ -12,6 +12,7 @@ import { type RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useMutation } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction, GridUtils, sessionTimeZone } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SsoUserModal, SubTitle } from '@shared/components';
@@ -300,6 +301,22 @@ export const ShipmentPlanElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const savingRef = useRef(false);
 
+  // Detail(확정) 저장 POST 를 react-query 뮤테이션으로 감싼다 — 전역 busy 스피너(useIsBusy = useIsMutating([tabId]))가
+  //   저장 동안 뜨게 하기 위함. 직접 apiClient.post 는 react-query 밖이라 스피너가 안 떴다(자매 auto-ess·mobility-it 동일 처방).
+  //   결과 판정(RESULT_CODE/'X'/오류행)은 호출부 runConfirmSave 가 그대로 하므로 여기선 응답만 돌려준다.
+  const { mutateAsync: confirmSaveAsync } = useMutation({
+    mutationKey: [tabId, SHEETS.PLAN_DETAIL, 'SAVE'],
+    mutationFn: (body: Record<string, string>) =>
+      apiClient.post(`/${MENU_ID}/${SHEETS.PLAN_DETAIL}/SAVE/call-proc`, body),
+  });
+
+  // 상단 Simulation(Main) 저장도 동일하게 뮤테이션 경유로 — 저장 동안 전역 busy 스피너 표시(useIsBusy).
+  const { mutateAsync: simuSaveAsync } = useMutation({
+    mutationKey: [tabId, SHEETS.MAIN, 'SAVE_SHIPMENT_PLAN_SIMU'],
+    mutationFn: (body: Record<string, string>) =>
+      apiClient.post(`/${MENU_ID}/${SHEETS.MAIN}/SAVE_SHIPMENT_PLAN_SIMU/call-proc`, body),
+  });
+
   // ── Simulation (btnSimulation — AS-IS 분리 버튼 복원, cs:1872 BtnSimulation_Click → Simulation() 5931). ──
   //   AS-IS 는 Save(Detail 확정)와 별개 버튼으로, siMain 의 P_SHIP_PLAN_SIMU_ETD 측정치 편집 셀을
   //   SSP0023_SAVE_SHIPMENT_PLAN_SIMU 로 저장한다. activeGrid 무관하게 항상 Main 저장(AS-IS 는 버튼이
@@ -376,10 +393,8 @@ export const ShipmentPlanElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
     const batch = Object.fromEntries(keys.map(k => [k, payload.map(r => r[k] ?? '').join('^')]));
     void (async () => {
       try {
-        const res = await apiClient.post(
-          `/${MENU_ID}/${SHEETS.MAIN}/SAVE_SHIPMENT_PLAN_SIMU/call-proc`,
-          batch
-        );
+        // 뮤테이션 경유로 POST — 저장 동안 전역 busy 스피너 표시(mutationKey=[tabId,…] → useIsBusy).
+        const res = await simuSaveAsync(batch);
         // false-success 판별 의무 (np §5-10 — 인터셉터가 500/403 도 resolve)
         //   업무 결과도 본다(결함 B3): SP 는 실패해도 RAISE 없이 RESULT_CODE 'F' 커서를 돌려준다.
         //   AS-IS 는 `t.DataSet.Tables[0].Rows[0][0] == "S"` 일 때만 성공 처리한다(cs:6055).
@@ -501,10 +516,8 @@ export const ShipmentPlanElectrode = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   ERP 연쇄(runErpChain)가 끝난 뒤에 부른다 — AS-IS SaveData_Detail cs:2543(GetERPInterface) → cs:2643(CONFIRM).
     //   savingRef 는 호출부(runDetailSave)가 관리한다.
     const runConfirmSave = async (confirmPayload: Record<string, string>): Promise<void> => {
-      const res = await apiClient.post(
-        `/${MENU_ID}/${SHEETS.PLAN_DETAIL}/SAVE/call-proc`,
-        confirmPayload
-      );
+      // 뮤테이션 경유로 POST — 저장 동안 전역 busy 스피너 표시(mutationKey=[tabId,…] → useIsBusy).
+      const res = await confirmSaveAsync(confirmPayload);
       // false-success 판별 의무 (np §5-10 — 인터셉터가 500/403 도 resolve)
       //   주의: apiClient.post 원본 응답은 {code,message,result:{O_RC1:[...]}} 이므로
       //   O_RC1 은 res.data.result 아래다. 조회 훅(useTabProcQuery)과 달리 result 가 벗겨지지

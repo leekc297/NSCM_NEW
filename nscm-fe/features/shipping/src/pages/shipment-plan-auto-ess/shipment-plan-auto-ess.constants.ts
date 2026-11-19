@@ -302,13 +302,11 @@ export const MSG_ERP = {
   SYSTEM_ERROR: 'MSG01215', // AS-IS MSG00204 (cs L3414) — F·C_E, {0}=Request No
 } as const;
 
-// AS-IS AddHelpButton(BaseForm.cs L3501→FileDownLoad L3406) 는 사내 Help 웹서버(App.config
-//   addr=gscm-battery.lgensol.com / path=GSCM_HELP)에서 'Standard Information SSP Manual.pptx' 를
-//   HTTP GET 으로 내려받는다. TO-BE 도 같은 서버 URL 을 그대로 새 탭으로 열어 브라우저가 바로 내려받게
-//   한다 — 저장결과 'X' → MSG01321 '예' 시(사내망 접근 가능 확인, 2026-10-21). 정적 호스팅 불요.
-export const STANDARD_MANUAL_URL = encodeURI(
-  'http://gscm-battery.lgensol.com/GSCM_HELP/Standard Information SSP Manual.pptx'
-);
+// AS-IS AddHelpButton(BaseForm.cs L3501→FileDownLoad L3406) 는 사내 Help 웹서버(gscm-battery.lgensol.com
+//   /GSCM_HELP)의 'Standard Information SSP Manual.pptx' 를 내려받았다(구)SCM 화면 내용). 그 구 매뉴얼
+//   대신 신 매뉴얼을 FE 정적 호스팅(nscm-fe/public/manual/)에 동봉해 제공한다 — 저장결과 'X' → MSG01321
+//   '예' 시 새 탭으로 열어 브라우저가 내려받게 한다. 자매 SSP0060·SSP0022·SSP0023 상수와 같은 값.
+export const STANDARD_MANUAL_URL = encodeURI('/manual/Standard Information SSP Manual.pptx');
 
 // ====================================================================================
 // 버튼 코드 — SCM_ADM_MNU_BTN_MPG_M 의 MNU_BTN_CD. 둘 다 SHT_NM='main' 으로 등록한다.

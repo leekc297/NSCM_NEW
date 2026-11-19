@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
@@ -161,85 +161,9 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.OPERATION_GROUP, 'Operation group')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    isInput={false}
-                    disabled={areaDisabled}
-                    value={searchParams.operationGroup}
-                    options={operGroupOptions}
-                    onChange={(_, option) => setSearchParams({ operationGroup: String(option ?? '') })}
-                  />
-                )}
-              />
-            </Grid>
-            {/* Model/Nickname — SCP0018.md 조회조건 정리(v0.5) 변경=O: 명칭 Model -> Model/Nickname, 팝업
-                ItemByDivisionModal -> MaterialByDivisionModal(COM0013). 다건(개행/콤마) 입력 — 팝업 다건
-                선택 시 ITEM_ID csv 를 itemId 에 채운다. */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.MODEL_NICKNAME, 'Model/Nickname')}
-                labelAlign='right'
-                render={() => (
-                  <InputField
-                    fullWidth
-                    multiline
-                    maxRows={3}
-                    className={commonStyles.popupSearchField}
-                    disabled={areaDisabled}
-                    value={searchParams.itemId}
-                    onChange={e => setSearchParams({ itemId: e.target.value })}
-                    InputProps={{
-                      endAdornment: (
-                        <Button
-                          appearance='outlined'
-                          priority='normal'
-                          disabled={areaDisabled}
-                          iconComponent={<FunctionSearchIcon appearance='lined' />}
-                          onClick={() => setItemModalOpen(true)}
-                        />
-                      ),
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            {/* Electrode — AS-IS 1행 4번째(변경=X). 다건(공백=전체 ALL)이라 기본 비움. division=EE 여부로
-                활성(!isEE 면 disable). 주의: AS-IS 는 init(SetChangedControl)에서만 평가하고 division 변경
-                live 경로(SetOperationGroupByDivision)는 재평가하지 않지만, TO-BE 는 공통 규약("Division 변경
-                = 검색조건 초기화", store setDivision)에 따라 division 변경 시 enable 을 live 재평가하고 선택값도
-                초기화한다(stale 방지 — AS-IS 고정 동작과 의도적으로 다름, 갭분석 G05 안A). */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.ELECTRODE, 'Electrode')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    multiple
-                    allOption
-                    useClearIcon
-                    limitTags={1}
-                    disabled={areaDisabled || !isEE}
-                    value={searchParams.electrodeTypes.join(',')}
-                    options={electrodeOptions}
-                    onChange={(_, picked) =>
-                      setSearchParams({
-                        electrodeTypes: String(picked ?? '')
-                          .split(',')
-                          .filter(Boolean),
-                      })
-                    }
-                  />
-                )}
-              />
-            </Grid>
-            {/* Version — 필수(*). 라벨은 LBL.VER(=LBL01275, KO/EN/CN 모두 'Ver.', DB 등록 2026-11-12,
+            {/* 조회조건 순서 — 기준표(2026-11-18) 5그룹 정렬: [1]Div·Ver → [2]Operation Group →
+                [3]Model/Nickname·Electrode → [4]Period·Bucket → [5]Sum. 종전 AS-IS 2행 배치를 표준 기준으로 교체. */}
+            {/* [1] Version — 필수(*). 라벨은 LBL.VER(=LBL01275, KO/EN/CN 모두 'Ver.', DB 등록 2026-11-12,
                 SCM_ADM_MSG_M MSG_TP_CD='LBL'). 과거 'Ver.' 하드코딩은 다국어 미처리라 i18n 코드로 교체. */}
             <Grid size={3}>
               <FormItem
@@ -271,7 +195,94 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
-            {/* Bucket — AS-IS 2행 2번째(변경=X). UI 조회조건(SP 미전달, 순수 클라 그리드 트리거, §2.4). */}
+            {/* [2] Operation Group */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LBL.OPERATION_GROUP, 'Operation group')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    isInput={false}
+                    disabled={areaDisabled}
+                    value={searchParams.operationGroup}
+                    options={operGroupOptions}
+                    onChange={(_, option) => setSearchParams({ operationGroup: String(option ?? '') })}
+                  />
+                )}
+              />
+            </Grid>
+            {/* [3] Model/Nickname — SCP0018.md 조회조건 정리(v0.5) 변경=O: 명칭 Model -> Model/Nickname, 팝업
+                ItemByDivisionModal -> MaterialByDivisionModal(COM0013). 다건(개행/콤마) 입력 — 팝업 다건
+                선택 시 ITEM_ID csv 를 itemId 에 채운다. */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LBL.MODEL_NICKNAME, 'Model/Nickname')}
+                labelAlign='right'
+                render={() => (
+                  <InputField
+                    fullWidth
+                    multiline
+                    maxRows={3}
+                    className={commonStyles.popupSearchField}
+                    disabled={areaDisabled}
+                    value={searchParams.itemId}
+                    onChange={e => setSearchParams({ itemId: e.target.value })}
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          appearance='outlined'
+                          priority='normal'
+                          disabled={areaDisabled}
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setItemModalOpen(true)}
+                        />
+                      ),
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+            {/* [3] Electrode — AS-IS 1행 4번째(변경=X). 다건(공백=전체 ALL)이라 기본 비움. division=EE 여부로
+                활성(!isEE 면 disable). 주의: AS-IS 는 init(SetChangedControl)에서만 평가하고 division 변경
+                live 경로(SetOperationGroupByDivision)는 재평가하지 않지만, TO-BE 는 공통 규약("Division 변경
+                = 검색조건 초기화", store setDivision)에 따라 division 변경 시 enable 을 live 재평가하고 선택값도
+                초기화한다(stale 방지 — AS-IS 고정 동작과 의도적으로 다름, 갭분석 G05 안A). */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LBL.ELECTRODE, 'Electrode')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    multiple
+                    allOption
+                    useClearIcon
+                    limitTags={1}
+                    disabled={areaDisabled || !isEE}
+                    value={searchParams.electrodeTypes.join(',')}
+                    options={electrodeOptions}
+                    onChange={(_, picked) =>
+                      setSearchParams({
+                        electrodeTypes: String(picked ?? '')
+                          .split(',')
+                          .filter(Boolean),
+                      })
+                    }
+                  />
+                )}
+              />
+            </Grid>
+            {/* [4] Period */}
+            <PeriodField
+              gridSize={3}
+              label={t(LBL.PERIOD, 'Period')}
+              start={searchParams.startYyyymmdd}
+              end={searchParams.endYyyymmdd}
+              onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
+            />
+            {/* [4] Bucket — AS-IS 2행 2번째(변경=X). UI 조회조건(SP 미전달, 순수 클라 그리드 트리거, §2.4). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -293,33 +304,8 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
-            <PeriodField
-              gridSize={3}
-              label={t(LBL.PERIOD, 'Period')}
-              start={searchParams.startYyyymmdd}
-              end={searchParams.endYyyymmdd}
-              onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
-            />
-            {/* Sum — AS-IS 2행 마지막(변경=X). WEEKLY_ISO 면 숨김(Never), 그 외 표시(01_layout.md §2 트리거D). */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={' '}
-                labelAlign='right'
-                render={() =>
-                  searchParams.bucket === BUCKET_TYPE.WEEKLY_ISO ? (
-                    <></>
-                  ) : (
-                    <Checkbox
-                      labelText={t(LBL.SUM, 'Sum')}
-                      disabled={areaDisabled}
-                      checked={searchParams.isSumChecked}
-                      onChange={checked => setSearchParams({ isSumChecked: checked })}
-                    />
-                  )
-                }
-              />
-            </Grid>
+            {/* Sum(isSumChecked)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18,
+                SCP0013 동형). WEEKLY_ISO 숨김·권한 비활성 조건은 메인 afterCount 로 옮겨 유지. */}
           </>
         }
       />

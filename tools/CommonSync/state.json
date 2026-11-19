@@ -1,8 +1,8 @@
 {
- "baseline": "fdff7f17ee69fd89cff2233f5a11d7647c8ccb24",
- "baselineInfo": "fdff7f17e 2026-11-12 17:50 eunjoo_hwang refactor(DMD0001): 대시보드를 @demand → @report/pages/dashboard 로 이동",
- "applied": "2026-11-13T09:24:45",
- "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261113\\README.md",
+ "baseline": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+ "baselineInfo": "06e7d22de 2026-11-19 09:47 eunjoo_hwang fix(combo): 단일 선택 콤보 dirty-confirm 취소 시 표시값이 store와 어긋나는 문제 전역 교정",
+ "applied": "2026-11-19T09:54:26",
+ "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261119\\README.md",
  "baselineBeApplied": "2026-11-12T10:30:49",
  "reportBe": "_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112\\README.md",
  "baselineBe": "3e1e0a081018e7121c5e7c323c3785532097f201",
@@ -98,6 +98,18 @@
    "from": "61c936ba4e8a47a1aa3d7df069349480aaafc43b",
    "applied": "2026-11-13T09:24:45",
    "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261113\\README.md"
+  },
+  {
+   "baseline": "724a6155065f07664677fd7819e26033b806930a",
+   "from": "fdff7f17ee69fd89cff2233f5a11d7647c8ccb24",
+   "applied": "2026-11-18T13:18:59",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261118\\README.md"
+  },
+  {
+   "baseline": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+   "from": "724a6155065f07664677fd7819e26033b806930a",
+   "applied": "2026-11-19T09:54:26",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261119\\README.md"
   }
  ]
 }

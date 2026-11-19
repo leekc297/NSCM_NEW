@@ -29,19 +29,116 @@ def read_csv(p):
         return list(csv.DictReader(f))
 
 
+def strip_tsql_comments(src):
+    """T-SQL 주석 제거 — 문자열('…') 안은 그대로 · '--' 줄 주석 · '/* */' 블록 주석(중첩 허용)을 앞에서부터 하나씩 읽어 지운다.
+    2026-11-18: 줄 단위 '--' 자르기를 먼저 하면 '/*-- … --*/' 의 닫는 표시가 사라져 뒤 본문 전체가 주석이 된다(DMF0003 SCM_MST_SITE_ITEM 누락 실측)"""
+    out = []; i = 0; n = len(src); depth = 0
+    while i < n:
+        c2 = src[i:i + 2]
+        if depth:
+            if c2 == '/*': depth += 1; i += 2
+            elif c2 == '*/': depth -= 1; i += 2; out.append(' ') if not depth else None
+            else: out.append('\n') if src[i] == '\n' else None; i += 1
+            continue
+        if c2 == '/*': depth = 1; i += 2; continue
+        if c2 == '--':
+            j = src.find('\n', i); i = n if j < 0 else j; continue
+        if src[i] == "'":
+            j = i + 1
+            while j < n:
+                if src[j] == "'":
+                    if src[j + 1:j + 2] == "'": j += 2; continue
+                    break
+                j += 1
+            out.append(src[i:j + 1]); i = j + 1; continue
+        out.append(src[i]); i += 1
+    return ''.join(out)
+
+
 def asis_targets(sp):
     p = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules', f'dbo.{sp}.sql')
     if not os.path.exists(p):
         return None
     ins, upd = set(), set()
-    for line in open(p, encoding='utf-8', errors='ignore'):
-        code = line.split('--')[0]
-        for kind, t in re.findall(r'(?i)\b(MERGE\s+INTO|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+(?:\[?dbo\]?\.)?\[?([A-Za-z_][\w]*)\]?', code):
-            t = t.upper()
-            if t.startswith(('#', '@')) or 'LOG' in t or t in ('SET', 'TOP'):
-                continue
-            (ins if re.match(r'(?i)(MERGE|INSERT)', kind) else upd).add(t)
+    code = strip_tsql_comments(open(p, encoding='utf-8', errors='ignore').read())
+    for m in re.finditer(r'(?i)\b(MERGE\s+INTO|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+(?:\[?dbo\]?\.)?\[?([A-Za-z_][\w]*)\]?', code):
+        kind, t = m.group(1), m.group(2).upper()
+        if t in ('SET', 'TOP'):
+            continue
+        # 2026-11-18 SCP0111 F7: T-SQL 'UPDATE X SET … FROM 표 X' 의 별칭 X 를 표로 읽었다 → 같은 문장(다음 DML 앞까지)의 FROM/JOIN 에서 별칭이 가리키는 표로 바꾼다
+        if not re.match(r'(?i)(MERGE|INSERT)', kind):
+            seg = code[m.end():m.end() + 4000]
+            nx = re.search(r'(?i)\b(UPDATE|INSERT|MERGE|DELETE)\b', seg)
+            seg = seg[:nx.start()] if nx else seg
+            al = re.search(r'(?i)\b(?:FROM|JOIN)\s+(?:\[?dbo\]?\.)?\[?([A-Za-z_#@][\w]*)\]?\s+(?:AS\s+)?' + re.escape(m.group(2)) + r'\b', seg)
+            if al:
+                t = al.group(1).upper()
+        if t.startswith(('#', '@')) or 'LOG' in t:
+            continue
+        (ins if re.match(r'(?i)(MERGE|INSERT)', kind) else upd).add(t)
     return ins, upd - ins
+
+
+def judge_trace(trace, save_sps, targets_of):
+    """2026-11-18(SCP0111 F7·F8 미검증): 기존 행 수정형 저장 — restore_touched 키 없는 복원이 되돌리기 전에 남긴 save_trace.json 으로 판정
+    F8 = 변경 행 감사 칸 판정(judge_audit: 생성 칸 불변 · 값이 바뀌면 수정 칸 갱신) — FAIL 1건이라도 있으면 FAIL · PASS 만이면 PASS
+    F7 = AS-IS 저장 SP(전부) DML 대상 업무 표 중 이번에 확인한 표(tables_scanned)를 저장이 썼는지 — 확인 못 한 표가 있으면 NOT_RUN(추정 금지)"""
+    au = [a for a in trace.get('audit') or [] if a.get('result') != 'NA']
+    fails = [a for a in au if a.get('result') == 'FAIL']
+    who = f"계정 {trace.get('account', '')} · 기준 시각 {trace.get('at', '')}"
+    if not au:
+        f8 = {'verdict': 'NOT_RUN', 'note': f"변경 행 감사 판정 없음(감사 칸 없음 또는 변경 0) · {who}"}
+    else:
+        f8 = {'verdict': 'FAIL' if fails else 'PASS',
+              'note': ('; '.join(dict.fromkeys(a['why'] for a in fails))[:600] if fails else f"변경 행 {len(au)}건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정)") + f" · {who}"}
+    wrote = {t.upper() for t, n in {**(trace.get('created') or {}), **(trace.get('changed') or {})}.items() if n}
+    scanned = {t.upper() for t in trace.get('tables_scanned') or []}
+    sps = [sp for sp in save_sps if sp]
+    if not sps:
+        return f8, {'verdict': 'NA', 'note': '저장 SP 없음'}
+    tg = {sp: targets_of(sp) for sp in sps}
+    if any(v is None for v in tg.values()):
+        return f8, {'verdict': 'NOT_RUN', 'note': f"AS-IS 저장 SP 원문 없음({', '.join(sp for sp, v in tg.items() if v is None)})"}
+    need = set().union(*[v[0] | v[1] for v in tg.values()])
+    unk = sorted(t for t in need if t not in scanned)
+    miss = sorted(t for t in need if t in scanned and t not in wrote)
+    base = f"AS-IS {', '.join(sps)} 대상 표 {', '.join(sorted(need)) or '없음'} · TO-BE 저장이 쓴 표 {', '.join(sorted(wrote))}"
+    if miss:
+        return f8, {'verdict': 'FAIL', 'note': f"{base} · 저장이 행을 남기지 않은 표 {', '.join(miss)}"}
+    if unk:
+        return f8, {'verdict': 'NOT_RUN', 'note': f"{base} · 이번 복원이 확인하지 않은 표 {', '.join(unk)}(cleanup_spec tables 밖) — 미측정"}
+    return f8, {'verdict': 'PASS', 'note': f"{base} · 대상 표 전부 기록"}
+
+
+def from_trace(mid, res):
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'save_trace.json')
+    if not os.path.exists(p):
+        return False
+    trace = json.load(open(p, encoding='utf-8'))
+    sys.path.insert(0, HERE); from asis_live import live_golden, asis_of
+    asis = asis_of(mid, sys.argv[sys.argv.index('--asis') + 1] if '--asis' in sys.argv else '')
+    sps = list(dict.fromkeys(g['asis_sp'] for g in live_golden(mid, asis, 'SAVE')))
+    res['F8'], res['F7'] = judge_trace(trace, sps, asis_targets)
+    res['run'] = {'cleanup_sql': 'save_trace.json(restore_touched 키 없는 복원)', 'account': trace.get('account', ''), 'saved_at': trace.get('at', ''),
+                  'tables': {**(trace.get('created') or {}), **(trace.get('changed') or {})}}
+    return True
+
+
+def selftest():
+    tg = {'SP1': ({'T1'}, set()), 'SP2': ({'T1'}, {'T2'})}.get
+    base = {'account': 'u', 'at': '2026-11-18 16:59:21', 'tables_scanned': ['T1', 'T2'], 'changed': {'T1': 2, 'T2': 1}, 'created': {}, 'audit': [{'result': 'PASS', 'why': 'ok'}]}
+    cases = [('정상', judge_trace(base, ['SP1', 'SP2'], tg), ('PASS', 'PASS')),
+             ('감사 FAIL', judge_trace({**base, 'audit': [{'result': 'FAIL', 'why': 'x'}]}, ['SP1'], tg), ('FAIL', 'PASS')),
+             ('표 누락', judge_trace({**base, 'changed': {'T1': 1}}, ['SP2'], tg), ('PASS', 'FAIL')),
+             ('미확인 표', judge_trace({**base, 'tables_scanned': ['T1']}, ['SP2'], tg), ('PASS', 'NOT_RUN')),
+             ('감사 없음', judge_trace({**base, 'audit': []}, ['SP1'], tg), ('NOT_RUN', 'PASS')),
+             ('SP 원문 없음', judge_trace(base, ['SPX'], tg), ('PASS', 'NOT_RUN'))]
+    bad = 0
+    for n, (f8, f7), want in cases:
+        got = (f8['verdict'], f7['verdict']); ok = got == want; bad += 0 if ok else 1
+        print(f"{'OK ' if ok else 'NG '} {n} → {got}(기대 {want})")
+    print(f'{len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
 
 
 def main():
@@ -49,6 +146,10 @@ def main():
     out = os.path.join(ROOT, 'Doc', 'verify', mid, 'save_audit.json')
     sqls = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'verify', mid, 'cleanup', 'cleanup_*.sql')))
     res = {'menu_id': mid, 'generated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'F8': None, 'F7': None}
+    if not sqls and from_trace(mid, res):
+        json.dump(res, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+        print(f"{mid}: (기존 행 수정 저장) F8 {res['F8']['verdict']} · F7 {res['F7']['verdict']} — {res['F8']['note'][:120]} | {res['F7']['note'][:200]} → {out}")
+        return
     if not sqls:
         res['F8'] = res['F7'] = {'verdict': 'NOT_RUN', 'note': 'CRUD 실제 저장 정리 기록 없음(E2E 저장 미실행)'}
         json.dump(res, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
@@ -127,4 +228,6 @@ def main():
 
 
 if __name__ == '__main__':
+    if '--selftest' in sys.argv:
+        sys.exit(selftest())
     main()

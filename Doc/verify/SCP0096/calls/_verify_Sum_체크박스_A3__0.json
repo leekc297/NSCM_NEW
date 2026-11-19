@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 87,
+  "at": "2026-11-19T00:50:05.678Z",
+  "user": "minyonglee1",
+  "test": "Sum 체크박스(A3)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 103,
+  "at": "2026-11-19T00:50:08.996Z",
+  "user": "minyonglee1",
+  "test": "Sum 체크박스(A3)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261118\",\"endYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 111,
+  "at": "2026-11-19T00:50:09.008Z",
+  "user": "minyonglee1",
+  "test": "Sum 체크박스(A3)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "Shipment Working Day OSP",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/Shipment%20Working%20Day%20OSP/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"ALL\",\"fromYyyymmdd\":\"20261118\",\"toYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 190,
+  "at": "2026-11-19T00:50:09.086Z",
+  "user": "minyonglee1",
+  "test": "Sum 체크박스(A3)"
+ }
+]

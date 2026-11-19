@@ -14,6 +14,7 @@ import {
   HEADER_TOTAL_HEIGHT,
   MEASURE_COLOR_TARGETS,
   MENU_ID,
+  PERIOD_MAX_INT_DIGITS,
   SHEETS,
   type GridSheet,
 } from '../capa-speed-plan.constants';
@@ -28,6 +29,22 @@ import { isCellEditable } from '../utils/capaSpeedPlan.editLock';
 
 import styles from './CapaSpeedPlanGrid.module.scss';
 
+/**
+ * 기간 칸 정수부 입력 자릿수 제한 헬퍼(SCP0105 테스트 자릿수 조치, `PERIOD_MAX_INT_DIGITS`).
+ * 부호·소수부는 보존하고 정수부만 센다/자른다. 콤마(표시 포맷)는 숫자가 아니므로 무시한다.
+ */
+const integerDigitCount = (value: string): number =>
+  value.replace(/[^\d.]/g, '').split('.')[0].length;
+
+/** 정수부를 `limit` 자리로 자른다(부호·소수부 유지). `'12345678901234'`→(10)→`'1234567890'`. */
+const clampIntegerDigits = (value: string, limit: number): string => {
+  const sign = value.trimStart().startsWith('-') ? '-' : '';
+  const digits = value.replace(/[^\d.]/g, '');
+  const dot = digits.indexOf('.');
+  if (dot === -1) return sign + digits.slice(0, limit);
+  return sign + digits.slice(0, dot).slice(0, limit) + digits.slice(dot);
+};
+
 interface Props {
   sheetName: GridSheet;
   rows: Scp0105Row[];
@@ -38,6 +55,10 @@ interface Props {
   /** ELTR 셀 콤보 후보 원천 — `OperationElectrodeType_SCP_ALL` 전량(행 기준으로 좁혀 쓴다). */
   electrodeTypeRows: ComboRow[] | undefined;
   isEditMode: boolean;
+  /** 편집권한은 있으나 버전 진행상태가 읽기전용(마감/과거)인 상태 — 편집 시도 시 MSG00109 안내(L-11). */
+  isReadOnlyVersion: boolean;
+  /** 읽기전용 버전에서 편집 가능했을 셀을 건드렸을 때 호출 — Page 가 MSG00109 를 띄운다. */
+  onReadOnlyEditBlocked: () => void;
   gridRef: MutableRefObject<FlexGridType | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef: MutableRefObject<EditTracker | undefined>;
@@ -64,6 +85,8 @@ export const CapaSpeedPlanGrid = ({
   periodColumns,
   electrodeTypeRows,
   isEditMode,
+  isReadOnlyVersion,
+  onReadOnlyEditBlocked,
   gridRef,
   gridFilterRef,
   editTrackerRef,
@@ -95,6 +118,10 @@ export const CapaSpeedPlanGrid = ({
   sheetRef.current = sheetName;
   const editModeRef = useRef(isEditMode);
   editModeRef.current = isEditMode;
+  const readOnlyVersionRef = useRef(isReadOnlyVersion);
+  readOnlyVersionRef.current = isReadOnlyVersion;
+  const readOnlyBlockedRef = useRef(onReadOnlyEditBlocked);
+  readOnlyBlockedRef.current = onReadOnlyEditBlocked;
   const electrodeRef = useRef(electrodeTypeRows);
   electrodeRef.current = electrodeTypeRows;
   const editEndedRef = useRef(onCellEditEnded);
@@ -220,6 +247,20 @@ export const CapaSpeedPlanGrid = ({
     ) => {
       const binding = sender.columns[event.col]?.binding ?? '';
       const row = sender.rows[event.row]?.dataItem as Scp0105Row | undefined;
+
+      // 버전 진행상태가 읽기전용(마감/과거)인데 편집권한 보유자가 **편집 가능했을** 셀을 건드리면
+      //   AS-IS Edit 클릭 차단과 동일하게 MSG00109 안내 후 차단한다(L-11/V-07). `isEditMode:true` 로
+      //   "Current 버전이면 열렸을 셀" 인지 판정해 고정열·우선순위 없는 셀 등 원래부터 잠긴 셀에는
+      //   안내를 띄우지 않는다(조용히 유지).
+      if (
+        readOnlyVersionRef.current &&
+        isCellEditable({ sheetName: sheetRef.current, binding, row, isEditMode: true })
+      ) {
+        event.cancel = true;
+        readOnlyBlockedRef.current();
+        return;
+      }
+
       const editable = isCellEditable({
         sheetName: sheetRef.current,
         binding,
@@ -265,14 +306,18 @@ export const CapaSpeedPlanGrid = ({
         binding === COLUMN.BASE_QTY ||
         isEditablePeriodColumn(binding);
       if (!numericCol) return; // 숫자 컬럼이 아니면 Wijmo 기본 동작에 맡긴다
-      const raw = String(event.data ?? '').replaceAll(',', '').trim();
+      const raw = toStr(event.data).replaceAll(',', '').trim();
       event.cancel = true; // 기본 paste 억제 — 아래에서 직접 적용
       let wrote = false;
       if (raw === '') {
         sender.setCellData(event.row, event.col, null, false, true); // 빈값 = 클리어
         wrote = true;
       } else if (Number.isFinite(Number(raw))) {
-        sender.setCellData(event.row, event.col, Number(raw), false, true);
+        // 기간 칸은 정수부 자릿수 상한(시트별 10/14)으로 자른 뒤 쓴다 — 붙여넣기도 타이핑과 동일 제한.
+        const capped = isEditablePeriodColumn(binding)
+          ? clampIntegerDigits(raw, PERIOD_MAX_INT_DIGITS[sheetRef.current])
+          : raw;
+        sender.setCellData(event.row, event.col, Number(capped), false, true);
         wrote = true;
       }
       // 숫자 아님 → 아무것도 쓰지 않음(문자 붙여넣기 차단)
@@ -319,7 +364,7 @@ export const CapaSpeedPlanGrid = ({
           committed !== null &&
           committed !== undefined &&
           committed !== '' &&
-          !Number.isFinite(Number(String(committed).replaceAll(',', '')))
+          !Number.isFinite(Number(toStr(committed).replaceAll(',', '')))
         ) {
           sender.setCellData(event.row, event.col, lastEditOldValue ?? null, false, true);
           return;
@@ -364,6 +409,11 @@ export const CapaSpeedPlanGrid = ({
         binding === COLUMN.BASE_QTY ||
         isEditablePeriodColumn(binding);
       if (!isNumericCol) return;
+      // 기간 칸(동적 컬럼)은 Operation group(시트)별 정수부 자릿수 상한을 둔다 — Cell/Module=10,
+      //   Electrode=14(SCP0105 테스트 자릿수 조치, PERIOD_MAX_INT_DIGITS). 정적 수량 컬럼엔 미적용.
+      const periodDigitLimit = isEditablePeriodColumn(binding)
+        ? PERIOD_MAX_INT_DIGITS[sheetRef.current]
+        : undefined;
       const editor = sender.activeEditor as HTMLInputElement | null;
       if (!editor) return;
       editor.addEventListener('beforeinput', (inputEvent: InputEvent) => {
@@ -379,10 +429,21 @@ export const CapaSpeedPlanGrid = ({
           inputEvent.data +
           editor.value.slice(end)
         ).replaceAll(',', '');
-        if (!/^-?\d*\.?\d*$/.test(next)) inputEvent.preventDefault();
+        if (!/^-?\d*\.?\d*$/.test(next)) {
+          inputEvent.preventDefault();
+          return;
+        }
+        // 기간 칸 정수부 자릿수 상한 초과 입력은 타이핑 단계에서 막는다(AS-IS MaxLength 체감 동일).
+        if (periodDigitLimit !== undefined && integerDigitCount(next) > periodDigitLimit) {
+          inputEvent.preventDefault();
+        }
       });
       editor.addEventListener('input', () => {
-        const cleaned = editor.value.replace(/[^\d.,\-]/g, ''); // 숫자·소수점·콤마·마이너스만 남긴다
+        let cleaned = editor.value.replace(/[^\d.,-]/g, ''); // 숫자·소수점·콤마·마이너스만 남긴다
+        // IME 등 beforeinput 을 우회해 들어온 초과 자릿수는 정수부를 상한으로 자른다(2차 방어).
+        if (periodDigitLimit !== undefined && integerDigitCount(cleaned) > periodDigitLimit) {
+          cleaned = clampIntegerDigits(cleaned, periodDigitLimit);
+        }
         if (cleaned !== editor.value) editor.value = cleaned;
       });
     };
@@ -498,9 +559,9 @@ export const CapaSpeedPlanGrid = ({
       dynamicColumns={periodColumns}
       comboParams={comboParams}
       sheetName={sheetName}
-      // 헤더 단당 기본높이(prop 은 defaultSize 만) — 2단 기준 48/2=24. 총높이 48px 고정은 위
-      //   applyHeaderHeight 가 tier 수로 균등배분해 각 row.height 에 박는 것이 단일 출처다(hook #93).
-      headerRowHeight={HEADER_TOTAL_HEIGHT / 2}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체 applyHeaderHeight 의 동적 tier 보정이 충돌해 무한
+      //   invalidate 가 됐다. 총높이 48px 고정은 위 applyHeaderHeight 가 tier 수로 균등배분해 박는 단일 출처다.
       allowMerging={allowMerging}
       // 메타(`FIXED_FLAG`)가 경계를 표현하면 prop 을 **넘기지 않는다**(위 주석). 키 자체를 빼야
       //   공용 DataGrid 의 산출값이 `{...gridProps}` 에 덮이지 않는다.

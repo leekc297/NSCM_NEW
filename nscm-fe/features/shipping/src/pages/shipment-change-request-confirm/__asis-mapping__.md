@@ -19,9 +19,7 @@ AS-IS: `GSCM/06.UIL/GSCM.SSP.Plan.UIL/SSP0202_ShipmentChangeRequestConfirm.cs`(+
 | txtItemID+btnItemId | Model/Nickname 입력 + 돋보기 → 공용 `MaterialByDivisionModal`(COM0013, division='40'). AS-IS 팝업과 조회 SP 가 다른 의도적 드리프트 |
 | spdMain(siMain 22열) | `ShipmentChangeRequestConfirmMainGrid`(DataGrid, isReadOnly, `allowMerging=None`) |
 | txtApprovalDeptName(FpSpread=siSub 50열, 오명명) | `ShipmentChangeRequestConfirmSubGrid`(DataGrid, 2단헤더, isReadOnly, `allowMerging=ColumnHeaders`) |
-| 디테일 폼 8필드 + txtRejectReason | `ConfirmDetailPanel`(8 읽기전용 + rejectReason 입력) — 2026-11-12 사용자 지시로 자매 SSP0200 Request Info 와 같은 형태로 재배치: 1행 Requestor·Dept Name·Approval·Dept Name / 2행 Title·Change Reason·Reason Detail(textarea 36px, 칸 안 스크롤) / 3행 Request No·Reject Reason. 9필드 전부 유지(누락 0), ReadOnly·maxLength 1000 불변 |
-| usrLabel2("Request Confirm Detail", Designer:991) | `ConfirmDetailPanel` 영역 Header — 2026-11-12 DMF0008 영역 Header 모양(`.sectionTitle` 동일 규격, 좌측 정렬)으로 교체(종전 가운데 정렬 굵은 글씨) + 테두리 박스(`.section`) · 박스 좌우 끝선 = 조회조건과 일치(`.detailForm` 좌우 padding 0) |
-| TO-BE 추가(2026-11-12, AS-IS 없음 — 사용자 지시) | Request Confirm Detail 접기/펼치기 + 펼침/접힘 고정: 머리줄 ▲▼·핀 버튼 + `hooks/useConfirmDetailFold.ts`(고정 = 화면·사용자별 localStorage `nscm.SSP0202.confirmDetailPin.<userId>`, 고정 중 토글 비활성). 접혀도 rejectReason 은 store 유지 → 반려 사유 가드(MSG00181) 동작 불변. 접으면 아래 디테일 그리드가 남는 높이를 가져간다 — 구현(런타임 미검증) |
+| 디테일 폼 8필드 + txtRejectReason | `ConfirmDetailPanel`(8 읽기전용 + rejectReason 입력) |
 | btnApproval/btnReject/btnSelfReject(초기 숨김) | `customButtons` 상시 3개 + `disabled: !canApprove/!canReject/!canSelfReject`(§B Q-2) |
 
 ## 2. validations 12건 (§3v) → TO-BE

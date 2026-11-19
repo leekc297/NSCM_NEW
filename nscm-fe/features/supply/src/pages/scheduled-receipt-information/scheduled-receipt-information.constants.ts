@@ -115,11 +115,11 @@ export const QTY_DECIMAL_MAX_DIGITS = 10;
 //   - DIVISION: LBL00641('Division')→LBL00001('Div', KO='Div'·EN/CN='Div.') — AS-IS 'Div' 복원
 //     (design 02 §4.5 의 LBL00641 지정은 AS-IS 표시와 불일치 — AS-IS 우선).
 //   - SITE: LBL00015('Site')→LBL00005('Plant Site', 3언어 완비. LBL00509 는 KO 누락이라 제외).
-//   - ITEM_ID: AS-IS 는 'Parent Model'(LBL01100)이나, MaterialByDivisionModal 아이템 팝업 조회조건의
-//     전 화면 공통 표준은 'Model/Nickname'(LBL00618, project-route·formation·safety-stock 등 수십 화면
-//     사용 — 코드가 모델/닉네임 양쪽으로 찾아주는 통합 픽커라서). SCP0130 만 'Parent Model' 로 남은
-//     outlier 였다 → 표준(LBL00618)으로 통일(SCP0130-#9, asis-parity-default-keep-common-standardization).
-//     그리드 컬럼은 'Parent Item'(메타) 유지 — 조회 라벨만 표준화.
+//   - ITEM_ID: 'Parent Item'(LBL00033, KO/EN/CN 완비, ora.py 실측) — 사용자 지시 2026-11-17.
+//     그리드 컬럼 메타(COLUMN_LABEL_NAME)가 이미 'Parent Item'이라 조회 라벨을 그에 맞춘다. 이전엔
+//     MaterialByDivisionModal 공통 표준 'Model/Nickname'(LBL00618)로 통일했으나, 이 화면은 Parent BOM
+//     아이템 조회조건이므로 그리드와 동일한 'Parent Item' 으로 재지정(AS-IS 'Parent Model' LBL01100 과도
+//     의미 일치).
 export const LABEL = {
   DIVISION: 'LBL00001',
   PLAN_GROUP: 'LBL00002',
@@ -129,7 +129,7 @@ export const LABEL = {
   //   standardization). 의미 동일.
   VALID: 'LBL00007',
   FROM_DATE: 'LBL00062',
-  ITEM_ID: 'LBL00618',
+  ITEM_ID: 'LBL00033',
   // item_id_child/material 조회조건 라벨 — 두 탭 모두 'Material'(LBL00021) 표준으로 통일(SCP0130-#10).
   //   AS-IS 는 Virtual Bom 탭만 'Child Material'(LBL01062, .cs:1477)로 달랐으나, 'Material' 이 전 화면
   //   공통 표준이고 'Child Material' 은 SCP0130 고유라 표준으로 맞춘다(탭별 스왑 제거).

@@ -14,7 +14,7 @@ export type Account = { key: string; keys: string[]; groups: string[]; menuGroup
 export type Facts = {
   id: string; at: string;
   asis: null | { mainClass: string; divControls: string[]; changeMethods: string[]; loadMethods: string[]; insertStmts: { kind: string; raw: string; ref: string; method: string }[]; headerSpan: { raw: string; ref: string; method: string }[]; planExcluded: string[]; editRules: { column: string; cond: string; ref: string }[]; states: AsisState[]; defaults: { target: string; raw: string; cond: string; phase: string; ref: string; labels: string[] }[]; insertGuards: { kind: string; raw: string; cond: string; value: string; ref: string }[]; hasMerge: boolean };
-  db: { menu: Record<string, string>; menuGroups: { user_gr_id: string; use_yn: string }[]; btnAuth: { user_gr_id: string; sht_nm: string; mnu_btn_cd: string; use_yn: string }[]; columns: Record<string, string>[]; measures: Record<string, string>[]; lookupMeasure: Record<string, string>[]; lookupAdmin: Record<string, string>[]; now: { now_: string; dow: string; hm: string } };
+  db: { menu: Record<string, string>; menuGroups: { user_gr_id: string; use_yn: string }[]; btnAuth: { user_gr_id: string; sht_nm: string; mnu_btn_cd: string; use_yn: string }[]; columns: Record<string, string>[]; measures: Record<string, string>[]; lookupMeasure: Record<string, string>[]; lookupAdmin: Record<string, string>[]; now: { now_: string; dow: string; hm: string }; titleset?: { tobeRows: number; tobeUsers: number; pkgRefs: number; asisRows: number | null } };
   accounts: Account[];
   btnDiv: Record<string, Record<string, string[]>>;
 };
@@ -28,13 +28,15 @@ export function accountId(key: string): string | null {
     const uj = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'E2E', 'users.json'), 'utf8').replace(/^﻿/, ''));
     const [area, dv, ...rest] = key.split('/');
     if (area === 'SCR') return uj.screens?.[dv]?.accounts?.[rest.join('/')] || null;  // 화면별 지정 계정(screens[<ID>].accounts · 2026-11-18)
+    if (area === 'GUEST') return uj.guestAccount || null;  // 전 화면 공용 GUEST 전용 계정(EG380 · 2026-11-18)
     return uj.areas[area]?.divisions?.[dv]?.[rest.join('/')] || null;
   } catch { return null; }
 }
 /** 그룹이 다른 계정 한 명씩(화면 권한 차이를 재는 최소 표본이 아니라 '메뉴 권한 그룹 조합'별 전수) */
 export function distinctAccounts(f: Facts): Account[] {
   const seen = new Set<string>(); const out: Account[] = [];
-  for (const a of f.accounts) { const k = `${a.groups.join('|')}#${a.divsMenu.join('|')}`; if (seen.has(k)) continue; seen.add(k); out.push(a); }
+  for (const a of f.accounts) { if (a.key.startsWith('GUEST/')) continue;  // 공용 GUEST 계정은 EG380 전용(2026-11-18) — 계정 순회 결과를 바꾸지 않는다
+    const k = `${a.groups.join('|')}#${a.divsMenu.join('|')}`; if (seen.has(k)) continue; seen.add(k); out.push(a); }
   return out;
 }
 

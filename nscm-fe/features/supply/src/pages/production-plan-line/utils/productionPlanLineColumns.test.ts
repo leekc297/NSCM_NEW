@@ -55,6 +55,16 @@ describe('buildPivotColumns — 드릴다운 후 주/월 그룹 순서', () => {
     expect(weekHeaders(cols[0])).toEqual(['SUM', 'W37', 'W38']);
   });
 
+  it('W1~W9(한자리 주차) 는 일(D_)·주SUM(W_) 라벨이 2자리 W01 로 일치해 쪼개지지 않는다', () => {
+    // 2026-01: ISO_WEEK 01=…~01-04(목), 02=01-05(월)~. D_ 는 isoWeek 숫자(1,2)라 종전 'W1'/'W2' 로
+    //   W_ 바인딩의 'W01'/'W02' 와 달라 그룹이 쪼개져 주 SUM 이 주차 뒤로 분리됐다 → zero-pad 로 일치.
+    const keys = ['M_202601', 'W_20260101', 'W_20260102', 'D_20260101', 'D_20260102', 'D_20260105'];
+    const cols = buildPivotColumns([makeRow(keys)], BUCKET_TYPE.DAILY, true, EMPTY_DRILLDOWN);
+    expect((cols[0] as { header?: string }).header).toBe('2026-01');
+    // 'W1'/'W01' 로 분리되지 않고 2자리 'W01','W02' 로 일치(월SUM 먼저, 각 주 안에서 SUM 이 일자 앞).
+    expect(weekHeaders(cols[0])).toEqual(['SUM', 'W01', 'W02']);
+  });
+
   it('늦은 달의 주를 펼쳐도 월 그룹이 연-월 오름차순을 유지한다', () => {
     const keys = [
       'M_202609',

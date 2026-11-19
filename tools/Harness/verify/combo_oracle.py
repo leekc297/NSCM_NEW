@@ -193,6 +193,41 @@ ROW_VAR = {'DIVISION': ['DIVISION_ID'], 'DIVISIONID': ['DIVISION_ID'], 'TEAM': [
            'SALESITEID': ['SCM_SITE_ID'], 'ITEMID': ['ITEM_ID'], 'PROJECTCODE': ['PROJECT_CODE'], 'SALESCOMPANY': ['SALES_COMPANY']}
 
 
+_SRC_CACHE = {}
+
+
+def local_rhs(asis_id, ref, var):
+    """2026-11-18 미검증 해소(SCP0096 Plant Site '인자 식 해석 불가: division'): 인자 식이 지역 변수면 같은 파일에서 호출 줄(ref 'X.cs:N') 위로
+    가장 가까운 '<형식> var = 식;' 대입의 오른쪽 식을 돌려준다(최대 60줄 · 주석 줄 제외). 못 찾으면 ''"""
+    m = re.match(r'([^:\s]+\.cs):(\d+)', ref or '')
+    if not m or not re.fullmatch(r'[a-z_]\w*', var or ''):
+        return ''
+    base, line = m.group(1), int(m.group(2))
+    key = (asis_id, base)
+    if key not in _SRC_CACHE:
+        txt = None
+        try:
+            root = json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or os.path.join(ROOT, 'GSCM')
+            for f in read_csv(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', asis_id, 'files.csv')):
+                if os.path.basename(f.get('file', '')) == base:
+                    txt = open(os.path.join(root, f['file']), encoding='utf-8', errors='replace').read().splitlines(); break
+        except (OSError, ValueError):
+            txt = None
+        _SRC_CACHE[key] = txt
+    lines = _SRC_CACHE[key]
+    if not lines:
+        return ''
+    rx = re.compile(r'^\s*(?:[\w<>\[\]]+\s+)?' + re.escape(var) + r'\s*=\s*(.+?);\s*(?://.*)?$')
+    for i in range(min(line, len(lines)) - 1, max(0, line - 61), -1):
+        t = lines[i]
+        if t.strip().startswith('//'):
+            continue
+        mm = rx.match(t)
+        if mm:
+            return mm.group(1).strip()
+    return ''
+
+
 def resolve(expr, ctx, asis, codes_of):
     """C# 인자 식 → 값. 해석 불가면 KeyError(사유)"""
     e = (expr or '').strip()
@@ -669,6 +704,43 @@ def asis_display(ctl):
     return '', f'컨트롤 유형 {t or "미상"} · 바인딩 {"있음" if a else "없음"}'
 
 
+def resolve_names(names, mst, asis, tobe_cx, rows, rep, probe):
+    """2026-11-19 미검증 해소(SCP0096 EG-7b487474 C1 'TO-BE 표시값 ?INFAC_40'): TO-BE 표시값(이름)이 AS-IS 원천 결과에 없어 코드로 못 바꾼 경우,
+    사내 마스터(mst 표)의 이름 칸으로 코드를 찾는다. 이름 칸 = 공통 후보(probe)의 표시값으로 조회했을 때 probe 코드 1건만 돌려주는 칸(자기 검증).
+    반환 {이름: 코드}, 이름 1개에 코드가 1개일 때만(여럿이면 단정 금지)"""
+    if not (mst and probe and names):
+        return {}
+    m2, _ = usable(mst, asis, tobe_cx)
+    if not m2:
+        return {}
+    pname = next((rep(r) for r in rows if r['CODE'] == probe), None)
+    if pname is None:
+        return {}
+    extra = [(k, v) for k, v in m2['eqs'].items() if k != m2['col']]
+    tc = tobe_cx.cursor()
+
+    def codes_by(ncol, v):
+        w = ' AND '.join([f'{ncol} = :p0'] + [f'{k} = :p{i + 1}' for i, (k, _) in enumerate(extra)])
+        tc.execute(f"SELECT DISTINCT {m2['col']} FROM {m2['tbl']} WHERE {w}", [v] + [x for _, x in extra])
+        return [str(r[0]) for r in tc.fetchall()]
+    tc.execute("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER='SCM_MGR' AND TABLE_NAME=:t AND DATA_TYPE IN ('VARCHAR2','NVARCHAR2','CHAR','NCHAR')", t=m2['tbl'].upper())
+    txt = [r[0] for r in tc.fetchall() if r[0] != m2['col'] and r[0] not in m2['eqs']]
+    # 이름 칸 후보 = 글자형 칸 전부(이름·설명 칸 먼저), SCM_MST_SITE 는 이름이 SITE_DESCRIPTION
+    for ncol in sorted(txt, key=lambda c: (0 if 'NAME' in c else 1 if 'DESC' in c else 2, c)):
+        try:
+            if codes_by(ncol, pname) != [probe]:
+                continue
+            out = {}
+            for n in names:
+                cs = codes_by(ncol, n)
+                if len(cs) == 1:
+                    out[n] = cs[0]
+            return out
+        except Exception:  # noqa: BLE001, 이 칸으로 못 찾음
+            continue
+    return {}
+
+
 def match_rep(asis_rows, texts):
     """TO-BE 표시 문구가 AS-IS 의 어떤 표현(CODE·NAME·'CODE NAME')과 맞는지 — 가장 많이 맞는 표현 선택"""
     reps = {'CODE': lambda r: r['CODE'], 'NAME': lambda r: r['NAME'], 'CODE NAME': lambda r: f"{r['CODE']} {r['NAME']}",
@@ -723,7 +795,7 @@ def main():
                         ctx.setdefault(p['n'], ctx.get(p['n'], ''))
                 rows, _ = ssp_inner(asis, r['code'], ctx)
                 return rows, {'mst': None, 'by_code': True, 'bigfilter': r['code']}
-            vals = {p['n']: resolve(p['expr'], ctx, asis, codes_of) for p in ps}
+            vals = {p['n']: resolve(local_rhs(asis_id, r.get('ref'), p['expr']) or p['expr'], ctx, asis, codes_of) for p in ps}  # 2026-11-18 지역 변수 → 대입식
             if r['code'] and r['sp'].upper().startswith('UP_FX_'):
                 vals['@Code'] = r['code']
             if not r['sp']:
@@ -794,6 +866,13 @@ def main():
                 else:
                     ex = {**explain([k for k in a_only if not k.startswith('?')], 'asis_only', mst, asis, tcx, probe),
                           **explain([k for k in t_only if not k.startswith('?')], 'tobe_only', mst, asis, tcx, probe)}
+                if not meta.get('bigfilter') and any(k.startswith('?') for k in t_only):
+                    # 2026-11-19: 이름으로 못 바꾼 TO-BE 표시값 → 사내 마스터 이름 칸으로 코드 찾기 → 찾은 코드는 데이터 차이 설명(explain)으로 넘긴다
+                    rs = resolve_names([k[1:] for k in t_only if k.startswith('?')], mst, asis, tcx, rows, match_rep(rows, tobe_texts)[1], probe)
+                    if rs:
+                        t_only = [rs.get(k[1:], k) if k.startswith('?') else k for k in t_only]
+                        ex.update(explain(list(rs.values()), 'tobe_only', mst, asis, tcx, probe))
+                        rec.update(tobe_only=t_only[:40], resolved={n: c for n, c in list(rs.items())[:20]})
                 unk = [k for k in t_only if k.startswith('?')]
                 cond = {k: v for k, v in ex.items() if v.startswith('조건 차이')}
                 noexp = {k: v for k, v in ex.items() if not v.startswith(('데이터 차이', '조건 차이'))}

@@ -60,8 +60,43 @@ const FOOTER_SUM_LABEL = 'Sum';
 //   스크롤바가 안 떠 있을 땐 실측(offsetHeight-clientHeight)이 0 이라 이 표준값으로 예약한다(자매 SSP0060 동일).
 const HSCROLLBAR_HEIGHT = 17;
 
+// 음수 값 글자색 — AS-IS 공통 Spread `NumberCellType.NegativeRed=true`(전 수치 셀 공통) 등가.
+//   메인 그리드(ShipmentPlanAutoEssMainGrid)·SCP0107 과 동일 색.
+const NEGATIVE_COLOR = '#c62828';
+
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+/**
+ * 음수 값 적색 formatItem 을 그리드에 붙이고 cleanup 을 돌려준다 — AS-IS 공통
+ * `NumberCellType.NegativeRed=true` 등가. Detail 7-sheet 그리드가 각각이라(persist 로 전부 마운트)
+ * {@link attachDashDateFormat} 와 같은 처방으로 전 시트에 한 번에 붙인다. Wijmo 셀 DOM 재사용이라
+ * 매번 color 를 초기화한 뒤 값이 음수인 수치 셀만 칠한다(텍스트 셀은 Number 파싱 NaN 으로 자동 제외).
+ */
+const attachNegativeRed = (grid: FlexGridType): (() => void) => {
+  const handler = (
+    sender: FlexGridType,
+    e: { panel: unknown; row: number; col: number; cell: HTMLElement }
+  ) => {
+    if (e.panel !== sender.cells) return;
+    const binding = sender.columns[e.col]?.binding ?? '';
+    const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
+    e.cell.style.color = '';
+    const value = row?.[binding];
+    if (value !== null && value !== undefined && value !== '') {
+      const numeric = Number(str(value).replace(/,/g, ''));
+      if (Number.isFinite(numeric) && numeric < 0) e.cell.style.color = NEGATIVE_COLOR;
+    }
+  };
+  grid.formatItem.addHandler(handler);
+  return () => {
+    try {
+      grid.formatItem.removeHandler(handler);
+    } catch {
+      /* grid disposed */
+    }
+  };
+};
 
 // Detail 7-sheet 그리드 — sheet별 컬럼셋은 admin SCM_MST_SHEET_COLUMNS 메타(191컬럼 실측)가 단일 원천.
 //   편집 화이트리스트/SO그룹 전파는 shtPlanDetail 만 코드 재현(design 03 §3). 나머지 시트(Hold stock 포함)
@@ -477,7 +512,7 @@ export const ShipmentPlanAutoEssDetailGrid = ({
   useEffect(() => {
     const cleanups = DETAIL_SHEETS.map(sheet => gridRefs[sheet]?.current)
       .filter((g): g is FlexGridType => !!g)
-      .map(g => attachDashDateFormat(g));
+      .flatMap(g => [attachDashDateFormat(g), attachNegativeRed(g)]);
     return () => cleanups.forEach(fn => fn());
   }, [gridRefs, staticColumns, activeDetailSheet]);
 

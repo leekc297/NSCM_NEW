@@ -180,6 +180,38 @@ export const MAIN_EDITABLE_MEASURE = 'SHIP_PLAN_DETAIL';
 // chkTotPSI 행 필터 (03 §2.3): 미체크 SEQ<12 / 체크 SEQ<21
 export const TOT_PSI_SEQ_LIMIT = { OFF: 12, ON: 21 } as const;
 
+// 하단 Plan Detail 저장 전 필수(*) 필드 — AS-IS DataUtil.checkRequiredOfSpread(cs:3120) 등가.
+//   원천 = SCM_MST_SHEET_COLUMNS.COLUMN_LABEL_NAME 의 '*' 실측(2026-11-16, SHEET_NAME='Shipment Plan Detail').
+//   '*' 10컬럼 전부를 **신규(I)·수정(M) 공통**으로 검사한다 — AS-IS checkRequiredOfSpread 는 I/M 을 구분하지
+//   않으며(DataUtil.cs:33~36 D 만 제외), CHANGE_REASON_CODE/DETAIL 도 '*' 라 포함된다. 조회된 확정행은
+//   CHANGE_REASON_DETAIL 이 NULL 로 오므로(PKG_SSP0060 BODY L4288 `NULL AS CHANGE_REASON_DETAIL`), 어떤
+//   편집이든(수량·일자·운송수단·Building·Remarks) M 행 저장 시 이 검사가 Reason Detail 에서 먼저 차단한다
+//   — AS-IS Validation_Check 의 조건부 변경사유(MSG00285)는 checkRequiredOfSpread 에 가려 사실상 dead 다
+//   (사용자 실측 2026-11-16: 신규행·기존행 모두 AS-IS 가 Reason Detail 입력을 요구).
+//   상세 컬럼 INPUT_TP_CD 가 전건 'S'(03 갭#1)라 공용 useSaveWithValidation 의 필수판정이 사문화되므로
+//   (메모리 input-tp-cd-search-only-kills-save-validation), 화면이 이 집합을 직접 검사한다(자매 SSP0033 선례).
+//   사이트는 code(FROM_SITE)/description(FROM_SITE_DESCRIPTION) 분리 — 조회행은 code, 신규행 셀콤보는
+//   description 에 값이 실려(ShipmentPlan.tsx openCellPopup L984) 둘 중 하나라도 있으면 입력으로 본다.
+//   컬럼 순서는 SORT_ORDER 실측 순서 그대로 둔다 — findMissingRequired 가 첫 미입력 필드를 알리므로
+//   AS-IS checkRequiredOfSpread(좌→우 순회)와 같은 컬럼에서 걸려야 한다. '-'(미선택 코드)는 isBlank 통과라
+//   CHANGE_REASON_DETAIL(공백)에서 걸려 AS-IS "Reason Detail 입력" 과 동일하게 안내된다(실제 코드 선택 강제는
+//   cellEditEnded REASON_CODE_FIRST 가드가 담당 — Detail 입력 전 Code 선택 필수).
+export const DETAIL_REQUIRED_FIELDS: ReadonlyArray<{
+  cols: readonly string[];
+  label: string;
+}> = [
+  { cols: ['ITEM_ID'], label: 'Model' },
+  { cols: ['FROM_SITE_DESCRIPTION', 'FROM_SITE'], label: 'From Site' },
+  { cols: ['TO_SITE_DESCRIPTION', 'TO_SITE'], label: 'To Site' },
+  { cols: ['INCOTERMS'], label: 'Incoterms' },
+  { cols: ['FCST_TYPE'], label: 'FCST Type' },
+  { cols: ['SHIPMENT_CONFIRM_QTY'], label: 'Shipment Qty' },
+  { cols: ['SHIPMENT_DATE'], label: 'Shipment Date' },
+  { cols: ['TRANSPORT_MODE'], label: 'Trans Mode' },
+  { cols: ['CHANGE_REASON_CODE'], label: 'Change Reason' },
+  { cols: ['CHANGE_REASON_DETAIL'], label: 'Reason Detail' },
+];
+
 // ====================================================================================
 // TO-BE MSG 코드 — SCM_ADM_MSG_M 문구 역조회 실측(ora.py 2026-09-25, Hook #114).
 //   AS-IS 번호 답습 금지: AS-IS 22개 MSG 중 TO-BE 동일 의미 존재는 5건뿐, 나머지는 문구 기준 재매핑.
@@ -239,13 +271,11 @@ export const MSG = {
   STD_INFO_NOT_REGISTERED: 'MSG01321',
 } as const;
 
-// AS-IS AddHelpButton(BaseForm.cs L3501→FileDownLoad L3406) 는 사내 Help 웹서버(App.config
-//   addr=gscm-battery.lgensol.com / path=GSCM_HELP)에서 'Standard Information SSP Manual.pptx' 를
-//   HTTP GET 으로 내려받는다. TO-BE 도 같은 서버 URL 을 그대로 새 탭으로 열어 브라우저가 바로 내려받게
-//   한다 — 저장결과 'X' → MSG01321 '예' 시(사내망 접근 가능 확인, 2026-10-21). 정적 호스팅 불요.
-export const STANDARD_MANUAL_URL = encodeURI(
-  'http://gscm-battery.lgensol.com/GSCM_HELP/Standard Information SSP Manual.pptx'
-);
+// AS-IS AddHelpButton(BaseForm.cs L3501→FileDownLoad L3406) 는 사내 Help 웹서버(gscm-battery.lgensol.com
+//   /GSCM_HELP)의 'Standard Information SSP Manual.pptx' 를 내려받았다(구)SCM 화면 내용). 그 구 매뉴얼
+//   대신 신 매뉴얼을 FE 정적 호스팅(nscm-fe/public/manual/)에 동봉해 제공한다 — 저장결과 'X' → MSG01321
+//   '예' 시 새 탭으로 열어 브라우저가 내려받게 한다. 자매 SSP0021·SSP0022·SSP0023 상수와 같은 값.
+export const STANDARD_MANUAL_URL = encodeURI('/manual/Standard Information SSP Manual.pptx');
 
 // ====================================================================================
 // LBL — DB 실측 10건 + 신규 2건(05_register.sql 로 등록: LBL01144 Product Level1 / LBL01145 Tot PSI)

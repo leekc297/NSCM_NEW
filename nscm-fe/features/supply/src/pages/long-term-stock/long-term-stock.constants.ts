@@ -109,12 +109,15 @@ export const SAVE_KEY_COLUMNS: readonly string[] = [
 // 엑셀 고정밀 치환쌍(화면 컬럼 → *_XLS 컬럼, design 03 §3.1 W9). 화면=저정밀 표시(VIS=Y) /
 //   엑셀=고정밀(VIS=N). NSCM 공용 excelDownload 는 per-export 정밀도 스왑 훅이 없어 이번 회차엔
 //   미구현(04 확인필요 — SP 미배포로 런타임 검증 불가). 상수는 후속 배선 시 참조용으로 남긴다.
-export const EXCEL_XLS_PAIRS: readonly { screen: string; xls: string }[] = [
-  { screen: 'LONG_TERM_STOCK_QTY', xls: 'LONG_TERM_STOCK_QTY_XLS' },
-  { screen: 'LONG_TERM_STOCK_AMOUNT', xls: 'LONG_TERM_STOCK_AMOUNT_XLS' },
-  { screen: 'UNIT_PRICE', xls: 'UNIT_PRICE_XLS' },
-  { screen: 'AMOUNT', xls: 'AMOUNT_XLS' },
-  { screen: 'UNIT_PRICE_KRW', xls: 'UNIT_PRICE_KRW_XLS' },
+//   scale = 엑셀 표시 소수 자릿수(메타 DATA_SCALE_NUMBER 실측). 공용 excelDownload 가 쓰는 wijmo
+//   변환기는 컬럼 format 'nX'(X>=3)를 built-in 2자리로 캡핑하므로, export 동안 명시 Excel 패턴
+//   '#,##0.0...0'(scale 자리)으로 바꿔 고정밀 표시를 강제한다(SCP0084 전용 — 공용 코드 무수정).
+export const EXCEL_XLS_PAIRS: readonly { screen: string; xls: string; scale: number }[] = [
+  { screen: 'LONG_TERM_STOCK_QTY', xls: 'LONG_TERM_STOCK_QTY_XLS', scale: 5 },
+  { screen: 'LONG_TERM_STOCK_AMOUNT', xls: 'LONG_TERM_STOCK_AMOUNT_XLS', scale: 7 },
+  { screen: 'UNIT_PRICE', xls: 'UNIT_PRICE_XLS', scale: 5 },
+  { screen: 'AMOUNT', xls: 'AMOUNT_XLS', scale: 7 },
+  { screen: 'UNIT_PRICE_KRW', xls: 'UNIT_PRICE_KRW_XLS', scale: 5 },
 ];
 
 // 편집가능(MEMO) 셀 배경색 — hook #95 표준 편집가능 색 #fff8cd(연한 노랑, .wj-cell-editable 과 동일).

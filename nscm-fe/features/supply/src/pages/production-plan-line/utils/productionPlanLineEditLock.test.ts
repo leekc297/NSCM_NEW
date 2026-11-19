@@ -87,12 +87,34 @@ describe('productionPlanLineEditLock', () => {
     expect(editablePivotKindForBucket(BUCKET_TYPE.MONTHLY)).toBeNull();
   });
 
-  it('isPastPivot — 이번 주 월요일 cutoff', () => {
+  it('isPastPivot — D_ 일 단위 / M_ 그 달 1일 기준 cutoff', () => {
     expect(isPastPivot('D_20200101', '20260105')).toBe(true);
     expect(isPastPivot('D_20990101', '20260105')).toBe(false);
     expect(isPastPivot('M_202001', '20260105')).toBe(true);
     expect(isPastPivot('M_202999', '20260105')).toBe(false);
     expect(isPastPivot('LINE_ID', '20260105')).toBe(false);
+    // M_ 은 '그 달 1일 < cutoff' — plan_start 가 속한 달(일부만 과거)의 월합계도 회색(AS-IS 등가).
+    expect(isPastPivot('M_202611', '20261109')).toBe(true); // 11월 1일 < 11-09 → 과거(회색) = plan_start 달
+    expect(isPastPivot('M_202612', '20261109')).toBe(false); // 12월 1일 > 11-09 → 미래(흰색)
+  });
+
+  it('isPastPivot — W_ 는 그 주 월요일(ISO) 기준 (AS-IS 주 단위, 월 뭉뚱그림 아님)', () => {
+    // cutoff = 2026-11-09(월, ISO주46). 같은 달이라도 Plan Date 이전 주(W45)는 과거, 그 주(W46)부터 편집가능.
+    expect(isPastPivot('W_20261145', '20261109')).toBe(true); // 주45 월=2026-11-02 < 11-09 → 과거
+    expect(isPastPivot('W_20261146', '20261109')).toBe(false); // 주46 월=2026-11-09 = cutoff → 편집가능
+    expect(isPastPivot('W_20261147', '20261109')).toBe(false); // 주47(미래) → 편집가능
+    // 이전 달(10월)·같은 주차 경계: 주40 Oct 포션 월=2026-09-28 < 11-09 → 과거
+    expect(isPastPivot('W_20261040', '20261109')).toBe(true);
+    // 이후 달(12월): 주50 월=2026-12-07 > 11-09 → 편집가능
+    expect(isPastPivot('W_20261250', '20261109')).toBe(false);
+  });
+
+  it('isPastPivot — Weekly 주 칸은 월이 아니라 주 월요일 일 단위로 비교 (I-05)', () => {
+    // W_ = 'W_'+BASIS_YYYYMM+ISO_WEEK. 2026 W45 월요일=11-02, W46 월요일=11-09.
+    //   편집시작 2026-11-09(Plan Date): 같은 달이어도 주 월요일이 그 이전인 W45(11-02)는 잠금,
+    //   편집시작이 속한 W46(11-09)부터 편집 가능. 종전 월(yyyymm) 비교는 W45 도 열어 버그였다.
+    expect(isPastPivot('W_20261145', '20261109')).toBe(true); // W45 locked
+    expect(isPastPivot('W_20261146', '20261109')).toBe(false); // W46 editable
   });
 
   it('buildFixKey — 8필드 concat + origin/electrode NVL 공백→"-" (M4a)', () => {

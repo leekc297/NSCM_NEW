@@ -10,6 +10,7 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ShipmentPlanSemiForm } from './components/ShipmentPlanSemiForm';
@@ -504,6 +505,14 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
             buttonLabel: '',
           },
         ].filter((b): b is Exclude<typeof b, false> => b !== false)}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={checked => set({ chkSum: checked })}
+          />
+        }
       />
 
       <ShipmentPlanSemiGrid

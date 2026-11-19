@@ -104,6 +104,23 @@ export const PRICE_BATCH_MAX_WEEKS = 52;
 export const MODAL_PRICE_BATCH = 'DMF0083_PRICE_BATCH' as const;
 export type MODAL_PRICE_BATCH = typeof MODAL_PRICE_BATCH;
 
+// Exchange Rate 팝업의 조회 쿼리 키(tabId) — 메인 환율 조회(tabId = 탭)와 캐시를 나눈다(POP-03).
+export const MODAL_EXCHANGE_RATE = 'DMF0083_EXCHANGE_RATE' as const;
+export type MODAL_EXCHANGE_RATE = typeof MODAL_EXCHANGE_RATE;
+
+// Exchange Rate 팝업 고정 칸 — 원천 DMF0020 팝업과 같은 칸 · 폭(Div 120 · Currency 70 · Unit 50).
+//   컬럼 메타에 등록된 시트가 아니라(조회 전용 피벗 그리드) 화면 상수로 둔다. labelCode 가 없는 칸은 header 를 그대로 쓴다.
+export const EXCHANGE_RATE_COLUMNS: ReadonlyArray<{
+  key: string;
+  header: string;
+  labelCode?: string;
+  width: number;
+}> = [
+  { key: 'DIVISION_ID', header: 'Div', labelCode: 'LBL00001', width: 120 },
+  { key: 'CURRENCY', header: 'Currency', width: 70 },
+  { key: 'UNIT_CURRENCY', header: 'Unit', labelCode: 'LBL00045', width: 50 },
+];
+
 // 컬럼 개인화(SCM_MST_TITLESET_USER) 조회 · 저장 키 — 조회 · 저장 · 진입 복원이 모두 같은 값을 써야 한다.
 export const TITLESET_COLUMN_TYPE = 'C';
 

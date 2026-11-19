@@ -37,6 +37,11 @@ interface State {
   // 선택 plan stage 편집가능 여부 — Form 이 Plan-type 콤보(선택값+보이는 옵션)로 판정해 올린다(요청1, 2026-11-04).
   //   true 면 그리드 편집 허용, false(이전 단계·FN·TE)면 전건 읽기전용. 그리드 editContext.isStageEditable 로 소비.
   stageEditable: boolean;
+  // 선택 Plan Date 의 계획구간(SCP구간) — Form 이 planDate 콤보(DATE_WEEKLY1_SCP_ALL) 반환행에서 올린다.
+  //   horizonEndYyyymmdd=HORIZON_END_DATE(계획구간 끝, 8자리), planWeeks=PLAN_WEEKS(주수). 페이지 조회검증
+  //   (AS-IS CheckPlanPeriodRange — Period 끝 > 계획구간 끝 차단·보정)이 소비한다. 미결정 시 ''·0(검사 skip).
+  horizonEndYyyymmdd: string;
+  planWeeks: number;
 }
 
 interface Action {
@@ -45,6 +50,7 @@ interface Action {
   setDivision: (divisionId: string) => void;
   setLatestVersion: (p: { latestPlanStart?: string; latestPlanSeq?: string }) => void;
   setStageEditable: (v: boolean) => void;
+  setPlanHorizon: (p: { horizonEndYyyymmdd: string; planWeeks: number }) => void;
   setFilter: () => void;
   clearFilters: () => void;
   // Load 팝업 — 부모 조회조건을 파라미터로 주입(design 01 P / BtnLoad_Click cs:944).
@@ -105,6 +111,8 @@ const initState: State = {
   latestPlanStart: '',
   latestPlanSeq: '',
   stageEditable: false,
+  horizonEndYyyymmdd: '',
+  planWeeks: 0,
 };
 
 // 다중 선택 배열 → SP 파라미터. 빈 배열(전체선택)은 '' — Oracle 바인드에서 NULL 취급되어 SP 옵션필터
@@ -131,6 +139,14 @@ const ARRAY_COND_KEYS = new Set<string>([
   'planSeqs',
 ]);
 const BOOL_COND_KEYS = new Set<string>(['chkAll', 'chkLineAssign', 'chkSum']);
+// Condition(F6) 저장/복원 제외 키 — Plan Date/Type/Seq 는 조회조건 저장 대상이 아니다. AS-IS 는 재진입 시
+//   목록 첫 항목(최신 계획)과 그 계획 기준 Period 로 표시한다(저장·복원하지 않음). 저장(페이지 searchParam)·
+//   복원 양쪽에서 제외한다(I-01, SCP0013 테스트 2026-11-13). Div·OpGroup·Bucket·PlantSite 등은 지금처럼 유지.
+export const SEARCH_SAVE_EXCLUDE_KEYS = new Set<string>([
+  'planStartYyyymmdds',
+  'planTypes',
+  'planSeqs',
+]);
 
 export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Action>(
   (set, get) => ({
@@ -144,6 +160,12 @@ export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Ac
     setStageEditable: v =>
       set(state => {
         state.stageEditable = v;
+      }),
+    // Form 이 선택 Plan Date 행(DATE_WEEKLY1_SCP_ALL)의 계획구간을 올린다 — 조회검증(CheckPlanPeriodRange) 입력.
+    setPlanHorizon: p =>
+      set(state => {
+        state.horizonEndYyyymmdd = p.horizonEndYyyymmdd;
+        state.planWeeks = p.planWeeks;
       }),
     setLatestVersion: p =>
       set(state => {
@@ -309,6 +331,7 @@ export const useProductionPlanLineStore = createPersistedStoreWithTab<State & Ac
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearch)) continue; // 현재 조회조건에 없는 구버전 키 무시
+          if (SEARCH_SAVE_EXCLUDE_KEYS.has(paramNm)) continue; // Plan Date/Type/Seq 복원 제외(I-01)
           const val = paramCtn ?? '';
           if (ARRAY_COND_KEYS.has(paramNm))
             patch[paramNm] = val ? val.split(',').filter(Boolean) : [];

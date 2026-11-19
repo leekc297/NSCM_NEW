@@ -1,0 +1,28 @@
+// OLAP 차트 팬 — 그리드 아래 분할(ResultArea.Group split). 차트는 남은 높이를 전부 채운다.
+.chartHost {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+}
+
+.chart {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.typeSelect {
+  height: 26px;
+  padding: 0 8px;
+  font-size: 12px;
+  border: 1px solid rgba(29, 31, 32, 0.22);
+  border-radius: 0;
+  background: #fff;
+}
+
+.empty {
+  padding: 16px;
+  color: #888;
+  font-size: 12px;
+}

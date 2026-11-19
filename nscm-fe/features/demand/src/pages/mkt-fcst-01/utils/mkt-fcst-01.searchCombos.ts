@@ -1,4 +1,7 @@
-import type { ComboParam } from '@foundation/models';
+import type { ComboParam, ComboResponse } from '@foundation/models';
+
+import { BUCKET_TYPE, DIVISION } from '../mkt-fcst-01.constants';
+import type { SearchCondition } from '../mkt-fcst-01.types';
 
 /**
  * 조회조건 콤보 원천 (Doc/Combo/DMF0003_콤보구성.md §1).
@@ -53,6 +56,48 @@ export const SEARCH_COMBO = {
   salesSite: 'SiteByEndCustomer_DM',
   salesSite40: 'SiteByEndCustomer40_DM',
 } as const;
+
+/**
+ * 이 화면에서 조회할 수 있는 사업부 - 82(ESS)만 조회한다(2026-11-17 요청).
+ *
+ * FilterMyDivision 은 여러 화면이 함께 쓰는 공용 콤보라 SQL 은 그대로 두고 여기서 거른다.
+ * 사용자 권한으로 40·81 이 있어도 이 화면 목록에는 나오지 않고, 다른 화면은 영향이 없다.
+ * 권한 데이터(그룹별 사업부·메뉴 권한)로 맞추지 않은 이유: 이 메뉴 권한이 있는 그룹 대부분이
+ * 전 사업부를 갖고 있고 다른 화면과 공유한다(2026-11-17 DB 실측).
+ */
+export const SEARCHABLE_DIVISIONS: readonly string[] = [DIVISION.ESS];
+
+/** Division 콤보 응답에서 이 화면이 조회할 수 있는 사업부만 남긴다. */
+export const filterSearchableDivisions = (rows: ComboResponse[] | undefined): ComboResponse[] =>
+  (rows ?? []).filter(row => SEARCHABLE_DIVISIONS.includes(String(row.CODE ?? '').trim()));
+
+/**
+ * Division 을 바꿀 때 함께 되돌리는 조회조건 - 종속 조회조건 전면 reset
+ * (AS-IS cboDivision_SelectedIndexChanged :3019~). 콤보 onChange 와 복원값 교정(MktFcst01.tsx)이 같이 쓴다.
+ */
+export const buildDivisionChangePatch = (division: string): Partial<SearchCondition> => ({
+  divisionId: division,
+  deptIds: [],
+  endCustomers: [],
+  scmSiteIds: [],
+  bizTypes: [],
+  plantSiteIds: [],
+  senderCodes: [],
+  projectCodes: [],
+  itemIds: [],
+  nickName: '',
+  owners: [],
+  itemTypes: [],
+  // Cell Qty 는 Div 40 전용 (AS-IS L2107/2140: 비40 = Enabled=false + Checked=false).
+  ...(division !== DIVISION.MOBILITY ? { cellQtyYn: false } : {}),
+  // Invalid(MKT FCST 미등록 제외)는 Div82 전용 - 82 진입 시 기본 checked (AS-IS L469~477).
+  invalidYn: division === DIVISION.ESS,
+  // G4 - Bucket 기본값: 82(ESS)=Daily / 그 외=Weekly (v1.7 3장, AS-IS OnShown).
+  bucketType: BUCKET_TYPE.WEEKLY,
+  // Sum / Qty >= 0 은 division 변경 시 초기화하지 않는다
+  // (AS-IS cboDivision_SelectedIndexChanged :3019~3164 도 chkSum/chkQty 를 건드리지 않는다).
+  asYn: false,
+});
 
 /** 81 계열·82 판정 - AS-IS :3170 · :3188 Substring(0,2)=="81" || =="82" 와 같다. */
 const is81or82 = (divisionId: string): boolean => {

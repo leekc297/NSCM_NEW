@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 102,
+  "at": "2026-11-19T00:40:47.820Z",
+  "user": "minyonglee1",
+  "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/dayRange/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planCycle\":\"DAILY\",\"fromDate\":\"\",\"offsetMonth\":\"12\",\"timeZone\":\"AM073\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 115,
+  "at": "2026-11-19T00:40:52.072Z",
+  "user": "minyonglee1",
+  "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261118\",\"endYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 142,
+  "at": "2026-11-19T00:40:52.079Z",
+  "user": "minyonglee1",
+  "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
+ },
+ {
+  "menu": "SCP0096",
+  "sheet": "Shipment Working Day OSP",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0096/Shipment%20Working%20Day%20OSP/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"plantSiteId\":\"ALL\",\"fromYyyymmdd\":\"20261118\",\"toYyyymmdd\":\"20271114\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 224,
+  "at": "2026-11-19T00:40:52.186Z",
+  "user": "minyonglee1",
+  "test": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)"
+ }
+]

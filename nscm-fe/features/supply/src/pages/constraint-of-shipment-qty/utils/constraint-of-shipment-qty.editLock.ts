@@ -8,6 +8,7 @@
 
 import { CRUD_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
+import type { EditTracker } from '@foundation/utils';
 
 import {
   ALWAYS_LOCKED_COLUMNS,
@@ -65,8 +66,9 @@ export const insertDefaults = (division: string): Row => ({
   STAGE: '',
   FROM_STE_ID: '',
   TO_STE_ID: '',
-  FROM_YYYYMMDD: '',
-  TO_YYYYMMDD: '',
+  // 날짜 칸은 null — '' 면 날짜 편집기가 값을 받지 못해(Date expected) 첫 F2 입력이 오늘 날짜가 된다.
+  FROM_YYYYMMDD: null,
+  TO_YYYYMMDD: null,
   SIPM_MIN_QYT: '',
   SIPM_MAX_QTY: '',
   SAT_SIPM_MIN_QTY: '',
@@ -78,16 +80,19 @@ export const insertDefaults = (division: string): Row => ({
   VAL_TP_CD: 'A',
 });
 
-// 파생: ITEM 팝업 선택 -> ITEM_ID 동기(design 03 §3 #13 SetText).
-export const applyItemSelect = (row: Row, itemId: string): void => {
+// 파생: ITEM 팝업 선택 -> ITEM_ID 동기(design 03 §3 #13 SetText). 그리드 칸 편집을 거치지 않으므로
+//   변경 추적에 직접 알린다 — 빠뜨리면 기존 행에 변경 표시가 없어 저장 요청이 만들어지지 않는다(갭분석 F-01).
+export const applyItemSelect = (
+  row: Row,
+  itemId: string,
+  tracker: EditTracker | undefined
+): void => {
+  tracker?.storeChange(row as WijmoRowItem, 'ITEM_ID', row.ITEM_ID as WijmoPrimitive, itemId);
   row.ITEM_ID = itemId;
 };
 
-// VAL_TP_CD "A"/"B" 자동 태깅(design 03 §3 #14~17) — 일반 Min/Max 쌍(SIPM_*) 편집 시 "A",
-//   SAT/SUN 쌍(SAT_SIPM_*/SUN_SIPM_*) 편집 시 "B". AS-IS 원본 부재로 정확한 분기 조건은 확인
-//   필요(design 03 §6#1) — 컬럼명 기준 최선 추정이며, EditChange/KeyDown 두 경로가 중복 구현된
-//   것으로 보이는 로직을 이 단일 유틸로 통합한다(plan.md §4 통합 권고 반영).
-const GENERAL_QTY_COLUMNS = ['SIPM_MIN_QYT', 'SIPM_MAX_QTY'] as const;
+// VAL_TP_CD "A"/"B" 자동 태깅 — AS-IS SpdMain_EditChange·SpdMain_KeyDown(.cs:1052~1098): SAT/SUN 네 칸을
+//   고칠 때 네 칸이 모두 비면 "A", 하나라도 값이 있으면 "B". 평일 Min/Max 를 고쳐도 바꾸지 않는다(갭분석 G-19).
 const SAT_SUN_QTY_COLUMNS = [
   'SAT_SIPM_MIN_QTY',
   'SAT_SIPM_MAX_QTY',
@@ -95,13 +100,8 @@ const SAT_SUN_QTY_COLUMNS = [
   'SUN_SIPM_MAX_QTY',
 ] as const;
 
-export const deriveValTpCd = (binding: string): 'A' | 'B' | undefined => {
-  if ((GENERAL_QTY_COLUMNS as readonly string[]).includes(binding)) return 'A';
-  if ((SAT_SUN_QTY_COLUMNS as readonly string[]).includes(binding)) return 'B';
-  return undefined;
-};
-
 export const applyValTpCdDerivation = (row: Row, binding: string): void => {
-  const derived = deriveValTpCd(binding);
-  if (derived) row.VAL_TP_CD = derived;
+  if (!(SAT_SUN_QTY_COLUMNS as readonly string[]).includes(binding)) return;
+  const empty = SAT_SUN_QTY_COLUMNS.every(key => s(row[key]).trim() === '');
+  row.VAL_TP_CD = empty ? 'A' : 'B';
 };

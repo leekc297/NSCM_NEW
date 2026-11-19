@@ -55,18 +55,18 @@ const grouped = (sCls: string) => ({ sClsLblNm: sCls });
 //   visible/display: true 를 주입한다. 이게 빠지면 No 코너만 그려지고 데이터 컬럼이 전부 사라진다.
 const CONFIRM_DETAIL_COLUMNS: RawFlexGridColumnConfig[] = (
   [
-  { colNm: 'CONFIRM_ID', colLblNm: 'Confirm/Plan ID', colWth: 110, horzAlgnCd: 'L' },
+  { colNm: 'CONFIRM_ID', colLblNm: 'Confirm/Plan ID', colWth: 130, horzAlgnCd: 'L' },
   { colNm: 'ERP_SO_NO', colLblNm: 'SO No', colWth: 110, horzAlgnCd: 'C' },
   { colNm: 'PROJECT_NAME', colLblNm: 'Project Name', colWth: 130, horzAlgnCd: 'L' },
   { colNm: 'FCST_TYPE', colLblNm: 'FCST Type', colWth: 90, horzAlgnCd: 'L' },
-  { colNm: 'ITEM_ID', colLblNm: 'Model', colWth: 110, horzAlgnCd: 'L' },
+  { colNm: 'ITEM_ID', colLblNm: 'Model', colWth: 130, horzAlgnCd: 'L' },
   { colNm: 'FROM_SITE', colLblNm: 'From Site', colWth: 80, horzAlgnCd: 'L' },
-  { colNm: 'TO_SITE', colLblNm: 'To Site', colWth: 100, horzAlgnCd: 'L' },
+  { colNm: 'TO_SITE', colLblNm: 'To Site', colWth: 130, horzAlgnCd: 'L' },
   { colNm: 'INCOTERMS', colLblNm: 'Incoterms', colWth: 70, horzAlgnCd: 'C' },
   // Confirmed(확정) 6컬럼
   { colNm: 'LT_DAY', colLblNm: 'L/T(Day)', colWth: 60, horzAlgnCd: 'C', ...grouped('Confirmed') },
-  { colNm: 'ETD', colLblNm: 'ETD', colWth: 80, horzAlgnCd: 'C', ...grouped('Confirmed') },
-  { colNm: 'ETA', colLblNm: 'ETA', colWth: 80, horzAlgnCd: 'C', ...grouped('Confirmed') },
+  { colNm: 'ETD', colLblNm: 'ETD', colWth: 100, horzAlgnCd: 'C', ...grouped('Confirmed') },
+  { colNm: 'ETA', colLblNm: 'ETA', colWth: 100, horzAlgnCd: 'C', ...grouped('Confirmed') },
   { colNm: 'TRANSPORT_MODE', colLblNm: 'Trans Mode', colWth: 70, horzAlgnCd: 'C', ...grouped('Confirmed') },
   { colNm: 'SHIPMENT_DATE', colLblNm: 'Shipment Date', colWth: 90, horzAlgnCd: 'C', ...grouped('Confirmed') },
   { colNm: 'SHIPMENT_CONFIRM_QTY', colLblNm: 'Qty', colWth: 70, horzAlgnCd: 'R', ...grouped('Confirmed') },
@@ -92,6 +92,11 @@ const HeaderField = ({ label, value }: { label: string; value: string }) => (
       sx={{
         flex: 1,
         minWidth: 0,
+        // 값이 비어도 높이가 줄지 않게 최소높이 고정 + 세로 중앙정렬(값 유무 무관 일정 높이).
+        //   Dept Name 은 세션에 부서가 없어 공란이 잦아 유독 쪼그라들었다(값 content-height 의존).
+        minHeight: 24,
+        display: 'flex',
+        alignItems: 'center',
         px: 1,
         py: 0.5,
         fontSize: 12,

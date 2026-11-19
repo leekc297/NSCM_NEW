@@ -1,34 +1,80 @@
 [
  {
-  "row_id": "V-9ce92210",
+  "row_id": "EG-807044ce",
+  "rule_id": "J1",
+  "target": "SCP0096 EG365 자동 선택 SCP/40/SCP Planner",
+  "same": []
+ },
+ {
+  "row_id": "V-f95f27ac",
+  "rule_id": "J4",
+  "target": "Home / Auth Request 메뉴",
+  "same": []
+ },
+ {
+  "row_id": "EG-ad36724d",
+  "rule_id": "J1",
+  "target": "SCP0096 EG365 자동 선택 SCP/40/SCM Viewer",
+  "same": []
+ },
+ {
+  "row_id": "EG-c63a0d42",
+  "rule_id": "J1",
+  "target": "SCP0096 EG365 자동 선택 SCP/82/SCM Viewer",
+  "same": []
+ },
+ {
+  "row_id": "EG-a24f3b24",
+  "rule_id": "J4",
+  "target": "SCP0096 EG380 무권한 첫 화면 GUEST/-/GUEST",
+  "same": []
+ },
+ {
+  "row_id": "V-0d52121b",
+  "rule_id": "G4",
+  "target": "SCP0096 스냅샷 조회조건 Div 40",
+  "same": []
+ },
+ {
+  "row_id": "V-4a2afe1f",
   "rule_id": "F5",
   "target": "SCP0096 화면",
-  "same": [
-   "T-a8c0dab9"
-  ]
- },
- {
-  "row_id": "V-d255e233",
-  "rule_id": "G3",
-  "target": "SCP0096 화면",
   "same": []
  },
  {
-  "row_id": "V-6ff7c5a4",
-  "rule_id": "F10",
-  "target": "PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+  "row_id": "V-9e29a0e2",
+  "rule_id": "D3",
+  "target": "spreadInfo.LockColumn",
   "same": []
  },
  {
-  "row_id": "T-d83840e6",
-  "rule_id": "C4",
-  "target": "cboDivision / Division / Div",
+  "row_id": "V-eb856b69",
+  "rule_id": "A3",
+  "target": "SCP0096 체크박스 Sum",
   "same": []
  },
  {
-  "row_id": "T-a8c0dab9",
-  "rule_id": "F5",
-  "target": "",
-  "folded_into": "V-9ce92210"
+  "row_id": "V-d8f314e2",
+  "rule_id": "H2",
+  "target": "SCP0096 시나리오 [자동] 당주 구분선(rail) = 이번 주(Weekly)",
+  "same": []
+ },
+ {
+  "row_id": "EG-cac7a1b1",
+  "rule_id": "N1",
+  "target": "SCP0096 기준정보 키 존재 SCM_MST_PLAN_DETAIL",
+  "same": []
+ },
+ {
+  "row_id": "EG-85b47891",
+  "rule_id": "N1",
+  "target": "SCP0096 기준정보 키 존재 SCM_MST_PROJECT",
+  "same": []
+ },
+ {
+  "row_id": "EG-a184f82b",
+  "rule_id": "N1",
+  "target": "SCP0096 기준정보 키 존재 SCM_MST_SITE_ITEM",
+  "same": []
  }
 ]

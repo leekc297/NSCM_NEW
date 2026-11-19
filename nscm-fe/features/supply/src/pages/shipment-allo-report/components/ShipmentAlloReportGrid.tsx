@@ -44,10 +44,13 @@ export const ShipmentAlloReportGrid = ({
     const g = gridRef.current;
     if (!g) return;
 
-    // 색상(AS-IS 등가):
-    //   - 음수 빨강(SetReNumerCellType NegativeRed, cs:201~255): Main·Gap 공통(InitSpread siMain+siGap, cs:382~383).
-    //   - 배경색(팀공백 비고 회색 cs:515 / 요약행 노랑 cs:1186 / 편집가능 비고 노랑): Main 전용
+    // 색상:
+    //   - 음수 빨강(AS-IS SetReNumerCellType NegativeRed, cs:201~255): Main·Gap 공통(InitSpread siMain+siGap, cs:382~383).
+    //   - 팀공백 비고 회색(AS-IS Color.LightGray cs:515) / 요약행 노랑(AS-IS Color.LightYellow cs:1186): Main 전용
     //     (AS-IS svMain 만, siGap 은 RefreshGridGAP·회색 대상 아님). Gap 은 배경색 없음.
+    //   - 편집가능 비고 노랑(#fff8cd = foundation $wj-editable-cell 표준 편집셀색): AS-IS 에는 없고
+    //     TO-BE 편집셀 표시 관례. 다른 화면은 공통 wj-cell-editable 클래스가 칠하지만 이 화면은
+    //     자체 핸들러가 다른 배경을 인라인으로 칠하므로 같은 분기에서 표준값을 인라인으로 맞춘다.
     const formatHandler = (_sender: FlexGridType, ev: FormatItemEventArgs) => {
       if (ev.panel.cellType !== CellType.Cell) return;
       const row = ev.panel.rows[ev.row]?.dataItem as ShipmentAlloRow | undefined;
@@ -62,7 +65,7 @@ export const ShipmentAlloReportGrid = ({
       } else if (row.IS_SUMMARY) {
         ev.cell.style.backgroundColor = 'lightyellow';
       } else if (isNote) {
-        ev.cell.style.backgroundColor = '#fffbcc';
+        ev.cell.style.backgroundColor = '#fff8cd';
       } else {
         ev.cell.style.backgroundColor = '';
       }

@@ -13,6 +13,7 @@ import { useMessageStore } from '@shared/stores';
 import {
   MENU_ID,
   MSG,
+  READ_ONLY_PROGRESS_STATUS,
   SHEETS,
   SHEET_BY_DIVISION_TYPE,
 } from './capa-speed-plan.constants';
@@ -52,12 +53,34 @@ export const CapaSpeedPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   /**
-   * 편집 가능 여부는 mount 1회 권한(`MNU_BTN_CD='EDIT'`)만으로 판정한다 — AS-IS Edit 모드토글
-   * (SwitchLock/IsLock)은 이식하지 않는다(convert-core §2.4). 권한이 있으면 조회 직후 바로 편집
-   * 가능하고, 없으면 grid 의 `isEditMode` prop 이 false 라 셀 편집게이트(`isCellEditable`)가 전 셀을 잠근다.
+   * 편집 가능 여부 = EDIT 권한(`MNU_BTN_CD='EDIT'`) AND **현재(Current) 버전**.
+   *
+   * 권한 축: mount 1회 권한만으로 판정한다 — AS-IS Edit 모드토글(SwitchLock/IsLock)은 이식하지
+   * 않는다(convert-core §2.4). 권한이 없으면 grid `isEditMode=false` 로 `isCellEditable` 가 전 셀을 잠근다.
+   *
+   * 버전 축: 그 버전의 현재 진행상태(`PROG_STAT`)가 과거/컷오프(PRE/1차/2차)면 두 시트 모두 read-only
+   * 다(AS-IS L-11, cs:1789~1794 — Current '0' 버전만 편집 가능). ASSEMBLY 는 데이터 `EDITABLE_YN`
+   * 으로도 잠기지만 ELTR 은 그 컬럼이 없어(editLock §c) 이 게이트가 없으면 마감 버전도 편집·저장돼
+   * 현재 전극 속도계획 값이 덮어써진다(SCP0105 테스트 Item3, 2026-11-12). 판정값은 Status 콤보
+   * 선택값(`sc.progressStatus`)이 아니라 버전의 실제 진행상태(`currVersionProgressStatus`)다(L-11).
    */
   const canEdit = hasButton('EDIT');
-  const editMode = canEdit;
+  const currVersionProgressStatus = useCapaSpeedPlanStore(
+    state => state.currVersionProgressStatus
+  );
+  const editMode = canEdit && !READ_ONLY_PROGRESS_STATUS.includes(currVersionProgressStatus);
+
+  /**
+   * 편집권한은 있으나 **버전 진행상태가 읽기전용**(PRE/1차/2차 컷오프)인 상태. AS-IS 는 Edit 클릭
+   * 시점에 `MSG00109`("읽기전용 상태입니다.")를 띄우고 차단한다(L-11/V-07). TO-BE 는 상시편집이라
+   * 위 `editMode=false` 로 셀이 이미 잠기지만, 그 차단이 **조용해서** AS-IS 안내가 빠진다 —
+   * 편집 가능했을 셀을 건드리면 그리드가 이 콜백으로 MSG00109 를 띄운다(07_validation-audit A2).
+   * 권한 자체가 없을 때(canEdit=false)는 이 경로가 아니라 저장단계 권한 가드가 담당한다.
+   */
+  const isReadOnlyVersion =
+    canEdit && READ_ONLY_PROGRESS_STATUS.includes(currVersionProgressStatus);
+  const notifyReadOnlyVersion = () =>
+    void setAlert({ type: 'alert', content: t(MSG.READ_ONLY, '_Read-only mode.') });
 
   const gridRef = useRef<FlexGrid | undefined>(undefined);
   const gridFilterRef = useRef<FlexGridFilter | undefined>(undefined);
@@ -288,6 +311,8 @@ export const CapaSpeedPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         periodColumns={periodColumns}
         electrodeTypeRows={electrodeTypeRows}
         isEditMode={editMode}
+        isReadOnlyVersion={isReadOnlyVersion}
+        onReadOnlyEditBlocked={notifyReadOnlyVersion}
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}

@@ -31,6 +31,84 @@ from a1_live import norm_all  # '' / 'ALL' 판독 정규식
 import prereq  # producer_lock
 from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
 RULES = P('tools', 'Harness', 'rules')
+import glob as _glob  # 2026-11-18 미검증 해소: 프레임워크 경유 SP·SP 선언 기본값
+
+
+from asis_sp_src import sp_declared_defaults  # noqa: E402  2026-11-18 공용 모듈로 이동(golden.py 와 같이 씀)
+
+
+_FW = None
+
+
+def _fw_texts():
+    global _FW
+    if _FW is None:
+        _FW = []
+        try:
+            src = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or P('GSCM')
+        except (OSError, ValueError):
+            src = P('GSCM')
+        for f in _glob.glob(os.path.join(src, '01.Framework', '**', '*.cs'), recursive=True):
+            try:
+                _FW.append((os.path.relpath(f, ROOT), open(f, encoding='utf-8', errors='replace').read()))
+            except OSError:
+                pass
+    return _FW
+
+
+def asis_result_unused(mid, sp):
+    """2026-11-18 미검증 해소(SCP0096 DM0003_GET_BUCKET_TYPE_CODE): AS-IS 화면이 SP 를 부르는 메서드 결과를 필드에 대입만 하고 읽지 않으면
+    그 SP 는 화면 동작에 쓰이지 않는다 → TO-BE 대응이 없어도 비교 대상 아님. 근거 문자열('파일:행 …') 또는 ''"""
+    try:
+        src = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or P('GSCM')
+    except (OSError, ValueError):
+        src = P('GSCM')
+    ev = []
+    for r in rd(P('Doc', 'asisfacts', 'screens', mid, 'endpoints.csv')):
+        if not re.match(r'^SP\s+(?:\w+\.)?' + re.escape(sp) + r'\b', r.get('sp_or_sql', '') or '') or not is_main(r, P('Doc', 'asisfacts', 'screens', mid)):
+            continue
+        member = (r.get('member') or '').strip()
+        f = os.path.join(src, r.get('file') or '')
+        if not re.fullmatch(r'[A-Za-z_]\w*', member) or not os.path.exists(f):
+            return ''
+        lines = open(f, encoding='utf-8', errors='replace').read().splitlines()
+        code = [(i + 1, re.sub(r'//.*', '', t)) for i, t in enumerate(lines)]
+        calls = [(n, t) for n, t in code if re.search(r'\b' + member + r'\s*\(', t) and not re.search(r'\b(private|public|protected|internal)\b[^=]*\b' + member + r'\s*\(', t)]
+        if not calls:
+            return ''
+        for n, t in calls:
+            m = re.match(r'^\s*(?:this\.)?(\w+)\s*=\s*' + member + r'\s*\(\s*\)\s*;\s*$', t)
+            if not m:
+                return ''  # 대입 밖 사용(인자·반환·식 안) = 쓰임
+            var = m.group(1)
+            reads = [k for k, u in code if re.search(r'\b' + var + r'\b', u) and not re.match(r'^\s*(?:this\.)?' + var + r'\s*=', u)
+                     and not re.search(r'\b(private|public|protected|internal)?\s*[\w<>\[\]]+\s+' + var + r'\s*(=\s*null)?\s*;', u)]
+            if reads:
+                return ''
+            ev.append(f"{os.path.basename(f)}:{n} {var} = {member}() · {var} 를 읽는 곳 없음")
+    return ' · '.join(ev)
+
+
+def framework_sps(mid, sps):
+    try:
+        calls = json.load(open(P('Doc', 'verify', mid, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or []
+    except (OSError, ValueError):
+        return []
+    have = {s.upper() for s in sps}; out = []
+    for proc in sorted({str(c.get('proc') or '') for c in calls if c.get('proc')}):
+        name = re.sub(r'^P_', '', proc.split('.')[-1], flags=re.I)
+        if not name or name.upper() in have:
+            continue
+        if not _glob.glob(P('Doc', 'asisfacts', 'db', 'modules', f'*.{name}.sql')):
+            continue
+        rx = re.compile(r'FoxDataRequest\(\s*"(?:\w+\.)?' + re.escape(name) + r'"', re.I)
+        for rel, t in _fw_texts():
+            m = rx.search(t)
+            if m:
+                out.append((name, f"{rel}:{t[:m.start()].count(chr(10)) + 1}")); have.add(name.upper()); break
+    return out
+
+
 SP_PAIR = os.path.join(RULES, 'sp_pair.csv'); PARAM_MAP = os.path.join(RULES, 'param_map.csv')
 PAIR_COLS = ['menu_id', 'asis_sp', 'tobe_proc', 'kind', 'rs_map', 'source', 'note']
 PM_COLS = ['tobe_proc', 'tobe_param', 'fe_key', 'asis_sp', 'asis_param', 'all_semantics', 'list_format', 'default', 'status', 'note']
@@ -235,6 +313,12 @@ def build(mids):
                 sp = m.group(1).split('.')[-1]
                 if sp not in sps:
                     sps.append(sp)
+        # 2026-11-18 미검증 해소(SCP0096 차등 32행 '짝 없음'): AS-IS 화면이 공통 프레임워크(DateUtil.GetDayRange·SpreadInfo 등)를 거쳐 부르는 SP 는
+        #   화면 호출 추출(endpoints.csv)에 없다 → TO-BE 가 이 화면에서 실제 호출한 PROC(sqllog_calls.json) 중 이름이 같은 AS-IS 모듈이 있고
+        #   AS-IS 프레임워크 원문에 그 SP 를 부르는 FoxDataRequest 가 있을 때만 대상에 넣는다(근거 파일:행을 note 에 남김)
+        fw_ev = {}
+        for sp_fw, ev in framework_sps(mid, sps):
+            sps.append(sp_fw); fw_ev[sp_fw.upper()] = ev
         # PKG 명세에 기록된 AS-IS SP 중 화면 호출 추출(endpoints.csv)에 안 잡힌 것도 대상에 넣는다(그 화면 PKG 의 PROC 에 한함)
         mine = {p.upper() for p in tobe_by_menu.get(mid, [])}
         for spu, lst in sorted(rec_by_sp.items()):
@@ -255,8 +339,14 @@ def build(mids):
                 tobe, how, rwhy = recs[0][0], 'pkgsrc', recs[0][2]
             else:
                 tobe, how = match_tobe(sp, mid); rwhy = (f"PKG 명세 기록이 PROC {len(recs)}개를 가리킴({[x[0] for x in recs]}) — 이름 일치로 대체" if recs else '')
+            unused = '' if tobe else asis_result_unused(mid, sp)
+            if unused:  # 2026-11-18: AS-IS 결과 미사용 SP = TO-BE 대응 없음(근거 원문 위치) — judge A6·A7 이 '비교 대상 아님'으로 판정
+                pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': '', 'kind': kind, 'rs_map': '', 'source': 'unused',
+                              'note': f"TO-BE 대응 없음 — AS-IS 결과 미사용({unused}) · kind 근거: {why}"})
+                continue
             pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': tobe, 'kind': kind, 'rs_map': 'ordinal' if tobe else '', 'source': how,
-                          'note': ('' if tobe else 'TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual)') + (f" · 짝 근거: {rwhy}" if rwhy else '') + f" · kind 근거: {why}"})
+                          'note': ('' if tobe else 'TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual)') + (f" · 짝 근거: {rwhy}" if rwhy else '') + f" · kind 근거: {why}"
+                                  + (f" · AS-IS 프레임워크 경유 호출 {fw_ev[sp.upper()]}(화면 소스 직접 호출 없음)" if sp.upper() in fw_ev else '')})
             if not tobe:
                 continue
             aps = sorted(asis_params.get(sp.upper(), []))
@@ -300,11 +390,16 @@ def build(mids):
                 else:
                     pmap.append({'tobe_proc': tobe, 'tobe_param': tparam, 'fe_key': fk, 'asis_sp': sp, 'asis_param': '', 'all_semantics': '', 'list_format': list_format(sp, '', tdt),
                                  'default': gparams.get(fk, ''), 'status': 'TOBE_ONLY', 'note': f"AS-IS 에 개념 '{c}' 인자 없음(TO-BE 전용 — FE 값 그대로 전달)"})
+            sp_def = sp_declared_defaults(sp)
             for _, an, adt in aps:
                 if an in used_a:
                     continue
                 sem, note = all_semantics(sp, an)
                 dflt = gparams.get(an.lstrip('@')) or DEF.get(re.sub(r'^@?p_', '', an.lower()), '')
+                # 2026-11-18 미검증 해소(SCP0096 등 @debug_mode 'default 없음' → 차등 SKIP 33): 값이 없으면 AS-IS SP 선언 기본값(원문 파일:행)
+                if not dflt and an.lstrip('@').lower() in sp_def and sp_def[an.lstrip('@').lower()][0] is not None:
+                    dflt, dloc = sp_def[an.lstrip('@').lower()]
+                    note = (note + ' · ' if note else '') + f"default = AS-IS SP 선언 기본값 {dloc}"
                 c = concept(re.sub(r'^@?p_', '', an))
                 multi = [x for x in tc.get(c, []) if x[0] not in exact_of]
                 pmap.append({'tobe_proc': tobe, 'tobe_param': '', 'fe_key': '', 'asis_sp': sp, 'asis_param': an, 'all_semantics': sem, 'list_format': list_format(sp, an, ''),

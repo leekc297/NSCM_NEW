@@ -156,16 +156,39 @@ export const ApprovalUserModal = ({ open, modalClose, setSelectedValue }: Props)
   );
 
   /**
-   * 열 때마다 초기 상태로 되돌린다 — AS-IS `Form_Load`(cs:88~98) 등가.
-   *   AS-IS 는 `popup.ShowDialog()` 마다 `new SSP0002_UserInfoPopup()` 으로 **새 인스턴스**를 만든다.
-   *   SSP0200 호출부(cs:3153~3161)는 초기 검색어를 넘기지 않으므로 **빈 검색어 + 전체 조회**가
-   *   연 직후의 정상 상태다. TO-BE 는 컴포넌트가 언마운트되지 않고 `open` 만 토글돼 **직전 검색어와
-   *   결과가 그대로 남았다**(2026-10-06 실사용 신고: '이민용' 조회 후 닫았다 열면 그대로 보인다).
-   */
+   * 열 때마다 초기 상태(빈 검색어·빈 그리드)로 되돌린다 — AS-IS `Form_Load`(cs:88~98) 등가.
+   *   AS-IS 는 `popup.ShowDialog()` 마다 `new SSP0002_UserInfoPopup()` 으로 **새 인스턴스**를 만들고,
+   *   `Form_Load` 는 `strSearch`(초기 검색어)가 비어있지 않을 때만 `FindData()` 를 호출한다(cs:94~98).
+   *   SSP0200 호출부(cs:3153~3161)는 초기 검색어를 넘기지 않으므로 **AS-IS 는 연 직후 조회하지 않고
+   *   빈 그리드로 뜬다** — 조회는 사용자가 Find 버튼(또는 Search/Enter)을 눌러야 일어난다.
+   *   종전 TO-BE 는 열 때마다 `findData('')` 로 전체 사용자를 자동조회해 AS-IS 와 어긋났다
+   *   (사용자 지적 2026-11-12). TO-BE 는 언마운트 없이 `open` 만 토글되므로, 직전 검색어·결과가
+   *   남지 않도록 열 때 상태만 초기화하고 조회는 하지 않는다. */
   useEffect(() => {
     if (!open) return;
     setKeyword('');
-    void findData('');
+    setRows([]);
+  }, [open]);
+
+  /**
+   * F5 조회 단축키 — AS-IS `BaseForm.ProcessCmdKey`(F5 -> OnClickFindButton -> FindData, BaseForm.cs:955)
+   *   등가. TO-BE 의 F5 는 메인 화면의 `SubTitle` 이 전역 리스너로 처리하는데, 이 팝업은
+   *   `CustomDialog`(SubTitle 미사용)라 F5 핸들러가 없어 조회가 안 됐다(사용자 지적 2026-11-12).
+   *   팝업이 열린 동안 캡처 단계로 F5 를 가로채 `findData` 를 호출하고, 부모 SubTitle 의 전역 F5
+   *   리스너(브라우저 새로고침 차단 + 부모 그리드 조회)로 전파되지 않도록 즉시 전파·기본동작을 막는다.
+   *   최신 검색어는 ref 로 읽어 타자마다 리스너를 재등록하지 않는다. */
+  const keywordRef = useRef(keyword);
+  keywordRef.current = keyword;
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'F5') return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      void findData(keywordRef.current);
+    };
+    globalThis.window.addEventListener('keydown', onKeyDown, true);
+    return () => globalThis.window.removeEventListener('keydown', onKeyDown, true);
   }, [open, findData]);
 
   const handleSelect = () => {

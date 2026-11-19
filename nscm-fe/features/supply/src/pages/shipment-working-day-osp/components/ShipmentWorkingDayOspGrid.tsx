@@ -174,12 +174,14 @@ export const ShipmentWorkingDayOspGrid = ({
       };
       let month = months[months.length - 1];
       if (!month || month.key !== dc.monthKey) {
-        month = { key: dc.monthKey, label: `${dc.monthKey.slice(0, 4)}-${dc.monthKey.slice(4, 6)}`, weeks: [] };
+        // 월 라벨은 SP LARGE_CLASS_LABEL_NAME('2026-11')을 그대로 쓴다(monthKey=라벨).
+        month = { key: dc.monthKey, label: dc.monthKey, weeks: [] };
         months.push(month);
       }
       let week = month.weeks[month.weeks.length - 1];
       if (!week || week.key !== dc.weekKey) {
-        week = { key: dc.weekKey, label: dc.weekKey.split('-W')[1] ?? '', leafs: [] };
+        // 주차 라벨은 SP SMALL_CLASS_LABEL_NAME('W48', ISO 주차)을 그대로 쓴다. 클라 재계산 폐기.
+        week = { key: dc.weekKey, label: dc.weekLabel, leafs: [] };
         month.weeks.push(week);
       }
       week.leafs.push(leaf);
@@ -189,7 +191,7 @@ export const ShipmentWorkingDayOspGrid = ({
       header: m.label,
       align: 'center',
       columns: m.weeks.map(w => ({
-        header: w.label ? `W${w.label}` : ' ',
+        header: w.label || ' ', // SP 주차 라벨('W48') 그대로. 라벨 없으면 공백 유지.
         align: 'center',
         columns: w.leafs,
       })),

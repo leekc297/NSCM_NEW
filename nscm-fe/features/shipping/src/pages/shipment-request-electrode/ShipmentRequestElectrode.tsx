@@ -12,6 +12,7 @@ import { useMutation, useQuery } from '@foundation/query-client';
 import { GridAction, type EditTracker } from '@foundation/utils';
 import { MainTitle, SsoUserModal, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -623,9 +624,14 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
         }
       );
       const code = Number((res.data as { code?: string })?.code ?? 0);
-      const inner = (res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] })
-        ?.o_result_cursor?.[0];
-      if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
+      const inner = (res.data?.result as {
+        o_result_cursor?: { RESULT_CODE?: string; result_code?: string; MSG?: string }[];
+      })?.o_result_cursor?.[0];
+      // 적재 proc 은 o_result_cursor 에 RESULT_CODE('S' 성공)를 준다(PKG_SSP0022 실측). 종전 inner.CODE 는
+      //   존재하지 않는 컬럼이라 undefined !== '0' = 항상 실패 → 적재 성공도 미반영됐다(#202-2). sibling
+      //   저장(save.ts readCode)과 동일하게 RESULT_CODE 를 대/소문자 폴백으로 읽고 'S' 로 판정한다.
+      const resultCode = inner?.RESULT_CODE ?? inner?.result_code ?? '';
+      if (res.status >= 400 || code || (inner && resultCode !== 'S')) {
         return { ok: false, message: inner?.MSG || (res.data as { message?: string })?.message };
       }
       return { ok: true };
@@ -707,6 +713,14 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
         hotkeyConfig={hotkeyConfig}
         customButtons={customButtons}
         searchParam={conditionSaveParam}
+        // Sum(sumChecked, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={searchParams.sumChecked}
+            onChange={checked => setSearchParams({ sumChecked: checked })}
+          />
+        }
       />
       <PanelGroup className={styles.bodyPanelGroup} orientation='vertical'>
         <Panel defaultSize={50} minSize={20}>

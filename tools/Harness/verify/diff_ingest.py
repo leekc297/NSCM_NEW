@@ -54,7 +54,8 @@ def main():
             if save_skip: res = 'NA'
             if item == 'KEYSET' and v == 'PASS' and (str(s.get('asis_only') or '0') not in ('', '0') or str(s.get('tobe_only') or '0') not in ('', '0')):
                 res = vm.get('ASIS_ONLY', '판정필요')  # 사용자 결정 2026-11-06: 건수(단독행) 차이 = 판정필요
-            if item == 'ORDER' and v == 'PASS':
+            if item == 'ORDER' and (v == 'PASS' or (v == 'DIFF' and s.get('order'))):
+                # 2026-11-18 미검증 해소(SCP0096 ORDER 허위 FAIL 4): 값 차이(DIFF) 호출도 순서는 따로 잰 결과(order 칸)로 판정한다 — 종전 DIFF=FAIL 일괄
                 res = vm.get(s.get('order') or 'NA', 'NA')
             if item == 'COLSET' and v in ('PASS', 'DIFF', 'ROWS_ONLY') and (s.get('cols_only_a') or s.get('cols_only_t')):
                 res = vm.get('COLS', '판정필요')

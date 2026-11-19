@@ -8,14 +8,14 @@ import {
   type GridPanel,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useCallback, useEffect, useRef, type MutableRefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 
 import { CustomMergeManager, ensureTopLeftMergeManager } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 // 기존 import 주석 보존 (2026-10-22)
 // import { COL, MEMO_EDITABLE_BG, MERGE_COLUMNS } from '../long-term-stock.constants';
-import { COL, MEMO_EDITABLE_BG } from '../long-term-stock.constants';
+import { COL, EXCEL_XLS_PAIRS, MEMO_EDITABLE_BG } from '../long-term-stock.constants';
 import type { LongTermStockRow } from '../long-term-stock.types';
 import { useLongTermStockStore } from '../useLongTermStockStore';
 
@@ -57,6 +57,18 @@ class LongTermStockMergeManager extends CustomMergeManager<LongTermStockRow> {
 
 export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Props) => {
   const staticColumns = useLongTermStockStore(state => state.staticColumns);
+
+  // 엑셀 고정밀 표시 — *_XLS 컬럼에 _excelFormat(명시 Excel 서식) 주입. 공용 excelDownload 변환기가
+  //   숫자 셀 서식을 값타입(0/2자리)으로만 정하고 scale 을 무시하므로, formatItem 의 _excelFormat opt-in
+  //   으로 scale 자릿수를 강제한다(SCP0084 한정 — 다른 화면은 _excelFormat 미주입이라 영향 없음).
+  const columnsWithExcelFormat = useMemo(
+    () =>
+      staticColumns.map(column => {
+        const pair = EXCEL_XLS_PAIRS.find(p => p.xls === column.colNm);
+        return pair ? { ...column, _excelFormat: `#,##0.${'0'.repeat(pair.scale)}` } : column;
+      }),
+    [staticColumns]
+  );
 
   // 분할 경계 병합 매니저로 교체 후 코너 병합 재적용
   const handleInitialized = useCallback((grid: FlexGrid<LongTermStockRow>) => {
@@ -140,7 +152,7 @@ export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Pr
       gridFilterRef={gridFilterRef}
       initialized={handleInitialized}
       itemsSource={data}
-      staticColumns={staticColumns}
+      staticColumns={columnsWithExcelFormat}
       // 다단 병합헤더(Exchange/KRW/Local)는 메타 LARGE/SMALL_CLASS_LABEL 구동(자동). SmartColMerge
       //   (cs:206·329) → Cells 로 켜 CustomMergeManager 가 선두 누적 동일값을 세로 병합(대상 컬럼
       //   선별은 위 updatedLayout effect). FIXED_FLAG=Y(ITEM_UOM) 틀고정도 메타 구동.

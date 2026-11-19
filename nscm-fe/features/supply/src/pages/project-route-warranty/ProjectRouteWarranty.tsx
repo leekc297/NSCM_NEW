@@ -347,6 +347,7 @@ export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
         invalidCells={invalidCells}
         onItemCellDblClick={handleItemCellDblClick}
         onSalesSiteCellDblClick={handleSalesSiteCellDblClick}
+        divisionId={searchParams.divisionId}
       />
 
       {/* Model(ITEM_ID) 셀 팝업 — ModelByDivisionPopup(SCM0002/ModelPopup). AS-IS(.cs:749

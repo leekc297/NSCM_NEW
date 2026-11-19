@@ -20,3 +20,14 @@ export interface SearchCondition {
 
 // 저장 실행 분기 (design 03 §4-저장): 일반(SAVE_INTEGRATION_PSI) / ADMIN(SAVE_PSI_ADMIN, +p_boh_qty).
 export type SaveMode = 'GENERAL' | 'ADMIN';
+
+// 파생검증 D1/D2 불일치 경고 메시지 재료 (design 03 §3-Deriv, AS-IS cs:2051-2056 / 2120-2125).
+//   그리드가 계산해 page 로 올리고, page 가 분기별 문구(라벨·줄 순서)로 조립해 경고창에 표시한다.
+export interface DerivMismatchDetail {
+  kind: 'D1' | 'D2'; // D1=Pack Prod Plan 수정 / D2=Cell In-house Moving 수정
+  itemId: string; // 수정행 모델(ITEM_ID)
+  counterpartId: string; // 대응 아이템 — D1: In-house 행 ITEM_ID / D2: To Product(Pack)
+  prodQty: number; // Prod plan 합(원시, CELL_CF 곱 전)
+  inhouseQty: number; // In-house moving 합
+  shouldBe: number; // 기대값 — D1: prodQty×CELL_CF / D2: inhouseQty÷CELL_CF
+}

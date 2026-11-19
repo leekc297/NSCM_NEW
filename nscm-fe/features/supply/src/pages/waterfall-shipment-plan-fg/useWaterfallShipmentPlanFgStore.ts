@@ -10,6 +10,7 @@ import {
   ADMIN_COLUMN_SHEET_NAME,
   ADMIN_MEASURE_SHEET_NAME,
   BUCKET_TYPE,
+  CONDITION_NOT_SAVED,
   MENU_ID,
   SHEETS,
   SP_SHEET_NAME,
@@ -320,6 +321,9 @@ export const useWaterfallShipmentPlanFgStore = createPersistedStoreWithTab<State
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearch)) continue; // SearchParams 필드만 allowlist
+          // Version 은 ConditionNotUse(저장 제외) — 저장측(Page)에서 이미 뺐지만, 수정 전 저장된 낡은
+          //   version 행이 서버에 남아 있을 수 있어 복원측에서도 건너뛴다(AS-IS 파리티, CONDITION_NOT_SAVED).
+          if (CONDITION_NOT_SAVED.includes(paramNm)) continue;
           const def = initSearch[paramNm as keyof SearchParams];
           const value = paramCtn ?? '';
           if (Array.isArray(def)) patch[paramNm] = value === '' ? [] : value.split(',');

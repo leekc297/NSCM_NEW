@@ -13,5 +13,7 @@
   "vibeRulesDir": "C:\\Projects\\NSCM\\tools\\VibeManager\\rules",
   "verifyDir": "C:\\Projects\\NSCM\\Doc\\verify",
   "repairScope": "DB_ONLY",
+  "snapAutoApprove": true,
+  "snapAutoApproveNote": "사용자 상시 승인 2026-11-19: CheckList(run_verify) 사후 단계에서 snap_validate OK·NA 스냅샷을 snap_approve.py 로 골든 승인. MISMATCH 는 승인 안 함(결정 목록)",
   "repairScopeNote": "작업 모드 단일 원천(Vibe_Manager 환경설정 🧭 작업 모드 · set_scope.py) — DB_FE = UI/DB MODE: 제약 없이 개발·수정, Git Download & Merge 로컬 소스 보호, 클라우드 이관 DB+FE·BE / DB_ONLY = DB MODE: DB·META 만 개발·수정, FE·BE 는 가이드만, Git Download & Merge 로컬 소스 보호 안 함, 클라우드 이관 DB 만. CheckList 는 모드 무관 전체 수행. 공통 컴포넌트(@shared/@foundation)는 변경 전 확인."
 }

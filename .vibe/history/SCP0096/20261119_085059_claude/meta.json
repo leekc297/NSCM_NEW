@@ -1,0 +1,39 @@
+{
+  "id": "SCP0096",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0096] · Doc/gen/SCP0096/GEN_NOTES.md · Doc/gen/SCP0096/CHECK.md · Doc/gen/SCP0096/DOD.md · Doc/gen/SCP0096/PIPELINE.md · AS-IS 액션 대조표",
+  "start": "2026-11-19T08:50:59+09:00",
+  "end": "2026-11-19T08:52:49+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\shipment-working-day-osp",
+      "files": 11
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0096",
+      "files": 4
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0096",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "미검증 16건 아직 남아 있나요? \nchecklist 작업 시 전체 미검증에 대해서 일괄 미검증 제거 후 checklist  수행 요청 했는데, 계속 잔여건수가 남는 이유는 무엇인가요?",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-19T08:52:49+09:00",
+  "changed": []
+}

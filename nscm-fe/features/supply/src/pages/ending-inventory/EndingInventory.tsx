@@ -7,11 +7,19 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useUIStore } from '@shared/stores';
 
 import { EndingInventoryForm } from './components/EndingInventoryForm';
 import { EndingInventoryGrid } from './components/EndingInventoryGrid';
-import { LBL, MENU_ID, MSG, SEARCH_MODE, SHEETS } from './ending-inventory.constants';
+import {
+  DEVALUATION_AGE_LABEL,
+  LBL,
+  MENU_ID,
+  MSG,
+  SEARCH_MODE,
+  SHEETS,
+} from './ending-inventory.constants';
 import { useEndingInventoryStore } from './useEndingInventoryStore';
 
 // AS-IS: SCP0085_EndingInventory.cs — 조회 전용 Report. Find + Excel 실동작 / Edit·Save NO-OP.
@@ -145,7 +153,30 @@ export const EndingInventory = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='EndingInventory'
         hotkeyConfig={hotkeyConfig}
         searchParam={conditionParam}
-      />
+        // Devaluation Age(재고월령 컬럼 토글) — 조회조건 폼에서 그리드 건수 툴바로 이동(사용자 지시 2026-11-16).
+        //   SCP0013 Weekly/Monthly Sum 과 동일하게 afterCount(건수 배지 오른쪽)에 렌더. 라벨 영어 고정.
+        afterCount={
+          <Checkbox
+            labelText={DEVALUATION_AGE_LABEL}
+            checked={searchParams.devaluationAge}
+            disabled={noDivisionAuth}
+            onChange={checked => setSearchParams({ devaluationAge: checked })}
+          />
+        }
+      >
+        {/* ERP 집계 안내문 — 모드(월마감/일별)에 따라 하나만 표시(사용자 지시 2026-11-16). 폰트 = FormItem label(0.8125rem). */}
+        <span style={{ fontSize: '0.8125rem' }}>
+          {searchParams.mode === SEARCH_MODE.DAILY
+            ? t(
+                MSG.DAILY_ERP_NOTICE,
+                '_일별 기준 데이터는 매일 각 법인별 시업시간 기준 ERP(ZMMCMR6014) 재고를 가져옵니다.'
+              )
+            : t(
+                MSG.MONTH_ERP_NOTICE,
+                '_월마감 기준 데이터는 매월 본사 4 영업일에 집계하며, ERP(ZMMCMR6014) 전월말 재고를 가져옵니다.'
+              )}
+        </span>
+      </SubTitle>
       <EndingInventoryGrid
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}

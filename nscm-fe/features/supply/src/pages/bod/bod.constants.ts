@@ -31,6 +31,10 @@ export const BOD_COLUMN = {
   FROM_SITE_CODE: 'FROM_SITE_CODE',
   TO_SITE_CODE: 'TO_SITE_CODE',
   TRANSPORT_MODE: 'TRANSPORT_MODE',
+  // 운송수단 코드(FRY/SEA 등) — 조회 proc P_SCP0007_GET_BOD 가 T.TRANSPORT_MODE_CODE 로 응답에 싣는다.
+  // TRANSPORT_MODE 는 이 코드를 LOOKUP 명칭으로 바꾼 표시값이라, 저장오류 커서의 TRANSPORT_MODE(=Route 코드)
+  // 와 1:1 비교하려면 이 코드 컬럼을 써야 한다(명칭≠코드).
+  TRANSPORT_MODE_CODE: 'TRANSPORT_MODE_CODE',
   PRIORITY: 'PRIORITY',
   ROUTE_ID: 'ROUTE_ID',
   BOD_VALID: 'BOD_VALID', // 저장 시 SP 파라미터는 p_valid_yn (컬럼명≠파라미터명, SaveData_Main L765)

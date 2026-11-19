@@ -12,7 +12,12 @@ import { DataGrid } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
 import type { MENU_ID, SHEETS} from '../formation.constants';
-import { attachNumberInputBlock, RESPONSE_SET, SHEET_INDEX } from '../formation.constants';
+import {
+  attachNumberInputBlock,
+  EXCEPT_LT_NEGATIVE_BLOCKED_COLUMNS,
+  RESPONSE_SET,
+  SHEET_INDEX,
+} from '../formation.constants';
 import { useFormationStore } from '../useFormationStore';
 
 interface FormationExceptLtGridProps {
@@ -50,7 +55,8 @@ export const FormationExceptLtGrid = ({
     };
   };
 
-  // L/T 예외 — LT_FORMATION > 0, ADD_LT_FORMATION 정수·0 이상. 기간 중복은 저장 시 서버 99010.
+  // L/T 예외 — LT_FORMATION 은 편집 종료 검증 없음(AS-IS 파리티, 아래 분기 주석 참조),
+  //   ADD_LT_FORMATION 은 파싱 실패 시 0 복원. 기간 중복은 저장 시 서버 99010.
   const handleCellEdit = (
     grid: FlexGrid<ResponseData<MENU_ID, SHEETS.EXCEPT_LT>>,
     e: CellRangeEventArgs
@@ -82,15 +88,18 @@ export const FormationExceptLtGrid = ({
     };
 
     const num = Number((dataItem as Record<string, unknown>)[binding]);
-    if (binding === 'LT_FORMATION') {
-      // Formation L/T > 0 (MSG00699 0보다 큰 정수). 위반 시 1 로.
-      if (Number.isNaN(num) || num <= 0) {
-        setCell(binding, 1);
-        void setAlert({ type: 'alert', content: t('MSG00699', '_0보다 큰 정수를 입력하십시오.') });
-      }
-    } else if (binding === 'ADD_LT_FORMATION') {
-      // Add L/T 는 음수 허용(min -9999999999, design 03 §1.1 SO7). 파싱 실패 시에만 0 으로 리셋한다
-      //   (AS-IS ZERO_OR_HIGHER→MSG00085). 음수는 정상 입력이므로 막지 않는다.
+    // Formation L/T (LT_FORMATION) 은 0 포함 어떤 값도 편집 종료 시 검증하지 않는다 — AS-IS 파리티.
+    //   AS-IS 는 이 탭(shtExceptLT)의 LT_FORMATION 에 셀 편집 검증을 연결하지 않았다
+    //   (CheckDigitValueEntered 는 spdMain·수율 Except 탭에만 LT 검증이 있고, Except LT 시트의
+    //    데이터모델 Changed 핸들러도 미연결 — SCP0022_Formation.cs L337/365-366/567). 유일한
+    //   제어는 NumberCellType(min 0·정수) 뿐이라 '-'/'.' 는 attachNumberInputBlock 이 입력 시점에
+    //   막고, 0 은 그대로 허용된다(보정·경고 없음).
+    if (binding === 'ADD_LT_FORMATION') {
+      // 이 탭(Except LT)의 Add L/T 는 AS-IS NumberCellType 최소값 0(SCP0022_Formation.cs L338)이라
+      //   음수 입력을 막는다 — '-' 는 attachNumberInputBlock 이 입력 시점에 차단
+      //   (EXCEPT_LT_NEGATIVE_BLOCKED_COLUMNS). 메인 Formation 그리드(L307, min -9999999999)와 달리
+      //   음수 허용이 아니다. 편집 종료 검증은 AS-IS 가 이 탭 LT 컬럼에 연결하지 않아, 파싱 실패 시에만
+      //   0 으로 리셋한다(AS-IS ZERO_OR_HIGHER→MSG00085).
       if (Number.isNaN(num)) {
         setCell(binding, 0);
         void setAlert({
@@ -112,7 +121,7 @@ export const FormationExceptLtGrid = ({
       allowMerging={AllowMerging.None}
       alternatingRowStep={0}
       gotFocus={() => setActiveTab(SHEET_INDEX.EXCEPT_LT)}
-      initialized={attachNumberInputBlock}
+      initialized={grid => attachNumberInputBlock(grid, EXCEPT_LT_NEGATIVE_BLOCKED_COLUMNS)}
       beginningEdit={handleBeginEdit}
       cellEditEnded={handleCellEdit}
     />

@@ -50,12 +50,7 @@ export const COMBO = {
   VALID: 'YesOrNo',
 } as const;
 
-// From/To Site 기저 필터(design 02 §3 filterCalls#2/#3) — AS-IS RefreshSiteByDivision 가 EE 선택 시
-//   DIVISION_ID IN('81','40','82')(배터리 셀 3개 사업부)로 먼저 좁힌 뒤 Division cascade 한다(.cs:276~286).
-export const SITE_BASE_DIVISIONS = ['81', '40', '82'] as const;
-
-// AS-IS Validation MSG(design 03 §3.1). TO-BE 미등록(MSG00046/00022)은 등록 전까지
-//   defaultValue 영문 fallback 만 표시한다(convert-core §4.1 — 임의 코드 재사용 금지).
+// AS-IS Validation MSG(design 03 §3.1).
 export const MSG = {
   // 필수값 일괄체크(8개 OR). AS-IS .cs:678 은 GMessageBox("MSG00001")("모든 항목은 필수입력입니다")였으나
   //   TO-BE DB 에서 MSG00001 은 "저장 하시겠습니까?"(공통 SAVE_CONFIRM)로 재정의돼 의미가 다르다 —
@@ -63,13 +58,15 @@ export const MSG = {
   //   메시지는 MSG00013("필수 입력란을 입력해 주세요 / Please enter the required fields.", KO/EN/CN USE_YN=Y).
   REQUIRED_FIELDS: 'MSG00013',
   MIN_MAX_INVALID: 'MSG00099', // 등록됨(KO/EN/CN USE_YN=Y, DB 실측 2026-10-14) — "{0}은 {1} 보다 클 수 없습니다." ({0}=MIN타이틀,{1}=MAX타이틀)
-  MIN_MAX_BOTH_EMPTY: 'MSG00022', // 미등록 — "Please enter Min qty or Max qty." fallback (AS-IS MSG00022)
+  MIN_MAX_BOTH_EMPTY: 'MSG00022', // "{0} 와 {1} 둘 중에 하나는 필수 입력입니다." ({0}=MIN,{1}=MAX, AS-IS .cs:735)
   PERIOD_INVALID: 'MSG00219', // 등록됨(EN 본문 공백) — "The start date can not be later than the end date." fallback
-  ITEM_NOT_EXIST: 'MSG00458', // 등록됨 — "MODEL: {0} \nInvalid MODEL Code!"
+  ITEM_NOT_EXIST: 'MSG00458', // "MODEL: {0} 유효하지 않은 모델입니다!" (AS-IS .cs:757)
+  QTY_NOT_INTEGER: 'MSG00460', // "정수값만 입력가능합니다!" — 수량 칸 원장 NUMBER(18,0), AS-IS 정수 변환 실패로 저장 중단
+  DATE_INVALID: 'MSG01081', // "유효한 날짜 형식이 아닙니다. {0}" — AS-IS MSG00046 과 같은 문구(TO-BE MSG00046 은 다른 뜻)
+  PERIOD_DATE_INVALID: 'MSG00611', // "유효한 날짜 형식이 아닙니다. (YYYYMMDD)" — 조회조건 Period 없는 날짜
   SAVE_SUCCESS: 'MSG00672', // 공통 규약 — "{0} data saved."
   NO_CHANGE: 'MSG00004', // 공통 규약 — "No changes to save."
   REQUIRED_SELECT: 'MSG01122', // 공통 규약 — "Select {0}."
-  // Sales Site Priority(AS-IS MSG00046) — 대상 컬럼·조건 확인 필요(design 03 §3.1 #3). 미구현.
 } as const;
 
 // 다국어 LABEL(design 02 §4.5).
@@ -114,6 +111,15 @@ export const REQUIRED_COLUMNS = [
   'FROM_YYYYMMDD',
   'TO_YYYYMMDD',
   'VALID_YN',
+] as const;
+
+// 칸 제목에 * 가 있지만 AS-IS 저장 검사의 공백 대상이 아닌 칸(갭분석 C-25). 공용 저장 검사가 * 를 필수로
+//   판정하므로 넘기는 칸 목록에서 뺀다. Min·Max 는 둘 중 하나만 필수(MSG00022), Stage·Item Group 은 검사 없음(.cs:678).
+export const NOT_REQUIRED_ON_SAVE_COLUMNS = [
+  'MDL_GR_NM',
+  'STAGE',
+  'SIPM_MIN_QYT',
+  'SIPM_MAX_QTY',
 ] as const;
 
 // 조회직후/EditButton 미해제 상태에서도 편집 가능한 컬럼(design 03 §1 — DIVISION_ID·VAL_TP_CD~

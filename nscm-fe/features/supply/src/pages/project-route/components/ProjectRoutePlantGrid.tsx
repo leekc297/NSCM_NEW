@@ -1,4 +1,4 @@
-import { CellType, type CellRangeEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, type CellRangeEventArgs, type FormatItemEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 // import { type MutableRefObject, useEffect, useMemo } from 'react';
 import { type MutableRefObject, useMemo, useRef } from 'react';
@@ -10,7 +10,7 @@ import { DataGrid } from '@shared/components';
 
 import { PLANT_EDITABLE_COLUMNS } from '../project-route.constants';
 import type { BomKey, PlantRow, SiteKey } from '../project-route.types';
-import { deriveOrgDates } from '../utils/projectRoute.plantDerive';
+import { deriveOrgDates, isPlantCellInvalid } from '../utils/projectRoute.plantDerive';
 
 interface Props {
   gridRef: MutableRefObject<FlexGrid<PlantRow> | undefined>;
@@ -187,6 +187,16 @@ export const ProjectRoutePlantGrid = ({
         if (!(ev as InputEvent).isComposing) keepDigits();
       });
       editor.addEventListener('compositionend', keepDigits);
+    });
+
+    // 저장검증 실패 셀 영구 하이라이트(AS-IS IS_PASS_N* 그리드 paint 파리티). 실패 셀은 ProjectRoute.tsx
+    //   가 행 객체에 플래그로 심고(markPlantInvalidCells), formatItem 은 셀을 (재)그릴 때마다 그 플래그를
+    //   읽어 칠한다 — 가상 스크롤로 셀 DOM 이 재활용돼도 다시 칠해져 DOM 직접 칠하기처럼 지워지지 않는다.
+    grid.formatItem.addHandler((s: FlexGrid<PlantRow>, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      const binding = s.columns[e.col]?.binding ?? '';
+      const row = s.rows[e.row]?.dataItem;
+      e.cell.style.backgroundColor = isPlantCellInvalid(row, binding) ? '#ffd7d7' : '';
     });
   };
 

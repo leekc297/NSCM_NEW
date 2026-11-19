@@ -147,7 +147,20 @@ export const PlanControlGrid = ({
       if (grid.columns[e.col]?.binding !== ACTION_COLUMN.PLAN_ID) return;
       const row = grid.rows[e.row]?.dataItem as PlanControlRow | undefined;
       planIdBeforeEditRef.current = row ? str(row.OPMZ_PLAN_ID) : undefined;
-      if (!row || str(row.OPMZ_PLAN_ID_INDP_YN) === 'Y' ) e.cancel = true;
+      if (!row || str(row.OPMZ_PLAN_ID_INDP_YN) === 'Y') {
+        e.cancel = true;
+        return;
+      }
+      // E09 — 편집 진입 즉시 콤보 드롭다운을 연다. Wijmo 매핑 셀은 첫 진입엔 입력창만 열고 목록은
+      //   다시 클릭/F4 해야 떠서 "Plan ID 를 여러 번 눌러야 리스트가 나온다"는 조작 불편이 있었다
+      //   (AS-IS 콤보는 셀 진입 시 바로 목록이 펼쳐짐). Wijmo 공식 권장대로 beginningEdit 에서
+      //   toggleDropDownList()로 목록을 띄운다(index.d.ts 예제). 에디터 생성 직후에 열려야 하므로
+      //   setTimeout 으로 한 틱 미루고, 그 사이 편집 대상이 바뀌지 않은 경우(editRange 동일)에만 연다.
+      setTimeout(() => {
+        if (grid.editRange?.row === e.row && grid.editRange?.col === e.col) {
+          grid.toggleDropDownList();
+        }
+      });
     },
     []
   );

@@ -1,0 +1,50 @@
+{
+ "menu_id": "SCP0096",
+ "asis_id": "SCP0096",
+ "at": "2026-11-19 09:59:53",
+ "result": "PASS",
+ "fails": [],
+ "gaps": [],
+ "notes": [
+  "ADMIN C→INSERT: AS-IS SCP0096_Shipment_Working_Day_OSP.cs:274 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "ADMIN D→DELETE: AS-IS SCP0096_Shipment_Working_Day_OSP.cs:278 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SCM PI Admin C→INSERT: AS-IS SCP0096_Shipment_Working_Day_OSP.cs:274 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SCM PI Admin D→DELETE: AS-IS SCP0096_Shipment_Working_Day_OSP.cs:278 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외",
+  "SCP Planner C→INSERT: AS-IS SCP0096_Shipment_Working_Day_OSP.cs:274 InsertButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 INSERT 버튼 없음, 비교 제외",
+  "SCP Planner D→DELETE: AS-IS SCP0096_Shipment_Working_Day_OSP.cs:278 DeleteButton 본문 없음(버튼 동작 없음) · TO-BE 메뉴 DELETE 버튼 없음, 비교 제외"
+ ],
+ "asis_groups": {
+  "ADMIN": "CRUD",
+  "SCM PI Admin": "CRUD",
+  "SCM Viewer": "R",
+  "SCP Planner": "CRUD"
+ },
+ "tobe_groups": [
+  "ADMIN",
+  "SCM PI Admin",
+  "SCM Viewer",
+  "SCP Planner"
+ ],
+ "tobe_buttons": {
+  "ADMIN": [
+   "EDIT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SCM PI Admin": [
+   "EDIT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SCM Viewer": [
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SCP Planner": [
+   "EDIT",
+   "SAVE",
+   "SEARCH"
+  ]
+ },
+ "why": "그룹 4↔4 · 메뉴 권한 그룹·버튼(R·C·U·D·SAVE) 일치"
+}

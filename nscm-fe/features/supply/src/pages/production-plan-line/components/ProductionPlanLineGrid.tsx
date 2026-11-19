@@ -23,7 +23,7 @@ import {
 } from '../production-plan-line.constants';
 import type { MainRow } from '../production-plan-line.types';
 import { buildFixedColumns, buildPivotColumns } from '../utils/productionPlanLineColumns';
-import { distributeWeeklyToDaily, isoWeek, sumValues, toNum } from '../utils/productionPlanLineDerive';
+import { isoWeek, sumValues, toNum } from '../utils/productionPlanLineDerive';
 import {
   type DrilldownState,
   EMPTY_DRILLDOWN,
@@ -36,7 +36,6 @@ import {
   isPastPivot,
   isPivotCellEditable,
   pivotKind,
-  thisWeekMonday,
   type VisibilityContext,
 } from '../utils/productionPlanLineEditLock';
 
@@ -77,7 +76,22 @@ const HEADER_TOTAL_HEIGHT = 48;
 //   베이스가 이 월 SUM 2×1 세로 스팬을 이미 계산하므로(mergeManager _isSameHorizontalRange 주석), 세로
 //   범위는 그대로 돌려주고 가로 범위(여러 컬럼)일 때만 차단한다. 월/주 라벨 가로병합·좌측 고정컬럼 세로
 //   스팬·데이터 셀 병합은 super 에 위임해 그대로 둔다.
+// 병합키 누적에서 '숨김 컬럼(visible=false)'을 전부 제외한다 — AS-IS 패리티.
+//   AS-IS FarPoint RightMergeWithColor(SpreadInfo.cs)는 숨김 컬럼을 병합 판정에서 아예 건너뛴다
+//   (숨김이면 startCol+1 로 재귀). 그래서 AS-IS 의 병합키는 '보이는 식별컬럼만'으로 구성돼,
+//   DIVISION_ID(Div)부터 Line/Material/Model/Nick Name 이 식별조합이 같은 인접 행끼리 세로병합된다.
+//   TO-BE 기본 CustomMergeManager 는 getCellData 로 숨김 포함 전 컬럼을 좌측 누적하는데, SCP0013 은
+//   식별컬럼(DIVISION_ID sort=13~) 왼쪽에 '행마다 값이 다른 숨김 컬럼'이 있어(DB 실측 VISIBLE_FLAG='N':
+//   CP_KEY sort=10='line|item|measure', MEASURE sort=12='PROD_PLAN'/'PROD_PLAN_AMEND' 등) 그 고유값이
+//   모든 식별컬럼 키에 섞여 '첫 보이는 컬럼 Div 부터 어떤 인접 행도 병합되지 않는다'
+//   (VDI 실데이터 '셀병합이 단 하나도 안 됨' 사용자 신고 2026-11-13). 숨김 컬럼을 누적에서 빼면
+//   식별컬럼 키가 '보이는 식별값만'으로 구성돼 AS-IS 와 등가가 된다(includeColumnInMergeKey 훅).
 class ProductionPlanLineMergeManager extends CustomMergeManager {
+  // 숨김 컬럼(visible=false)은 병합키 누적에서 뺀다 — AS-IS RightMergeWithColor 숨김-스킵과 동일.
+  protected override includeColumnInMergeKey(panel: GridPanel, col: number): boolean {
+    return panel.columns[col]?.visible !== false;
+  }
+
   getMergedRange(panel: GridPanel, currentRow: number, currentCol: number): CellRange | null {
     const range = super.getMergedRange(panel, currentRow, currentCol);
     if (
@@ -94,16 +108,17 @@ class ProductionPlanLineMergeManager extends CustomMergeManager {
 }
 
 // 같은 주(ISO)의 하위 D_ 키 (design 03 §3 #8 — W_ → D_ 분배 대상).
-//   W_ tag 는 BASIS_YYYYMM + ISO_WEEK(design 03 §2.1). 주차/연도로 D_ 를 매칭한다.
-//   주의: TO-BE RC1 동적 컬럼 명명은 런타임 확정(design 03 §6 확인필요) — isoWeek 매칭으로 근사.
+//   W_ tag 는 BASIS_YYYYMM + ISO_WEEK(design 03 §2.1). **그 달(BASIS_YYYYMM) + ISO주차**로 D_ 를 매칭한다.
+//   주의: partial week(월 경계 주)는 DB 가 달별로 W_YYYYMM+WW 를 쪼개 주므로(예: W44=W_20261044(10월분)·
+//   W_20261144(11월분)), 연도만 보면 양쪽 달 일자가 섞여 그 달 포션 합계가 틀린다 → 월(slice(0,6))까지 매칭.
 const dailyKeysOfWeek = (rowKeys: string[], weekBinding: string): string[] => {
   const tag = pivotTag(weekBinding);
-  const year = tag.slice(0, 4);
+  const ym = tag.slice(0, 6); // BASIS_YYYYMM — partial week 는 그 달 포션만
   const weekNum = Number(tag.slice(6)) || Number(tag.slice(4, 6));
   return rowKeys.filter(k => {
     if (pivotKind(k) !== 'D') return false;
     const d = pivotTag(k);
-    return d.slice(0, 4) === year && isoWeek(d) === weekNum;
+    return d.slice(0, 6) === ym && isoWeek(d) === weekNum;
   });
 };
 
@@ -131,7 +146,12 @@ export const ProductionPlanLineGrid = ({
   fixCellSet,
   onFocus,
 }: Props) => {
-  const cutoff = useMemo(() => thisWeekMonday(), []);
+  // 편집가능 구간 하한 = Plan Date(plan_start). 테스터 이슈: 편집구간이 '당주 월요일'이 아니라 'Plan Date' 기준이어야
+  //   한다(실적표시 회색이 plan_start 로 정합된 것과 대칭). 종전 thisWeekMonday()(당주 월요일 고정)는 AS-IS 와
+  //   어긋났다 — AS-IS 편집시작은 max(조회 From, EDIT_START_DATE)(cs:751-764)이고 조회 From 기본=오늘이라, 오늘이
+  //   월요일일 때만 우연히 일치했다. isPivotCellEditable 이 내부에서 max(editStartDate, cutoff) 로 서버
+  //   EDIT_START_DATE 하한을 그대로 보장하므로(AS-IS EDIT_START_DATE 축 유지), cutoff 만 plan_start 로 바꾼다.
+  const cutoff = useMemo(() => planStartYyyymmdd, [planStartYyyymmdd]);
 
   const fixedColumns = useMemo(
     () => buildFixedColumns(adminColumns, visibilityCtx),
@@ -256,8 +276,9 @@ export const ProductionPlanLineGrid = ({
     // 붙여넣기 게이트 — 공용 pastingCell(cancel=!isEditableCell)도 편집가능 pivot 셀을 막으므로 동일 판정으로 되돌린다.
     g.pastingCell.addHandler(beginningEditHandler);
 
-    // pivot Auto-Sync (design 03 §3 #7~#9) — W_ 편집 시 하위 D_ 균등분배(+나머지) / 음수는 일합계 원복,
-    //   D_ 편집 시 상위 W_·M_ 재집계. LINE_TOTAL% measure 는 평균이라 재분배 제외(단순 표시).
+    // pivot Auto-Sync (design 03 §3 #7~#9) — D_ 편집 시 상위 W_·M_ 재집계. W_ 편집(Weekly 버킷)은 하위 D_ 를
+    //   건드리지 않고 월(M_)합계만 재집계한다(AS-IS Weekly 버킷 거동 — 아래 kind==='W' 주석). LINE_TOTAL%
+    //   measure 는 평균이라 재분배 제외(단순 표시).
     const cellEditEndedHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
@@ -275,23 +296,32 @@ export const ProductionPlanLineGrid = ({
       const rowKeys = Object.keys(row);
 
       if (kind === 'W') {
-        const dayKeys = dailyKeysOfWeek(rowKeys, binding);
-        const weekVal = toNum(row[binding]) ?? 0;
-        if (weekVal < 0) {
-          // 음수 입력 → 하위 일합계로 원복 (design 03 §3 #7).
-          setCell(binding, sumValues(dayKeys.map(k => row[k])));
-        } else if (dayKeys.length > 0) {
-          // 균등분배 + 나머지 마지막 셀 (design 03 §3 #8/#9).
-          const dist = distributeWeeklyToDaily(weekVal, dayKeys.length);
-          dayKeys.forEach((k, i) => setCell(k, dist[i]));
+        // AS-IS Weekly 버킷(cboBucketType=WEEKLY): 주SUM(W_) 편집 시 하위 일(D_) 셀을 분배하지 않는다.
+        //   AS-IS 는 W→D 분배(CalculateDailyQty)를 bucket==Daily||chkAll 일 때만 호출하고(cs:3818~3826),
+        //   정상 Weekly 버킷에선 D_ 를 건드리지 않는다 — 일 분배는 저장 SP(P_SCP0013_SAVE_LINE_ROW_JSON
+        //   의 WEEKLY 분기)가 서버에서 담당한다. FE 가 D_ 를 균등분배로 덮어쓰면 SP 버킷판정(값이 DB와 다른
+        //   D_ 가 있으면 DAILY, PKG body 5927~5954)이 DAILY 로 뒤집혀 서버 비율분배 대신 FE 균등분배가
+        //   저장되는 결함이 됐다(테스터 신고: Weekly 입력 후 Daily 전환 시 일분배 기준 상이, 2026-11-18).
+        //   W_ 는 편집셀로 자동 추적되어 그대로 저장되고(저장 시 WEEKLY 로 판정→서버 분배), 월(M_)합계만
+        //   그 달 W_ 합으로 재집계한다(AS-IS CalculateSum weekly 분기 cs:1400~1425 — M_ 은 SP 저장대상
+        //   아니라 regex 5865 에서 제외, 표시용 재집계).
+        const ym = pivotTag(binding).slice(0, 6);
+        const monthKey = rowKeys.find(k => pivotKind(k) === 'M' && pivotTag(k).slice(0, 6) === ym);
+        if (monthKey) {
+          const weekKeysOfMonth = rowKeys.filter(
+            k => pivotKind(k) === 'W' && pivotTag(k).slice(0, 6) === ym
+          );
+          setCell(monthKey, sumValues(weekKeysOfMonth.map(k => row[k])));
         }
       } else if (kind === 'D') {
         // 상위 W_·M_ 재집계 (design 03 §2.4 CalculateSum).
         const dTag = pivotTag(binding);
         const ym = dTag.slice(0, 6);
         const weekNum = isoWeek(dTag);
+        // partial week: 편집한 D_ 와 **같은 달(ym)** 의 W_ 컬럼만 잡는다(연도만 보면 월경계 주에서 다른 달 W_ 를
+        //   먼저 잡아 엉뚱한 달 주SUM 을 갱신한다). ym = dTag.slice(0,6).
         const weekKey = rowKeys.find(
-          k => pivotKind(k) === 'W' && pivotTag(k).slice(0, 4) === dTag.slice(0, 4) && (Number(pivotTag(k).slice(6)) || Number(pivotTag(k).slice(4, 6))) === weekNum
+          k => pivotKind(k) === 'W' && pivotTag(k).slice(0, 6) === ym && (Number(pivotTag(k).slice(6)) || Number(pivotTag(k).slice(4, 6))) === weekNum
         );
         if (weekKey) setCell(weekKey, sumValues(dailyKeysOfWeek(rowKeys, weekKey).map(k => row[k])));
         const monthKey = rowKeys.find(k => pivotKind(k) === 'M' && pivotTag(k).slice(0, 6) === ym);
@@ -323,8 +353,8 @@ export const ProductionPlanLineGrid = ({
         const isLineTotal = s(dataItem.MEASURE).startsWith(LINE_TOTAL_MEASURE_PREFIX);
 
         // 실적/과거 구간 회색 (AS-IS Set_ProductResult cs:1130~1143) — '선택 Plan Date 이전' 날짜
-        //   (D_(plan_start-1)까지)를 실적으로 회색 처리한다. 편집잠금(cutoff=이번 주 월요일)과는 별개 기준이라
-        //   회색만 plan_start 로 맞춘다(사용자 지시 2026-11-11, 종전 cutoff 기준 오류 교정). Period from>=plan_start
+        //   (D_(plan_start-1)까지)를 실적으로 회색 처리한다. 회색·편집잠금 둘 다 plan_start 기준이다
+        //   (회색은 2026-11-11, 편집잠금은 2026-11-16 당주월요일→plan_start 정합). Period from>=plan_start
         //   면 이전 날짜 셀이 없어 자연히 회색 없음(AS-IS from<plan_start 게이트 + chkAll 상시 등가).
         if (isPastPivot(binding, planStartRef.current))
           ev.cell.style.backgroundColor = CELL_COLOR.PAST_GRAY;

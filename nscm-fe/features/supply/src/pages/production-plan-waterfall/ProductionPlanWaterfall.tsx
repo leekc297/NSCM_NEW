@@ -16,6 +16,7 @@ import {
   type ColumnLayoutRow,
 } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ProductionPlanWaterfallForm } from './components/ProductionPlanWaterfallForm';
@@ -54,6 +55,7 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
   const setFilters = useProductionPlanWaterfallStore(s => s.setFilters);
   const setTitleFilters = useProductionPlanWaterfallStore(s => s.setTitleFilters);
   const setSearchParams = useProductionPlanWaterfallStore(s => s.setSearchParams);
+  const setChkAll = useProductionPlanWaterfallStore(s => s.setChkAll);
   const clearFilters = useProductionPlanWaterfallStore(s => s.clearFilters);
   const openSearchArea = useProductionPlanWaterfallStore(s => s.openSearchArea);
   const setOpenSearchArea = useProductionPlanWaterfallStore(s => s.setOpenSearchArea);
@@ -93,7 +95,8 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
   //   권한 Division 0건이면 선조회하지 않는다(G6). setTitleFilters 는 TITLE filters 가 이미 있으면 no-op.
   //   deps 에 기간(from/to)은 넣지 않는다 — Search 전 Period 수동 변경마다 헤더가 재조회돼 깜빡이던 것을
   //   막는다(조회된 것처럼 보이는 오인 방지). 바뀐 기간은 Search 시 setFilters 가 헤더에 반영한다. bucket 은
-  //   변경 시 그리드(헤더 포함)를 비우므로(setBucket) 비운 뒤 새 bucket 으로 헤더를 1회 다시 세팅하도록 유지.
+  //   WeeklyISO 경계 전환에서만 그리드(헤더 포함)를 비우므로(setBucket), 그 경우 비운 뒤 새 bucket 으로 헤더를
+  //   1회 다시 세팅하도록 sc.bucket 을 deps 에 유지한다(비ISO 전환은 filters 유지 → setTitleFilters no-op, 즉시 re-pivot).
   useEffect(() => {
     if (noDivisionAuth) return;
     if (!sc.divisionId) return;
@@ -321,6 +324,26 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
             buttonLabel: '',
           },
         ]}
+        // Sum·All·Gap 체크박스를 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <>
+            <Checkbox
+              labelText={t(LBL.SUM, '_Sum')}
+              checked={sc.chkSum}
+              onChange={checked => setSearchParams({ chkSum: checked })}
+            />
+            <Checkbox
+              labelText={t(LBL.ALL, '_All')}
+              checked={sc.chkAll}
+              onChange={checked => setChkAll(checked)}
+            />
+            <Checkbox
+              labelText={t(LBL.GAP, '_Gap')}
+              checked={sc.chkGap}
+              onChange={checked => setSearchParams({ chkGap: checked })}
+            />
+          </>
+        }
       />
 
       <div className={styles.gridWrapper}>

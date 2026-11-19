@@ -5,7 +5,7 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CascadeDropdown, CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
@@ -295,27 +295,6 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
     </Grid>
   );
 
-  const checkbox = (labelText: string, checked: boolean, onToggle: (v: boolean) => void) => (
-    // customGrid(flex+align-items:center)로 Grid 셀을 채워 FormItem(라벨+체크박스)을 행 높이 기준
-    //   세로 중앙에 둔다. 기본 FormItem 은 상단 정렬이라 체크박스가 위로 붙어 보인다(사용자 신고).
-    //   MKT FCST(DMF0003) 검색영역 체크박스와 동일한 customGrid 센터링 방식.
-    <Grid size={3} className={commonStyles.customGrid}>
-      <FormItem
-        className={commonStyles.formItem}
-        label={' '}
-        labelAlign='right'
-        render={() => (
-          <Checkbox
-            labelText={labelText}
-            checked={checked}
-            onChange={onToggle}
-            disabled={noDivisionAuth}
-          />
-        )}
-      />
-    </Grid>
-  );
-
   return (
     <SearchArea
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
@@ -462,8 +441,7 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
           />
           {/* ALL 체크박스 숨김 — 조회 시 항상 chkAll='Y'(전체) 고정. store 기본값에서 처리(useGlobalPsiStore makeInitSearch) */}
           {/* {checkbox(t(LBL.ALL, '_All'), sc.chkAll, v => set({ chkAll: v }))} */}
-           {/* Sum(chkSum) — SUM 컬럼(주계·월계) 표시 토글(design 03 §2.2). 서버 재조회 없는 그리드 가시성 전환. */}
-          {checkbox(t(LBL.SUM, '_Sum'), sc.chkSum, v => set({ chkSum: v }))}
+          {/* Sum(chkSum)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18, SCP0013 동형). */}
         </>
       }
     />

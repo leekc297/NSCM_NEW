@@ -139,12 +139,23 @@ export const MeasureSelectModal = ({
     [measures, fallbackCodes]
   );
 
+  // 원본 순서(SCM_MST_SHEET_MEASURE.SORT_ORDER_NO, BE GridMeasure.sortOrd) 조회표.
+  //   조회 SP 는 표시 measure 를 개인화 순서(USER_SORT_ORDER_NO)로 정렬해 내려주므로 measures 배열
+  //   순서 = 개인화 순서다. Default 가 이 배열 순서를 그대로 쓰면 개인화 순서가 복원되는 결함이 있어
+  //   (사용자 신고 2026-11-18), Default 는 이 원본 순서로 재정렬한다. sortOrd 미제공(BE 미반영) 시
+  //   index+1 로 degrade — 기존 동작(배열 순서) 그대로라 안전하다.
+  const sortOrdByCol = useMemo(() => {
+    const map = new Map<string, number>();
+    measures.forEach((measure, index) => map.set(measure.colNm, measure.sortOrd ?? index + 1));
+    return map;
+  }, [measures]);
+
   // useVisibleOverride=true  : 모달 open 복원 — visibleMeasures(이전 OK 결과) 우선, 없으면 display.
+  //   표시 순서는 배열 순서(=BE 가 내려준 개인화 순서) 유지.
   // useVisibleOverride=false : Default 버튼 — defaultFlag='Y' 만 표시측, 나머지는 전부 비표시측.
-  //   personalizable='N' 행도 예외 없이 defaultFlag 기준으로 재배치한다.
+  //   personalizable='N' 행도 예외 없이 defaultFlag 기준으로 재배치하고, 표시 순서는 원본 순서로 복원.
   const buildRows = (useVisibleOverride: boolean): MeasureDualRow[] => {
-    let sequence = 0;
-    return sourceRows.map(row => {
+    const built = sourceRows.map(row => {
       let selected: boolean;
       if (!useVisibleOverride) {
         selected = row.defaultFlag === 'Y';
@@ -153,13 +164,20 @@ export const MeasureSelectModal = ({
       } else {
         selected = visibleMeasures.includes(row.colNm);
       }
-      sequence += selected ? 1 : 0;
-      return {
-        ...row,
-        userFlag: selected ? 'Y' : 'N',
-        sortOrderNo: selected ? sequence : 0,
-      };
+      return { ...row, userFlag: selected ? 'Y' : 'N', sortOrderNo: 0 };
     });
+
+    // 표시(Visible) 행에 sortOrderNo 1..n 부여. Default 는 원본 순서, open/복원은 배열 순서.
+    const selectedRows = built.filter(row => row.userFlag === 'Y');
+    const ordered = useVisibleOverride
+      ? selectedRows
+      : [...selectedRows].sort(
+          (a, b) => (sortOrdByCol.get(a.colNm) ?? 0) - (sortOrdByCol.get(b.colNm) ?? 0)
+        );
+    ordered.forEach((row, index) => {
+      row.sortOrderNo = index + 1;
+    });
+    return built;
   };
 
   const [rows, setRows] = useState<MeasureDualRow[]>([]);

@@ -153,15 +153,19 @@ export const useCapaLossPlanCombos = (): CapaLossPlanCombos => {
       }),
     [master, sc.divisionId, shopGroupId, sc.siteId]
   );
+  // Site 는 상위 축이라 하위 Building/Line/Operation 후보를 좁힌다(AS-IS clbSite cascade, 02 §3.3).
+  //   Plant 가 무선택(ALL)이어도 Site 만으로 좁혀야 AS-IS 와 같다 — 마스터가 행마다 SITE_ID 를 들고
+  //   있어 siteId 직접 필터가 "Site 의 Plant 기준" 과 등가다(I-03).
   const buildingOptions = useMemo(
     () =>
       buildBuildingOptions({
         rows: master,
         divisionId: sc.divisionId,
         shopGroupId,
+        siteId: sc.siteId,
         plantId: sc.plantId,
       }),
-    [master, sc.divisionId, shopGroupId, sc.plantId]
+    [master, sc.divisionId, shopGroupId, sc.siteId, sc.plantId]
   );
   const lineOptions = useMemo(
     () =>
@@ -169,10 +173,11 @@ export const useCapaLossPlanCombos = (): CapaLossPlanCombos => {
         rows: master,
         divisionId: sc.divisionId,
         shopGroupId,
+        siteId: sc.siteId,
         plantId: sc.plantId,
         factoryId: sc.factoryId,
       }),
-    [master, sc.divisionId, shopGroupId, sc.plantId, sc.factoryId]
+    [master, sc.divisionId, shopGroupId, sc.siteId, sc.plantId, sc.factoryId]
   );
 
   /**
@@ -193,6 +198,7 @@ export const useCapaLossPlanCombos = (): CapaLossPlanCombos => {
         rows: master,
         divisionId: sc.divisionId,
         shopGroupId,
+        siteId: sc.siteId,
         plantId: sc.plantId,
         factoryId: sc.factoryId,
         lineId: sc.lineId,
@@ -203,6 +209,7 @@ export const useCapaLossPlanCombos = (): CapaLossPlanCombos => {
       master,
       sc.divisionId,
       shopGroupId,
+      sc.siteId,
       sc.plantId,
       sc.factoryId,
       sc.lineId,
@@ -249,6 +256,11 @@ export const useCapaLossPlanCombos = (): CapaLossPlanCombos => {
    * Status 기본선택 = **목록의 마지막 항목**(`SelectedIndex = Items.Count - 1`, 02 §2.3·F-08).
    * **SCP0105 와 다르다** — SCP0105 는 `GetIndexByCode(curr)` 로 현재 진행상태를 고른다.
    * `GetIndexByCode` 류로 바꾸면 3중 필터로 후보가 바뀔 때 선택이 어긋난다.
+   *
+   * `sc.progressStatus` 를 deps 에 포함한다 — Division 변경(`setDivision`)이 progressStatus 를 `''` 로
+   * 비우는데, 새 Division 의 현재 버전이 **같은 `PROG_STAT`** 를 가지면 currProgressStatus·statusOptions
+   * 가 참조 그대로라 effect 가 재실행되지 않아 Status 칸이 빈 채로 남았다(I-01). progressStatus 가
+   * 리셋되면 다시 돌아 마지막 항목(Current)을 채운다. 선택이 후보에 있으면 guard 로 멈춰 루프 없음.
    */
   useEffect(() => {
     setDerivedVersionInfo(planType, currProgressStatus);
@@ -256,7 +268,7 @@ export const useCapaLossPlanCombos = (): CapaLossPlanCombos => {
     if (statusOptions.some(option => option.value === sc.progressStatus)) return;
     setSearchCondition({ progressStatus: statusOptions[statusOptions.length - 1].value });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planType, currProgressStatus, statusOptions]);
+  }, [planType, currProgressStatus, statusOptions, sc.progressStatus]);
 
   /**
    * GET SP payload (15 파라미터, AS-IS `SetQueryInfoGet` cs:3031~3063).

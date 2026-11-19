@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0111",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0111/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20261026\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202610\",\"toYyyymm\":\"202410\",\"nickName\":\"\",\"cellItemId\":\"\",\"itemId\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 95,
+  "at": "2026-11-18T10:17:35.915Z",
+  "user": "minyonglee1",
+  "test": "기간 조건 글자·역전(E2)"
+ }
+]

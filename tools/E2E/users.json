@@ -1,6 +1,8 @@
-﻿{
+{
   "_doc": "E2E·정합검증 테스트 사용자 명부 — 사용자가 직접 관리(2026-10-20 지정). 영역별 목록: areas.DM(DM UI·공통 UI) · areas.SCP · areas.SSP(2026-10-27 사내오라클 추출 — tools/E2E/extract-role-users.py). 명부는 필요한 시점에 USER_ID 를 꺼내 쓰는 풀이다: 기본 테스트 = 화면당 ADMIN/PLANNER 1계정(single), 권한×Division 전수는 사용자가 화면을 지정할 때만(screens[ID].mode=division). 비밀번호 없음(/user/login userId). 기대 권한은 사내 DB 메타(user_group_user·user_group_menu·btn_auth)에서 계산 — 여기 역할은 표기·Division 배정 용도",
   "updated": "2026-10-27",
+  "guestAccount": "Guest",
+  "guestAccountNote": "2026-11-18 SCP0096 미검증(EG380) 해소 — 전 화면 공용 GUEST 전용 계정(사내 ZIOUI1 SCM_ADM_USER_GR_MPG_M 사용 그룹 GUEST 1개 · BE 로그인 200 확인 22:58). 무권한 첫 화면 검사만 쓰고 계정 순회에는 넣지 않음",
   "areas": {
     "DM": {
       "_doc": "DM UI · 공통 UI 사용자 목록 — 2026-10-20 등록분 그대로(2026-10-27 사용자 지시로 영역 분리). SCP·SSP 화면은 areas.SCP / areas.SSP 를 쓴다",
@@ -149,7 +151,7 @@
     "SCP0096": {
       "mode": "admin",
       "note": "마스터 화면(2026-10-20 사용자 지정) — Division 별 사용자 불필요",
-      "updated": "2026-10-20"
+      "updated": "2026-11-19"
     },
     "SCP0100": {
       "mode": "admin",
@@ -164,7 +166,7 @@
         "Plan Date": "20260907"
       },
       "condsNote": "사용자 지정 2026-10-31 — Plan Date 20260907 은 이번 실행(v21)만 한정(사용자: 앞으로는 다른 일자도 데이터 있을 예정). condsValidUntil 이 지나면 무시 → 기본 조건으로 조회",
-      "updated": "2026-10-31",
+      "updated": "2026-11-18",
       "condsValidUntil": "2026-10-31T12:00:00+09:00",
       "extra": [
         "lucky-alex"
@@ -175,7 +177,8 @@
         "SCM PI Admin": "dwhong1012",
         "SCP Planner": "bottle"
       },
-      "accountsNote": "2026-11-18 사용자 지정 — 권한 검사(eg-auth) 계정을 영역 명부 대신 이 3개로 확인"
+      "accountsNote": "2026-11-18 사용자 지정 — 권한 검사(eg-auth) 계정을 영역 명부 대신 이 3개로 확인",
+      "mode": "admin"
     }
   }
 }

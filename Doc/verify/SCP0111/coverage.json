@@ -3,26 +3,26 @@
  "rules": [
   {
    "rule_id": "A1",
-   "rows": 35,
+   "rows": 34,
    "measured": 15,
-   "inherited": 1,
+   "inherited": 0,
    "not_run_error": 1,
-   "review": 6,
-   "na": 12,
-   "na_pct": 34.3,
+   "review": 7,
+   "na": 11,
+   "na_pct": 32.4,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "KEYSET CR-105 값·행 집합 차이는×12 | 측정 경로 없음 AS-IS 0행 · 양쪽 Mea×1"
+   "na_reasons": "KEYSET CR-105 값·행 집합 차이는×11 | 측정 경로 없음 AS-IS 0행 · 양쪽 Mea×1"
   },
   {
    "rule_id": "A5",
-   "rows": 34,
-   "measured": 29,
+   "rows": 33,
+   "measured": 28,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 5,
-   "na_pct": 14.7,
+   "na_pct": 15.2,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "검사 대상 아님 — 이 화면에 A5 를 적용할 요소×2 | 기대 Measure 버튼 · 실제 버튼·설정 창 없×2 | 기대 Div 별 DEFAULT 컬럼 차이 · 실제×1"
@@ -51,7 +51,7 @@
    "na_pct": 50.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "조회 1261행 뒤에도 합계 행 없음 — 합계 없는×1"
+   "na_reasons": "조회 1259행 뒤에도 합계 행 없음 — 합계 없는×1"
   },
   {
    "rule_id": "B1",
@@ -82,28 +82,28 @@
   {
    "rule_id": "B3",
    "rows": 10,
-   "measured": 4,
+   "measured": 6,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 6,
-   "na_pct": 60.0,
+   "na": 4,
+   "na_pct": 40.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "검사 대상 아님 — AS-IS 진입점 미연결 — S×3 | 진입점 집계 — 대조표 SCP0111_Integra×2 | 실측: OPERATION_GROUP 은 콤보 검사×1"
+   "na_reasons": "진입점 집계 — 대조표 SCP0111_Integra×2 | 실측: OPERATION_GROUP 은 콤보 검사×1 | 검사 대상 아님 — AS-IS 진입점 미연결 — S×1"
   },
   {
    "rule_id": "B4",
    "rows": 11,
-   "measured": 3,
+   "measured": 4,
    "inherited": 0,
-   "not_run_error": 1,
+   "not_run_error": 2,
    "review": 0,
-   "na": 7,
-   "na_pct": 63.6,
+   "na": 5,
+   "na_pct": 45.5,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "검사 대상 아님 — AS-IS 진입점 미연결 — S×3 | 진입점 집계 — 대조표 SCP0111_Integra×2 | 실측: OPERATION_GROUP 은 콤보 검사×1 | 기대 GET_ADMIN_GROUP_MEASURE 행×1"
+   "na_reasons": "진입점 집계 — 대조표 SCP0111_Integra×2 | 화면 초기(선택 Div=81) AS-IS 0건×2 | 실측: OPERATION_GROUP 은 콤보 검사×1 | 검사 대상 아님 — AS-IS 진입점 미연결 — S×1"
   },
   {
    "rule_id": "B6",
@@ -185,9 +185,9 @@
   },
   {
    "rule_id": "D1",
-   "rows": 74,
-   "measured": 61,
-   "inherited": 8,
+   "rows": 73,
+   "measured": 63,
+   "inherited": 5,
    "not_run_error": 0,
    "review": 0,
    "na": 5,
@@ -264,15 +264,15 @@
   {
    "rule_id": "E2",
    "rows": 2,
-   "measured": 0,
+   "measured": 2,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 2,
-   "na_pct": 100.0,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "N",
    "suspect_na100": "",
-   "na_reasons": "기간 조회조건 없음×1 | From·To 기간 조회조건 없음×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "E3",
@@ -302,16 +302,16 @@
   },
   {
    "rule_id": "F1",
-   "rows": 5,
-   "measured": 2,
-   "inherited": 2,
+   "rows": 8,
+   "measured": 6,
+   "inherited": 0,
    "not_run_error": 1,
    "review": 0,
-   "na": 0,
-   "na_pct": 0.0,
+   "na": 1,
+   "na_pct": 12.5,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "측정 중단 앞 단계 행 식별 실패 — ⚠ 수동×1"
+   "na_reasons": "이 계정(lucky-alex) Save 비노출 =×1 | 측정 전제 미충족: 시험 행 저장 요청 없음(sa×1"
   },
   {
    "rule_id": "F2",
@@ -341,24 +341,24 @@
   },
   {
    "rule_id": "F4",
-   "rows": 15,
+   "rows": 16,
    "measured": 12,
    "inherited": 0,
    "not_run_error": 2,
    "review": 0,
-   "na": 1,
-   "na_pct": 6.7,
+   "na": 2,
+   "na_pct": 12.5,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "DM0003_GET_BUCKET_TYPE_CODE:×1 | 측정 경로 없음 PKG_SCP0111.P_SCP×1 | 측정 경로 없음 P_SCP0111_SAVE: 이×1"
+   "na_reasons": "DM0003_GET_BUCKET_TYPE_CODE:×1 | BE 5xx 가 이 화면 밖 공통 경로만(), 화면×1 | 측정 경로 없음 PKG_SCP0111.P_SCP×1 | 측정 경로 없음 P_SCP0111_SAVE: 이×1"
   },
   {
    "rule_id": "F5",
    "rows": 4,
-   "measured": 2,
+   "measured": 3,
    "inherited": 0,
    "not_run_error": 1,
-   "review": 1,
+   "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "",
@@ -368,15 +368,15 @@
   {
    "rule_id": "F6",
    "rows": 5,
-   "measured": 2,
-   "inherited": 1,
-   "not_run_error": 2,
+   "measured": 5,
+   "inherited": 0,
+   "not_run_error": 0,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "측정 중단 앞 단계 행 식별 실패 — ⚠ 수동×2"
+   "na_reasons": ""
   },
   {
    "rule_id": "G1",
@@ -406,13 +406,13 @@
   },
   {
    "rule_id": "G4",
-   "rows": 16,
+   "rows": 17,
    "measured": 6,
    "inherited": 0,
-   "not_run_error": 2,
+   "not_run_error": 3,
    "review": 0,
    "na": 8,
-   "na_pct": 50.0,
+   "na_pct": 47.1,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "정적 순서 판정 불가 — Form 라벨 추출이 조건×2 | 기대 AS-IS Div·GROUP 분기 문장 · 실×2 | 기대 AS-IS 조건 라벨 Model, Divis×2 | 기준 순서 2번째 'Plan Date' — 화면 5×1"
@@ -472,15 +472,15 @@
   {
    "rule_id": "H4",
    "rows": 23,
-   "measured": 22,
+   "measured": 21,
    "inherited": 0,
    "not_run_error": 1,
    "review": 0,
-   "na": 0,
-   "na_pct": 0.0,
+   "na": 1,
+   "na_pct": 4.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "헤더 20개 중 글자 잘림 5개: OPERATION×1"
+   "na_reasons": "기대 축소 → 조건·버튼 간섭 없음 · 실제 리사이×1 | 헤더 20개 중 글자 잘림 5개: OPERATION×1"
   },
   {
    "rule_id": "H5",
@@ -602,15 +602,15 @@
   {
    "rule_id": "K4",
    "rows": 11,
-   "measured": 10,
+   "measured": 11,
    "inherited": 0,
-   "not_run_error": 1,
+   "not_run_error": 0,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "확인 대상 AS-IS 목록에 없는 기능 버튼 노×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "M3",
@@ -694,14 +694,14 @@
    "rule_id": "X-ROW",
    "rows": 35,
    "measured": 0,
-   "inherited": 20,
-   "not_run_error": 5,
-   "review": 0,
+   "inherited": 21,
+   "not_run_error": 3,
+   "review": 1,
    "na": 10,
    "na_pct": 28.6,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "검사 대상 아님 — AS-IS 진입점 미연결 — S×6 | 진입점 집계 9검사 — PASS:5 · ERROR:×2 | 검사 대상 아님 — 이 진입점에 연결된 문장·요소×1 | 실측T-ead3b7e3: AS-IS SCP011×1"
+   "na_reasons": "검사 대상 아님 — AS-IS 진입점 미연결 — S×6 | 진입점 집계 9검사 — PASS:6 · NA:2 ·×2 | 검사 대상 아님 — 이 진입점에 연결된 문장·요소×1 | 실측T-ead3b7e3: AS-IS SCP011×1"
   },
   {
    "rule_id": "A2",
@@ -796,8 +796,8 @@
   },
   {
    "rule_id": "J1",
-   "rows": 10,
-   "measured": 10,
+   "rows": 12,
+   "measured": 12,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
@@ -870,7 +870,7 @@
    "na_pct": 100.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "화면 전용 버튼 없음(보이는 버튼 14개)×1"
+   "na_reasons": "화면 전용 버튼 없음(보이는 버튼 11개)×1"
   },
   {
    "rule_id": "N1",
@@ -887,29 +887,29 @@
   },
   {
    "rule_id": "A6",
-   "rows": 29,
+   "rows": 28,
    "measured": 9,
    "inherited": 0,
    "not_run_error": 1,
    "review": 4,
-   "na": 15,
-   "na_pct": 51.7,
+   "na": 14,
+   "na_pct": 50.0,
    "feature_present": "Y",
    "suspect_na100": "",
    "na_reasons": "정렬 비교 대상 아님 — AS-IS ORDER BY×1 | ORDER 차등 검증 #1 main/SEAR×1 | ORDER 차등 검증 #3 main/SEAR×1 | ORDER 차등 검증 #4 main/SEAR×1"
   },
   {
    "rule_id": "A7",
-   "rows": 23,
+   "rows": 22,
    "measured": 10,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 13,
-   "na_pct": 56.5,
+   "na": 12,
+   "na_pct": 54.5,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "VALUES CR-105 값·행 집합 차이는×12 | 비교 대상 아님 — 짝 표: 2026-11-17 수×1"
+   "na_reasons": "VALUES CR-105 값·행 집합 차이는×11 | 비교 대상 아님 — 짝 표: 2026-11-17 수×1"
   },
   {
    "rule_id": "A9",
@@ -927,10 +927,10 @@
   {
    "rule_id": "B7",
    "rows": 8,
-   "measured": 7,
+   "measured": 8,
    "inherited": 0,
    "not_run_error": 0,
-   "review": 1,
+   "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "",
@@ -953,28 +953,28 @@
   {
    "rule_id": "F7",
    "rows": 3,
-   "measured": 0,
+   "measured": 3,
    "inherited": 0,
-   "not_run_error": 2,
+   "not_run_error": 0,
    "review": 0,
-   "na": 1,
-   "na_pct": 33.3,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "AS-IS 저장 SP SCP0111_SAVE_INT×1 | | 미검증 검사기(tools/Harness/v×1 | 측정 경로 없음 저장 1회×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "F8",
    "rows": 3,
-   "measured": 1,
+   "measured": 3,
    "inherited": 0,
-   "not_run_error": 1,
+   "not_run_error": 0,
    "review": 0,
-   "na": 1,
-   "na_pct": 33.3,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "AS-IS 저장 SP SCP0111_SAVE_INT×1 | | 미검증 검사기(tools/Harness/v×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "G7",
@@ -1070,15 +1070,15 @@
   {
    "rule_id": "X-LOC",
    "rows": 20,
-   "measured": 20,
+   "measured": 19,
    "inherited": 0,
-   "not_run_error": 0,
+   "not_run_error": 1,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": ""
+   "na_reasons": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없×1"
   },
   {
    "rule_id": "MS1",

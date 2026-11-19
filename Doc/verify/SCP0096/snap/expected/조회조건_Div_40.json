@@ -1,0 +1,45 @@
+{
+ "kind": "조회조건",
+ "scope": "Div 40",
+ "items": [
+  {
+   "seq": 1,
+   "label": "Div",
+   "type1": "선택",
+   "type2": "단일",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0096 tobe_seq=1"
+  },
+  {
+   "seq": 2,
+   "label": "Plant Site",
+   "type1": "선택",
+   "type2": "다중",
+   "roles": [
+    "combobox",
+    "button",
+    "listbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0096 tobe_seq=2"
+  },
+  {
+   "seq": 3,
+   "label": "Period",
+   "type1": "텍스트",
+   "type2": "단일",
+   "roles": [
+    "textbox"
+   ],
+   "popup": false,
+   "src": "search_cond.csv SCP0096 tobe_seq=3"
+  }
+ ],
+ "order_rule": "CR-071(기준표 tobe_seq 순서)",
+ "note": "Div 별 표시 차이(G4 Div 분기)는 사람 확인"
+}

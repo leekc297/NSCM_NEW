@@ -13,9 +13,11 @@ export interface ValidationResult {
 }
 
 // 위임자 검색 결과 — AS-IS UserName_Search(cs:789-816) 반환 건수 분기 재현:
-//   one=단일 확정(UserID) / many=다건(MSG00302 검색 프롬프트) / none=0건(MSG00301) / error=호출 실패.
+//   one=단일 확정(UserID+UserName) / many=다건(MSG00302 검색 프롬프트) / none=0건(MSG00301) / error=호출 실패.
+//   userName = AS-IS 가 1건 확정 시 txtDelegatee.Text 에 되넣는 사용자명(cs:797 KO / cs:799 EN) —
+//   화면이 입력칸을 ID 가 아닌 정식 이름으로 치환하는 데 쓴다.
 export type DelegateeSearch =
-  | { status: 'one'; userId: string }
+  | { status: 'one'; userId: string; userName: string }
   | { status: 'many' }
   | { status: 'none' }
   | { status: 'error' };
@@ -65,7 +67,7 @@ export const useDelegateValidation = () => {
         msgDefault: 'Select a date and enter it.',
       };
     }
-    // From > To (MSG00219, cs:393)
+    // From > To (AS-IS MSG00219 → TO-BE MSG01230, cs:393)
     if (toYmd(input.fromDate) > toYmd(input.toDate)) {
       return {
         ok: false,
@@ -142,8 +144,12 @@ export const useDelegateValidation = () => {
       const rows =
         (res.data as { result?: { o_rc1?: Record<string, unknown>[] } }).result?.o_rc1 ?? [];
       if (rows.length === 1) {
-        const id = str(rows[0].USER_ID) || str(rows[0].USERID);
-        return id ? { status: 'one', userId: id } : { status: 'none' };
+        const row = rows[0];
+        const id = str(row.USER_ID) || str(row.USERID);
+        // AS-IS cs:796-799 — 1건 확정 시 사용자명을 txtDelegatee.Text 로 되넣는다(KO=USERNAME /
+        //   그 외=USERNAME_E). P_USER_CHECK 는 USERNAME/USERNAME_E 로 반환(소스 418-420). 비면 ID 로 폴백.
+        const nm = langCd === 'KO' ? str(row.USERNAME) : str(row.USERNAME_E);
+        return id ? { status: 'one', userId: id, userName: nm || id } : { status: 'none' };
       }
       return { status: rows.length > 1 ? 'many' : 'none' };
     } catch {

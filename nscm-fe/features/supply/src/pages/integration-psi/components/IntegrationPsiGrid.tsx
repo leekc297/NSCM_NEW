@@ -26,7 +26,7 @@ import {
   OP_GROUP_PACK,
   OPERATION_GROUP_CODE,
 } from '../integration-psi.constants';
-import type { MainRow } from '../integration-psi.types';
+import type { DerivMismatchDetail, MainRow } from '../integration-psi.types';
 import type { MeasureMeta } from '../useIntegrationPsiStore';
 import {
   buildFixedColumns,
@@ -39,17 +39,37 @@ import {
   type EditLockContext,
   hasEditAuth,
   isBohCellEditable,
+  isEssGreenCell,
   isInsertRowCellEditable,
   isPivotCellLocked,
   isPivotCellValueEmpty,
   isPivotColumn,
 } from '../utils/integrationPsiEditLock';
 
-// 편집가능 셀 배경색 — AS-IS SetBGColor2 편집모드 연두(140,240,60) (design 03 §3-Color C1/C2).
-//   hook#95 표준(편집가능=Yellow 계열)로 매핑. 잠금/실적 셀은 표준 회색.
+// 편집가능 셀 배경색 — 기본은 hook#95 표준(편집가능=Yellow wj-cell-editable / 잠금=흰색). 단
+//   ESS(div82) C1/C2 행(design 03 §3-Color)만은 AS-IS SetBGColor2 연두(140,240,60)를 복원한다
+//   (cs:757/782, isEssGreenCell). ESS Pack Prod Plan·페어 Cell In-house 기간셀을 연두로 구분한다.
+const ESS_EDIT_GREEN = 'rgb(140, 240, 60)';
 // 음수 폰트색 — AS-IS NumberCellType.NegativeRed=true 재현(SpreadInfo.cs AddNumColumn, 표준 Color.Red).
 //   기간(월) pivot 셀·BOH_QTY·CELL_CF 등 숫자 컬럼의 음수 값을 빨간 글자로 표시한다.
-const NEGATIVE_RED_COLOR = '#ff0000';
+//   주의: 아래 셀 서식 쓰기 가드(setStyle)가 브라우저 정규화 readback('rgb(...)')과 등호를 맞추려면
+//   색 리터럴도 rgb 표기여야 한다(#ff0000 은 읽을 때 'rgb(255, 0, 0)' 로 돌아와 가드가 매번 빗나간다).
+const NEGATIVE_RED_COLOR = 'rgb(255, 0, 0)';
+// 잠금/읽기전용 셀 배경 흰색 — rgb 표기(가드 readback 일치, 위 NEGATIVE_RED_COLOR 주석).
+const LOCKED_WHITE = 'rgb(255, 255, 255)';
+
+// 셀 서식 쓰기 가드 — 값이 그대로면 쓰지 않아 불필요한 스타일 무효화(Recalculate style)를 줄인다.
+//   읽기(style/classList)는 리플로우를 강제하지 않으므로 가드 자체는 저렴하다(2026-11-17 프로파일 대응).
+const setStyle = (
+  el: HTMLElement,
+  prop: 'color' | 'backgroundColor',
+  value: string
+): void => {
+  if (el.style[prop] !== value) el.style[prop] = value;
+};
+const setClass = (el: HTMLElement, name: string, on: boolean): void => {
+  if (el.classList.contains(name) !== on) el.classList.toggle(name, on);
+};
 
 const s = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -95,8 +115,8 @@ interface Props {
   // ESS(div82·Pack) 신규행 LINE_ID 콤보 분기 A 원천 — P_SCP0111_GET_ESS_PACK_LINE 결과 pool(COMPANY_ID 필터).
   //   SP 미배선 상태(05_register 대기)면 빈 배열 → 분기 A 후보 0건(design 03 §6 확인필요).
   essPackLineRows: ComboResponse[];
-  // 파생검증 D1/D2 불일치 경고 — AS-IS "수량 불일치"(경고만, 저장 미차단). 메시지는 page 가 표시.
-  onDerivMismatch: () => void;
+  // 파생검증 D1/D2 불일치 경고 — AS-IS "수량 불일치"(경고만, 저장 미차단). 수치 상세는 page 가 조립해 표시.
+  onDerivMismatch: (detail: DerivMismatchDetail) => void;
   onFocus: () => void;
 }
 
@@ -137,7 +157,8 @@ export const IntegrationPsiGrid = ({
   const [openItemModal, setOpenItemModal] = useState(false);
   const [itemModalRow, setItemModalRow] = useState(-1);
 
-  // 편집 권한 보유 여부 — 편집 권한 전용 컬럼(SEQ_FLAG/MEASURE/PLANT_ID/TO_SITE) 가시성 기준.
+  // 관리컬럼(SEQ_FLAG/MEASURE/PLANT_ID/TO_SITE) 가시성 기준 — ADMIN 전용(hasEditAuth=isAdmin).
+  //   SCM PI Admin/SCP Planner 는 BOH 편집 권한이 있어도 관리컬럼은 안 보인다(AS-IS SetVisibleSheetColumns).
   const canEdit = useMemo(() => hasEditAuth(auth), [auth]);
 
   const fixedBindings = useMemo(() => fixedBindingSet(adminColumns), [adminColumns]);
@@ -150,6 +171,18 @@ export const IntegrationPsiGrid = ({
     () => periodMonthRange(fromYyyymm, toYyyymm),
     [fromYyyymm, toYyyymm]
   );
+  // pivot(YYYYMM) 컬럼은 rows 의 **키 집합**에서만 결정된다(buildPivotColumns 가 Object.keys 만 읽고 값은 안 본다).
+  //   그래서 저장/재조회로 값만 바뀌고 월 구조가 같은데도 rows 참조가 바뀌면, 종전엔 pivotColumns 가 매번
+  //   새 배열이 되어 공용 DataGrid 의 columnGroups 가 통째로 재생성됐다 → 다단 헤더가 부풀었다 줄며 깜빡였다
+  //   (SCP0098/DMF0021 선례 [[dynamic-columns-memo-on-data-identity-rebuilds-header-flash]]). 값이 아니라
+  //   'pivot 키 서명'으로 memo 해 월 구조가 같은 재조회에선 같은 컬럼 참조를 유지한다(컬럼 재생성 0).
+  const pivotKeySig = useMemo(() => {
+    const keys = new Set<string>();
+    for (const r of rows as unknown as Record<string, unknown>[]) {
+      for (const k of Object.keys(r)) if (isPivotColumn(k, fixedBindings)) keys.add(k);
+    }
+    return [...keys].sort().join(',');
+  }, [rows, fixedBindings]);
   const pivotColumns = useMemo(
     () =>
       buildPivotColumns(
@@ -157,7 +190,10 @@ export const IntegrationPsiGrid = ({
         fixedBindings,
         periodMonths
       ),
-    [rows, fixedBindings, periodMonths]
+    // rows 참조가 아니라 키 서명으로 재생성 — 월 구조가 같은 재조회는 컬럼을 다시 만들지 않는다.
+    //   값 갱신은 itemsSource(rows) 교체로 셀에 반영되므로 컬럼 재생성 없이도 표시가 최신이다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pivotKeySig, fixedBindings, periodMonths]
   );
 
   const lockCtx = useMemo<EditLockContext>(
@@ -249,6 +285,20 @@ export const IntegrationPsiGrid = ({
     return map;
   }, [measures]);
 
+  // C2 연두 판정용 — PROD_PLAN 행의 ITEM_ID 집합(AS-IS dtPSIAll 필터 cs:767-769 대응).
+  //   IN_HOUSE_MOVING(셀) 행의 TO_PRODUCT 가 이 집합에 있으면 PROD_PLAN 페어가 존재하는 것이다.
+  const prodPlanItemIds = useMemo(() => {
+    const set = new Set<string>();
+    (rows ?? []).forEach(r => {
+      const row = r as unknown as Record<string, unknown>;
+      if (s(row.MEASURE) === MEASURE.PROD_PLAN) {
+        const id = s(row.ITEM_ID);
+        if (id) set.add(id);
+      }
+    });
+    return set;
+  }, [rows]);
+
   // 잠금/색 핸들러가 최신값을 stale 없이 참조 (핸들러는 mount 후 등록).
   const lockCtxRef = useRef(lockCtx);
   lockCtxRef.current = lockCtx;
@@ -260,6 +310,8 @@ export const IntegrationPsiGrid = ({
   onDerivMismatchRef.current = onDerivMismatch;
   const measureCodeByLabelRef = useRef(measureCodeByLabel);
   measureCodeByLabelRef.current = measureCodeByLabel;
+  const prodPlanItemIdsRef = useRef(prodPlanItemIds);
+  prodPlanItemIdsRef.current = prodPlanItemIds;
 
   // 셀콤보 DataMap 지속 적용 — 공용 DataGrid 가 매 렌더 columnGroups 재대입으로 메타 콤보맵을
   //   덮으므로 updatedLayout 마다 재부착([[wijmo-columngroups-recreate-datamap]] 규약). LINE_ID + Wave1 4종.
@@ -368,8 +420,9 @@ export const IntegrationPsiGrid = ({
     };
     g.pastingCell.addHandler(pastingCellHandler);
 
-    // 파생검증 D1/D2 (design 03 §3-Deriv) — ESS(div82) 수정 시 PROD_PLAN×CELL_CF ↔ IN_HOUSE_MOVING
-    //   정합을 같은 아이템·월 기준으로 검증(경고만, 저장은 막지 않음). CELL_CF 결측 시 1 대체(cs:1997-2000).
+    // 파생검증 D1/D2 (design 03 §3-Deriv, AS-IS cs:1945-2129) — ESS(div82) 수정 시 PROD_PLAN×CELL_CF
+    //   ↔ IN_HOUSE_MOVING 정합을 아이템·월 기준으로 검증(경고만, 저장은 막지 않음). D1(Pack PROD_PLAN,
+    //   seqFlag[0]='2')과 D2(Cell IN_HOUSE_MOVING, seqFlag[0]='3')는 앵커·집계 범위가 달라 분기별로 재현한다.
     const cellEditEndedHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
@@ -391,30 +444,87 @@ export const IntegrationPsiGrid = ({
       if (divisionRef.current !== DIVISION_ESS) return;
       if (!isPivotColumn(binding, fixedBindingsRef.current)) return;
       if (!row) return;
+      // AS-IS action!='M' → 신규행('I') 제외. 저장된 행 수정만 파생검증 대상(cs:1973-1974).
+      if (s(row.CRUD_TYPE) === 'I') return;
+
       const measure = s(row.MEASURE);
-      if (measure !== MEASURE.PROD_PLAN && measure !== MEASURE.IN_HOUSE_MOVING) return;
-
+      const seqHead = s(row.SEQ_FLAG).slice(0, 1); // AS-IS seqFlag.Substring(0,1) — 제품유형 분기
       const src = (sender.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
-      const item = s(row.ITEM_ID);
       const ym = binding;
-      const cellCf = toNum(row.CELL_CF) || 1; // CELL_CF 결측/0 = 1 대체
 
-      // ΣPROD_PLAN(same item, 해당월) × CELL_CF.
-      const sumProdPlan = src
-        .filter(r => s(r.ITEM_ID) === item && s(r.MEASURE) === MEASURE.PROD_PLAN)
-        .reduce((a, r) => a + toNum(r[ym]), 0);
-      // ΣIN_HOUSE_MOVING(toProduct=item, valueType≠'-', 해당월).
-      const sumInHouse = src
-        .filter(
+      // 주의: D1(Pack PROD_PLAN)과 D2(Cell IN_HOUSE_MOVING)는 앵커 아이템과 집계 범위가 서로 달라
+      //   (cs:1992-2058 vs 2061-2127) 한 식으로 합칠 수 없다. 합치면 D2 가 ITEM_ID(=Cell 자신)로
+      //   집계해 매칭행이 0 이 되어 불일치여도 경고가 안 뜬다 — 분기별로 재현한다.
+
+      // D1 — Pack 의 Prod Plan 수정(seqFlag[0]='2'): ΣPROD_PLAN(same item)×CELL_CF ↔
+      //   ΣIN_HOUSE_MOVING(toProduct=item, valueType≠'-'). CELL_CF 는 수정행 값(결측/0 = 1).
+      if (measure === MEASURE.PROD_PLAN && seqHead === '2') {
+        const item = s(row.ITEM_ID);
+        const cellCf = toNum(row.CELL_CF) || 1;
+        const prodQty = src
+          .filter(r => s(r.ITEM_ID) === item && s(r.MEASURE) === MEASURE.PROD_PLAN)
+          .reduce((a, r) => a + toNum(r[ym]), 0);
+        const prodSum = prodQty * cellCf;
+        const inhouseRows = src.filter(
           r =>
             s(r.TO_PRODUCT) === item &&
             s(r.MEASURE) === MEASURE.IN_HOUSE_MOVING &&
             s(r.VALUE_TYPE) !== '-'
-        )
-        .reduce((a, r) => a + toNum(r[ym]), 0);
+        );
+        const inhouseQty = inhouseRows.reduce((a, r) => a + toNum(r[ym]), 0);
+        // AS-IS 는 매칭 In-house 행의 ITEM_ID 를 메시지에 쓴다(cs:2043 — 마지막 매칭행 기준).
+        const inhouseItem = inhouseRows.length
+          ? s(inhouseRows[inhouseRows.length - 1].ITEM_ID)
+          : '';
+        // AS-IS 정확 비교(cs:2049 prodSum != inhouseQty) — 동일 IEEE754 연산이라 bit 단위 일치.
+        //   round 를 거치면 소수 단위 불일치를 놓친다(경고 누락). CELL_CF 정수 데이터에선 결과 동일.
+        if (prodSum !== inhouseQty) {
+          onDerivMismatchRef.current({
+            kind: 'D1',
+            itemId: item,
+            counterpartId: inhouseItem,
+            prodQty,
+            inhouseQty,
+            shouldBe: prodSum,
+          });
+        }
+        return;
+      }
 
-      if (Math.round(sumProdPlan * cellCf) !== Math.round(sumInHouse)) {
-        onDerivMismatchRef.current();
+      // D2 — Cell 의 In-house Moving 수정(seqFlag[0]='3'): ΣIN_HOUSE_MOVING(same item·toProduct,
+      //   valueType≠'-') ↔ ΣPROD_PLAN(item=toProduct)×CELL_CF. CELL_CF 는 PROD_PLAN 행에서 취한다
+      //   (cs:2104-2110, 마지막 매칭 PROD_PLAN 행 값 — 결측 시 1).
+      if (measure === MEASURE.IN_HOUSE_MOVING && seqHead === '3') {
+        const item = s(row.ITEM_ID);
+        const toProduct = s(row.TO_PRODUCT);
+        const inhouseQty = src
+          .filter(
+            r =>
+              s(r.ITEM_ID) === item &&
+              s(r.MEASURE) === MEASURE.IN_HOUSE_MOVING &&
+              s(r.TO_PRODUCT) === toProduct &&
+              s(r.VALUE_TYPE) !== '-'
+          )
+          .reduce((a, r) => a + toNum(r[ym]), 0);
+        let cellCf = 1;
+        const prodQty = src
+          .filter(r => s(r.ITEM_ID) === toProduct && s(r.MEASURE) === MEASURE.PROD_PLAN)
+          .reduce((a, r) => {
+            cellCf = toNum(r.CELL_CF) || 1;
+            return a + toNum(r[ym]);
+          }, 0);
+        // AS-IS 정확 비교(cs:2118 prodSum != inhouseQty).
+        if (prodQty * cellCf !== inhouseQty) {
+          onDerivMismatchRef.current({
+            kind: 'D2',
+            itemId: item,
+            counterpartId: toProduct,
+            prodQty,
+            inhouseQty,
+            shouldBe: inhouseQty / cellCf, // AS-IS: inhouseQty / cell_CF (cs:2124)
+          });
+        }
+        return;
       }
     };
     g.cellEditEnded.addHandler(cellEditEndedHandler);
@@ -435,7 +545,7 @@ export const IntegrationPsiGrid = ({
         binding === 'CELL_CF' ||
         isPivotColumn(binding, fixedBindingsRef.current)
       ) {
-        ev.cell.style.color = toNum(row[binding]) < 0 ? NEGATIVE_RED_COLOR : '';
+        setStyle(ev.cell, 'color', toNum(row[binding]) < 0 ? NEGATIVE_RED_COLOR : '');
       }
 
       // admin 신규행 — 수정가능 셀 양식을 **표준 wj-cell-editable**(다른 셀·화면과 동일한 편집가능 배경)로
@@ -444,11 +554,8 @@ export const IntegrationPsiGrid = ({
       //   DIVISION_ID 만 잠금(나머지 전 컬럼 edit — LINE 콤보/ Model·Nick Name 팝업 포함, AS-IS cs:976).
       //   pivot 경로가 남긴 인라인 배경색을 비워 클래스 배경이 그대로 뜨게 한다.
       if (s(row.CRUD_TYPE) === 'I' && ctx.auth.isAdmin) {
-        ev.cell.style.backgroundColor = '';
-        ev.cell.classList.toggle(
-          'wj-cell-editable',
-          binding !== '' && binding !== 'DIVISION_ID'
-        );
+        setStyle(ev.cell, 'backgroundColor', '');
+        setClass(ev.cell, 'wj-cell-editable', binding !== '' && binding !== 'DIVISION_ID');
         return;
       }
 
@@ -459,12 +566,21 @@ export const IntegrationPsiGrid = ({
       //   편집 불가 BOH 셀은 **흰색**(일반 읽기전용 셀과 동일)으로 둔다(사용자 지시 2026-10-30).
       if (binding === 'BOH_QTY') {
         const bohEditable = isBohCellEditable(row, ctx);
-        ev.cell.classList.toggle('wj-cell-editable', bohEditable);
-        ev.cell.style.backgroundColor = bohEditable ? '' : '#ffffff';
+        setClass(ev.cell, 'wj-cell-editable', bohEditable);
+        setStyle(ev.cell, 'backgroundColor', bohEditable ? '' : LOCKED_WHITE);
         return;
       }
 
       if (!isPivotColumn(binding, fixedBindingsRef.current)) return; // 고정 컬럼은 색상 대상 아님
+      // ESS(div82) C1/C2 연두 복원 — AS-IS SetBGColor2(iRow, startDate~endDate, 연두) (cs:757/782).
+      //   AS-IS 는 C1/C2 행의 **기간 전체**를 연두로 칠한 뒤(757/782) 빈 월 셀만 잠그므로(801-805) 빈 셀도
+      //   연두가 유지된다 → 아래 잠금/빈값 노랑·흰색 판정보다 먼저 적용해 행 범위 전체를 연두로 둔다.
+      //   ADMIN 은 AS-IS 에서 연두 분기(cs:597 else)를 타지 않으므로 제외 — ADMIN 편집셀은 종전처럼 노랑.
+      if (!ctx.auth.isAdmin && isEssGreenCell(row, ctx.division, prodPlanItemIdsRef.current)) {
+        setClass(ev.cell, 'wj-cell-editable', false); // 공용이 입힌 노랑 제거
+        setStyle(ev.cell, 'backgroundColor', ESS_EDIT_GREEN); // 연두(140,240,60)
+        return;
+      }
       // 편집가능 pivot 셀 = **노랑**(BOH 편집가능과 동일 wj-cell-editable), 잠금 셀 = **흰색**.
       //   AS-IS EditButton 권한 2-분기와 동일 기준으로 노랑/흰색 결정(isCellEditable 과 1:1):
       //   ① ADMIN(System Administrator): 측정값 제한 없이 값(공백 아님)이면 노랑(cs:573-589).
@@ -473,11 +589,11 @@ export const IntegrationPsiGrid = ({
         (!ctx.auth.isAdmin && isPivotCellLocked(row, ctx)) ||
         isPivotCellValueEmpty(row, binding);
       if (locked) {
-        ev.cell.classList.remove('wj-cell-editable'); // 공용이 입힌 노랑 제거
-        ev.cell.style.backgroundColor = '#ffffff'; // 잠금 = 평평한 흰색(테마 얼룩무늬 제거)
+        setClass(ev.cell, 'wj-cell-editable', false); // 공용이 입힌 노랑 제거
+        setStyle(ev.cell, 'backgroundColor', LOCKED_WHITE); // 잠금 = 평평한 흰색(테마 얼룩무늬 제거)
       } else {
-        ev.cell.classList.add('wj-cell-editable'); // 편집가능 = 노랑(BOH 와 동일)
-        ev.cell.style.backgroundColor = ''; // 인라인 비워 클래스 노랑이 그대로 뜨게
+        setClass(ev.cell, 'wj-cell-editable', true); // 편집가능 = 노랑(BOH 와 동일)
+        setStyle(ev.cell, 'backgroundColor', ''); // 인라인 비워 클래스 노랑이 그대로 뜨게
       }
     };
     g.formatItem.addHandler(formatHandler);

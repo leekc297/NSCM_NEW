@@ -7,7 +7,8 @@ import { CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction, GridUtils, type EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { BodItemRouteModal } from './components/modals/BodItemRouteModal';
@@ -18,6 +19,7 @@ import { useShipmentRequestSemiValidation } from './hooks/useShipmentRequestSemi
 import {
   BOD_FILL_MAP,
   COLUMN,
+  COMBO,
   EDITABLE_MEASURE,
   LBL,
   MENU_ID,
@@ -80,6 +82,14 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const divisionAuthLoaded = useShipmentRequestSemiStore(s => s.divisionAuthLoaded);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
+  // Sum 체크박스(SubTitle afterCount)의 비활성 조건 — 권한 division 0건이면 끈다(AS-IS SetDivisionAuthCheck,
+  //   G-06). 조회조건 폼이 쓰던 noDivisionAuth 를 그대로 재현한다(useTabComboQueries 는 tab 캐시 공유라
+  //   폼과 같은 DIVISION 콤보 결과를 쓴다 — 추가 네트워크 없음).
+  const [divisions] = useTabComboQueries({
+    filters: [{ comboId: COMBO.DIVISION, mnuId: MENU_ID }],
+  });
+  const noDivisionAuth = divisions !== undefined && divisions.length === 0;
 
   // 명시 조회 게이트 — mount 시 clearFilters() 로 keep-alive 잔여 filters 를 무효화한다(nscm-patterns §5-7).
   useEffect(() => {
@@ -331,6 +341,16 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        // Sum(showSum, SUM 컬럼 가시성 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18,
+        //   SCP0013 동형). 권한 division 0건이면 비활성(AS-IS SetDivisionAuthCheck 파리티 유지).
+        afterCount={
+          <Checkbox
+            disabled={noDivisionAuth}
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.showSum}
+            onChange={checked => set({ showSum: checked })}
+          />
+        }
       />
       <ShipmentRequestSemiGrid
         rows={rows}

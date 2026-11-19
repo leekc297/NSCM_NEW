@@ -1,0 +1,5 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+보완 대상 전체,I5,용어,"8, 병렬 call-proc 첫 응답",call-proc → 서버 호출(규칙 19),"[시험 검사 CM-003: FAIL 승격 전(화면 2개 이상 사용자 확인 뒤 check_maturity.csv status=confirmed)] T98, 병렬 call-proc 첫 응답 기준 허위 FAIL, 실측: WORKING_TIME_DEFAULT r1 → 6, 저장 요청 1.5초 지연 동안 로딩 표시 0회, 대조군 조회 지연 때는 37회 관측, 표본 48개·저장 구간 1512ms"
+보완 대상 전체,J29,주어,"조회, 사유: 이 화면은 Column",문맥으로 아는 주어 삭제,"[O1] 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교: GAP 1행, 요지: 컬럼 설정 적용 시 Reset 후 재조회, 사유: 이 화면은 Column/Measure 설정 UI 진입점 없음(SHEET_MEASURE 0행). admin 메타 변경은 Search refetch 로 반영"
+사람판정,I3,용어,"8, 병렬 call-proc 첫 응답",call-proc → 서버 호출(규칙 19),"[시험 검사 CM-003: FAIL 승격 전(화면 2개 이상 사용자 확인 뒤 check_maturity.csv status=confirmed)] T98, 병렬 call-proc 첫 응답 기준 허위 FAIL, 실측: WORKING_TIME_DEFAULT r1 → 6, 저장 요청 1.5초 지연 동안 로딩 표시 0회, 대조군 조회 지연 때는 37회 관측, 표본 48개·저장 구간 1512ms"
+사람판정,J18,주어,"조회, 사유: 이 화면은 Column",문맥으로 아는 주어 삭제,"[O1] 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교: GAP 1행, 요지: 컬럼 설정 적용 시 Reset 후 재조회, 사유: 이 화면은 Column/Measure 설정 UI 진입점 없음(SHEET_MEASURE 0행). admin 메타 변경은 Search refetch 로 반영"

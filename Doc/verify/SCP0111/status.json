@@ -1,0 +1,299 @@
+{
+ "screen": "SCP0111",
+ "made": "2026-11-18 20:00",
+ "checklist": {
+  "version": 62,
+  "total": 1785,
+  "totals": {
+   "PASS": 799,
+   "FAIL": 47,
+   "판정필요": 14,
+   "미검증": 32,
+   "해당없음": 893
+  },
+  "axes": [
+   {
+    "axis": "1.디자인·다국어",
+    "total": 262,
+    "PASS": 157,
+    "FAIL": 9,
+    "판정필요": 1,
+    "미검증": 2,
+    "해당없음": 93
+   },
+   {
+    "axis": "2.AS-IS 로직",
+    "total": 188,
+    "PASS": 67,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 121
+   },
+   {
+    "axis": "3.SMOKE",
+    "total": 536,
+    "PASS": 183,
+    "FAIL": 10,
+    "판정필요": 9,
+    "미검증": 11,
+    "해당없음": 323
+   },
+   {
+    "axis": "4.CRUD",
+    "total": 542,
+    "PASS": 192,
+    "FAIL": 25,
+    "판정필요": 0,
+    "미검증": 9,
+    "해당없음": 316
+   },
+   {
+    "axis": "5.권한별 CRUD",
+    "total": 39,
+    "PASS": 24,
+    "FAIL": 0,
+    "판정필요": 1,
+    "미검증": 1,
+    "해당없음": 13
+   },
+   {
+    "axis": "분류 없음",
+    "total": 218,
+    "PASS": 176,
+    "FAIL": 3,
+    "판정필요": 3,
+    "미검증": 9,
+    "해당없음": 27
+   }
+  ],
+  "action": [
+   [
+    "V-28123894",
+    "G4",
+    "SCP0111 스냅샷 조회조건 Div 40"
+   ],
+   [
+    "V-ce8459b6",
+    "E2",
+    "SCP0111 기간 역전 조회"
+   ],
+   [
+    "V-c73d3323",
+    "G1",
+    "MSG00344"
+   ],
+   [
+    "V-f5114028",
+    "H6",
+    "SCP0111 스냅샷 팝업 Model/Nickname"
+   ],
+   [
+    "V-a19f5cc5",
+    "F4",
+    "SCP0111 경계값 저장"
+   ],
+   [
+    "V-2eed0400",
+    "E3",
+    "SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0"
+   ],
+   [
+    "ES-600e4157",
+    "F1",
+    "SCP0111 E2E crud 저장 왕복(insert)"
+   ],
+   [
+    "T-236699af",
+    "F4",
+    "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE"
+   ],
+   [
+    "V-daa3f0ba",
+    "D6",
+    "SCP0111 시나리오 [자동] 선택 행 위로 Insert"
+   ],
+   [
+    "V-55556e17",
+    "H4",
+    "SCP0111 스냅샷 화면샷 1920"
+   ],
+   [
+    "V-e8ca7b9a",
+    "H4",
+    "SCP0111 스냅샷 화면샷 1366"
+   ]
+  ],
+  "review": [
+   [
+    "V-dd871d7e",
+    "A1",
+    "SCP0111 화면"
+   ],
+   [
+    "V-47b619ec",
+    "H11",
+    "SCP0111 저장 중 로딩"
+   ],
+   [
+    "V-f578e081",
+    "J3",
+    "SCP0111 화면"
+   ],
+   [
+    "V-b6cf8233",
+    "A6",
+    "SCP0111_GET_INTEGRATION_PSI"
+   ],
+   [
+    "T-6eb2d5fe",
+    "A1",
+    "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI"
+   ],
+   [
+    "T-31acd359",
+    "A1",
+    "P_SCP0111_GET"
+   ],
+   [
+    "T-c2eca54f",
+    "A6",
+    "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE"
+   ],
+   [
+    "T-f0258bdb",
+    "X-ROW",
+    "SCP0111_IntegrationPSI.FindButton"
+   ],
+   [
+    "EG-aa0df6b6",
+    "A1",
+    "SCP0111 실전송 건수 main"
+   ],
+   [
+    "EG-e8be8647",
+    "A6",
+    "SCP0111 문자 정렬 PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE"
+   ]
+  ],
+  "ledger": {
+   "PASS": 56,
+   "미검증": 322,
+   "FAIL": 17
+  },
+  "unverified_sheet_rows": 535
+ },
+ "fe_mapping": {
+  "total": 0,
+  "by_state": {}
+ },
+ "asis_actions": {
+  "total": 299,
+  "blank_state": 295,
+  "meaning_needed": 13,
+  "by_state": {
+   "빈칸": 295,
+   "처리 중단/반환": 1,
+   "this._isEditMode": 1,
+   "그리드 속성/값 설정": 2
+  }
+ },
+ "counts": {
+  "menu_id": "SCP0111",
+  "unverified_sheet": 535,
+  "unverified_by_reason": {
+   "측정못함": 32,
+   "시험검사": 1,
+   "상속생략": 499,
+   "대상불명": 3
+  },
+  "direct_unmeasured": 273
+ },
+ "ledger": {
+  "menu_id": "SCP0111",
+  "generated": "2026-11-18T19:50:12",
+  "instances": 331,
+  "done": 300,
+  "open": 31,
+  "by_type": {
+   "W3": 13,
+   "W6": 1,
+   "W7": 8,
+   "W9": 9
+  },
+  "by_owner": {
+   "DB": 1,
+   "DB 객체": 1,
+   "FE": 1,
+   "화면 FE": 10,
+   "E2E": 1,
+   "사람 판정 / AS-IS 원문 확인 → 재판정": 8,
+   "하네스·환경": 9
+  },
+  "suspect_not_implemented": 0,
+  "by_check": {
+   "F1": {
+    "W3": 1
+   },
+   "F4": {
+    "W3": 1,
+    "W9": 2
+   },
+   "H4": {
+    "W3": 1
+   },
+   "D6": {
+    "W3": 1
+   },
+   "G1": {
+    "W3": 4
+   },
+   "X-ROW": {
+    "W3": 5,
+    "W7": 2,
+    "W9": 4
+   },
+   "G4": {
+    "W6": 1
+   },
+   "A1": {
+    "W7": 5
+   },
+   "X-LOC": {
+    "W7": 1
+   },
+   "J2": {
+    "W9": 1
+   },
+   "F5": {
+    "W9": 1
+   },
+   "I1": {
+    "W9": 1
+   }
+  }
+ },
+ "name": "IntegrationPSI",
+ "sources": [
+  {
+   "file": "Doc/UI_CHECKLIST/SCP0111_IntegrationPsi_CheckList_v62.xlsx",
+   "time": "2026-11-18 19:50"
+  },
+  {
+   "file": "nscm-fe/features/supply/src/pages/integration-psi/__asis-mapping__.md",
+   "time": "2026-11-18 13:19"
+  },
+  {
+   "file": "Doc/asisfacts/screens/SCP0111/__asis-actions__.md",
+   "time": "2026-10-23 11:29"
+  },
+  {
+   "file": "Doc/verify/SCP0111/checklist_counts.json",
+   "time": "2026-11-18 19:50"
+  },
+  {
+   "file": "Doc/verify/SCP0111/work_ledger_summary.json",
+   "time": "2026-11-18 19:50"
+  }
+ ]
+}

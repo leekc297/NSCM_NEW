@@ -13,7 +13,7 @@ import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 import { LongTermStockForm } from './components/LongTermStockForm';
 import { LongTermStockGrid } from './components/LongTermStockGrid';
 import { useLongTermStockValidation } from './hooks/useLongTermStockValidation';
-import { MENU_ID, MSG, SHEETS } from './long-term-stock.constants';
+import { EXCEL_XLS_PAIRS, MENU_ID, MSG, SHEETS } from './long-term-stock.constants';
 import type { LongTermStockRow } from './long-term-stock.types';
 import { useLongTermStockStore } from './useLongTermStockStore';
 
@@ -114,16 +114,39 @@ export const LongTermStock = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // Excel — 조회 0건 가드 후 공용 다운로드. 화면 5쌍 컬럼→*_XLS 고정밀 치환(W9)·콤보→텍스트(W10)·
-  //   Footer(W12)·MSG00100 "저장않고 열기" 확인은 이번 회차 미구현 — 04_react-gap.md 확인필요(사용자
-  //   축) 기록(공용 excelDownload 에 per-export 정밀도 스왑 훅 없음 + SP 미배포로 런타임 검증 불가).
-  const handleExcel = () => {
+  // Excel — AS-IS ExportExcelData(SCP0084.cs:603~625) 파리티: 엑셀은 고정밀 *_XLS 컬럼으로 내보낸다
+  //   (AS-IS 2023-04-21 "Excel 소수점 적용 개선"). 화면 표시컬럼은 저정밀(메타 scale 0/2)이라 엑셀에
+  //   소수점이 잘려 보이므로, export 직전 화면 5컬럼(EXCEL_XLS_PAIRS.screen)을 숨기고 대응 *_XLS
+  //   (SP 가 반환, 메타 scale 5~7·VIS=N)를 보이게 스왑한 뒤 export, 끝나면 원복한다. 공용 excelDownload
+  //   는 live grid 의 visible 컬럼을 동기 스냅샷하므로 호출을 이 스왑으로 감싼다(per-export 스왑 훅 없음).
+  const handleExcel = async () => {
     if (rows.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.EXCEL_NO_DATA, 'No data have been retrieved.') });
       return;
     }
-    if (gridRef.current) {
-      void GridAction.excelDownload(gridRef.current, 'LongTermStock', setProgress);
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    // 스왑 — 표시컬럼(저정밀) 숨김 + 대응 *_XLS(고정밀) 표시. 쌍이 없으면 건너뜀(기존 동작 유지).
+    for (const { screen, xls } of EXCEL_XLS_PAIRS) {
+      const screenCol = grid.columns.getColumn(screen);
+      const xlsCol = grid.columns.getColumn(xls);
+      if (!screenCol || !xlsCol) continue;
+      screenCol.visible = false;
+      xlsCol.visible = true;
+    }
+
+    try {
+      await GridAction.excelDownload(grid, 'LongTermStock', setProgress);
+    } finally {
+      // 원복 — excelDownload 가 내부에서 컬럼을 재구성(columnGroups 교체)할 수 있어 binding 으로 최신
+      //   참조를 다시 얻어 메타 기본(표시컬럼 VIS=Y / *_XLS VIS=N)으로 되돌린다.
+      for (const { screen, xls } of EXCEL_XLS_PAIRS) {
+        const screenCol = grid.columns.getColumn(screen);
+        const xlsCol = grid.columns.getColumn(xls);
+        if (screenCol) screenCol.visible = true;
+        if (xlsCol) xlsCol.visible = false;
+      }
     }
   };
 

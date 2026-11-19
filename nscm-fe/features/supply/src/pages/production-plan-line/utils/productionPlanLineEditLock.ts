@@ -67,8 +67,9 @@ export const editablePivotKindForBucket = (bucket: BUCKET_TYPE): PivotKind => {
   return null; // Monthly — M_(월SUM) 항상 잠금 → 편집 불가(AS-IS 1:1)
 };
 
-// ===== 과거 기간 pivot 잠금 (design 01 F2 startEditIdx / 03 §3 #4) =====
-//   cutoff = 이번 주 월요일. tag < cutoff 이면 과거(편집불가). D_=8자리 날짜, W_/M_=앞 6자리 yyyymm.
+// ===== 과거 기간 pivot 잠금 (design 01 F2 startEditIdx / 03 §3 #33) =====
+//   cutoff 이전이면 과거(편집불가·실적회색). D_=일(8자리), W_=그 주 월요일(ISO), M_=그 달 1일 비교(AS-IS 월 SUM 컬럼
+//   위치 기준 — plan_start 가 속한 달의 월합계도 회색).
 export const thisWeekMonday = (base: Date = new Date()): string => {
   const d = new Date(base);
   d.setHours(0, 0, 0, 0);
@@ -76,12 +77,33 @@ export const thisWeekMonday = (base: Date = new Date()): string => {
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 };
 
+// W_ 바인딩(W_ + BASIS_YYYYMM(6) + ISO_WEEK(2), 예: W_20261146)을 그 주 월요일(ISO 8601) 날짜 YYYYMMDD 로 환산.
+//   AS-IS 편집시작·실적회색은 '일(日) 단위 컬럼 위치' 기준(cs:756~776 — D_(editStart) 인덱스 + 직전 W_ 포함)이라,
+//   주(W_) 셀도 주차를 실제 날짜로 환산해 비교해야 등가다. 종전 월(앞 6자리) 비교는 '같은 달이면서 cutoff 이전인
+//   주'를 못 걸러 AS-IS 와 어긋났다(전환기 약식 — 2026-09-16 도입). 연말/연초 경계: Jan 월인데 주차가 52+ 면
+//   전년 주, Dec 월인데 주차가 1 이면 익년 주로 본다.
+const weekMondayYmd = (tag: string): string => {
+  let yyyy = Number(tag.slice(0, 4));
+  const mm = Number(tag.slice(4, 6));
+  const week = Number(tag.slice(6, 8));
+  if (mm === 1 && week >= 52) yyyy -= 1;
+  else if (mm === 12 && week <= 1) yyyy += 1;
+  const jan4 = new Date(Date.UTC(yyyy, 0, 4)); // ISO week 1 은 1/4 이 속한 주
+  const jan4Dow = jan4.getUTCDay() || 7; // 월=1 … 일=7
+  const mon = new Date(jan4);
+  mon.setUTCDate(jan4.getUTCDate() - jan4Dow + 1 + (week - 1) * 7); // ISO week N 의 월요일
+  return `${mon.getUTCFullYear()}${String(mon.getUTCMonth() + 1).padStart(2, '0')}${String(mon.getUTCDate()).padStart(2, '0')}`;
+};
+
 export const isPastPivot = (binding: string, cutoffYmd: string): boolean => {
   const kind = pivotKind(binding);
   if (kind === null || kind === 'B') return false;
   const tag = binding.slice(2).replace(/[^0-9]/g, '');
-  if (kind === 'D') return tag.slice(0, 8) < cutoffYmd.slice(0, 8);
-  return tag.slice(0, 6) < cutoffYmd.slice(0, 6); // W_/M_ 은 월 단위 비교
+  if (kind === 'D') return tag.slice(0, 8) < cutoffYmd.slice(0, 8); // 일: 일자 단위
+  if (kind === 'W') return weekMondayYmd(tag) < cutoffYmd.slice(0, 8); // 주: 그 주 월요일 < cutoff (AS-IS 주 단위)
+  // 월(M_): 그 달 1일 < cutoff 이면 과거 → plan_start 가 속한 달의 월합계(M_)도 회색(AS-IS Set_ProductResult
+  //   cs:1143 가 월 SUM 컬럼을 D_(plan_start-1)까지 회색 처리하는 것과 등가). M_ 은 편집불가라 회색 음영만 대상.
+  return tag.slice(0, 6) + '01' < cutoffYmd.slice(0, 8);
 };
 
 // ===== EDIT_INFO(GET_PLAN_EDIT_INFO) 행별 편집판정 원천 (M4c — design 01 F2 / 03 §3 파생 cs:688~782) =====
@@ -156,8 +178,9 @@ export const isPivotCellEditable = (
 ): boolean => {
   if (!isPivotColumn(binding)) return false; // 고정 컬럼은 전건 잠금(INPUT_TP_CD='S')
   if (pivotKind(binding) !== editablePivotKindForBucket(bucket)) return false; // SUM 컬럼 잠금
-  // 편집시작 = max(cutoff, 서버 EDIT_START_DATE) — design 03 §3.6 #33 (L8). editInfo 가 CP_KEY 별
-  //   서버 편집시작일을 주면 그 이전 셀은 잠근다(항상 더 보수적). 빈 값이면 cutoff(이번 주 월요일) 유지.
+  // 편집시작 = max(cutoffYmd, 서버 EDIT_START_DATE) — AS-IS SCP0013.cs:751-763(startPeriod/EDIT_START_DATE).
+  //   그리드가 cutoffYmd 로 Plan Date(plan_start)를 넘긴다(그리드 cutoff 주석 — '당주 월요일' 하한 제거,
+  //   I-04). 서버 EDIT_START_DATE 는 Plan Date(81·SE 는 +공장 Prod Frozen)라 그 하한을 그대로 보장한다.
   const editStartDate = editInfo.get(s(row.CP_KEY))?.editStartDate ?? '';
   const effectiveCutoff = editStartDate > cutoffYmd ? editStartDate : cutoffYmd;
   if (isPastPivot(binding, effectiveCutoff)) return false; // 과거/편집시작 전 기간

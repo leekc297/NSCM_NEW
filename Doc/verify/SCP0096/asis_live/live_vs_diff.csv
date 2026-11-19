@@ -1,1 +1,6 @@
 ﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+DM0003_GET_BUCKET_TYPE_CODE,,GET,0,,,1,load,3,{},LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP,GET,11,DIFF:4 PASS:1 ROWS_ONLY:6,,1,find,1,"{""p_division_id"": ""81"", ""p_plant_site_id"": ""KR02239900_81-P"", ""p_from_yyyymmdd"": ""20261118"", ""p_to_yyyymmdd"": ""20271114"", ""debug_mode"": ""F""}",BOTH,차등 검증·실측 모두 있음
+SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP,PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,GET,2,PASS:2,,2,find/load,"436,436","{""p_start_yyyymmdd"": ""20261118"", ""p_end_yyyymmdd"": ""20271114""}",BOTH,차등 검증·실측 모두 있음
+SCM0001_GET_SCP_MONTH_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD,GET,8,PASS:8,,1,load,1,"{""p_division_id"": ""81"", ""p_plan_cycle"": ""DAILY"", ""p_from_date"": """", ""p_offset_month"": ""12"", ""p_timezone"": ""AS054""}",BOTH,차등 검증·실측 모두 있음

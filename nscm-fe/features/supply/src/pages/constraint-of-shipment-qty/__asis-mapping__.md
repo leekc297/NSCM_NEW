@@ -14,7 +14,7 @@
 | # | method | AS-IS 판정 | TO-BE 구현 |
 |--:|---|---|---|
 | 1 | FindButton | 가드없음, 실동작(GET SP 체인 확정) | `ConstraintOfShipmentQty.handleSearch` — Division 필수 선행 alert 후 `setFilter`+`fetchStaticColumns` |
-| 2 | SaveButton | 가드없음, 실동작(SAVE SP + 재조회 체인 확정) | `handleSave` — `validateSaveRows`(필수8+수량2+날짜1) 통과 후 `saveWithValidation`. Item존재/Sales Site Priority 게이트는 서버(SP) 영역 — PKG_SCP0132 미배포로 이 회차 미검증 |
+| 2 | SaveButton | 가드없음, 실동작(SAVE SP + 재조회 체인 확정) | `handleSave` — `validateSaveRows`(AS-IS SaveData 순서 : 필수8 → 날짜 → Min·Max 하나 → 정수 → Min<=Max 3쌍 → 품목) 통과 후 `saveWithValidation`(칸 제목 * 중 AS-IS 공백 대상 아닌 4칸 제외). 결과 커서 거부 판정 |
 | 3 | DeleteButton | `fps==null` early-return(가드 확정), SwitchLock 미관여(정정) | `handleDelete` — `if(!selected) return`(무메시지) |
 | 4 | EditButton | **실동작 확정**(SwitchLock+LockColumn 2건 스코프 포함) | `useConstraintOfShipmentQtyStore.setEditMode` 토글 + `SubTitle customButtons`(EDIT, `hasButton('EDIT')` 게이트) — DIVISION_ID·VAL_TP_CD~PRE_KEY_VALUES 는 `editLock.ALWAYS_LOCKED_COLUMNS`로 토글 무관 항상잠금 |
 | 5 | InsertButton | **확인 필요**(NO-OP/실동작 미확정, 사전조건 가드 유무 불명) | **잠정 구현** — `handleInsert` 배선(division 확정 필요, 조회 후에만 허용). §3 gridSignals#8~11(Insert/SetValue/LockRange 조합)이 방향성(실동작)은 뒷받침하나 override 본문 자체의 가드 유무는 미확정 — 최종 확정 전 전환 완료로 간주하지 않는다(design 01 §2#5 명시 규정 그대로 적용) |
@@ -53,24 +53,20 @@
 
 | # | msgId | AS-IS 조건 | TO-BE 구현 |
 |--:|---|---|---|
-| 1 | MSG00099 | 일반쌍 Min>Max(SAT/SUN쌍 적용여부 확인필요) | `useConstraintOfShipmentQtyValidation` 2) — 일반쌍만 검사(SAT/SUN 미검사, 확인 필요) |
+| 1 | MSG00099 | Min>Max 3쌍(일반·SAT·SUN) | `validateSaveRows` 5) — {0}·{1} = MIN·MAX · MIN(SAT)·MAX(SAT) · MIN(SUN)·MAX(SUN) |
 | 2 | MSG00001 | 8개 필수값 일괄체크 | `validateSaveRows` 1) — `REQUIRED_COLUMNS` 8종(등록됨 MSG00001 그대로 재사용) |
-| 3 | MSG00046 | Sales Site Priority(대상 확인 필요) | **미구현(확인 필요)** — 대상 컬럼·조건 원문 미확보 |
-| 4 | MSG00219 | From>To | `validateSaveRows` 4) |
-| 5 | MSG00022 | 일반쌍 Min/Max 동시공백 | `validateSaveRows` 3) — 일반쌍만(SAT/SUN 미검사, 확인 필요) |
-| 6 | MSG00458 | Item 존재 확인 | **미구현(확인 필요)** — 서버(SAVE SP) 판정 영역, PKG_SCP0132 미배포로 런타임 검증 불가 |
-| 7 | MSG00004 | 저장 성공(SP 결과 'S') | `useProcMutation` 표준 onSuccess toast 대체 |
-| 8 | (없음) | 저장 실패 2차 콜백 | `useProcMutation` 표준 실패 핸들 |
-| 9 | (없음, GMessageBoxForException) | 예외 발생 | `useProcMutation` 표준 에러 핸들 |
+| 3 | MSG00046 | 날짜 형식(.cs:722, 인자 문구는 AS-IS 복사 잔재) | `validateSaveRows` 2) — TO-BE MSG00046 은 다른 뜻이라 MSG01081 사용 |
+| 4 | MSG00219 | From>To | `validateSaveRows` 2) — 8자리로 비교 |
+| 5 | MSG00022 | 일반쌍 Min/Max 동시공백 | `validateSaveRows` 3) — {0}·{1} = MIN·MAX |
+| 6 | MSG00458 | Item 존재 확인 | `validateSaveRows` 6) — init 6번째 결과(행 Div · 대소문자 무시). AS-IS 처럼 사업부 변환 없음 : EE 계열은 품목 행이 없어 저장 전 항상 차단 |
+| 7 | MSG00004 | 저장 성공(SP 결과 'S') | MSG00002 토스트 + 재조회 |
+| 8 | (없음) | 저장 실패 2차 콜백 | `rejectedMessage` — 결과 커서 거부 문구 안내, 재조회 없음 |
+| 9 | (없음, GMessageBoxForException) | 예외 발생 | `submitConstraintOfShipmentQtySave` catch → 안내 |
 
 ## 미이관/대체 정직 표기 (convert-core §4.3)
 
 - **InsertButton override 본문 사전조건 가드 미확정**(design 01 §5#3): AS-IS 원본 부재로 확정 불가. `handleInsert`는 division 확정(단일값) 조건부로 잠정 활성화했다 — 최종 확정 전까지 전환 완료로 간주하지 않는다.
 - **SmartColMerge(line929) 미구현**: 병합 대상 컬럼을 특정할 원본이 없다.
-- **VAL_TP_CD A/B 분기 기준 추정**(design 03 §6#1): 컬럼명(일반쌍 vs SAT/SUN쌍) 기준으로 최선 추정했다 — 정확한 AS-IS 조건은 확인 필요.
-- **SAT/SUN 수량쌍 게이트 미적용**(design 03 §6#6): validations#1/#5 조건식 변수명이 일반쌍(`iMin`/`iMax`, `v_sipm_min_qyt`/`v_sipm_max_qty`)만 특정 가능해, SAT/SUN 쌍(4컬럼)에는 이번 회차 게이트를 걸지 않았다.
-- **Sales Site Priority 게이트(MSG00046) 미구현**(design 03 §6#7): 대상·조건 원문이 JSON에 없다.
-- **Item 존재 확인(MSG00458) 미구현**: 서버(SAVE SP) 판정 영역이며 `PKG_SCP0132` 미배포로 런타임 검증이 애초 불가능하다.
 - **붙여넣기(ClipboardPasted) OPMZ_PLAN_GR_ID 정규화 미배선**: AS-IS `codeVal` 정규화 로직 원본 미확보.
 - **PRE_KEY_VALUES 신규행 잠금 제외**(design 03 §1 #23 각주): 조회모드 전체잠금엔 포함되나 `NEW_ROW_LOCKED_COLUMNS`엔 제외 — 코드상 확인된 비대칭을 그대로 재현했다(의도 여부 확인 필요).
 - **콤보 데이터소스 확인 필요 상태 그대로 잠정 배선**(design 02 §7): Division(`Division_SCP` 1·2·4층 미확인) / Plan Group(`PlanGroup_SCP_ALL` AS-IS 공급원 불명) / From Site·To Site(TO-BE 후보 전부 화이트리스트 미재현 — 재사용 금지, 신규 등록 보류라 이번 회차는 빈 옵션) / Stage·Model Group(TO-BE 미배포 — 신규 등록 보류, 빈 옵션) / Valid(`YesOrNo` 확정 재사용).

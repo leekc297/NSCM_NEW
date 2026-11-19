@@ -81,11 +81,13 @@ export const buildPivotColumns = (
       months.set(ym, month);
     }
     // 주 라벨: W_ 는 바인딩에 박힌 ISO_WEEK 를 그대로 쓴다(W_ 컬럼명 = 'W_'||BASIS_YYYYMM||ISO_WEEK,
-    //   PKG_SCP0013 실측). tag.slice(6)=ISO_WEEK. 과거 isoWeek(tag) 는 tag(yyyymm+주차)를 날짜로 파싱해
-    //   주차(33~36 등)를 '일'로 오인→월말 롤오버로 한 달 전체가 같은 주차로 뭉쳤다(예: 8월 전주 W36).
-    //   D_(일) 는 소속 주 계산이 필요하므로 isoWeek(yyyymmdd) 유지. M_ 는 'SUM'.
+    //   PKG_SCP0013 실측). tag.slice(6)=ISO_WEEK(2자리 zero-pad, DB WEEK_NAME='W01' 형식). 과거 isoWeek(tag) 는
+    //   tag(yyyymm+주차)를 날짜로 파싱해 주차(33~36 등)를 '일'로 오인→월말 롤오버로 한 달 전체가 같은 주차로 뭉쳤다.
+    //   D_(일) 는 소속 주 계산이 필요하므로 isoWeek(yyyymmdd) 유지하되, 2자리 zero-pad 로 W_ 와 라벨을 일치시킨다
+    //   — 안 그러면 W1~W9(한자리 주차)에서 일그룹 'W1' ≠ SUM그룹 'W01' 로 쪼개져 주 SUM 이 주차 뒤로 분리된다
+    //   (DB WEEK_NAME='W01' 2자리 포맷 실측). M_ 는 'SUM'.
     const weekLabel =
-      kind === 'M' ? 'SUM' : kind === 'W' ? `W${tag.slice(6)}` : `W${isoWeek(tag)}`;
+      kind === 'M' ? 'SUM' : kind === 'W' ? `W${tag.slice(6)}` : `W${String(isoWeek(tag)).padStart(2, '0')}`;
     let week = month.weeks.get(weekLabel);
     if (!week) {
       week = { label: weekLabel, leaves: [] };

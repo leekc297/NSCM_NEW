@@ -61,6 +61,14 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters,
   });
 
+  // 조회 결과가 새로 도착하면 저장오류 강조를 해제한다. 강조는 저장 시도 시작(mutate L122)에만
+  //   리셋됐고 조회(setFilters)·저장성공 refetch 경로엔 해제가 없어, 중복저장 실패로 칠해진 셀이
+  //   재조회 후에도 남는 버그가 있었다(2026-11-18 사용자 신고). data 변경(=조회/refetch 완료)을
+  //   기준으로 해제하면 모든 재조회 경로를 한 번에 덮는다.
+  useEffect(() => {
+    setSaveError(null);
+  }, [data]);
+
   // Country/City 캐시 — AS-IS GetData_Country()(SCP0007_BOD.cs L604-638) 는 p_scm_site_id='' 로
   // 전 SITE 를 1회 캐시(dtCountryCity)한다. SetCityCode 가 이 캐시로 From/To Site 셀 변경마다
   // client-side lookup 한다(서버 재조회 없음).
@@ -134,15 +142,24 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
       await refetch();
     } catch (error) {
       // SP 저장검증 실패(99030 기간중복 등) — 인터셉터가 O_RESULT_CURSOR 오류 행을 error.cause 로 전달.
-      // MSG00043('저장시 중복 오류가 발생하였습니다. {0}') + SP 상세메시지 표출 + 위반 행 강조(BodGrid).
+      // AS-IS SCP0007_BOD.cs L843-866: MSG00043('...발생하였습니다.{0}') 의 {0} 에 상세문구를 끼워
+      //   '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다' 로 띄운다. AS-IS 는 그 상세
+      //   문구를 C# 에 하드코딩했지만, TO-BE 는 SP(P_SCP0007_SAVE_BOD)가 ERR_MESSAGE 로 같은 문구를
+      //   돌려주므로 그 값을 쓴다(결과 동일).
       const cause = error instanceof Error ? error.cause : undefined;
       if (cause && typeof cause === 'object' && 'RESULT_CODE' in cause) {
         const errorRow = cause as BodSaveErrorRow;
         const detail = errorRow.ERR_MESSAGE || errorRow.MSG || '';
-        void setAlert({
-          type: 'alert',
-          content: t('MSG00043', '_저장시 중복 오류가 발생하였습니다. {0}').replace('{0}', detail),
-        });
+        // 주의: TO-BE DB(SCM_ADM_MSG_M) MSG00043 은 '{0}' 플레이스홀더 없이 이관돼(locales JSON 도
+        //   동일) t() 결과에 '{0}' 가 없다. 그대로 replace 하면 공쳐 detail 이 버려지므로, 자리표시자가
+        //   있으면 치환하고 없으면 뒤에 이어붙인다(AS-IS 와 동일한 '본문 + 상세' 표출 보장).
+        const base = t('MSG00043', '_저장시 중복 오류가 발생하였습니다. {0}');
+        const content = base.includes('{0}')
+          ? base.replace('{0}', detail)
+          : detail
+            ? `${base} ${detail}`
+            : base;
+        void setAlert({ type: 'alert', content });
         setSaveError(errorRow);
         return;
       }

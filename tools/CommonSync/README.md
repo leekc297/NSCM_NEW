@@ -121,3 +121,8 @@ python tools/CommonSync/common_sync.py --apply --no-fetch --target <sha>
 python tools/CommonSync/common_sync.py --upload-prepare --keys DMF0082 --files-from files.txt --out <dir>
 # 시험: --work <사본 폴더> (백업은 사본 안 · 기준선 미갱신) · --base/--tip 으로 과거 회차 재현
 ```
+
+## screen_sync.py (2026-11-18)
+- CheckList(run_verify.py, --only 제외) 시작 때 자동 실행. DB MODE(harness.json repairScope=DB_ONLY)일 때만 그 화면 FE 페이지 폴더를 Source Download & Merge 와 같은 규칙(common_sync.py --overwrite-local)으로 받는다. UI/DB MODE 는 건너뜀.
+- common_sync.py --paths <nscm-fe 기준 경로>: 받을 범위를 좁힌다. 전체 기준선(state.json)은 옮기지 않는다.
+- 결과 Doc/verify/<ID>/screen_sync.json · 보고·백업은 common_sync 와 같다(.vibe/common_sync · _artifacts/_backup/NSCMFE_PRE_COMMON_*).

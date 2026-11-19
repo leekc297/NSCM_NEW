@@ -46,6 +46,13 @@ export const MEASURE = {
 //   SCP0111 은 GET_ADMIN_GROUP_MEASURE 미등록이라 sales-plan 식 AuthGroup CMBO 대신 session.groups 직접 판정을 쓴다.
 export const ADMIN_GROUP_NAME = 'System Administrator';
 
+// SCM PI Admin / SCP Planner 권한 그룹명 — AS-IS BOH 편집 2-분기(cs:564-565 isEdit)의 나머지 두 축.
+//   DB 실측(SCM_ADM_USER_GR_M, 2026-11-16 ora.py): 두 그룹은 USER_GR_ID==USER_GR_NM 이라 NM 도 동일 문자열.
+//   session.groups(USER_GR_NM 배열)로 판정한다(ADMIN_GROUP_NAME 과 동일 규약). INV(measureFlag=6) 행 BOH
+//   편집만 추가 허용하는 축이다 — 관리컬럼 노출·ADMIN 저장·Insert V1 은 ADMIN 전용(아래 editLock 참고).
+export const PI_ADMIN_GROUP_NAME = 'SCM PI Admin';
+export const PLANNER_GROUP_NAME = 'SCP Planner';
+
 // division 특수 코드 (design 03 §3-Lock / §1-M).
 export const DIVISION_ESS = '82'; // ESS — 파생검증(D1/D2) + 신규행 LINE_ID 분기 A + 조건색 C1/C2
 export const DIVISION_SMALL = '40'; // 소형 — L10~L13 편집잠금 분기
@@ -64,14 +71,16 @@ export const OP_GROUP_CELL = 'A';
 export const OP_GROUP_ELECTRODE = 'E';
 
 // 기본 조회기간(월수) lookup — AS-IS Data.Common(LookupCommon,"INTEGRATION_PSI_DEFAULT_PERIOD").
-//   응답 CODE(SEGMENT1 정규화)=개월수. To 초기 선택값 = 시작월+(CODE-1)월 (design 02 §3.2 / cs:256-260).
+//   응답 필드 = **`PERIOD`**(2026-11-16 ora.py 실측). admin/lookup 은 동적 PIVOT 이라 결과 컬럼명이
+//   SCM_ADM_LOOKUP_MASTER 헤더값(SEGMENT1='PERIOD')이 된다 — `.CODE` 아님. 값은 detail SEGMENT1(현재 '6')=개월수.
+//   To 초기 선택값 = 시작월+(PERIOD-1)월 (design 02 §3.2 / cs:256-260).
 //   주의: 이 값은 To "선택값"만 정한다 — From/To 콤보 "목록 범위"는 HORIZON_END_DATE 로 별도 산정(cs:287).
 export const DEFAULT_PERIOD_LOOKUP = 'INTEGRATION_PSI_DEFAULT_PERIOD' as const;
 // lookup CODE 부재 시 fallback 개월수 — AS-IS else 분기 시작월+5월(=6개월치, cs:264).
 export const DEFAULT_PERIOD_MONTHS = 6;
 // From/To 콤보 목록 상한 fallback — SCPPlanPeriod 부재 시 시작월+11월(AS-IS cs:277).
-//   미사용: Period 를 SCP 공통 PeriodRangePicker(자유 달력)로 바꿔 "선택 가능한 월 목록"이 없어졌다
-//   (사용자 지시 2026-10-12). AS-IS 실측값으로 남겨 둔다 — 상한 제약을 되살릴 때 쓸 근거다.
+//   미사용: Period 를 표준 PeriodField mode='month'(월 피커)로 바꿔 "선택 가능한 월 목록"이 없어졌다
+//   (사용자 지시 2026-10-12, 2026-11-16 월 피커 표준으로 재교체). AS-IS 실측값으로 남겨 둔다 — 상한 제약을 되살릴 때 쓸 근거다.
 export const PERIOD_LIST_FALLBACK_MONTHS = 12;
 
 // LINE_ID 신규행 기본값 sentinel (design 03 §3-Value V2 / §2-D). 저장 시 "-" 이면 확인(MSG00453→MSG01434).
@@ -97,8 +106,8 @@ export const COMBO = {
   DIVISION: 'Division_SCP',
   PLAN_DATE: 'DATE_WEEKLY1_SCP_ALL', // 반환 PLANDATE/DIVISION_ID → 클라 필터(Division·SE/FN PlanType 교집합)
   PLAN_TYPE: 'PlanType1_SCP_ALL', // 반환 CODE/DIVISION_ID/PLANDATE → PlanDate 산출용(cascade 필터)
-  // 아래 2건은 **현재 미호출**이다 — Period 가 SCP 공통 PeriodRangePicker(자유 달력)로 바뀌어 월 목록/목록상한을
-  //   쓰지 않는다(사용자 지시 2026-10-12). 실측 SQL_ID·파라미터 계약은 복구 근거로 남긴다.
+  // 아래 2건은 **현재 미호출**이다 — Period 가 표준 PeriodField mode='month'(월 피커)로 바뀌어 월 목록/목록상한을
+  //   쓰지 않는다(사용자 지시 2026-10-12, 2026-11-16 월 피커 표준으로 재교체). 실측 SQL_ID·파라미터 계약은 복구 근거로 남긴다.
   CALENDAR_MONTH: 'CalendarMonth', // 파라미터 @param1/@param2 (basis_yyyymm >= / <=) → 월 목록 CODE=YYYYMM
   SCP_PLAN_PERIOD: 'SCPPlanPeriod_SCP', // 파라미터 @planName/@divisionId → HORIZON_END_DATE(기간 목록 상한)
 } as const;
@@ -107,17 +116,12 @@ export const DIVISION_EE_EXCLUDE = 'EE';
 // cboPlanDate 노출 대상 PlanType 코드 (design 02 §3.1 — SE/FN PlanType 의 PLANDATE 교집합만 노출).
 export const PLAN_DATE_ALLOWED_PLAN_TYPES = ['SE', 'FN'] as const;
 
-// F6 개인화 저장 날짜키 별칭 — 공용 personalizeCondition 의 EXCLUDED_DATE_PARAM
-//   (/(yyyymmdd|yyyymm|^yyyy$|^period(from|to)?$|date(fr|to))$/i, gridAction.ts L650)이
-//   planStartYyyymmdd/fromYyyymm/toYyyymm 을 전부 날짜로 보고 저장에서 제외한다("날짜는 개인화 대상 아님" 공용 규약).
-//   사용자 지시(2026-10-19)로 이 화면은 PlanDate·Period 도 F6 저장/복원 대상이 되어야 해서, 정규식에 안 걸리는
-//   별칭(...Ymd)으로 투영해 저장하고 복원 시 원래 키로 역매핑한다(SCP0031 Global PSI 선례 1:1 — 공용 정규식은
-//   타 화면 회귀 위험이 커 건드리지 않는다). 실제 SearchCondition 필드명·SP 매핑·Form 배선은 불변.
-export const SAVE_DATE_ALIAS = {
-  planStartYyyymmdd: 'planStartYmd',
-  fromYyyymm: 'fromYmd',
-  toYyyymm: 'toYmd',
-} as const;
+// F6 개인화 저장 — PlanDate·Period(조회구간)는 **저장 대상 아님**(공통 원칙, 사용자 지시 2026-11-16).
+//   공용 personalizeCondition 의 EXCLUDED_DATE_PARAM(/(yyyymmdd|yyyymm|^yyyy$|^period(from|to)?$|date(fr|to))$/i,
+//   gridAction.ts L660)이 planStartYyyymmdd/fromYyyymm/toYyyymm 을 전부 날짜로 보고 저장에서 제외한다
+//   ("날짜는 개인화 대상 아님" 공용 규약 + AS-IS ConditionNotUseList cboPlanDate 제외와 일치). 컨테이너는
+//   searchCondition 을 그대로 SubTitle.searchParam 으로 넘기면 된다 — 자매 Capa/OptCapa 와 동일(별칭 우회 폐기).
+//   재진입 시 PlanDate·Period 는 Form 의 기본선택 effect 가 다시 도출한다.
 
 // 신규행 셀콤보 원천 lookup (Wave1, 사용자 지시 2026-10-19 — 코드성 컬럼을 드롭다운으로 제한해 오입력 차단).
 //   SCM_ADM_LOOKUP_MASTER_DETAIL 실측: OPERATION_GROUP(SEG1=코드 P/A/E, SEG2=명 Pack/Cell/Electrode) /
@@ -159,10 +163,10 @@ export const MSG = {
   //   "필수"가 아니라 "유효값 안내"가 맞다. AS-IS 전용 리터럴("OPERATION_GROUP이 Lookup에 없는 값입니다",
   //   roslyn L1217) 등가. DB 코드 부재라 비카탈로그 key + 한글 fallback(DERIV_MISMATCH 선례)으로 유효값을 직접 안내.
   OP_GROUP_INVALID: 'SCP0111_OP_GROUP_INVALID',
-  // 파생검증 D1/D2 불일치 경고 (design 03 §3-Deriv). AS-IS 는 리터럴 "수량 불일치"(catalog MSG 코드 아님) —
-  //   TO-BE MSG_M 등가 코드 미확정(확인필요). 실 MSG 코드를 재사용하면 hook#114 오표시 위험이 있어
-  //   비카탈로그 key 로 두고 t() defaultValue 로만 표시(경고, 저장 미차단). 코드 확정 시 여기만 교체.
-  DERIV_MISMATCH: 'SCP0111_DERIV_MISMATCH',
+  // 파생검증 D1/D2 불일치 경고 (design 03 §3-Deriv). AS-IS 리터럴 "수량 불일치" 대응.
+  //   메타 소유자 채번 완료(R3 해소) → MSG01502 적용(KO "수량 불일치" / EN·CN "Qty mismatch",
+  //   SCM_ADM_MSG_M USE_YN='Y' 3언어 실측 2026-11-17). 경고만, 저장 미차단.
+  DERIV_MISMATCH: 'MSG01502',
 } as const;
 
 // 저장 시 공백검증 대상 15필수 (AS-IS roslyn L1237 조건식 1:1 — division_id/company_id/plant_id/

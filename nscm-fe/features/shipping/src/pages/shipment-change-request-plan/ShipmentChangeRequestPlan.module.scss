@@ -39,7 +39,7 @@
 }
 
 // 가운데 고정 폼 Panel = 요청정보(RequestInfoPanel) + 액션바. 컴팩트하게 스크롤 없이 담는다.
-//   Panel 은 px 고정(min=max)이며 그 값은 .requestInfo 실측 높이다(2026-11-12 — 종전 상수 FORM_PANEL_SIZE 폐지).
+//   Panel 이 px 고정이라 내용이 넘치면 잘리므로, 폼은 FORM_PANEL_SIZE 안에 들어가는 컴팩트 크기여야 한다.
 .formPane {
   display: flex;
   flex-direction: column;
@@ -50,11 +50,7 @@
 
 .requestInfo {
   flex: 0 0 auto; // 내용(컴팩트 폼) 자연 높이 — 고정 패널 안에서 늘어나 필드 간 빈틈이 생기지 않게.
-  // 이 요소의 실측 높이(패딩 포함)가 곧 폼 패널 높이다(useRequestInfoFold.contentRef).
-  //   2026-11-12: 액션바가 머리줄로 들어오면서 하단 여백을 이 요소가 갖는다(0 -> 6px).
-  //   2026-11-12(사용자 지시): 좌우 여백 12px -> 0. 상단 조회조건(공용 SearchArea — 자체 좌우 여백 없이
-  //     본문 폭 그대로 테두리를 그린다)과 Request Info 테두리 박스의 좌·우 끝선을 맞춘다.
-  padding: 6px 0;
+  padding: 6px 12px 0;
 }
 
 .actionBar {

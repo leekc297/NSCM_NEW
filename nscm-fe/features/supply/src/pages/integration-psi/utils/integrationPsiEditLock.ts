@@ -30,10 +30,11 @@ export interface AuthContext {
 export const isBohEditableAuth = (auth: AuthContext): boolean =>
   auth.isAdmin || auth.isPiAdmin || auth.isPlanner;
 
-// 편집 권한 보유 여부 — 편집모드 전용 컬럼(SEQ_FLAG/MEASURE/PLANT_ID/TO_SITE) 가시성 기준.
-//   AS-IS 는 IsEditMode 로 노출했으나 TO-BE 는 편집모드가 없으므로 편집 권한 보유 시 노출한다.
-export const hasEditAuth = (auth: AuthContext): boolean =>
-  auth.isAdmin || auth.isPiAdmin || auth.isPlanner;
+// 관리컬럼(SEQ_FLAG/MEASURE/PLANT_ID/TO_SITE) 가시성 기준 — **ADMIN 전용**이다.
+//   AS-IS SetVisibleSheetColumns(cs:1064-1087)는 EditButton 의 ADMIN 분기(cs:594)에서만 호출된다.
+//   SCM PI Admin / SCP Planner 는 BOH(INV) 편집 권한은 있어도(isBohEditableAuth) 관리컬럼은 못 본다.
+//   TO-BE 는 편집모드가 없으므로 isAdmin 보유 시 노출한다 — isPiAdmin/isPlanner 는 가시성에 영향 없다.
+export const hasEditAuth = (auth: AuthContext): boolean => auth.isAdmin;
 
 // seqFlag 코드 파싱 (design 03 §3-Lock cs:608,676). packFlag=seqFlag[0], measureFlag=seqFlag[1].
 //   packFlag: 1 팩/모듈제품, 2 팩/모듈반제품, 3 셀제품, 4 셀반제품, 5 전극, 6 셀후공정제품, 7 셀후공정반제품.
@@ -133,20 +134,25 @@ export const isInsertRowCellEditable = (binding: string, auth: AuthContext): boo
 //   ① ADMIN(System Administrator, nowGroupID=="ADMIN", cs:573): LockColumn(PLAN_TYPE..INCOTERMS)+
 //      (UOM..TO_SITE) 만 잠그고 **BOH_QTY(sort160, INCOTERMS150~UOM170 사이)는 미잠금** → 전 행 편집.
 //      주석 "Admin 권한의 경우 전체 컬럼 edit 가능"(2024-07-31) 그대로.
-//   ② 그 외(일반/SCM PI Admin/SCP Planner, cs:600/650-652): LockColumn(BOH_QTY..TO_SITE) 전잠금 후
-//      measureFlag=6(INV) 행만 LockRange(BOH, !isEdit) 로 해제 → **INV & mf6 & isEdit(PI Admin/Planner)**.
+//   ② 그 외(일반/SCM PI Admin/SCP Planner): LockColumn(BOH_QTY..TO_SITE) 전잠금(cs:600) 후 **division별로
+//      서로 다른 조건**의 행만 LockRange(BOH, !isEdit) 로 해제한다 — AS-IS 는 둘을 AND 하지 않는다:
+//        - ESS(82): measure=='INV' 이면 seqFlag 무관하게 해제 (L17, cs:789)
+//        - 비ESS·소형(40): measureFlag=='6'(seqFlag[1]) 이면 해제 (L8/L12, cs:650/692)
+//      해제된 행은 isEdit 권한(SCM PI Admin/SCP Planner)일 때만 실제 편집 가능.
 export const isBohCellEditable = (row: Row, ctx: EditLockContext): boolean => {
   if (ctx.auth.isAdmin) return true; // ① ADMIN: 전 행 BOH 편집(cs:573 분기, BOH 미잠금)
-  // ② 그 외: measure=INV & seqFlag[1]=6 & isEdit 권한(SCM PI Admin/SCP Planner)
-  if (s(row.MEASURE) !== MEASURE.INV) return false;
-  if (measureFlag(row) !== '6') return false;
-  return isBohEditableAuth(ctx.auth);
+  // ② 그 외: division별 BOH 해제 조건 — ESS=measure INV / 비ESS=measureFlag 6
+  const bohUnlocked =
+    ctx.division === DIVISION_ESS
+      ? s(row.MEASURE) === MEASURE.INV // L17 ESS: measure=INV (cs:789)
+      : measureFlag(row) === '6'; // L8/L12 비ESS·소형: measureFlag=6 (cs:650/692)
+  return bohUnlocked && isBohEditableAuth(ctx.auth);
 };
 
 // ===== 고정 컬럼 가시성 (design 03 §1 VISIBLE=N / §3-Other O4 SetVisibleSheetColumns) =====
 //   VISIBLE=N 2건(MEASURE_COLOR/MEASURE_ORDER_NO)은 상시 숨김. AS-IS 는 아래 4건(SEQ_FLAG/MEASURE/
-//   PLANT_ID/TO_SITE)을 IsEditMode 일 때만 노출했으나(cs:1064-1087), TO-BE 는 편집모드가 없으므로
-//   편집 권한 보유 시 노출한다(hasEditAuth).
+//   PLANT_ID/TO_SITE)을 ADMIN 편집모드일 때만 노출했으나(cs:1064-1087, SetVisibleSheetColumns 는 ADMIN
+//   분기 cs:594 전용), TO-BE 는 편집모드가 없으므로 ADMIN 보유 시 노출한다(hasEditAuth=isAdmin).
 export const HIDDEN_COLUMNS: readonly string[] = ['MEASURE_COLOR', 'MEASURE_ORDER_NO'];
 export const EDIT_AUTH_ONLY_COLUMNS: readonly string[] = [
   'SEQ_FLAG',
@@ -165,16 +171,29 @@ export const isFixedColumnVisible = (
   return baseVisible;
 };
 
-// ===== 조건부 배경색 C1/C2 (design 03 §3-Color) — ESS 편집가능 셀 연두 배경 =====
-//   C1: ESS PROD_PLAN & seqFlag[0]=2(Pack). C2: ESS IN_HOUSE_MOVING & seqFlag[0]=3 & TO_PRODUCT 유효.
-//   편집가능=연두(140,240,60) / 잠금=흰(252,252,252). hook#95 표준(편집=Yellow/잠금=Gray)로 매핑.
-export const isEssEditableColorCell = (row: Row, division: string): boolean => {
+// ===== 조건부 배경색 C1/C2 (design 03 §3-Color, AS-IS SetBGColor2 cs:757/782) — ESS 연두 배경 =====
+//   ESS(div82) 비ADMIN 에서 아래 두 행 유형의 기간셀을 연두(140,240,60)로 칠한다(AS-IS 복원).
+//   C1: PROD_PLAN & seqFlag[0]=2(팩/모듈 반제품)                               — cs:742-757
+//   C2: IN_HOUSE_MOVING & seqFlag[0]=3(셀제품) & TO_PRODUCT 유효(''·'-' 아님)
+//       & VALUE_TYPE≠'-' & 그 TO_PRODUCT 의 PROD_PLAN 페어 행이 존재               — cs:761-782
+//   prodPlanItemIds = MEASURE=PROD_PLAN 행들의 ITEM_ID 집합 — C2 페어 존재 판정(AS-IS DBUtils.Filter
+//     dtPSIAll "ITEM_ID=<TO_PRODUCT> AND MEASURE='PROD_PLAN'" Rows.Count>0, cs:767-769)을 그대로 옮긴 것.
+//   주의: AS-IS 는 편집모드(IsEditMode)에서만 연두, 아니면 흰색(cs:748-754)이다. TO-BE 는 편집모드 토글이
+//     없으므로(이 파일 상단 주석) 권한/잠금으로 편집 여부를 바로 결정 — C1/C2 행은 상시 연두로 둔다.
+export const isEssGreenCell = (
+  row: Row,
+  division: string,
+  prodPlanItemIds: ReadonlySet<string>
+): boolean => {
   if (division !== DIVISION_ESS) return false;
   const measure = s(row.MEASURE);
   const pf = packFlag(row);
   if (measure === MEASURE.PROD_PLAN && pf === '2') return true; // C1
-  if (measure === MEASURE.IN_HOUSE_MOVING && pf === '3' && s(row.TO_PRODUCT).trim() !== '') {
-    return true; // C2
+  if (measure === MEASURE.IN_HOUSE_MOVING && pf === '3') {
+    const toProduct = s(row.TO_PRODUCT).trim();
+    if (toProduct !== '' && toProduct !== '-' && s(row.VALUE_TYPE) !== '-') {
+      return prodPlanItemIds.has(toProduct); // C2 — PROD_PLAN 페어가 있을 때만 연두
+    }
   }
   return false;
 };

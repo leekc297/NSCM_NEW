@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@foundation/apis';
 import { BUTTON_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useMutation } from '@foundation/query-client';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabLookupQueries } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
@@ -61,6 +62,24 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 기존 로직 주석 보존 (2026-10-28) 끝
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
+  // 조회 SP 호출을 react-query mutation 으로 감싼다 — raw apiClient.callProc 는 react-query 밖이라
+  //   MDIContainer 의 useIsBusy([tabId]) 공통 로딩 스피너가 뜨지 않는다(전체조회 F5·개별 QUERY 모두
+  //   "조회 중" 표시 없음, 테스터 지적 2026-11-16). mutationKey 를 [tabId] 로 두어 조회 동안 전역
+  //   프로그래스가 표시되게 한다(ShipmentPlanFg 선례). 조회는 멱등이라 재시도는 무해하나 중복 호출을
+  //   피하려 retry:0 — 성패 분기(토스트/알럿)는 호출부 callValidationSp 가 res 로 종전과 동일 처리.
+  const { mutateAsync: callProcAsync } = useMutation({
+    mutationKey: [tabId],
+    retry: 0,
+    mutationFn: (sheet: SHEETS) =>
+      apiClient.callProc<MENU_ID, SHEETS.BOM>(MENU_ID, sheet as SHEETS.BOM, BUTTON_TYPE.SEARCH, {
+        divisionId: searchParams.divisionId,
+        searchType: '',
+        // ALL(빈 배열) -> '' (전체). 다중선택은 콤마 결합.
+        planGroupId: searchParams.planGroupIds.length ? searchParams.planGroupIds.join(',') : '',
+        itemId: searchParams.itemId,
+      }),
+  });
 
   // 마스터 목록 = lookup MASTER_VALIDATION(admin/lookup). AS-IS InsertBaseRow 는 Form_Load 에 목록을
   //   seed 하므로(조회조건 무관) mount 시 로드. 비활성행(PROCEDURE_NAME='-' = Sales Site)은 제외(R11).
@@ -144,20 +163,9 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
     async (row: MasterValidationRow): Promise<DetailRow[] | null> => {
       const spec = VALIDATION_MAP[row.VALIDATION_TYPE];
       if (!spec) return null;
-      const payload = {
-        divisionId: searchParams.divisionId,
-        searchType: '',
-        // ALL(빈 배열) -> '' (전체). 다중선택은 콤마 결합.
-        planGroupId: searchParams.planGroupIds.length ? searchParams.planGroupIds.join(',') : '',
-        itemId: searchParams.itemId,
-      };
       try {
-        const res = await apiClient.callProc<MENU_ID, SHEETS.BOM>(
-          MENU_ID,
-          spec.sheet as SHEETS.BOM,
-          BUTTON_TYPE.SEARCH,
-          payload
-        );
+        // callProcAsync(mutationKey=[tabId]) 경유 — 전역 로딩 스피너 트리거(payload 는 mutationFn 이 구성).
+        const res = await callProcAsync(spec.sheet);
         if (res.code !== '0') {
           void setAlert({ type: 'alert', content: res.message ?? t('MSG01052', '_An error has occurred when inquiring.') });
           return null;
@@ -168,7 +176,7 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
         return null;
       }
     },
-    [searchParams, setAlert, t]
+    [callProcAsync, setAlert, t]
   );
 
   // QUERY 셀 클릭 — 해당 행 검증유형 SP dispatch -> COUNT 갱신 + detail 바인딩(design 03 §3 R13).
@@ -255,11 +263,13 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    // read-only 뷰어 — AS-IS Insert/Edit/Delete/Save override 본문 공백(NO-OP, design 00 §4d).
-    //   명시적 무동작 함수로 배선(키 생략 금지 — 공용 SubTitle addRow/removeRow 재활성 방지, self-check §3).
-    insert: () => undefined,
-    save: () => undefined,
-    delete: () => undefined,
+    // read-only 뷰어 — AS-IS Insert/Edit/Delete/Save override 는 본문 공백 NO-OP(design 00 §4d)라
+    //   당초 노출+무동작으로 배선했으나, 사용자 지시(2026-11-16)로 버튼 자체를 제거한다. false =
+    //   SubTitle 에서 해당 버튼 미렌더(buttonActions.<key>===false 분기) + 공용 addRow/removeRow 도
+    //   재활성되지 않는다(명시적 비활성이라 키 생략과 달리 안전).
+    insert: false,
+    save: false,
+    delete: false,
     manual: false,
     upload: false,
   };

@@ -199,8 +199,9 @@ export const ShipmentChangeRequestForm = ({ onSearch, onItemSearch }: Props) => 
             />
           </Grid>
 
-          {/* Confirm ID — 다건(개행/콤마). 자매 SSP0200 과 같은 자리(Model/Nickname 다음, 메인 영역).
-              SO No 는 바로 이 앞에 오지만 AS-IS 비노출이라 렌더하지 않는다(상단 주석 참조). */}
+          {/* Confirm ID — 다건(콤마). 자매 SSP0200 과 동일한 single-line(사용자 결정 2026-11-17 —
+              종전 multiline+maxRows 는 붙여넣기 시 스크롤·여러 줄이 생겨 평범한 입력창으로 통일).
+              store multiLine() 이 콤마로 분해해 SP IN 절로 보낸다. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -209,17 +210,7 @@ export const ShipmentChangeRequestForm = ({ onSearch, onItemSearch }: Props) => 
               render={() => (
                 <InputField
                   fullWidth
-                  multiline
-                  maxRows={3}
-                  // 기본 multiline 은 상단 정렬이라 같은 행의 콤보·popup 필드와 글자 세로 위치가
-                  //   어긋난다(자매 SSP0200 a8dffcd0 과 동일 처방 — 정렬만 떼어낸 공용 클래스).
-                  className={commonStyles.multilineSearchField}
                   value={sc.confirmId}
-                  // Enter 로 줄바꿈(행 추가)되지 않게 막는다(사용자 요청 2026-11-05) — 다건은 콤마/
-                  //   붙여넣기(개행 포함)로 입력하고, store multiLine() 이 `[\n,]` 로 분해한다.
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') e.preventDefault();
-                  }}
                   onChange={e => set({ confirmId: e.target.value })}
                 />
               )}

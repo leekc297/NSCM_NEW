@@ -8,6 +8,7 @@ import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { WaterfallShipmentPlanSemiForm } from './components/WaterfallShipmentPlanSemiForm';
@@ -34,6 +35,8 @@ export const WaterfallShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) 
 
   const filters = useWaterfallShipmentPlanSemiStore(state => state.filters);
   const searchParams = useWaterfallShipmentPlanSemiStore(state => state.searchParams);
+  const setSearchParams = useWaterfallShipmentPlanSemiStore(state => state.setSearchParams);
+  const hasDivisionAuth = useWaterfallShipmentPlanSemiStore(state => state.hasDivisionAuth);
   const isOpenSearchArea = useWaterfallShipmentPlanSemiStore(state => state.isOpenSearchArea);
   const setOpenSearchArea = useWaterfallShipmentPlanSemiStore(state => state.setOpenSearchArea);
   const setFilters = useWaterfallShipmentPlanSemiStore(state => state.setFilters);
@@ -217,6 +220,18 @@ export const WaterfallShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) 
         searchParam={searchParams}
         hotkeyConfig={hotkeyConfig}
         customButtons={customButtons}
+        // Sum(isSumChecked, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18,
+        //   SCP0013 동형). WeeklyISO 면 숨김(합산 불필요), 권한 Division 0건이면 비활성(areaDisabled 파리티).
+        afterCount={
+          isWeeklyIso ? undefined : (
+            <Checkbox
+              disabled={!hasDivisionAuth}
+              labelText={t(LBL.SUM, '_Sum')}
+              checked={searchParams.isSumChecked}
+              onChange={checked => setSearchParams({ isSumChecked: checked })}
+            />
+          )
+        }
       />
       <WaterfallShipmentPlanSemiGrid
         gridRef={gridRef}

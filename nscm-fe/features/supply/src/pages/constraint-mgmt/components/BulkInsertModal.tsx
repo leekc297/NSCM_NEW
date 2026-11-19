@@ -73,7 +73,14 @@ export const BulkInsertModal = ({ open, modalClose, lookupType, onConfirm }: Pro
             title='Bulk Insert'
             customContentArea={
                 <div className={styles.contentWrapper}>
-                    <div className={styles.notice}>{`* 직접 입력, 최대 ${BULK_INSERT_MAX}건 가능`}</div>
+                    {/* '* ' 접두는 AS-IS 하드코딩 문구의 머리표식인데 MSG01504 등록값에는 빠져 있어
+                        코드에서 붙인다(등록값은 다른 소비자 영향을 피해 그대로 둔다). */}
+                    <div className={styles.notice}>
+                        {`* ${t(MSG.BULK_INSERT_NOTICE, '_Direct input, up to {0} rows allowed').replace(
+                            '{0}',
+                            String(BULK_INSERT_MAX)
+                        )}`}
+                    </div>
 
                     {/* 상위 Lookup Type — 보여주기만 하고 수정은 못 하게 disabled */}
                     <FormItem
@@ -86,7 +93,7 @@ export const BulkInsertModal = ({ open, modalClose, lookupType, onConfirm }: Pro
                     {/* 추가 Row 수 — 숫자만 입력, Enter 로도 확인 */}
                     <FormItem
                         className={commonStyles.formItem}
-                        label='추가 Row 수'
+                        label={t(LBL.BULK_INSERT_ROW_COUNT, '_Number of Rows to Add')}
                         labelAlign='right'
                         render={() => (
                             <InputField

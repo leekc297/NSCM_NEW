@@ -128,6 +128,8 @@ export const EtcSalesReportsForm = ({
                 <CustomDropdown
                   value={sc.planResult}
                   options={[
+                    // ALL — 실적·계획 구간 모두 편집 (2026-11-17 사용자테스트 개선 요청. editLock 참조)
+                    { label: 'ALL', value: PLAN_RESULT.ALL },
                     { label: 'Plan', value: PLAN_RESULT.PLAN },
                     { label: 'Result', value: PLAN_RESULT.RESULT },
                   ]}

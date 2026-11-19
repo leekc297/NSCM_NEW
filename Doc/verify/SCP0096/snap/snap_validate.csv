@@ -1,0 +1,6 @@
+﻿key,kind,scope,status,missing,order,type_warn,extra,basis
+조회조건_Div_40,조회조건,Div 40,OK,,,,,
+버튼_Div_40,버튼,Div 40,OK,,,EDIT: TO-BE 룰 CR-084·CR-093(편집 버튼 없음 · 조회 즉시 상시 편집) — 누락 아님;SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
+헤더_Shipment_Working_Day_OSP,헤더,Shipment Working Day OSP,OK,,,,1;10;11;12;13;14;15;16;17;18;19;2;20;21;22;23;24;25;26;27;28;29;3;30;31;4;5;6;7;8;9;date;w,plan.json expectedCols[Shipment Working Day OSP][40](SHEET_COLUMNS)
+화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(MATCH)
+화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(MATCH)

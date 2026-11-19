@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { CustomDropdown, over52WeekPreset, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -17,7 +17,6 @@ import {
   ELECTRODE_LOOKUP,
   LBL,
   MENU_ID,
-  OP_GROUP_CELL,
   PRESET_W52,
   SHEETS,
 } from '../production-plan-line.constants';
@@ -62,6 +61,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   const setDivision = useProductionPlanLineStore(s => s.setDivision);
   const setLatestVersion = useProductionPlanLineStore(s => s.setLatestVersion);
   const setStageEditable = useProductionPlanLineStore(s => s.setStageEditable);
+  const setPlanHorizon = useProductionPlanLineStore(s => s.setPlanHorizon);
   const clearFilters = useProductionPlanLineStore(s => s.clearFilters);
   const openSearchArea = useProductionPlanLineStore(s => s.openSearchArea);
 
@@ -103,8 +103,27 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   //   재조회이므로 react-query 키(filters)에 상위값(div/opGroup/plantSite/cellTypeGr/planStart)을 실어 캐시한다.
   //   SP 전제(PKG body 실측): P_PLANT_SITE(STRING_SPLIT)·P_PLAN_START_YYYYMMDD 필수 → 둘 다 있을 때만 enable.
   //   반환 O_RC1 = CODE/NAME(+선두 '-' DUAL 행) — 실동작은 runtime-parity-gate 브라우저 축(미확인).
+  // Plant Site 무선택(ALL)이면 후보 전체 코드를 Line 재조회에 전개한다 — AS-IS 는 Cell Type Gr 선택 시
+  //   Plant Site 를 안 골라도 Plant Site 전체 기준으로 Line 을 재조회한다(그 계획에 해당 품목 있는 라인만).
+  //   SP P_PLANT_SITE 가 STRING_SPLIT 필수라 빈값이면 재조회가 안 되므로 후보 코드를 명시 전개한다
+  //   (I-02, SCP0013 테스트 2026-11-13). 안정 참조를 위해 plantSiteOptions(매 렌더 새 배열)가 아니라
+  //   plantSites(react-query 캐시)·sc 필드로 직접 파생한다(무한 refetch 방지, 아래 lineListFilters 주석).
+  const plantSiteCodesForLine = useMemo(
+    () =>
+      sc.plantSiteIds.length > 0
+        ? sc.plantSiteIds
+        : (plantSites ?? [])
+            .filter(
+              r =>
+                (!sc.divisionId || str(r.DIVISION_ID) === sc.divisionId) &&
+                (!sc.operationGroupId || str(r.OPERATION_GROUP) === sc.operationGroupId)
+            )
+            .map(r => str(r.CODE))
+            .filter(Boolean),
+    [sc.plantSiteIds, plantSites, sc.divisionId, sc.operationGroupId]
+  );
   const lineListEnabled =
-    sc.cellTypeGrs.length > 0 && sc.plantSiteIds.length > 0 && !!sc.planStartYyyymmdds[0];
+    sc.cellTypeGrs.length > 0 && !!sc.planStartYyyymmdds[0] && plantSiteCodesForLine.length > 0;
   //   filters 는 반드시 안정 참조여야 한다 — 매 렌더 새 객체를 넘기면 useTabProcQuery 의 useLayoutEffect 가
   //   "재조회"로 오판해 캐시를 비우고 무한 refetch 루프가 된다(useCustomQueryClient.ts:83-88 경고).
   const lineListFilters = useMemo(
@@ -113,7 +132,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
         ? {
             divisionId: sc.divisionId,
             operationGroup: sc.operationGroupId,
-            plantSite: sc.plantSiteIds.join(','),
+            plantSite: plantSiteCodesForLine.join(','), // 무선택이면 후보 전체 전개(I-02)
             cellTypeGr: sc.cellTypeGrs.join(','),
             planStartYyyymmdd: sc.planStartYyyymmdds[0] ?? '',
           }
@@ -122,7 +141,7 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
       lineListEnabled,
       sc.divisionId,
       sc.operationGroupId,
-      sc.plantSiteIds,
+      plantSiteCodesForLine,
       sc.cellTypeGrs,
       sc.planStartYyyymmdds,
     ]
@@ -155,18 +174,23 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   const extraSpecRows = (extraSpecData as { o_rc1?: ComboResponse[] })?.o_rc1;
 
   const divisionOptions = toOptions(divisions);
-  // WLast 프리셋(Period) — 현재 division 의 기본기간(SCM_MST_DIVISION.DAILY_PLAN_PERIOD). Division_SCP 콤보가
-  //   이미 이 컬럼을 반환하므로(AS-IS GetLastRange=SCM0001_GET_SCP_DAILY_PLAN_PERIOD 와 동일 원천) 별도 호출 없이
-  //   로드된 divisions 에서 읽는다. 52(미적용)·미발견이면 undefined → PeriodRangePicker 가 WLast 버튼 숨김.
-  const divisionPeriod =
-    Number((divisions ?? []).find(r => str(r.CODE) === sc.divisionId)?.DAILY_PLAN_PERIOD) ||
-    undefined;
-  // EE(JV 포함, 앞2자 'EE') 는 Operation Group 에서 Cell(A) 제외 — 사용자 지시 2026-11-11.
-  //   AS-IS deviation: AS-IS(SetChangedControl)는 EE 콤보 OperationGroupEE 를 A(Cell)/E(Electrode) 그대로
-  //   바인딩한다. 비EE 는 불변. 선택값이 'A'였다가 EE 로 바뀌면 아래 기본값 effect 가 첫 옵션(E)으로 교정한다.
-  const operationGroupOptions = toOptions(operationGroups).filter(
-    o => !(isEe && o.value === OP_GROUP_CELL)
-  );
+  // WLast 프리셋(Period) — 선택된 Plan Date 행의 PLAN_WEEKS/OVER_52W_YN(DATE_WEEKLY1_SCP_ALL 반환컬럼)로 결정.
+  //   OVER_52W_YN='Y'(계획기간 52주 초과)일 때만 그 행 PLAN_WEEKS 를 넘겨 W{PLAN_WEEKS} 버튼을 띄운다
+  //   (예: 73→W73, 92→W92). 공유 over52WeekPreset 로 일괄 적용(사용자 지시 2026-11-17). 종전 division
+  //   DAILY_PLAN_PERIOD 기준은 폐기.
+  const over52Weeks = over52WeekPreset(planDates, sc.planStartYyyymmdds[0] ?? '');
+  // 선택 Plan Date 의 계획구간(SCP구간) — 같은 DATE_WEEKLY1_SCP_ALL 행의 HORIZON_END_DATE(계획구간 끝,
+  //   8자리)/PLAN_WEEKS(주수). AS-IS SCPPlanPeriod(SCM_MST_PLAN.HORIZON_END_DATE, bucket 무관 PLAN_CYCLE='WEEKLY'
+  //   실측 2026-11-18)와 동일 원천이다. 페이지 조회검증(CheckPlanPeriodRange)이 쓰도록 스토어로 올린다(아래 effect).
+  const selectedPlanRow = (planDates ?? []).find(
+    r => str(r.CODE) === (sc.planStartYyyymmdds[0] ?? '')
+  ) as Record<string, unknown> | undefined;
+  const planHorizonEnd = str(selectedPlanRow?.HORIZON_END_DATE).slice(0, 8);
+  const planHorizonWeeks = Number(selectedPlanRow?.PLAN_WEEKS) || 0;
+  // EE(JV 포함) 의 Operation Group Cell(A) 제외는 공유 콤보 OperationGroupEE_SCP(SEGMENT1='E')에서
+  //   일괄 처리한다(SCM_ADM_CMBO_SQL_M, scp0013_fix_opgroup_ee_remove_cell.sql, 사용자 승인 2026-11-17).
+  //   화면 로컬 FE 필터였던 것을 공유 원천으로 승격 — 여기선 콤보 결과를 그대로 쓴다.
+  const operationGroupOptions = toOptions(operationGroups);
   const bucketOptions = toOptions(buckets);
   const cellTypeGrOptions = toOptions(cellTypeGrs);
   // electrode 는 lookup(LookupResponse — index signature) — CODE/NAME 로 직접 매핑(tact-time 규약).
@@ -313,6 +337,10 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   useEffect(() => {
     setLatestVersion({ latestPlanStart: latestPlanDate, latestPlanSeq: firstPlanSeq });
   }, [latestPlanDate, firstPlanSeq, setLatestVersion]);
+  // 선택 Plan Date 의 계획구간(SCP구간)을 스토어로 승격 — 페이지 조회검증(CheckPlanPeriodRange)이 소비.
+  useEffect(() => {
+    setPlanHorizon({ horizonEndYyyymmdd: planHorizonEnd, planWeeks: planHorizonWeeks });
+  }, [planHorizonEnd, planHorizonWeeks, setPlanHorizon]);
 
   // 요청1(2026-11-04, FE 전용): 선택 plan stage 편집가능 여부를 Plan-type 콤보(선택값 + 옵션)로 판정해 스토어로 승격.
   //   (1) FN 조회거나 (2) 콤보에 다음 단계(TE→PR→MA→SE→FN) 가 있으면 false. 그리드가 editContext.isStageEditable
@@ -532,8 +560,9 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               end={sc.toYyyymmdd}
               onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
               label={t(LBL.PERIOD, '_Period')}
+              required // 필수 조회조건(*) 표시 — AS-IS 는 Period 라벨에 * 가 있다(I-03, SCP0013 테스트).
               quickWeeks={SCP0013_QUICK_WEEKS}
-              lastWeeks={divisionPeriod}
+              lastWeeks={over52Weeks}
             />
           </Grid>
           {/* Bucket — chkAll 체크 시 AS-IS ChkAll_CheckedChanged 는 Daily 강제 → 선택 비활성(design 02 §1 row21/§3.3). */}
@@ -545,8 +574,8 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
             false,
             sc.chkAll
           )}
-          {/* Sum(SUM 컬럼 토글)은 그리드 건수 툴바(SubTitle)로 이동(사용자 지시 2026-11-11). ALL/Line Assign 은
-              사용자 지시(2026-10-01)로 제거됨. */}
+          {/* Sum(chkSum, SUM 컬럼 토글)은 그리드 건수 표시 오른쪽(SubTitle afterCount)으로 이동(사용자 지시
+              2026-11-18). 폼에서 제거 — 2026-11-16 폼 복귀분을 다시 툴바로 되돌림. */}
         </>
       }
     />

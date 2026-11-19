@@ -22,6 +22,7 @@ import {
   useTabLookupQueries,
   useTabProcQuery,
 } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
@@ -1201,56 +1202,68 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       //   두 proc 은 쓰는 표가 달라 중복 저장이 아니다 —
       //     DRAFTING    : CHG_REQ, CHG_REQ_DE, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN (BODY L9667 CHG_BATCH('C'))
       //     CONFIRM_40  : SSP_ANL_SHIP_CONFIRM, SSP_ANL_SHIP_PLAN_40, 이력, 메일 (XIF INSERT 없음)
-      const draftingPayload = collectDraftingSaveRows(dirty, {
-        userId: session.userId ?? '',
-        // AS-IS 는 UserInfoContext[Dept_ID] 를 보낸다(cs:6943). TO-BE 세션에 부서가 없어 공란이다(잔여).
-        userDeptId: '',
-        title: activeDetailSheet,
-        programId: MENU_ID,
-      });
-      if (!draftingPayload) return;
+      //   Insert(F8) 로 만든 행(CRUD_TYPE 'I')은 ①~③ 에서 뺀다 — AS-IS GetERPInterface(cs:6537
+      //   `if (action != FlagI)`)와 같다. 신규 행은 아직 확정이 없고 CONFIRM_ID 칸에 복사 원본 ID 가 들어
+      //   있을 뿐이라, DRAFTING 에 보내면 CHG_REQ_DE(CHANGE_REQ_NO, CONFIRM_ID, NEW_YN='N') 에 원본 ID 로
+      //   적재된다 → 같은 확정에서 Insert 2행 또는 Insert 1행+수정 1행이면 ORA-00001 로 저장 전체 실패
+      //   (dev 11-10 13:47 I^M, 11-13 10:53·11:08·13:02 I^I 실측). 신규 행은 ④ CONFIRM_40 의 'I' 분기가
+      //   새 CONFIRM_ID 를 발급하고 'New Adjustment' 요청(NEW_YN 'Y')을 따로 만든다(BODY L6422~7414).
+      //   수정·삭제 행이 하나도 없으면 ①~③ 을 건너뛰고 ④ 만 호출한다(AS-IS iCount==0 동치).
+      const erpRows = dirty.filter(r => str(r.CRUD_TYPE) !== 'I');
+      const draftingPayload =
+        erpRows.length > 0
+          ? collectDraftingSaveRows(erpRows, {
+              userId: session.userId ?? '',
+              // AS-IS 는 UserInfoContext[Dept_ID] 를 보낸다(cs:6943). TO-BE 세션에 부서가 없어 공란이다(잔여).
+              userDeptId: '',
+              title: activeDetailSheet,
+              programId: MENU_ID,
+            })
+          : null;
 
-      // ① 초안 저장 — 상단 시트에 따라 proc 분기(AS-IS cs:7011/7015).
-      let changeReqNo = '';
-      try {
-        const draftBtn = mainSheet === 'packer' ? BTN_SAVE_DRAFTING_PACKER : BTN_SAVE_DRAFTING;
-        const resDraft = await apiClient.post(
-          `/${MENU_ID}/${SHEETS.MAIN}/${draftBtn}/call-proc`,
-          draftingPayload
-        );
-        if (resDraft.status >= 400 || Number(resDraft.data?.code)) {
+      if (draftingPayload) {
+        // ① 초안 저장 — 상단 시트에 따라 proc 분기(AS-IS cs:7011/7015). 신규 행만이면 ①~③ 건너뜀.
+        let changeReqNo = '';
+        try {
+          const draftBtn = mainSheet === 'packer' ? BTN_SAVE_DRAFTING_PACKER : BTN_SAVE_DRAFTING;
+          const resDraft = await apiClient.post(
+            `/${MENU_ID}/${SHEETS.MAIN}/${draftBtn}/call-proc`,
+            draftingPayload
+          );
+          if (resDraft.status >= 400 || Number(resDraft.data?.code)) {
+            void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__Save failed.') });
+            return;
+          }
+          const d1 = (
+            resDraft.data?.result as {
+              o_rc1?: { RESULT_CODE?: unknown; REQUEST_NO?: unknown; ERR_MESSAGE?: unknown }[];
+            }
+          )?.o_rc1?.[0];
+          // AS-IS cs:7059 `ds.Tables[0].Rows[0][0] == "S"` · cs:7061 `[0][1]` = sRequestNo
+          if (str(d1?.RESULT_CODE) !== 'S') {
+            void setAlert({
+              type: 'alert',
+              content: str(d1?.ERR_MESSAGE) || t(MSG.SAVE_FAILED, '__Save failed.'),
+            });
+            return;
+          }
+          changeReqNo = str(d1?.REQUEST_NO);
+        } catch {
           void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__Save failed.') });
           return;
         }
-        const d1 = (
-          resDraft.data?.result as {
-            o_rc1?: { RESULT_CODE?: unknown; REQUEST_NO?: unknown; ERR_MESSAGE?: unknown }[];
-          }
-        )?.o_rc1?.[0];
-        // AS-IS cs:7059 `ds.Tables[0].Rows[0][0] == "S"` · cs:7061 `[0][1]` = sRequestNo
-        if (str(d1?.RESULT_CODE) !== 'S') {
-          void setAlert({
-            type: 'alert',
-            content: str(d1?.ERR_MESSAGE) || t(MSG.SAVE_FAILED, '__Save failed.'),
-          });
-          return;
-        }
-        changeReqNo = str(d1?.REQUEST_NO);
-      } catch {
-        void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__Save failed.') });
-        return;
-      }
-      // AS-IS cs:7063 — 요청번호가 비면 송신하지 않는다(대체값 없음).
-      if (!changeReqNo) return;
+        // AS-IS cs:7063 — 요청번호가 비면 송신하지 않는다(대체값 없음).
+        if (!changeReqNo) return;
 
-      // ② ERP 송신. Packer 시트는 AS-IS 가 송신하지 않고 통과시킨다(cs:7072~7075).
-      let erpOk = true;
-      if (mainSheet !== 'packer') {
-        erpOk = await sendErpAndCompensate(changeReqNo, dirty);
+        // ② ERP 송신. Packer 시트는 AS-IS 가 송신하지 않고 통과시킨다(cs:7072~7075).
+        let erpOk = true;
+        if (mainSheet !== 'packer') {
+          erpOk = await sendErpAndCompensate(changeReqNo, erpRows);
+        }
+        // ③·③' 2차 적재(CHG_BATCH('B'))와 2차 송신은 sendErpAndCompensate 안에서 끝낸다 —
+        //    S 면 바로, S_E 면 실패분을 뺀 뒤 성공분으로. 상세는 그 함수 주석 참고.
+        if (!erpOk) return; // ⑤ 실패 — 보상은 sendErpAndCompensate 안에서 끝냈다. ④ 를 하지 않는다.
       }
-      // ③·③' 2차 적재(CHG_BATCH('B'))와 2차 송신은 sendErpAndCompensate 안에서 끝낸다 —
-      //    S 면 바로, S_E 면 실패분을 뺀 뒤 성공분으로. 상세는 그 함수 주석 참고.
-      if (!erpOk) return; // ⑤ 실패 — 보상은 sendErpAndCompensate 안에서 끝냈다. ④ 를 하지 않는다.
 
       // ④ 확정 반영
       try {
@@ -1664,6 +1677,14 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
         customButtons={customButtons}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={c => set({ chkSum: c })}
+          />
+        }
       />
 
       {/* splitContainer1 — Master(상) / Detail(하) 수직 분할 (01 §1). 경계를 드래그해 상하 크기 조절 */}

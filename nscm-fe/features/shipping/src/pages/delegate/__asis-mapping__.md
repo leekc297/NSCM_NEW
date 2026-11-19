@@ -13,7 +13,7 @@ convert-sp 후속. FE 는 목표 PKG 이름으로 API/권한 선배선(convert-c
 | 1 | MSG00298 | 372 | 위임자명 공백 | validateSave delegatee 공백 차단 | MSG00298(미존재→영문 fallback) | hooks/useDelegateValidation.ts |
 | 2 | MSG00305 | 379 | 위임자==본인 | validateSave delegateeId===sesUserId | MSG00305(미존재→fallback) | useDelegateValidation.ts |
 | 3 | MSG00134 | 385 | 기간 공백 | validateSave from/to 공백 | MSG00134(미존재→fallback) | useDelegateValidation.ts |
-| 4 | MSG00219 | 393 | From>To | validateSave toYmd 비교 | MSG00219(미존재→fallback) | useDelegateValidation.ts |
+| 4 | MSG00219 | 393 | From>To | validateSave toYmd 비교 | **MSG01230**(TO-BE 실존 "The start date can not be later than the end date") ※AS-IS MSG00219 는 TO-BE 미등록이라 재매핑 | useDelegateValidation.ts |
 | 5 | MSG00105 | 426 | 중첩 기간(intCount>0) | validateSave: rs1(dtFind_Data)에서 선택 division·VALID='Y'·AS-IS 중첩정의(FROM/TO∈[from,to]) — 위임자 무관(AS-IS cs:416 에 delegatee 필터 없음) | **MSG00105(TO-BE 실존 "There are overlapping periods")** | useDelegateValidation.ts |
 | 6 | MSG00296 | 440 | 수임자 타 위임 현황(intCount>0) | validateSave: rs1 에서 선택 division·VALID='Y'·`USER_ID==delegateeId`·중첩 (AS-IS cs:430 그대로 클라 판정 — dtFind_Data=rs1, SP 조회 아님) | MSG00296(미존재→fallback, 상수 보유) | useDelegateValidation.ts |
 | 7 | MSG00297 | 454 | 중첩 기간 수임 현황(intCount>0) | validateSave: rs1 에서 선택 division·VALID='Y'·`DELEGATEE_ID==sessionUserId`·중첩 (AS-IS cs:444 그대로 클라 판정) | MSG00297(미존재→fallback, 상수 보유) | useDelegateValidation.ts |

@@ -43,30 +43,69 @@ const matches = (row: ComboRow, context: Record<string, string>): boolean => {
   return true;
 };
 
-/** 코드 후보 — `'-'` 와 `DMY_` 접두 Dummy 는 하위 필터 대상에서 제외한다(K-11). */
-const codesOf = (rows: ComboRow[], key: string): string[] => {
-  const seen = new Set<string>();
-  for (const row of rows) {
-    const code = str(row[key]);
-    if (!code || code === EMPTY_CODE || code.startsWith(DUMMY_CODE_PREFIX)) continue;
-    seen.add(code);
-  }
-  return [...seen].sort((a, b) => a.localeCompare(b));
+/** AS-IS `GetDummyCheckedCode`(cs:1745-1748) — Dummy(`DMY_`) 부모 코드는 하위 필터 기준에서 뺀다(빈값=무필터). */
+const dummyUnchecked = (code: string): string => (code.startsWith(DUMMY_CODE_PREFIX) ? '' : code);
+
+/**
+ * 셀 콤보 코드 정렬 — AS-IS `GetSortedCode`(ScpCapaBL.cs:81-136): CODE 오름차순, 단 `DMY_` 접두
+ * Dummy 는 **맨 뒤**(제외가 아니다). `'-'`(센티널)도 맨 뒤로 둔다 — Line Type `keepEmpty` 축에만
+ * 존재하며 AS-IS 자연순서상 높은 DISPLAY_SEQ 로 하단에 온다.
+ */
+const compareCellCode = (a: string, b: string): number => {
+  const aDummy = a.startsWith(DUMMY_CODE_PREFIX);
+  const bDummy = b.startsWith(DUMMY_CODE_PREFIX);
+  if (aDummy !== bDummy) return aDummy ? 1 : -1;
+  const aDash = a === EMPTY_CODE;
+  const bDash = b === EMPTY_CODE;
+  if (aDash !== bDash) return aDash ? 1 : -1;
+  return a.localeCompare(b);
 };
 
 /**
- * 명칭 후보 — 코드 축과 같은 필터를 쓰되 표시값(`*_NAME`)을 돌려준다.
+ * 코드 후보 — `'-'`(센티널)만 제외하고, `DMY_` 접두 Dummy 는 **제외하지 않고 맨 뒤로** 둔다.
+ *
+ * AS-IS 의 어느 `GetFilterDummy*`(Site/Company/Plant/Factory/Line)도 DMY_ 를 걸러내지 않는다 —
+ * `CODE <> '-'` 만 있고(ScpCapaBL.cs:414·430·446·487·527), `GetSortedCode` 가 DMY_ 를 맨 뒤로
+ * 정렬할 뿐이다. 사내 마스터에 선존재하는 DMY_ 라인(실측 43건)을 셀 콤보에서 고를 수 있어야 한다.
+ * (K-11 "Dummy 는 하위 필터에서 제외"는 Dummy 가 **부모로 선택됐을 때 자식 필터 기준에서 뺀다**는
+ *  뜻이다 — {@link dummyUnchecked} — 후보 목록에서 지우라는 뜻이 아니다. 조회조건 쪽 `sortMasterCodes`
+ *  /`distinctByCode` 도 DMY_ 를 끝에 포함한다.)
+ *
+ * `keepEmpty=true` 면 `'-'` 도 남긴다 — Line Type(ELTR_LN_TP_CD) 전용이다. AS-IS
+ * `GetFilterElectrodeType`(ScpCapaBL.cs:370-403)는 location 축의 `GetFilterDummySite`(cs:414
+ * `CODE <> '-'`)와 달리 `'-'` 를 거르지 않는다. `'-'` 는 유효 Line Type 이라, 빼면 Operation
+ * A9000/AFFFF/P5500/P9500 행의 셀 후보가 0건이 돼 입력 제한(검증)이 풀린다(2026-11-18 DB 실측).
+ */
+const codesOf = (rows: ComboRow[], key: string, keepEmpty = false): string[] => {
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const code = str(row[key]);
+    if (!code) continue;
+    if (!keepEmpty && code === EMPTY_CODE) continue;
+    seen.add(code);
+  }
+  return [...seen].sort(compareCellCode);
+};
+
+/**
+ * 명칭 후보 — 코드 축(`codesOf`)과 같은 멤버십·순서를 쓰되 표시값(`*_NAME`)을 돌려준다.
  * AS-IS `dtOperationSpreadName`/`dt*SpreadName`(cs:1800)처럼 `코드 + " "` 접두를 뗀 순수 명칭이다.
+ *
+ * 정렬은 **코드 순서**다 — 명칭 가나다순이 아니다. AS-IS `SetSpreadNameToCode`(cs:1775-1807)가
+ * `GetSortedCode`(CODE 오름차순, DMY_ 맨 뒤)로 정렬된 테이블을 그대로 복사해 명칭만 치환하므로,
+ * 명칭 콤보도 코드 콤보와 같은 순서(DMY_ 포함, 맨 뒤)로 선다. 명칭 기준으로 정렬하면 같은 필드의
+ * ID 콤보와 NAME 콤보 후보 순서가 어긋난다(예: Site Name A001 LGES Korea→A002 LGES China 뒤집힘).
  */
 const namesOf = (rows: ComboRow[], idKey: string, nameKey: string): string[] => {
-  const seen = new Set<string>();
+  const seen = new Map<string, string>();
   for (const row of rows) {
     const code = str(row[idKey]);
     const name = str(row[nameKey]);
+    // `codesOf` 와 동일 멤버십: '-'(EMPTY_CODE)·빈 명칭만 제외(DMY_ 는 포함해 맨 뒤로 정렬).
     if (!code || code === EMPTY_CODE || !name) continue;
-    seen.add(stripCodePrefix(code, name));
+    if (!seen.has(code)) seen.set(code, stripCodePrefix(code, name));
   }
-  return [...seen].sort((a, b) => a.localeCompare(b));
+  return [...seen.entries()].sort(([a], [b]) => compareCellCode(a, b)).map(([, name]) => name);
 };
 
 export interface CellComboSources {
@@ -127,25 +166,48 @@ export const buildCellComboCandidates = (
         'PLANT_ID',
         'PLANT_NAME'
       );
+    // Building(Factory)은 Division·Plant 뿐 아니라 **Company 로도 좁힌다** — AS-IS
+    //   `GetFilterDummyFactory`(ScpCapaBL.cs:480-499)가 `COMPANY_ID = company` 를 AND 로 더한다.
+    //   Company 를 빼면 Plant 가 빈 행에서 다른 Company 의 Building 까지 후보에 뜬다(cs:1844 `_curr_assign_company`).
     case COLUMN.FACTORY_ID:
       return codesOf(
-        master.filter(r => matches(r, { DIVISION_ID: division, PLANT_ID: plant })),
+        master.filter(r =>
+          matches(r, { DIVISION_ID: division, COMPANY_ID: company, PLANT_ID: dummyUnchecked(plant) })
+        ),
         'FACTORY_ID'
       );
     case COLUMN.FACTORY_NAME:
       return namesOf(
-        master.filter(r => matches(r, { DIVISION_ID: division, PLANT_ID: plant })),
+        master.filter(r =>
+          matches(r, { DIVISION_ID: division, COMPANY_ID: company, PLANT_ID: dummyUnchecked(plant) })
+        ),
         'FACTORY_ID',
         'FACTORY_NAME'
       );
+    // Line 은 Division·Factory 뿐 아니라 **Plant 로도 좁힌다** — AS-IS `GetFilterDummyLine`
+    //   (ScpCapaBL.cs:520-527)은 `DIVISION_ID·SHOP_GROUP_ID·PLANT_ID·FACTORY_ID` + `CODE<>'-'` 다
+    //   (shop_group 은 masterRows 선필터로 반영). Plant/Factory 가 Dummy 면 `dummyUnchecked` 로
+    //   필터에서 빼 AS-IS `GetDummyCheckedCode(_plant)·(_factory)`(cs:1854)와 같게 한다.
     case COLUMN.LINE_ID:
       return codesOf(
-        master.filter(r => matches(r, { DIVISION_ID: division, FACTORY_ID: factory })),
+        master.filter(r =>
+          matches(r, {
+            DIVISION_ID: division,
+            PLANT_ID: dummyUnchecked(plant),
+            FACTORY_ID: dummyUnchecked(factory),
+          })
+        ),
         'LINE_ID'
       );
     case COLUMN.LINE_NAME:
       return namesOf(
-        master.filter(r => matches(r, { DIVISION_ID: division, FACTORY_ID: factory })),
+        master.filter(r =>
+          matches(r, {
+            DIVISION_ID: division,
+            PLANT_ID: dummyUnchecked(plant),
+            FACTORY_ID: dummyUnchecked(factory),
+          })
+        ),
         'LINE_ID',
         'LINE_NAME'
       );
@@ -165,7 +227,8 @@ export const buildCellComboCandidates = (
         sources.electrodeRows.filter(r =>
           matches(r, { DIVISION_ID: division, OPERATION_ID: str(row[COLUMN.OPERATION_ID]) })
         ),
-        'CODE'
+        'CODE',
+        true // Line Type 은 `'-'` 를 유효 후보로 남긴다(AS-IS `GetFilterElectrodeType` 에 `CODE<>'-'` 없음)
       );
     // F07 — 현재 행 Division 기준. CELL/MODULE_PACK 은 NICK_NAME, ELTR 은 ITEM_ID 축이다.
     case COLUMN.NICK_NAME:

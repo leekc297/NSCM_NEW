@@ -158,6 +158,15 @@ export const OperationLTForm = ({ onSearch, onItemSearch }: Props) => {
       onSearch={onSearch}
       conditions={
         <>
+          {/* Division (단일, cascade 트리거, EE 제외 — design 02 §2-1).
+              조회조건 그룹핑 규칙: Div.는 원칙적으로 첫 번째(데이터 기준) — 2026-11-16 LT Operation 과 순서 교체.
+              Division 변경 = Division 제외 검색조건 전부 초기화 + 그리드 비움(store setDivision, TO-BE 공통 요건).
+              편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴). */}
+          {single(LBL.DIVISION, '_Div', sc.divisionIds[0] ?? '', divisionOptions, code => {
+            void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+              if (ok) setDivision(code);
+            });
+          })}
           {/* LT Operation (단일, cascade 트리거 + INV_FLAG visible 트리거 — design 02 §3 / 01 R6).
               필수값: clear(X) 미노출 + 빈 선택 무시(사용자 지시 2026-10-12). */}
           {single(
@@ -175,14 +184,6 @@ export const OperationLTForm = ({ onSearch, onItemSearch }: Props) => {
             },
             false
           )}
-          {/* Division (단일, cascade 트리거, EE 제외 — design 02 §2-1).
-              Division 변경 = Division 제외 검색조건 전부 초기화 + 그리드 비움(store setDivision, TO-BE 공통 요건).
-              편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴). */}
-          {single(LBL.DIVISION, '_Div', sc.divisionIds[0] ?? '', divisionOptions, code => {
-            void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
-              if (ok) setDivision(code);
-            });
-          })}
           {/* Plant Site (다중, cascade 하위 — design 02 §2-3). ALL 옵션 유지 */}
           {multi(LBL.PLANT_SITE, '_Plant Site', sc.plantSiteIds, plantSiteOptions, ids =>
             set({ plantSiteIds: ids })

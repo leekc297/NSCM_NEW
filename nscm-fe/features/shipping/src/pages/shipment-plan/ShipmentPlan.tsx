@@ -22,6 +22,7 @@ import type { EditTracker } from '@foundation/utils';
 import { GridAction, GridUtils, sessionTimeZone } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SsoUserModal, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import {
   registerDirtyCheck,
@@ -38,6 +39,7 @@ import { ShipmentPlanForm } from './components/ShipmentPlanForm';
 import { ShipmentPlanMainGrid } from './components/ShipmentPlanMainGrid';
 import {
   ADMIN_SHEET_NAME,
+  DETAIL_REQUIRED_FIELDS,
   DRAFTING_TITLE,
   LBL,
   LOOKUP,
@@ -65,8 +67,8 @@ import {
   collectConfirmSaveRows,
   collectMainSaveRows,
   type ConfirmSaveFolded,
+  findMissingRequired,
   type MainSaveFolded,
-  needsChangeReason,
 } from './utils/shipment-plan.save';
 import {
   applyTransModeRouteKeys,
@@ -136,7 +138,6 @@ export const ShipmentPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useShipmentPlanStore(s => s.setOpenSearchArea);
   const realFlag = useShipmentPlanStore(s => s.realFlag);
   const activeGrid = useShipmentPlanStore(s => s.activeGrid);
-  const setActiveGrid = useShipmentPlanStore(s => s.setActiveGrid);
   const activeDetailSheet = useShipmentPlanStore(s => s.activeDetailSheet);
   const setActiveDetailSheet = useShipmentPlanStore(s => s.setActiveDetailSheet);
   const staticColumns = useShipmentPlanStore(s => s.staticColumns);
@@ -781,11 +782,21 @@ export const ShipmentPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         });
         return;
       }
-      // 행별 필수 (validations #3/#34/#35): TRANSPORT_MODE 공백 / CHANGE_REASON_CODE 미선택 차단
+      // 필수(*) 필드 빈값 차단 — AS-IS DataUtil.checkRequiredOfSpread(cs:3120)가 Validation_Check 보다
+      //   먼저 도는 순서 그대로 재현한다. '*' 10필드(DETAIL_REQUIRED_FIELDS — 변경사유 2종 포함, I/M 공통)를
+      //   저장대상 행 전수로 돌아 첫 미입력 필드를 MSG00429 로 차단한다. 조회행 CHANGE_REASON_DETAIL=NULL 이라
+      //   이 검사가 모든 편집에 Reason Detail 을 요구한다(AS-IS checkRequiredOfSpread 가 조건부 Validation_Check
+      //   보다 먼저 도는 것과 동일 — 종전 needsChangeReason 조건부 가드는 이에 가려져 제거).
+      const missingRequired = findMissingRequired(dirty, DETAIL_REQUIRED_FIELDS);
+      if (missingRequired) {
+        void setAlert({
+          type: 'alert',
+          content: fmtMsg(MSG.REQUIRED_VALUE, '_{0} value is required.', missingRequired.label),
+        });
+        return;
+      }
+      // 출하일 입력 가능 기간 (AS-IS Validation_Check MSG00194, M/I 행) — 범위 밖이면 저장 차단(결함 E1).
       for (const row of dirty) {
-        // 행번호(1-based) — MSG01289 "{0}열 출하 변경사항..." 의 {0} 치환용(AS-IS 행번호).
-        const rowNo = (planDetailGridRef.current?.rows.findIndex(r => r.dataItem === row) ?? -1) + 1;
-        // 출하일 입력 가능 기간 (AS-IS SSP0060_ShipmentPlan.cs Validation_Check, M/I 행) — 범위 밖이면 저장 차단(결함 E1).
         if (shipDateRange) {
           const digits = str(row.SHIPMENT_DATE).replace(/\D/g, '').slice(0, 8);
           const d = digits.length === 8 ? dayjs(`${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`) : undefined;
@@ -799,29 +810,6 @@ export const ShipmentPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
             });
             return;
           }
-        }
-        if (str(row.TRANSPORT_MODE).trim() === '') {
-          // MSG00429 "{0} value is required." — {0}=Trans Mode. fmtMsg 가 치환·개행 정규화.
-          void setAlert({
-            type: 'alert',
-            content: fmtMsg(MSG.REQUIRED_VALUE, '_{0} value is required.', 'Trans Mode'),
-          });
-          return;
-        }
-        const reason = str(row.CHANGE_REASON_CODE).trim();
-        const original = planDetailEditTrackerRef.current?.getOriginalValues().get(row as WijmoRowItem);
-        if ((reason === '' || reason === '-') && needsChangeReason(row, original)) {
-          // MSG01289 — {0}=행번호 치환 + 이스케이프 개행 정규화(종전 { defaultValue } 는 카탈로그 값이
-          //   우선돼 '{0}'·'\n' 이 글자로 노출됐다 — 사용자 신고 2026-10-20).
-          void setAlert({
-            type: 'alert',
-            content: fmtMsg(
-              MSG.ROW_REASON_REQUIRED,
-              '_There is a shipment change in {0} row.\nPlease enter Change_Reason.',
-              String(rowNo)
-            ),
-          });
-          return;
         }
       }
       // 확인창 (validations #27 MSG00324 → TO-BE MSG01201). 확인창이 닫힌 뒤(then) 연쇄를 시작한다 —
@@ -955,50 +943,15 @@ export const ShipmentPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     setOpenMeasure(true);
   };
 
-  // ── 하단(Detail) 그리드 포커스 시 F7(저장)/F8(삽입) — "포커스된 그리드별 단축키"(AS-IS parity) ──
-  //   공용 SubTitle 의 단축키 핸들러는 전달된 grid(=Main)의 containsFocus 로만 게이트된다
-  //   (SubTitle.tsx:261). 그래서 하단 Detail 그리드에 포커스가 있으면 Main 이 포커스를 안 가져
-  //   F7/F8 이 아예 발화하지 않았다(사용자 신고 2026-10-16 — "하단 포커스 + F7 무반응").
-  //   AS-IS 는 BaseForm 전역 F7/F8 + SaveButton/InsertRow 이 fps(활성 스프레드)로 분기해
-  //   (cs:2933) 포커스된 그리드별로 저장/삽입이 따로 동작한다. 그 동작을 Detail 쪽에서 보강한다:
-  //   - Detail 그리드 중 하나가 포커스를 가진 경우에만 실행(Main 포커스는 SubTitle 담당 → 상호배타,
-  //     이중 실행 없음). containsFocus 가 곧 "현재 보이는 활성 탭" 판정이라 keep-alive MDI 숨김
-  //     탭에서는 발화하지 않는다(SubTitle 의 offsetParent/scope 가드 등가).
-  //   - finishEditing 으로 편집 중 셀을 먼저 커밋(SubTitle wrapWithEditCommit 등가).
-  //   - setActiveGrid('detail') 를 동기로 선반영 → handleSave 가 getState()로 Detail 분기를 탄다.
-  //   - 권한 게이트는 SubTitle 과 동일하게 hasButton('SAVE'/'INSERT').
-  const detailHotkeyRef = useRef({ handleSave, handleInsert, hasButton });
-  detailHotkeyRef.current = { handleSave, handleInsert, hasButton };
-  useEffect(() => {
-    const detailRefs = [
-      planDetailGridRef,
-      stockDetailGridRef,
-      owmsDetailGridRef,
-      holdStockGridRef,
-      mesStockGridRef,
-      mesStockDetailGridRef,
-      shipmentResultGridRef,
-    ];
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'F7' && e.key !== 'F8') return;
-      const focused = detailRefs.find(r => r.current?.containsFocus());
-      if (!focused) return; // Detail 미포커스 → Main 담당(SubTitle)
-      const { handleSave: save, handleInsert: insert, hasButton: has } = detailHotkeyRef.current;
-      focused.current?.finishEditing(); // 편집 중 셀 커밋
-      setActiveGrid('detail'); // 활성 그리드 동기화(Measure 게이트 등 후속 동작용)
-      if (e.key === 'F7') {
-        if (!has('SAVE')) return;
-        e.preventDefault();
-        save('detail'); // 포커스가 Detail 이므로 Detail 저장 분기 강제
-      } else {
-        if (!has('INSERT')) return;
-        e.preventDefault();
-        insert();
-      }
-    };
-    globalThis.window.addEventListener('keydown', onKeyDown, true);
-    return () => globalThis.window.removeEventListener('keydown', onKeyDown, true);
-  }, [setActiveGrid]);
+  // ── 하단(Detail) 그리드 포커스 시 F7(저장)/F8(삽입)은 공용 SubTitle 이 담당한다 ──
+  //   SubTitle 에 grid={focusedGridRef}(포커스된 그리드로 라우팅 — item 3, 2026-11-09)를 넘기므로,
+  //   Detail 포커스 시 SubTitle 의 단축키 게이트(containsFocus, SubTitle.tsx:347)가 곧 Detail 을
+  //   가리켜 handleSave/handleInsert 가 올바른 분기로 발화한다(편집 커밋도 SubTitle wrapWithEditCommit).
+  //   종전엔 grid 가 Main 고정이라 Detail 포커스 F7/F8 이 안 떠(2026-10-16) 별도 window keydown
+  //   effect 로 보강했는데, grid 라우팅 도입 후 그 effect 가 SubTitle 과 겹쳐 F8 이 두 번 실행돼
+  //   신규행이 2개 생겼다(사용자 신고 2026-11-13). 중복 effect 를 제거해 단일 경로(SubTitle)로 통일한다.
+  //   handleSave 는 forceGrid 없이도 activeGrid('detail') — DetailGrid 의 click/gotFocus 가 선반영 —
+  //   로 Detail 분기를 타고, handleInsert 는 activeDetailSheet 로 분기해 activeGrid 와 무관하다.
 
   // Simulation 재계산 핸들러 제거 — AS-IS 에서 버튼이 뜨지 않으므로 호출 경로가 없다
   //   (근거는 아래 customButtons 주석). 재계산 본체는 utils/shipment-plan.calc.ts `simulate`
@@ -1150,6 +1103,23 @@ export const ShipmentPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         searchParam={sc}
         searchDirtyKey={mainDirtyKey}
         customButtons={customButtons}
+        // Sum(chkSum)·Tot PSI(chkTotPsi) 체크박스를 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시
+        //   2026-11-18, SCP0013 동형). Tot PSI 는 SUM 오른쪽에 둔다. chkTotPsi 는 mainRows SEQ<12/21 행 필터에
+        //   연결돼 있다(ShipmentPlan.tsx mainRows, 03 §2.3).
+        afterCount={
+          <>
+            <Checkbox
+              labelText={t(LBL.SUM, '_Sum')}
+              checked={sc.chkSum}
+              onChange={checked => set({ chkSum: checked })}
+            />
+            <Checkbox
+              labelText={t(LBL.TOT_PSI, '_Tot PSI')}
+              checked={sc.chkTotPsi}
+              onChange={checked => set({ chkTotPsi: checked })}
+            />
+          </>
+        }
       />
 
       {/* splitContainer1 — Main(상) / Detail(하) 수직 드래그 분할 (01 §1).

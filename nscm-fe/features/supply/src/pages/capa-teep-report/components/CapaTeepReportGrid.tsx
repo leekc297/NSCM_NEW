@@ -22,6 +22,12 @@ import { isPeriodColumn } from '../utils/capaTeepReport.dateColumns';
 
 import styles from './CapaTeepReportGrid.module.scss';
 
+/**
+ * 음수 값 글자색 — AS-IS Spread `NumberCellType.NegativeRed=true`(전 수치 셀 공통) 등가.
+ * 자매 화면 SCP0018(waterfall-shipment-plan-semi)과 동일한 적색(#c62828)으로 통일한다.
+ */
+const NEGATIVE_COLOR = '#c62828';
+
 interface Props {
   sheetName: GridSheet;
   rows: CapaTeepRow[];
@@ -75,8 +81,12 @@ export const CapaTeepReportGrid = ({
           styles.measureOrange,
           styles.measurePink
         );
+        event.cell.style.color = '';
         return;
       }
+
+      // 음수 적색은 아래 수치 포맷 분기에서만 다시 칠한다 — 셀 재활용 잔색 방지로 매번 초기화한다(V-24).
+      event.cell.style.color = '';
 
       /**
        * (a) Measure 행 배경색 — 적용 범위는 `(행, MEASURE_NAME 열) ~ 행 끝` 이다
@@ -116,6 +126,8 @@ export const CapaTeepReportGrid = ({
         minimumFractionDigits: scale,
         maximumFractionDigits: scale,
       });
+      // 음수 = 적색(AS-IS NumberCellType.NegativeRed 등가). 비음수는 위에서 이미 색을 초기화했다.
+      if (numeric < 0) event.cell.style.color = NEGATIVE_COLOR;
     };
     grid.formatItem.addHandler(formatItemHandler);
 

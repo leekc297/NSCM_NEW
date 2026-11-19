@@ -16,7 +16,12 @@ import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shar
 
 import { BUCKET_TYPE, DIVISION, MSG } from '../mkt-fcst-01.constants';
 import { useMktFcst01Store } from '../useMktFcst01Store';
-import { SEARCH_COMBO, buildSalesSiteComboParam } from '../utils/mkt-fcst-01.searchCombos';
+import {
+  SEARCH_COMBO,
+  buildDivisionChangePatch,
+  buildSalesSiteComboParam,
+  filterSearchableDivisions,
+} from '../utils/mkt-fcst-01.searchCombos';
 
 interface MktFcst01FormProps {
   onSearch: () => void;
@@ -71,7 +76,8 @@ export const MktFcst01Form = ({ onSearch, insertedRowCount = 0 }: MktFcst01FormP
   const deptIds = sc.deptIds.filter(v => v !== 'ALL');
   const endCustomers = sc.endCustomers.filter(v => v !== 'ALL');
 
-  const divisionOptions = buildComboOptions(divisions);
+  // 이 화면은 82 만 조회한다 - 권한상 다른 사업부가 있어도 목록에서 뺀다(SEARCHABLE_DIVISIONS).
+  const divisionOptions = buildComboOptions(filterSearchableDivisions(divisions));
   const teamOptions = buildComboOptions(teams, { division: sc.divisionId });
   const bizTypeOptions = buildComboOptions(bizType, { division: sc.divisionId });
 
@@ -210,30 +216,7 @@ export const MktFcst01Form = ({ onSearch, insertedRowCount = 0 }: MktFcst01FormP
                   onChange={(_, picked) => {
                     void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                       if (!ok) return;
-                      const division = String(picked ?? '');
-                      set({
-                        divisionId: division,
-                        deptIds: [],
-                        endCustomers: [],
-                        scmSiteIds: [],
-                        bizTypes: [],
-                        plantSiteIds: [],
-                        senderCodes: [],
-                        projectCodes: [],
-                        itemIds: [],
-                        nickName: '',
-                        owners: [],
-                        itemTypes: [],
-                        // Cell Qty 는 Div 40 전용 (AS-IS L2107/2140: 비40 = Enabled=false + Checked=false).
-                        ...(division !== DIVISION.MOBILITY ? { cellQtyYn: false } : {}),
-                        // Invalid(MKT FCST 미등록 제외)는 Div82 전용 — 82 진입 시 기본 checked (AS-IS L469~477).
-                        invalidYn: division === DIVISION.ESS,
-                        // G4 — Bucket 기본값: 82(ESS)=Daily / 그 외=Weekly (v1.7 3장, AS-IS OnShown).
-                        bucketType: BUCKET_TYPE.WEEKLY,
-                        // Sum / Qty ≥ 0 은 division 변경 시 초기화하지 않는다
-                        // (AS-IS cboDivision_SelectedIndexChanged :3019~3164 도 chkSum/chkQty 를 건드리지 않는다).
-                        asYn: false,
-                      });
+                      set(buildDivisionChangePatch(String(picked ?? '')));
                     });
                   }}
                 />

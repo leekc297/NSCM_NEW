@@ -19,7 +19,12 @@ const MONTH_SUM_PATTERN = /^M_(\d{6})$/; //   월 SUM (잠금)
 const toIso = (yyyymmdd: string): string =>
   `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`;
 
-// D_ 일자열 → 3단 머지헤더(월/주차/일) 파생. weekKey 는 dayjs 로컬 파싱으로 재현(SP 커서에 없음).
+// D_ 일자열 → 3단 머지헤더(월/주차/일) 파생. 월/주차 그룹·라벨은 3SPAN SP 라벨이 정본이다.
+//   AS-IS InitSpreadDateColumn(SCP0096.cs:183-244)은 SMALL/LARGE_CLASS_LABEL_NAME 이 바뀌는 지점에서
+//   주·월 span 을 끊고 그 라벨을 헤더에 그대로 쓴다 — 1:1 재현. SP 는 SCM_SYS_CALENDAR_M 의 ISO 주차
+//   (예 'W48', 월요일 시작·연중 연속)를 WEEK_NAME 으로 내려주므로, 월 내 Math.ceil(day/7) 재계산
+//   (W1·W2 가 매월 재시작 + 주 시작요일을 월1일 기준 7일블록으로 무시하던 결함)을 폐기한다.
+//   라벨이 없을 때(비정상 응답)만 yyyymmdd 로 폴백한다 — 단정 금지.
 export const buildDynDayColumns = (columnMeta: DynColumnMeta[]): DynDayColumn[] => {
   const out: DynDayColumn[] = [];
   for (const col of columnMeta) {
@@ -29,15 +34,20 @@ export const buildDynDayColumns = (columnMeta: DynColumnMeta[]): DynDayColumn[] 
     const d = dayjs(toIso(yyyymmdd));
     // 파싱 불가(비정상 alias)면 건너뛴다 — 단정 금지, 미발견 처리.
     if (!d.isValid()) continue;
+    // 월 라벨 = SP LARGE_CLASS_LABEL_NAME('2026-11'). 폴백은 yyyymm 를 하이픈 ISO 로.
+    const monthKey = col.monthName?.trim() || `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}`;
+    // 주차 라벨 = SP SMALL_CLASS_LABEL_NAME('W48', ISO 주차). 폴백은 기존 월내 주차(결함 재현 아님, 최후수단).
+    const weekLabel = col.weekName?.trim() || `W${Math.ceil(Number(yyyymmdd.slice(6, 8)) / 7)}`;
     out.push({
       binding: col.name,
       yyyymmdd,
       dayLabel: String(d.date()), // 일(DD, 앞 0 제거) — leaf 헤더
       weekday: d.day(), //           0=일 ~ 6=토 — 요일색·btnInput 요일별 분기
-      monthKey: yyyymmdd.slice(0, 6), // 대(월) 그룹 — 3단 머지헤더 상단
-      // 소(주차) 그룹 — ISO 연-주(dayjs week plugin 미보장 → 월 내 주차를 일자로 계산).
-      //   1~7일=1주 / 8~14=2주 ... 헤더 그룹 span 용도(정렬만 맞으면 됨, 라벨은 W_ 커서가 별도 제공).
-      weekKey: `${yyyymmdd.slice(0, 6)}-W${Math.ceil(Number(yyyymmdd.slice(6, 8)) / 7)}`,
+      monthKey, //                   대(월) 그룹 — 3단 머지헤더 상단(SP 라벨)
+      // 월경계를 넘는 ISO 주(예 W49 가 11월말·12월초에 걸침)는 월별로 분리해야 월→주 중첩이 성립한다
+      //   → 월 라벨을 접두해 그룹 키를 유일화한다(표시 라벨은 weekLabel 그대로).
+      weekKey: `${monthKey}/${weekLabel}`,
+      weekLabel,
     });
   }
   return out;

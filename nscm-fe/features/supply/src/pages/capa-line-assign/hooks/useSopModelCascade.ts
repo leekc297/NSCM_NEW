@@ -102,6 +102,12 @@ export const useSopModelCascade = (sel: SopModelSelection, divisionType: Divisio
   const inDivision = (row: ComboRow): boolean =>
     !sel.divisionId || str(row.DIVISION_ID) === sel.divisionId;
 
+  // Plant/Building/Line 축 전용 shop_group 필터 — AS-IS `GetFilterPlant/Factory/Line`(`SHOP_GROUP_ID
+  //   IN(_shop_group)`). CELL/PACK 은 masterRows 가 이미 shop 선필터돼 멱등, ELTR 은 EE 마스터의
+  //   비-'E' 행(MI03 등)을 여기서 떨군다 — 안 걸면 ELTR Plant 가 7건 대신 8건(2026-11-18 실측,
+  //   메인 useCapaLineCascade 와 동일). Site 에는 걸지 않는다(AS-IS Site = DIVISION 만).
+  const inShopGroup = (row: ComboRow): boolean => str(row.SHOP_GROUP_ID) === shopGroup;
+
   const siteOptions = useMemo<ComboOption[]>(
     () => sortMasterCodes(distinctByCode(masterRows, 'SITE_ID', 'SITE_NAME', inDivision)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,14 +121,18 @@ export const useSopModelCascade = (sel: SopModelSelection, divisionType: Divisio
           masterRows,
           'PLANT_ID',
           'PLANT_NAME',
-          row => inDivision(row) && inSet(siteSet, str(row.SITE_ID))
+          row => inDivision(row) && inShopGroup(row) && inSet(siteSet, str(row.SITE_ID))
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, sel.divisionId, siteSet]
+    [masterRows, sel.divisionId, siteSet, shopGroup]
   );
 
-  // 주의: Building 은 Site 가 아니라 Plant 를 통한 간접 종속이다(`GetFilterFactory`, V-10).
+  // Building/Line 은 직속 부모(Plant/Building)뿐 아니라 **Site 로도 좁힌다**. AS-IS 는 Site 선택 시
+  //   좁혀진 Plant 후보 CSV 를 `GetFilterFactory` 의 `_plant` 인자로 넘겨 Building 을 간접 종속시키는데,
+  //   TO-BE 는 Site 변경 시 하위를 'ALL'(무필터)로 리셋하므로 plantSet 만 보면 Site 만 골라도 Building·
+  //   Line 이 안 좁혀진다(메인 useCapaLineCascade 와 동일 보완, 2026-11-18). 마스터가 행마다 SITE_ID 를
+  //   들고 있어 siteSet 직접 필터가 "그 Site 의 Plant 들" 슬라이스와 등가다(Site⊃Plant⊃Factory 계층).
   const factoryOptions = useMemo<ComboOption[]>(
     () =>
       sortMasterCodes(
@@ -130,11 +140,15 @@ export const useSopModelCascade = (sel: SopModelSelection, divisionType: Divisio
           masterRows,
           'FACTORY_ID',
           'FACTORY_NAME',
-          row => inDivision(row) && inSet(plantSet, str(row.PLANT_ID))
+          row =>
+            inDivision(row) &&
+            inShopGroup(row) &&
+            inSet(siteSet, str(row.SITE_ID)) &&
+            inSet(plantSet, str(row.PLANT_ID))
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, sel.divisionId, plantSet]
+    [masterRows, sel.divisionId, siteSet, plantSet, shopGroup]
   );
 
   const lineOptions = useMemo<ComboOption[]>(
@@ -147,13 +161,15 @@ export const useSopModelCascade = (sel: SopModelSelection, divisionType: Divisio
             'LINE_NAME',
             row =>
               inDivision(row) &&
+              inShopGroup(row) &&
+              inSet(siteSet, str(row.SITE_ID)) &&
               inSet(plantSet, str(row.PLANT_ID)) &&
               inSet(factorySet, str(row.FACTORY_ID))
           )
         )
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [masterRows, sel.divisionId, plantSet, factorySet]
+    [masterRows, sel.divisionId, siteSet, plantSet, factorySet, shopGroup]
   );
 
   // ── Operation ────────────────────────────────────────────────────────────────────────
@@ -198,7 +214,11 @@ export const useSopModelCascade = (sel: SopModelSelection, divisionType: Divisio
     const seen = new Map<string, number>();
     for (const row of electrodeRows.filter(row => inSet(operationSet, str(row.OPERATION_ID)))) {
       const code = str(row.CODE);
-      if (!code || code === EMPTY_CODE || seen.has(code)) continue;
+      // Line Type 은 `'-'` 를 후보에서 빼지 않는다 — AS-IS `GetFilterElectrodeType`(ScpCapaBL.cs:
+      //   370-403)에 `CODE <> '-'` 가 없다(location 축의 `GetFilterDummySite` cs:414 에만 있음).
+      //   `'-'` 는 유효 Line Type 이다(Operation A9000/AFFFF/P5500/P9500 의 유일값). 메인 화면
+      //   useCapaLineCascade 와 동일 교정(2026-11-18). 빈 NAME 만 제외.
+      if (!code || seen.has(code)) continue;
       seen.set(code, Number(str(row.DISPLAY_SEQ)) || 0);
     }
     return [...seen.entries()]

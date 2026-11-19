@@ -239,9 +239,11 @@ export const useShipmentPlanStore = createPersistedStoreWithTab<State & Action>(
     setPeriod2: (from, to) =>
       set(state => {
         const c = state.searchCondition;
-        // SSP0005 조회조건 Period 참조 — Shipment Date 는 Plan 기간에 묶지 않고 자유 입력(사용자 지시
-        //   2026-10-16). 종전 clampPeriod2(buttonGuard #37)는 Plan 기간 밖 선택을 무메시지로 경계에
-        //   되돌려 "입력이 잘 안됨" 증상의 원인이었다 — AS-IS clamp 이탈로 확정.
+        // Shipment Date 범위 제약(AS-IS DrpPeriod2_ValueChanged clamp cs:2187~2202)은 값을 여기서
+        //   되돌리지 않고 ShipmentPlanDetailBar 의 PeriodField startMax/endMin 으로 **picker 에서
+        //   범위 밖 날짜를 비활성화**해 재현한다(사용자 재확인 2026-11-16). 종전 무메시지 snap-back
+        //   방식(buttonGuard #37)은 "입력이 잘 안됨" 불편으로 2026-10-16 제거됐고, picker-disable 로
+        //   AS-IS 의도(범위 밖 선택 불가)를 되살린 것이다. 그래서 여기선 값을 그대로 저장만 한다.
         c.period2From = from;
         c.period2To = to;
       }),

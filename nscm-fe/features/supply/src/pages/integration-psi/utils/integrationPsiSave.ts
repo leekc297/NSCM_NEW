@@ -1,7 +1,14 @@
 // SCP0111 저장 payload 빌더 (design 03 §4-저장 cs:1233-1626). 변경셀(수정 M / 신규 I)만 셀 단위로
 //   펼쳐(unfold) 19키 '^'delim CLOB 배열 payload 를 만든다 — SAVE SP 가 배열을 MERGE 하는 계약.
-//   수정(M): preQty≠qty 인 월/BOH 셀만, modiQty=qty-preQty(가감값, cs:1560,1603).
 //   신규(I): **Plan 전체 개월수**(plan_start월~HORIZON_END, cs:1510~1511) modiQty=절대값. 상수 이식 금지 — 규칙 재현.
+//
+//   수정(M)은 저장 경로(일반/ADMIN)에 따라 modiQty 의 의미가 **비대칭**이다 — SP 가 서로 다르게 쓰기 때문:
+//   - 일반 `P_SCP0111_SAVE_INTEGRATION_PSI`: `QTY = QTY + V_MODI_QTY`(가감 누적) → modiQty=qty-preQty(가감값, cs:1560,1603).
+//   - ADMIN `P_SCP0111_SAVE_PSI_ADMIN`:    `QTY = V_MODI_QTY` / `BOH_QTY = V_BOH_QTY_N`(절대 대입) → modiQty=절대값(cs:1318,1364).
+//   종전 구현은 두 경로 모두 가감값을 보내 ADMIN 저장이 깨졌다(사용자 신고 2026-11-17):
+//     (1) BOH 저장 시 plan-start월 INV 의 QTY 가 BOH delta 로 덮여 "INV 가 재계산된" 것처럼 보였고,
+//     (2) 특정월 INV 를 100→150 으로 바꾸면 delta(50)만 QTY 에 대입돼 "반영 안 됨"이 됐다.
+//   AS-IS ADMIN 저장(cs:1283~1369)은 **절대값**을 보내며, BOH 가 바뀌면 기간 전체 월에 새 BOH 를 전파한다(아래 unfoldSaveCells 참고).
 
 import type { EditTracker } from '@foundation/utils';
 
@@ -132,8 +139,11 @@ export const unfoldSaveCells = (params: {
   // Plan 식별 — 신규행 삽입 월 범위와 BOH 수정셀의 yyyymm 토큰을 여기서 도출한다.
   planStartYyyymmdd: string;
   horizonEndYyyymmdd: string;
+  // ADMIN 저장 경로 여부 — 수정(M) 셀의 modiQty 를 가감값(일반) ↔ 절대값(ADMIN)으로 가른다(위 주석 참고).
+  isAdmin?: boolean;
 }): UnfoldResult => {
   const { source, tracker, fixedBindings, planStartYyyymmdd, horizonEndYyyymmdd } = params;
+  const isAdmin = params.isAdmin ?? false;
   const insertMonths = insertTargetMonths(planStartYyyymmdd, horizonEndYyyymmdd);
   // BOH(measure=INV) 수정셀의 yyyymm 토큰 = **plan start 월**. AS-IS cs:1577
   //   `AppendString(ref p_yyyymm, p_plan_start_yyyymmdd.Substring(0,6), iCount)` —
@@ -179,9 +189,39 @@ export const unfoldSaveCells = (params: {
       continue;
     }
 
-    // 수정행(M) — EditTracker 가 기록한 변경 셀만 modiQty=qty-preQty 가감값으로.
+    // 수정행(M) — EditTracker 가 기록한 변경 셀만.
     const changed = originals?.get(row as never);
     if (!changed) continue;
+
+    if (isAdmin) {
+      // ADMIN 저장 — **절대값**으로 보낸다(ADMIN SP 는 QTY/BOH_QTY 를 절대 대입). AS-IS cs:1283~1369 재현.
+      //   base.bohQty = s(row.BOH_QTY) = 현재(=수정 후) BOH 절대값이라 두 경로 모두 그대로 쓴다.
+      const bohChanged =
+        'BOH_QTY' in changed && num(changed.BOH_QTY) !== num(row.BOH_QTY);
+      if (bohChanged) {
+        // BOH 변경(cs:1293~1326): 기간 전체 월에 새 BOH_QTY 를 전파하고 각 월 QTY 는 **현재 절대값**을 유지한다.
+        //   BOH_QTY 는 월 행마다 비정규화 저장이라 "BOH 하나"를 바꾸려면 모든 월 행의 BOH_QTY 를 갱신해야 한다.
+        //   현재 공백인 월은 건너뛴다(AS-IS 공백 skip cs:1301). 동시에 편집된 월도 row[m] 로 새 값이 실린다.
+        for (const m of Object.keys(row)) {
+          if (!isYyyymm(m, fixedBindings)) continue;
+          const cur = row[m];
+          if (cur === '' || cur === null || cur === undefined) continue;
+          cells.push({ ...base, action: 'M', yyyymm: m, modiQty: String(num(cur)) });
+        }
+      } else {
+        // BOH 미변경(cs:1328~1369): 변경된 월 셀만 **절대값**으로. BOH_QTY 는 현재값 유지(base.bohQty).
+        for (const binding of Object.keys(changed)) {
+          if (!isYyyymm(binding, fixedBindings)) continue; // 월 셀만(BOH 미변경이므로 BOH_QTY 제외)
+          const pre = num(changed[binding]);
+          const now = num(row[binding]);
+          if (pre === now) continue; // 실변경 없음
+          cells.push({ ...base, action: 'M', yyyymm: binding, modiQty: String(now) });
+        }
+      }
+      continue;
+    }
+
+    // 일반 저장 — modiQty=qty-preQty 가감값으로(일반 SP 는 QTY=QTY+V_MODI_QTY 누적).
     for (const binding of Object.keys(changed)) {
       const isBoh = binding === 'BOH_QTY';
       if (!isBoh && !isYyyymm(binding, fixedBindings)) continue; // 수량셀(월/BOH)만 저장 대상

@@ -25,7 +25,10 @@ export const REPORT_TYPE = {
 export type ReportType = (typeof REPORT_TYPE)[keyof typeof REPORT_TYPE];
 
 // ⭐ Plan/Result (clbPlanResult — AS-IS 정적 콤보, 기본 Plan[SelectedIndex=0 L207]. CMBO 불요)
+//   ALL = TO-BE 신설(2026-11-17 사용자테스트 개선 요청). 실적·계획 구간 시점 잠금을 모두 푼다.
+//   조회 SP 는 이 값을 받지 않으므로(조회 결과 동일) 편집 판정(editLock)에서만 쓴다.
 export const PLAN_RESULT = {
+  ALL: 'ALL',
   PLAN: 'Plan',
   RESULT: 'Result',
 } as const;

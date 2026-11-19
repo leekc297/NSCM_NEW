@@ -89,6 +89,13 @@ export const PlanGroupDashboard = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
+  // F6(조회조건 저장) 대상에서 날짜(startDate/endDate)는 제외한다 — 공용 personalizeCondition 의
+  //   EXCLUDED_DATE_PARAM 정규식이 '…Date' 로 끝나는 키를 날짜로 인식하지 못해, 과거 날짜가 그대로
+  //   저장되고 재진입 시 복원되던 문제를 화면에서 차단한다. 날짜는 '오늘 기준 상대값' 이라 과거로
+  //   굳히지 않는 공통 규칙에 맞춘다(scheduled-receipt-information 선례와 동일 destructure 패턴).
+  //   SubTitle 은 searchParam 을 F6 저장에만 쓰므로 날짜 제외가 다른 동작(조회 등)에 영향 없다.
+  const { startDate: _startDate, endDate: _endDate, ...conditionSaveParam } = searchParams;
+
   return (
     <>
       <MainTitle
@@ -105,7 +112,7 @@ export const PlanGroupDashboard = ({ tabId, title }: PageProps<MENU_ID>) => {
         dataCount={rows.length}
         excelFileName='PlanGroupDashboard'
         hotkeyConfig={hotkeyConfig}
-        searchParam={searchParams}
+        searchParam={conditionSaveParam}
         // F10(조회조건 초기화) — 사용자 지시(2026-11-05): 서버 개인화 초기화에 더해 **즉시 한번** 화면
         //   조회조건도 기본값으로 되돌린다(Division 제외 — store reset() 이 현재 Division 보존).
         resetConditionOnClient

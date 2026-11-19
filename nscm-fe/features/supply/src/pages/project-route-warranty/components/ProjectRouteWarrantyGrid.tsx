@@ -9,14 +9,16 @@ import {
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { GridUtils } from '@foundation/utils';
+import { GridUtils, safeString } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
+  ALL_SENTINEL,
   COMBO,
   DEFAULT_CELL_BG_COLOR,
   DIVISION_82,
@@ -24,10 +26,12 @@ import {
   isSalesSitePopupDivision,
   LOCK_ON_NON_WARRANTY,
   LOCK_ON_WARRANTY_EXISTING,
+  MENU_ID,
   MSG,
   NO_VALUE_PLACEHOLDER,
   OPERATION_GROUP_WARRANTY,
   POPUP_ONLY_COLUMNS,
+  SHEETS,
 } from '../project-route-warranty.constants';
 import type { MainRow } from '../project-route-warranty.types';
 import { deriveTactTimeFlag } from '../utils/projectRouteWarranty.derive';
@@ -43,6 +47,8 @@ interface Props {
   // ITEM_ID 셀 더블클릭 → Item 팝업(R-D8). div=81 SCM_SITE_ID/PROJECT_CODE 셀 → SalesSite 팝업(R-D6).
   onItemCellDblClick: (row: MainRow) => void;
   onSalesSiteCellDblClick: (row: MainRow) => void;
+  // 조회조건 division — PLANT_SITE_ID 셀 콤보 base 조회 bind(ALL 이면 권한 division CSV 로 펼침).
+  divisionId: string;
   gotFocus?: () => void;
 }
 
@@ -94,6 +100,7 @@ export const ProjectRouteWarrantyGrid = ({
   invalidCells,
   onItemCellDblClick,
   onSalesSiteCellDblClick,
+  divisionId,
   gotFocus,
 }: Props) => {
   const { t } = useTranslation();
@@ -127,6 +134,120 @@ export const ProjectRouteWarrantyGrid = ({
     };
     return map;
   }, [myDivisionRaw]);
+
+  // PLANT_SITE_ID 셀 콤보 base 조회 bind(자매 SCP0027 R-COMBO-PLANT 준용). 메타는 PARAM10='D' 행
+  //   파라미터 콤보지만, 공유 콤보 ElecRoutePlantByOperation_SCP 는 파라미터 없이 호출하면 @divisionId
+  //   INSTR 매칭(BE 가 미전달값을 '' 치환)에 걸려 0건이라 base dataMap 이 비어 신규행 셀이 콤보가 아닌
+  //   텍스트로 뜬다(2026-11-16 사용자 신고). 조회조건 division 을 base bind 로 실어(comboParams) 셀을
+  //   항상 콤보로 만든다. operationGroup 은 이 화면 전용 'W'(Warranty) 고정. ALL 이면 권한 division CSV 로
+  //   펼친다(Form.plantSiteDivisionFilter 동일 — SQL 이 @divisionId 를 리터럴 INSTR 매칭, ALL→NULL 치환 없음).
+  // div=="82" 행은 AS-IS 가 division="" 로 콤보를 조회해 전체 사이트를 돌려준다(cs:993
+  //   `if(division=="82") division="";`). TO-BE 콤보도 divisionId="''"(빈값)이면 전 division 사이트를
+  //   돌려준다(ora 실측: ''→40/81/82 전체, '82'→82만). 그래서 div 82 는 권한 CSV 가 아니라 빈값을 bind 한다.
+  const plantComboDivision = useCallback(
+    (rowDivision: string): string => (rowDivision.trim() === DIVISION_82 ? '' : rowDivision.trim()),
+    []
+  );
+  const comboDivisionId = useMemo(
+    () =>
+      divisionId && divisionId !== ALL_SENTINEL
+        ? divisionId
+        : (myDivisionRaw ?? [])
+            .filter((r: ComboResponse) => String(r.ATTRIBUTE3 ?? '') !== 'EE')
+            .map((r: ComboResponse) => String(r.CODE ?? ''))
+            .filter(Boolean)
+            .join(','),
+    [divisionId, myDivisionRaw]
+  );
+  const comboParams = useMemo(
+    () => ({
+      divisionId: `'${comboDivisionId}'`,
+      operationGroup: `'${OPERATION_GROUP_WARRANTY}'`,
+      itemId: '\'\'',
+    }),
+    [comboDivisionId]
+  );
+
+  // PLANT_SITE_ID 의 Y/N(TACT_TIME_FLAG 소스)은 콤보 SQL 이 @itemId 로 TACT_TIME·OUTSOURCING_CAPA 를
+  //   조인해 사이트별로 달라진다. base comboParams 는 itemId='' 고정이라 드롭다운/표시가 전부 'N' 으로
+  //   오므로, 편집 진입 시 그 행 division+itemId 로 콤보를 재조회해 셀 dataMap 을 행별 맵으로 스왑해
+  //   정확한 Y/N 을 띄우고(AS-IS SetCellTypeCombo 행별 재맵핑, 자매 SCP0027 [F-14] 동형), 편집 종료 시
+  //   base 로 복원한다. (div,itemId)별 결과는 캐시한다(성공·실패 모두 — 재조회 폭주 방지).
+  const plantComboByItemRef = useRef<Map<string, ComboResponse[]>>(new Map());
+  const plantPendingRef = useRef<Set<string>>(new Set());
+  const fetchPlantCombo = useCallback((div: string, itemId: string): Promise<ComboResponse[]> => {
+    const key = `${div}|${itemId}`;
+    const cached = plantComboByItemRef.current.get(key);
+    if (cached) return Promise.resolve(cached);
+    if (plantPendingRef.current.has(key)) return Promise.resolve([] as ComboResponse[]);
+    plantPendingRef.current.add(key);
+    return apiClient
+      .getCombo(
+        {
+          comboId: COMBO.CELL_PLANT_SITE,
+          mnuId: MENU_ID,
+          sheetName: SHEETS.MAIN,
+          divisionId: `'${div}'`,
+          operationGroup: `'${OPERATION_GROUP_WARRANTY}'`,
+          itemId: `'${itemId}'`,
+        },
+        'grid'
+      )
+      .then(rows => {
+        const arr = rows ?? [];
+        plantComboByItemRef.current.set(key, arr);
+        return arr;
+      })
+      .catch(() => {
+        plantComboByItemRef.current.set(key, []);
+        return [] as ComboResponse[];
+      })
+      .finally(() => {
+        plantPendingRef.current.delete(key);
+      });
+  }, []);
+
+  const plantBaseDataMapRef = useRef<DataMap | null>(null);
+  const plantRowMapsRef = useRef<WeakSet<DataMap>>(new WeakSet());
+  const plantRowMapByKeyRef = useRef<Map<string, DataMap>>(new Map());
+  const swapPlantCombo = useCallback(
+    (grid: FlexGrid<MainRow>, div: string, itemId: string) => {
+      // div 는 '' 도 유효하다(div 82 → '' = 전체 조회). itemId 는 선택 아님(공백 가능).
+      const key = `${div}|${itemId}`;
+      const applyRowMap = (rows: ComboResponse[] | undefined): boolean => {
+        const col = grid.getColumn('PLANT_SITE_ID');
+        if (!col || !rows || rows.length === 0) return false;
+        let rowMap = plantRowMapByKeyRef.current.get(key);
+        if (!rowMap) {
+          rowMap = new DataMap(rows, 'CODE', 'NAME');
+          plantRowMapByKeyRef.current.set(key, rowMap);
+          plantRowMapsRef.current.add(rowMap);
+        }
+        if (col.dataMap === rowMap) return true; // 이미 그 행맵 — 재스왑 금지(루프 차단)
+        const cur = col.dataMap;
+        if (cur && !plantRowMapsRef.current.has(cur)) plantBaseDataMapRef.current = cur;
+        col.dataMap = rowMap;
+        return true;
+      };
+      const cached = plantComboByItemRef.current.get(key);
+      if (cached && cached.length > 0) {
+        applyRowMap(cached);
+        return;
+      }
+      // 캐시 미스 — 조회 후 그 셀이 아직 편집 중이면 dataMap 을 세운다. 드롭다운은 편집 진입과 동시에
+      //   열리지 않고 사용자가 뒤에 여므로, 조회 완료 후 세워도 열 때 새 목록(div 82 → 전체)이 반영된다.
+      void fetchPlantCombo(div, itemId).then(rows => {
+        const editCol = grid.editRange?.col ?? -1;
+        if (editCol >= 0 && grid.columns[editCol]?.binding === 'PLANT_SITE_ID') applyRowMap(rows);
+      });
+    },
+    [fetchPlantCombo]
+  );
+  const restorePlantCombo = useCallback((grid: FlexGrid<MainRow>) => {
+    const col = grid.getColumn('PLANT_SITE_ID');
+    if (col && plantBaseDataMapRef.current && col.dataMap !== plantBaseDataMapRef.current)
+      col.dataMap = plantBaseDataMapRef.current;
+  }, []);
 
   // DIVISION_ID 컬럼에 신규행 전용 DataMap 부착(DataGrid 가 컬럼을 (재)생성할 때마다 재부착).
   //   DIVISION_ID 는 메타상 콤보가 아니므로(CELL_CONTROL_OBJECT_TYPE_CODE 공백) DataGrid 의
@@ -210,20 +331,33 @@ export const ProjectRouteWarrantyGrid = ({
         e.cancel = true;
         return;
       }
-      // R-C5 — division=="82" 행은 PLANT_SITE_ID 콤보를 비운다(AS-IS .cs 993/994 CellClick) → 편집기를
-      //   열지 않는다. 메타 PARAM10='D' 재조회로는 표현되지 않는 FE 업무규칙이다.
-      if (binding === 'PLANT_SITE_ID' && String(row?.DIVISION_ID ?? '') === DIVISION_82) {
-        e.cancel = true;
-        return;
-      }
       // R-L2/R-L3 — 행-조건부 잠금(formatItem 의 노랑 제거와 동일 술어 공유). 비-Warranty 행
       //   PLANT_SITE_ID~VALID_YN / Warranty 기존행 PLANT_SITE_ID~PROJECT_CODE 잠금(AS-IS .cs 295-305).
       if (isRowTypeLockedCell(binding, row)) {
         e.cancel = true;
         return;
       }
+      // PLANT_SITE_ID 편집 진입(AS-IS CellClick cs:970~996).
+      //   · division 공백이면 편집 취소 + "Division 선택" 안내(AS-IS 빈 콤보 + MSG00093 → TO-BE MSG00097).
+      //   · div=="82" 는 AS-IS 가 division="" 로 전체 조회(권한 division 전체 = 40/81/82 등)하므로 권한
+      //     division CSV 로 조회한다(cs:993). 그 외는 그 행 division.
+      //   · itemId 는 선택 아님(공백 가능) — 콤보 목록은 division+opGroup 'W'로만 나오고 item 은 Y/N 만 좌우.
+      //   그 행 콤보로 dataMap 을 스왑(드롭다운 Y/N 재맵핑, 자매 SCP0027 [F-14] 동형). 캐시 미스면 비동기
+      //   조회만 걸고 다음 진입에서 반영한다.
+      if (binding === 'PLANT_SITE_ID') {
+        const rowDiv = String(row?.DIVISION_ID ?? '').trim();
+        if (!rowDiv) {
+          e.cancel = true;
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.REQUIRE_DIVISION_CELL, '_사업부를 먼저 선택하세요.'),
+          });
+          return;
+        }
+        swapPlantCombo(s, plantComboDivision(rowDiv), String(row?.ITEM_ID ?? '').trim());
+      }
     },
-    []
+    [swapPlantCombo, plantComboDivision, setAlert, t]
   );
 
   // 그리드 생성 시 1회(initialized, grid 확정 보장) — 모든 셀 렌더링 훅을 여기서 건다.
@@ -285,17 +419,33 @@ export const ProjectRouteWarrantyGrid = ({
       return;
     }
 
-    // R-D1 — PLANT_SITE_ID 선택 시 표시문자열 마지막문자 = TACT_TIME_FLAG.
+    // R-D1 — PLANT_SITE_ID 선택 시 표시문자열 마지막문자 = TACT_TIME_FLAG. 편집 중 셀은 swap 된 행별
+    //   콤보 dataMap 이 붙어 있어 표시값(getCellData formatted)이 그 Model 의 정확한 Y/N 이다 —
+    //   record.PLANT_SITE_ID(CODE)가 아니라 표시값에서 뽑는다. 플래그 확정 후 base 콤보로 복원한다.
     if (binding === 'PLANT_SITE_ID') {
-      const flag = deriveTactTimeFlag(record.PLANT_SITE_ID);
-      editTrackerRef.current?.storeChange(
-        dataItem,
-        'TACT_TIME_FLAG',
-        record.TACT_TIME_FLAG as string,
-        flag
-      );
-      record.TACT_TIME_FLAG = flag;
-      GridUtils.refreshRow(grid, e.row);
+      const applyFlag = (flag: string) => {
+        editTrackerRef.current?.storeChange(
+          dataItem,
+          'TACT_TIME_FLAG',
+          record.TACT_TIME_FLAG as string,
+          flag
+        );
+        record.TACT_TIME_FLAG = flag;
+        GridUtils.refreshRow(grid, e.row);
+      };
+      applyFlag(deriveTactTimeFlag(String(grid.getCellData(e.row, e.col, true) ?? '')));
+      restorePlantCombo(grid);
+      // 안전망 — 스왑 미발생(캐시 미스)이면 그 행 div+itemId 콤보 재조회로 정확 보정. div=="82"는 빈값(전체).
+      const rowDiv = safeString(record.DIVISION_ID).trim();
+      const comboDiv = plantComboDivision(rowDiv);
+      const itemId = safeString(record.ITEM_ID).trim();
+      const plantCode = safeString(record.PLANT_SITE_ID).trim();
+      if (rowDiv && itemId && plantCode) {
+        void fetchPlantCombo(comboDiv, itemId).then(rows => {
+          const hit = rows.find(r => String(r.CODE ?? '') === plantCode);
+          if (hit) applyFlag(deriveTactTimeFlag(String(hit.NAME ?? '')));
+        });
+      }
       return;
     }
 
@@ -319,6 +469,10 @@ export const ProjectRouteWarrantyGrid = ({
         record[col] = val;
       }
       GridUtils.refreshRow(grid, e.row);
+      // Plant Site 콤보 선조회 — division 확정 시 그 division(82→빈값=전체) 목록을 미리 당겨 편집 진입
+      //   첫 드롭다운이 바로 전체 목록으로 뜨게 한다(itemId='' 목록은 Y/N 무관, 사이트 집합 동일).
+      const rowDivTrim = div.trim();
+      if (rowDivTrim) void fetchPlantCombo(plantComboDivision(rowDivTrim), '');
     }
   };
 
@@ -352,6 +506,7 @@ export const ProjectRouteWarrantyGrid = ({
       editTrackerRef={editTrackerRef}
       itemsSource={data}
       staticColumns={staticColumns}
+      comboParams={comboParams}
       initialized={handleGridInitialized}
       cellEditEnded={handleCellEdit}
       pastedCell={handleCellEdit}

@@ -55,7 +55,11 @@ import { isEditableDivision } from './utils/mkt-fcst-01.division';
 import { applyCascadeClear, buildWsSupportComboFilters } from './utils/mkt-fcst-01.gridCombos';
 import { groupKeyBindings, type GroupKeyColumn } from './utils/mkt-fcst-01.merge';
 import { buildSavePayload, buildUnfoldRows, findMissingPrdnCtry } from './utils/mkt-fcst-01.save';
-import { SEARCH_COMBO } from './utils/mkt-fcst-01.searchCombos';
+import {
+  SEARCH_COMBO,
+  buildDivisionChangePatch,
+  filterSearchableDivisions,
+} from './utils/mkt-fcst-01.searchCombos';
 import { useMktFcst01Validation } from './utils/mkt-fcst-01.validate';
 
 // AS-IS DMF0003_MktFcst (Demand > Demand Plan > MKT FCST / 시장예측).
@@ -201,10 +205,21 @@ export const MktFcst01 = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   Division 기본 선택 (DMF0040/CustFcstWaterfall 과 통일): 세션 division 이 FilterMyDivision
   //   목록에 있으면 그것, 없으면 목록 첫 행 (AS-IS 진입 시 콤보 첫 항목 자동선택 파리티).
   //   sc.divisionId 가 비어 있을 때마다 채운다 — 기존 값(사용자 선택·복원값)은 덮지 않는다.
+  //   목록은 이 화면 조회 가능 사업부(82)로 거른 뒤 쓴다(Form 콤보와 같은 기준).
+  //   주의: sessionStorage 복원값이 목록 밖(예: 82 제한 전에 고른 40)이면 그대로 두지 않는다 —
+  //   목록 첫 행으로 바꾸고 종속 조회조건도 콤보 변경과 똑같이 되돌린다. 목록이 비면 공란으로
+  //   두어 조회 시 MSG00097 로 막는다. 콤보 응답 전(undefined)에는 판단하지 않는다.
   const [divisionRows] = useTabComboQueries({ filters: [SEARCH_COMBO.division] });
   useEffect(() => {
-    if (sc.divisionId) return;
-    const codes = (divisionRows ?? []).map(r => String(r.CODE ?? '')).filter(Boolean);
+    if (!divisionRows) return;
+    const codes = filterSearchableDivisions(divisionRows)
+      .map(r => String(r.CODE ?? '').trim())
+      .filter(Boolean);
+    if (sc.divisionId) {
+      if (codes.includes(sc.divisionId.trim())) return;
+      setSearchCondition(buildDivisionChangePatch(codes[0] ?? ''));
+      return;
+    }
     if (codes.length === 0) return;
     const sessionDiv = String(session.div ?? '');
     const picked = codes.includes(sessionDiv) ? sessionDiv : codes[0];

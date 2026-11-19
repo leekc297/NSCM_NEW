@@ -129,6 +129,10 @@ export const CapaLineAssignGrid = ({
     const rowOf = (index: number): GridRow | undefined =>
       grid.rows[index]?.dataItem as GridRow | undefined;
 
+    // 편집 진입 시점의 원본 셀 값 — AS-IS `_defaultDataModel_Changed`(DataModel.Changed, cs:2511)가
+    //   값이 실제로 바뀔 때만 발화하는 것을 재현하기 위해 cellEditEnded 에서 비교한다.
+    let editOriginalValue: unknown;
+
     const editableAt = (col: number, row: number): boolean => {
       // `_inputEditType`(= admin INPUT_TP_CD) 은 공용 게이트와 같은 출처(GridUtils.getColumn)에서 읽는다 —
       //   grid.columns[col] 은 leaf 매핑 전 Wijmo 컬럼이라 이 메타 필드가 없다.
@@ -169,14 +173,22 @@ export const CapaLineAssignGrid = ({
       e.cancel = !editableAt(e.col, e.row);
       if (e.cancel) return;
       if (!row) return;
+      // cellEditEnded 의 값 변경 비교 기준(AS-IS DataModel.Changed 재현).
+      editOriginalValue = sender.getCellData(e.row, e.col, false);
       const candidates = buildCellComboCandidates(binding, row, comboSourcesRef.current, isEltr);
       if (!candidates || candidates.length === 0) return;
       // 후보는 코드/명칭 자기 자신이다 — 표시 변환이 없으므로 `formatItem` 복원이 필요 없다.
-      column.dataMap = new DataMap(
+      const dataMap = new DataMap(
         candidates.map(value => ({ value })),
         'value',
         'value'
       );
+      // Dummy 채번 축(ASSEMBLY NICK_NAME / ELTR ITEM_ID)은 목록 밖 신규 명칭 입력을 허용해야 한다 —
+      //   AS-IS 는 미등록 이름을 그대로 받아 DMY_ 코드를 채번한다(cs:3658-3690, G14·G15). isEditable 이면
+      //   Wijmo 와 공용 DataGrid 의 목록밖값 되돌림(restoreCanonicalComboText·clearOutOfListComboOnPaste)이
+      //   모두 그 값을 지우지 않아, 입력한 이름이 행에 남아 cellEditEnded→onUnknownItemName 까지 흐른다.
+      if (dummyCodeTypeOf(binding, isEltr)) dataMap.isEditable = true;
+      column.dataMap = dataMap;
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
 
@@ -189,6 +201,10 @@ export const CapaLineAssignGrid = ({
       if (column?.dataMap && buildCellComboCandidates(binding, row ?? {}, comboSourcesRef.current, isEltr))
         column.dataMap = null;
       if (!row) return;
+      // AS-IS 는 DataModel.Changed(값이 실제로 바뀔 때만)에서만 cascade(명칭동기·하위클리어·Dummy)를
+      //   수행한다. Wijmo cellEditEnded 는 F2 로 열고 Esc/Enter 로 닫기만 해도 발화하므로, 값이
+      //   그대로면 하위 칸을 지우지 않는다(SCP0104 GAP: 값 변경 없이 하위 8칸 클리어).
+      if (str(sender.getCellData(e.row, e.col, false)) === str(editOriginalValue)) return;
       syncCodeAndName(binding, row, comboSourcesRef.current);
       clearSubCodes(binding, row);
       markDummyYn(row, dummyCodesRef.current);
@@ -314,9 +330,9 @@ export const CapaLineAssignGrid = ({
       comboParams={comboParams}
       sheetName={ADMIN_SHEET_NAME[sheet]}
       excelFileName='CapaLineAssign'
-      // 헤더 단당 기본높이(prop 은 defaultSize 만 세팅) — 표시 2단 기준 48/2=24. 실제 총높이 48px 고정은
-      //   위 applyHeaderHeight 가 tier 수로 균등배분해 각 row 에 박는 것이 단일 출처다(hook #93).
-      headerRowHeight={ASSIGN_HEADER_TOTAL_HEIGHT / 2}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체 applyHeaderHeight 의 동적 tier 보정이 충돌해 무한
+      //   invalidate 가 됐다. 총높이 48px 고정은 위 applyHeaderHeight 가 tier 수로 균등배분해 박는 단일 출처다.
       /*
         셀 병합은 조회모드일 때만이다(AS-IS `SetSheetMergeAssign` = `SetToggleMerge(si, !editMode)`) —
         병합된 셀을 편집하면 어느 행을 고쳤는지 알 수 없다. 신규행(`CRUD_TYPE='I'`) 제외는 공용

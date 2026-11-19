@@ -6,7 +6,7 @@ import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { sessionTimeZone } from '@foundation/utils';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useSessionStore, useTabid } from '@shared/stores';
@@ -320,30 +320,9 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
           />
 
-          {/* F8 Sum — 초기 unchecked. SUM(M_/W_) 컬럼 가시성만 바꾼다(재조회 없음).
-              정렬: 라벨을 `FormItem` 라벨 트랙(우측정렬)에 둬 위 Period·Bucket 라벨 열과 x 정렬한다.
-              bare `customGrid`+`Checkbox labelText` 는 라벨 트랙이 없어 체크박스가 셀 왼쪽(Bucket 뒤)으로
-              붙어 위 행과 어긋난다 — GlobalPsiReportForm 2026-10-15 사용자 교정과 동형(Pattern A 정렬 기준).
-              세로: Grid 에 `customGrid`(flex + align-items:center)를 걸어 체크박스를 행 높이(36px) 중앙에
-              맞춘다 — 없으면 체크박스가 셀 위쪽에 붙는다(GlobalPsiReport 동형). */}
-          <Grid size={3} className={commonStyles.customGrid}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.SUM, '_Sum')}
-              labelAlign='right'
-              render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  {/* AS-IS SetDivisionAuthCheck(cs:237-238)는 `usrLayoutControl2` 컨테이너 전체를 끈다 —
-                      Designer dz:126-133 상 chkSum·txtItem_Id 도 그 안이라 8필드 전부가 대상이다(G-06). */}
-                  <Checkbox
-                    disabled={noDivisionAuth}
-                    checked={sc.showSum}
-                    onChange={checked => set({ showSum: checked })}
-                  />
-                </div>
-              )}
-            />
-          </Grid>
+          {/* Sum(showSum, SUM 컬럼 가시성 토글)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시
+              2026-11-18, SCP0013 동형). 폼에서 제거 — 권한 division 0건 비활성(disabled)은 메인 SubTitle 쪽에서
+              동일 로직(noDivisionAuth)으로 재현한다. */}
         </>
       }
     />

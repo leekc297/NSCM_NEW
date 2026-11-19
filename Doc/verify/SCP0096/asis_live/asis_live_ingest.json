@@ -1,16 +1,16 @@
 {
  "id": "SCP0096",
- "run_dir": "Doc/asislive/SCP0096/run_20261112_224704",
- "live_at": "2026-11-12 22:47:04.837",
+ "run_dir": "Doc/asislive/SCP0096/run_20261118_143319",
+ "live_at": "2026-11-18 14:33:19.096",
  "user": "jaeuk.shin",
  "find": {
   "signaled": true,
-  "time_status": "DB : 11.392s, UI : 0.124s",
+  "time_status": "DB : 0.307s, UI : 0.122s",
   "total": "Total : 1",
   "how": "status"
  },
- "mixed_risk": true,
- "live_calls": 16,
+ "mixed_risk": false,
+ "live_calls": 15,
  "live_sp_distinct": 12,
  "static_vs_live": {
   "SP:MATCH": 3,
@@ -23,8 +23,12 @@
   "CONDITION:LIVE": 7,
   "GRID:LIVE": 1
  },
- "diff_gap": {},
- "param_hints": 0,
+ "diff_gap": {
+  "LIVE_ONLY": 1,
+  "BOTH": 3,
+  "NONE": 1
+ },
+ "param_hints": 2,
  "limits": [
   "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
   "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",

@@ -120,6 +120,17 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     return false;
   }
 
+  // 병합키 누적에 이 컬럼 값을 포함할지 — 기본 true(전 컬럼 포함, 현행 동일·회귀 0).
+  //   병합키는 좌측 누적이라, 행마다 고유한 숨김 컬럼(예: SCP0013 CP_KEY='line|item|measure',
+  //   MEASURE='PROD_PLAN'/'PROD_PLAN_AMEND')이 식별컬럼보다 왼쪽에 있으면 그 고유값이 모든
+  //   식별컬럼 키에 섞여 어떤 행도 병합되지 않는다(첫 보이는 식별컬럼부터 병합 전멸).
+  //   AS-IS(FarPoint RightMergeWithColor)는 숨김 컬럼(Visible=false)을 병합 판정에서 아예
+  //   건너뛰므로(SpreadInfo.cs 숨김→startCol+1 재귀), 그 화면은 서브클래스가 숨김 컬럼을 누적에서
+  //   제외해 AS-IS 와 등가로 맞춘다.
+  protected includeColumnInMergeKey(_panel: GridPanel, _col: number): boolean {
+    return true;
+  }
+
   private _getMergeKey(panel: GridPanel, row: number, col: number): string {
     if (row < 0) return '';
 
@@ -127,10 +138,15 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     const cached = this._mergeKeyCache.get(cacheKey);
     if (cached !== undefined) return cached;
 
+    const prev = col === 0 ? '' : this._getMergeKey(panel, row, col - 1);
     let key: string;
-    if (col === 0) key = String(panel.getCellData(row, 0, false));
-    else {
-      const prev = this._getMergeKey(panel, row, col - 1);
+    if (!this.includeColumnInMergeKey(panel, col)) {
+      // 누적에서 제외 — 이 컬럼 값은 키에 넣지 않고 왼쪽 누적을 그대로 물려준다.
+      //   (col 0 이 제외되면 빈 문자열에서 시작 — 아래 포함 컬럼부터 실제 값이 쌓인다.)
+      key = prev;
+    } else if (col === 0) {
+      key = String(panel.getCellData(row, 0, false));
+    } else {
       key = prev + '|' + panel.getCellData(row, col, false);
     }
 

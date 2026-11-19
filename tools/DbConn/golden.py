@@ -389,11 +389,42 @@ def main(argv=None):
     for c in cases:
         sc, sp, proc = c['screen'], c['asis_sp'], c['tobe_proc']
         params = json.loads(c['params'] or '{}')
-        md = [f"# {sc} · {sp} ↔ {proc or '(미매칭)'}", '', f"- 실행: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}", f"- 파라미터: `{json.dumps(params, ensure_ascii=False)}`", f"- 종류: {c['kind']}"]
+        # 2026-11-18 미검증 해소(SCP0096 A7 3행 '파라미터 값 미정'): 빈 값은 ① AS-IS SP 선언 기본값으로 채우고 ② 본문이 '@인자 = ''' 로 빈 값을 전체로 다루면 의도된 빈 값으로 본다
+        _blank_ok = set()
+        try:
+            sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Harness', 'verify'))
+            import asis_sp_src as _src
+            _dd = _src.sp_declared_defaults(sp)
+            for _k, _v in list(params.items()):
+                if _v == '':
+                    _d = _dd.get(_k.lstrip('@').lower())
+                    if _d and _d[0] is not None:
+                        params[_k] = _d[0]
+                    elif _src.blank_means_all(sp, _k):
+                        _blank_ok.add(_k)
+        except Exception:  # 원문 판독 실패 = 종전 판단(빈 값이면 SKIP)
+            _blank_ok = set()
+        # ③ 남은 빈 값 = 같은 화면 차등 검증이 실제 호출에서 잡은 AS-IS 인자(diff_summary.csv params_asis · 실행된 호출)로 채운다(실측 인자 · 추측 아님)
+        _live_note = ''
+        if any(v == '' and k not in _blank_ok for k, v in params.items()):
+            try:
+                _ds = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'Doc', 'verify', sc, 'diff', 'diff_summary.csv')
+                with open(_ds, encoding='utf-8-sig', newline='') as _f:
+                    for _r in csv.DictReader(_f):
+                        if (_r.get('asis_sp') or '').upper() != sp.upper() or _r.get('verdict') not in ('PASS', 'DIFF', 'ROWS_ONLY') or not _r.get('params_asis'):
+                            continue
+                        _pa = json.loads(_r['params_asis'])
+                        _hit = {k: str(_pa[k]) for k, v in params.items() if v == '' and k not in _blank_ok and str(_pa.get(k, '')) != ''}
+                        if _hit:
+                            params.update(_hit); _live_note = f"빈 인자 {', '.join(_hit)} = 차등 검증 호출 #{_r.get('call_no')} 실측 AS-IS 인자({_r.get('measured_at', '')})"
+                        break
+            except (OSError, ValueError):
+                pass
+        md = [f"# {sc} · {sp} ↔ {proc or '(미매칭)'}", '', f"- 실행: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}", f"- 파라미터: `{json.dumps(params, ensure_ascii=False)}`", f"- 종류: {c['kind']}"] + ([f'- {_live_note}'] if _live_note else [])
         a_sets = t_sets = None
         if c['kind'] == 'SAVE' and not WRITE: verdict = 'SKIP'; md.append('- SAVE 류 — `--write` 없이 건너뜀')
         elif not proc: verdict = 'SKIP'; md.append('- To-Be proc 미매칭 — golden_cases.csv 의 tobe_proc 를 지정(manual=Y)')
-        elif any(v == '' for v in params.values()) and (c.get('manual') or '').upper() != 'Y': verdict = 'SKIP'; md.append('- 파라미터 값 미정 — param_defaults.json 또는 golden_cases.csv params 보완 (manual=Y 면 빈값도 의도된 값으로 실행)')
+        elif any(v == '' and k not in _blank_ok for k, v in params.items()) and (c.get('manual') or '').upper() != 'Y': verdict = 'SKIP'; md.append('- 파라미터 값 미정 — param_defaults.json 또는 golden_cases.csv params 보완 (manual=Y 면 빈값도 의도된 값으로 실행)')
         else:
             try:
                 a_sets = run_asis(ca, sp, params)

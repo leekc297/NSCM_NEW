@@ -5,14 +5,13 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import {
   COMBO,
-  DETAIL_LABEL,
   EE_ATTRIBUTE,
   LBL,
   MONTH_MIN_YEAR,
@@ -247,23 +246,6 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Detail — 상세 22컬럼 표시 토글(AS-IS chkDetail, cs:425~448 / .designer:364). 기본 해제=숨김.
-              조회조건이 아니라 그리드 컬럼 show/hide 트리거(SP 미전달) — 형제 ending-inventory 동형.
-              라벨을 Month 처럼 우측정렬 FormItem 으로 두어 체크박스를 필드 컬럼에 맞춘다. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={DETAIL_LABEL}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  checked={sc.detail}
-                  disabled={noDivisionAuth}
-                  onChange={checked => set({ detail: checked })}
-                />
-              )}
-            />
-          </Grid>
         </>
       }
     />

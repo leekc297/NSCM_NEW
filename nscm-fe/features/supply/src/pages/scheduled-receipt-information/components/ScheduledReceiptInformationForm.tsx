@@ -164,7 +164,14 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
         onSearch={onSearch}
         conditions={
           <>
-            {/* Row1(AS-IS Designer y=0): Division(x0)/Plant Site(x260)/Valid(x540)/Parent Model(x730). */}
+            {/* 조회조건 순서 — 논리 그룹 기준(사용자 지시 2026-11-17): Division(①데이터기준) →
+                Plan Group·Site(②조직·거점: 상위조직이 모델·자재보다 앞, Site 는 Plan Group 에 종속) →
+                Parent Model·Material(③제품·대상: BOM 부모→자식) → From Date(④기간) → Valid(⑤상태·표시, 마지막).
+                AS-IS Designer 절대좌표(Row1 Division/Site/Valid/ParentModel, Row2 PlanGroup/Material/FromDate)
+                에서 의도적 deviation. Grid size={3} = 4칸/행 → Virtual Bom(7필드) Row1 Division/PlanGroup/Site/
+                ParentModel · Row2 Material/FromDate/Valid. Scheduled Receipt(ParentModel 숨김)은 placeholder
+                로 자리 유지. */}
+            {/* ① Division */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -192,74 +199,7 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                 )}
               />
             </Grid>
-            {/* Site(SCP0130-03) — 등록 콤보 PlantSiteSir, Division 단일필터 + CODE dedup. */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LABEL.SITE, '_Site')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    multiple
-                    allOption
-                    value={searchParams.siteIds}
-                    options={siteOptions}
-                    onChange={(_, value) => setSearchParams({ siteIds: value })}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LABEL.VALID, '_Valid')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    value={searchParams.valid}
-                    options={VALID_OPTIONS}
-                    onChange={(_, option) => setSearchParams({ valid: option ?? 'All' })}
-                  />
-                )}
-              />
-            </Grid>
-            {/* Parent Model(Item ID) — Row1 맨 끝(AS-IS Designer lblItemId x=730, Valid x=540 뒤).
-                Virtual Bom 시트에서만 노출(SCP0130-08, AS-IS btnItemId.Visible .cs:1473/1488);
-                Scheduled Receipt 시트에서는 조회조건 자체를 숨긴다(itemId 파라미터도 store 에서 ''). */}
-            {isVirtualBom ? (
-              <Grid size={3}>
-                <FormItem
-                  className={commonStyles.formItem}
-                  label={t(LABEL.ITEM_ID, '_Item')}
-                  labelAlign='right'
-                  render={() => (
-                    <InputField
-                      fullWidth
-                      className={commonStyles.popupSearchField}
-                      value={searchParams.itemId}
-                      InputProps={{
-                        endAdornment: (
-                          <Button
-                            appearance='outlined'
-                            priority='normal'
-                            iconComponent={<FunctionSearchIcon appearance='lined' />}
-                            onClick={() => setOpenItemModal(true)}
-                          />
-                        ),
-                      }}
-                      onChange={e => setSearchParams({ itemId: e.target.value })}
-                    />
-                  )}
-                />
-              </Grid>
-            ) : (
-              // Scheduled Receipt 탭: Parent Model 숨김으로 비는 Row1 4번째 칸을 빈 placeholder 로 채운다.
-              //   없으면 Grid auto-flow 로 Plan Group 이 1행 4번째로 올라가 배치가 어긋난다(#13). AS-IS 는
-              //   절대배치라 숨겨도 다른 필드가 안 밀리므로, placeholder 로 Plan Group/Material/From Date 를
-              //   2행에 고정해 등가로 맞춘다.
-              <Grid size={3} />
-            )}
-            {/* Row2(design 01 §1 y=29/41 행): PlanGroup/ChildMaterial/FromDate. */}
+            {/* ② Plan Group(조직) — Site 보다 앞(Site 가 Plan Group 에 종속, sitePlanGroupFilter). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -285,11 +225,63 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                 )}
               />
             </Grid>
-            {/* Child Material(SCP0130-03) — 등록 콤보 ItemIdChild, Division 단일필터 + CODE dedup.
-                라벨은 두 탭 모두 'Material'(LBL00021) 표준으로 통일(SCP0130-#10). AS-IS 는 Virtual Bom 탭에서만
-                'Child Material'(.cs:1477)로 달랐으나, item_id_child/material 조회조건의 전 화면 공통 표준이
-                'Material'(LBL00021)이고 'Child Material'(LBL01062)은 SCP0130 고유라, 표준으로 맞춘다
-                (asis-parity-default-keep-common-standardization). 탭별 스왑 제거. */}
+            {/* ② Site(거점, SCP0130-03) — 등록 콤보 PlantSiteSir, Division 단일필터 + CODE dedup. */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LABEL.SITE, '_Site')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    multiple
+                    allOption
+                    value={searchParams.siteIds}
+                    options={siteOptions}
+                    onChange={(_, value) => setSearchParams({ siteIds: value })}
+                  />
+                )}
+              />
+            </Grid>
+            {/* ③ Parent Model(Item ID) — 제품·대상 그룹 첫 필드(BOM 부모, Material 앞).
+                Virtual Bom 시트에서만 노출(SCP0130-08, AS-IS btnItemId.Visible .cs:1473/1488);
+                Scheduled Receipt 시트에서는 조회조건 자체를 숨긴다(itemId 파라미터도 store 에서 ''). */}
+            {isVirtualBom ? (
+              <Grid size={3}>
+                <FormItem
+                  className={commonStyles.formItem}
+                  label={t(LABEL.ITEM_ID, '_Parent Item')}
+                  labelAlign='right'
+                  render={() => (
+                    <InputField
+                      fullWidth
+                      className={commonStyles.popupSearchField}
+                      value={searchParams.itemId}
+                      InputProps={{
+                        endAdornment: (
+                          <Button
+                            appearance='outlined'
+                            priority='normal'
+                            iconComponent={<FunctionSearchIcon appearance='lined' />}
+                            onClick={() => setOpenItemModal(true)}
+                          />
+                        ),
+                      }}
+                      onChange={e => setSearchParams({ itemId: e.target.value })}
+                    />
+                  )}
+                />
+              </Grid>
+            ) : (
+              // Scheduled Receipt 탭: Parent Model 숨김으로 비는 Row1 4번째 칸을 빈 placeholder 로 채운다.
+              //   없으면 Grid auto-flow 로 Material 이 1행 4번째로 올라가 배치가 어긋난다(#13). placeholder 로
+              //   Material/From Date/Valid 를 2행에 고정해 Virtual Bom 과 같은 그룹 순서를 유지한다.
+              <Grid size={3} />
+            )}
+            {/* ③ Child Material(SCP0130-03) — BOM 자식, Parent Model 뒤. 등록 콤보 ItemIdChild, Division
+                단일필터 + CODE dedup. 라벨은 두 탭 모두 'Material'(LBL00021) 표준으로 통일(SCP0130-#10).
+                AS-IS 는 Virtual Bom 탭에서만 'Child Material'(.cs:1477)로 달랐으나, item_id_child/material
+                조회조건의 전 화면 공통 표준이 'Material'(LBL00021)이고 'Child Material'(LBL01062)은 SCP0130
+                고유라, 표준으로 맞춘다(asis-parity-default-keep-common-standardization). 탭별 스왑 제거. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -306,6 +298,7 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                 )}
               />
             </Grid>
+            {/* ④ From Date(기간) — 제품·대상 뒤, 상태·표시(Valid) 앞. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -344,6 +337,21 @@ export const ScheduledReceiptInformationForm = ({ isVirtualBom }: Props) => {
                       }
                     />
                   </div>
+                )}
+              />
+            </Grid>
+            {/* ⑤ Valid(상태·표시) — 조회 결과 필터링 옵션이라 맨 마지막. */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LABEL.VALID, '_Valid')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    value={searchParams.valid}
+                    options={VALID_OPTIONS}
+                    onChange={(_, option) => setSearchParams({ valid: option ?? 'All' })}
+                  />
                 )}
               />
             </Grid>

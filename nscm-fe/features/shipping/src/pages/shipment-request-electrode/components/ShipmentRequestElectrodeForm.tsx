@@ -397,11 +397,8 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
                 '& .MuiFormControlLabel-label': { whiteSpace: 'nowrap' },
               }}
             >
-              <Checkbox
-                labelText={t(LBL.SUM, '_Sum')}
-                checked={sp.sumChecked}
-                onChange={checked => setSearchParams({ sumChecked: checked })}
-              />
+              {/* Sum(sumChecked)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18,
+                  SCP0013 동형). 폼에서 제거. */}
               <Checkbox
                 labelText={t(LBL.PAST_PERIOD, 'Including Past Period')}
                 checked={sp.pastPeriodChecked}

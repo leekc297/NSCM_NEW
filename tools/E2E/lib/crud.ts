@@ -192,14 +192,33 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   const targetCol = Math.max(keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : remarkCol >= 0 ? remarkCol : firstEditable, 0);
   try {
     const before = await rowsLoc().count();
+    const ctl0 = await probe.rowCount(nscm.page).catch(() => -1);
     await nscm.clickInsert();
     await nscm.page.waitForFunction((n: number) => document.querySelectorAll('.wj-flexgrid .wj-cells .wj-row').length > n, before, { timeout: 10_000 }).catch(() => undefined);
-    out.inserted = (await rowsLoc().count()) > before;
+    // 2026-11-18 SCP0111 ES-0af2f16b(실측 DOM 행 37 → 37 · 그리드 행 1259 → 1260): 행이 많으면 그리드는 보이는 행만 그린다(가상화) → 화면에 그려진 행 수로는 Insert 성공을 못 본다.
+    //   그리드 행 수(control rows)가 늘었는지도 본다
+    const domUp = (await rowsLoc().count()) > before; const ctl1 = await probe.rowCount(nscm.page).catch(() => -1);
+    out.inserted = domUp || (ctl0 >= 0 && ctl1 > ctl0);
+    // 2026-11-18: 정리 경로가 없는 화면(cleanup_spec mode=editonly — 기존 행 수정·원복만 정의 · 저장된 신규 행을 지울 키·SP 없음)은 마커 행을 저장하면 사내 DB 에 남는다
+    //   (restore_touched 는 수정 기록 시각 뒤 기본 계정이 만든 행만 지움 · 다른 계정·기록 전 저장은 못 지움) → 행 추가까지만 재고 저장 시험은 보류(미검증 사유를 남긴다)
+    const mid0 = ((plan as { menuId?: string }).menuId || process.env.VERIFY_ID || '').toUpperCase();
+    const editOnly = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'Harness', 'verify', 'cleanup_spec.json'), 'utf8'))[mid0]?.mode === 'editonly'; } catch { return false; } })();
     if (!out.inserted) { out.notes.push('Insert 후 행 증가 없음'); }
+    else if (editOnly) { out.notes.push(`Insert 행 추가 확인(그리드 행 ${ctl0} → ${ctl1}${domUp ? '' : ' · 화면에 그려진 행 수는 같음(가상화)'}) · [측정 보류: 신규 행 저장 정리 경로 없음] cleanup_spec ${mid0} mode=editonly — 마커 행 저장 시험 안 함`); }
     else {
       // 신규 행 = 맨 위 또는 맨 아래 — 비어 있는 행을 찾는다
-      const n = await rowsLoc().count(); let ri = 0;
+      const n = await rowsLoc().count(); let ri = -1;
       for (const cand of [0, n - 1]) { const t = (await rowsLoc().nth(cand).innerText().catch(() => '')).replace(/\s+/g, ''); if (!t) { ri = cand; break; } }
+      // 2026-11-18: 빈 행을 못 찾으면(신규 행에 기본값이 들어가는 화면 · 가상화로 화면 밖) 그리드에서 CRUD_TYPE='I' 행을 찾아 보이게 한 뒤 그려진 행 순번을 구한다.
+      //   종전엔 0번(기존 행)에 마커를 넣을 수 있었다 — 못 찾으면 기존 행을 건드리지 않고 멈춘다
+      if (ri < 0) {
+        const nr = await probe.findRow(nscm.page, 'new').catch(() => null);
+        if (nr) {
+          await nscm.page.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (c) c.scrollIntoView(${nr.row}, -1); })()`).catch(() => undefined); await nscm.page.waitForTimeout(400);
+          ri = await nscm.page.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return -1; const ci = c.columns.findIndex(x => x.visible !== false); const el = c.cells.getCellElement(${nr.row}, ci < 0 ? 0 : ci); if (!el) return -1; const row = el.closest('.wj-row'); return row ? [...c.hostElement.querySelectorAll('.wj-cells .wj-row')].indexOf(row) : -1; })()`).catch(() => -1) as number;
+        }
+      }
+      if (ri < 0) throw new Error('신규 행 위치를 찾지 못함(빈 행 없음 · 그리드 CRUD_TYPE=I 행의 화면 위치 미확인) — 기존 행을 건드리지 않고 중단');
       // 2026-11-09 T176: AS-IS 선행 칸(cell_prereq.csv · 예 Division)을 먼저 채운다 — 비우면 다른 칸 입력이 '먼저 선택' 안내로 막혀 마커 저장이 실패한다
       { const mid = ((plan as { menuId?: string }).menuId || process.env.VERIFY_ID || '').toUpperCase(); const nq = await probe.findRow(nscm.page, 'new'); if (mid && nq) { const pl = await fillPrereq(nscm.page, mid, nq.row, { isNew: true }); if (pl.length) out.notes.push(`선행 칸 채움(T176) ${pl.join(' · ')}`); } }
       // 2026-11-08 T166(SCP0122 J2 실측 '[Act. Seq] 값은 필수 입력 항목입니다.' → 17:4x 2차 실측 '신규 입력 데이터 중 중복된 데이터' — 연동 콤보(OPMZ_ACTV_NAME→CD)가 키를 기존 값으로 바꿈 → 필수 칸을 먼저 채우고 마커(키)는 마지막에 넣어 덮는다): 마커 행이 keyColumns 만 채워 필수(M) 컬럼 화면 검증에 막혀 허용 계정 CRUD 를 재지 못했다 →

@@ -57,7 +57,7 @@ export const CHK_COLUMN = 'CHK';
 //   MSG00134 → MSG01153  | 날짜 선택 후 입력하세요.
 //   MSG00004 → MSG00672  | {0}개의 데이터가 저장되었습니다.        ← TO-BE MSG00004 는 "수정한 내용이 없습니다"
 //   MSG00284 → MSG01288  | 실행중 에러가 발생했습니다.             ← TO-BE MSG00284 는 "Grid 가 준비되지 않았습니다"
-//   MSG00219 → MSG00219  | (동일 번호에 동일 문구 등록 — 유일한 번호 일치 건)
+//   MSG00219 → MSG01230  | 시작일자가 종료일자보다 늦을 수 없습니다. (AS-IS MSG00219 는 TO-BE 미등록 — 재매핑)
 //
 //   주의: **MSG00097 을 Division 미체크에 쓰면 안 된다.** TO-BE MSG00097 문구는
 //   "Division 을 선택하세요"(= AS-IS MSG00299 의미)라서, 무권한 사용자에게 선택할 Division 이
@@ -72,7 +72,7 @@ export const MSG = {
   DELEGATEE_REQUIRED: 'MSG01301', // Delegatee를 입력해 주세요 ← AS-IS MSG00298
   DELEGATEE_SELF: 'MSG01308', // 위임자와 수임자가 동일 합니다 ← AS-IS MSG00305
   PERIOD_REQUIRED: 'MSG01153', // 날짜 선택 후 입력하세요 ← AS-IS MSG00134
-  PERIOD_REVERSED: 'MSG00219', // 시작일자가 종료일자보다 늦을 수 없습니다 ← AS-IS 동일번호
+  PERIOD_REVERSED: 'MSG01230', // 시작일자가 종료일자보다 늦을 수 없습니다 ← AS-IS MSG00219(미등록) 재매핑
   DELEGATEE_OTHER: 'MSG01299', // 수임자의 다른 위임 현황이 있습니다 ← AS-IS MSG00296
   OVERLAP_RECEIVED: 'MSG01300', // 중첩된 기간에 수임받은 현황이 있습니다 ← AS-IS MSG00297
   UNSET_NONE_SELECTED: 'MSG01303', // 리스트에서 선택 후 설정해제 해주세요 ← AS-IS MSG00300

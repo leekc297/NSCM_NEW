@@ -646,6 +646,16 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         row[COLUMN.NICK_NAME] as WijmoPrimitive
       );
       tracker?.storeChange(target, COLUMN.ITEM_ID, prevItemId, row[COLUMN.ITEM_ID] as WijmoPrimitive);
+      // AS-IS `Edit_Row_Assign`(cs:5291-5310): 신규(미저장) 행이면 품목과 함께 행 기본값을 다시
+      //   적용한다 — 기간칸=`NEW_ROW_DATE_CELL_VALUE`(1)·`VALID_YN='Y'`·`DUMMY_YN='N'`(+ELTR Line
+      //   Type='S'). `_curr_assign_action == FlagI`(= 현재 행 CRUD='I') 게이트와 같다. 그래서 품목
+      //   선택 전에 바꿔둔 기간/Active 가 기본값으로 되돌아간다. 기존(저장된) 행은 품목만 바꾼다.
+      if (row.CRUD_TYPE === 'I') {
+        row[COLUMN.DUMMY_YN] = 'N';
+        row[COLUMN.VALID_YN] = 'Y';
+        if (isEltr) row[COLUMN.ELTR_LN_TP_CD] = 'S';
+        for (const binding of dateBindings) row[binding] = NEW_ROW_DATE_CELL_VALUE;
+      }
       grid.invalidate();
       return;
     }

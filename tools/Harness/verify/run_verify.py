@@ -56,7 +56,7 @@ STAGES = [('pre', '사전 작업(DB·Fact Pack·메타·스펙·smoke)', None),
           ('e2e', 'E2E 검증엔진(@verify·@trace)', 0),
           ('eg', 'E2E 팝업·권한 검사기(eg_chain)', 1),
           ('diff', '차등 검증(AS-IS↔TO-BE 결과 비교)', 7),  # +asis_live_screen(2026-11-13 · 6 → 7)  # +asis_live_auto(2026-11-13)  # +asis_live_ingest(2026-11-12 · 실제 run() 4 + 1 = 5 — 종전 2 는 sqllog_calls·gen_param_map 추가 때 안 고쳐진 값) · 2026-11-06 플랜 2-4: 포착 call-proc 인자로 AS-IS SP ↔ TO-BE PROC 실행·키 기반 비교 → 원장 ASIS_DIFF 행
-          ('post', '사후 검사·판정·추적', 33),  # +snap_expect·snap_validate(2026-11-17 SCP0111)  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
+          ('post', '사후 검사·판정·추적', 40),  # 2026-11-18 +menu_auth_sync(SCP0111 J4) · 실측 39(SCP0096 로그 '실행 39 ≠ 예정 33' · e2e_suite_ingest 2 포함)  # +snap_expect·snap_validate(2026-11-17 SCP0111)  # +asis_live_rows(2026-11-13)  # +oracle_class --check(2026-11-06) · +db_orphan_sessions(2026-11-12 T250)
           ('docs', '문서 생성·회귀 점검', 4)]  # +precision.py(2026-11-06)
 _PG = {'i': 0, 'j': 0, 'm': 0}
 
@@ -307,6 +307,16 @@ def main():
         return 4
     import atexit
     atexit.register(dbwin_release)
+    # 2026-11-18 사용자: "CHECKLIST 수행 시 UI 해당 소스에 대해서 GIT 확인 후 최신소스 변경 분 있으면 다운로드" · "DOWNLOAD & MERGE 되어야 합니다. (DB MODE 일때만)"
+    #   화면 FE 페이지 폴더만 Source Download & Merge 와 같은 규칙으로 받는다(tools/CommonSync/screen_sync.py · UI/DB MODE 는 건너뜀).
+    #   부분 재판정(--only)은 소스를 바꾸지 않는다. 받기 실패는 CheckList 를 멈추지 않는다(현재 로컬 소스로 진행 · 결과 Doc/verify/<ID>/screen_sync.json)
+    if not only:
+        try:
+            _ss = subprocess.call([py, os.path.join(ROOT, 'tools', 'CommonSync', 'screen_sync.py'), mid], cwd=ROOT, timeout=600)
+            if _ss != 0:
+                print(f'[WARN] 화면 소스 받기 실패(exit {_ss}) — 현재 로컬 소스로 CheckList 진행 · Doc/verify/{mid}/screen_sync.json')
+        except Exception as _e:
+            print(f'[WARN] 화면 소스 받기 실행 오류({type(_e).__name__}) — 현재 로컬 소스로 CheckList 진행')
     stage('pre')
     # 2026-11-12 T253(사용자 상시 지시 — DB 실행 5분 이상 알림 · 30분 이상 종료): 감시가 없으면 띄운다. 세부 수에 넣지 않는 보조 호출(실패해도 체인 계속)
     try:
@@ -318,6 +328,14 @@ def main():
         # 2026-10-30: E2E plan·스펙·smoke 가 없으면 FAIL(종전엔 MANUAL/ERROR 로 기록만 하고 진행 → SCP0111 smoke 근거 규칙 전부 미측정 · T13). rc 5 = 서버/잠금(환경)
         print(f"[FAIL] 사전 작업 미충족 — Doc/verify/{mid}/prereq.json 확인({'FE/BE 미기동 또는 다른 E2E 실행 중' if rc_pre == 5 else 'AS-IS Fact Pack·TO-BE 화면·E2E plan/스펙/smoke 중 생산 실패'})")
         return 5 if rc_pre == 5 else 6
+    # 2026-11-18 사용자: "CheckList 생성 시 테스트의 모든 단계까지를 테스트 · 테스트 4단계가 CheckList 에 포함" — smoke(사전 작업) 다음에
+    #   crud · auth · authcrud 를 같은 실행기(run-e2e.cmd, 화면별 잠금)로 돌린다. 결과가 최신이면 재사용 · 저장 종류는 VERIFY_NO_SAVE=1 이면 건너뜀(미검증 행).
+    #   판정 반입 = e2e_suite_ingest.py(eg_ingest 뒤). E2E 를 돌리지 않는 실행(--skip-e2e · --static · --only)은 건너뛰고 직전 결과만 반입한다
+    if not (a.skip_e2e or a.static or only):
+        try:
+            subprocess.call([py, os.path.join(HERE, 'e2e_suite.py'), mid], cwd=ROOT)
+        except Exception as e_s:
+            print(f'[ERROR] E2E 4종(crud·auth·authcrud) 실행 실패: {str(e_s)[:200]} — 원장에 미검증 행으로 남는다', flush=True)
     # 순서: gridcols(프레임워크 기본값 CSV 기록) → dyncols(기본값 인용) → cellrules/lockrules(동적 패밀리 키 공유) — 2026-10-30 WP1/WP7
     stage('facts')
     # 2026-11-12 T266(C1-27): 사실 파일의 대소문자 혼합 컬럼 상수 이름(DefColumns.EditFlag·Division·Project …)을 선언 값(EDIT_FLAG·DIVISION_ID·PROJECT_CODE)으로 — 뒤 도구 25개·검증 스펙이 읽기 전에 한 번(멱등 · 실패해도 계속)
@@ -565,6 +583,8 @@ def main():
                 print(f'[FAIL] E2E 결과 파일 없음({res_json}) — Playwright 가 판정 없이 끝남(rc={rc}). 로그 확인')
                 return 3
             print(f'E2E 종료 rc={rc} (테스트 실패는 판정 결과로 원장에 반영된다)')
+            if not only or 'I2' in only:
+                lang_retry(mid, env, out_dir, cfg)
             if only:
                 stage('eg', f"건너뜀(--only {','.join(sorted(only))} — 팝업·권한 검사기는 전체 실행에서만)", m=0)
             elif a.tier in ('all', 'slow'):  # 엔진 갭 팝업·권한 검사기 — 오래 걸려 fast 에서는 돌지 않는다. 화면 잠금을 쥔 채 실행(2026-11-01)
@@ -629,18 +649,26 @@ def main():
     if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'snap', 'results.json')):
         run([py, os.path.join(HERE, 'snap_expect.py'), mid])
         run([py, os.path.join(HERE, 'snap_validate.py'), mid])
-    else:
+        # 2026-11-19 사용자 상시 승인('checklist 생성 시 필요하면 스냅샷 승인 권한 부여'): harness.json snapAutoApprove=true 이면 대조 OK·NA(사람 확인 종류)인 수신본을 골든으로 승인.
+        #   MISMATCH(AS-IS 기대와 라벨 누락·순서 차이)는 --force 없이 승인되지 않아 미검증으로 남고 결정 목록에 오른다. 정식 판정은 다음 실행부터 골든 대조
+        try:
+            _auto = bool(json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig')).get('snapAutoApprove'))
+        except (OSError, ValueError):
+            _auto = False
+        if _auto and not os.environ.get('CL_MUTATE'):
+            run([py, os.path.join(HERE, 'snap_approve.py'), mid, '--by', '사용자 상시 승인(2026-11-19 · harness.json snapAutoApprove)', '--opinion', 'CheckList 자동 승인: snap_validate OK·NA 수신본'])
         sub('snap_expect.py', '스냅샷 결과 snap/results.json 없음'); sub('snap_validate.py', '스냅샷 결과 snap/results.json 없음')
     # CRUD 실제 저장 마커 행 정리(사내 DB) — 백업·건수 단언·SQL 기록. 정의 없는 화면은 SKIP(2026-10-24 BOD 잔존 행 사고 재발 방지)
     if not a.skip_e2e and not blocked:
         run([py, os.path.join(HERE, 'db_orphan_sessions.py'), mid, '--kill'])  # 2026-11-12 T250: 시간 초과로 끝난 저장 시험이 DB 에 남긴 장시간 세션 종료(SCP0111 5개·6시간 잠금) — 복원보다 먼저(잠금에 걸리지 않게)
-        run([py, os.path.join(HERE, 'restore_touched.py'), mid])  # 시험이 원복 못 한 기존 행 DB 복원(T39)
+        run([py, os.path.join(HERE, 'restore_touched.py'), mid] + (['--keep-trace'] if only else []))  # 시험이 원복 못 한 기존 행 DB 복원(T39) · --only 는 지난 저장 기록(save_trace.json) 유지
         run([py, os.path.join(HERE, 'cleanup_marker.py'), mid])
     else:
         sub('db_orphan_sessions.py', 'E2E 미실행'); sub('restore_touched.py', 'E2E 미실행'); sub('cleanup_marker.py', 'E2E 미실행')
     dbwin_release()  # 2026-11-17 시험 행 정리가 끝났으므로 같은 화면의 다음 실행이 DB 조회를 시작해도 된다
     # F8 감사 필드 · F7 저장 연계 테이블 — 정리 백업(실제 저장이 남긴 행) ↔ AS-IS 저장 SP DML 대상 (2026-10-27)
     run([py, os.path.join(HERE, 'save_audit.py'), mid, '--asis', asis])
+    run([py, os.path.join(HERE, 'menu_auth_sync.py'), mid, '--asis', asis])  # 2026-11-18 J4 그룹별 메뉴·버튼 권한 AS-IS↔TO-BE 대조(결함원장 GAPSELF-22 · SCP0111 V-d9598564)
     run([py, os.path.join(HERE, 'sp_branch_check.py'), mid])  # 저장 SP 검증 분기 정적 대조(EG161)
     if a.static:
         sub('a1_live.py', '--static(AS-IS SP 실행 없음)'); sub('asis_live_rows.py', '--static(AS-IS SP 실행 없음)')  # 2026-11-13 점검: 세부 수 31 유지; sub('asis_live_rows.py', '--static(AS-IS 실구동 건수 대조 없음)')  # 2026-11-13: 건너뜀 표시 누락으로 --static 에서 세부 30 ≠ 31 이던 것
@@ -662,6 +690,7 @@ def main():
     run([py, os.path.join(HERE, 'master_sweep.py'), mid])  # 기준정보 키 존재·활성 후보(EG455)
     run([py, os.path.join(HERE, 'titleset_check.py'), mid])  # 사용자 칸 설정 이관·필수 컬럼(EG025·EG399)
     run([py, os.path.join(HERE, 'eg_ingest.py'), mid])  # 팝업·권한 검사기 결과 → 원장 행·판정 입력
+    subprocess.call([py, os.path.join(HERE, 'e2e_suite_ingest.py'), mid], cwd=ROOT)  # 2026-11-18: E2E 4종 중 판정에 안 들어가던 기능 시험(CRUD·Division 조회·BE 5xx 등) → 원장 ES- 행
     if run([py, os.path.join(HERE, 'oracle_class.py'), '--check', mid]):  # 2026-11-06 W8-A: 원장 규칙 ID 가 오라클 분류 마스터에 전부 있는지(없으면 HOLD → 판정필요 게이트)
         GATE_WARN.append(f'오라클 분류 마스터 누락 — python tools/Harness/verify/oracle_class.py --init 으로 Doc/verify/_oracle_class.csv 갱신(미분류 규칙의 FAIL 은 판정필요로 내려감)')
     if run([py, os.path.join(HERE, 'judge.py'), mid]):
@@ -680,6 +709,7 @@ def main():
         if run([py, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis, '--to-ledger']):
             return 9
         run([py, os.path.join(HERE, 'eg_ingest.py'), mid])
+        subprocess.call([py, os.path.join(HERE, 'e2e_suite_ingest.py'), mid], cwd=ROOT)  # 2026-11-18: E2E 4종 중 판정에 안 들어가던 기능 시험(CRUD·Division 조회·BE 5xx 등) → 원장 ES- 행
         if run([py, os.path.join(HERE, 'judge.py'), mid]):
             return 7
         _sig = _ledger_sig()
@@ -842,6 +872,60 @@ def running_e2e(mid):
         except Exception:
             pass
     return out
+
+
+def lang_skipped(p):
+    """lang_texts.json 에서 다른 화면 동시 실행 때문에 언어 전환을 생략한(T200) 언어 목록"""
+    try:
+        with open(p, encoding='utf-8') as fh:
+            j = json.load(fh)
+    except (OSError, ValueError):
+        return []
+    return [k for k, v in j.items() if isinstance(v, dict) and 'T200' in str(v.get('why') or '')]
+
+
+def lang_retry(mid, env, out_dir, cfg):
+    """2026-11-18 SCP0111 I2 미검증(EG-7a7637ba·EG-ee2bb45d): 언어 전환 문구 덤프(I2)는 다른 화면 E2E 가 돌면 6분 기다린 뒤 전환을 생략했다(T200 · 테스트 제한 600초).
+    → 본 E2E 가 끝난 뒤(화면 잠금을 쥔 채) 다른 화면 E2E 가 끝나기를 최대 langRetryMaxMin(기본 45분) 기다렸다가 I2 시험만 다시 돌린다.
+      기다리는 동안 언어 대기 표식(_run.langwait.<ID>.lock)을 둬 다른 화면의 I2 가 이 실행을 '측정 중' 으로 보지 않게 한다(T208 교착 방지).
+      결과 파일은 lang_texts.json 만 바뀌고 Playwright 요약은 e2e/results_lang_retry.json 에 따로 쓴다(본 results.json 보존)"""
+    lt = os.path.join(out_dir, 'lang_texts.json')
+    sk = lang_skipped(lt)
+    if not sk:
+        return
+    max_s = int(cfg.get('langRetryMaxMin', 45)) * 60
+    wait_p = os.path.join(ROOT, 'Doc', 'e2e', f'_run.langwait.{mid.upper()}.lock')
+
+    def busy():
+        out = []
+        for k in running_e2e(mid):
+            try:
+                with open(os.path.join(ROOT, 'Doc', 'e2e', f'_run.langwait.{k.upper()}.lock'), encoding='utf-8') as fh:
+                    if _alive(int(json.load(fh).get('pid') or 0)):
+                        continue  # 그 화면도 언어 전환을 기다리는 중(측정 안 함)
+            except (OSError, ValueError):
+                pass
+            out.append(k)
+        return out
+    t0 = time.time(); o = busy()
+    print(f"[INFO] {mid} I2 언어 전환 생략({','.join(sk)} · T200) — 다른 화면 E2E({','.join(o) or '없음'}) 종료 뒤 I2 만 다시 실행(최대 {max_s // 60}분 대기)", flush=True)
+    try:
+        with open(wait_p, 'w', encoding='utf-8') as fh:
+            json.dump({'pid': os.getpid(), 'at': time.time(), 'tag': f'{mid} I2 재실행 대기'}, fh)
+        while o and time.time() - t0 < max_s:
+            time.sleep(30); o = busy()
+    finally:
+        try:
+            os.remove(wait_p)
+        except OSError:
+            pass
+    if o:
+        print(f"[WARN] {mid} I2 재실행 못 함 — {max_s // 60}분 뒤에도 다른 화면 E2E 실행 중({','.join(o)}) · I2 는 미검증으로 남음", flush=True)
+        return
+    e2 = dict(env, VERIFY_ONLY='I2', PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(out_dir, 'e2e', 'results_lang_retry.json'))
+    rc2 = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_verify', '--grep', '언어 전환 문구 덤프', '--workers', '1', '--retries', '0', '--reporter=list,json'], env=e2, cwd=E2E)
+    left = lang_skipped(lt)
+    print(f"[INFO] {mid} I2 재실행 rc={rc2} · {round((time.time() - t0) / 60, 1)}분 · 생략 남은 언어 {','.join(left) or '없음'}", flush=True)
 
 
 def admit_by_load(mid, cfg):

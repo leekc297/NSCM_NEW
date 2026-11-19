@@ -1,2 +1,13 @@
-- [골든 17] # visual-order: Div > Model/Nickname > Cell Model > Plan Date > Qty < 0
-+ [수신 17] # visual-order: Div > Model/Nickname > Cell Model > Plan Date > Period > Qty < 0
+- [골든 2] - text: Div
+- [골든 14] - text: Period 2026.10 ~ 2027.03
+- [골든 17] # visual-order: Div > Model/Nickname > Cell Model > Plan Date > Period > Qty < 0
++ [수신 2] - text: Div.
++ [수신 15] - text: Period
++ [수신 16] - button "calendar"
++ [수신 17] - textbox "YYYY.MM": "2026.10"
++ [수신 18] - text: ~
++ [수신 19] - button "calendar"
++ [수신 20] - textbox "YYYY.MM": "2027.03"
++ [수신 23] # visual-order: Div. > Model/Nickname > Cell Model > Plan Date > Period > Qty < 0
+~ [순서 13] 골든 '- checkbox "Qty < 0"' ↔ 수신 '- img'
+~ [순서 14] 골든 '- text: Qty < 0' ↔ 수신 '- checkbox "Qty < 0"'

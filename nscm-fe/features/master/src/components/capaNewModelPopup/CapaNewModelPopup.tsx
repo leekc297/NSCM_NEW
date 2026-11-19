@@ -156,9 +156,15 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
   //   AS-IS FindData 와 동일하게 빈 목록으로만 처리한다(SP 자체가 예외 시에도 빈 O_RC 를 연다).
   const fetchList = async () => {
     if (!modelId && !itemId && !nickName) {
+      // MSG01324(AS-IS MSG00327) "{0} 와 {1},{2} 중에 하나는 필수 입력입니다." — {0}/{1}/{2} 플레이스홀더에
+      //   Model/Material/Nick Name 을 순서대로 치환(AS-IS GMessageBox 인자 배열, SCP0049NewModelPopup.cs:935).
+      //   이 프로젝트 보간 규약은 i18next 자동 보간이 아니라 수동 .replace(useSaveWithValidation 참고).
       void setAlert({
         type: 'alert',
-        content: t('MSG01324', 'Model, Material, Nick Name 중 하나는 필수 입력입니다.'),
+        content: t('MSG01324', '{0} 와 {1},{2} 중에 하나는 필수 입력입니다.')
+          .replace('{0}', 'Model')
+          .replace('{1}', 'Material')
+          .replace('{2}', 'Nick Name'),
       });
       return;
     }

@@ -162,15 +162,23 @@ export const useCapaSpeedPlanCombos = (): CapaSpeedPlanCombos => {
       }),
     [master, sc.divisionId, shopGroupId, sc.siteId]
   );
+  // Building/Line/Operation 은 직속 부모축뿐 아니라 **전체 조상축(siteId 포함)**으로 좁힌다.
+  //   AS-IS 는 Site 선택 시 좁혀진 Plant 값(그 Site 의 Plant 들)을 Factory 필터로 전달해 Building 을
+  //   좁힌다(ScpCapaBL.GetFilterFactory). TO-BE 는 Site 선택 시 하위를 전부 'ALL' 로 리셋하므로
+  //   (Form onChange), plantId 만 보면 'ALL'=무필터가 돼 전체가 뜬다 — Site 만 골라도 Building/Line/
+  //   Operation 이 안 좁혀지던 버그(SCP0105 테스트 Item5, 2026-11-12). siteId 를 함께 넘기면 마스터가
+  //   Site 로 직접 좁혀져 결과가 AS-IS 와 등가다(Site⊃Plant⊃Factory 계층이라 Site 슬라이스 = 그 Site
+  //   Plant 들의 슬라이스).
   const buildingOptions = useMemo(
     () =>
       buildBuildingOptions({
         rows: master,
         divisionId: sc.divisionId,
         shopGroupId,
+        siteId: sc.siteId,
         plantId: sc.plantId,
       }),
-    [master, sc.divisionId, shopGroupId, sc.plantId]
+    [master, sc.divisionId, shopGroupId, sc.siteId, sc.plantId]
   );
   const lineOptions = useMemo(
     () =>
@@ -178,10 +186,11 @@ export const useCapaSpeedPlanCombos = (): CapaSpeedPlanCombos => {
         rows: master,
         divisionId: sc.divisionId,
         shopGroupId,
+        siteId: sc.siteId,
         plantId: sc.plantId,
         factoryId: sc.factoryId,
       }),
-    [master, sc.divisionId, shopGroupId, sc.plantId, sc.factoryId]
+    [master, sc.divisionId, shopGroupId, sc.siteId, sc.plantId, sc.factoryId]
   );
   const operationOptions = useMemo(
     () =>
@@ -189,11 +198,12 @@ export const useCapaSpeedPlanCombos = (): CapaSpeedPlanCombos => {
         rows: master,
         divisionId: sc.divisionId,
         shopGroupId,
+        siteId: sc.siteId,
         plantId: sc.plantId,
         factoryId: sc.factoryId,
         lineId: sc.lineId,
       }),
-    [master, sc.divisionId, shopGroupId, sc.plantId, sc.factoryId, sc.lineId]
+    [master, sc.divisionId, shopGroupId, sc.siteId, sc.plantId, sc.factoryId, sc.lineId]
   );
 
   // Line Type 만 원천이 갈린다: ASSEMBLY 는 마스터 슬라이스, ELTR 은 별도 lookup 콤보(02 §2.4/§2.5).

@@ -144,7 +144,9 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
     labelEn: string,
     value: string[],
     options: ComboOption[],
-    onPick: (codes: string[]) => void
+    onPick: (codes: string[]) => void,
+    // Line Type 처럼 `'-'` 가 유효 코드인 콤보만 센티널 제외를 끈다(design 02 §2.2 V-14).
+    dropdownProps?: { keepSentinelValues?: boolean }
   ) => (
     <Grid size={3}>
       <FormItem
@@ -160,6 +162,7 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
             disabled={locked}
             value={value.join(',')}
             options={options}
+            {...dropdownProps}
             onChange={(_, picked) =>
               onPick(
                 String(picked ?? '')
@@ -348,7 +351,10 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 'Line Type',
                 sc.electrodeTypes,
                 cascade.electrodeTypeOptions,
-                codes => setSearchParams({ electrodeTypes: codes })
+                codes => setSearchParams({ electrodeTypes: codes }),
+                // Line Type 은 `'-'` 가 유효 후보다(AS-IS GetFilterElectrodeType 에 CODE<>'-' 없음).
+                //   공용 CustomDropdown 의 센티널 제외를 꺼 '-'(Operation A9000/AFFFF 등의 유일값)를 남긴다.
+                { keepSentinelValues: true }
               )}
           </>
         }

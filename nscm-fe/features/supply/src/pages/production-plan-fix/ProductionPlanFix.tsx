@@ -11,6 +11,7 @@ import type { EditTracker } from '@foundation/utils';
 import { sessionTimeZone } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ProductionPlanFixForm } from './components/ProductionPlanFixForm';
@@ -242,6 +243,14 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
           hasButton('SAVE')
             ? [{ label: t(LBL.UNFIX, '_Unfix'), action: () => void handleUnfix() }]
             : []
+        }
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={checked => setSearchCondition({ chkSum: checked })}
+          />
         }
       />
 

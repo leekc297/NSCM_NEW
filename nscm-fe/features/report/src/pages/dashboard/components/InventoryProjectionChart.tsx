@@ -5,7 +5,9 @@ import { useEffect, useRef } from 'react';
 import type { ProductKey } from '../demand-as-dashboard.mock';
 import { INVENTORY_PROJECTION, PRODUCTS, SHORTAGE_MARK } from '../demand-as-dashboard.mock';
 import styles from '../DemandAsDashboard.module.scss';
+import { drawYUnitTop } from '../wijmo-axis-unit';
 import { attachAutoSize } from '../wijmo-autosize';
+import { styleLineLegend } from '../wijmo-legend';
 import { applyCompactTooltip } from '../wijmo-tooltip';
 
 interface Props {
@@ -32,14 +34,17 @@ export const InventoryProjectionChart = ({ product, onProductChange, refreshKey 
         { name: '재고 (On Hand)', binding: 'onHand', symbolSize: 6 },
         { name: '예상 수요', binding: 'demand', symbolSize: 6, style: { strokeDasharray: '6 4' } },
         { name: '예상 입고', binding: 'inbound', symbolSize: 6, style: { strokeDasharray: '6 4' } },
-        { name: '안전재고', binding: 'safety', symbolSize: 6, style: { strokeDasharray: '2 3' } },
+        // 안전재고는 기준선 성격이라 심볼 없이 점선만(ChartType.Line). 데이터 점을 찍지 않는다.
+        { name: '안전재고', binding: 'safety', chartType: ChartType.Line, style: { strokeDasharray: '2 3' } },
       ],
       palette: ['#1565c0', '#ed6c02', '#2e7d32', '#9e9e9e'],
       legend: { position: Position.Top },
       // 가로선(Y 주눈금 그리드) 숨김 + Y축 선·라벨 표시(수요예측 추이와 동일).
-      axisY: { min: 0, title: 'EA', majorGrid: false, axisLine: true },
+      axisY: { min: 0, majorGrid: false, axisLine: true },
     });
     applyCompactTooltip(chart);
+    styleLineLegend(chart);
+    drawYUnitTop(chart, 'EA');
 
     // '예상 부족 시작'을 수요예측 추이의 Forecast 구분선처럼 해당 날짜에 세로 선 + 라벨로 표시.
     //   카테고리 축이라 축좌표 변환(convert) 필요 → rendered 이벤트에서 직접 그린다.
@@ -79,12 +84,22 @@ export const InventoryProjectionChart = ({ product, onProductChange, refreshKey 
         strokeWidth: '1',
         rx: '4',
       });
+      // 각 줄을 박스 중심 x 에 text-anchor:middle 로 그려 가로 중앙 정렬(글자폭 추정 불필요).
+      const centerX = boxLeft + boxW / 2;
+      // 세로 중앙 정렬: Wijmo drawString 의 y 는 글자 baseline 이다(dominant-baseline 미반영).
+      //   글자 블록(첫 줄 상단 ~ 마지막 줄 baseline)을 박스 세로 중앙에 두도록 첫 baseline 을 잡는다.
+      //   그래야 첫 줄이 박스 상단에 물려 잘리지 않는다.
+      const ascent = fontPx * 0.8; // baseline 위 글자 높이 추정(한글/숫자)
+      const blockH = (lines.length - 1) * lineH + ascent;
+      // 세로 중앙값(topGap=0)에서 topGap 만큼 더 내려 위 여백을 키운다(아래 여백은 그만큼 줄어듦).
+      const topGap = 3;
+      const firstBaseline = boxTop + (boxH - blockH) / 2 + ascent + topGap;
       lines.forEach((line, li) => {
         e.engine.drawString(
           line,
-          new Point(boxLeft + padX, boxTop + padY + 9 + li * lineH),
+          new Point(centerX, firstBaseline + li * lineH),
           undefined,
-          { ...fontStyle, fill: SHORTAGE_COLOR },
+          { ...fontStyle, fill: SHORTAGE_COLOR, textAnchor: 'middle' },
         );
       });
     });

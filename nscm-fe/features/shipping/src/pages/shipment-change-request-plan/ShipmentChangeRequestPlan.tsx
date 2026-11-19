@@ -18,7 +18,6 @@ import { RequestInfoPanel } from './components/RequestInfoPanel';
 import { ShipmentChangeRequestPlanForm } from './components/ShipmentChangeRequestPlanForm';
 import { ShipmentChangeRequestPlanMainGrid } from './components/ShipmentChangeRequestPlanMainGrid';
 import { ShipmentChangeRequestPlanModals } from './components/ShipmentChangeRequestPlanModals';
-import { useRequestInfoFold } from './hooks/useRequestInfoFold';
 import { useShipmentChangeRequestPlanCellCombos } from './hooks/useShipmentChangeRequestPlanCellCombos';
 import { useShipmentChangeRequestPlanRequestor } from './hooks/useShipmentChangeRequestPlanRequestor';
 import { useShipmentChangeRequestPlanSaveActions } from './hooks/useShipmentChangeRequestPlanSaveActions';
@@ -48,12 +47,40 @@ import {
   submitDraftingNewSave,
 } from './utils/shipmentChangeRequestPlanSave';
 
-// 요청정보 폼 패널 높이 — 2026-11-12 부터 고정 상수(종전 FORM_PANEL_SIZE 248px)가 아니라 내용 실측값이다
-//   (useRequestInfoFold.panelSize). 접기/펼치기·2행 재배치(사용자 지시)로 내용 높이가 바뀌는데, 패널은
-//   overflow:hidden 이라 상수가 내용보다 작으면 **조용히 잘린다**(2026-10-14 Request Complete 잘림 사고).
-//   min=max 로 고정하는 방식은 그대로라 스플리터는 여전히 Grid1·Grid2 만 리사이즈한다(폼 높이 불변).
-//   크기 제약이 바뀌면 react-resizable-panels(4.7.1)가 패널을 재등록하며 레이아웃을 제약에 맞춰 재검증한다
-//   (dist Panel useLayoutEffect deps minSize/maxSize → Group jt() B(layout, constraints)) — 줄어든/늘어난 몫은 그리드가 나눠 갖는다.
+// 요청정보 폼 패널의 고정 높이(px 문자열). min=max 로 이 값에 고정되어 스플리터가 폼을 리사이즈하지 못한다.
+//   컴팩트 폼(섹션 헤더 1줄 + 3행 + Reason Detail textarea) + 액션바가 들어갈 높이.
+//   패널은 overflow:hidden 이라 모자라면 **조용히 잘린다** — 내용이 늘면 이 값도 함께 올려야 한다.
+//   2026-10-08: AS-IS `usrLabel2`("Request Info") 섹션 헤더를 이식하면서 그 한 줄을 반영.
+//     헤더 폰트를 16px(가운데 정렬)로 키운 분(lineHeight 1.4 -> 약 22px)까지 포함한 값이다.
+//   2026-10-14: 224 -> 248. Request Complete 버튼 아래쪽이 잘려 보인다는 신고 — 폼+액션바 자연높이
+//     합이 224 를 넘어 마지막 요소(액션바)가 clip 되고 있었다. +24 중 4px 은 액션바 하단 여백
+//     증가분(8->12, RequestActionBar.module.scss)이고 나머지 20px 이 잘림 여유다.
+//   2026-11-12: 248 -> 192. 폼 컴팩트화(섹션 헤더 제거 · 입력칸 32px · 액션바를 Reason Detail 옆으로
+//     이동)로 실제 content 높이가 ~182px(.requestInfo 실측)로 줄어 패널 하단에 ~66px 빈 공간이 생겼다.
+//     그 빈칸이 info 영역과 하단 그리드 사이에 보여(사용자 신고 2026-11-12) content 높이에 10px 여유만
+//     더해 맞춘다 — 줄어든 만큼 위·아래 그리드가 나눠 커진다(하단 그리드가 높아져 공간을 채운다).
+//     자매 SSP0201 은 별도 상수라 영향 없다(그 화면은 컴팩트화 안 됨 — 조작감 일치는 더 이상 유지 불가).
+//   'Request Info' 헤더 복구(사용자 지시 2026-11-12)로 한 줄(16px·lineHeight 1.4 ≈ 22px + rowSpacing 2px)이
+//     늘어 192px 에선 하단(액션바)이 잘린다 — 그만큼 폼 패널을 키운다(192 -> 218). px 고정이라 늘린 분량은
+//     위·아래 그리드에서 자동으로 빠진다(사용자 요청: 윗 그리드 조금 줄이고 폼 살리기).
+//   218 -> 214: 폼 콘텐츠(~206px) 아래 잔여 빈틈(info 하단 ~ 하단 그리드 간격)을 12px -> 8px 로 줄인다
+//     (사용자 지시 2026-11-12). 폼이 px 고정이라 이 4px 는 위·아래 그리드로 되돌아간다.
+//   214 -> 184 -> 200: 'Request Info' 헤더 삭제(~22px)와 pt/pb 12->6으로 폼 콘텐츠가 줄어 아래 빈칸이
+//     info~하단그리드 간격으로 남는다 — 패널을 줄여 하단 그리드로 돌려준다. 184 는 과해(사용자 신고
+//     2026-11-12) 200 으로 완화(214 대비 14px 만 하단 그리드로 환원).
+//   200 -> 222: Reason Detail 2줄->3줄(height 56->78, +22px)로 폼 콘텐츠가 커진 만큼 패널도 올려
+//     하단 그리드 영역은 200 시점과 동일하게 유지한다(사용자 지시 2026-11-12).
+//   222 -> 218: info~하단그리드 간격 미세 축소(사용자 지시 2026-11-12) — 4px 만 하단 그리드로 환원.
+//   218 -> 180: Reason Detail 3줄->2줄(height 78->56, -22px) + info~하단그리드 간격 과대 신고(2026-11-12).
+//     .requestInfo 실측 content 높이 ~170px(dom_styles) 대비 패널이 218px 라 하단에 ~48px 빈칸이 남아
+//     info 영역과 하단 그리드 사이가 벌어져 보였다 — content(170) + 여유 10 = 180 으로 맞춰 남던 38px 를
+//     하단 그리드로 환원한다(하단 그리드가 그만큼 높아진다). px 고정이라 줄인 분량이 그대로 하단으로 간다.
+//   180 -> 172: info~하단그리드 간격 추가 축소(사용자 지시 2026-11-12) — content(~170) + 여유 2 로 바짝
+//     붙인다. 남던 8px 를 하단 그리드로 추가 환원.
+//   172 -> 160: 행 간격을 셀 32px 로 다시 늘린 뒤 .requestInfo 실측 content 높이가 ~158px 로 줄어
+//     패널(172)에 ~14px 빈칸이 다시 생겼다(사용자 신고 2026-11-12) — content(158) + 여유 2 = 160 으로
+//     맞춰 남던 12px 를 하단 그리드로 환원한다.
+const FORM_PANEL_SIZE = '160px';
 
 // AS-IS GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.cs (정본 6,906행).
 //   상세 매핑·dead 미이식 근거: __asis-mapping__.md / design/04_react-gap.md.
@@ -107,8 +134,6 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   // 저장/요청확정/요청취소 서버 작업 중 로딩 — 조회 로딩(전역 useIsBusy 스피너)과 동일한 딤 오버레이 +
   //   원형 스피너를 렌더한다. 수동 apiClient post 경로라 전역 스피너가 안 잡혀 액션 훅이 토글한다(2026-10-01).
   const [actionLoading, setActionLoading] = useState(false);
-  // 요청정보 접기/펼치기·고정 + 패널 높이 실측(사용자 지시 2026-11-12).
-  const requestInfoFold = useRequestInfoFold();
 
   const { data: mainData, refetch: refetchMain } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -528,16 +553,18 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
       {/* 상/하 3분할: Grid1(main) / 요청정보 폼(고정) / Grid2(sub).
           사용자 지시 2026-09-29: 폼은 고정, 스플리터는 두 그리드만 커지고 줄어들게 한다.
-          → 폼 Panel 을 px 고정(min=max=요청정보 실측 높이)으로 두면 위·아래 스플리터가 각각 Grid1·Grid2 만
+          → 폼 Panel 을 px 고정(min=max=FORM_PANEL_SIZE)으로 두면 위·아래 스플리터가 각각 Grid1·Grid2 만
           리사이즈한다(폼 높이 불변). 그리드는 %(숫자) 기본크기 — 나머지 공간을 나눠 갖는다.
           (react-resizable-panels 4.7.1 은 px 문자열 크기를 지원한다.) */}
       <div className={styles.splitWrapper}>
         <PanelGroup className={styles.panelGroup} orientation='vertical'>
-          {/* Grid1 (main) — 리사이즈 대상. defaultSize 를 **주지 않는다**: 이 라이브러리는 미지정 패널에
-              자동 크기를 배분한다(dist `defaultSize===void 0 && (o[id]=a)`). 폼(px 고정)을 뺀 나머지를
-              Grid1·Grid2 가 자동 균등(50:50) 분배한다. %로 50/50 을 주면 100%+폼 높이가 넘쳐 Grid2 가
-              헤더만 남고 붕괴한다(2026-09-29 실측). minSize 만 %로 제약한다. */}
-          <Panel minSize='10%'>
+          {/* Grid1 (main) — 리사이즈 대상. 하단 그리드를 키우기 위해 상단을 px 로 고정한다(사용자 지시
+              2026-11-12). % 로 상·하 합 100 을 주면 폼(px 고정)이 끼어 총합이 100 을 넘고, 라이브러리가
+              제약을 맞추느라 하단을 minSize 까지 깎는다(상단 80:하단 20 현상). → 상단만 px defaultSize 로
+              작게 고정하고, 하단은 defaultSize 미지정 → 폼·상단 두 px 를 뺀 나머지를 하단이 전부 가져간다.
+              260 -> 200: 상단 그리드를 줄이고 하단 그리드를 키운다(사용자 지시 2026-11-12). 줄인 60px 는
+              하단 그리드로 환원된다(하단은 나머지를 전부 가져가므로). */}
+          <Panel defaultSize='200px' minSize='10%'>
             <div className={styles.mainPane}>
               <ShipmentChangeRequestPlanMainGrid
                 rows={displayMainRows}
@@ -561,26 +588,19 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
           <PanelSeparator className={styles.splitBar} />
 
-          {/* 요청정보 폼(머리줄에 액션바 포함) — px 고정(리사이즈 비대상). min=max 로 스플리터가 이 패널을
-              건드리지 못한다. 크기 = 내용 실측(접힘이면 머리줄 1줄 높이). */}
-          <Panel
-            defaultSize={requestInfoFold.panelSize}
-            minSize={requestInfoFold.panelSize}
-            maxSize={requestInfoFold.panelSize}
-          >
+          {/* 요청정보 폼 + 액션바 — px 고정(리사이즈 비대상). min=max 로 스플리터가 이 패널을 건드리지 못한다. */}
+          <Panel defaultSize={FORM_PANEL_SIZE} minSize={FORM_PANEL_SIZE} maxSize={FORM_PANEL_SIZE}>
+            {/* 액션바(Request Complete/Cancel)는 Reason Detail 옆 우측 빈칸에 배치 — 사용자 지시
+                2026-11-12. RequestInfoPanel 의 actionSlot 으로 넘겨 폼 그리드 안에서 함께 흐르게 한다. */}
             <div className={styles.formPane}>
-              <div className={styles.requestInfo} ref={requestInfoFold.contentRef}>
+              <div className={styles.requestInfo}>
                 <RequestInfoPanel
                   requestInfo={requestInfo}
                   canEdit={canEdit}
                   canSearchApproval={hasButton('EDIT')}
                   onChange={setRequestInfo}
                   onApprovalSearch={() => setOpenApproval(true)}
-                  collapsed={requestInfoFold.collapsed}
-                  pinned={requestInfoFold.pin !== null}
-                  onToggleCollapsed={requestInfoFold.toggleCollapsed}
-                  onTogglePin={requestInfoFold.togglePin}
-                  actions={
+                  actionSlot={
                     <RequestActionBar
                       canRequestComplete={hasButton('SAVE')}
                       canCancel={hasButton('DELETE')}
@@ -595,7 +615,8 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
           <PanelSeparator className={styles.splitBar} />
 
-          {/* Grid2 (sub) — 리사이즈 대상. defaultSize 미지정 → Grid1 과 남은 공간 자동 균등(50:50) 분배. */}
+          {/* Grid2 (sub) — 리사이즈 대상. defaultSize 미지정 → 폼·상단(둘 다 px)을 뺀 나머지를 전부 가져간다
+              (하단을 크게). */}
           <Panel minSize='10%'>
             <div className={styles.subPane}>
               <ChangeRequestPlanSubGrid

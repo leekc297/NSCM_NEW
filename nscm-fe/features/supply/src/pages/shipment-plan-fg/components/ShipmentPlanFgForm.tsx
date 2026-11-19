@@ -4,9 +4,9 @@ import { useEffect, useMemo } from 'react';
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { CustomDropdown, over52WeekPreset, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
@@ -480,7 +480,8 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
               Bucket↔Period 순서 교체(사용자 지시 2026-10-21) — Bucket 을 Period 앞으로. */}
           {single(LBL.BUCKET, '_Bucket', sc.bucketType, bucketOptions, v => onChangeBucketType(v as BUCKET_TYPE))}
 
-          {/* Period(dCalendar)* — design 02 §2.9. 기간 프리셋(W26/W52/W82)은 PeriodRangePicker 팝업에 내장돼 있다. */}
+          {/* Period(dCalendar)* — design 02 §2.9. W26/W52 고정 + 선택 Plan Date 행 OVER_52W_YN='Y' 면
+              동적 W{PLAN_WEEKS}(DATE_WEEKLY1_SCP_ALL 반환컬럼, 사용자 지시 2026-11-17 — 종전 고정 W82 폐기). */}
           <Grid size={3}>
             <PeriodRangePicker
               start={sc.fromYyyymmdd}
@@ -489,26 +490,12 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
               label={t(LBL.PERIOD, '_Period')}
               required
               className={commonStyles.formItem}
-              quickWeeks={[26, 52, 82]}
+              quickWeeks={[26, 52]}
+              lastWeeks={over52WeekPreset(planDates, sc.planStartYyyymmdd)}
             />
           </Grid>
           {/* ALL(chkAll)은 화면에 노출하지 않는다 — 스토어 기본값(true) 고정으로 서버에 P_CHK_ALL='Y' 를 보낸다. */}
-          {/* Sum — SCP0031(GlobalPsiForm) 과 동일 스타일: 체크박스 앞·라벨 뒤(Checkbox labelText), FormItem
-              라벨 칸은 공백으로 두고 customGrid 로 체크박스를 행 높이 기준 세로 중앙 정렬한다(2026-10-21). */}
-          <Grid size={3} className={commonStyles.customGrid}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={' '}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-              )}
-            />
-          </Grid>
+          {/* Sum(chkSum)은 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18, SCP0013 동형). */}
         </>
       }
     />

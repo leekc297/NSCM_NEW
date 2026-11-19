@@ -107,9 +107,23 @@ gap-resolve iter-1(2026-09-23) 재검증 결과. 각 항목 뒤 분류는 R3 사
   - 행 키를 union 하는 이유: 조회 후 기간을 좁히면 응답에 있는 월이 컬럼을 잃어 데이터가 은폐된다.
   - 단위테스트 `utils/integrationPsiColumns.test.ts` 9건(연도 경계·역순·형식불량·union·고정컬럼 배제).
 
-- **U-6 Period → SCP 공통 `PeriodRangePicker`**: 사용자 지시로 월 콤보 2개를
+- **U-6-R Period → 표준 `PeriodField mode='month'`(2026-11-16 사용자 신고로 재교체)**: `monthOnly`
+  `PeriodRangePicker` 는 표기만 `YYYY-MM` 이고 팝업은 **일 셀 달력**이라 "월 선택인데 일자 달력이 나온다"는
+  혼란이 남았다(아래 U-6 이 명시해 둔 "남은 차이"가 그대로 리포트됨). 선례 조사 결과 "월 단위 기간 선택"의
+  **프로젝트 표준**은 `PeriodField mode='month'`(features/master, 내부 `DatePickerCalendar usecase='month'`)이고
+  같은 feature 의 **Capa(SCP0049)/OptCapa(SCP0047)/ProjectRoute(SCP0006)/MetalLinkPrice(DMF0074)** 가 전부
+  AS-IS 월 콤보를 이 표준으로 전환해 쓴다 → 표준이 있으므로 AS-IS 월 콤보 재구현 대신 표준을 채택.
+  - 값이 **월 단위 YYYYMM** 직접(start/end/onChange)이라 store(`fromYyyymm`/`toYyyymm`)·SP param
+    (`p_from_yyyymm`/`p_to_yyyymm`)과 1:1 — 아래 U-6 의 YYYYMMDD↔YYYYMM 환산(`monthStart`/`monthEnd`)과
+    `PeriodRangePicker`/`monthOnly` 의존이 **모두 제거**됐다(`IntegrationPsiForm.tsx`).
+  - "data 있는 월까지만" 상한(HORIZON_END)은 **표준 패턴에서도 걸지 않는다**(Capa/OptCapa 도 자유 월선택).
+    아래 U-6 divergence(상한 소실) 그대로 — 상한 밖 월을 골라도 SP 가 빈 컬럼을 돌려줄 뿐 오류 아님. 상한을
+    되살리려면 `PeriodField` 에 `endMax` 프롭 확장 + `COMBO.SCP_PLAN_PERIOD`(HORIZON) 전달이 필요(미적용).
+
+- **U-6 (구) Period → SCP 공통 `PeriodRangePicker`**: 사용자 지시로 월 콤보 2개를
   `packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx` 로 교체
   (같은 feature 의 capa-mobility-it / production-plan / safety-stock / shipment-plan-fg 등과 동일 사용법).
+  **→ 2026-11-16 U-6-R 로 대체됨(위 참조). 이하는 이력 보존.**
   - **단위 환산**: 컴포넌트 값은 `YYYYMMDD`(일)인데 조회 param 은 `p_from_yyyymm`/`p_to_yyyymm`(월)이다.
     store 는 SP 계약대로 YYYYMM 을 유지하고 경계에서만 환산한다 — `start`=해당월 1일, `end`=해당월 **말일**
     (`Date.UTC(y, m, 0)`), 되돌려받은 값은 `slice(0,6)`.

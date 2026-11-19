@@ -1,0 +1,2 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+,L2,기호,머지 crud · auth · authcru,가운뎃점 나열 → 쉼표,"CheckList 안에서 E2E 테스트 4종 실행 (2026-11-18 사용자 지시)    ""CheckList 생성 시 테스트의 모든 단계까지를 테스트하고 CheckList 을 생성 · 테스트 4단계가 CheckList 에 포함""    python tools/Harness/verify/e2e_suite.py <MENU_ID> [--kinds crud,auth,authcrud] [--force]    smoke 는 사전 작업(prereq.py)이 이미 돌린다. 이 도구는 나머지 crud · auth · authcrud 를 같은 방식으"

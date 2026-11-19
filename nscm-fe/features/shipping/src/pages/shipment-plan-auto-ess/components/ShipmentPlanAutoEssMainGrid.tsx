@@ -131,6 +131,10 @@ const MAIN_HEADER_HEIGHT = 54; // 48→54(18px/tier): 3단 헤더 가독성 상�
 const SHIP_PLAN_MEASURE = 'SHIP_PLAN';
 const SHIP_PLAN_ROW_COLOR = 'rgba(135, 206, 250, 0.314)';
 
+// 음수 값 글자색 — AS-IS 공통 Spread `NumberCellType.NegativeRed=true`(전 수치 셀 공통,
+//   GSCM.Windows.Forms/SpreadInfo.cs) 등가. 자매 선례 SCP0107 `CapaTeepReportGrid` 와 동일 색.
+const NEGATIVE_COLOR = '#c62828';
+
 // 확정구간(Frozen) 배경 — AS-IS Re_Design(cs L4749~4758 "확정일자 구분 처리").
 //   CONFIRM_DAY 가 있는 행의 첫 기간열 ~ D_{CONFIRM_DAY} 구간을 행별 BACK_COLOR 로 칠한다.
 //   BACK_COLOR 는 서버가 내리는 "r,g,b" 문자열(DB 실측 전 measure 242,242,242 = 옅은 회색 #F2F2F2).
@@ -403,6 +407,16 @@ export const ShipmentPlanAutoEssMainGrid = ({
         kindOf(binding) && str(row?.MEASURE) === SHIP_PLAN_MEASURE
           ? SHIP_PLAN_ROW_COLOR
           : confirmWindowBackground(row, binding);
+
+      // 음수 = 적색 (AS-IS 공통 NumberCellType.NegativeRed 등가). Wijmo 가 셀 DOM 을 재사용하므로
+      //   매번 초기화 후, 값이 음수인 수치 셀만 다시 칠한다(스크롤 잔색 방지). 텍스트 셀(MEASURE/Model 등)은
+      //   Number 파싱이 NaN 이라 대상에서 자동 제외된다.
+      e.cell.style.color = '';
+      const value = row?.[binding];
+      if (value !== null && value !== undefined && value !== '') {
+        const numeric = Number(str(value).replace(/,/g, ''));
+        if (Number.isFinite(numeric) && numeric < 0) e.cell.style.color = NEGATIVE_COLOR;
+      }
     };
     g.formatItem.addHandler(formatItemHandler);
 

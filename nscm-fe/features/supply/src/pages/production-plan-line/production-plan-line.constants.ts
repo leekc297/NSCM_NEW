@@ -158,7 +158,8 @@ export const MSG = {
   SAVE_YN_NO: 'MSG01196', // 저장 불가(서버 SAVE_YN=N) (AS-IS MSG00182 는 TO-BE 미등록 → 같은 문구 MSG01196, KO/EN/CN). 서버 SAVE_YN(M5) 축
   CONFIRM_RESEARCH: 'MSG01273', // Do you want to re-search? (구 MSG00265=Excel 재로드 오표시). 번들 미포함→영문 fallback
   QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater. (구 MSG00084 미등록)
-  QTY_OVERFLOW: 'MSG00165', // You have exceeded the number of digits you can enter. (구 MSG00317 미등록). 번들 미포함
+  QTY_OVERFLOW: 'MSG01318', // AS-IS 입력상한 "{0} 미만의 값만 입력 가능합니다."({0}=100,000,000). AS-IS 코드 MSG00317 은
+  //   TO-BE 미등록이나, 동일 문구가 MSG01318(KO/EN/CN, USE_YN='Y' 실측 2026-11-16)로 이미 등록돼 있어 이를 사용한다.
   NEW_ROW_RED_CELL: 'MSG00013', // Please enter the required fields. (구 MSG00026=TO-BE "환율 적용 실패" 오표시)
   SELECT_CELL: 'MSG01262', // No date selected. Select Fix/Unfix date. (SCP0013 전용, 구 MSG00134 미등록). 번들 미포함
   CONFIRM_UNFIX: 'MSG00683', // 삭제 하시겠습니까? / Do you want to delete it? — AS-IS Unfix 확인(MSG00016='삭제하시겠습니까?')과 동일 문구. TO-BE MSG00016 은 'page not found' 오표시라, 동일 문구 MSG00683(KO/EN/CN USE_YN=Y 실측 2026-10-07)으로 재사용
@@ -167,6 +168,11 @@ export const MSG = {
   SAVE_SUCCESS: 'MSG00004', // No changes to save. (변경없음 토스트로 사용 — 의미 일치, 유지)
   SAVE_FAIL: 'MSG00003', // Failed to save. (TO-BE 동일 — 유지)
   PLAN_PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (구 MSG00252 미등록 — 자매 START_END_ORDER 정합)
+  // SCP구간(계획구간) 초과 조회 차단 — AS-IS SCP0013 CheckPlanPeriodRange(cs:1989)/MSG00402.
+  //   문구 "SCP구간 내 Plan 조회가 가능합니다\n(~계획수립주차 + {0}주 = {1})"({0}=주수, {1}=계획구간끝)는
+  //   TO-BE SCM_ADM_MSG_M 에 KO/EN/CN 그대로 등록돼 있다(MSG_NM, ora.py 2026-11-18 실측 — AS-IS 동일).
+  //   {0}=PLAN_WEEKS, {1}=HORIZON_END_DATE 를 호출부(.replace)에서 치환한다.
+  PLAN_PERIOD_LIMIT: 'MSG00402',
   // INSERT_GUIDE(MSG00662 '조회 후 수정모드로 가능') 제거: AS-IS Set_FixButtonEnabled 는 조건 미충족 시
   //   btnNew 를 비활성(Enabled=false)으로 막을 뿐 안내 메시지가 없다 — New 에 disabled:!canFix 적용으로 대체.
 } as const;
@@ -208,6 +214,8 @@ export const LBL = {
 // 수량 범위 (design 03 §3 파생 white-list — MSG00084 <0 / MSG00317 >99999999).
 export const QTY_MIN = 0;
 export const QTY_MAX = 99999999;
+// 입력상한 메시지 MSG00317("{0} 미만의 값만 입력 가능합니다.")의 {0} — AS-IS 하드코딩 "100,000,000"(=QTY_MAX+1) 동일.
+export const QTY_MAX_LABEL = '100,000,000';
 
 // pivot 셀 색상 파리티 (design 03 §3.8) — AS-IS SetCellBackColor.
 //   실적/과거 구간 회색(cs #34/#61), fix 확정 셀 녹색(cs #62~64), LINE_TOTAL<100 강조(cs #65).

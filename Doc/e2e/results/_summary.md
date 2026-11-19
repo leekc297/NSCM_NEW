@@ -1,6 +1,6 @@
-# E2E 결과 — 2026-11-18 10:33
+# E2E 결과 — 2026-11-19 09:28
 
-테스트 128 · PASS 75 · FAIL 53 · FLAKY 0 · SKIP 0
+테스트 129 · PASS 76 · FAIL 53 · FLAKY 0 · SKIP 0
 
 | 화면 | 스모크 | 조회조건 동작 | 공통 기능 | CRUD | 권한(계정×DIV) | 권한별 CRUD(계정) | BE DB 오류(시노님·SQL) | 실패 요약 |
 |---|---|---|---|---|---|---|---|---|
@@ -16,11 +16,11 @@
 | SCP0037 | 3/3 | 6/6 OK · FAIL 0 · WARN 0 · ERROR 0 | 10/11 OK · FAIL 0 · WARN 0 · ERROR 1 | - | - | - | - |  |
 | SCP0041 | 1/3 ✗ | 5/8 OK · FAIL 0 · WARN 0 · ERROR 3 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Inspection' (InputField) — 후보 [Inspection]<br>smoke: Error: 조회조건 판정 불가(ERROR) 3: Inspection, Cutoff Date, Status |
 | SCP0084 | 2/3 ✗ | 4/5 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/12 OK · FAIL 1 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 공통 기능 FAIL 1: Excel 다운로드 |
-| SCP0096 | 0/3 ✗ | 5/7 OK · FAIL 0 · WARN 0 · ERROR 2 | 11/12 OK · FAIL 1 · WARN 0 · ERROR 0 | 1/1 | 2/2 | 2/2 | - | smoke: Error: 조회조건 'Input Value' (CustomDropdown) — 후보 [Input Value | -]<br>smoke: Error: 조회조건 판정 불가(ERROR) 2: Input Value, Day of the week<br>smoke: Error: 공통 기능 FAIL 1: Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제) |
+| SCP0096 | 1/3 ✗ | 4/6 OK · FAIL 0 · WARN 0 · ERROR 2 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | 1/1 | 2/2 | 2/2 | - | smoke: Error: 조회조건 'Input Value' (CustomDropdown) — 후보 [Input Value | -]<br>smoke: Error: 조회조건 판정 불가(ERROR) 2: Input Value, Day of the week |
 | SCP0100 | 2/3 ✗ | 13/18 OK · FAIL 1 · WARN 3 · ERROR 1 | 10/11 OK · FAIL 0 · WARN 0 · ERROR 1 | 1/1 | 2/2 | 2/2 | - | smoke: Error: 조회조건 동작 FAIL 1: (기준표 순서) |
 | SCP0104 | 3/3 | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |
 | SCP0108 | 0/3 ✗ | 0/15 OK · FAIL 1 · WARN 0 · ERROR 14 | 0/2 OK · FAIL 1 · WARN 1 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]<br>smoke: Error: 조회조건 동작 FAIL 1: (기준 조회)<br>smoke: Error: 공통 기능 FAIL 1: Search(조회 버튼) |
-| SCP0111 | 2/3 ✗ | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | - | 2/2 | 1/2 ✗ | - | smoke: Error: 조회조건 'Qty ＜ 0' (Checkbox) — 후보 [Qty ＜ 0 | Qty ≥ 0]<br>authcrud: Error: [jooyong026] 허용 계정 마커 행 저장  |
+| SCP0111 | 2/3 ✗ | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 1/2 ✗ | 1건 | smoke: Error: 조회조건 'Qty ＜ 0' (Checkbox) — 후보 [Qty ＜ 0 | Qty ≥ 0]<br>crud: Error: Insert(F8) 로 행 추가<br>authcrud: Error: [jooyong026] 허용 계정 마커 행 저장  |
 | SCP0122 | 3/3 | 3/4 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 2/2 | 2건 | crud: Test timeout of 300000ms exceeded. |
 | SCP0125 | 0/3 ✗ | 0/6 OK · FAIL 1 · WARN 0 · ERROR 5 | 0/2 OK · FAIL 1 · WARN 1 · ERROR 0 | - | - | - | 3건 | smoke: Error: 조회조건 'Div' (DivisionField) — 후보 [Div | Div.]<br>smoke: Error: 조회조건 동작 FAIL 1: (기준 조회)<br>smoke: Error: 공통 기능 FAIL 1: Search(조회 버튼) |
 | SCP0127 | 3/3 | 9/9 OK · FAIL 0 · WARN 0 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |

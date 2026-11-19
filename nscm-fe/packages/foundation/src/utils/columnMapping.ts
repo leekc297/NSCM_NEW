@@ -654,6 +654,93 @@ export const buildLeafColumnDataMap = (column: RawFlexGridColumnConfig): DataMap
     ? getRowParamDataMap(column)
     : getDataMap(column.dataMap, column.insertDataMap, column.attribute2);
 
+/**
+ * 그 행의 콤보 후보 rows — 드롭다운 표시(getDataMap/getRowParamDataMap)와 **같은 규칙**으로 뽑는다.
+ * "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값" 불변식의 공용 기준이다.
+ *
+ * 반환:
+ *   · 재조회형(PARAM10='D'): 그 행 조합 버킷. 아직 안 실렸으면(비동기 미도착) undefined — "0건"과 구분한다.
+ *   · 필터형: 행 컨텍스트로 좁힌 배열(항상 배열). 좁힘 조건(attribute2)이 없으면 전량.
+ *
+ * 주의: 재조회형 버킷은 Map 으로 조회한다 — 행 값이 'constructor' 같은 Object 프로토타입 키면
+ *   plain object 인덱싱이 프로토타입 체인을 집는다(getRowParamDataMap 과 같은 사정).
+ */
+export const pickRowComboCandidates = (
+  column: RawFlexGridColumnConfig,
+  row: WijmoRowItem
+): ComboResponse[] | undefined => {
+  if (isRowParamCombo(column)) {
+    const bindings = parseComboFilterBindings(column.attribute2);
+    const insertBucket = column.insertRowParamRows;
+    const useInsert = isInsertRow(row) && !!insertBucket && Object.keys(insertBucket).length > 0;
+    const bucket = new Map(Object.entries((useInsert ? insertBucket : column.rowParamRows) ?? {}));
+    const key = rowParamKey(bindings, row);
+    return bucket.has(key) ? bucket.get(key) : undefined;
+  }
+
+  const baseRows = column.dataMap ?? [];
+  const insertRows = column.insertDataMap ?? [];
+  const source = insertRows.length > 0 && isInsertRow(row) ? insertRows : baseRows;
+  return filterComboRowsByRowItem(source, column.attribute2, row);
+};
+
+/** 전역 콤보 목록(메타 + 전 행조합 버킷)에서 코드의 표시명. 없으면 ''. */
+const comboNameOfCode = (column: RawFlexGridColumnConfig, code: string): string => {
+  const allRows = isRowParamCombo(column)
+    ? [
+        ...(column.dataMap ?? []),
+        ...Object.values(column.rowParamRows ?? {}).flat(),
+        ...Object.values(column.insertRowParamRows ?? {}).flat(),
+      ]
+    : [...(column.dataMap ?? []), ...(column.insertDataMap ?? [])];
+  const found = allRows.find(comboRow => safeString(comboRow.CODE).trim() === code);
+  return found ? safeString(found.NAME).trim() : '';
+};
+
+/**
+ * 드롭다운으로 콤보 셀에 커밋된 코드를 그 행의 후보 기준으로 바로잡는다.
+ *
+ * Wijmo DataMap 의 표시명->코드 역변환(getKeyValue)은 컬럼 전역 색인에서 first-CODE-wins 다.
+ * 서로 다른 코드가 같은 표시명을 쓰면(행/Division 맥락만 달라 라벨이 겹치는 경우) 드롭다운엔 그
+ * 행 후보만 떠도 커밋 코드는 전역 첫 코드가 될 수 있다 — 사용자가 고른 것과 다른 코드가 저장된다.
+ * 여기서 그 행 후보 중 **같은 표시명**을 가진 코드로 되맞춘다.
+ *
+ * 되맞추는 조건(전부 충족):
+ *   · 콤보 컬럼이고 커밋값이 비어 있지 않다(빈 값은 지움 의도).
+ *   · 그 행 후보가 도착했고(재조회형 미도착이면 보류) 0건이 아니다.
+ *   · 커밋 코드가 그 행 후보 **밖**이다(안이면 이미 맞음).
+ *   · 커밋 코드의 표시명과 같은 표시명을 가진 행 후보가 **정확히 1건**이다 — 행 안에서도 동명이면
+ *     어느 코드인지 판정할 수 없어 손대지 않는다(그건 표시명을 구분해야 하는 몫이다).
+ *
+ * 값을 직접 지우지는 않는다. 호출부(DataGrid)가 EditTracker 기록과 함께 반영한다.
+ * 반환: 바로잡을 코드. 위 조건을 못 채우면 undefined(= 손대지 않음).
+ */
+export const resolveRowComboCode = (
+  column: RawFlexGridColumnConfig,
+  row: WijmoRowItem,
+  committedValue: WijmoPrimitive
+): string | undefined => {
+  if (column.cellCtrlObjTpCd !== CELL_CONTROL_TYPE.COMBO || !column.cellCboDataTp) return undefined;
+
+  const committed = safeString(committedValue).trim();
+  if (committed === '') return undefined;
+
+  const candidates = pickRowComboCandidates(column, row);
+  if (candidates === undefined || candidates.length === 0) return undefined;
+
+  // 이미 그 행 후보 안이면 손대지 않는다.
+  if (candidates.some(candidate => safeString(candidate.CODE).trim() === committed)) return undefined;
+
+  // 커밋 코드의 표시명(사용자가 고른 라벨) — 전역 목록 기준(커밋 코드는 그 이름으로 뽑힌 값이다).
+  const committedName = comboNameOfCode(column, committed);
+  if (committedName === '') return undefined;
+
+  const sameName = candidates.filter(
+    candidate => safeString(candidate.NAME).trim() === committedName
+  );
+  return sameName.length === 1 ? safeString(sameName[0].CODE).trim() : undefined;
+};
+
 // ⭐ 라벨 끝 필수표시(`*`) 정규화 — AS-IS 잔재로 관리자 컬럼 메타의 라벨(colLblNm)에 `*` 가 그대로
 //   박혀 있는 화면(DMF0082 등)이 있다. 디자인 표준은 헤더 라벨 앞 빨간점(`is-required`, _grid.scss)이라
 //   `*` 로 등록된 화면만 표기가 달랐다. 라벨에서 `*` 를 떼고 `_requiredMark` 로 옮겨
@@ -728,6 +815,7 @@ const toLeafColumn = (column: NormalizedRawColumn): FlexGridColumnConfig => ({
   _fixed: column.fixed,
   _uppercase: column.uppercase,
   _display: column.display,
+  _excelFormat: column._excelFormat,
   _personalizable: column.personalizable,
   _sClsLblNm: column.sClsLblNm,
   _lClsLblNm: column.lClsLblNm,

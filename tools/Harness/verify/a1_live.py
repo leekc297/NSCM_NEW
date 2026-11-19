@@ -108,6 +108,7 @@ def selftest():
         ('짧으면 배수 무시', judge_time(1, 9, 1, 1)[0], 'PASS'),
         ('Measure 컬럼 없음', judge_shape(['SITE'], [('X',)], ['SITE'], [{'SITE': 'X'}]), None),
         ('AS-IS 0행', judge_shape(A, [], T, tr), None),
+        ('사용자 인자 없음 = 같은 사용자 대상 아님', same_user_rows(None, None, 'X', {'sheet': 'S'}, {'asis_sp': 'X_GET_Y'}, 'P', {'p_division_id': '40'})[0]['verdict'], 'NA'),
     ]
     ok = 0
     for n, g, w in cases:
@@ -177,8 +178,13 @@ def pick_users(acur, tcur, program, top=5):
 
 def same_user_rows(cx, tcx, mid, base, g, proc, ps):
     """AS-IS 0행일 때 같은 실사용자·같은 인자로 양쪽을 실행해 건수·Measure 행 구성을 대조"""
+    # 2026-11-19 미검증 해소(SCP0096 EG-938ba32f): 조회 SP 인자에 사용자 칸이 없으면 결과가 사용자별 칸 설정과 무관하다, 같은 사용자 재실행 대상 아님(SP 인자 근거 NA).
+    #   건수 차이 판정은 주 행(판정필요)이 맡는다. 사용자 인자가 있는데 양쪽 설정 사용자가 없을 때만 측정 경로 없음(ERROR)
+    if not any(re.search('(?i)created_by|user_id', k) for k in ps):
+        return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'NA', 'asis_rows': 0,
+                 'detail': f"조회 SP 인자 {sorted(ps)} 에 사용자 칸 없음, 결과가 사용자 칸 설정과 무관해 같은 사용자 재실행 대상 아님(건수 차이는 주 행에서 판정)", 'note': ''}]
     users = pick_users(cx.cursor(), tcx.cursor(), mid)
-    if not users or not any(re.search('(?i)created_by|user_id', k) for k in ps):
+    if not users:
         return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'ERROR', 'asis_rows': 0, 'detail': '[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음', 'note': ''}]
     import time
     user, up, sets = users[0], ps, []; a_sec = 0.0

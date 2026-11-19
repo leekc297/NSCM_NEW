@@ -600,6 +600,9 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     test.setTimeout(480_000);
     const f = F as Facts; const p = nscm.page;
     const withTs = f.accounts.find(a => a.titleset > 0 && a.menuGroups.length); const noTs = f.accounts.find(a => a.titleset === 0 && a.menuGroups.length && (!withTs || a.divsMenu.some(d => withTs.divsMenu.includes(d))));
+    // 2026-11-18 미검증 해소(SCP0096 EG-c5e0731c): AS-IS·TO-BE 모두 이 화면 칸 설정 0행이면 보유 계정이 있을 수 없다 — 계정 지정 대상 아님(NA · 근거 행 수)
+    const ts = f.db.titleset;
+    if (!withTs && ts && ts.tobeRows === 0 && ts.asisRows === 0) { put('EG032', ID, '계정쌍', 'NA', 'TITLESET_USER 보유·미보유 계정쌍', `이 화면 칸 설정 없음: AS-IS SCM_MST_TITLESET_USER PROGRAM_ID=${ID} 0행 · TO-BE 0행 · 화면 PKG 참조 ${ts.pkgRefs}곳`, 'SCM_MST_TITLESET_USER'); return; }
     if (!withTs || !noTs) { put('EG032', ID, '계정쌍', 'ERROR', 'TITLESET_USER 보유·미보유 계정쌍', `명부에 쌍 없음(보유 ${withTs ? 'Y' : 'N'} · 미보유 ${noTs ? 'Y' : 'N'})`, 'SCM_MST_TITLESET_USER'); return; }
     const div = noTs.divsMenu.find(d => withTs.divsMenu.includes(d)) || '';
     let rules: { keys: string; line: string; depth: string }[] = [];
@@ -670,8 +673,20 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     const uid = accountId(guestOnly[0].key); if (!uid) { put('EG380', '무권한 첫 화면', guestOnly[0].key, 'ERROR', '명부', 'ID 없음'); return; }
     await nscm.loginAs(uid); await p.goto(new URL('/', process.env.E2E_FE || CFG.feUrl).toString(), { waitUntil: 'domcontentloaded' }); await p.waitForLoadState('networkidle', { timeout: 20_000 }).catch(() => undefined); await p.waitForTimeout(1_500);
     if (MUT === 'guest_home') await p.evaluate(() => { document.body.innerHTML = '<div>home</div>'; });
-    const t = await p.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 600));
-    const url = p.url(); const shows = /auth(ority)?\s*request|권한\s*신청|request\s*auth/i.test(t) || /sys0011|sys0012|auth/i.test(url);
-    put('EG380', '무권한 첫 화면', guestOnly[0].key, shows ? 'PASS' : 'FAIL', 'Auth Request(권한 신청) 화면 메인 — DM-247', `URL ${url.replace(/^https?:\/\/[^/]+/, '')} · 본문 ${t.slice(0, 90)}`, 'DM-247·GAP-475', realNote);
+    let t = await p.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 600));
+    let url = p.url();
+    const isShown = (tx: string, u: string) => /auth(ority)?\s*request|request\s*auth/i.test(tx) || /sys0011|sys0012|auth/i.test(u);
+    let shows = isShown(t, url);
+    // 2026-11-18(SCP0096 EG380 실측): 게스트 로그인 직후 안내창(MSG00023 'You are not authorized to NSCM. Apply for permission.')이 뜬다.
+    //   안내 문구의 'Apply for permission' 은 화면 표시가 아니므로 판정에서 뺐고(종전 '권한 신청' 문구 일치 제외), 안내창 확인 뒤 열리는 화면까지 잰다
+    const notice = (/You are not authorized[^.]*\.\s*Apply for permission\.?|권한이 없습니다[^.]*\.?/i.exec(t) || [''])[0];
+    let after = '';
+    if (!shows && notice) {
+      await p.getByRole('button', { name: /^(Confirm|확인|OK)$/i }).first().click({ timeout: 5_000 }).catch(() => undefined);
+      await p.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined); await p.waitForTimeout(2_000);
+      t = await p.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 600)); url = p.url(); shows = isShown(t, url);
+      after = ` · 안내창 확인 뒤 URL ${url.replace(/^https?:\/\/[^/]+/, '')}`;
+    }
+    put('EG380', '무권한 첫 화면', guestOnly[0].key, shows ? 'PASS' : 'FAIL', 'Auth Request(권한 신청) 화면 메인 — DM-247', `URL ${url.replace(/^https?:\/\/[^/]+/, '')}${notice ? ` · 안내창 '${notice}'` : ''}${after} · 본문 ${t.slice(0, 90)}`, 'DM-247·GAP-475', realNote);
   });
 });

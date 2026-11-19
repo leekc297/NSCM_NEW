@@ -9,21 +9,20 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
+// 2026-11-18 사용자: 파싱부터 완료까지 바뀐 순서(🚀 ID 하나로 전체 체인)대로 — 파싱 → 실측 → 문서(MD) → 생성 → 등록SQL → PKG → 게이트 → CheckList → 보완 → TestResultList → 문서 Excel.
+//   E2E 4종(smoke·crud·auth·authcrud)은 CheckList 안에서 실행되므로 단계에서 빼고 Status 의 E2E 타일로만 보인다(판정 값 s.smoke 등은 그대로 계산).
 const STAGES = [
   { key: 'pack', label: '1 파싱', task: 'S1.packone' },
-  { key: 'docs', label: '2 문서', task: 'S3.agent' },
-  { key: 'xlsx', label: '2x Excel', task: 'S3.xlsx' },
-  { key: 'chk', label: '3 CheckList', task: 'S8.verify' }, // 2026-10-30 GAP 분석 폐지 → CheckList(fixlist.csv 조치 필요 행)
+  { key: 'live', label: '2 실측', task: 'S1.liveScreen' },
+  { key: 'docs', label: '3 문서', task: 'S3.agent' },
   { key: 'gen', label: '4 생성', task: 'S5.pipelinedry' },
-  { key: 'gate', label: '5 게이트', task: 'S5.final' },
-  { key: 'repair', label: '6 보완', task: 'S5.pipeline' }, // 2026-11-11: 수선 → 보완 (사용자 지시)
-  { key: 'pkg', label: '7 PKG', task: 'S5.pkgrepair' },
-  { key: 'reg', label: '8 등록SQL', task: 'S5.regsql' },
-  // 1.8.8: 테스트 단계 4종 — smoke · crud · auth · authcrud(계정별 권한 CRUD). 판정 = Doc/e2e/results/_summary.csv 의 kind 열
-  { key: 'smoke', label: '9 Smoke', task: 'S7.smoke' },
-  { key: 'crud', label: '10 CRUD', task: 'S7.crud' },
-  { key: 'auth', label: '11 Auth', task: 'S7.auth' },
-  { key: 'authcrud', label: '12 Auth×CRUD', task: 'S7.authcrud' },
+  { key: 'reg', label: '5 등록SQL', task: 'S5.regsql' },
+  { key: 'pkg', label: '6 PKG', task: 'S5.pkgrepair' },
+  { key: 'gate', label: '7 게이트', task: 'S8.feGate' },
+  { key: 'chk', label: '8 테스트(CheckList)', task: 'S8.verify' }, // 2026-11-18 사용자: E2E 4종(smoke·crud·auth·authcrud)이 CheckList 안에서 실행 → CheckList = 테스트 단계
+  { key: 'repair', label: '9 보완', task: 'S8.repairClose' },
+  { key: 'report', label: '10 TestResultList', task: 'S8.report' },
+  { key: 'xlsx', label: '11 문서 Excel', task: 'S3.xlsx' },
 ];
 const E2E_KINDS = ['smoke', 'crud', 'auth', 'authcrud'];
 const parseCsv = text => { text = text.replace(/^﻿/, ''); const rows = []; let row = [], f = '', q = false; for (let i = 0; i < text.length; i++) { const ch = text[i]; if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; } else if (ch === '"') q = true; else if (ch === ',') { row.push(f); f = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(f); f = ''; if (row.length > 1 || row[0] !== '') rows.push(row); row = []; } else f += ch; } if (f !== '' || row.length) { row.push(f); rows.push(row); } return rows; };
@@ -45,12 +44,30 @@ function stageStatus(p, id) {
   const pack = path.join(p.outDir, 'screens', id); s.pack = has(path.join(pack, `${id}_summary.md`)) ? 'ok' : (has(pack) ? 'warn' : 'none');
   const gate = path.join(p.outDir, 'agent', id, '_gate.csv');
   if (has(gate)) { const rows = csvObjs(gate); const bad = rows.filter(r => /FAIL|BLOCK/i.test(r.status || r.result || '')).length; s.docs = bad ? 'warn' : 'ok'; } else s.docs = has(path.join(p.outDir, 'agent', id, 'analysis.md')) ? 'warn' : 'none';
-  const xd = path.join(p.root, 'Doc', 'documents', id); s.xlsx = has(xd) && fs.readdirSync(xd).some(f => /\.xlsx$/.test(f)) ? 'ok' : 'none';
-  const fxF = path.join(p.root, 'Doc', 'verify', id, 'fixlist.csv'); if (has(fxF)) { const rows = csvObjs(fxF).filter(r => (r.action_needed || '').toUpperCase() === 'Y'); const open = rows.filter(r => !/^(적용|검증완료)/.test(r.status || '')).length; s.chk = open ? 'warn' : 'ok'; s.chkN = `${rows.length - open}/${rows.length}`; } else s.chk = 'none';
+  // 2026-11-18: 문서 Excel = 팀 폴더(화면설계서·화면분석서·단위테스트) 최신 위치 + 구 Doc/documents/<ID>
+  const xlsxIn = d => { try { return fs.readdirSync(d).some(f => /\.xlsx$/i.test(f) && f.toUpperCase().startsWith(id) && !f.startsWith('~$')); } catch { return false; } };
+  const xn = ['화면설계서', '화면분석서', '단위테스트'].filter(d => xlsxIn(path.join(p.root, 'Doc', d)));
+  s.xlsx = xn.length || xlsxIn(path.join(p.root, 'Doc', 'documents', id)) ? 'ok' : 'none'; if (xn.length) s.xlsxN = `${xn.length}/3`;
+  // 2026-11-18: AS-IS 실측 = Doc/asislive/<ID>/screen_bundle.json 상태(OK·NA 완료 · PARTIAL 일부 실패 · ERROR 미측정)
+  try { const bd = JSON.parse(rd(path.join(p.root, 'Doc', 'asislive', id, 'screen_bundle.json')).replace(/^\uFEFF/, '')); s.live = /^(OK|NA)$/.test(bd.status) ? 'ok' : bd.status === 'PARTIAL' ? 'warn' : 'bad'; s.liveN = bd.status; } catch { s.live = has(path.join(p.root, 'Doc', 'asislive', id, 'latest.json')) ? 'warn' : 'none'; }
+  // 2026-11-18: CheckList = run_verify.result.json(FAIL·판정필요·미검증) + '미검증' 시트(checklist_counts.json) · 보완 = fixlist 조치 필요 행 처리 상태
+  const vd = path.join(p.root, 'Doc', 'verify', id); let env = null, cc = null;
+  try { env = JSON.parse(rd(path.join(vd, 'run_verify.result.json')).replace(/^\uFEFF/, '')); } catch { }
+  try { cc = JSON.parse(rd(path.join(vd, 'checklist_counts.json')).replace(/^\uFEFF/, '')); } catch { }
+  if (env && env.summary) { const sm = env.summary; const unv = cc ? cc.unverified_sheet : null; const clean = !sm.FAIL && !sm['판정필요'] && !sm['미검증'] && unv === 0 && env.state === 'completed';
+    s.chk = clean ? 'ok' : (env.state !== 'completed' || sm['미검증'] ? 'bad' : 'warn'); s.chkN = `F ${sm.FAIL}`; s.chkTip = `FAIL ${sm.FAIL} · 판정필요 ${sm['판정필요']} · 미검증 ${sm['미검증']} · 미검증 시트 ${unv == null ? '미집계' : unv} · ${env.started || ''}`;
+    s.chkCounts = { FAIL: sm.FAIL, 판정필요: sm['판정필요'], 미검증: sm['미검증'], 미검증시트: unv, started: env.started || '', state: env.state }; }
+  else s.chk = 'none';
+  const fxF = path.join(vd, 'fixlist.csv');
+  if (has(fxF)) { const rows = csvObjs(fxF).filter(r => (r.action_needed || '').toUpperCase() === 'Y'); const open = rows.filter(r => !/^(적용|검증완료)/.test(r.status || '')).length; s.repair = !rows.length || !open ? 'ok' : (open < rows.length ? 'warn' : 'bad'); s.repairN = `${rows.length - open}/${rows.length}`; s.repairTip = `조치 필요 ${rows.length} · 처리 ${rows.length - open} · 남음 ${open}`; s.fixOpen = open; s.fixTot = rows.length; }
+  // 2026-11-18: TestResultList = Doc/테스트결과서/<ID>_*.xlsx · CheckList 보다 오래되면 warn
+  try { const td = path.join(p.root, 'Doc', '테스트결과서'); const ts = fs.readdirSync(td).filter(f => f.toUpperCase().startsWith(id + '_') && /\.xlsx$/i.test(f) && !f.startsWith('~$')).map(f => fs.statSync(path.join(td, f)).mtimeMs); const envAt = has(path.join(vd, 'run_verify.result.json')) ? fs.statSync(path.join(vd, 'run_verify.result.json')).mtimeMs : 0; s.report = ts.length ? (Math.max(...ts) >= envAt ? 'ok' : 'warn') : 'none'; } catch { s.report = 'none'; }
   s.gen = has(path.join(g, 'GEN_NOTES.md')) ? (pageDirOf(p, id) && has(pageDirOf(p, id)) ? 'ok' : 'warn') : 'none';
   const chk = rd(path.join(g, 'CHECK.md')); const m = chk.match(/BLOCK (\d+) \/ WARN (\d+)/); s.gate = m ? (Number(m[1]) === 0 ? 'ok' : 'bad') : 'none'; s.gateN = m ? `${m[1]}/${m[2]}` : '';
+  // 2026-11-18: 게이트 = FE 게이트(Doc/verify/<ID>/fe_gate.json · 실제 브라우저 열기·콘솔·조회)가 있으면 그것을, 없으면 check.js(CHECK.md)
+  try { const fg = JSON.parse(rd(path.join(p.root, 'Doc', 'verify', id, 'fe_gate.json')).replace(/^\uFEFF/, '')); const gs = (fg.gates || []).filter(x => x && x.result); const f = gs.filter(x => x.result === 'FAIL').length, ok = gs.filter(x => x.result === 'PASS').length; if (gs.length) { s.gate = f ? 'bad' : ok === gs.length ? 'ok' : 'warn'; s.gateN = `${ok}/${gs.length}`; s.gateTip = gs.map(x => `${x.gate} ${x.result}`).join(' · ') + ` · ${fg.at || ''}`; } } catch { }
   const dod = rd(path.join(g, 'DOD.md')).match(/(\d+)\/(\d+) 충족/); s.dod = dod ? `${dod[1]}/${dod[2]}` : '';
-  const rep = rd(path.join(g, 'REPAIR.md')); s.repair = /\*\*PASS\*\*/.test(rep) ? 'ok' : (/NEEDS_HUMAN|사람 확인 큐/.test(rep) ? 'bad' : (rep ? 'warn' : 'none'));
+  const rep = rd(path.join(g, 'REPAIR.md')); if (!s.repair) s.repair = /\*\*PASS\*\*/.test(rep) ? 'ok' : (/NEEDS_HUMAN|사람 확인 큐/.test(rep) ? 'bad' : (rep ? 'warn' : 'none'));
   const pk = rd(path.join(g, 'CHECK_PKG.md')).match(/BLOCK (\d+) \/ WARN (\d+)/); s.pkg = pk ? (Number(pk[1]) === 0 ? 'ok' : 'bad') : (has(path.join(g, `${id}_PKG.sql`)) ? 'warn' : 'none'); s.pkgN = pk ? `${pk[1]}/${pk[2]}` : '';
   s.reg = has(path.join(g, `${id}_registration.sql`)) ? (has(path.join(g, `${id}_revert.sql`)) ? 'ok' : 'warn') : 'none';
   // 1.9.42(2026-11-06): 화면 폴더 요약 Doc/e2e/results/<ID>/_summary.csv 우선 · 없으면(전환 전) 공용 색인
@@ -72,19 +89,21 @@ const CLS = { ok: 'ok', warn: 'warn', bad: 'bad', none: 'none' };
 // ───────────────────────── FLOW 표 열 (표시 전용 묶음) ─────────────────────────
 //   parts = 묶는 판정 키. 묶음 상태 = 전부 ok → ok · 하나라도 bad → bad · 전부 none → none · 그 외 warn.
 //   클릭 = 한 칸짜리는 그 단계 작업 · 문서 = 아직 ok 가 아닌 첫 부분의 작업(문서 → S3.agent, Excel → S3.xlsx) · Test = S7.all(4종 한 번에)
-const COLS = [ // 일괄 작업 체인(quick.json 'ID 하나로 전체')이 순서대로 실행하는 단계만 둔다(사용자 2026-11-11: 흐름에서 벗어나는 별도 액션 제외). 머리글은 언어 설정과 무관하게 영문
-  //   체인 순서: 1 파싱 → 2 문서(MD) → 4 FE 골격 → 5 메타 등록 SQL → 6·8 PKG 골격·이식 → 7 FE 수선+게이트 → 13 CheckList → 14 자동 보완 → 15 재판정 → 16 문서 Excel
-  //   제외: E2E 단독 실행(S7.smoke·crud·auth·authcrud — 체인에 없음. 11-04 E2E 메뉴 단계 폐지, E2E 는 CheckList 안에서 실행) · 클라우드 이관 완료 표시(수동 메뉴)
+const COLS = [ // 🚀 ID 하나로 전체 체인 순서(2026-11-18 사용자: 파싱부터 완료까지 바뀐 순서). 머리글은 언어 설정과 무관하게 영문
+  //   제외: E2E 단독 실행(S7.* — 11-04 E2E 메뉴 단계 폐지, E2E 는 CheckList 안에서 실행) · 클라우드 이관(수동 메뉴)
   { key: 'pack', ko: '파싱', en: 'Parse', parts: ['pack'] },
-  { key: 'doc', ko: '문서', en: 'Docs', parts: ['docs', 'xlsx'] },
+  { key: 'live', ko: '실측', en: 'Live', parts: ['live'] },
+  { key: 'docs', ko: '문서', en: 'Docs', parts: ['docs'] },
   { key: 'gen', ko: '생성', en: 'Build', parts: ['gen'] },
   { key: 'reg', ko: '등록SQL', en: 'META', parts: ['reg'] },
   { key: 'pkg', ko: 'PKG', en: 'PKG', parts: ['pkg'] },
   { key: 'gate', ko: '게이트', en: 'Gate', parts: ['gate'] },
-  { key: 'chk', ko: 'CheckList', en: 'CheckList', parts: ['chk'] },
+  { key: 'chk', ko: '테스트(CheckList)', en: 'Test·CheckList', parts: ['chk'] },
   { key: 'repair', ko: '보완', en: 'Fix', parts: ['repair'] },
+  { key: 'report', ko: 'TestResultList', en: 'Result', parts: ['report'] },
+  { key: 'xlsx', ko: '문서 Excel', en: 'Excel', parts: ['xlsx'] },
 ];
-const PART = { docs: ['문서', 'Docs'], xlsx: ['Excel', 'Excel'], smoke: ['Smoke', 'Smoke'], crud: ['CRUD', 'CRUD'], auth: ['Auth', 'Auth'], authcrud: ['Auth×CRUD', 'Auth×CRUD'] };
+const PART = { docs: ['문서', 'Docs'], xlsx: ['Excel', 'Excel'], live: ['실측', 'Live'], report: ['TestResultList', 'Result'], smoke: ['Smoke', 'Smoke'], crud: ['CRUD', 'CRUD'], auth: ['Auth', 'Auth'], authcrud: ['Auth×CRUD', 'Auth×CRUD'] };
 const taskOf = key => (STAGES.find(st => st.key === key) || {}).task || '';
 function cell(col, s, en) {
   const vs = col.parts.map(k => s[k] || 'none');

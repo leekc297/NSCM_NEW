@@ -5,9 +5,9 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
-import { Grid, Stack } from '@shared/mui';
+import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
 
 import type {
@@ -53,7 +53,6 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
   const setDivision = useProductionPlanWaterfallStore(s => s.setDivision);
   const setOperationGroup = useProductionPlanWaterfallStore(s => s.setOperationGroup);
   const setVersions = useProductionPlanWaterfallStore(s => s.setVersions);
-  const setChkAll = useProductionPlanWaterfallStore(s => s.setChkAll);
   const setBucket = useProductionPlanWaterfallStore(s => s.setBucket);
   const openSearchArea = useProductionPlanWaterfallStore(s => s.openSearchArea);
   const setNoDivisionAuth = useProductionPlanWaterfallStore(s => s.setNoDivisionAuth);
@@ -228,14 +227,18 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
       onSearch={onSearch}
       conditions={
         <>
-          {/* Row0 — Division* / Operation Group* / Plant Site / Electrode (사용자 지정 배치) */}
+          {/* 조회조건 순서 — 기준표(2026-11-18) 5그룹 정렬: [1]데이터기준(Div·Ver) → [2]조직·거점·공정
+              (OpGroup·PlantSite·Line) → [3]제품·대상(Model/Nickname·Material·Electrode) → [4]기간·집계
+              (Period·Bucket) → [5]상태·표시(Sum·All·Gap·UOM). 표준 2줄(상시 8필드=[1][2][3]) + 나머지([4][5])는
+              접기(extraConditions). 근거: 사용자 지시 2026-11-18 + 설계 02 §231(2단 초과 → extraConditions 펼침)
+              + 설계 01 §3(AS-IS 2단 고정, 3줄 요구 없음). #1 지시로 Model/Nickname 을 Material 앞에 둔다. */}
+          {/* [1] Div — Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
+              편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit
+              51d4e9fa 패턴). 이 화면은 read-only 라 실제 dirty 는 없지만 공통 패턴을 동일하게 둔다(SCP0025 선례). */}
           {single(
             t(LBL.DIVISION, '_Div'),
             sc.divisionId,
             divisionOptions,
-            // Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건). 편집중(dirty)이면
-            //   MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴).
-            //   이 화면은 read-only 라 실제 dirty 는 없지만 공통 패턴을 동일하게 둔다(SCP0025 선례).
             v => {
               void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                 if (ok) setDivision(v);
@@ -243,7 +246,17 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             },
             true
           )}
-          {/* OperationGroup 변경 = 하위(plantSite/line) 초기화 + 그리드 clear(store setOperationGroup,
+          {/* [1] Version — AS-IS 체크리스트 단일 UI 이나 Gap 시 2건 필요(design 02 §7-3) → 다중 허용.
+              변경 시 Period 재산정(AS-IS CboVersion_SelectedIndexChanged → GetDayRange, G2) — setVersions 경유.
+              표시 규약: SELECT ALL 미노출(allOption=false, 사용자 지시 2026-11-18 — 종전 2026-11-02 의 'ALL
+              선택 가능' 결정을 뒤집음. 자매 SCP0016 과 동일). AS-IS 초기값이 빈값(setListBox blnAllFlag=false,
+              SCP0017.cs L1302)이므로 placeholder='' 로 미선택을 공백 표시한다. 미선택 조회는 필수값 게이트
+              (versionNos.length===0)로 차단되므로 공백 초기값과 양립한다.
+              라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체.
+              sortByLabel=false — WaterfallVer2_SCP 가 ORDER BY PLAN_START_YYYYMMDD DESC(최신 먼저, ora.py 실측
+              2026-11-04)로 내려주므로 label 오름차순(최신 맨 아래)으로 덮지 않고 서버 순서를 보존한다. */}
+          {multi(t('LBL01275', '_Ver.'), sc.versionNos, versionOptions, setVersions, undefined, false, true, '', false)}
+          {/* [2] OperationGroup 변경 = 하위(plantSite/line) 초기화 + 그리드 clear(store setOperationGroup,
               AS-IS cboOperationGroup_SelectedIndexChanged → RefreshPlantSite/Line + InitSpread). */}
           {single(
             t(LBL.OPERATION_GROUP, '_Operation Group'),
@@ -252,52 +265,19 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             v => setOperationGroup(v),
             true
           )}
-          {/* PlantSite 변경 = Line 재조회(위 콤보 filters 의 @scmSiteId 종속) + Line 선택 초기화.
+          {/* [2] PlantSite 변경 = Line 재조회(위 콤보 filters 의 @scmSiteId 종속) + Line 선택 초기화.
               AS-IS clbPlantSite_SelectedIndexChanged → RefreshLine(cs:2297~2300)은 Line 을 재populate 하며
               기존 Line 선택을 ALL 기본으로 되돌린다(setListBox isAddAll=true). 그리드는 비우지 않는다(AS-IS 파리티 —
               clbPlantSite 핸들러는 InitSpread 미호출, Division/OpGroup 변경과 달리 재조회만 요구). */}
           {multi(t(LBL.PLANT_SITE, '_Plant Site'), sc.plantSiteIds, plantSiteOptions, v =>
             set({ plantSiteIds: v, lineIds: [] })
           )}
-          {/* Electrode — enable=isEe(division), 비EE 면 disable+clear(design 01 L8). */}
-          {multi(
-            t(LBL.ELECTRODE, '_Electrode'),
-            sc.electrodeTypes,
-            electrodeOptions,
-            v => set({ electrodeTypes: v }),
-            !isEe
+          {/* [2] Line — PlantSite → Line 종속관계 고정(기준표 규칙). */}
+          {multi(t(LBL.LINE, '_Line'), sc.lineIds, lineOptions, v =>
+            set({ lineIds: v })
           )}
-
-          {/* Row1 — Material(팝업) / Model/Nickname(팝업) / Version* / Period* */}
-          {/* Material(txtItemId) — 팝업 검색(btnItemId → MaterialByDivisionModal). AS-IS lblItemId.Text="Material". */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.MATERIAL, '_Material')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  className={commonStyles.popupSearchField}
-                  value={sc.modelId}
-                  disabled={noDivisionAuth}
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        appearance='outlined'
-                        priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' />}
-                        onClick={onModelSearch}
-                      />
-                    ),
-                  }}
-                  onChange={e => set({ modelId: e.target.value })}
-                />
-              )}
-            />
-          </Grid>
-          {/* Model/Nickname — TO-BE 변경: 텍스트 입력 → Material 과 동일 MaterialByDivisionModal 팝업(선택 NICK_NAME 저장).
-              자매 GlobalPsi 패턴 이식. onChange 수기 입력도 병행 허용. */}
+          {/* [3] Model/Nickname — TO-BE 변경: 텍스트 입력 → Material 과 동일 MaterialByDivisionModal 팝업(선택 NICK_NAME 저장).
+              자매 GlobalPsi 패턴 이식. onChange 수기 입력도 병행 허용. #1 지시(2026-11-18)로 Material 앞에 둔다. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -324,16 +304,47 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
               )}
             />
           </Grid>
-          {/* Version — AS-IS 체크리스트 단일 UI 이나 Gap 시 2건 필요(design 02 §7-3) → 다중 허용.
-              변경 시 Period 재산정(AS-IS CboVersion_SelectedIndexChanged → GetDayRange, G2) — setVersions 경유.
-              표시 규약(사용자 결정 2026-11-02): ALL 은 선택 가능(allOption=true, SELECT ALL 선택 시 전 항목 =
-              표준 SRCH-06)하되, AS-IS 초기값이 빈값(setListBox blnAllFlag=false, SCP0017.cs L1302)이므로
-              placeholder='' 로 미선택을 공백 표시한다(자매 SCP0018 과 동일 패턴 — 다중선택 기본 'ALL' 표시 억제).
-              미선택 조회는 필수값 게이트(versionNos.length===0)로 차단되므로 공백 초기값과 양립한다. */}
-          {/* 라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체. */}
-          {/* sortByLabel=false — WaterfallVer2_SCP 가 ORDER BY PLAN_START_YYYYMMDD DESC(최신 먼저, ora.py 실측
-              2026-11-04)로 내려주므로 label 오름차순(최신 맨 아래)으로 덮지 않고 서버 순서를 보존한다. */}
-          {multi(t('LBL01275', '_Ver.'), sc.versionNos, versionOptions, setVersions, undefined, true, true, '', false)}
+          {/* [3] Material(txtItemId) — 팝업 검색(btnItemId → MaterialByDivisionModal). AS-IS lblItemId.Text="Material". */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.MATERIAL, '_Material')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  className={commonStyles.popupSearchField}
+                  value={sc.modelId}
+                  disabled={noDivisionAuth}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
+                      />
+                    ),
+                  }}
+                  onChange={e => set({ modelId: e.target.value })}
+                />
+              )}
+            />
+          </Grid>
+          {/* [3] Electrode — enable=isEe(division), 비EE 면 disable+clear(design 01 L8). */}
+          {multi(
+            t(LBL.ELECTRODE, '_Electrode'),
+            sc.electrodeTypes,
+            electrodeOptions,
+            v => set({ electrodeTypes: v }),
+            !isEe
+          )}
+        </>
+      }
+      extraConditions={
+        <>
+          {/* [4] Period — 기간·집계 그룹. 표준 2줄(상시 8필드) 초과분이라 접기 영역에 배치(설계 02 §231 /
+              01 §3 근거). 주의: Period 는 필수값이나 Version 선택 시 자동 산정되어 접힌 상태로도 조회 가능. */}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}
@@ -341,53 +352,16 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
             label={t(LBL.PERIOD, '_Period')}
           />
-        </>
-      }
-      extraConditions={
-        <>
-          {/* 접기 영역 — Row2(Bucket / Line / 체크박스 Sum·All·Gap) + UOM(조건부).
-              SRCH-02(size 3 기준 8칸 초과 → extraConditions 분리) · 설계 02 §5 / 05 runtime-parity 근거.
-              필수값(Division·OpGroup·Version·Period)과 자주 쓰는 조건은 위 conditions 에 상시 노출. */}
-          {/* Bucket 변경 = AS-IS InitSpread_2 → InitSheet: 그리드(데이터+헤더) 비우고 재조회 요구(setBucket). */}
+          {/* [4] Bucket 변경 — 비ISO(Daily/Weekly/Monthly)는 재조회 없이 그 자리에서 re-pivot(SCP0013 이식),
+              WeeklyISO 경계(진입/이탈)만 그리드 초기화(재조회 요구). 분기는 store setBucket 이 처리. */}
           {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
             setBucket(v as BUCKET_TYPE)
           )}
-          {multi(t(LBL.LINE, '_Line'), sc.lineIds, lineOptions, v =>
-            set({ lineIds: v })
-          )}
-          <Grid size={3} className={commonStyles.customGrid}>
-            <div className={commonStyles.customCheckbox} style={{ width: '100%' }}>
-              {/* 체크박스를 size=3 셀 가로 중앙에 배치(사용자 지정). */}
-              <Stack
-                direction='row'
-                spacing={2}
-                alignItems='center'
-                justifyContent='center'
-                sx={{ width: '100%' }}
-              >
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-                {/* All(전체기간) — 토글 시 AS-IS ChkAll_CheckedChanged 등가로 그리드 비움(재조회 요구, G1). */}
-                <Checkbox
-                  labelText={t(LBL.ALL, '_All')}
-                  checked={sc.chkAll}
-                  onChange={checked => setChkAll(checked)}
-                />
-                <Checkbox
-                  labelText={t(LBL.GAP, '_Gap')}
-                  checked={sc.chkGap}
-                  onChange={checked => set({ chkGap: checked })}
-                />
-              </Stack>
-            </div>
-          </Grid>
+          {/* [5] Sum·All·Gap 체크박스는 그리드 건수 오른쪽(SubTitle afterCount)으로 이동(사용자 지시 2026-11-18,
+              SCP0013 동형). All 토글의 그리드 비움(재조회 요구)은 setChkAll 그대로 유지. */}
 
-          {/* UOM(조건부) — AS-IS RefreshUOM: EE Division + OperationGroup='E' 일 때만 노출(lciUOM.Visibility).
-              clbUOM(CheckedListBox 단일선택) → single 콤보. 선택값은 조회결과 UOM 컬럼 클라 필터(ApplyUOM, 재조회 없음).
-              Row2 에 Bucket/Line/체크박스와 같은 Grid size={3} 셀로 정렬(사용자 지정 — 체크박스 size 3 축소로 자리 확보). */}
+          {/* [5] UOM(조건부) — AS-IS RefreshUOM: EE Division + OperationGroup='E' 일 때만 노출(lciUOM.Visibility).
+              clbUOM(CheckedListBox 단일선택) → single 콤보. 선택값은 조회결과 UOM 컬럼 클라 필터(ApplyUOM, 재조회 없음). */}
           {uomVisible &&
             single(t(LBL.UOM, '_UOM'), sc.uom, [...UOM_OPTIONS], v => set({ uom: v }))}
         </>

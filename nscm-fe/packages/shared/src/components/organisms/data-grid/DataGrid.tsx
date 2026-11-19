@@ -65,6 +65,7 @@ import {
   type NumberInputRule,
   parseComboFilterBindings,
   rebindFilterColumns,
+  resolveRowComboCode,
   restoreGridFilter,
   restoreGridSort,
   revertRowChanges,
@@ -107,6 +108,12 @@ import {
 import { useRowParamCombos } from './useRowParamCombos';
 
 const initialIndexRowHeaderWidth = 50;
+
+// 그리드 셀 콤보 드롭다운에 한 번에 보이는 항목 수.
+// wijmo 는 _EditHandler._createListBox 에서 maxHeight 를 `renderHeight * _LB_PAGE_SIZE(=4)` 로
+// 고정한다. 아래 _createListBox 오버라이드에서 이 값으로 다시 늘린다.
+const GRID_COMBO_DROPDOWN_ROWS = 8;
+const WIJMO_DEFAULT_DROPDOWN_ROWS = 4;
 
 /**
  * 그리드 셀 콤보 드롭다운의 휠 스크롤을 항목 단위로 바꾼다.
@@ -437,7 +444,16 @@ const installComboCaseInsensitiveSearch = () => {
     const listBox = originalCreateListBox.call(this) as {
       selectedIndex: number;
       itemsSource?: unknown[];
+      maxHeight?: number | null;
     };
+    // 드롭다운에 보이는 항목 수를 기본 4줄에서 GRID_COMBO_DROPDOWN_ROWS 줄로 늘린다.
+    //   wijmo 가 maxHeight = renderHeight * 4 로 잡아 두므로, 한 줄 높이(현재 maxHeight / 4)를
+    //   되살려 원하는 줄수만큼 다시 곱한다. maxHeight setter 가 hostElement.style.maxHeight 를
+    //   갱신한다(값이 없으면=콤보 아님 건너뜀).
+    if (listBox && typeof listBox.maxHeight === 'number' && listBox.maxHeight > 0) {
+      const rowHeight = listBox.maxHeight / WIJMO_DEFAULT_DROPDOWN_ROWS;
+      listBox.maxHeight = rowHeight * GRID_COMBO_DROPDOWN_ROWS;
+    }
     if (listBox && listBox.selectedIndex < 0 && Array.isArray(listBox.itemsSource)) {
       const typed = this._edt?.value;
       if (typed) {
@@ -1517,6 +1533,44 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
       event.data = '';
     };
     grid.pastingCell.addHandler(clearOutOfListComboOnPaste as never);
+
+    // 드롭다운으로 고른 콤보 값이 전역 첫 코드로 커밋되는 것을 그 행 후보 코드로 바로잡는다.
+    //   Wijmo DataMap 의 표시명->코드 역변환(getKeyValue)은 컬럼 전역 색인 first-CODE-wins 라,
+    //   서로 다른 코드가 같은 표시명을 쓰면(행/Division 맥락만 다른 경우) 드롭다운엔 그 행 후보만
+    //   떠도 커밋 코드는 전역 첫 코드가 될 수 있다(사용자가 고른 것과 다른 코드 저장). resolveRowComboCode
+    //   가 그 행 후보 기준으로 되맞춘다 — 붙여넣기 경로(clearOutOfListComboOnPaste)의 커밋 대응판이다.
+    //   아래 clearStaleCombo·registerRowParam·queueRowParamReval 보다 먼저 걸어야 그 cascade 들이
+    //   바로잡힌 코드를 본다. EditTracker 직후라 최초 원본(편집 전)이 이미 기록돼 storeChange 가 M 상태를
+    //   정확히 유지한다(동명 교정이 원본과 같아지면 자동으로 수정표시가 풀린다).
+    const correctComboCommitHandler = (sender: TFlexGrid<T>, event: { row: number; col: number }) => {
+      const binding = sender.columns[event.col]?.binding ?? '';
+      if (!binding) return;
+      const config = layoutAppliedRef.current.find(column => column.colNm === binding);
+      if (!config || config.cellCtrlObjTpCd !== CELL_CONTROL_TYPE.COMBO) return;
+      const row = sender.rows[event.row]?.dataItem as WijmoRowItem | undefined;
+      if (!row) return;
+
+      const committed = row[binding];
+      const insertId = insertComboId(config);
+      const corrected = resolveRowComboCode(
+        {
+          ...config,
+          dataMap: comboQueryMapRef.current[comboKeyOfColumn(config)],
+          insertDataMap: insertId ? comboQueryMapRef.current[insertId] : undefined,
+          rowParamRows: rowParamRowsRef.current[config.colNm],
+          insertRowParamRows: insertRowParamRowsRef.current[config.colNm],
+        },
+        row,
+        committed
+      );
+      if (corrected === undefined || corrected === safeString(committed).trim()) return;
+
+      editTracker.storeChange(row as T, binding, committed, corrected);
+      row[binding] = corrected;
+      sender.invalidate();
+    };
+    grid.cellEditEnded.addHandler(correctComboCommitHandler as never);
+    grid.pastedCell.addHandler(correctComboCommitHandler as never);
 
     // 상위 콤보를 바꿔 하위 셀 값이 드롭다운 후보 밖이 되면 비운다 (컬럼 메타 ATTRIBUTE2 종속 기준).
     //   판정은 표시(getDataMap)와 같은 규칙 — "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값" 불변식.

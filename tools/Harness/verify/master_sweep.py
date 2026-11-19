@@ -237,6 +237,39 @@ def main(mid):
             tc.execute('SELECT COLUMN_NAME, DATA_TYPE FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=:t', t=tbl)
             ctypes = dict(tc.fetchall()); tcols = set(ctypes)
             pk = [c for c in pk if not re.match(r'DATE|TIMESTAMP', ctypes.get(c, ''))]  # 일시 키 컬럼은 등록 시점 값이라 대조에서 제외
+            pk_src = 'TO-BE PK·유일 인덱스'
+            if not pk:
+                # 2026-11-18 미검증 해소(SCP0096 SCM_ADM_MSG_M·SCM_MST_PLAN_DETAIL 'PK 없음'): TO-BE 에 PK·유일 인덱스가 없으면 AS-IS 표의 PK(없으면 첫 유일 인덱스)를 키로 쓴다
+                try:
+                    ac.execute("""SELECT c.name FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id=i.object_id AND ic.index_id=i.index_id
+                                  JOIN sys.columns c ON c.object_id=ic.object_id AND c.column_id=ic.column_id
+                                  WHERE i.object_id=OBJECT_ID(?) AND (i.is_primary_key=1 OR i.is_unique=1) AND ic.is_included_column=0
+                                  AND i.index_id=(SELECT TOP 1 index_id FROM sys.indexes WHERE object_id=OBJECT_ID(?) AND (is_primary_key=1 OR is_unique=1) ORDER BY is_primary_key DESC, index_id)
+                                  ORDER BY ic.key_ordinal""", (f'dbo.{tbl}', f'dbo.{tbl}'))
+                    apk = [r[0].upper() for r in ac.fetchall()]
+                except Exception:
+                    apk = []
+                pk = [c for c in apk if c in tcols and not re.match(r'DATE|TIMESTAMP', ctypes.get(c, ''))] if apk and all(c in tcols for c in apk) else []
+                pk_src = 'AS-IS PK·유일 인덱스(TO-BE 에 없음)'
+            if not pk:
+                # 2026-11-18 미검증 해소(SCP0096 SCM_ADM_MSG_M): AS-IS 에 같은 표가 없으면 키가 없어도 대조 대상 아님 — 'PK 없음' 오류보다 먼저 본다
+                ac.execute('SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ?', tbl)
+                if not ac.fetchone()[0]:
+                    res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': 'NA', 'why': 'AS-IS 에 같은 이름 표 없음(TO-BE 신설·이름 변경) · 키 정의 없음'})
+                    continue
+                # 2026-11-18 미검증 해소(SCP0096 SCM_MST_PLAN_DETAIL): 양쪽 모두 PK·유일 인덱스가 없으면 첫 일반 인덱스 컬럼 조합을 식별 키로(중복 허용 · 키 조합 존재 대조)
+                tc.execute("""SELECT C.COLUMN_NAME FROM ALL_INDEXES I JOIN ALL_IND_COLUMNS C ON C.INDEX_OWNER=I.OWNER AND C.INDEX_NAME=I.INDEX_NAME
+                              WHERE I.TABLE_NAME=:t AND I.INDEX_NAME=(SELECT MIN(INDEX_NAME) FROM ALL_INDEXES WHERE TABLE_NAME=:t2) ORDER BY C.COLUMN_POSITION""", t=tbl, t2=tbl)
+                ix = [r[0] for r in tc.fetchall()]
+                if not ix:
+                    try:
+                        ac.execute("""SELECT c.name FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id=i.object_id AND ic.index_id=i.index_id JOIN sys.columns c ON c.object_id=ic.object_id AND c.column_id=ic.column_id
+                                      WHERE i.object_id=OBJECT_ID(?) AND i.index_id=(SELECT MIN(index_id) FROM sys.indexes WHERE object_id=OBJECT_ID(?) AND index_id>0) AND ic.is_included_column=0 ORDER BY ic.key_ordinal""", (f'dbo.{tbl}', f'dbo.{tbl}'))
+                        ix = [r[0].upper() for r in ac.fetchall()]
+                    except Exception:
+                        ix = []
+                pk = [c for c in ix if c in tcols and not re.match(r'DATE|TIMESTAMP', ctypes.get(c, ''))]
+                pk_src = '일반 인덱스 컬럼(PK·유일 인덱스 없음 · 중복 허용)'
             if RX_HIST.search(tbl):
                 res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': 'NA', 'why': '이력·로그 표 — 기준정보 아님'})
                 continue
@@ -258,13 +291,19 @@ def main(mid):
             elif not set(pk) <= acols:
                 res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': 'NA', 'why': f"PK 컬럼 {sorted(set(pk) - acols)} AS-IS 에 없음"})
             else:
-                ac.execute(f"SELECT {','.join('[' + c + ']' for c in pk)} FROM dbo.[{tbl}] WITH(NOLOCK)")
+                # 2026-11-18(SCP0096 N1 EG-d98bd5c6): AS-IS 개발 DB 에 시험용으로 넣은 행(ATTRIBUTE* = 'ASISLIVE_TEST_…' 표시)은 이관 대상이 아니므로 대조에서 뺀다
+                _tc = sorted(c for c in acols if re.fullmatch(r'ATTRIBUTE\d+', c))
+                _tw = (' WHERE NOT (' + ' OR '.join(f"ISNULL(CONVERT(nvarchar(100),[{c}]),'') LIKE 'ASISLIVE_TEST%'" for c in _tc) + ')') if _tc else ''
+                ac.execute(f"SELECT {','.join('[' + c + ']' for c in pk)} FROM dbo.[{tbl}] WITH(NOLOCK){_tw}")
                 akeys = {tuple(norm_key(v) for v in r) for r in ac.fetchall()}
+                _ntest = 0
+                if _tw:
+                    ac.execute(f"SELECT COUNT(*) FROM dbo.[{tbl}] WITH(NOLOCK) WHERE ({_tw[12:-1]})"); _ntest = ac.fetchone()[0]
                 if is_surrogate(pk, akeys | tkeys):
                     res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': 'NA', 'why': f'단일 숫자 대리키 {pk[0]} — DB 사이 값 대조 의미 없음'})
                     continue
                 r, why = judge_keys(tbl, akeys, tkeys, scope=lits)
-                res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': r, 'why': why})
+                res.append({'kind': 'MASTER_KEY', 'target': tbl, 'result': r, 'why': why + ('' if pk_src.startswith('TO-BE') else f' · 키 = {pk_src} {pk}') + (f' · AS-IS 시험 표시 행(ASISLIVE_TEST) {_ntest}행 제외' if _ntest else '')})
         res += active_rows(tc, cands)
     p = os.path.join(ROOT, 'Doc', 'verify', mid, 'master_sweep.csv')
     os.makedirs(os.path.dirname(p), exist_ok=True)

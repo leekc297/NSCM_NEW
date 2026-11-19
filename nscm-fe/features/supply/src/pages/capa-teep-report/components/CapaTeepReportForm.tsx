@@ -26,12 +26,12 @@ interface Props {
 /**
  * 조회조건 9필드 (design 02 §1 C1~C11 / §5.2).
  *
- * 단 구성(hook #52 / #83) — 12-column Grid 에서 `size=3` 기준 행당 4필드, 합계 24 = 정확히 2단이고
- * 3단째부터 `extraConditions` 로 분리한다(02 §5.2). **자체 expand state·자체 토글 버튼을 만들지 않는다**
- * — `SearchArea` 의 `extraConditions` prop 만 쓴다(축소 시 DOM 미생성).
- *   `conditions`      1단 = Operation group(3) · Div.(3) · Plan Month(3) · Ver.+Plan Type(3) = 12
- *   `conditions`      2단 = Site(3) · Plant(3) · Building(3) · Line(3)                       = 12
- *   `extraConditions` 3단 = Operation(3) · Line Type(3)                                       = 6
+ * 단 구성 — 조회조건이 2단뿐이라 접기/펼치기(`extraConditions`)를 쓰지 않고 전건 상시 노출한다
+ * (사용자 지시 2026-11-18 — 종전 3단째 extraConditions 분리를 폐기). 3단이었던 Operation / Line Type 도
+ * `conditions` 로 합쳐 항상 보인다.
+ *   `conditions` 1단 = Operation group(3) · Div.(3) · Plan Month(3) · Ver.+Plan Type(3) = 12
+ *   `conditions` 2단 = Site(3) · Plant(3) · Building(3) · Line(3)                       = 12
+ *   `conditions` 3단 = Operation(3) · Line Type(3)  (동적 가시성)                        = 6
  * Ver. 칸은 verSeq 콤보 + Plan Type 읽기전용 박스를 Box flex 50:50 으로 묶는다(AS-IS Designer 순서).
  *
  * 동적 가시성 2규칙의 **조건식 비대칭을 통일하지 않는다**(01 L-01/L-02 / goal S-3):
@@ -321,14 +321,10 @@ export const CapaTeepReportForm = ({ combos, onSearch, disabled }: Props) => {
               )}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* 3단 — Operation(동적) / Line Type(동적). Plan Type 은 Ver. 칸으로 이동했다(AS-IS Designer
-              순서 = Version 콤보 직후, 위 1단 Ver. 주석 참조).
-              조건부 가시성은 `extraConditions` 안에서 조건부 렌더로 재현한다 — 축소 시 DOM 미생성
-              (hook #52 §7). 숨겨도 선택값은 유지되며 GET 파라미터에 계속 실린다(goal D-6 / V-05). */}
+          {/* Operation(동적) / Line Type(동적) — 종전 extraConditions(3단)였으나 조회조건이 2단뿐이라
+              접기/펼치기(extraConditions)를 없애고 상시 노출(conditions)로 합친다(사용자 지시 2026-11-18).
+              조건부 가시성(showOperation/showElectrodeType)은 그대로 유지 — 숨겨도 선택값은 GET 파라미터에
+              계속 실린다(goal D-6 / V-05). */}
           <Grid size={3}>
             {showOperation && (
               <FormItem

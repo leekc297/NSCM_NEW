@@ -14,7 +14,7 @@ interface Props {
 }
 
 /**
- * 하단 액션 버튼바 (design 01 §1.3 / V-03) — **노출 버튼은 정확히 2개다**.
+ * 액션 버튼바 (design 01 §1.3 / V-03) — **노출 버튼은 정확히 2개다**. 폼 우측 위에 배치된다(2026-11-12).
  *   `Save Draft`(btnSave) · `Delete`(btnDel) · `Add Date`(btnAdd) · 날짜입력(dtDate) 4건은
  *   Designer `Visibility=Never`(+ 일부는 `Visible=false`) 인 2축 dead 라 이식하지 않는다(Δ4).
  *   되살릴 유일한 경로 `SetButtonVisual(bool)` 도 호출 0건(F4)이다.

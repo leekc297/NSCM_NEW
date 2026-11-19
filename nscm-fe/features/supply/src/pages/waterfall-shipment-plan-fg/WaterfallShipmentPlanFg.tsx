@@ -16,6 +16,7 @@ import {
   type ColumnLayoutRow,
 } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { WaterfallShipmentPlanFgForm } from './components/WaterfallShipmentPlanFgForm';
@@ -24,6 +25,8 @@ import { useWaterfallShipmentPlanFgStore } from './useWaterfallShipmentPlanFgSto
 import {
   ADMIN_COLUMN_SHEET_NAME,
   ADMIN_MEASURE_SHEET_NAME,
+  BUCKET_TYPE,
+  CONDITION_NOT_SAVED,
   LBL,
   MAX_PERIOD_DAYS,
   MENU_ID,
@@ -69,6 +72,13 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
   const noDivisionAuth = useWaterfallShipmentPlanFgStore(s => s.noDivisionAuth);
   // F6 저장조건 복원(진입 1회, basic-check #3) — searchParam 저장분을 searchParams 로 되살린다.
   const restoreSearchConditions = useWaterfallShipmentPlanFgStore(s => s.restoreSearchConditions);
+
+  // F6 조회조건 저장 payload — Version 은 저장 제외(AS-IS ConditionNotUseList, CONDITION_NOT_SAVED).
+  //   SubTitle 은 받은 searchParam 전체를 personalizeCondition 으로 저장하므로, 제외 키를 여기서 뺀다.
+  const conditionSaveParam = useMemo(
+    () => Object.fromEntries(Object.entries(sc).filter(([key]) => !CONDITION_NOT_SAVED.includes(key))),
+    [sc]
+  );
 
   const [openModel, setOpenModel] = useState(false);
   const [openProject, setOpenProject] = useState(false);
@@ -265,7 +275,7 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
         excelFileName='WaterfallShipmentPlanFg'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        searchParam={sc}
+        searchParam={conditionSaveParam}
         // #120 아이콘 순서 = (환율 없음) → Column Set → Measure (design 01 §7 hook #120, §4e #1/#2).
         customButtons={[
           {
@@ -283,6 +293,17 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
             buttonLabel: '',
           },
         ]}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013
+        //   동형). WeeklyISO 버킷이면 합산 불필요라 숨긴다(종전 showSum 조건 유지, design 01 D1).
+        afterCount={
+          sc.bucket !== BUCKET_TYPE.WEEKLY_ISO ? (
+            <Checkbox
+              labelText={t(LBL.SUM, '_Sum')}
+              checked={sc.chkSum}
+              onChange={checked => setSearchParams({ chkSum: checked })}
+            />
+          ) : undefined
+        }
       />
 
       <div className={styles.gridWrapper}>

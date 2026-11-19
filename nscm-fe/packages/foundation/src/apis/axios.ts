@@ -145,6 +145,27 @@ class AxiosConfig {
     return response.data;
   }
 
+  /**
+   * callProc 의 스트리밍 변형 — BE `/call-proc-stream`(GeneralController) 로 보낸다. 응답 형태는
+   * call-proc 와 동일한 `{code,message,result}` 라 소비부는 바꿀 필요가 없다. 차이는 서버 측:
+   * OUT 커서를 `ResultSet -> JSON` 단일 패스로 흘려 보내고 fetchSize 를 1000 으로 올린다
+   * (구 경로는 MyBatis 가 전행을 List 로 버퍼링 + Oracle defaultRowPrefetch=100 → 대용량에서
+   * DB 왕복 폭증·BE 힙 압박). **대용량 결과 시트에만 opt-in** 으로 쓴다(SCP0125 init = 품목
+   * 검증용 전건 ~415K행). 주의: 이 엔드포인트는 `@SystemLog` 미부착이라 BUTTON 로그가 남지 않는다.
+   */
+  async callProcStream<M extends MenuId, S extends SheetName<M>>(
+    menuId: M,
+    sheetName: S,
+    procedureAction: string,
+    params?: ProcRequest<M, S>
+  ): Promise<ApiResponse<ProcResponse<M, S>>> {
+    const response = await this.post<ProcResponse<M, S>, ProcRequest<M, S>>(
+      `${menuId}/${sheetName}/${procedureAction}/call-proc-stream`,
+      params
+    );
+    return response.data;
+  }
+
   async callMutationProc<M extends MenuId, S extends SheetName<M>, RS extends ResponseKeys<M, S>>(
     menuId: M,
     sheetName: S,

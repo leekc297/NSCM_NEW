@@ -9,7 +9,6 @@ import { GridAction } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { ProgressIndicator } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ElectrodeItemByDivisionModal } from './components/modals/ElectrodeItemByDivisionModal';
@@ -103,7 +102,7 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
   const [openModel, setOpenModel] = useState(false);
   const [openMaterialCell, setOpenMaterialCell] = useState(false);
 
-  const { data, refetch, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     tabId,
@@ -409,14 +408,10 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
           그대로 두되 화면은 쓰지 않는다(USER_CHECK 행은 그 권한체크 API 라우팅으로 계속 쓰인다). */}
 
       <div className={styles.gridWrapper}>
-        {/* 조회 중 로딩 — AS-IS FindData 의 ProgressForm(cs:291,298,349) 등가(design 01 R4).
-            직전 구현은 "공용 isFetching 으로 대체"라고 적어 두고 실제로는 아무 표시가 없었다(A08). */}
-        <ProgressIndicator
-          shape='circular'
-          apprearance='infinite'
-          open={isFetching}
-          placement='parent'
-        />
+        {/* 조회 중 로딩 — AS-IS FindData 의 ProgressForm(cs:291,298,349) 등가(design 01 R4)는
+            공용 MDIContainer 글로벌 스피너(useIsBusy([tabId]) → 이 화면의 SEARCH 쿼리를 집계)로
+            이미 표시된다. 화면이 ProgressIndicator 를 추가로 띄우면 글로벌 스피너와 겹쳐 동그라미
+            두 개가 뜬다(A08 노트의 "공용 isFetching 미표시" 전제가 틀렸음). 화면 전용 스피너 제거. */}
         <ShipmentMasterElectrodeGrid
           rows={rows}
           gridRef={gridRef}

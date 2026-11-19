@@ -94,12 +94,17 @@ export const useWorkbenchData = (tabId: string): WorkbenchData => {
   const isUcDivision = divisionId === DIVISION_CODE.UC;
 
   // ── init(GET_SEARCH_INFO) — 화면당 1회. Division 변경 시 재호출하지 않는다(W23).
+  //   저장 검증용 전건 커서(O_RC5 품목 ~415K행 · O_RC6 프로젝트)가 섞여 있어 응답이 수십만 행
+  //   규모다. 구 `/call-proc`(MyBatis 버퍼링 + Oracle prefetch 100 → 왕복 ~4천 회)는 화면 오픈이
+  //   매우 느리므로, 이 커서에 한해 `stream: true`(`/call-proc-stream`, fetchSize 1000 + 서버
+  //   스트리밍)로 조회한다. 5탭 lazy 조회는 결과가 작아 기본 경로를 유지한다.
   const { data: initData } = useTabProcQuery<MENU_ID, SHEETS.INIT>({
     menuId: MENU_ID,
     sheetName: SHEETS.INIT,
     tabId,
     filters: INIT_FILTERS,
     enabled: true,
+    stream: true,
   });
 
   // ── 5탭 lazy 조회. 그 탭 filters 가 없으면 미발사 = 빈 그리드 유지(hook #81 / V27).

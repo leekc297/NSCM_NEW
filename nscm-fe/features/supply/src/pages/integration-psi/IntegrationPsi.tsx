@@ -4,7 +4,7 @@ import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
-import type { HotkeyConfig, PageProps } from '@foundation/models';
+import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction, GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -21,13 +21,15 @@ import { IntegrationPsiGrid } from './components/IntegrationPsiGrid';
 import {
   ADMIN_GROUP_NAME,
   COMBO,
+  DIVISION_ESS,
   LINE_ID_EMPTY,
   MEASURE,
   MENU_ID,
   MSG,
   MULTI_CHILD_ITEM_LOOKUP,
+  PI_ADMIN_GROUP_NAME,
+  PLANNER_GROUP_NAME,
   REQUIRED_SAVE_FIELDS,
-  SAVE_DATE_ALIAS,
   SHEETS,
 } from './integration-psi.constants';
 import type { MainRow, SaveMode } from './integration-psi.types';
@@ -113,6 +115,10 @@ const hasDuplicateInsertRow = (source: Record<string, unknown>[]): boolean => {
   return source.some(r => sVal(r.CRUD_TYPE) === 'I' && saved.has(dupKeyOf(r)));
 };
 
+// 그리드 gotFocus 용 no-op — 렌더마다 새 화살표(`() => undefined`)를 내리면 그 참조가 gotFocus prop 으로
+//   바뀌어 memo(DataGrid) 가 매 렌더 재렌더된다. 하는 일이 없으므로 모듈 상수로 고정해 참조를 안정화한다.
+const NOOP = (): void => undefined;
+
 // AS-IS GSCM.SCP.Forms.UIL Analysis/SCP0111_IntegrationPSI — 조회조건 패널(pnlCondition) + 단일 PSI
 //   그리드(spdMain) + 서버측 동적 PIVOT. 설계: .atlas/gscm-design/SCP0111/design/00~03(DB 실측 PASS).
 //   레이아웃/버튼 판정: design/01_layout.md §2(R1~R14)·§2.1. 상세 매핑: __asis-mapping__.md(후속).
@@ -169,18 +175,38 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
   // GET 응답 grid PIVOT 데이터 = O_RC(표준 key 'o_rc1'). O_RESULT_CURSOR(상태봉투)는 무시(design 03 §2-C).
   const rows = useMemo<MainRow[]>(() => (data as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [data]);
 
+  // ESS(div82) 신규행 LINE_ID 셀콤보 분기 A 원천 — P_SCP0111_GET_ESS_PACK_LINE(IN 0개) call-proc 조회.
+  //   SP·API·버튼·그룹권한·PROC 매핑이 전부 DB 반영 실측(2026-11-17 ora.py): SCM_ADM_API_M/MNU_BTN_MPG_M
+  //   essPackLine/SEARCH(USE_YN='Y'), SCM_ADM_PROC_M o_rc1 CURSOR. 라우트 'SCP0111/essPackLine/SEARCH/call-proc'.
+  //   반환 o_rc1 = {DIVISION_ID, SCM_SITE_ID, SITE_DESCRIPTION, COMPANY_ID, CODE(=LINE_ID), NAME(=LINE_NAME),
+  //   OPERATION_ID}(div82·VALID_YN='Y' 고정). 콤보는 이 풀을 **현재행 COMPANY_ID** 로 필터한다(분기 A).
+  //   division 82 일 때만 조회한다 — 그 외 division 은 분기 B(LineByOperationPlantId_SCP_ALL)만 쓰므로 불필요.
+  const { data: essPackLineData } = useTabProcQuery<MENU_ID, 'essPackLine'>({
+    menuId: MENU_ID,
+    sheetName: 'essPackLine',
+    tabId,
+    enabled: sc.divisionId === DIVISION_ESS,
+  });
+  const essPackLineRows = useMemo<ComboResponse[]>(
+    () => (essPackLineData as { o_rc1?: ComboResponse[] })?.o_rc1 ?? [],
+    [essPackLineData]
+  );
+
   // 권한(ADMIN / SCM PI Admin / SCP Planner) = AS-IS NowGroupID 3분기. TO-BE 는 USER_ID 기준이어야 하며
   //   (hook#128 auth-by-userid-not-groupid), session.groupId(단일 유령 필드) 는 참조 금지. 대신 session.groups
   //   (USER_GR_NM 배열, nscm-be User.xml retrieveUserGroups)로 보유 그룹을 판정한다 — plan-control /
   //   sales-site-project-model 등 전환 선례와 동일 규약(그룹 "이름"으로 비교, ID 아님).
-  //   isAdmin = NowGroupID=='ADMIN' 재현 → 신규행 Insert V1(빈행·DIVISION_ID만) + BOH/정보열 편집 + ADMIN 저장.
-  //   isPiAdmin/isPlanner(SCM PI Admin / SCP Planner)는 BOH 편집 파리티 축이라 별도 검증 전까지 false 유지.
+  //   세 그룹명은 DB 실측(SCM_ADM_USER_GR_M, 2026-11-16): ADMIN→'System Administrator', 나머지 둘은 ID==NM.
+  //   - isAdmin  = NowGroupID=='ADMIN' 재현 → 신규행 Insert V1(빈행·DIVISION_ID만) + 전열/BOH 편집 + ADMIN 저장.
+  //   - isPiAdmin/isPlanner = AS-IS BOH 편집 2-분기(cs:564-565)의 나머지 축 — INV(measureFlag=6) 행 BOH 편집만
+  //     추가 허용한다. 관리컬럼 노출·ADMIN 저장·Insert V1 은 isAdmin 전용이다(AS-IS SetVisibleSheetColumns 가
+  //     ADMIN 분기 cs:594 에서만 호출 / 저장·Insert 분기도 nowGroupID=='ADMIN' 단독 — hasEditAuth=isAdmin).
   const sessionGroups = useSessionStore(s => s.session.groups);
   const auth = useMemo<AuthContext>(
     () => ({
       isAdmin: (sessionGroups ?? []).includes(ADMIN_GROUP_NAME),
-      isPiAdmin: false,
-      isPlanner: false,
+      isPiAdmin: (sessionGroups ?? []).includes(PI_ADMIN_GROUP_NAME),
+      isPlanner: (sessionGroups ?? []).includes(PLANNER_GROUP_NAME),
     }),
     [sessionGroups]
   );
@@ -239,7 +265,7 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   `SCPPlanPeriod_SCP` 등록 SQL 실측: `SELECT HORIZON_START_DATE, HORIZON_END_DATE, PLAN_CYCLE, ...
   //    FROM SCM_MST_PLAN WHERE PLAN_NAME = @planName AND DIVISION_ID = @divisionId AND PLAN_CYCLE = 'WEEKLY'`
   //   → 파라미터 키는 `planName`/`divisionId` 와 정확히 같아야 치환된다(BE makeComboQuery 는 raw 치환).
-  //   **저장 경로 전용**이다 — 화면 기간 입력은 공통 PeriodRangePicker(자유 달력)라 상한을 쓰지 않는다.
+  //   **저장 경로 전용**이다 — 화면 기간 입력은 표준 PeriodField mode='month'(월 피커)라 상한을 쓰지 않는다.
   //   종전에는 "렌더된 pivot 컬럼"(=화면 조회기간)을 삽입 월로 썼는데, 그러면 Plan 전체 개월수보다 좁아
   //   **행이 모자라게 등록된다**(실측: 20개월 Plan 에 6개월만 생성 — 사용자 신고 2026-10-13).
   const [planPeriodRows] = useTabComboQueries({
@@ -270,6 +296,8 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         fixedBindings: fixedBindingSet(staticColumns),
         planStartYyyymmdd: sc.planStartYyyymmdd,
         horizonEndYyyymmdd,
+        // ADMIN 저장은 수정셀 modiQty 를 절대값으로 보낸다(일반은 가감값) — SP 비대칭 계약. unfoldSaveCells 주석 참고.
+        isAdmin: auth.isAdmin,
       });
 
     // OPERATION_GROUP NAME->CODE 역변환 실패 = 저장 차단(추측 코드 저장 금지, design 03 §4 cs:1207-1219).
@@ -418,19 +446,11 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.removeRow(grid, true);
   };
 
-  // F6 개인화 저장 payload — 공용 personalizeCondition 이 날짜키(planStartYyyymmdd/from·toYyyymm)를
-  //   EXCLUDED_DATE_PARAM(gridAction.ts L650)으로 저장에서 제외하므로, 날짜 3종만 정규식을 피하는 별칭
-  //   (...Ymd)으로 투영해 넘긴다. 복원은 useIntegrationPsiStore.restoreSearchConditions 가 같은 별칭을
-  //   원래 키로 역매핑한다. 사용자 지시(2026-10-19): PlanDate·Period 도 F6 저장/복원 대상(SCP0031 선례 1:1).
-  const savedParam = useMemo(() => {
-    const { planStartYyyymmdd, fromYyyymm, toYyyymm, ...rest } = sc;
-    return {
-      ...rest,
-      [SAVE_DATE_ALIAS.planStartYyyymmdd]: planStartYyyymmdd,
-      [SAVE_DATE_ALIAS.fromYyyymm]: fromYyyymm,
-      [SAVE_DATE_ALIAS.toYyyymm]: toYyyymm,
-    };
-  }, [sc]);
+  // F6 개인화 저장 payload — 공용 표준을 따른다: searchCondition 을 그대로 넘기면 공용 personalizeCondition 이
+  //   날짜키(planStartYyyymmdd/from·toYyyymm)를 EXCLUDED_DATE_PARAM(gridAction.ts L660)으로 **저장에서 제외**한다.
+  //   "PlanDate·조회구간(Period)은 조회조건 저장 제외"가 공통 원칙이고 AS-IS ConditionNotUseList(cboPlanDate 제외)
+  //   와도 일치한다(사용자 지시 2026-11-16 — 2026-10-19 의 별칭 저장 우회 철회). 재진입 시 PlanDate·Period 는
+  //   Form 의 기본선택 effect 가 다시 도출한다. 자매 Capa/OptCapa 도 raw searchParams 를 그대로 넘긴다(표준 파리티).
 
   const hotkeyConfig: HotkeyConfig = {
     // 조회는 무해하므로 항상 허용(design 01 R13).
@@ -469,18 +489,16 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='IntegrationPsi'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        searchParam={savedParam}
+        searchParam={sc}
       />
 
       {/* 영역3 그리드 — 고정 24열(admin 메타) + 서버측 동적 YYYYMM PIVOT + 편집잠금 L1~L23 + 조건색 C1/C2 +
           LINE_ID 신규행 셀콤보(§2-D). division/auth 조합으로 셀 단위 잠금을 beginningEdit 에서 재현(편집모드 없음).
           essPackLineRows(분기 A ESS Pack Line): 원천이 CMBO 아닌 SP(P_SCP0111_GET_ESS_PACK_LINE, IN 0개 +
-          O_RC/O_RESULT_CURSOR)라 콤보 훅으로 못 붙는다. NSCM proc 호출은 {menuId}/{sheet}/{action}/call-proc
-          3-키 라우팅이고 BE 가 그 3-키로 SCM_ADM_PROC_M/API 매핑을 찾아 SP 를 실행하는데, 이 SP 는 (sheet,action)
-          매핑에 미등록이다(05_register.sql: SEARCH/SAVE/SAVEDETAIL 3종만 API 배선, GET_ESS_PACK_LINE 은 미배선).
-          즉 FE 단독 배선 불가 — API_M/버튼(별도 action)/그룹권한 DB 등록(메타소유자 채번·배포)이 선행돼야 한다.
-          확정 전까지 빈 배열 유지(분기 A 후보 0건, design 03 §6 확인필요). 분기 B(LineByOperationPlantId_SCP_ALL)는
-          그리드 내부에서 직접 로드한다. */}
+          O_RC/O_RESULT_CURSOR)라 콤보 훅이 아니라 useTabProcQuery(essPackLine/SEARCH)로 조회한다. BE 는
+          {menuId}/{sheet}/{action}/call-proc 3-키로 SCM_ADM_PROC_M/API 매핑을 찾아 SP 를 실행하는데, 이 SP 의
+          (sheet=essPackLine, action=SEARCH) 매핑·그룹권한이 2026-11-17 DB 반영 실측으로 확인됐다(design U-1 해소).
+          division 82 일 때만 조회(위 essPackLineRows). 분기 B(LineByOperationPlantId_SCP_ALL)는 그리드 내부 로드. */}
       {/* fromYyyymm/toYyyymm — 조회 전에도 기간 월이 컬럼으로 생성되도록 검색조건의 **현재 선택값**을 넘긴다.
           AS-IS 는 Form_Load → CreateSpread → InitSpread → SetCalendar(cs:174/303/334)로 데이터와 무관하게
           From/To 월 컬럼을 먼저 만들고, PlanDate 변경(cs:1862)·조회(cs:853)마다 재생성한다. */}
@@ -496,14 +514,23 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         auth={auth}
         multiChildItems={multiChildItems}
         measures={staticMeasures}
-        essPackLineRows={[]}
-        onDerivMismatch={() =>
-          setToast({
-            type: 'warning',
-            message: t(MSG.DERIV_MISMATCH, '수량 불일치'),
-          })
-        }
-        onFocus={() => undefined}
+        essPackLineRows={essPackLineRows}
+        onDerivMismatch={detail => {
+          // AS-IS MessageHelper.GMessageBox(cs:2051-2056 / 2120-2125) 파리티 — 수정 즉시 뜨는 블로킹 경고창.
+          //   검증 실패 범주라 Toast 가 아니라 Alert 가 표준(규칙 UI-09). 저장은 막지 않는다(읽고 확인).
+          //   머리말은 MSG.DERIV_MISMATCH(MSG01502) 문구, 상세 수치 줄은 AS-IS 라벨 그대로 조립한다.
+          const head = t(MSG.DERIV_MISMATCH, '수량 불일치');
+          const body =
+            detail.kind === 'D1'
+              ? `${detail.itemId} Prod plan Qty : ${detail.prodQty}\n` +
+                `${detail.counterpartId} In-house moving Qty : ${detail.inhouseQty}\n` +
+                `${detail.counterpartId} In-house moving Qty Should be ${detail.shouldBe}`
+              : `${detail.itemId} In-house moving Qty : ${detail.inhouseQty}\n` +
+                `${detail.counterpartId} Prod plan Qty : ${detail.prodQty}\n` +
+                `${detail.counterpartId} Prod plan Qty Should be ${detail.shouldBe}`;
+          setAlert({ type: 'alert', content: `${head}\n${body}` });
+        }}
+        onFocus={NOOP}
       />
 
       {/* Model/Nickname 팝업 — MaterialByDivisionModal(COM0013), 사용자 지시 2026-10-12.

@@ -1,0 +1,39 @@
+{
+ "ok": true,
+ "mode": "dry-run",
+ "stamp": "20261119_092604",
+ "areas_sel": "fe",
+ "be_login": [],
+ "tip": "0ea739ec5c88b8e77634873f5f346214646625b0",
+ "tip_info": "0ea739ec5 2026-11-18 18:13 Jeongyun Park fix(SCP0120): Active 'ALL' sentinel 정규화·Plan Group AS-IS 순서·Bulk Insert 팝업 다국어",
+ "base": "724a6155065f07664677fd7819e26033b806930a",
+ "ancestor": true,
+ "commits": 22,
+ "changed": 0,
+ "counts": {
+  "동일": 11
+ },
+ "actions": {
+  "none": 11,
+  "write": 0,
+  "merge": 0,
+  "delete": 0,
+  "keep": 0
+ },
+ "pending": 0,
+ "areas": {
+  "fe": {
+   "base": "724a6155065f07664677fd7819e26033b806930a",
+   "changed": 0,
+   "actions": {
+    "none": 11
+   },
+   "pending": 0,
+   "local_only": 0,
+   "env_keep": 0
+  }
+ },
+ "overwrite_local": true,
+ "local_only": 0,
+ "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261119_092604.md"
+}

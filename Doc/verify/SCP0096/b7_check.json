@@ -1,10 +1,56 @@
 {
  "menu_id": "SCP0096",
  "asis_id": "SCP0096",
- "generated": "2026-10-31 05:28:12",
+ "generated": "2026-11-19 09:28:19",
  "a": {
   "verdict": "NA",
-  "note": "저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음",
-  "targets": []
+  "note": "저장 SP SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP 대상 SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, SCP_MST_SHIPMENT_WORKING_DAY_OSP 와 콤보 원천 4종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT",
+   "SCP_MST_SHIPMENT_WORKING_DAY_OSP"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "Division*",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboInputValue",
+    "label": "Input Value",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboDayWeek",
+    "label": "Day of the week",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=PlantByDivisionOperOsp3 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   }
+  ]
  }
 }

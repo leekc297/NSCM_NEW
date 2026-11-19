@@ -14,7 +14,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { buildNoColumn, GridUtils, withRowNo } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
@@ -66,7 +66,10 @@ interface MaterialByDivisionModalProps {
   multiDivision?: boolean;
   /** 팝업 가로 폭(px, 옵션). */
   dialogSize?: number;
-  /** Operation Group 표시 라벨(옵션). 없으면 코드값 표시. SP 에는 코드가 넘어간다. */
+  /**
+   * Operation Group 표시 라벨 강제(옵션 override). 미지정이면 팝업이 operationGroup 코드를 OPERATION_GROUP
+   * 룩업으로 공통 해석해 이름을 표시한다(코드가 룩업에 없으면 코드 원문). SP 에는 항상 코드가 넘어간다.
+   */
   operationGroupLabel?: string;
 }
 
@@ -125,6 +128,21 @@ export const MaterialByDivisionModal = ({
     () => ({ ...searchParam, divisionId: mapElectrodeDivision(searchParam.divisionId) }),
     [searchParam]
   );
+
+  // Operation Group 표시 라벨(공통) — 넘어온 코드(searchParam.operationGroup)를 OPERATION_GROUP 룩업
+  //   (CODE→NAME)으로 해석해 이름(예 'P'→'Pack')을 보여준다. 호출 화면이 operationGroupLabel 을 넘기지
+  //   않아도 팝업이 전 화면 공통으로 라벨화한다(Division 필드가 콤보로 코드→이름을 보여주는 것과 동형).
+  //   룩업에 없는 코드(EE 변형 등)는 코드 원문으로 fallback(공백 방지), 명시 operationGroupLabel prop 이
+  //   오면 그 값을 최우선한다(하위호환 override). SP 로는 코드가 그대로 넘어가 조회 동작은 불변.
+  const [operationGroupRows] = useTabLookupQueries({ filters: ['OPERATION_GROUP'] });
+  const operationGroupName = useMemo(() => {
+    const code = searchParam.operationGroup ?? '';
+    if (!code) return '';
+    const hit = (operationGroupRows ?? []).find(
+      row => (row as Record<string, unknown>).CODE === code
+    ) as Record<string, unknown> | undefined;
+    return typeof hit?.NAME === 'string' && hit.NAME ? hit.NAME : code;
+  }, [operationGroupRows, searchParam.operationGroup]);
 
   const {
     data: itemData,
@@ -307,7 +325,7 @@ export const MaterialByDivisionModal = ({
                       <InputField
                         fullWidth
                         disabled
-                        value={operationGroupLabel ?? searchParam.operationGroup ?? ''}
+                        value={operationGroupLabel ?? operationGroupName}
                       />
                     )}
                   />

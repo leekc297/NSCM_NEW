@@ -59,7 +59,7 @@ interface Action {
   setVersions: (versionNos: string[]) => void;
   // 전체기간(chkAll) 토글 = 그리드 재구성 + 데이터 clear (AS-IS ChkAll_CheckedChanged, design 03 §2.5).
   setChkAll: (checked: boolean) => void;
-  // Bucket 변경 = 그리드 재구성 + 데이터 clear (AS-IS cboBucketType_SelectedIndexChanged → InitSpread_2 → InitSheet).
+  // Bucket 변경 — 비ISO(Daily/Weekly/Monthly) 상호 전환은 재조회 없이 즉시 re-pivot(SCP0013 이식), WeeklyISO 경계만 그리드 clear.
   setBucket: (bucket: BUCKET_TYPE) => void;
   // 조회 발사 — main(15 IN) + title(캘린더) payload 구성. userId = 세션 사용자.
   setFilters: (input: { userId: string }) => void;
@@ -211,13 +211,23 @@ export const useProductionPlanWaterfallStore = createPersistedStoreWithTab<State
         state.searchParams = { ...get().searchParams, chkAll: checked };
         state.filters = {}; // ClearDataSource — 그리드 비움(재조회 필요)
       }),
-    // Bucket 변경 = AS-IS cboBucketType_SelectedIndexChanged → InitSpread_2 → siMain.InitSheet(RowCount=0,ColumnCount=0):
-    //   그리드(데이터+날짜헤더)를 비우고 재조회(Search)를 요구한다. filters clear 로 MAIN 데이터 + TITLE 캘린더를
-    //   모두 비워, 옛 bucket 기준 결과가 새 bucket 인 것처럼 남는 drift 를 막는다(setChkAll 선례와 동일).
+    // Bucket 변경:
+    //   - 비ISO 상호 전환(Daily/Weekly/Monthly): 그리드를 비우지 않는다. MAIN 데이터 payload 에 bucket 이 없어
+    //     데이터는 bucket 무관하게 D_/W_/M_ 전량 로드되고, 비ISO 캘린더(_3SPAN)는 세 버킷이 동일 컬럼이라,
+    //     로드된 결과를 그 자리에서 re-pivot 한다(Grid 가 searchParams.bucket 을 reactive 하게 읽어 buildDynamicColumns/
+    //     baseVisibleOf 재계산 — 자매 SCP0013 production-plan-line 이식: bucket 은 비ISO 에서 순수 FE 표시상태).
+    //   - WeeklyISO 경계(새 값 또는 직전 값이 WeeklyISO): 캘린더가 _3SPAN_ISO 로 분기해 W_ 컬럼 형상(_ISO 접미·
+    //     MMDD 헤더)이 달라져 기존 로드로 재현할 수 없다 → filters clear 로 그리드를 비우고 재조회를 요구한다
+    //     (AS-IS cboBucketType_SelectedIndexChanged → InitSpread_2 → InitSheet 등가, 이 경계에서만).
     setBucket: bucket =>
       set(state => {
+        const prevBucket = get().searchParams.bucket;
+        const crossesIso =
+          bucket === BUCKET_TYPE.WEEKLY_ISO || prevBucket === BUCKET_TYPE.WEEKLY_ISO;
         state.searchParams = { ...get().searchParams, bucket };
-        state.filters = {}; // InitSheet — 그리드 비움(재조회 필요)
+        if (crossesIso) {
+          state.filters = {}; // InitSheet — ISO↔비ISO 경계만 그리드 비움(재조회 필요)
+        }
       }),
     // 메인 GET 15-param 매핑 (design 03 §4.1 — SP IN 순번 주석) + title(캘린더) payload.
     setFilters: ({ userId }) => {

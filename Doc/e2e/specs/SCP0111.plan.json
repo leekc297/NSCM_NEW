@@ -1,7 +1,7 @@
 {
   "id": "SCP0111",
-  "mode": "single",
-  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "mode": "admin",
+  "modeSource": "users.json screens",
   "menuId": "SCP0111",
   "divCascade": [
     [
@@ -502,7 +502,7 @@
         "81": "SCP Tester",
         "82": "SCP Tester"
       },
-      "roleNote": "지정 계정(권한별 검사)",
+      "roleNote": "권한 없음 대표",
       "admin": false,
       "adminOf": [],
       "screenGroup": "",

@@ -9,6 +9,7 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { Checkbox } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -354,17 +355,16 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
           }}
         />
       )}
-      {/* Model 그리드 헤더 = 공용 툴바 줄(제목 'Model' 왼쪽 + 버튼 오른쪽, 한 줄). 별도 캡션 줄로 분리하지 않고
-          오른쪽 버튼과 같은 줄에 둔다(사용자 지시 2026-10-07). 건수는 숨김(hideTotalCases).
-          Sort/Filter/Excel 등 그리드 대상 동작은 포커스된 그리드(focusedSheet)를 따른다 — AS-IS fps 패리티
-          (사용자 결정 2026-10-12). Save 는 hotkeyConfig.save=handleSave 로 항상 Line, Measure 는 아래 모달이 focusedSheet 로 분기. */}
+      {/* 상단 공용 툴바 줄(건수 왼쪽 + 버튼 오른쪽, 한 줄). 제목 글자('Model')는 두지 않고(사용자 지시
+          2026-11-18 — 자매 화면과 동일) 건수와 SUM 토글을 상단 그리드 쪽에 붙인다. 건수는 상단 Model 그리드
+          기준(modelRows). Sort/Filter/Excel 등 그리드 대상 동작은 포커스된 그리드(focusedSheet)를 따른다 —
+          AS-IS fps 패리티(사용자 결정 2026-10-12). Save 는 hotkeyConfig.save=handleSave 로 항상 Line, Measure 는
+          아래 모달이 focusedSheet 로 분기. */}
       <SubTitle
         menuId={MENU_ID}
         grid={focusedSheet === SHEETS.MAIN ? masterGridRef : lineGridRef}
         gridFilter={focusedSheet === SHEETS.MAIN ? masterFilterRef : lineFilterRef}
-        dataCount={lineRows.length}
-        title={t(LBL.MODEL, '_Model')}
-        hideTotalCases
+        dataCount={modelRows.length}
         excelFileName='ProductionPlan'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
@@ -381,6 +381,14 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
             buttonLabel: '',
           },
         ]}
+        // Sum(chkSum, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18, SCP0013 동형).
+        afterCount={
+          <Checkbox
+            labelText={t(LBL.SUM, '_Sum')}
+            checked={sc.chkSum}
+            onChange={checked => setSearchCondition({ chkSum: checked })}
+          />
+        }
       />
 
       {/* 상/하 2그리드 split (design 01 §1 splitContainer1 Horizontal). 상 spdMain(MODEL) · 하 spdLine(LINE).
@@ -417,7 +425,6 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
                 grid={lineGridRef}
                 gridFilter={lineFilterRef}
                 dataCount={lineRows.length}
-                title={t(LBL.LINE, '_Line')}
                 useHotkey={false}
               />
               <ProductionPlanGrid

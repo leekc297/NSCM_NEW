@@ -1952,3 +1952,70 @@ FE 가이드 생성시에도 이 RULE 적용하도록 해주세요. 그리고 �
 2026-11-17T19:52:22+09:00	S8.verify	end	0	
 2026-11-17T19:52:23+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
 2026-11-17T20:10:28+09:00	workbench	start		prompt: CheckList 전체 건수 현황 알려주세요.
+2026-11-18T13:12:53+09:00	workbench	start		quick: ⬆️ Source Backup SCP0104
+2026-11-18T13:19:06+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge fdff7f17e→724a61550 exit 0
+2026-11-18T13:19:06+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0104
+2026-11-18T13:54:41+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-11-18T14:42:12+09:00	S8.verify	end	0	
+2026-11-18T14:42:14+09:00	workbench	start		quick: 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-11-18T14:54:54+09:00	workbench	start		prompt: 전체 대조표 기준 건수 현황 공유해주세요.
+2026-11-18T15:11:09+09:00	workbench	start		prompt: 질문에 대한 답변중 건수현황 과 같은 경우는 GRID 형태로 나오도록 하거나 대답의 결과를 DASHBOARD 형태로 깔끔하게 보이도록 DESIGN 에 대한 안을 제안해주세요. 
+2026-11-18T15:13:20+09:00	workbench	start		prompt: 위의 답변을 SAMPLE 로 제안해주면 좋을 것 같아요.
+2026-11-18T15:17:27+09:00	workbench	start		prompt: 생성된 HTML 보여주세요
+2026-11-18T15:18:44+09:00	workbench	start		prompt: 생성된 html 을 Console 창에 보이도록 해주세요. 
+2026-11-18T15:21:36+09:00	workbench	start		prompt: 현재의 생성된 Dashboard 처럼 양이 많을 필요는 없습니다. Simple 하게 필요한 정보만 보이도록 깔끔하게 HTML 형태로 나오면 됩니다. 
+2026-11-18T15:25:56+09:00	workbench	start		prompt: scp0096 의 checklist 건수현황 보여주세요
+2026-11-18T15:35:11+09:00	workbench	start		prompt: CHECKLIST 건수현황 알려주세요.
+2026-11-18T15:39:01+09:00	workbench	start		prompt: 조금전 위의 경우와 같은 경우 DASHBOARD 형태의 HTML 이 CONSOLE 창에 보이도록 보완요청했는데, 계속 TEXT BASE 로만 보입니다.
+2026-11-18T15:46:01+09:00	workbench	start		prompt: DARK THEME 일 때는 테마에 맞춰서 BACKCOLOR 을 맞춰주세요.
+2026-11-18T15:55:48+09:00	workbench	start		prompt: CHECKLIST 건수현황 알려주세요.
+2026-11-18T16:05:46+09:00	workbench	start		chain:checklist: SCP0111
+2026-11-18T16:05:46+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-11-18T16:20:40+09:00	S8.verify	end	1	
+2026-11-18T16:20:42+09:00	workbench	start		quick: 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-11-18T16:21:24+09:00	workbench	start		chain:checklist: SCP0111
+2026-11-18T16:21:24+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-11-18T16:21:39+09:00	S8.verify	end	6	
+2026-11-18T16:21:44+09:00	workbench	start		quick: 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-11-18T16:28:10+09:00	workbench	start		prompt: CHECKLIST 수행했는데 오류 발생했습니다. 원인 확인 요청 합니다.
+2026-11-18T16:34:34+09:00	workbench	start		chain:checklist: SCP0111
+2026-11-18T16:34:35+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-11-18T17:44:37+09:00	S8.verify	end	0	
+2026-11-18T17:44:39+09:00	S8.unverified	start		S8.unverified: unverified_resolve.py SCP0111
+2026-11-18T17:44:39+09:00	S8.unverified	end	0	
+2026-11-18T18:21:29+09:00	S8.unverified	start		S8.unverified: unverified_resolve.py SCP0111
+2026-11-18T18:21:29+09:00	S8.unverified	end	0	
+2026-11-18T19:52:56+09:00	S8.unverified	start		S8.unverified: unverified_resolve.py SCP0111
+2026-11-18T19:52:56+09:00	S8.unverified	end	0	
+2026-11-18T19:52:57+09:00	workbench	start		quick: 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-11-18T19:54:24+09:00	workbench	start		prompt: CHECKLIST 건수 확인해주세요
+2026-11-18T19:58:39+09:00	workbench	start		prompt: 미검증을 전체 제거해달라는 요청이였는데 아직 32건이 있네요.
+그리고 간단한 질문에 답이 숫자가 있을때는 DASHBOARD 을 요청했었는데 그게 표현되지 않았습니다.
+먼저 DASHBOARD 양식 표기 먼저 보완 해주
+2026-11-18T23:18:54+09:00	workbench	start		chain:checklist: SCP0096
+2026-11-18T23:18:55+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0096
+2026-11-18T23:56:32+09:00	S8.checklistRun	end	0	
+2026-11-19T00:21:10+09:00	S8.checklistRecheck	start		S8.checklistRecheck: checklist_run.py SCP0096 --recheck
+2026-11-19T00:59:35+09:00	S8.checklistRecheck	end	0	
+2026-11-19T01:25:15+09:00	S8.checklistRecheck	start		S8.checklistRecheck: checklist_run.py SCP0096 --recheck
+2026-11-19T01:34:45+09:00	S8.checklistRecheck	end	0	
+2026-11-19T01:34:47+09:00	workbench	start		quick: 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-11-19T07:10:26+09:00	workbench	start		prompt: checklist 건수현황 공유해주세요.
+2026-11-19T07:13:08+09:00	workbench	start		prompt:inject: 미검증이 23건 남아 있습니다. 그런데 왜 미검증을 조치하지 않고 재수행 2단계 에서 종료처리가 된건가요?
+2026-11-19T07:16:39+09:00	workbench	start		prompt: 진행해주세요. 
+2026-11-19T08:50:59+09:00	workbench	start		prompt: 미검증 16건 아직 남아 있나요? 
+checklist 작업 시 전체 미검증에 대해서 일괄 미검증 제거 후 checklist  수행 요청 했는데, 계속 잔여건수가 남는 이유는 무엇인가요?
+2026-11-19T08:54:00+09:00	workbench	start		prompt: 스냅샷 일괄 승인 처리 하고 앞으로도 승인처리 해주세요.
+작업모드 전환의 경우 작업모드를 전환하지 않아도 미검증 사유가 발생할 이유가 있나요? checklist는 직접 수정을 하지 않고, 대상을 추출하는 과정입니다.
+2026-11-19T08:54:46+09:00	workbench	start		prompt:inject: checklist 생성 시 필요하면 스냅샷에 대해서는 승인하도록 권한부여해주세요. 
+2026-11-19T08:57:31+09:00	workbench	start		prompt:inject: Checklist 3차 전체 실행 중지해주세요. 
+2026-11-19T08:58:43+09:00	workbench	start		prompt: checklist  를 다시 돌리기 전에 제가 승인한 내역만 작업해주세요.
+제가 궁금한 점은 왜 미검증이 일괄 보완이 되지 않느냐는 점 입니다.
+2026-11-19T09:02:23+09:00	workbench	start		prompt: 새로운 미검증이 생기는 것은 인정합니다. 그러면 18에서 16으로 줄어든 것은 18은 전체 미검증을 해소했는데 다시 16이 늘어난건가요?
+2026-11-19T09:03:26+09:00	workbench	start		prompt:inject: 그리고 대조표의 행을 검증하지않고 미검증으로 분류하는 이유가 무엇인지도 알려주세요.
+2026-11-19T09:08:13+09:00	workbench	start		prompt: 사람 확인으로 넘길 항목 중 일반적인 항목은 권장안(추천 보완 방안)으로 처리하고 필요하면 필요한 경우에만 판정필요로 분류해주세요. 미검증으로 남아 있으면 안됩니다. 검사엔진 이외에 16건은 어떻게 하면 일괄 해소가
+2026-11-19T09:22:13+09:00	S8.unverified	start		S8.unverified: unverified_resolve.py SCP0096
+2026-11-19T09:22:14+09:00	S8.unverified	end	0	
+2026-11-19T09:54:29+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 724a61550→06e7d22de exit 0
+2026-11-19T09:54:29+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0111
+2026-11-19T10:04:41+09:00	workbench	start		quick: 🧪 미검증 해소 SCP0096

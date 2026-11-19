@@ -134,6 +134,12 @@ export const ShipmentChangeRequestConfirmSsp0003SubGrid = ({
         cb.checked = checked;
         cb.disabled = !editableRef.current;
         cb.tabIndex = -1;
+        // 셀 세로/가로 중앙 정렬 — raw input 은 display:inline-block·vertical-align:baseline 라
+        //   .wj-cell 비대칭 padding(4/3) 위 baseline 에 앉아 아래로 치우쳐 보인다(사용자 신고 2026-11-12).
+        //   block + margin:auto 로 바꾸면 .wj-cell 의 align-content:center·text-align:center 가 먹어 중앙에 온다
+        //   (자매 SSP0201 헤더 체크박스가 쓰는 margin:auto 패턴과 동일).
+        cb.style.display = 'block';
+        cb.style.margin = 'auto';
         e.cell.innerHTML = '';
         e.cell.appendChild(cb);
         return;
@@ -145,6 +151,8 @@ export const ShipmentChangeRequestConfirmSsp0003SubGrid = ({
         cb.checked = allChecked(grid);
         cb.disabled = !editableRef.current;
         cb.tabIndex = -1;
+        cb.style.display = 'block';
+        cb.style.margin = 'auto';
         e.cell.innerHTML = '';
         e.cell.appendChild(cb);
       }

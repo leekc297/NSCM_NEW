@@ -6,7 +6,6 @@ import {
   ADMIN_SHEET_NAME,
   MEASURE_SHEET_NAME,
   MENU_ID,
-  SAVE_DATE_ALIAS,
   SHEETS,
 } from './integration-psi.constants';
 import type { SearchCondition } from './integration-psi.types';
@@ -64,15 +63,10 @@ interface Action {
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
 //   qtyYn = 체크박스(String(bool) → ==='true'). 그 외 조건(divisionId/nickName/cellItemId/itemId)은 문자열 → 그대로 patch.
-//   날짜 키(planStartYyyymmdd/from·toYyyymm)는 공용 EXCLUDED_DATE_PARAM(gridAction.ts)이 저장에서 빼므로
-//   사용자 지시(2026-10-19)에 따라 별칭(...Ymd, SAVE_DATE_ALIAS)으로 저장/복원한다 — 아래 DATE_ALIAS_TO_FIELD 로
-//   별칭을 원래 키로 역매핑한 뒤 patch. 배열(멀티셀렉트) 조건 없음 — divisionId 는 단일 콤보.
+//   날짜 키(planStartYyyymmdd/from·toYyyymm)는 공용 EXCLUDED_DATE_PARAM(gridAction.ts)이 **저장에서 제외**하므로
+//   복원 응답에도 오지 않는다(공통 원칙 — 사용자 지시 2026-11-16). 재진입 시 PlanDate·Period 는 Form 의 기본선택
+//   effect 가 다시 도출한다. 배열(멀티셀렉트) 조건 없음 — divisionId 는 단일 콤보.
 const RESTORE_BOOL_KEYS = new Set<string>(['qtyYn']);
-// F6 저장 시 날짜키는 별칭(...Ymd)으로 평문화돼 저장된다(IntegrationPsi savedParam, 공용 날짜 제외 정규식 회피).
-//   복원 측은 별칭→원래 키로 역매핑해 SearchCondition 에 되넣는다(SCP0031 Global PSI 선례 1:1).
-const DATE_ALIAS_TO_FIELD: Record<string, string> = Object.fromEntries(
-  Object.entries(SAVE_DATE_ALIAS).map(([field, alias]) => [alias, field])
-);
 // AS-IS ConditionNotUseList(design 02 §4.1 cs:InitControls) — cboPlanDate/cboPlanType 은 조회조건 저장/복원 제외.
 //   planStartYyyymmdd(cboPlanDate)는 날짜 키라 저장 측에서 이미 제외되고, planType(cboPlanType)은 비날짜라
 //   공용 저장 핸들러가 저장하므로 복원 측에서 명시 제외해 AS-IS 파리티를 맞춘다(cascade 하위 — 재진입 시 재도출).
@@ -254,9 +248,8 @@ export const useIntegrationPsiStore = createPersistedStoreWithTab<State & Action
         const init = makeInitSearch();
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
-          // 날짜 별칭(...Ymd)은 원래 키(planStartYyyymmdd/from·toYyyymm)로 역매핑 후 적용. 그 외 키는 그대로.
-          const key = DATE_ALIAS_TO_FIELD[paramNm] ?? paramNm;
-          if (!(key in init)) continue; // SearchCondition 필드만 allowlist
+          const key = paramNm;
+          if (!(key in init)) continue; // SearchCondition 필드만 allowlist(날짜 키는 저장 제외라 응답에 없음)
           if (RESTORE_SKIP_KEYS.has(key)) continue; // AS-IS ConditionNotUseList 제외(planType)
           const val = paramCtn ?? '';
           if (RESTORE_BOOL_KEYS.has(key)) patch[key] = val === 'true';

@@ -25,7 +25,6 @@ import {
   COLUMN,
   COMBO,
   GROUP_HEAD_MEASURE,
-  HEADER_ROW_HEIGHT,
   HEADER_TOTAL_HEIGHT,
   MEASURE_BG_FROM_TO_SITE,
   MENU_ID,
@@ -528,9 +527,9 @@ export const ShipmentRequestSemiGrid = ({
       comboParams={COMBO_PARAMS}
       sheetName={ADMIN_SHEET_NAME}
       allowMerging={AllowMerging.All}
-      // 동적 기간칼럼이 붙으면 3단(각 16), 조회 전엔 1단(48). 실제 강제는 위 updatedLayout 핸들러가
-      //   rows.length 로 나눠 수행하며, 이 prop 은 초기 defaultSize 를 맞춰 첫 렌더 깜빡임을 줄인다.
-      headerRowHeight={dynamicColumns.length === 0 ? HEADER_TOTAL_HEIGHT : HEADER_ROW_HEIGHT}
+      // headerRowHeight 정적 prop 제거(SCP0100 류 무한 header-height 루프 방지) — 공용 DataGrid 가 정적
+      //   prop 으로 defaultSize 를 되돌리는 것과 자체 applyHeaderHeight 의 동적 tier(rows.length) 보정이
+      //   충돌해 무한 invalidate 가 됐다. HEADER_TOTAL_HEIGHT 은 applyHeaderHeight 에서 계속 쓰인다.
       gotFocus={onFocus}
     />
   );

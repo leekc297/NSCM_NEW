@@ -1,11 +1,11 @@
 import { PeriodField } from 'features/master/src/components';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
@@ -13,7 +13,6 @@ import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shar
 import { useWaterfallShipmentPlanFgStore } from '../useWaterfallShipmentPlanFgStore';
 import type { BUCKET_TYPE } from '../waterfall-shipment-plan-fg.constants';
 import {
-  BUCKET_TYPE as BUCKET,
   COMBO,
   ELECTRODE_LOOKUP,
   isEeDivision,
@@ -56,15 +55,15 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
   const tabId = useTabid();
 
   const isEe = isEeDivision(sc.divisionId);
-  // SUM 체크박스 표시 (design 01 D1) — BucketType==WeeklyISO 면 숨김(주(ISO)단위라 합산 불필요).
-  const showSum = sc.bucket !== BUCKET.WEEKLY_ISO;
 
   // 콤보 — 부모값 파라미터 재조회(cascade). isEe 로 opGroup SQL_ID 스왑(별개 코드셋, 이름 대조 금지).
+  //   Version 은 _ALL 콤보(WaterfallVer_FG21_SCP_ALL) — 파라미터 없이 전 사업부 1회 로드 후 아래에서
+  //   DIVISION_ID 로 클라 필터(AS-IS CommonAll + DBUtils.Filter 재현, convert-core §2.6). 재조회 아님.
   const [divisions, operationGroups, versions, buckets] = useTabComboQueries({
     filters: [
       { comboId: COMBO.DIVISION, mnuId: MENU_ID },
       isEe ? COMBO.OP_GROUP_EE : COMBO.OP_GROUP,
-      { comboId: COMBO.VERSION, divisionId: sc.divisionId },
+      COMBO.VERSION,
       COMBO.BUCKET,
     ],
   });
@@ -72,7 +71,13 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
 
   const divisionOptions = toOptions(divisions);
   const operationGroupOptions = toOptions(operationGroups);
-  const versionOptions = toOptions(versions);
+  // Version — _ALL 콤보가 전 사업부 행(DIVISION_ID 컬럼 포함)을 반환 → 선택 division 으로 클라 필터
+  //   (AS-IS .cs:237 DBUtils.Filter(dtVersionAll,"DIVISION_ID='"+division+"'") 1:1). 단순 동등비교 —
+  //   버전은 사업부별 독립이라 warehouse-capacity 의 EE 특수분기(matchSiteByDivision) 같은 보정 불필요.
+  const versionOptions = useMemo(
+    () => toOptions((versions ?? []).filter(r => str(r.DIVISION_ID) === sc.divisionId)),
+    [versions, sc.divisionId]
+  );
   const bucketOptions = toOptions(buckets);
   // electrode 는 lookup(LookupResponse — index signature) — CODE/NAME 직접 매핑.
   const electrodeOptions: Option[] = (electrodes ?? []).map(r => {
@@ -119,6 +124,10 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
     options: Option[],
     onPick: (codes: string[]) => void,
     disabled?: boolean,
+    // allOption=false 면 목록에서 SELECT ALL 항목을 뺀다(기본 true). 빈 선택을 'ALL' sentinel 로
+    //   내보내는 것은 스토어 규약(빈 배열 → 필터 없음)이라 유지한다 — 미선택 표현이지 선택 항목이
+    //   아니므로 SELECT ALL 노출과 무관하다. Version 은 AS-IS 에 전체선택이 없어 false(사용자 지시).
+    allOption = true,
     required?: boolean,
     // placeholder: 미선택일 때 필드에 보일 문구. 인자를 주지 않으면(undefined) CustomDropdown 다중선택
     //   기본('ALL')이 그대로 쓰여 "All" 로 보인다(Electrode 등 전체=ALL 이 정상인 조건).
@@ -126,7 +135,12 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
     //   주의: placeholder 는 '값이 있을 때만' 넘긴다(아래 조건부 스프레드). undefined 를 prop 으로 그대로
     //   넘기면 CustomDropdown 내부의 {...props} 재스프레드가 기본 'ALL' 을 undefined 로 덮어써 Electrode
     //   까지 공백이 된다 — 키 자체를 빼야 기본값이 유지된다.
-    placeholder?: string
+    placeholder?: string,
+    // sortByLabel: 목록을 라벨 오름차순으로 재정렬할지. Electrode 처럼 순서가 무의미한 코드 목록은 true.
+    //   Version 은 콤보 SQL 이 `ORDER BY PLAN_START_YYYYMMDD DESC`(최신순 내림차순)로 내려주는데 라벨
+    //   오름차순 정렬을 켜면 그 의미 있는 순서를 덮어써 오래된 버전이 위로 온다(AS-IS 는 최신이 위) —
+    //   그런 콤보는 false 로 서버 순서를 보존한다(CustomDropdown sortBy 설계 주석과 동일 취지).
+    sortByLabel = true
   ) => (
     <Grid size={3}>
       <FormItem
@@ -137,10 +151,10 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
         render={() => (
           <CustomDropdown
             multiple
-            allOption
+            allOption={allOption}
             useClearIcon
             limitTags={1}
-            sortBy='label'
+            {...(sortByLabel ? { sortBy: 'label' as const } : {})}
             disabled={disabled || noDivisionAuth}
             value={value.length ? value.join(',') : 'ALL'}
             options={options}
@@ -215,11 +229,12 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
       onSearch={onSearch}
       conditions={
         <>
-          {/* AS-IS SCP0016 조회조건 순서 그대로(사용자 지시 2026-10-20, AS-IS 화면 캡처 기준):
-              1행 Div·Operation Group·Project·Model / 2행 Electrode·Ver.·Bucket·Period. Sum 만 접기 영역. */}
-          {/* Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건). 편집중(dirty)이면
-              MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴).
-              조회전용 화면이라 실제 dirty 는 없어 no-op 가드지만 공통 패턴을 동일하게 둔다(정본 SCP0025). */}
+          {/* 조회조건 순서 — 기준표(2026-11-18) 5그룹 정렬: [1]데이터기준(Div·Ver) → [2]조직·거점·공정
+              (Operation Group) → [3]제품·대상(PJT·Model/Nickname·Electrode) → [4]기간·집계(Period·Bucket).
+              [5]상태·표시(Sum)는 접기 영역. 종전 2026-10-20 AS-IS 캡처 순서를 표준 기준으로 교체. */}
+          {/* [1] Div — Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건).
+              편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit
+              51d4e9fa 패턴). 조회전용 화면이라 실제 dirty 는 없어 no-op 가드지만 공통 패턴을 동일하게 둔다(정본 SCP0025). */}
           {single(
             t(LBL.DIVISION, '_Div'),
             sc.divisionId,
@@ -231,6 +246,24 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             },
             true
           )}
+          {/* [1] Version — 다중선택 CheckedList(필수). 변경 시 Period 재산정(AS-IS ClbVersion → GetDayRange).
+              라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체.
+              AS-IS 초기값이 빈값(setListBox blnAllFlag=false, SCP0016.cs L239)이므로 placeholder='' 로 미선택을
+              공백 표시한다(자매 SCP0017 동일 패턴 — 다중선택 기본 'ALL' 표시 억제). 미선택 조회는 필수값 게이트로
+              차단되므로 공백 초기값과 양립한다. sortByLabel=false — 콤보 SQL 이 최신순(PLAN_START_YYYYMMDD DESC)
+              으로 내려주므로 라벨 오름차순 재정렬을 끄고 서버 내림차순을 보존한다(AS-IS 최신 버전이 위). */}
+          {multi(
+            t('LBL01275', '_Ver.'),
+            sc.versionNos,
+            versionOptions,
+            v => setVersions(v),
+            false, // disabled
+            false, // allOption — Ver. 는 전체선택(Select All) 미노출(사용자 지시)
+            true, // required
+            '', // placeholder — 미선택 공백
+            false // sortByLabel — 서버 최신순 유지
+          )}
+          {/* [2] Operation Group */}
           {single(
             t(LBL.OPERATION_GROUP, '_Operation Group'),
             sc.operationGroupId,
@@ -238,11 +271,12 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             v => set({ operationGroupId: v }),
             true
           )}
+          {/* [3] PJT / Model/Nickname(팝업) */}
           {popupField(t(LBL.PROJECT, '_PJT'), sc.projectCode, onProjectSearch, v =>
             set({ projectCode: v })
           )}
           {popupField(t(LBL.MODEL, '_Model/Nickname'), sc.itemId, onModelSearch, v => set({ itemId: v }))}
-          {/* Electrode — enable=isEe(division), 비EE 면 disable+clear(design 01 D2). */}
+          {/* [3] Electrode — enable=isEe(division), 비EE 면 disable+clear(design 01 D2). */}
           {multi(
             t(LBL.ELECTRODE, '_Electrode'),
             sc.electrodeTypes,
@@ -250,23 +284,7 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             v => set({ electrodeTypes: v }),
             !isEe
           )}
-          {/* Version — 다중선택 CheckedList(필수). 변경 시 Period 재산정(AS-IS ClbVersion → GetDayRange).
-              라벨 'Ver.' = LBL01275(KO/EN/CN 'Ver.', DB 등록 2026-11-12). 과거 하드코딩은 다국어 미처리라 교체.
-              AS-IS 초기값이 빈값(setListBox blnAllFlag=false, SCP0016.cs L239)이므로 placeholder='' 로 미선택을
-              공백 표시한다(자매 SCP0017 동일 패턴 — 다중선택 기본 'ALL' 표시 억제). 미선택 조회는 필수값 게이트로
-              차단되므로 공백 초기값과 양립한다. */}
-          {multi(
-            t('LBL01275', '_Ver.'),
-            sc.versionNos,
-            versionOptions,
-            v => setVersions(v),
-            false,
-            true,
-            ''
-          )}
-          {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
-            set({ bucket: v as BUCKET_TYPE })
-          )}
+          {/* [4] Period */}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}
@@ -274,27 +292,9 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
             label={t(LBL.PERIOD, '_Period')}
           />
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Sum — W_/M_ 합계칼럼 표시 토글. WeeklyISO 면 숨김(design 01 D1). 접기 펼침 시 Electrode(2행 1열)
-              아래 1열에 노출(사용자 지시 2026-10-20). 라벨 우측정렬 FormItem 으로 세로 정렬. */}
-          {showSum && (
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={' '}
-                labelAlign='right'
-                render={() => (
-                  <Checkbox
-                    labelText={t(LBL.SUM, '_Sum')}
-                    checked={sc.chkSum}
-                    onChange={checked => set({ chkSum: checked })}
-                  />
-                )}
-              />
-            </Grid>
+          {/* [4] Bucket */}
+          {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
+            set({ bucket: v as BUCKET_TYPE })
           )}
         </>
       }

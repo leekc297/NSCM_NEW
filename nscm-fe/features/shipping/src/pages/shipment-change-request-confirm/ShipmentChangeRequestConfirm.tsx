@@ -14,7 +14,6 @@ import { ConfirmDetailPanel } from './components/ConfirmDetailPanel';
 import { ShipmentChangeRequestConfirmForm } from './components/ShipmentChangeRequestConfirmForm';
 import { ShipmentChangeRequestConfirmMainGrid } from './components/ShipmentChangeRequestConfirmMainGrid';
 import { ShipmentChangeRequestConfirmSubGrid } from './components/ShipmentChangeRequestConfirmSubGrid';
-import { useConfirmDetailFold } from './hooks/useConfirmDetailFold';
 import { useShipmentChangeRequestConfirmActions } from './hooks/useShipmentChangeRequestConfirmActions';
 import {
   ACTION,
@@ -97,8 +96,6 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
   const setRejectReason = useShipmentChangeRequestConfirmStore(s => s.setRejectReason);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
-  // Request Confirm Detail 접기/펼치기·고정(사용자 지시 2026-11-12 — SSP0200 Request Info 와 같은 형태).
-  const confirmDetailFold = useConfirmDetailFold();
   const [openRequestor, setOpenRequestor] = useState(false);
   const [openItem, setOpenItem] = useState(false);
 
@@ -431,10 +428,12 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
 
       {/* 상/하 2분할 — 상단 마스터 그리드(리사이즈 대상) / 하단(디테일 폼 + 디테일 그리드).
           종전엔 plain div(고정 %)라 상단 그리드 높이를 조절할 수 없었다(사용자 요청 2026-11-05).
-          스플리터로 상단 그리드 ↔ 하단 블록을 리사이즈한다(자매 SSP0201 PanelGroup 패턴). */}
+          스플리터로 상단 그리드 ↔ 하단 블록을 리사이즈한다(자매 SSP0201 PanelGroup 패턴).
+          상단 그리드를 하단보다 작게 — 자매 SSP0003/SSP0200 과 동일하게 상단만 px(220px) 로 작게 고정하고
+          하단은 나머지를 전부 가져간다(사용자 지시 2026-11-13: Packer 화면도 Confirm 과 동일 레이아웃). */}
       <div className={styles.splitWrapper}>
         <PanelGroup className={styles.panelGroup} orientation='vertical'>
-          <Panel minSize='15%'>
+          <Panel defaultSize='220px' minSize='15%'>
             <div className={styles.mainPane}>
               <ShipmentChangeRequestConfirmMainGrid
                 rows={mainRows}
@@ -450,7 +449,8 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
 
           <PanelSeparator className={styles.splitBar} />
 
-          <Panel minSize='20%'>
+          {/* 하단(폼 + 디테일 그리드) — defaultSize 미지정 → 상단(px 고정)을 뺀 나머지를 전부 가져간다. */}
+          <Panel minSize='30%'>
             <div className={styles.bottomPane}>
               <div className={styles.detailForm}>
                 <ConfirmDetailPanel
@@ -458,10 +458,6 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
                   rejectReason={rejectReason}
                   rejectEnabled={rejectEnabled}
                   onRejectReasonChange={setRejectReason}
-                  collapsed={confirmDetailFold.collapsed}
-                  pinned={confirmDetailFold.pin !== null}
-                  onToggleCollapsed={confirmDetailFold.toggleCollapsed}
-                  onTogglePin={confirmDetailFold.togglePin}
                 />
               </div>
 

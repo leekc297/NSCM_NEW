@@ -1,43 +1,44 @@
 [
  {
-  "row_id": "EG-a5c7c913",
-  "rule_id": "J3",
-  "target": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCR/SCP0111/SCM PI Admin · Div 81",
-  "same": [
-   "EG-0a94c395",
-   "EG-5a7d02bf",
-   "EG-f48097ef",
-   "EG-9e78a0e2",
-   "EG-e501d086",
-   "EG-f2d39e3e",
-   "EG-c9ab9660"
-  ]
- },
- {
-  "row_id": "V-d2511df5",
-  "rule_id": "L2",
-  "target": "SCP0111 조건 입력 중 재렌더",
+  "row_id": "V-28123894",
+  "rule_id": "G4",
+  "target": "SCP0111 스냅샷 조회조건 Div 40",
   "same": []
  },
  {
-  "row_id": "V-3937cc87",
-  "rule_id": "F1",
-  "target": "SCP0111 화면",
-  "same": [
-   "V-64f29823",
-   "V-bded1ccf"
-  ]
+  "row_id": "V-ce8459b6",
+  "rule_id": "E2",
+  "target": "SCP0111 기간 역전 조회",
+  "same": []
  },
  {
-  "row_id": "V-02e2f75a",
-  "rule_id": "F5",
-  "target": "SCP0111 화면",
+  "row_id": "V-c73d3323",
+  "rule_id": "G1",
+  "target": "MSG00344",
+  "same": []
+ },
+ {
+  "row_id": "V-f5114028",
+  "rule_id": "H6",
+  "target": "SCP0111 스냅샷 팝업 Model/Nickname",
+  "same": []
+ },
+ {
+  "row_id": "V-a19f5cc5",
+  "rule_id": "F4",
+  "target": "SCP0111 경계값 저장",
   "same": []
  },
  {
   "row_id": "V-2eed0400",
   "rule_id": "E3",
   "target": "SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
+  "same": []
+ },
+ {
+  "row_id": "ES-600e4157",
+  "rule_id": "F1",
+  "target": "SCP0111 E2E crud 저장 왕복(insert)",
   "same": []
  },
  {
@@ -57,58 +58,16 @@
   ]
  },
  {
-  "row_id": "EG-0a94c395",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
+  "row_id": "V-55556e17",
+  "rule_id": "H4",
+  "target": "SCP0111 스냅샷 화면샷 1920",
+  "same": []
  },
  {
-  "row_id": "EG-5a7d02bf",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
- },
- {
-  "row_id": "EG-f48097ef",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
- },
- {
-  "row_id": "EG-9e78a0e2",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
- },
- {
-  "row_id": "EG-e501d086",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
- },
- {
-  "row_id": "EG-f2d39e3e",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
- },
- {
-  "row_id": "EG-c9ab9660",
-  "rule_id": "J3",
-  "target": "",
-  "folded_into": "EG-a5c7c913"
- },
- {
-  "row_id": "V-64f29823",
-  "rule_id": "F1",
-  "target": "",
-  "folded_into": "V-3937cc87"
- },
- {
-  "row_id": "V-bded1ccf",
-  "rule_id": "F1",
-  "target": "",
-  "folded_into": "V-3937cc87"
+  "row_id": "V-e8ca7b9a",
+  "rule_id": "H4",
+  "target": "SCP0111 스냅샷 화면샷 1366",
+  "same": []
  },
  {
   "row_id": "T-40ab485f",

@@ -114,7 +114,13 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
   const dynColumnMeta = useMemo<DynColumnMeta[]>(
     () =>
       ((calendarData as unknown as Record<string, CalendarColumnRow[]>)?.[RESPONSE_SET.CALENDAR] ?? [])
-        .map(r => ({ name: String(r.COLUMN_NAME ?? '') }))
+        .map(r => ({
+          name: String(r.COLUMN_NAME ?? ''),
+          // 3SPAN SP 라벨 — 월/주차 머지헤더 그룹·라벨의 정본(SCM_SYS_CALENDAR_M ISO 주차). 03 §1-b.
+          weekName: r.SMALL_CLASS_LABEL_NAME != null ? String(r.SMALL_CLASS_LABEL_NAME) : undefined,
+          monthName: r.LARGE_CLASS_LABEL_NAME != null ? String(r.LARGE_CLASS_LABEL_NAME) : undefined,
+          dayCode: r.DAY_CODE != null ? String(r.DAY_CODE) : undefined,
+        }))
         .filter(c => c.name !== ''),
     [calendarData]
   );

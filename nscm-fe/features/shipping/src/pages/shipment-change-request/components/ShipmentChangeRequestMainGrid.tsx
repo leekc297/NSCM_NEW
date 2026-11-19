@@ -203,11 +203,11 @@ export const ShipmentChangeRequestMainGrid = ({
         e.cancel = true;
         return;
       }
-      // 팝업셀(ITEM_ID/PROJECT_CODE)은 더블클릭 팝업 전용 — 인라인 편집/붙여넣기 취소.
-      if (POPUP_COLUMNS.has(binding)) {
-        e.cancel = true;
-        return;
-      }
+      // 팝업셀(ITEM_ID/PROJECT_CODE)은 key-in + 붙여넣기 + 더블클릭 팝업 동시 허용(FPTextModal, 사용자
+      //   지시 2026-11-17). 인라인 편집을 더 이상 취소하지 않는다 — 열 축은 메타(INPUT_TP_CD=IM → 신규행
+      //   한정)와 공용 isEditableCell 이, 더블클릭 팝업은 handleDblClick 이 담당한다. PROJECT_CODE 는
+      //   메타 CELL_CONTROL_OBJECT_TYPE_CODE 를 FPModal→FPTextModal 로 바꿔야 공용 beginningEdit 의
+      //   FPModal 취소 분기에 안 걸린다(design/32_fix_main_popup-cell_keyin_fptextmodal.sql).
       // END_CUSTOMER 는 메타상 IM(편집가능)이지만 Insert(복사) 신규행에서만 추가로 잠근다 —
       //   AS-IS 비대칭(Insert=잠금 / New=편집). 메타로 표현 못 하는 생성경로 차이라 여기서 가른다.
       if (isEndCustomerLockedOnInsert(row, binding)) {
@@ -223,7 +223,8 @@ export const ShipmentChangeRequestMainGrid = ({
     // 셀 값 변경 파생 — EDIT_MAIN 플래그 + SO No 그룹 전파 + Reason Code/Detail 가드(§3.2).
     //   편집 종료(cellEditEnded)와 **붙여넣기(pastedCell)** 양쪽에 등록한다 — AS-IS shtMain_Change 는
     //   붙여넣기에도 발동해 수량·날짜·운송모드가 동일 SO 로 전파된다(리뷰 #2). pastingCell(editGate)이
-    //   비편집·팝업 셀 붙여넣기를 이미 취소하므로 여기는 통과한 편집 셀만 온다.
+    //   비편집 셀 붙여넣기를 이미 취소하므로 여기는 통과한 편집 셀만 온다(ITEM_ID/PROJECT_CODE 는 이제
+    //   편집 허용 — switch 에 케이스가 없어 default no-op, 값만 기록된다).
     const applyCellChange = (
       sender: FlexGridType,
       e: { row: number; col: number }
