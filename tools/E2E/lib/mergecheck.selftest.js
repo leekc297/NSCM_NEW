@@ -13,6 +13,11 @@ const cases = [
   ['Delete 전체 D', d(D), 'PASS'], ['일부만 D', d({ ...D, cruds: ['D', '', ''] }), 'FAIL'], ['범위 밖 D', d({ ...D, outD: 1 }), 'FAIL'], ['D 없음', d({ ...D, cruds: ['', '', ''] }), 'ERROR'], ['토글형 전체', d({ ...D, cruds: ['', '', ''], toggled: 3, keys: ['ACTIVE'] }), 'PASS'], ['토글 일부', d({ ...D, cruds: ['', '', ''], toggled: 1, keys: ['ACTIVE'] }), 'FAIL'], ['서버 요청', d({ ...D, posts: 1 }), 'ERROR'], ['측정 실패', d({ ...D, why: 'x' }), 'ERROR'],
   ['신규 행 병합 안 됨', n({ b: 'C', same: true, span: 1 }), 'PASS'], ['신규 행 병합됨', n({ b: 'C', same: true, span: 2 }), 'FAIL'], ['같은 값 못 넣음', n({ b: 'C', same: false, span: 1 }), 'ERROR'],
   ['복원 해제', r(R), 'PASS'], ['복원 뒤 M', r({ ...R, crud2: 'M' }), 'FAIL'], ['복원 뒤 M·코드 다름', r({ ...R, crud2: 'M', diff: ["ID 'a'→'b'"] }), 'ERROR'], ['값 변경 안 됨', r({ ...R, v1: 'a' }), 'ERROR'], ['복원 안 됨', r({ ...R, v2: 'b' }), 'ERROR'], ['수정 표시 없음', r({ ...R, crud1: '' }), 'ERROR'],
+  ['AS-IS Delete 빈 본문 + 알림(T341)', d({ b: 'PLAN_TYPE', cruds: ['', '', ''], outD: 0, posts: 0, alert: '신규 입력 (Insert) 한 행만 삭제할 수 있습니다.', asisNoDelete: 'X.cs:536 DeleteButton' }), 'NA'],
+  ['AS-IS Delete 빈 본문 + 알림 없음(T341)', d({ b: 'PLAN_TYPE', cruds: ['', ''], outD: 0, posts: 0, asisNoDelete: 'X.cs:536 DeleteButton' }), 'ERROR'],
+  ['AS-IS Delete 있음 + 알림(T341)', d({ b: 'PLAN_TYPE', cruds: ['', ''], outD: 0, posts: 0, alert: 'x' }), 'ERROR'],
+  ['빈 재정의 줄(T341)', { result: m.exports.emptyOverrideLine('a\nb\n  protected override void DeleteButton()\n  {\n\n  }\n', 'DeleteButton') === 3 ? 'PASS' : 'FAIL', why: '' }, 'PASS'],
+  ['본문 있는 재정의(T341)', { result: m.exports.emptyOverrideLine('protected override void DeleteButton() { DeleteRow(); }', 'DeleteButton') === 0 ? 'PASS' : 'FAIL', why: '' }, 'PASS'],
 ];
 let bad = 0; for (const [nm, got, want] of cases) { const ok = got.result === want; if (!ok) bad++; console.log(`${ok ? 'OK ' : 'NG '} ${nm} → ${got.result}(기대 ${want}) ${got.why}`); }
 console.log(`${cases.length - bad}/${cases.length}`); process.exit(bad ? 1 : 0);

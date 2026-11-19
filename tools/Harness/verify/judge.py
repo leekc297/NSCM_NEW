@@ -2212,6 +2212,18 @@ def main():
     for r in rows:
         if r['result'] not in ('판정필요', 'FAIL') or r['rule_id'] == 'A1' or (r.get('evidence') or '').startswith(('[사용자판정]', SORT_REVIEW_TAG, ORDER_REVIEW_TAG, FORM_REVIEW_TAG, ALIGN_REVIEW_TAG, '[시험 검사', '[AS-IS 에만 있는 후보', '[필수 조건 자동 채움', '[날짜 편집기 재확인 필요]')):  # P3·P7 표식 행은 사람 판정으로 남긴다(2026-11-06)
             continue
+        if r['result'] == '판정필요' and r['rule_id'] == 'H4' and '칸 폭(COLUMN_WIDTH) 확인 대상' in (r.get('evidence') or ''):
+            # 2026-11-19 T342(SCP0111 V-171648d3 · 사용자 승인 11-19 '사람 확인 일반 항목 = 권장안 · 필요할 때만 판정필요'): 헤더 글자 잘림은
+            #   사용자 판정 선례(T102 · SCP0016 V-34521981 '오류 아님 · 판정 필요로 이관')가 있는 유형 — 판정필요로 둔다(미검증 ERROR 로 바꾸지 않음)
+            if '[T102 칸 폭 사람 판정]' not in r['evidence']:
+                r['evidence'] = ('[T102 칸 폭 사람 판정] ' + r['evidence'] + ' · 근거 = 사용자 판정 선례 SCP0016 V-34521981(헤더 글자 잘림 오류 아님 · 판정 필요로 이관)')[:1500]
+            continue
+        if r['result'] == '판정필요' and r['rule_id'] == 'G4' and 'COND_LIST' in (r.get('target') or '') and '누락 [' in (r.get('evidence') or ''):
+            # 2026-11-19 T342(SCP0111 EG-8451fc67·EG-caf2c4d2): AS-IS 팝업 조회조건 구성 ↔ TO-BE 모달 조회조건 구성 차이는 측정이 끝난 사실이다(양쪽 라벨 실측).
+            #   TO-BE 룰 CR-096 은 호출 인자만 정함 → 구성 차이를 룰로 볼지는 사용자 결정 사항 = 판정필요(미검증 ERROR 아님 · 11-19 승인 '필요할 때만 판정필요')
+            if '[팝업 조회조건 구성 판정]' not in r['evidence']:
+                r['evidence'] = ('[팝업 조회조건 구성 판정] ' + r['evidence'] + ' · CR-096 은 호출 인자만 TO-BE 룰 · 조회조건 구성 차이를 룰로 볼지 사용자 결정')[:1500]
+            continue
         ev = r.get('evidence') or ''
         if r['result'] == 'FAIL' and not (r['rule_id'] in ('C3', 'M4') and r['source'] == 'TRACE' and '2초 뒤 신규행' in ev):
             continue  # FAIL 은 popMap 교정 건만 손댄다

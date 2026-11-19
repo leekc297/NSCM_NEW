@@ -84,8 +84,17 @@ export function judgeDivSearches(s: { runs: { div: string; bad: string[]; rows: 
 }
 
 /** 콤보 칸 코드 그대로 노출 — cols 칸별 후보에 없는 코드 수 · checked 본 칸 수 (EG014) */
-export function judgeCodeShown(s: { checked: number; cols: { b: string; n: number; ex: string }[] }): J {
+//   2026-11-19 T338(SCP0111 V-028e36d9 INCOTERMS FCA): 후보가 전부 '값=표시값'(identity DataMap) 인 칸은 이름이 없는 코드 표시 칸이다 —
+//   후보 밖 코드도 후보 안 코드와 같은 모양으로 보이므로 '코드 대신 이름' 판정 대상이 아니다. ident 칸은 따로 세고 후보 밖 값은 근거에 남긴다
+export function judgeCodeShown(s: { checked: number; cols: { b: string; n: number; ex: string; ident?: boolean; items?: number }[]; identChecked?: number }): J {
   if (!s.checked) return { result: 'NA', why: '값 있는 콤보 칸 없음' };
+  const idc = s.cols.filter(c => c.ident), named = s.cols.filter(c => !c.ident), idN = Math.min(s.identChecked ?? idc.length, s.checked);
+  const idNote = idc.length ? ` · 코드 표시 칸(후보 값=표시값) ${idc.length}개는 이름 표시 대상 아님 — 후보 밖 값 ${idc.slice(0, 4).map(c => `${c.b} ${c.n}행(${c.ex}, 후보 ${c.items ?? '?'}개)`).join(', ')}` : '';
+  if (!named.length && idc.length) {
+    if (s.checked - idN <= 0) return { result: 'NA', why: `값 있는 콤보 칸 ${s.checked}개 전부 코드 표시 칸(후보 값=표시값)${idNote}` };
+    return { result: 'PASS', why: `이름 표시 콤보 칸 ${s.checked - idN}개 전부 이름 표시${idNote}` };
+  }
+  s = { ...s, cols: named };
   if (s.cols.length) return { result: 'ERROR', why: `[확인 대상] 콤보 칸 ${s.checked}개 중 후보에 없는 코드가 그대로 보이는 칸 ${s.cols.length}개: ${s.cols.slice(0, 4).map(c => `${c.b} ${c.n}행(${c.ex})`).join(', ')} — 비활성 코드 여부 확인` };
   return { result: 'PASS', why: `콤보 칸 ${s.checked}개 전부 이름 표시` };
 }

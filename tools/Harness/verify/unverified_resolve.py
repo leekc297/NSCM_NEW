@@ -183,8 +183,16 @@ def main():
         state = {'ledger_mode_at': rm.get('at'), 'rerun_rules': [], 'round': 0}
     rnd = a.round or (int(state.get('round') or 0) + 1)
     print(f'== 미검증 해소 1단계(분류·자동 재측정) {mid} · 라운드 {rnd} · {now()} ==', flush=True)
+    # 2026-11-19 사용자: 미검증 해소 보완 뒤 CheckList 재수행 전이면 보완 전 원장 건수를 출력·문서에 보여 주지 않는다(json 값은 VM 체인 판단용으로 유지)
+    try:
+        import pending_recheck as _PR
+        prc = _PR.pending(mid)
+    except Exception:
+        prc = None
+    if prc:
+        print(f'[INFO] {prc["note"]} · 원장 {prc["ledger_at"]}', flush=True)
     tri0 = triage(rows, classes); before = counts(tri0)
-    print(f'[세부 1/3] 분류: 미검증 {before["total"]}행 · 담당 ' + ' · '.join(f'{k} {v}' for k, v in sorted(before['by_actor'].items(), key=lambda x: -x[1])), flush=True)
+    print('[세부 1/3] 분류: ' + ('보완 전 원장이라 건수 표시 생략(행 목록 unverified_triage.csv)' if prc else f'미검증 {before["total"]}행 · 담당 ' + ' · '.join(f'{k} {v}' for k, v in sorted(before['by_actor'].items(), key=lambda x: -x[1]))), flush=True)
     rr = None
     if not a.no_rerun and before['total']:
         print('[세부 2/3] 자동 재측정', flush=True)
@@ -233,12 +241,14 @@ def main():
             if t['actor'] == '대조표':
                 t['actor'] = '가이드'; t['remedy'] = 'DB MODE(repairScope DB_ONLY): 대조표(FE 폴더) 수정 불가, FE 가이드(FE_GUIDE_*.md)로 남기고 결정 목록에 적음 · 재수행으로 줄지 않아 처리 대상에서 뺌'
     after = counts(tri)
-    print(f'[세부 3/3] 기록: 미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}, 사람 확인 {after["human"]}, 집계 {after["aggregate"]}', flush=True)
+    print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}, 사람 확인 {after["human"]}, 집계 {after["aggregate"]}'), flush=True)
     os.makedirs(vd, exist_ok=True)
     with open(os.path.join(vd, 'unverified_triage.csv'), 'w', encoding='utf-8-sig', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=['row_id', 'source', 'rule_id', 'target', 'class', 'actor', 'remedy', 'evidence'])
         w.writeheader(); w.writerows(tri)
-    md = group_md(mid, tri, before, after, rr, rnd)
+    md = group_md(mid, tri, before, after, rr, rnd) if not prc else (
+        f'# {mid} 미검증 분류 · {now()} · 라운드 {rnd}\n\n- {prc["note"]}\n- 원장 {prc["ledger_at"]} 은 보완 전 판이라 건수를 싣지 않음. CheckList 재수행 뒤 다시 만듦\n'
+        f'- 행 목록(작업용): unverified_triage.csv · 보완 기록: _unverified_work.md · 결정 목록: _unverified_decisions.md\n')
     open(os.path.join(vd, 'unverified_triage.md'), 'w', encoding='utf-8').write(md)
     sheet = None
     try:
@@ -263,7 +273,7 @@ def main():
     out = {'menu_id': mid, 'at': now(), 'round': rnd, 'ledger': os.path.relpath(lp, ROOT), 'before': before, 'after': after,
            'actionable': after['actionable'], 'human': after['human'], 'rerun': rr, 'unverified_sheet': sheet,
            'ledger_mtime': lmt, 'prev_actionable': prev_act, 'continue': cont, 'stalled': stalled,
-           'resolved_actionable': sorted(resolved_ids), 'new_actionable': sorted(new_ids),
+           'resolved_actionable': sorted(resolved_ids), 'new_actionable': sorted(new_ids), 'pending_recheck': prc,
            'note': '미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행'}
     json.dump(out, open(os.path.join(vd, 'unverified_triage.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     hp = os.path.join(vd, 'unverified_history.csv'); new = not os.path.exists(hp)
@@ -276,6 +286,9 @@ def main():
     state['round'] = rnd
     json.dump(state, open(st_p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(f'@@LINK 📋 미검증 분류|{os.path.join(vd, "unverified_triage.md")}', flush=True)
+    if prc:
+        print('[INFO] 보완 뒤 CheckList 재수행 전. 남은 건수는 CheckList 재수행 뒤 표시', flush=True)
+        return 0
     if stalled:
         print(f'[WARN] 처리 대상 {after["actionable"]}행 · 직전 처리 대상 {prev_act}행 중 풀린 행 0 — 반복 중단, 남은 행은 원인·결정 목록으로 보고', flush=True)
     elif resolved_ids or new_ids:

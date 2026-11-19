@@ -346,7 +346,10 @@ export class Nscm {
   }
   /** 후보 라벨 중 하나라도 보이면 그 라벨(없으면 ''). 첫 후보만 기본 대기, 나머지는 짧게 */
   async fieldExistsAny(labels: string[]) {
-    const list = [...new Set(labels.map(s => String(s || '').trim()).filter(Boolean))];
+    // 2026-11-19 T339(SCP0111 ES-f6cf77b0): 기준 Excel 라벨의 전각 기호('Qty ＜ 0')는 화면 반각 문구('Qty < 0')와 글자 비교가 안 된다 —
+    //   전각→반각(NFKC) 후보를 뒤에 덧붙인다(원 후보 우선 · 찾은 후보 문구를 그대로 돌려줌)
+    const base = labels.map(s => String(s || '').trim()).filter(Boolean);
+    const list = [...new Set([...base, ...base.map(s => s.normalize('NFKC'))])];
     for (let i = 0; i < list.length; i++) if (await this.fieldExists(list[i], i === 0 ? 4_000 : 1_000)) return list[i];
     return '';
   }

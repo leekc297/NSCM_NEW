@@ -1,0 +1,39 @@
+{
+  "id": "SCP0111",
+  "task": "claude",
+  "scope": "both",
+  "note": "[2/2] 2. 검사엔진 보완 (처리 대상 전체 → 일괄 신설·보완 · 처리 대상이 있을 때만)",
+  "start": "2026-11-19T10:24:08+09:00",
+  "end": "2026-11-19T10:45:38+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\integration-psi",
+      "files": 16
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0111",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0111",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "chain",
+  "label": "[2/2] 2. 검사엔진 보완 (처리 대상 전체 → 일괄 신설·보완 · 처리 대상이 있을 때만)",
+  "text": "화면 SCP0111 의 CheckList 미검증을 해소한다(2026-11-18 사용자 지시: CheckList 를 돌렸을 때 미검증이 생기면 따로 요청하지 않아도 검사엔진을 만들거나 보완해서 검증까지 진행). 중간에 사용자에게 묻지 않고 끝까지 진행하며, 판단이 필요한 것은 결정 목록에 모아 마지막에 보고한다.\n\n[0 입력] Doc/verify/SCP0111/unverified_triage.md 와 unverified_triage.csv(행별 유형·담당·처리 방법·증거), unverified_triage.json(전후 건수), unverified_history.csv(라운드 기록)를 먼저 읽는다. 파일이 없거나 원장(Doc/verify/SCP0111/verify_ledger.csv)보다 오래됐으면 python tools/Harness/verify/unverified_resolve.py SCP0111 --no-rerun 으로 다시 만든다. 이전 라운드 기록(Doc/verify/SCP0111/_unverified_work.md)이 있으면 이어서 진행하고 같은 시도를 되풀이하지 않는다. 참고: Doc/verify/_checker_defects.md(검사기 결함 유형 T1~), Doc/verify/_tobe_rule_registry.md(TO-BE 룰 원장), Doc/verify/_ENGINE_MASTER.md 끝(최근 엔진 작업), tools/Harness/README.md 도구 등록부.\n\n[1 전체 목록 먼저] 고치기 전에 담당이 엔진·대조표·판단·자동(재실행)인 행 전부(유형 미분류 포함)를 행마다 조치(고칠 검사기 파일 · 원인 · 판단·사람 행은 결정 목록)와 함께 Doc/verify/SCP0111/_unverified_plan.md 에 표로 쓴다. 목록에 없는 행이 남지 않게 원장 미검증 행 수와 목록 행 수를 맞춘다. 집계 행은 하위 행을 따라가므로 따로 고치지 않는다. 담당 사람(스냅샷 승인·시험 계정)·보완(선행 결함: 화면 기능 누락 FAIL 뒤에만 잴 수 있는 행) 행은 처리하지 않고 결정 목록에만 적는다(스냅샷은 snap_validate.py 대조 결과를 붙인다). 같은 유형·같은 규칙 묶음은 원인이 하나이므로 묶음 단위로 원인을 찾고 한 번에 고친다. 처리 순서는 행 수가 많은 묶음부터.\n\n[2 원인 확인] 묶음마다 증거 문구에 나온 검사기(스크립트·스펙 테스트)와 그 실행 기록(Doc/verify/SCP0111 의 결과 파일, Playwright 결과, 로그)을 열어 왜 측정하지 못했는지 실측으로 확인한다. 원인을 추측으로 적지 않는다. 화면 결함인지 검사기 한계인지 구분한다.\n- 검사기공백(측정 경로·코드 없음, 해석 불가, 시나리오 없음): 그 규칙을 판정하는 검사기를 신설하거나 기존 검사기의 측정 경로를 넓힌다.\n- 데이터전제(조회 행 부족, 0행, 편집 가능한 행 없음, 저장 요청 없음): 검사기가 조회조건·Division·행 선택을 바꿔 전제를 스스로 만들게 한다(전 후보 순회 · 0행 탭을 오류 없음으로 보지 않음).\n- 차등짝(KEYSET·VALUES·COLSET·ORDER): sp_pair.csv 짝, gen_param_map 인자, 원천 SP 대응을 보강하고 diff 단계 검사기를 다시 돌린다.\n- 대조표사유: 대조표 행의 근거(룰·지시·AS-IS 원문·이동 위치)를 원문에서 찾아 보강한다. 대조표 파일 수정은 tools/Harness/harness.json repairScope 범위 안에서만 하고, DB_ONLY 면 가이드만 남긴다.\n- 판단: TO-BE 룰 원장과 AS-IS 원문에서 근거를 찾는다. 룰 근거가 있으면 그 룰을 판정 경로(검사기·규칙표)에 넣어 기계 판정이 되게 하고, 근거가 없으면 결정 목록에 남긴다.\n- 재실행(담당 자동 · 시간 초과·측정 경로 실패·결과 기록 없음): 체인 1단계는 --no-rerun 이라 이 행을 다시 재지 않는다. 실패 로그(Playwright 결과·_run 로그)에서 실패 지점을 확인하고, 같은 실패가 반복될 원인(선택자·대기·전제 데이터)이 검사기에 있으면 고친다. 일시 실패로 확인되면 목록에 근거를 적고 3단계 재수행에 맡긴다. 직전 라운드에도 같은 실패였던 행은 분류기가 담당 엔진으로 넘긴다.\n- 미분류: 원인을 확인한 뒤 tools/Harness/verify/unverified_classes.csv 에 유형 정규식을 더하고 위 처리 중 맞는 것을 한다.\n\n[3 보완 원칙]\n- 고치는 대상은 공용 검사엔진(tools/Harness/verify, tools/E2E, Doc/e2e/specs 의 공용 스펙·생성기, 규칙표 csv)이다. 화면 ID·시트명·컬럼명·라벨을 검사기에 고정하지 않는다(화면 독립). 다른 화면에도 같은 유형이 있으면 같이 풀리게 만든다.\n- 화면 FE(nscm-fe)·BE(nscm-be)·AS-IS 원본 소스는 고치지 않는다. 화면 결함으로 확인되면 FAIL 이 되게 측정하고, 고칠 곳은 가이드로만 남긴다.\n- 판정을 낮추지 않는다. 재지 못한 행을 NA·PASS 로 바꾸지 않는다. NA 는 원문·메타 근거가 있을 때만. 기대값을 실측값에 맞춰 바꾸지 않는다.\n- 저장 시험은 기존 규칙을 따른다(VERIFY_NO_SAVE=1 이면 저장 안 함, 저장 직전 대상 행 기록 후 복원, 다른 사용자 행·사용자 설정을 덮어쓰지 않음). DB 는 내가 연 세션만 다룬다.\n- 다른 세션이 같은 엔진 파일을 고칠 수 있으므로 공용 파일은 수정 직전에 다시 읽고 필요한 부분만 고친다.\n- 고친 뒤 python tools/Harness/verify/engine_selfcheck.py 를 통과시킨다(실패하면 다음 단계로 가지 않고 고친다). 새 도구를 만들면 python scripts/rules/inventory_check.py --write-registry 로 등록부를 갱신한다. 새 검사기 결함 유형은 Doc/verify/_checker_defects.md 에, 작업 기록은 Doc/verify/_ENGINE_MASTER.md 끝에 덧붙인다.\n\n[4 일괄 진행 · 재측정 없음 — 2026-11-18 사용자: \"전체 목록을 보고, 필요한 작업을 일괄로 먼저 한 후에 미검사 없이 전체 검증 절차를 거친다\"] 보완은 [1]에서 만든 목록 전체를 한 번에 끝낸다. 묶음마다 run_verify --only 나 개별 검사기 재실행으로 확인하지 않는다(확인은 검사기 자기 시험·단위 함수 시험·engine_selfcheck 로만). CheckList(run_verify.py · checklist_run.py)는 직접 실행하지 않는다(2026-11-19 사용자: 진행 단계가 Console 보드에 보여야 함). 🔎 CheckList 체인에서 불렸으면 체인이 다음 단계로 CheckList 를 다시 수행하고, 🧪 메뉴에서 직접 실행했으면 VM 이 사용자에게 CheckList 재수행을 묻고 승인할 때만 수행한다. [5 기록·보고] Doc/verify/SCP0111/_unverified_work.md 에 라운드별로 묶음마다 원인(실측 근거), 고친 파일:라인, 재측정 명령과 결과(전후 상태), 남은 사유를 적는다. 결정 목록은 Doc/verify/SCP0111/_unverified_decisions.md(행 ID, 정할 내용, 근거). 끝나면 python tools/Harness/verify/unverified_resolve.py SCP0111 --no-rerun 으로 남은 수를 다시 세고, 보고에는 원장 미검증 전/후 행 수, 담당별 남은 수, CheckList '미검증' 시트 행 수(checklist_counts.json unverified_sheet), 고친 검사기 목록, 결정 목록 건수를 실측값으로 적는다. 시각은 date 실행값만 쓴다.",
+  "user": "LG",
+  "host": "LEE-03",
+  "afterMode": "end",
+  "afterAt": "2026-11-19T10:45:38+09:00",
+  "changed": []
+}

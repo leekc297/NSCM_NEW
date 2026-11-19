@@ -147,7 +147,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 ### 도구 등록부
 
 <!-- TOOL-REGISTRY:BEGIN -->
-> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-18 18:32 · 도구 233개 · 손 실행 35개). 직접 고치지 말고 다시 생성한다.
+> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-19 10:58 · 도구 234개 · 손 실행 35개). 직접 고치지 말고 다시 생성한다.
 > 진입 열: `체인 <단계>` = `run_verify.py`(CheckList) 가 그 단계에서 실행 · `VM <작업 id>` = `tools/VibeManager/steps.json` 작업 · `다른 도구가 사용` = import·호출만 · `손 실행` = 어떤 진입점에도 연결 없음(명령줄에서 직접).
 
 
@@ -376,6 +376,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `new_screen_precheck.py` | VM S8.precheck | new_screen_precheck.py — EN-25 신규 화면 사전 점검 (2026-11-11 · 플랜 '추측 대신 실행') |
 | `oracle_class.py` | 체인 post | 규칙 → 오라클 분류 마스터(2026-11-06 사용자 원칙: AS-IS 직접 비교가 1순위 정답 · 룰은 AS-IS 로 비교할 수 없는 항목만) |
 | `pattern_coverage.py` | 다른 도구가 사용: gen_expect.py | pattern_coverage.py <ID> [<ID> ...] — 화면별 결함 패턴 적용표(W8-3, 2026-11-05) |
+| `pending_recheck.py` | 다른 도구가 사용: recheck.js, screen_status.py, unverified_resolve.py | 미검증 해소 보완 뒤 CheckList 재수행 전인지 판단(2026-11-19 사용자 지시) |
 | `pkg_asis_map.py` | 다른 도구가 사용: gen_param_map.py | pkg_asis_map.py — TO-BE PKG 원문에 적힌 AS-IS SP 이름으로 짝을 읽는다 (2026-11-11 · EN-02 ② 짝 = 기록된 사실) |
 | `pkg_gate.py` | VM S8.pkgGate | pkg_gate.py — EN-05 PKG 컴파일·실행 대조 게이트 (2026-11-11 · 플랜 '추측 대신 실행' M1) |
 | `plain_detail.py` | 손 실행(진입점 연결 없음) | plain_detail — CheckList '설명' 열을 처음 보는 사람도 읽을 수 있게 다시 쓴다 (사용자 2026-11-13). |
@@ -400,7 +401,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `scenario_env.py` | 체인 facts | scenario_env.py <ID> [...] — 화면별 데이터 전제 프로필(W8-5, 2026-11-05) → Doc/verify/<ID>/scenario_env.json |
 | `set_scope.py` | VM S8.scope | 보완 범위 환경설정 — tools/Harness/harness.json 의 repairScope 를 읽고 쓴다(단일 원천) |
 | `sheet_data_cond.py` | 다른 도구가 사용: asis_live_scen_run.py, smoke-extra.ts | 시트별 데이터 조건 탐색(2026-11-17 SCP0104 SOP 탭 0행 미측정 대응). |
-| `snap_approve.py` | 다른 도구가 사용: _snap.spec.ts, make_verify_docs.py, run_verify.py 외 2 | 스냅샷 승인 = 골든(2026-11-06 플랜 3-4) — 수신본을 골든으로 올리고 사용자 판정 회귀 오라클(_user_verdicts_direct.csv)에 기록한다. |
+| `snap_approve.py` | 체인 post | 스냅샷 승인 = 골든(2026-11-06 플랜 3-4) — 수신본을 골든으로 올리고 사용자 판정 회귀 오라클(_user_verdicts_direct.csv)에 기록한다. |
 | `snap_expect.py` | 체인 post | 스냅샷 기대 템플릿(AS-IS 유래 부분 기대) 생성 — Doc/verify/<ID>/snap/expected/<key>.json (2026-11-06 플랜 3-4) |
 | `snap_parallel.py` | 손 실행(진입점 연결 없음) | 스냅샷 행 ↔ 구 프로브 행 병행 대조(2026-11-06 플랜 3-5) — 같은 규칙(G4·K4·A5·H6·H4·H5·SC1)의 기존 실측 판정과 스냅샷 판정을 나란히 놓는다. |
 | `snap_validate.py` | 체인 post | 수신 스냅샷(snap/received) ↔ AS-IS 유래 기대(snap/expected) 대조 — 골든 승인 전 기계 검증(2026-11-06 플랜 3-4) |

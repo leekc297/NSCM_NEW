@@ -42,12 +42,69 @@ def page_dir(mid):
     return out
 
 
+RX_RAISE = re.compile(r'RAISE_APPLICATION_ERROR\s*\(', re.I)
+RX_MSGVAR = re.compile(r'\b([A-Z0-9_]*MSG[A-Z0-9_]*)\s*:=', re.I)
+
+
+def msg_use_line(line):
+    """문구가 사용자 메시지로 나가는 경로 — RAISE(RAISE_APPLICATION_ERROR 인자) · OUTMSG(이름에 MSG 가 든 변수·인자 대입) · ''(경로 못 찾음)"""
+    if RX_RAISE.search(line): return 'RAISE'
+    if RX_MSGVAR.search(line): return 'OUTMSG'
+    return ''
+
+
+def name_use(name, body, skip_decl=True):
+    """이름(상수·변수)을 본문이 쓰는 줄 중 메시지 경로 — RAISE 우선 · 선언 줄 제외"""
+    uses = []
+    for l in (body or '').split(chr(10)):
+        l = re.sub(r'--.*$', '', l)
+        if not re.search(r'(?i)\b' + re.escape(name) + r'\b', l): continue
+        if skip_decl and re.match(r'(?i)^\s*' + re.escape(name) + r'\s+(CONSTANT\b|VARCHAR2|NVARCHAR2|CHAR\b|[A-Z0-9_.]+%TYPE)', l): continue
+        uses.append(msg_use_line(l))
+    return 'RAISE' if 'RAISE' in uses else 'OUTMSG' if 'OUTMSG' in uses else ''
+
+
+def decl_use(line, body):
+    """선언 줄('C_MSG_DUP CONSTANT VARCHAR2(200) := '…'')이면 그 이름의 본문 사용 경로 · 선언 줄 아니면 ''"""
+    m = re.match(r"(?i)^\s*([A-Z][A-Z0-9_]*)\s+(?:CONSTANT\s+)?[A-Z0-9_.%()\s]+?:=\s*'", line)
+    return name_use(m.group(1), body) if m else ''
+
+
+def const_lits(pkg_src, body):
+    """본문 밖(패키지 선언부) 한글 상수 중 PROC 본문이 RAISE·메시지 변수 대입에 쓰는 것 — [(문구, use)] · 본문이 안 쓰면 넣지 않음"""
+    out = []
+    if not pkg_src or not body: return out
+    for m in re.finditer(r"(?im)^\s*([A-Z][A-Z0-9_]*)\s+CONSTANT\b[^:;]*:=\s*'((?:[^'\n]|'')*[가-힣](?:[^'\n]|'')*)'", pkg_src):
+        name, lit = m.group(1), m.group(2)
+        if re.search(r'(?i)\b' + name + r'\s+CONSTANT\b', body): continue  # 본문 안 선언 = 줄 단위 검사가 이미 잡음
+        if not re.search(r'(?i)\b' + name + r'\b', body): continue
+        out.append((lit, name_use(name, body)))
+    return out
+
+
+def selftest():
+    pkg = "  C_MSG_DUP CONSTANT VARCHAR2(200 CHAR) := '[99010]동일한 데이터가 존재합니다.';\n  C_X CONSTANT VARCHAR2(10) := '미사용';\nPROCEDURE P IS\nBEGIN\n  RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP);\nEND;"
+    body = "PROCEDURE P IS\nBEGIN\n  RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP);\nEND;"
+    cases = [('상수 RAISE', const_lits(pkg, body), [('[99010]동일한 데이터가 존재합니다.', 'RAISE')]),
+             ('본문 안 상수 중복 제외', const_lits(pkg, "PROCEDURE P IS\n C_MSG_DUP CONSTANT VARCHAR2(9) := '가';\nBEGIN RAISE_APPLICATION_ERROR(-1, C_MSG_DUP); END;"), []),
+             ('본문 선언 상수 RAISE', decl_use("        C_MSG_DUP       CONSTANT VARCHAR2(200 CHAR) := '[99010]동일한 데이터가 존재합니다.';", "PROCEDURE P IS\n        C_MSG_DUP       CONSTANT VARCHAR2(200 CHAR) := '[99010]동일한 데이터가 존재합니다.';\nBEGIN\n  IF X THEN\n    RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP);\n  END IF;\nEND;"), 'RAISE'),
+             ('본문 선언 변수 미사용', decl_use("  V_T VARCHAR2(10) := '전극';", "PROCEDURE P IS\n  V_T VARCHAR2(10) := '전극';\nBEGIN NULL; END;"), ''),
+             ('직접 RAISE', msg_use_line("RAISE_APPLICATION_ERROR(-20001, '오류');"), 'RAISE'),
+             ('메시지 변수', msg_use_line("  O_RTN_MSG := '저장 실패';"), 'OUTMSG'),
+             ('비교값', msg_use_line("  WHERE A.NAME = '전극'"), '')]
+    bad = 0
+    for n, got, want in cases:
+        ok = got == want; bad += not ok; print(('OK ' if ok else 'NG ') + n, got)
+    print(f'{len(cases) - bad}/{len(cases)}'); return 1 if bad else 0
+
+
 def strip_ts(t):
     t = re.sub(r'/\*.*?\*/', lambda m: re.sub(r'[^\n]', ' ', m.group(0)), t, flags=re.S)
     return re.sub(r'(?m)(?<![:\'"`])//.*$', '', t)
 
 
 def main():
+    if '--selftest' in sys.argv: return selftest()
     ap = argparse.ArgumentParser(); ap.add_argument('menu'); a = ap.parse_args(); mid = a.menu.upper(); vd = os.path.join(DOC, 'verify', mid); os.makedirs(vd, exist_ok=True)
     rows = []; ids = set()
     for d in page_dir(mid):
@@ -80,10 +137,16 @@ def main():
                     else:
                         cur.execute("SELECT TEXT FROM ALL_SOURCE WHERE OWNER=:o AND NAME=:n AND TYPE='PACKAGE BODY' ORDER BY LINE", o=m[0], n=pkg); cache[pkg] = strip_comments(''.join(x[0] for x in cur.fetchall()))
                 body = proc_body(cache[pkg], proc) if cache[pkg] else ''
+                # 2026-11-19 T340(SCP0111 EG-42d53d53): 잡힌 문구가 화면에 나가는지 몰라 전부 ERROR 였다 — 나가는 경로(use)를 기록하고,
+                #   패키지 선언부 상수(C_MSG_DUP := '…')를 본문이 RAISE·메시지 변수에 쓰는 경우도 넣는다
+                lits = []
                 for line in (body or '').split(chr(10)):
                   line = re.sub(r'--.*$', '', line)
                   for lit in re.findall(r"'((?:[^'\n]|'')*[가-힣](?:[^'\n]|'')*)'", line):
-                    rows.append({'menu_id': mid, 'kind': 'DB', 'where': r['proc'], 'text': lit[:100]})
+                    lits.append((lit, decl_use(line, body) or msg_use_line(line)))
+                lits += const_lits(cache[pkg], body)
+                for lit, use in lits:
+                    rows.append({'menu_id': mid, 'kind': 'DB', 'where': r['proc'], 'text': lit[:100], 'use': use})
     # 같은 문구 다른 코드
     mm = rd(os.path.join(DOC, 'tobefacts', 'db', 'msg_master.csv')); by = collections.defaultdict(set)
     for x in mm:
@@ -101,7 +164,7 @@ def main():
             rows.append({'menu_id': mid, 'kind': 'DUP', 'where': ','.join(sorted(codes)[:6]), 'text': f'[{lg}] {txt[:80]}'})
     uniq = {(r['kind'], r['where'], r['text']): r for r in rows}; rows = list(uniq.values())
     with open(os.path.join(vd, 'i18n_static.csv'), 'w', encoding='utf-8-sig', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=['menu_id', 'kind', 'where', 'text']); w.writeheader(); w.writerows(rows)
+        w = csv.DictWriter(f, fieldnames=['menu_id', 'kind', 'where', 'text', 'use'], extrasaction='ignore'); w.writeheader(); w.writerows(rows)
     print(f"{mid}: {dict(collections.Counter(r['kind'] for r in rows))} · 화면 사용 MSG {len(ids)}")
     return 0
 

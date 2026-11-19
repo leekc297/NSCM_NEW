@@ -72,6 +72,8 @@ function dbModeBlock(p, what, out) {
   return true;
 }
 // DB MODE 면 모든 Claude 요청 앞에 붙는다(메뉴·체인·수선·직접 입력 공통) — 메뉴를 나누지 않고 이 문단 하나로 범위를 정한다
+// 2026-11-19 사용자: 프롬프트창 모델 옆 작업 모드 표시 문구(2개 모드)
+function workModeLabel(p) { return workMode(p).db ? 'DB Mode' : 'UI&DB Mode'; }
 function workModePrefix(p, id) {
   if (!workMode(p).db) return '';
   const g = `Doc/verify/${id || '<화면ID>'}/FE_GUIDE_<YYYYMMDD_HHMM>.md`;
@@ -120,7 +122,10 @@ function verifyStep(p, v, id) {
       const f = path.join(p.root, 'Doc', 'verify', id, 'unverified_triage.json'); if (!fs.existsSync(f)) return { ok: false, why: `미검증 분류 결과 없음: ${path.relative(p.root, f)}`, from: 'run' };
       const since = v._since || 0; if (since && fs.statSync(f).mtimeMs < since) return { ok: false, why: `미검증 분류가 이번 실행에서 갱신되지 않음 — ${path.relative(p.root, f)}`, from: 'run' };
       const j = JSON.parse(fs.readFileSync(f, 'utf8')); const a = j.after || {}; const n = Number(j.actionable || 0);
-      const tail = `원장 미검증 ${(j.before || {}).total ?? '?'} → ${a.total ?? '?'}행 · 사람 확인 ${a.human || 0} · 집계 ${a.aggregate || 0}${j.unverified_sheet != null ? ` · 미검증 시트 ${j.unverified_sheet}` : ''}`;
+      // 2026-11-19 사용자: 보완 뒤 재수행 전이면 보완 전 원장 건수를 문구에 넣지 않는다(통과 여부 판단은 그대로)
+      const prc = require('./recheck').pendingRecheck(path.join(p.root, 'Doc', 'verify', id));
+      if (prc) return n ? { ok: false, why: `미검증 해소 보완 ${prc.fixedAt} · CheckList 재수행 전 — 건수는 재수행 뒤 표시` } : { ok: true, why: `미검증 처리 대상 0 · 보완 ${prc.fixedAt} · CheckList 재수행 전` };
+      const tail =`원장 미검증 ${(j.before || {}).total ?? '?'} → ${a.total ?? '?'}행 · 사람 확인 ${a.human || 0} · 집계 ${a.aggregate || 0}${j.unverified_sheet != null ? ` · 미검증 시트 ${j.unverified_sheet}` : ''}`;
       return n ? { ok: false, why: `미검증 처리 대상 ${n}행 남음(${tail})` } : { ok: true, why: `미검증 처리 대상 0(${tail})` };
     }
     if (v.type === 'fileExists') { const f = String(v.file || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root).replace(/\$\{genDir\}/g, p.genDir); return fs.existsSync(f) ? { ok: true, why: `산출물 있음 ${path.relative(p.root, f)}` } : { ok: false, why: `산출물 없음 ${f}` }; }
@@ -265,7 +270,8 @@ function statusHtml(p, id) {
   const kpis = [
     tile(t(p, 'st_progress'), `${pct}%`, `${done}/${stages.length} ${t(p, 'st_stages')}`, pct === 100 ? 'ok' : pct ? 'mid' : ''),
     // 2026-11-18: 완료 기준 = CheckList(FAIL·판정필요·미검증·미검증 시트) · AS-IS 실측 상태를 앞에
-    (() => { const c = s.chkCounts; if (!c) return tile(t(p, 'st_cl'), '–', t(p, 'st_notrun'), ''); const ko2 = p.language === 'ko'; return tile(t(p, 'st_cl'), `FAIL ${c.FAIL}`, `${ko2 ? '판정필요' : 'Review'} ${c['판정필요']} · ${ko2 ? '미검증' : 'Unverified'} ${c['미검증']} · ${ko2 ? '미검증 시트' : 'Unverified sheet'} ${c['미검증시트'] == null ? '–' : c['미검증시트']}`, s.chk === 'ok' ? 'ok' : s.chk === 'bad' ? 'bad' : 'mid'); })(),
+    (() => { if (s.chkPending) return tile(t(p, 'st_cl'), p.language === 'ko' ? '재수행 전' : 'Recheck pending', p.language === 'ko' ? `보완 ${s.chkPending.fixedAt} · 건수는 재수행 뒤 표시` : `Fixed ${s.chkPending.fixedAt} · counts after re-run`, 'mid'); // 2026-11-19 보완 전 건수 숨김
+      const c = s.chkCounts; if (!c) return tile(t(p, 'st_cl'), '–', t(p, 'st_notrun'), ''); const ko2 = p.language === 'ko'; return tile(t(p, 'st_cl'), `FAIL ${c.FAIL}`, `${ko2 ? '판정필요' : 'Review'} ${c['판정필요']} · ${ko2 ? '미검증' : 'Unverified'} ${c['미검증']} · ${ko2 ? '미검증 시트' : 'Unverified sheet'} ${c['미검증시트'] == null ? '–' : c['미검증시트']}`, s.chk === 'ok' ? 'ok' : s.chk === 'bad' ? 'bad' : 'mid'); })(),
     tile(t(p, 'st_live'), s.liveN || '–', s.liveN ? '' : t(p, 'st_notrun'), s.live === 'ok' ? 'ok' : s.live === 'bad' ? 'bad' : s.live === 'warn' ? 'mid' : ''),
     tile(t(p, 'st_dod'), dod ? `${dod[1]}/${dod[2]}` : '–', dod ? '' : t(p, 'st_notrun'), dod ? (dod[1] === dod[2] ? 'ok' : 'mid') : ''),
     tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''),
@@ -738,7 +744,8 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     child.stderr.on('data', d => { const t = d.toString('utf8'); this.out('claude', t); if (logWs) try { logWs.write('[stderr] ' + t); } catch { } for (const ln of t.split(/\r?\n/)) if (ln.trim()) { errTail.push(ln.trim().slice(0, 200)); if (errTail.length > 6) errTail.shift(); } });
     try { child.stdin.on('error', () => { inputOpen = false; }); } catch { } // 입력을 닫은 뒤 쓰기(EPIPE)로 확장이 죽지 않게
     child.on('error', e => { errTail.push(`spawn 실패: ${e.message}`); this.out('claude', `spawn 실패: ${e.message}\n`, 'bad'); });
-    { const wm = workMode(p); if (wm.db) this.post({ type: 'chat', role: 'meta', text: '🧭 작업 모드 DB MODE — DB·META 만 수정, FE·BE 는 가이드만' }); }
+    // 2026-11-19 사용자: 작업 모드는 Console 줄 대신 프롬프트창 모델 옆 표시로(매 실행 때 현재 값으로 맞춤 · harness.json 이 밖에서 바뀐 경우 포함)
+    this.post({ type: 'workMode', label: workModeLabel(p), code: workMode(p).code });
     writeUser(workModePrefix(p, (s.id || '').toUpperCase()) + full); // 2026-11-18: 입력을 닫지 않음 — 결과 뒤 IDLE_MS 가 지나면 closeInput
     child.on('close', code => {
       if (buf.trim()) handle(buf);
@@ -1348,7 +1355,7 @@ body.lsdrag{cursor:row-resize;user-select:none}
 #chat,#status,#flow,#hist,#thist{white-space:normal;font-family:var(--vscode-font-family)}
 .m{margin:4px 0;padding:4px 6px;border-radius:4px;white-space:pre-wrap}
 .m.user{background:var(--vscode-input-background);border-left:3px solid var(--vscode-focusBorder)}
-.m.assistant{border-left:3px solid #3fb950}
+.m.assistant{border-left:3px solid rgba(63,185,80,.35)}
 .m.meta{opacity:.6;font-size:11px}
 .m.mdet summary{cursor:pointer;white-space:normal}
 .m.mdet .mb{white-space:pre-wrap;font-size:10.5px;margin:3px 0 0 14px;max-height:240px;overflow:auto;font-family:var(--vscode-editor-font-family)}
@@ -1356,6 +1363,7 @@ body.lsdrag{cursor:row-resize;user-select:none}
 .m.htmlv .hvh{display:flex;align-items:center;gap:8px;padding:3px 8px;background:var(--vscode-sideBarSectionHeader-background,#8882);font-size:11.5px}
 .m.htmlv .hvh b{font-weight:600}.m.htmlv .hvh .hvt{opacity:.65}.m.htmlv .hvh .sp{flex:1}
 .m.htmlv .hvh button{font-size:11px;padding:1px 8px;cursor:pointer}
+.m.htmlv .hvh button.hvi{display:inline-flex;align-items:center;justify-content:center;width:22px;height:20px;padding:0;border:0;border-radius:4px;background:transparent;color:var(--vscode-icon-foreground,var(--vscode-foreground));opacity:.75;cursor:pointer}.m.htmlv .hvh button.hvi:hover{opacity:1;background:var(--vscode-toolbar-hoverBackground,rgba(128,128,128,.2))}.m.htmlv .hvh button.hvi:focus-visible{outline:1px solid var(--vscode-focusBorder)}
 .m.htmlv iframe{display:block;width:100%;height:480px;border:0;background:transparent}
 .m.htmlv.fold iframe{display:none}
 details.m{padding:3px 6px;background:transparent;opacity:1;max-height:none;overflow:visible}
@@ -1421,7 +1429,7 @@ body.vscode-light .step.done .sno{color:#1a7f37}body.vscode-light .step.running 
 .step .slast{font-size:10px;opacity:.6;max-width:34%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
 .step[open] .slast{display:none}
 .sbody{padding:4px 8px 8px 30px;border-top:1px solid rgba(var(--hl,255,255,255),calc(.05*var(--kl,1)))}
-.stext{white-space:pre-wrap;font-size:12px;margin:4px 0;padding:4px 6px;border-left:3px solid #3fb950}
+.stext{white-space:pre-wrap;font-size:12px;margin:4px 0;padding:4px 6px;border-left:3px solid rgba(63,185,80,.35)}
 .sbody details.m.tool{margin:2px 0}
 .sbody details.m.tool.bad{border-left-color:#f85149}
 .mr{white-space:pre-wrap;margin-top:4px;max-height:260px;overflow:auto;font-family:var(--vscode-editor-font-family);font-size:11px;border-left:2px solid var(--vscode-focusBorder);padding:4px 6px;opacity:.9}
@@ -1479,7 +1487,7 @@ table.csvt.folder a{cursor:pointer;color:var(--vscode-textLink-foreground,#58a6f
 .codew{font-family:var(--vscode-editor-font-family);font-size:11.5px}table.codet{border-collapse:collapse;width:100%}table.codet td{padding:0 8px;vertical-align:top;white-space:pre;line-height:1.45}table.codet td.ln{text-align:right;opacity:.4;user-select:none;width:1%;border-right:1px solid var(--b)}table.codet tr.hl td{background:rgba(210,153,34,.18)}
 table.difft tr.dadd td.cd{background:rgba(63,185,80,.15)}table.difft tr.ddel td.cd{background:rgba(248,81,73,.15)}table.difft tr.gap td{text-align:center;opacity:.45;font-size:10px;padding:2px}table.difft tr.ctxh{display:none}.diffw.all table.difft tr.ctxh{display:table-row}.diffw.all table.difft tr.gap{display:none}
 .imgw{display:flex;justify-content:center;padding:10px}.imgw img{max-width:100%;border:1px solid var(--b)}
-details.bfinal .ft{white-space:pre-wrap;font-size:12px;max-height:420px;overflow:auto;margin-top:6px;padding:6px 8px;border-left:3px solid #3fb950;background:var(--vscode-editor-background)}
+details.bfinal .ft{white-space:pre-wrap;font-size:12px;max-height:420px;overflow:auto;margin-top:6px;padding:6px 8px;border-left:3px solid rgba(63,185,80,.35);background:var(--vscode-editor-background)}
 .md{white-space:normal;line-height:1.5}.md>:first-child{margin-top:0}.md>:last-child{margin-bottom:0}.md .mdp{margin:4px 0}.md .mdh{font-weight:700;margin:10px 0 4px}.md .mdh1{font-size:1.25em}.md .mdh2{font-size:1.15em}.md .mdh3{font-size:1.05em}.md .mdh4{font-size:1em}.md .mdlist{margin:3px 0;padding-left:22px}.md li{margin:2px 0}.md .mdc{font-family:var(--vscode-editor-font-family);font-size:.95em;padding:0 4px;border-radius:3px;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.18))}.md .mdpre{margin:6px 0;padding:6px 8px;overflow:auto;border-radius:4px;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.15));font-family:var(--vscode-editor-font-family);font-size:11px;white-space:pre}.md .mdtw{overflow:auto;margin:6px 0}.md .mdt{border-collapse:collapse;font-size:11.5px}.md .mdt th,.md .mdt td{border:1px solid var(--vscode-panel-border,rgba(127,127,127,.35));padding:3px 8px;text-align:left;vertical-align:top}.md .mdt th{font-weight:600;background:var(--vscode-editorWidget-background,rgba(127,127,127,.12))}.md .mdq{margin:4px 0;padding:2px 8px;border-left:3px solid var(--vscode-textBlockQuote-border,#888);opacity:.9}.md .mdhr{border:0;border-top:1px solid var(--vscode-panel-border,#8884);margin:8px 0}.md a.mdl{color:var(--vscode-textLink-foreground);cursor:pointer;text-decoration:none}.md a.mdl:hover{text-decoration:underline}.md b{font-weight:700}
 details.bfinal .ft.md{white-space:normal}
 
@@ -1511,12 +1519,12 @@ details.bfinal .ft.md{white-space:normal}
 .tli .tlt{font-family:var(--vscode-editor-font-family);opacity:.65;min-width:84px}.tli a{cursor:pointer;text-decoration:underline;flex:1}.tli .tln{opacity:.65;font-size:10px}.tli .tln.ok{color:#3fb950}.tli .tln.bad{color:#f85149}
 
 /* 2.0.0: 프롬프트 창 = Claude Code 입력창 형태 — 둥근 상자 1개(입력 + 아래 도구 줄) · 테두리·모드 글자·전송 버튼이 모드 색을 같이 쓴다 */
-.pbox{--mc:var(--vscode-descriptionForeground,#9d9d9d);--mb:var(--vscode-input-border,var(--b));--mf:var(--vscode-button-background);border:1px solid var(--mb);border-radius:12px;background:var(--vscode-input-background);padding:8px 10px 6px;transition:border-color .15s ease}
+.pbox{--mc:var(--vscode-descriptionForeground,#9d9d9d);--mb:var(--vscode-input-border,var(--b));--mf:var(--vscode-button-background);border:1px solid var(--mb);border-color:color-mix(in srgb,var(--mb) 35%,transparent);border-radius:12px;background:var(--vscode-input-background);padding:8px 10px 6px;transition:border-color .15s ease,box-shadow .15s ease}
 /* 모드 색(사용자 지정 2026-11-11): 자동승인·자동(수용) = 주황 · PLAN = 파랑 · 수동 = 흰색(밝은 테마에서는 글자색) */
 .pbox[data-mode=bypassPermissions],.pbox[data-mode=acceptEdits]{--mc:#e8833a;--mb:#e8833a;--mf:#e8833a}
 .pbox[data-mode=plan]{--mc:#4a9eff;--mb:#4a9eff;--mf:#4a9eff}
 .pbox[data-mode=default]{--mc:#fff;--mb:#fff;--mf:#fff}.vscode-light .pbox[data-mode=default]{--mc:var(--vscode-foreground);--mb:var(--vscode-foreground);--mf:var(--vscode-foreground)}
-.pbox:focus-within{box-shadow:0 0 0 1px var(--mb)}
+.pbox:focus-within{border-color:color-mix(in srgb,var(--mb) 75%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--mb) 12%,transparent),0 3px 12px color-mix(in srgb,var(--mb) 22%,transparent)} /* 2026-11-19 사용자: 평소 은은하게(35%) · 커서 있을 때 1px + 옅은 그림자 */
 .pbox textarea{display:block;width:100%;min-height:44px;max-height:40vh;field-sizing:content;resize:none;background:transparent;color:var(--vscode-input-foreground);border:0;outline:0;padding:2px 2px 6px;font:13px/1.45 var(--vscode-font-family)}
 .pbar{display:flex;align-items:flex-end;gap:4px;position:relative}
 .pbar .pl{display:flex;align-items:center;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
@@ -1529,6 +1537,7 @@ details.bfinal .ft.md{white-space:normal}
 .pbar .pchip{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 8px;border-radius:11px;background:var(--vscode-toolbar-hoverBackground,rgba(128,128,128,.16));color:var(--vscode-foreground);font-size:9.2px;max-width:100%;min-width:0}
 .pbar .pchip svg{width:13px;height:13px;color:var(--vscode-descriptionForeground,#9d9d9d)}
 .pbar .idbtn{outline:0;font-weight:600;cursor:pointer}.pbar .idbtn:hover{background:var(--vscode-toolbar-activeBackground,rgba(128,128,128,.3))}
+.pbar .pwmode{flex:none;gap:3px}.pbar .pwmode select.dd{width:auto;max-width:96px;font-weight:600;cursor:pointer}.pbar .pwmode select.dd option{background:var(--vscode-dropdown-background);color:var(--vscode-dropdown-foreground)}
 .pbar select.dd{background:transparent;border:0;padding:0;font-size:9.2px;color:inherit;max-width:190px;text-overflow:ellipsis;outline:0}
 .pbar select.dd:focus-visible,.pbar button:focus-visible{outline:1px solid var(--vscode-focusBorder);outline-offset:1px}
 .pbar select.dd option{background:var(--vscode-dropdown-background,#252526);color:var(--vscode-dropdown-foreground,#ccc)}
@@ -1639,19 +1648,20 @@ ${flow.FLOW_CSS}
     <textarea id="t" placeholder="${esc(String(t(p, 'ph')).replace(/\p{Extended_Pictographic}️?\s*/gu, ''))}"></textarea>
     <div class="pbar"><div class="pl">
       <button class="pi" id="attach" aria-label="${esc(noEm(t(p, 'attach')))}" title="파일 첨부 — 선택한 파일을 Claude 에 @경로 로 전달. 이미지는 Claude 가 직접 읽습니다. 클립보드 이미지는 textarea 에 Ctrl+V 로 붙여넣기 가능.">${PI.plus}</button>
-      <span class="pmw"><button class="pi" id="slash" aria-haspopup="menu" aria-expanded="false" aria-label="${p.language === 'ko' ? '명령' : 'Commands'}" title="${p.language === 'ko' ? '명령 — 지우기 · 새 세션 · quick.json 편집' : 'Commands — clear · new session · edit quick.json'}">${PI.slash}</button>
+      <span class="pmw"><button class="pi" id="slash" aria-haspopup="menu" aria-expanded="false" aria-label="${p.language === 'ko' ? '명령' : 'Commands'}" title="${p.language === 'ko' ? '명령 — 지우기 · 새 세션 · quick.json 편집 · 새 창 · 리모트' : 'Commands — clear · new session · edit quick.json · new window · remote'}">${PI.slash}</button>
         <div class="pmenu" id="pmenu" role="menu" hidden>
           <button class="pm" id="clear" role="menuitem" title="작업 출력·Claude 대화 지우기">${PI.trash}<span>${esc(noEm(t(p, 'clear')))}</span></button>
           <button class="pm" id="newS" role="menuitem" title="Claude 세션 리셋 — 다음 전송부터 새 대화 (화면ID 유지)">${PI.refresh}<span>${esc(noEm(t(p, 'newsess')))}</span></button>
           <button class="pm" id="editQ" role="menuitem" title="quick.json 편집 — 전체 메뉴 그룹·항목 커스터마이즈">${PI.pencil}<span>quick.json</span></button>
+          <button class="pm" id="newWin" role="menuitem" title="${esc(noEm(t(p, 'newwin')))} — 워크벤치를 하나 더 열기 — 각 창이 독립된 Claude 세션·화면ID 로 멀티 작업 가능">${PI.newwin}<span>${esc(noEm(t(p, 'newwin')))}</span></button>
+          <button class="pm" id="remote" role="menuitem" title="${esc(noEm(t(p, 'remote')))} — 현재 Claude 세션 ID 를 모바일 Claude Code 로 이어받기 위한 세션 ID / --resume 명령 복사">${PI.phone}<span>${esc(noEm(t(p, 'remote')))}</span></button>
           <div class="pmi"><span id="sess" class="hint">${wb.claudeSession ? t(p, 'sess') + esc(wb.claudeSession.slice(0, 8)) : t(p, 'nosess')}</span></div>
         </div></span>
       <button class="pchip idbtn" id="idBtn" title="화면 ID 확정 — 유지/다른 ID 입력/AS-IS DB 목록에서 선택. 묵시적 재사용 금지(1.6 룰).">${PI.pin}<span id="idTxt">${esc(state.id || t(p, 'noid'))}</span></button>
       <span class="pchip pmodel"><select class="dd" id="model" title="Claude 모델 (--model) — 다음 전송부터 적용(세션 유지). 목록은 VS Code 설정 vibeManager.modelList, 없는 모델은 '직접 입력…'">${modelOpts}</select>
         <span id="modelInfo" class="modelbox" title="현재 세션에서 실제로 응답한 모델 (Claude Code stream 의 model 필드)"><span class="mlbl">${t(p, 'inuse')}</span><span id="modelName" title="${esc(state.model || p.claudeModel || '')}">${esc(mShort(state.model || p.claudeModel || ''))}</span></span></span>
+      <span class="pchip pwmode" title="작업 모드 — DB Mode = DB·META 만 수정, FE·BE 는 가이드만 · UI&amp;DB Mode = 제약 없음 (고르면 바로 바뀜 · tools/Harness/harness.json repairScope)">🧭<select class="dd" id="wmode"><option value="DB_ONLY"${workMode(p).db ? ' selected' : ''}>DB Mode</option><option value="DB_FE"${workMode(p).db ? '' : ' selected'}>UI&amp;DB Mode</option></select></span>
       <span class="psp"></span>
-      <button class="pi" id="newWin" aria-label="${esc(noEm(t(p, 'newwin')))}" title="${esc(noEm(t(p, 'newwin')))} — 워크벤치를 하나 더 열기 — 각 창이 독립된 Claude 세션·화면ID 로 멀티 작업 가능">${PI.newwin}</button>
-      <button class="pi" id="remote" aria-label="${esc(noEm(t(p, 'remote')))}" title="${esc(noEm(t(p, 'remote')))} — 현재 Claude 세션 ID 를 모바일 Claude Code 로 이어받기 위한 세션 ID / --resume 명령 복사">${PI.phone}</button>
       </div><div class="pr">
       <span class="pmode" title="Claude 모드 (/mode) — 자동(acceptEdits) · 수동(default) · PLAN · 전부허용(bypassPermissions)">${PI.bolt}<select class="dd" id="mode" aria-label="mode">
         <option value="acceptEdits" title="Auto — accept edits (acceptEdits)"${curMode === 'acceptEdits' ? ' selected' : ''}>Auto</option>
@@ -1760,6 +1770,7 @@ $('t').addEventListener('paste',e=>{
 $('attach').onclick=()=>vscode.postMessage({type:'pickFiles'});
 $('newS').onclick=()=>vscode.postMessage({type:'newSession'});
 $('idBtn').onclick=()=>vscode.postMessage(Object.assign({type:'pickId'},st()));
+$('wmode').addEventListener('change',()=>{const s=$('wmode');s.disabled=true;vscode.postMessage({type:'setWorkMode',code:s.value});}); // 2026-11-19 사용자: 작업 모드 = 드롭다운으로 선택
 $('remote').onclick=()=>vscode.postMessage({type:'remote'});
 $('editQ').onclick=()=>vscode.postMessage({type:'editQuick'});
 $('newWin').onclick=()=>vscode.postMessage({type:'newWindow'});
@@ -1975,12 +1986,18 @@ function hvTheme(fr){
 }
 let HV_WATCH=null;
 function hvWatch(){if(HV_WATCH||!window.MutationObserver)return;HV_WATCH=new MutationObserver(()=>document.querySelectorAll('.m.htmlv iframe').forEach(hvTheme));HV_WATCH.observe(document.body,{attributes:true,attributeFilter:['class']});}
+const HV_IC={
+  fold:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10l4-4 4 4"/></svg>',
+  unfold:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>',
+  open:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h4v4"/><path d="M13 3L7.5 8.5"/><path d="M11 9.5V12.5a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5H6.5"/></svg>'};
 function addHtmlView(m){
   const stick=chatStick();
   const box=el('div','m htmlv','');const hd=el('div','hvh','');
   hd.appendChild(el('b',null,'📊 '+(m.label||'HTML')));hd.appendChild(el('span','hvt',(m.time||'')+' · '+(m.file||'')));hd.appendChild(el('span','sp',''));
-  const bf=el('button',null,'접기');bf.onclick=()=>{box.classList.toggle('fold');bf.textContent=box.classList.contains('fold')?'펼치기':'접기';};
-  const bo=el('button',null,'브라우저로 열기');bo.onclick=()=>vscode.postMessage({type:'openExternal',file:m.file});
+  // 2026-11-19 사용자: 접기·브라우저로 열기 = 배경 없는 아이콘 버튼(설명은 툴팁)
+  const bf=el('button','hvi');bf.innerHTML=HV_IC.fold;bf.title='접기';bf.setAttribute('aria-label','접기');
+  bf.onclick=()=>{box.classList.toggle('fold');const f=box.classList.contains('fold');bf.innerHTML=f?HV_IC.unfold:HV_IC.fold;bf.title=f?'펼치기':'접기';bf.setAttribute('aria-label',bf.title);};
+  const bo=el('button','hvi');bo.innerHTML=HV_IC.open;bo.title='브라우저로 열기';bo.setAttribute('aria-label','브라우저로 열기');bo.onclick=()=>vscode.postMessage({type:'openExternal',file:m.file});
   hd.appendChild(bf);hd.appendChild(bo);box.appendChild(hd);
   const fr=document.createElement('iframe');fr.setAttribute('sandbox','allow-same-origin');fr.title=m.label||'HTML';
   // 2026-11-19: 축소(zoom) 뒤에는 scrollHeight 가 줄지 않아 아래가 비므로 본문이 실제 그려진 높이로 맞춘다(Chrome 실측: zoom .85 에서 scrollHeight 708 · 본문 끝 602)
@@ -2289,6 +2306,7 @@ window.addEventListener('message',e=>{const m=e.data;
  else if(m.type==='flow'){$('flow').innerHTML=m.html;bindFlow();}
  else if(m.type==='history'){$(m.view==='task'?'thist':'hist').innerHTML=m.html;bindHist(m.view);}
  else if(m.type==='session'){$('sess').textContent=m.id?(UI_SESS+m.id.slice(0,8)):UI_NOSESS;}
+ else if(m.type==='workMode'){const s=$('wmode');if(s){if(m.code)s.value=m.code;s.disabled=false;}}
  else if(m.type==='model'){const el=$('modelName');if(el){el.textContent=mShort(m.name||'');el.title=m.name||'';}if(m.name)addModelOpt(m.name,mShort(m.name));syncModelInfo();}
  else if(m.type==='showTab'){if(m.auto)markNew(m.tab);else showTab(m.tab);}
  else if(m.type==='setModel'){if(m.id){addModelOpt(m.id,mShort(m.id));$('model').value=m.id;CUR_MODEL=m.id;save();syncModelInfo();}}
@@ -2535,6 +2553,17 @@ function open(api, opts) {
           break;
         }
         case 'openExternal': openWithOS(p, wb, m.file); break;
+        case 'setWorkMode': { // 2026-11-19 사용자: 프롬프트창 작업 모드 드롭다운 — 쓰기는 기존 메뉴와 같은 set_scope.py 하나로
+          const cur = workMode(p); const code = m.code === 'DB_FE' ? 'DB_FE' : 'DB_ONLY';
+          if (code === cur.code) { wb.post({ type: 'workMode', label: workModeLabel(p), code: cur.code }); break; }
+          const sc = await wb.spawnStream(p, `"${p.python || 'python'}"`, [`"${path.join(p.root, 'tools', 'Harness', 'verify', 'set_scope.py')}"`, code], { env: { PYTHONIOENCODING: 'utf-8' } }, 'task', '작업 모드 변경');
+          const now = workMode(p); wb.post({ type: 'workMode', label: workModeLabel(p), code: now.code });
+          if (sc === 0 && now.code === code) { wb.out('task', `🧭 작업 모드 → ${now.name}
+`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager 🧭 작업 모드 → ${now.name}`); }
+          else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}) — 현재 ${now.name}
+`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ 작업 모드 변경 실패 — 현재 ${now.name}`); }
+          api.record('quick', `🧭 작업 모드(드롭다운) ${cur.name}→${now.name}`); break;
+        }
         case 'mdlink': { // 2026-11-19: 답변 Markdown 링크 — URL 은 브라우저, 파일은 프로젝트 기준 경로(#L줄 · #L줄-줄)로 연다
           const href = String(m.href || '').trim(); if (!href) break;
           if (/^https?:\/\//i.test(href)) { vscode.env.openExternal(vscode.Uri.parse(href)); break; }
@@ -2713,6 +2742,7 @@ function open(api, opts) {
             if (pick.code === cur.code) { wb.out('task', `🧭 작업 모드 변경 없음 — ${cur.name}\n`, ''); break; }
             const sc = await wb.spawnStream(p, `"${p.python || 'python'}"`, [`"${path.join(p.root, 'tools', 'Harness', 'verify', 'set_scope.py')}"`, pick.code], { env: { PYTHONIOENCODING: 'utf-8' } }, 'task', '작업 모드 변경');
             const now = workMode(p);
+            wb.post({ type: 'workMode', label: workModeLabel(p), code: workMode(p).code });
             if (sc === 0 && now.code === pick.code) { wb.out('task', `🧭 작업 모드 → ${now.name}\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager 🧭 작업 모드 → ${now.name}`); }
             else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}) — 현재 ${now.name}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ 작업 모드 변경 실패 — 현재 ${now.name}`); }
             api.record('quick', `${item.label} ${cur.name}→${now.name}`);

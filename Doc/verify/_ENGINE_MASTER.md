@@ -1545,3 +1545,17 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 
 ### 2026-11-19 09:0x 사람 확인 행 권장안 판정(사용자 승인 · 공용)
 - mapping_trace.py X-REASON 근거 없음 = FAIL · judge.py 선행 결함 종속 = FAIL(T337) · harness.json snapAutoApprove=true + run_verify 사후 snap_approve(OK·NA). engine_selfcheck PASS(09:09). 다른 화면 X-REASON 사람 확인 행(66화면)이 다음 CheckList 부터 FAIL
+
+## 2026-11-19 10:4x SCP0111 미검증 해소 라운드 3(VM 🧪 · 일괄 보완)
+- 입력: 분류 라운드 9(10:24) 원장 미검증 32 · 처리 대상 12(판단 8 · 엔진 4) · 가이드 1 · 사람 5 · 집계 14. 원장은 11-18 19:50 그대로(재실행 없음)
+- 공용 엔진 보완 T338~T342: disp2 judgeCodeShown 값=표시값 칸 · nscm.ts fieldExistsAny NFKC · i18n_static·eg_ingest PROC 문구 출력 경로 판정 · mergecheck AS-IS 빈 Delete 근거 NA · judge.py H4 칸 폭·G4 팝업 구성 판정필요 유지
+- 다른 화면 영향(11-19 10:3x 원장 기준 건수): MS1 PROC 한글 ERROR 30행(9화면) → FAIL 또는 판정필요 · G4 팝업 COND_LIST ERROR 19행(14화면) → 판정필요 · H4 칸 폭 ERROR 7행(7화면) → 판정필요. 다음 CheckList 부터 반영
+- 확인: disp2 selftest 56/56 · mergecheck 32/32 · i18n_static --selftest 7/7 · engine_selfcheck PASS(10:40). 백업 *.bak_20261119_t338 · t340 · t341 · t342
+
+### 2026-11-19 10:5x 공용 변경 · 미검증 해소 뒤 보완 전 CheckList 건수 숨김(사용자 지시)
+- 사용자: 미검증 해소 뒤에는 이전 CheckList 건수를 보여 주지 않는다. 보여 줄 때는 보완 뒤 다시 수행한 CheckList 건수만
+- 판단 = 보완 표식 Doc/verify/<ID>/_unverified_fix.json(fixed_at)이 원장 verify_ledger.csv 보다 뒤면 'CheckList 재수행 전'. CheckList 재수행으로 원장이 새로 써지면 풀림. 표식은 🧪 세션이 검사기를 고쳤을 때 pending_recheck.py <ID> --mark 로 남김
+- 반영: 신규 tools/Harness/verify/pending_recheck.py · tools/VibeManager/recheck.js. 건수 숨김 = VM 트리 CheckList 묶음·하위(extension.js), 흐름 패널·현황 타일(flow-panel.js·workbench.js), 미검증 게이트 문구(workbench.js unverifiedOpen), Console 현황판(screen_status.py), 미검증 분류 출력·triage.md(unverified_resolve.py · json 값은 체인 판단용 유지 + pending_recheck 키)
+- quick.json 🧪 프롬프트 [5]: 보고에 보완 전 건수를 쓰지 않음 · 표식 남기기 추가
+- _unverified_work.md 수정 시각은 판단에 쓰지 않음(SCP0096 10:03 재수행 결과 기록도 그 파일에 붙어 오판 실측)
+- 확인: pending_recheck --selftest 4/4 · node --check 4파일 · SCP0111 표식 10:58 → 현황판·분류 출력 건수 없음 · SCP0096 표식 없음 → 종전 표시 · engine_selfcheck PASS(10:58). VM 확장 변경은 창 다시 로드 뒤 반영. 백업 *.bak_20261119_recheck

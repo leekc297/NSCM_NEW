@@ -21,12 +21,21 @@ export function judgeMergeInput(s: { how: string; b: string; opened: boolean; wa
 }
 
 /** 병합 칸 선택 후 Delete — cruds 범위 안 행 상태 · outD 범위 밖 D 수 · posts Delete 클릭만으로 나간 서버 요청 · toggled 값이 바뀐 행 수(토글형) */
-export function judgeMergeDelete(s: { b: string; cruds: string[]; outD: number; posts: number; toggled?: number; keys?: string[]; alert?: string; why?: string }): J {
+/** AS-IS 화면 소스에서 BaseForm 버튼 메서드를 본문 없이 재정의한 위치(줄 번호 · 없으면 0) — menu_auth_sync.empty_overrides 와 같은 기준(주석·공백만 = 빈 본문) */
+export function emptyOverrideLine(src: string, method: string): number {
+  const m = new RegExp(`override\\s+void\\s+${method}\\s*\\(\\s*\\)\\s*\\{((?:\\s|//[^\\n]*\\n)*)\\}`).exec(String(src ?? ''));
+  return m ? String(src).slice(0, m.index).split('\n').length : 0;
+}
+
+export function judgeMergeDelete(s: { b: string; cruds: string[]; outD: number; posts: number; toggled?: number; keys?: string[]; alert?: string; asisNoDelete?: string; why?: string }): J {
   if (s.why) return { result: 'ERROR', why: `[측정 경로 없음] ${s.why}` };
   const d = s.cruds.filter(c => c === 'D').length, n = s.cruds.length;
   if (s.posts) return { result: 'ERROR', why: `[확인 대상] Delete 클릭만으로 서버 요청 ${s.posts}건 — 시험이 차단함(즉시 삭제 화면인지 확인)` };
   if (!d && s.toggled && s.toggled === n) return { result: 'PASS', why: `${s.b} 병합 ${n}행 전부 값 토글(${(s.keys || []).join(',')}) — D 표시 없는 토글형 Delete(CR-057)` };
   if (!d && s.toggled) return { result: 'FAIL', why: `${s.b} 병합 ${n}행 중 ${s.toggled}행만 값 토글(${(s.keys || []).join(',')})` };
+  // 2026-11-19 T341(SCP0111 V-23d0a714): AS-IS Delete 버튼 본문이 비어 있으면(기존 행 삭제 기능 없음) TO-BE 가 기존 행 Delete 를 알림으로 막는 것은
+  //   AS-IS 와 같은 동작이다 — 병합 범위 D 표시 판정 대상 아님(원문 근거 NA). 알림 없이 무반응이면 그대로 확인 대상
+  if (!d && s.asisNoDelete && s.alert) return { result: 'NA', why: `${s.b} 병합 ${n}행 Delete 뒤 D 표시 0 · 알림 '${s.alert}' · AS-IS 기존 행 삭제 기능 없음(${s.asisNoDelete} 본문 없음) — 병합 범위 D 표시 대상 아님` };
   if (!d) return { result: 'ERROR', why: `[확인 대상] ${s.b} 병합 ${n}행 Delete 뒤 D 표시 0${s.alert ? ` · 알림 '${s.alert}'` : ''} — 토글형·차단 여부 확인` };
   if (d < n) return { result: 'FAIL', why: `${s.b} 병합 ${n}행 중 D 표시 ${d}행 — 병합 전체 행이 D 여야 함` };
   if (s.outD) return { result: 'FAIL', why: `${s.b} 병합 범위 밖 ${s.outD}행까지 D 표시` };

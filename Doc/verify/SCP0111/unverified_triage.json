@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0111",
- "at": "2026-11-18 19:52:56",
- "round": 8,
+ "at": "2026-11-19 10:58:07",
+ "round": 11,
  "ledger": "Doc\\verify\\SCP0111\\verify_ledger.csv",
  "before": {
   "total": 32,
@@ -24,7 +24,8 @@
   "actionable": 13,
   "human": 5,
   "aggregate": 14,
-  "blocked": 0
+  "blocked": 0,
+  "guide": 0
  },
  "after": {
   "total": 32,
@@ -33,7 +34,7 @@
    "엔진": 4,
    "집계": 14,
    "사람": 5,
-   "대조표": 1
+   "가이드": 1
   },
   "by_class": {
    "판단": 8,
@@ -44,14 +45,26 @@
    "대조표사유": 1,
    "저장보류": 1
   },
-  "actionable": 13,
+  "actionable": 12,
   "human": 5,
   "aggregate": 14,
-  "blocked": 0
+  "blocked": 0,
+  "guide": 1
  },
- "actionable": 13,
+ "actionable": 12,
  "human": 5,
  "rerun": null,
  "unverified_sheet": 535,
+ "ledger_mtime": 1794999011.541,
+ "prev_actionable": 12,
+ "continue": 1,
+ "stalled": false,
+ "resolved_actionable": [],
+ "new_actionable": [],
+ "pending_recheck": {
+  "fixed_at": "2026-11-19 10:58",
+  "ledger_at": "2026-11-18 19:50",
+  "note": "미검증 해소 보완 2026-11-19 10:58 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ },
  "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
 }

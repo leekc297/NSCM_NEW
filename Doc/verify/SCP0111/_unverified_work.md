@@ -67,3 +67,44 @@
 
 - engine_selfcheck 19:21 PASS. _trace.spec 수정 뒤 tsc 오류 0
 - 남은 처리 대상 13행 = 판단 8, 엔진 4(F4 2행 D10, B4 2행 D6), 대조표 1(G7 가이드). 13행 결정 목록 또는 가이드 대상
+
+## 라운드 3 (2026-11-19 10:24 ~ 10:4x · VM 🧪 미검증 해소 메뉴)
+
+- 시작 상태: 라운드 2 뒤 CheckList 재실행 없음(원장 11-18 19:50). 분류 라운드 9(10:24:07) 미검증 32 = 처리 대상 12(판단 8, 엔진 4), 가이드 1, 사람 5, 집계 14
+- 행별 조치 표 `_unverified_plan.md`(32행, 원장 미검증 32행과 같음). 재측정은 하지 않음(run_verify·개별 검사기 재실행 없음). 확인은 자기 시험, 단위 함수 호출, engine_selfcheck
+- 11-19 승인 '사람 확인 일반 항목 = 권장안 판정, 필요할 때만 판정필요'를 판단 행에 적용함
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|
+| G4 smoke 라벨 ES-f6cf77b0 | DB SCM_ADM_MSG_M LBL01150 = 'Qty < 0'(화면 사용, integration-psi.constants.ts:201). 계획 파일 후보 = 'Qty ＜ 0'(전각), LBL00689 'Qty ≥ 0' | `tools/E2E/lib/nscm.ts` fieldExistsAny (T339) | 'Qty ＜ 0'.normalize('NFKC') = 'Qty < 0'. engine_selfcheck TSC 0 |
+| A2 INCOTERMS V-028e36d9 | buildCellCombo 값=표시값 DataMap. 그리드 응답 `calls/_grid_main.json` INCOTERMS 값 '-' 19, 'FCA' 1. 코드 표 FCA VALID_YN=Y | `tools/E2E/lib/disp2.ts` judgeCodeShown, `Doc/e2e/specs/_verify.spec.ts` A2 수집 (T338) | disp2 selftest 56/56(추가 3건) |
+| I1 EG-c892f15f | MSG00002 KO '성공적으로 저장되었습니다.', MSG00606 KO '저장되었습니다.'. 화면 사용 = MSG00002 1개 | 수정 없음(11-18 20:2x i18n_static 제외 규칙) | 같은 조건 계산: 묶음 [MSG00002, MSG00606], 사용 [MSG00002] |
+| MS1 EG-42d53d53 | PKG_SCP0111 3204줄 C_MSG_DUP, 3337줄 RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP) | `tools/Harness/verify/i18n_static.py` msg_use_line, name_use, decl_use, const_lits, selftest. `eg_ingest.py` MS1 판정 (T340) | --selftest 7/7. 실제 PKG_SCP0111 P_SCP0111_SAVE_PSI_ADMIN 본문 함수 호출 결과 RAISE |
+| F5 병합 Delete V-23d0a714 | AS-IS SCP0111_IntegrationPSI.cs:536~539 DeleteButton 본문 없음. TO-BE 알림 '신규 입력 (Insert) 한 행만 삭제할 수 있습니다.' | `tools/E2E/lib/mergecheck.ts` emptyOverrideLine, judgeMergeDelete, `_verify.spec.ts` asisNoDeleteAt (T341) | mergecheck selftest 32/32(추가 5건). 실제 소스 emptyOverride 줄 536 |
+| H4 V-171648d3 · G4 EG-8451fc67, EG-caf2c4d2 | layout2.ts·eg-popup 이 낸 판정필요를 judge.py REVIEW_SWEEP 이 ERROR 로 바꿈 | `tools/Harness/verify/judge.py` REVIEW_SWEEP 앞 (T342) | engine_selfcheck PY_COMPILE 0 |
+| F4 2행, B4 2행 | 라운드 1 원인 그대로(ADMIN 계정만 시험, AS-IS 개발 DB Plan date 0건) | 수정 없음 | 결정 D10, D6 |
+
+### 집계 행 하위 원인(이번 라운드 확인)
+
+- T-eb4e0e13: 하위 ERROR 1 = I1 화면 단위 검사(EG-c892f15f)
+- T-7f7f309f, T-81c9a537: J2 화면 단위 검사 ERROR. `Doc/e2e/results/SCP0111/_summary.csv` authcrud FAIL(jooyong026 마커 행 저장, 재조회 후 신규 행). ES-cd72403b(D9)와 같은 원인
+
+### 다음 CheckList 에서 예상되는 행 상태(검사기 판정 경로 기준, 미측정)
+
+- 미검증 → FAIL: EG-42d53d53
+- 미검증 → 판정필요: V-171648d3, EG-8451fc67, EG-caf2c4d2
+- 미검증 → 해당없음: V-23d0a714, V-028e36d9(다른 이름 표시 콤보 칸에 코드 노출이 있으면 미검증 유지)
+- 미검증 → 통과 또는 행 없음: ES-f6cf77b0, EG-c892f15f
+- 미검증 유지: F4 2행(D10), B4 2행(D6), 사람 5행, 가이드 1행(G7)
+
+### 점검
+
+- engine_selfcheck 10:40 PASS(PY_COMPILE 0, TSC 0, selftest JS 30, PY 47)
+- 새 도구 없음(inventory_check 등록부 갱신 대상 없음)
+- 백업: `*.bak_20261119_t338`(_verify.spec·nscm·disp2.selftest), `*.bak_20261119_t340`(i18n_static·eg_ingest), `*.bak_20261119_t341`(mergecheck·mergecheck.selftest), `*.bak_20261119_t342`(judge)
+
+### 라운드 3 추가 (2026-11-19 10:58)
+
+- 사용자 지시로 보완 뒤 CheckList 재수행 전에는 보완 전 건수를 표시하지 않게 바꿈. 보완 표식 `_unverified_fix.json` 10:58 남김. 건수는 CheckList 재수행 뒤 표시

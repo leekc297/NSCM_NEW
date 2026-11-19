@@ -135,6 +135,16 @@ def collect(sid):
         'counts': read_json(os.path.join(vdir, 'checklist_counts.json'), sources),
         'ledger': read_json(os.path.join(vdir, 'work_ledger_summary.json'), sources),
     }
+    # 2026-11-19 사용자: 미검증 해소 보완 뒤 CheckList 재수행 전이면 보완 전 CheckList 건수를 보여 주지 않는다(재수행 뒤 건수만)
+    try:
+        sys.path.insert(0, os.path.join(ROOT, 'tools', 'Harness', 'verify'))
+        import pending_recheck
+        data['pending_recheck'] = pending_recheck.pending(sid)
+    except Exception:
+        data['pending_recheck'] = None
+    if data['pending_recheck']:
+        data['checklist'] = None; data['counts'] = None; data['ledger'] = None
+        sources[:] = [s for s in sources if not re.search(r'CheckList|checklist_counts|work_ledger_summary', s['file'])]
     reg = os.path.join(ROOT, 'Doc', 'gen', sid, 'register.json')
     data['name'] = json.load(open(reg, encoding='utf-8')).get('screenName', '') if os.path.exists(reg) else ''
     data['sources'] = sources
@@ -187,6 +197,10 @@ def render(d):
     out = ['<!doctype html><html lang="ko"><head><meta charset="utf-8">',
            f'<title>{e(d["screen"])} 건수 현황</title><style>{CSS}</style></head><body>',
            f'<div class="hd"><b>{e(d["screen"])} {e(d["name"])}</b><span>{ver}생성 {e(d["made"])}</span></div>']
+    pr = d.get('pending_recheck')
+    if pr:
+        out.append(f'<div class="line"><b class="warn">CheckList 재수행 전</b>, 미검증 해소 보완 {e(pr["fixed_at"])} 뒤 CheckList 를 다시 수행하지 않음. '
+                   f'보완 전 건수(원장 {e(pr["ledger_at"])})는 표시하지 않고, CheckList 재수행 뒤 표시함</div>')
     if cl:
         t = cl['totals']
         out.append('<div class="kpi"><div><i>전체</i><em>' + fmt(cl['total']) + '</em></div>' +

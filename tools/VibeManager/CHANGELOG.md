@@ -1,3 +1,40 @@
+## (판 번호 없음, VM 저장소 + 설치 폴더) 프롬프트창 새 창·원격 아이콘 = '/' 명령 메뉴 안으로 (2026-11-19 11:1x)
+- 사용자(11-19): "프롬프트 창의 새창, 리모트 아이콘은 명령 아이콘 하위에".
+- 오른쪽 아이콘 2개(#newWin · #remote) 제거 → '/' 명령 메뉴(#pmenu)에 '새 창' · '원격' 항목(같은 id · 기존 동작 그대로 · 누르면 메뉴 닫힘). 명령 버튼 툴팁에 두 항목 추가.
+- 확인: node --check · 웹뷰 스크립트 문법 OK. VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_cmdmenu.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 프롬프트창 작업 모드 = 드롭다운 선택 (2026-11-19 11:1x)
+- 사용자(11-19): "프롬프트 창에 추가된 mode 는 dropdown 으로 선택".
+- 표시 버튼(wmodeBtn) → 드롭다운(#wmode · DB Mode = DB_ONLY · UI&DB Mode = DB_FE · 모델 선택과 같은 모양). 고르면 setWorkMode → set_scope.py(기존 🧭 작업 모드 메뉴와 같은 쓰기) → 결과 값으로 드롭다운을 다시 맞춤(실패하면 원래 값으로 돌아감 · 바뀌는 동안 잠금).
+- 확인: node --check · 웹뷰 스크립트 문법 OK · Chrome 캡처(옵션 2개 · DB Mode 선택). VS Code 화면·실제 변경 미확인.
+- 되돌리기: workbench.js.bak_20261119_modedd.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 프롬프트창 테두리 = 평소 은은하게 · 커서 있을 때 얇게 + 그림자 (2026-11-19 11:1x)
+- 사용자(11-19): "커서가 없을 때는 투명도를 높여 은은하게 · 커서가 갔을 때는 두께를 줄이고 그림자가 보이는 느낌".
+- .pbox: 테두리 색 = 권한 모드 색(--mb) 35%(color-mix). :focus-within: 종전 1px 테두리 + 1px 그림자(합 2px) → 1px 테두리(75%) + 바깥 3px 옅은 테(12%) + 아래 번짐 그림자(22%). 색은 모드 색 그대로(Bypass 주황 · Plan 파랑 · 기본 흰색).
+- 확인: node --check · Chrome 다크 바탕 두 상태 캡처. VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_pbox.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 답변·최종 보고 앞 초록 세로 막대 = 반투명 (2026-11-19 11:0x)
+- 사용자(11-19): "최종 보고나 결과 앞 초록색 세로 bar · 같은 색감 · 반투명으로 은은하게".
+- .m.assistant · .stext · details.bfinal .ft 의 border-left #3fb950 → rgba(63,185,80,.35)(같은 초록 · 불투명도 35%).
+- 되돌리기: workbench.js.bak_20261119_bar.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) Console HTML 틀 머리 버튼 = 배경 없는 아이콘 (2026-11-19 10:5x)
+- 사용자(11-19): "건수 현황 및 html 형태로 보일 때 상단의 접기, 브라우저로 열기 2개 버튼은 투명한 형태의 아이콘으로".
+- addHtmlView: 접기(⌃ · 접힌 뒤 ⌄ 펼치기) · 브라우저로 열기(바깥 열기 화살표) = SVG 아이콘 버튼(HV_IC) · 배경·테두리 없음 · 마우스를 올리면 옅은 배경 · 이름은 툴팁·aria-label.
+- 확인: node --check · 웹뷰 스크립트 문법 OK · Chrome 다크 바탕 캡처. VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_hvicon.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 작업 모드 = 프롬프트창 모델 옆 표시 · Console 안내 줄 제거 (2026-11-19 10:5x)
+- 사용자(11-19): "작업 모드 표기가 항상 Console 창에 표기됨 · 보이지 않게 · 프롬프트창 엔진 옆에 표기(DB Mode, UI&DB Mode)".
+- 원인: askClaude 시작마다 DB MODE 면 Console 에 '🧭 작업 모드 DB MODE …' 안내 줄을 넣음.
+- 안내 줄 제거. 프롬프트창 모델 선택 옆에 '🧭 DB Mode' / '🧭 UI&DB Mode' 표시(workModeLabel · harness.json repairScope). 누르면 기존 작업 모드 변경 메뉴. 매 Claude 실행 시작·모드 변경 뒤 현재 값으로 다시 맞춤.
+- Claude 프롬프트 앞의 DB MODE 지시문(workModePrefix)은 그대로.
+- 확인: node --check · 웹뷰 스크립트 문법 OK. VS Code 화면 미확인.
+- 되돌리기: workbench.js.bak_20261119_modechip.
+
 ## (판 번호 없음, VM 저장소 + 설치 폴더) 답변·결과 = Markdown 정리 형태로 표시 (2026-11-19 10:2x)
 - 사용자(11-19): "답변이나 작업 결과를 나열할 때 Claude Code 처럼 정리된 형태로 · 지금은 나열된 text 안에서 결과를 찾아야 함".
 - 원인: 답변 글을 textContent(일반 글자)로 그려 제목·굵게·목록·표·코드가 구분되지 않음(addText · showFinal · 대화 assistant).

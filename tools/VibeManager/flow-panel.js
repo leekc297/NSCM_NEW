@@ -54,7 +54,10 @@ function stageStatus(p, id) {
   const vd = path.join(p.root, 'Doc', 'verify', id); let env = null, cc = null;
   try { env = JSON.parse(rd(path.join(vd, 'run_verify.result.json')).replace(/^\uFEFF/, '')); } catch { }
   try { cc = JSON.parse(rd(path.join(vd, 'checklist_counts.json')).replace(/^\uFEFF/, '')); } catch { }
-  if (env && env.summary) { const sm = env.summary; const unv = cc ? cc.unverified_sheet : null; const clean = !sm.FAIL && !sm['판정필요'] && !sm['미검증'] && unv === 0 && env.state === 'completed';
+  // 2026-11-19 사용자: 미검증 해소 보완 뒤 CheckList 재수행 전이면 보완 전 건수를 보여 주지 않는다(타일·말풍선 모두) — tools/VibeManager/recheck.js
+  const prc = require('./recheck').pendingRecheck(vd);
+  if (prc && env && env.summary) { s.chk = 'warn'; s.chkN = '재수행 전'; s.chkTip = prc.note; s.chkPending = prc; }
+  else if (env && env.summary) { const sm = env.summary; const unv = cc ? cc.unverified_sheet : null; const clean = !sm.FAIL && !sm['판정필요'] && !sm['미검증'] && unv === 0 && env.state === 'completed';
     s.chk = clean ? 'ok' : (env.state !== 'completed' || sm['미검증'] ? 'bad' : 'warn'); s.chkN = `F ${sm.FAIL}`; s.chkTip = `FAIL ${sm.FAIL} · 판정필요 ${sm['판정필요']} · 미검증 ${sm['미검증']} · 미검증 시트 ${unv == null ? '미집계' : unv} · ${env.started || ''}`;
     s.chkCounts = { FAIL: sm.FAIL, 판정필요: sm['판정필요'], 미검증: sm['미검증'], 미검증시트: unv, started: env.started || '', state: env.state }; }
   else s.chk = 'none';

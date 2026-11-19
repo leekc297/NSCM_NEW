@@ -247,7 +247,15 @@ def main():
         add(f"D|{x.get('table')}|{x.get('column')}", 'F8', f"{mid} SP 쓰기 {x.get('table', '')}.{x.get('column', '')}", '저장 SP 쓰기 컬럼 정적 대조', 'AS-IS 저장 SP 가 쓰는 컬럼을 TO-BE 도 씀', 'AS-IS 저장 SP', 'ERROR', f"[쓰기 대조 불일치] {x.get('verdict')} · {x.get('detail', '')}", 'sp-dml')
     for x in i18n:  # EG451·EG356·EG364 정적 — 화면 표시 여부를 재지 않아 ERROR(확인 대상)
         k = x.get('kind'); rule = 'I1' if k == 'DUP' else 'MS1'; lab = {'FE': '화면 고정 한글', 'DB': 'PROC 한글 문구', 'DUP': '같은 문구 다른 코드'}.get(k, k)
-        add(f"I|{k}|{x.get('where')}|{x.get('text')}", rule, f"{mid} {lab} {x.get('text', '')[:30]}", '다국어 정적 점검', '등록 코드 사용 · 코드 재사용', x.get('where', ''), 'ERROR', f"[다국어 확인 필요] {lab} · {x.get('where')} · '{x.get('text')}'", 'i18n-static')
+        res, ev = 'ERROR', f"[다국어 확인 필요] {lab} · {x.get('where')} · '{x.get('text')}'"
+        # 2026-11-19 T340(사용자 승인 11-19 '사람 확인 일반 항목 = 권장안 판정'): PROC 한글 문구가 RAISE_APPLICATION_ERROR·메시지 출력 변수로 나가면
+        #   언어와 무관하게 한글로 보이는 메시지 — CR-008(KO·EN·CN 등록 코드) 위반 FAIL(권장 조치 = 등록 MSG 코드로 교체). 경로를 못 찾은 문구는 판정필요(비교값·로그 가능)
+        if k == 'DB' and 'use' in x:
+            if x.get('use') in ('RAISE', 'OUTMSG'):
+                res, ev = 'FAIL', f"PROC 한글 문구가 {'RAISE_APPLICATION_ERROR' if x.get('use') == 'RAISE' else '메시지 출력 변수'}로 화면에 나감 · CR-008(KO·EN·CN 등록 코드) 위반 · {x.get('where')} · '{x.get('text')}' · 권장 조치 = 등록 MSG 코드로 교체"
+            else:
+                res, ev = '판정필요', f"PROC 한글 문구 · 메시지 출력 경로(RAISE·MSG 변수) 못 찾음, 비교값·로그 여부 확인 · {x.get('where')} · '{x.get('text')}'"
+        add(f"I|{k}|{x.get('where')}|{x.get('text')}", rule, f"{mid} {lab} {x.get('text', '')[:30]}", '다국어 정적 점검', '등록 코드 사용 · 코드 재사용', x.get('where', ''), res, ev, 'i18n-static')
     for x in lk:  # EG066 Lookup 편집 후보
         add(f"L|{x.get('side')}|{x.get('target')}", 'B5', f"{mid} Lookup 후보 {x.get('target')} {x.get('side')}", f"Lookup {x.get('lookup_type')}", '편집 후보 = 활성 기준 코드 · 비활성·구코드 0', x.get('ref', ''), x.get('result', 'ERROR'), x.get('why', ''), 'lookup-check')
     for x in act:  # EG055 Active 정책

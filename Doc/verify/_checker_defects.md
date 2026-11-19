@@ -608,3 +608,12 @@
 | T335 | 체인 반복이 재수행 2에서 중단(처리 대상 3 → 4 · 1행 해소 + 새 2행) | 건수만 비교 · DB MODE 에서 줄 수 없는 대조표 행을 처리 대상에 포함 | progress() 행 단위 비교 · DB_ONLY 대조표 행 = 담당 가이드 |
 | T336 | 시나리오 KO 언어 저장 '언어 변경 실패(ENG→ENG)'(SCP0096 07:21 · 00:25 같은 코드 PASS) | 언어 단계 1회 클릭 + 2.5초 고정 대기 · 재시도 없음 | 바뀔 때까지 최대 8초 · 메뉴 다시 열어 최대 3회 · 회차 기록 |
 | T337 | 대조표 근거 없는 제외 행·선행 결함 종속 행이 '사람 확인'·'화면 보완 뒤 측정' 미검증으로 남음(SCP0096 4행) | 판정을 사람에게 넘기는 분기 | 사용자 승인 11-19: 권장안 판정 FAIL(근거 없는 제외 = 구현·사유 보강 · 선행 결함 종속 = 같은 원인) |
+
+## T338~T342 (2026-11-19 10:2x~10:4x · SCP0111 미검증 해소 라운드 3)
+| ID | 증상(실측) | 원인 | 조치 |
+|---|---|---|---|
+| T338 | A2 '[확인 대상] 콤보 칸 중 후보에 없는 코드 그대로 보임 INCOTERMS 26행(FCA)' ERROR | 값=표시값 DataMap(IntegrationPsiGrid.tsx:94~97) 칸은 원래 코드를 보여 주는 칸인데 이름 표시 칸과 같이 셈 | disp2.ts judgeCodeShown ident 칸 분리(이름 표시 대상 아님 · 후보 밖 값과 후보 수는 근거에 남김) · _verify.spec.ts A2 수집에 ident·items |
+| T339 | smoke 조회조건 라벨 누락 'Qty ＜ 0'(화면 문구 LBL01150 'Qty < 0') | 기준 Excel 전각 기호와 화면 반각 문구를 글자 그대로 비교 | nscm.ts fieldExistsAny 전각→반각(NFKC) 후보 추가 |
+| T340 | MS1 PROC 한글 문구 전부 '[다국어 확인 필요]' ERROR(9화면 30행) | 문구가 화면에 나가는지 재지 않음 | i18n_static.py 메시지 출력 경로 use(RAISE·OUTMSG · 선언 상수 이름 추적) · eg_ingest.py RAISE·MSG 변수 = FAIL(CR-008), 경로 없음 = 판정필요 |
+| T341 | F5 병합 셀 Delete '[확인 대상] D 표시 0 · 알림 신규 입력 한 행만 삭제' ERROR | AS-IS DeleteButton 본문 없음(기존 행 삭제 기능 없음)을 고려하지 않음 | mergecheck.ts emptyOverrideLine · judgeMergeDelete asisNoDelete(알림 + AS-IS 빈 Delete = 원문 근거 NA) · _verify.spec.ts asisNoDeleteAt |
+| T342 | 헤더 글자 잘림(H4) · 팝업 조회조건 구성(G4 COND_LIST) 판정필요가 REVIEW_SWEEP 에서 ERROR 로 바뀜 | 사용자 선례(T102)·결정 사항인 유형도 '기계 판정 불가' 미검증으로 돌림 | judge.py 두 유형 판정필요 유지(표식 [T102 칸 폭 사람 판정] · [팝업 조회조건 구성 판정]) |

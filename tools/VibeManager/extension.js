@@ -4,6 +4,7 @@ const vscode = require('vscode');
 const promptPanel = require('./prompt-panel');
 const menuView = require('./menu-view');
 const flowPanel = require('./flow-panel');
+const { pendingRecheck } = require('./recheck'); // 2026-11-19 미검증 해소 뒤 보완 전 CheckList 건수 숨김
 const history = require('./history');
 const workbench = require('./workbench');
 const fs = require('fs');
@@ -441,8 +442,9 @@ class DodProvider {
       const vd = path.join(p.root, 'Doc', 'verify', ID); const js = f => { try { return JSON.parse(fs.readFileSync(path.join(vd, f), 'utf8').replace(/^﻿/, '')); } catch { return null; } };
       const env = js('run_verify.result.json'); const sm = env && env.summary; const cc = js('checklist_counts.json');
       const unv = cc ? cc.unverified_sheet : null;
-      const clDesc = sm ? `FAIL ${sm.FAIL} · 판정필요 ${sm['판정필요']} · 미검증 ${sm['미검증']}${unv != null ? ` · 미검증 시트 ${unv}` : ' · 미검증 시트 미집계'} · ${env.started || ''}${env.state !== 'completed' ? ` · ${env.state}` : ''}` : 'CheckList 미실행';
-      items.push(grp('CheckList (완료 기준)', 'checklist', 'cl', clDesc, sm ? (sm.FAIL === 0 && sm['판정필요'] === 0 && sm['미검증'] === 0 && unv === 0 && env.state === 'completed') : undefined));
+      const prc = pendingRecheck(vd); // 2026-11-19 사용자: 미검증 해소 보완 뒤에는 보완 전 CheckList 건수를 보여 주지 않는다
+      const clDesc = prc ? `보완 ${prc.fixedAt} · CheckList 재수행 전(건수는 재수행 뒤 표시)` : sm ? `FAIL ${sm.FAIL} · 판정필요 ${sm['판정필요']} · 미검증 ${sm['미검증']}${unv != null ? ` · 미검증 시트 ${unv}` : ' · 미검증 시트 미집계'} · ${env.started || ''}${env.state !== 'completed' ? ` · ${env.state}` : ''}` : 'CheckList 미실행';
+      items.push(grp('CheckList (완료 기준)', 'checklist', 'cl', clDesc, prc ? undefined : sm ? (sm.FAIL === 0 && sm['판정필요'] === 0 && sm['미검증'] === 0 && unv === 0 && env.state === 'completed') : undefined));
       const bd = (() => { try { return JSON.parse(fs.readFileSync(path.join(p.root, 'Doc', 'asislive', ID, 'screen_bundle.json'), 'utf8').replace(/^﻿/, '')); } catch { return null; } })();
       items.push(grp('AS-IS 실측', 'device-desktop', 'live', bd ? `${bd.status} · ${bd.at || ''}${bd.reused ? ' · 재사용' : ''}` : '미실측', bd ? (bd.status === 'OK' || bd.status === 'NA') : undefined));
       const fg = js('fe_gate.json'), pg = js('pkg_gate.json'); const mlc = (() => { try { return readCsv(path.join(vd, 'meta_live_check.csv')); } catch { return null; } })();
@@ -463,6 +465,13 @@ class DodProvider {
     const latestOf = (dir, re) => { try { const vn = n => Number((/_v(\d+)\./.exec(n) || [])[1] || 0); const hit = fs.readdirSync(dir).filter(n => re.test(n) && !n.startsWith('~$')).sort((a, b) => vn(a) - vn(b) || fs.statSync(path.join(dir, a)).mtimeMs - fs.statSync(path.join(dir, b)).mtimeMs).pop(); return hit ? path.join(dir, hit) : ''; } catch { return ''; } };
     if (el.group === 'cl') { const env = js2('run_verify.result.json'); if (!env) return [Object.assign(leaf('CheckList 결과 없음 — 🔎 CheckList 실행', 'info'), { command: { command: 'vibeManager.qCheckList', title: '실행' } })];
       const sm = env.summary || {}; const cc = js2('checklist_counts.json'); const items = [];
+      // 2026-11-19 사용자: 미검증 해소 보완 뒤 재수행 전이면 보완 전 건수(전체·FAIL·판정필요·미검증·미검증 시트·처리 대상·문제 목록)를 숨기고 안내·기록·문서만
+      { const prc = pendingRecheck(vd2); if (prc) {
+        items.push(Object.assign(leaf('미검증 해소 보완 완료 · CheckList 재수행 전', 'info', `보완 ${prc.fixedAt} · 건수는 CheckList 재수행 뒤 표시`), { command: { command: 'vibeManager.qCheckList', title: '실행' } }));
+        items.push(openFile(leaf('미검증 해소 기록', 'file', '_unverified_work.md'), path.join(vd2, '_unverified_work.md')));
+        items.push(openFile(leaf('미검증 결정 목록', 'file', '_unverified_decisions.md'), path.join(vd2, '_unverified_decisions.md')));
+        const fe0 = latestOf(vd2, /^FE_GUIDE_.*\.md$/); if (fe0) items.push(openFile(leaf('FE 가이드(DB MODE)', 'book', path.basename(fe0)), fe0));
+        return items; } }
       items.push(leaf(`전체 ${sm.rows} · PASS ${sm.PASS} · 해당없음 ${sm['해당없음']}`, 'list-flat', `${env.started || ''}${env.skip_e2e ? ' · E2E 미실행' : ''}`));
       for (const [k, icon] of [['FAIL', 'error'], ['판정필요', 'question'], ['미검증', 'circle-slash']]) items.push(leaf(`${k} ${sm[k]}`, sm[k] ? icon : 'pass-filled'));
       if (cc) { const it = leaf(`미검증 시트 ${cc.unverified_sheet}`, cc.unverified_sheet ? 'circle-slash' : 'pass-filled', Object.entries(cc.unverified_by_reason || {}).map(([k, v]) => `${k} ${v}`).join(' · ') + (cc.direct_unmeasured ? ` · 직접 실측 없음 ${cc.direct_unmeasured}` : '')); items.push(it); }
