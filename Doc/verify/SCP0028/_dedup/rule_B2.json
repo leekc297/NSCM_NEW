@@ -1,89 +1,65 @@
 {
  "rule_id": "B2",
- "hash": "2ba8da82f858c662",
+ "hash": "372eece281cff0a8",
  "groups": [
   {
    "rows": [
-    "V-793b3550",
-    "V-99d54e32"
+    "V-14bd2be6"
    ],
-   "why": "두 행은 같은 그리드 콤보(Insert 시 End Customer·Sold-to Customer)를 같은 신규행 Insert 상태에서 확인하고, 기대 결과도 중복 0·원천 정렬·빈 콤보 아님으로 같다."
-  },
-  {
-   "rows": [
-    "V-8de1d072"
-   ],
-   "why": "End Customer 콤보 하나만 보고 빈 행 0건까지 기대하므로, 두 콤보를 함께 보는 행과 범위가 달라 확신이 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-86ad0a55"
-   ],
-   "why": "Div 선택에 따른 Team 후보가 SSPM DEPT 기준인지도 확인해야 해서 기대 결과가 다르므로 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-c369bc2e"
-   ],
-   "why": "Div 40에서 Cust Group→End Customer→Sales Site 연쇄 필터와 상위 값 변경 시 초기화를 확인하는 행이라 기대 결과가 다르므로 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3a81c8a3"
    ],
-   "why": "조회조건 To Site만 대상으로 하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-980093b6"
    ],
-   "why": "조회조건 Trans Mode만 대상으로 하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-af96562f"
    ],
-   "why": "조회조건 Valid만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "V-cc05baba"
-   ],
-   "why": "조회조건 From Site만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "V-d08e451c"
-   ],
-   "why": "조회조건 Operation Group은 그리드 컬럼 OPERATION_GROUP_ID와 다른 요소이므로 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-e6f27a68"
-   ],
-   "why": "조회조건 Division만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "V-14bd2be6"
-   ],
-   "why": "신규행의 그리드 컬럼 VALID_YN만 대상으로 하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-b3aeb86c"
    ],
-   "why": "신규행의 그리드 컬럼 SPLIT_YN만 대상으로 하는 행이다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-cc05baba"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-d08e451c"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-e6f27a68"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "V-fe0de9c0"
    ],
-   "why": "신규행의 그리드 컬럼 OPERATION_GROUP_ID는 같은 이름의 조회조건과 다른 요소이므로 따로 둔다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:16:36",
- "cost": 0.0579757
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 12:59:56",
+ "cost": 0,
+ "open": 0
 }

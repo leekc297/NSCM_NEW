@@ -1,0 +1,34 @@
+{
+  "id": "20261120115806_VISION_2",
+  "at": "2026-11-20T11:58:06+09:00",
+  "ms": 1795143486149,
+  "source": "vision",
+  "status": "pending",
+  "sig": "waitrows reason log",
+  "title": "행 대기(waitRows)가 상한까지 기다린 사유를 시험 소요 기록에 남김",
+  "evidence": "Doc/verify/SSP0005/_test_timing.jsonl run 2026-11-19T21:12:18Z: wait@probe.ts:60 6,566초(E2E 143.3분 중 109.4분), 37개 시험, 최대 714초. B1(pagereg.ts emptyAnswered) 반영 05:30 뒤 실행인데 생략이 일어났는지 기록 없음. run_timing.json SSP0005 e2e 143.7분",
+  "targets": [
+    "tools/E2E/lib/probe.ts",
+    "tools/E2E/lib/pagereg.ts"
+  ],
+  "before_after": "waitRows 가 행 수만 돌려주고 대기 사유는 남기지 않음 → emptyAnswered 가 false 인 마지막 사유(요청 진행 중, 최근 조회 응답 없음, rowsSure 아님, 행 수 1 이상)와 대기 초, 결과 행 수를 _test_timing.jsonl 의 waitWhy 항목에 기록함. 대기 동작과 상한 120초는 그대로 둠",
+  "verify": "tools/E2E 형식 검사(tsc --noEmit) 통과. 다음 CheckList 실행 뒤 _test_timing.jsonl 에서 wait@probe.ts:60 이 있는 시험마다 waitWhy 가 채워졌는지 건수 대조, 기대 = wait@probe.ts:60 있는 시험 수와 같음",
+  "rollback": "git checkout -- tools/E2E/lib/probe.ts tools/E2E/lib/pagereg.ts",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:43:46+09:00",
+      "by": "사용자 지시(Claude Code 세션 분류)",
+      "what": "권장안 승인. 분류 fix: 행 대기 사유 기록 추가(대기 동작·상한 그대로). 사용자 지시 11-20 '버그성이나 시스템 관련 항목은 권장안으로 처리'. VMO 자동 반영(게이트 통과 조건)으로 반영"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 시간의 대부분을 차지하는 '그리드 행 기다리기'가 왜 120초 상한까지 갔는지 기록만 추가합니다. 판정과 대기 시간은 바뀌지 않습니다.",
+    "risk": "시험 소요 기록 파일 줄이 길어집니다. 판정 결과에는 영향이 없습니다.",
+    "undo": "두 파일을 이전 판으로 돌립니다."
+  },
+  "needsApproval": "큰 그림 점검 안 = 사용자 승인 뒤 반영(harness.json orch.visionAutoApply false)",
+  "impact": "fix",
+  "waitNote": "실행 중인 작업이 읽는 검증 도구 대상이라 작업이 끝난 뒤 반영"
+}

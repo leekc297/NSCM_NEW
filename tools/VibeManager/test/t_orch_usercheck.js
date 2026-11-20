@@ -1,5 +1,5 @@
 // 사용자 지적 점검(orch-usercheck.js · 자가진단 S13, 2026-11-20) 시험
-//   감지기 9종 통과/실패 표본 · 원장에 없는 감지기 · VMO 화면 표시 보고(noteUi) · 사람 프롬프트 수집(sdk-cli 제외, 작업 중 끼운 메시지 포함) · 학습(가짜 Claude)
+//   감지기 12종 통과/실패 표본(U13 reloadResumeMissing, U14 screenNameMissing, U15 logTabShown 포함) · 원장에 없는 감지기 · VMO 화면 표시 보고(noteUi) · 사람 프롬프트 수집(sdk-cli 제외, 작업 중 끼운 메시지 포함) · 학습(가짜 Claude)
 //   사용: node test/t_orch_usercheck.js <VibeManager 폴더>
 const path = require('path'); const fs = require('fs'); const os = require('os');
 const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
@@ -10,7 +10,7 @@ fs.copyFileSync(path.join(dir, 'user_checks.json'), path.join(vmd, 'user_checks.
 let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
 const now = Date.now(); const M = 60000;
 const W = (rel, v) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, typeof v === 'string' ? v : JSON.stringify(v)); return f; };
-let INC = [], PROP = [], EV = [], CH = []; let review = { enabled: true, lastMs: now - 3600000 };
+let INC = [], PROP = [], EV = [], CH = [], FT = []; let review = { enabled: true, lastMs: now - 3600000 };
 const proposalsAdded = [];
 const mods = {
   'orch-watch': { list: () => INC },
@@ -18,6 +18,7 @@ const mods = {
   'orch-state': { snapshot: () => ({ chains: CH }) },
   'orch-selfcheck': { autoEligible: p => ((p.targets || []).every(t => t.startsWith('tools/VibeManager/')) ? { ok: true, kind: 'code' } : { ok: false }) },
   'orch-history': { redact: s => String(s).replace(/[\w.]+@[\w.]+/g, '<메일>') },
+  'flow-panel': { targets: () => FT },
 };
 const uc = require(path.join(dir, 'orch-usercheck'));
 uc.init({ paths: () => ({ root, vibeDir }), vmDir: vmd, mods, events: () => EV, sessionDirs: [sess] });
@@ -65,16 +66,71 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
   r = run(); chk('U9 R14 미해결 = 실패', has(r, 'U9', /미해결 SCP0005/)); chk('U9 작업 중단인데 화면 실행 중 = 실패', has(r, 'U9', /기록 불일치 J9/));
   CH = [{ job: 'J9', runId: 'x' }]; chk('U9 체인이 살아 있으면 R14 가 맡음(기록 불일치 아님)', !has(run(), 'U9', /J9/)); CH = []; INC = [];
   fs.rmSync(path.join(vibeDir, 'jobs', 'J9'), { recursive: true });
+  // U13 창 다시 로드 뒤 재개 누락
+  const age = (f, mn) => fs.utimesSync(f, new Date(now - mn * M), new Date(now - mn * M));
+  const j13 = W('.vibe/jobs/J13/job.json', { id: 'J13', status: 'interrupted', note: 'VS Code 종료로 중단됨', screens: [{ id: 'SSP0014', status: 'wait' }, { id: 'SCP0005', status: 'done' }] }); age(j13, 10);
+  r = run(); chk('U13 중단 작업 남은 화면에 재개 기록 없음 = 실패', has(r, 'U13', /재개 표시 없음 J13/));
+  W('.vibe/orch/chain_progress/SSP0014_1.json', { runId: 'SSP0014_1', screen: 'SSP0014', job: 'J13', interruptedAt: '2026-11-20T11:00:00+09:00', updatedMs: now - 10 * M, cur: 2, steps: 7 });
+  r = run(); chk('U13 재개 기록 있음 + 중단 10분 = 아님', !has(r, 'U13'));
+  age(j13, 40); r = run(); chk('U13 재개 기록 있음 + 중단 40분째 재시작 없음 = 실패', has(r, 'U13', /재개 안 됨 J13/));
+  EV = [{ type: 'job.start', job: 'J13', ms: now - 5 * M }]; chk('U13 중단 뒤 같은 작업 job.start 있음 = 아님', !has(run(), 'U13'));
+  EV = []; fs.rmSync(path.join(vibeDir, 'jobs', 'J13'), { recursive: true }); fs.rmSync(path.join(vibeDir, 'orch', 'chain_progress'), { recursive: true });
+  INC = [{ id: 'R5A', rule: 'R5', notice: true, sig: 'R5|reloadcut|111', status: 'open', ms: now - 40 * M, title: '창 다시 로드로 끊긴 실행 1건(알림)', evidence: { owner: 111, runs: [{ what: 'chain', screen: 'SCP0028', label: 'CheckList' }] } }];
+  chk('U13 R5 reloadcut 뒤 같은 화면 재실행 없음 = 실패', has(run(), 'U13', /재실행 없음 SCP0028/));
+  EV = [{ type: 'chain.start', screen: 'SCP0028', ms: now - 10 * M }]; chk('U13 R5 뒤 같은 화면 chain.start 있음 = 아님', !has(run(), 'U13'));
+  EV = []; INC = [];
   // U10 · U11
   EV = [{ type: 'chain.end', ms: now - 5 * M, ms_run: 10 * M, screen: 'SCP0005', wb: 'W1', chain: 'checklist', ok: false, claudeRan: 0, claudeSkipped: 3 }, { type: 'chain.end', ms: now - 5 * M, ms_run: 10 * M, screen: 'SSP0005', wb: 'W2', chain: 'checklist', ok: false, claudeRan: 0, claudeSkipped: 3 }, { type: 'user.stop', wb: 'W2', ms: now - 7 * M }];
   r = run(); chk('U10 Claude 건너뛰고 끝남 = 경고, 중지된 체인은 제외', r.some(i => i.uid === 'U10' && /SCP0005/.test(i.what)) && !r.some(i => i.uid === 'U10' && /SSP0005/.test(i.what)));
+  // 개선안 20261120131344_SELF: chain.end 뒤 2초 안 같은 작업·화면 job.item.end cancel = U10 없음 · fail = U10 경고 + detail '1단계' · stopped:true = U10 없음
+  const ce = (scr, ms, x) => Object.assign({ type: 'chain.end', ms, ms_run: 10 * M, screen: scr, wb: `J20:${scr}`, job: 'J20', chain: 'checklist', ok: false, failNo: 1, claudeRan: 0, claudeSkipped: 3, scriptRan: 1, rows: [{ no: 1, task: 'S8.checklistRun', actor: 'script', status: 'FAIL', exit: 1 }, { no: 2, task: '', actor: 'claude', status: 'NOT_RUN' }] }, x || {});
+  const tC = now - 4 * M, tF = now - 3 * M;
+  EV = [ce('SCP0005', tC), { type: 'job.item.end', job: 'J20', screen: 'SCP0005', status: 'cancel', ms: tC + 500 }, ce('SSP0005', tF), { type: 'job.item.end', job: 'J20', screen: 'SSP0005', status: 'fail', ms: tF + 500 }, ce('SCP0014', tF, { stopped: true })];
+  r = run(); const u10 = r.filter(i => i.uid === 'U10');
+  chk('U10 job.item.end cancel = 없음 · fail = 경고(1단계 S8.checklistRun) · stopped:true = 없음', !u10.some(i => /SCP0005|SCP0014/.test(i.what)) && u10.some(i => i.level === 'warn' && /SSP0005/.test(i.what) && /1단계 S8\.checklistRun FAIL 로 Claude 단계 3개 미실행/.test(i.detail)), JSON.stringify(u10.map(i => `${i.what} | ${i.detail}`)));
   EV = [];
   PROP = [{ id: 'R1', status: 'apply-failed', ms: now - 10 * 3600000, title: '실패 안', history: [{ at: new Date(now - 8 * 3600000).toISOString(), what: '반영 실패 exit 1' }] }];
   chk('U11 반영 실패 8시간 재진단 없음 = 실패', has(run(), 'U11'));
   PROP[0].repair = { at: new Date(now - 1 * 3600000).toISOString(), decision: 'retry' }; chk('U11 실패 뒤 재진단 있음 = 아님', !has(run(), 'U11')); PROP = [];
+  // U14 VMW 화면 목록 명칭 빠짐: 메뉴 이름 있는데 목록 이름 빔 · ID 와 같음 · 웹뷰 보고 · 메뉴 없음
+  const mnu = W('Doc/tobefacts/db/menu.csv', '﻿mnu_id,uppr_mnu_id,mnu_desc\nSCP0028,SCP,"Supply Plan, Detail"\nSSP0014,SSP,Order Plan\nSCP0005,SCP,Plan View\n');
+  FT = [{ id: 'SCP0028', title: 'Supply Plan, Detail' }, { id: 'SSP0014', title: '' }, { id: 'DMF9999', title: '' }];
+  r = run(); const u14 = r.find(i => i.uid === 'U14' && i.level === 'fail');
+  chk('U14 메뉴 이름 있는데 목록 이름 빔(대상 SSP0014 + 업무 작업 J1 SCP0005) = 실패, 메뉴에 없는 DMF9999·이름 있는 SCP0028 제외', !!u14 && /2건/.test(u14.what) && /SSP0014 'Order Plan'/.test(u14.detail) && /SCP0005 'Plan View'/.test(u14.detail) && !/DMF9999|SCP0028/.test(u14.detail), u14 && u14.detail);
+  FT[1].title = 'Order Plan'; fs.rmSync(path.join(vibeDir, 'jobs', 'J1'), { recursive: true });
+  chk('U14 목록 이름 모두 채움 = 아님', !has(run(), 'U14'));
+  FT[1].title = 'SSP0014'; chk('U14 목록 이름이 ID 와 같음 = 실패', has(run(), 'U14', /1건/)); FT[1].title = 'Order Plan';
+  chk('noteUi scr 보고 기록', (uc.noteUi({ tab: 'scr', received: 3, blank: ['scp0028', 'x'] }) || {}).blank === 1);
+  r = run(); chk('U14 웹뷰가 이름 없이 그린 SCP0028 = 실패', r.some(i => i.uid === 'U14' && i.level === 'fail' && /SCP0028 'Supply Plan, Detail'/.test(i.detail)));
+  uc.noteUi({ tab: 'scr', received: 3, blank: [] }); chk('U14 웹뷰 보고 이름 빠짐 0 = 아님', !has(run(), 'U14'));
+  fs.rmSync(mnu); FT[1].title = ''; r = run(); chk('U14 메뉴 파일 없음 = 경고(판정 못 함), 실패 아님', r.some(i => i.uid === 'U14' && i.level === 'warn') && !r.some(i => i.uid === 'U14' && i.level === 'fail'));
+  FT = [];
+  // U15 FE LOG 탭 송출 0줄: 기준 → 60초 뒤 파일 늘어남 + 송출 0 = 실패 · 송출 있음 = 아님 · 꺼짐 = 아님 · 기록 없음 = 경고 · VM 기동 로그 파일
+  const ageFe = sec => { const s = JSON.parse(fs.readFileSync(stF, 'utf8')); s.logTab.fe.ms = now - sec * 1000; fs.writeFileSync(stF, JSON.stringify(s)); };
+  const extLog = W('Doc/e2e/logs/_server_5173.log', 'a\n');
+  EV = [{ type: 'server.state', port: 5173, state: 'up', owner: 'external', source: 'poll', ms: now - 30 * M }, { type: 'log.toggle', stream: 'fe', on: true, ms: now - 20 * M }];
+  chk('U15 첫 점검 = 기준만', !has(run(), 'U15')); ageFe(120); fs.appendFileSync(extLog, 'x'.repeat(3000));
+  r = run(); chk('U15 FE 켜짐 + 5173 up + 120초 동안 _server_5173.log 늘어남 + 송출 0줄 = 실패', r.some(i => i.uid === 'U15' && i.level === 'fail' && /_server_5173\.log/.test(i.detail)), JSON.stringify(r.filter(i => i.uid === 'U15')));
+  ageFe(120); fs.appendFileSync(extLog, 'y'.repeat(3000)); EV.push({ type: 'log.out', stream: 'fe', lines: 12, ms: now - 30000 });
+  chk('U15 같은 동안 log.out fe 12줄 = 아님', !has(run(), 'U15'));
+  ageFe(30); fs.appendFileSync(extLog, 'z'.repeat(3000)); EV = EV.filter(e => e.type !== 'log.out');
+  chk('U15 60초 안 = 판정 보류', !has(run(), 'U15'));
+  ageFe(120); fs.appendFileSync(extLog, 'w'.repeat(10)); EV.push({ type: 'log.toggle', stream: 'fe', on: false, ms: now - 1 * M });
+  chk('U15 FE LOG 꺼짐 = 아님', !has(run(), 'U15'));
+  EV = [{ type: 'server.state', port: 5173, state: 'up', owner: 'external', source: 'poll', ms: now - 30 * M }]; run(); ageFe(120); fs.appendFileSync(extLog, 'v'.repeat(3000));
+  r = run(); chk('U15 log.out, log.toggle 기록 없음 = 경고(판정 못 함), 실패 아님', r.some(i => i.uid === 'U15' && i.level === 'warn') && !r.some(i => i.uid === 'U15' && i.level === 'fail'));
+  const vmLog = W('.vibe/logs/2026-11-20T11-00-00_NSCM_FE.log', 'a\n'); W('.vibe/logs/2026-11-20T09-00-00_NSCM_BE.log', 'b\n');
+  EV = [{ type: 'server.state', port: 5173, name: 'NSCM FE', state: 'ready', source: 'start', ms: now - 10 * M }, { type: 'log.toggle', stream: 'fe', on: true, ms: now - 9 * M }];
+  run(); ageFe(120); fs.appendFileSync(vmLog, 'x'.repeat(3000));
+  r = run(); chk('U15 VM 이 띄운 FE = .vibe/logs/*_NSCM_FE.log 증가분으로 실패', r.some(i => i.uid === 'U15' && i.level === 'fail' && /NSCM_FE\.log/.test(i.detail)));
+  EV.push({ type: 'server.state', port: 5173, state: 'down', owner: 'vm', source: 'poll', ms: now - 1000 }); chk('U15 5173 down = 아님', !has(run(), 'U15'));
+  EV = [];
   // 감지기 없는 원장 항목
   const lf = path.join(vmd, 'user_checks.json'); const L = JSON.parse(fs.readFileSync(lf, 'utf8')); L.items.push({ id: 'U99', detector: 'noSuch', status: 'active' }); fs.writeFileSync(lf, JSON.stringify(L));
-  chk('원장 감지기 이름이 코드에 없음 = 실패', has(run(), 'U99'));
+  chk('원장 감지기 이름이 코드에 없음 = 실패', run().some(i => i.uid === 'U99' && i.level === 'fail' && i.key === 'S13|U99|nodet'));
+  // 파일에는 정의가 있고 실행 중 DETECTORS 에만 없음(반영 직후 창 다시 로드 전) = 경고
+  const keepU15 = uc.DETECTORS.logTabShown; delete uc.DETECTORS.logTabShown;
+  try { r = run(); chk('reload 표본: logTabShown 실행 중 없음 + 파일에 있음 = U15 경고 S13|U15|reload, 실패 아님', r.some(i => i.uid === 'U15' && i.level === 'warn' && i.key === 'S13|U15|reload') && !r.some(i => i.uid === 'U15' && i.level === 'fail'), JSON.stringify(r.filter(i => i.uid === 'U15'))); } finally { uc.DETECTORS.logTabShown = keepU15; }
   // 사람 프롬프트 수집
   const ts = k => new Date(Date.parse(L.coveredUntil) + k * M).toISOString();
   fs.writeFileSync(path.join(sess, 'a.jsonl'), [

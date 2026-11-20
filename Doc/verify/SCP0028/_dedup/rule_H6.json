@@ -1,338 +1,220 @@
 {
  "rule_id": "H6",
- "hash": "f8cc90f0baaf2aab",
+ "hash": "02765e4254717d3c",
  "groups": [
-  {
-   "rows": [
-    "V-0a9ecffe",
-    "V-6722342e"
-   ],
-   "why": "대상(전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드), 조건(필터 적용 시), 기대(No. 컬럼·조회/필터 건수 표시, 공통 그리드)가 모두 같고 출처만 CONFIRMED와 DEFECT로 다르다."
-  },
-  {
-   "rows": [
-    "V-6008a294",
-    "V-c145c351"
-   ],
-   "why": "대상(팝업 No. 컬럼, Model/Owner/Project/Version 팝업)과 기대(No. 컬럼 1개를 적정 폭으로 표시) 문장이 같고 출처만 다르다."
-  },
-  {
-   "rows": [
-    "V-2c3cae84",
-    "V-43d0c408"
-   ],
-   "why": "대상이 둘 다 '전체 팝업 버튼 순서'이고 기대도 둘 다 OK → CLOSE 통일이다."
-  },
-  {
-   "rows": [
-    "V-0c6de6d8",
-    "V-3afa0eef"
-   ],
-   "why": "같은 From City 검색 버튼의 테두리를 클릭했을 때 버튼 전 영역에서 팝업이 열리는지 확인하는 같은 검사다."
-  },
   {
    "rows": [
     "EG-2219b2fc"
    ],
-   "why": "ItembyDivision 팝업(COND:Model)의 섹션 타이틀 위치를 보는 검사로, 같은 팝업·같은 항목을 보는 다른 행이 없다."
+   "why": "ItembyDivisionPopup(Model 조건 진입)의 섹션 타이틀 위치 검사로, 같은 팝업·같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-2644dff3"
    ],
-   "why": "ItembyDivision 팝업의 버튼 순서 검사다. 일반 규칙 행은 어느 팝업을 가리키는지 특정되지 않아 묶지 않았다."
+   "why": "ItembyDivisionPopup의 버튼 순서 검사로, 같은 팝업에 같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-2e65bc91"
    ],
-   "why": "ShipmentLotSize 팝업을 Delete 모드로 열었을 때의 상단 가로줄 검사이며, Input 모드와는 여는 상태가 다르다."
+   "why": "ShipmentLotSizePopup Delete('D') 진입의 가로줄 검사로, Input('I') 진입과는 상태(자동조회 여부, 행 수)가 다르다."
   },
   {
    "rows": [
     "EG-31faacc6"
    ],
-   "why": "Delete 모드 No. 폭 기준(27px, 383행)은 다른 팝업·모드의 기준값과 다르다."
+   "why": "Delete 진입 팝업의 No. 폭 검사로, 기대값(27px, 383행)이 다른 행과 다르다."
   },
   {
    "rows": [
     "EG-52c5fc68"
    ],
-   "why": "ShipmentLotSize 팝업 Input 모드의 버튼 순서 검사로, Delete 모드와는 여는 경로와 상태가 다르다."
+   "why": "Input 진입 팝업의 버튼 순서 검사로, Delete 진입과는 상태가 다르다."
   },
   {
    "rows": [
     "EG-6be7f873"
    ],
-   "why": "ItembyDivision 팝업의 No. 폭 기준(34px, 9616행)은 다른 행에 없는 고유 기대값이다."
+   "why": "ItembyDivisionPopup의 No. 폭 검사로, 기대값(34px, 9616행)이 다른 행과 다르다."
   },
   {
    "rows": [
     "EG-6cc339e1"
    ],
-   "why": "Input 모드는 자동조회가 없어 건수 표시 상태가 Delete 모드와 다르다."
+   "why": "Input 진입 팝업의 조회 건수 검사로, 이 진입은 자동조회가 없어 Delete 진입과 상태가 다르다."
   },
   {
    "rows": [
     "EG-89799316"
    ],
-   "why": "ItembyDivision 팝업의 조회 건수 표시 검사로, 같은 팝업의 다른 행이 없다."
+   "why": "ItembyDivisionPopup의 조회 건수 검사로, 대상 팝업이 다른 행과 다르다."
   },
   {
    "rows": [
     "EG-8d104ad6"
    ],
-   "why": "ShipmentLotSize 팝업 Delete 모드의 버튼 순서 검사로, Input 모드와 상태가 달라 단독으로 둔다."
+   "why": "Delete 진입 팝업의 버튼 순서 검사로, Input 진입과는 상태가 다르다."
   },
   {
    "rows": [
     "EG-a1a860f0"
    ],
-   "why": "ShipmentLotSize 팝업 Input 모드의 No. 컬럼 개수 검사다."
+   "why": "Input 진입 팝업의 No. 컬럼 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-af67cddc"
    ],
-   "why": "ShipmentLotSize 팝업 Delete 모드의 No. 컬럼 개수 검사다."
+   "why": "Delete 진입 팝업의 No. 컬럼 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-b0d10a90"
    ],
-   "why": "ItembyDivision 팝업의 No. 컬럼 개수 검사다."
+   "why": "ItembyDivisionPopup의 No. 컬럼 검사로, 대상 팝업이 다른 행과 다르다."
   },
   {
    "rows": [
     "EG-b2b9b2fb"
    ],
-   "why": "ShipmentLotSize 팝업 Input 모드의 섹션 타이틀 위치 검사다."
+   "why": "Input 진입 팝업의 섹션 타이틀 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-b3b6c195"
    ],
-   "why": "Input 모드 No. 폭 기준(13px, 0행)은 고유 기대값이다."
+   "why": "Input 진입 팝업의 No. 폭 검사로, 기대값(13px, 0행)이 다른 행과 다르다."
   },
   {
    "rows": [
     "EG-cfb36dbd"
    ],
-   "why": "ItembyDivision 팝업의 상단 가로줄 검사다."
+   "why": "ItembyDivisionPopup의 가로줄 검사로, 대상 팝업이 다른 행과 다르다."
   },
   {
    "rows": [
     "EG-e04489c3"
    ],
-   "why": "ShipmentLotSize 팝업 Delete 모드의 섹션 타이틀 위치 검사다."
+   "why": "Delete 진입 팝업의 섹션 타이틀 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-f28038e7"
    ],
-   "why": "ShipmentLotSize 팝업 Input 모드의 상단 가로줄 검사다."
+   "why": "Input 진입 팝업의 가로줄 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "EG-f3ab83c2"
    ],
-   "why": "Delete 모드는 진입 시 자동조회가 있어 건수 표시 상태가 Input 모드와 다르다."
+   "why": "Delete 진입 팝업의 조회 건수 검사로, Input 진입과는 상태가 다르다."
   },
   {
    "rows": [
     "T-0855373f"
    ],
-   "why": "대조표에서 To Site 조회조건을 추적하는 행으로, 외관을 측정하는 행과 성질이 다르다."
+   "why": "To Site 조건 하나를 추적하는 대조표 행으로, 같은 대상을 보는 다른 행이 없다."
   },
   {
    "rows": [
     "T-1417e33a"
    ],
-   "why": "대조표에서 툴바 Delete 버튼의 hotkey 무동작 구현을 추적하는 행이다."
+   "why": "툴바 Delete 버튼이 보이지만 동작하지 않는지를 추적하는 행으로, 다른 행과 확인하는 성질이 다르다."
   },
   {
    "rows": [
     "T-31170afd"
    ],
-   "why": "대조표에서 팝업 검색영역과 Find 버튼 구현을 추적하는 행이다."
+   "why": "팝업 검색영역 배치와 Find 버튼 구현을 추적하는 행으로, 대상 요소가 다른 행과 다르다."
   },
   {
    "rows": [
     "T-449b82ac"
    ],
-   "why": "대조표에서 From Site 조회조건을 추적하는 행이다."
+   "why": "From Site 조건을 추적하는 대조표 행으로, To Site와는 다른 조건이다."
   },
   {
    "rows": [
     "T-505b6f16"
    ],
-   "why": "대조표에서 Form_Load의 D/I 모드별 자동조회 동작을 추적하는 행이다."
-  },
-  {
-   "rows": [
-    "T-a239a7e1"
-   ],
-   "why": "대조표에서 Model(txtItemId) 조회조건을 추적하는 행이다."
+   "why": "D/I 진입 시 자동조회 여부를 추적하는 행으로, 팝업 표준 외형 검사와 성질이 다르다."
   },
   {
    "rows": [
     "T-c7a94f1d"
    ],
-   "why": "대조표에서 TRANS_MODE_CODE 컬럼 메타를 추적하는 행이다."
+   "why": "TRANS_MODE_CODE 컬럼 메타를 추적하는 행으로, 대상 컬럼이 다른 행과 다르다."
   },
   {
    "rows": [
     "T-e691090a"
    ],
-   "why": "대조표에서 팝업 조회 프로시저와 그 파라미터 6개를 추적하는 행이다."
+   "why": "팝업 조회 프로시저의 파라미터 6개를 추적하는 행으로, 대상이 다른 행과 다르다."
   },
   {
    "rows": [
     "T-fa46d98c"
    ],
-   "why": "대조표에서 팝업 OK(handleConfirm)의 메시지 분기 구현을 추적하는 행이다."
-  },
-  {
-   "rows": [
-    "V-0be83995"
-   ],
-   "why": "팝업에 스크롤바 없이 버튼까지 한 화면에 보이는지 보는 고유 기대다."
-  },
-  {
-   "rows": [
-    "V-10c70824"
-   ],
-   "why": "팝업 Search 버튼, DB 즉시 조회, Like·콤마 다중 검색을 보는 고유 검사다."
-  },
-  {
-   "rows": [
-    "V-41700714"
-   ],
-   "why": "모든 팝업 상단 선을 보는 일반 규칙으로, 어느 특정 팝업 행과 같은지 정할 수 없어 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-45ef80f7"
-   ],
-   "why": "그리드 셀에서 연 Model 팝업이 단일 선택만 되는지 보는 고유 검사다."
-  },
-  {
-   "rows": [
-    "V-481e0d42"
-   ],
-   "why": "Team 팝업에서 단일 조건으로 ID·Name을 모두 검색하는지 보는 고유 검사다."
-  },
-  {
-   "rows": [
-    "V-50bb86cb"
-   ],
-   "why": "Version 조회조건 크기와 Description 컬럼 폭을 보는 고유 검사다."
+   "why": "팝업 OK(SaveData)의 메시지 분기를 추적하는 행으로, 대상과 기대가 다른 행과 다르다."
   },
   {
    "rows": [
     "V-5123358d"
    ],
-   "why": "AS-IS ShowDialog 호출 지점 가운데 하나로, 어느 팝업·모드인지 특정되지 않아 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-6658da4a"
-   ],
-   "why": "Module 콤보, 라벨, Active 등 여러 요소를 한꺼번에 보는 복합 기대여서 다른 행과 같지 않다."
-  },
-  {
-   "rows": [
-    "V-6a273c0f"
-   ],
-   "why": "팝업 제목의 등록 문구 표시를 보는 고유 검사다."
+   "why": "ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다."
   },
   {
    "rows": [
     "V-6cb6bfa8"
    ],
-   "why": "AS-IS Form_Load(\"D\") 호출 지점으로, Delete 모드라는 별도 상태다."
-  },
-  {
-   "rows": [
-    "V-7903fadb"
-   ],
-   "why": "팝업 리사이즈·드래그가 뷰포트 안으로 제한되는지 보는 고유 검사다."
-  },
-  {
-   "rows": [
-    "V-7fa1a734"
-   ],
-   "why": "팝업을 축소했을 때 조회조건과 버튼이 간섭하지 않는지 보는 고유 검사다."
-  },
-  {
-   "rows": [
-    "V-97068936"
-   ],
-   "why": "컬럼 설정 팝업의 버튼 구성 예외 규칙이다."
-  },
-  {
-   "rows": [
-    "V-97c27752"
-   ],
-   "why": "TO-BE 메타 공통 셀 팝업의 예외·검사 범위 규칙이며 기대가 다른 행과 다르다."
+   "why": "'D' 모드 Form_Load 지점이다. 기대값이 세 항목을 합친 것이어서 개별 규칙 행과 같다고 보기 어려워 단독으로 두었다."
   },
   {
    "rows": [
     "V-97b0fc4e"
    ],
-   "why": "AS-IS ItembyDivision 팝업 생성 지점이다. EG 행은 개별 항목으로 쪼개져 있어 기대가 같지 않다."
-  },
-  {
-   "rows": [
-    "V-a0e9671f"
-   ],
-   "why": "Ver.Cutoff 팝업의 Period·Description·조회조건 크기를 보는 고유 검사다."
+   "why": "ItembyDivisionPopup 생성 지점이다. 기대값이 세 항목을 합친 것이어서 개별 규칙 행과 묶기에 확신이 없다."
   },
   {
    "rows": [
     "V-a9485a6a"
    ],
-   "why": "AS-IS Form_Load(true, …) 호출 지점으로, 파라미터 구성이 다른 별도 호출이다."
+   "why": "ItembyDivisionPopup의 Form_Load 지점으로, 생성 지점과 같은 진입인지 확신할 수 없다."
   },
   {
    "rows": [
     "V-aa6bec9e"
    ],
-   "why": "ShipmentLotSize 팝업 생성 지점 가운데 하나로, Input·Delete 중 어느 쪽인지 확인할 수 없어 묶지 않는다."
+   "why": "ShipmentLotSizePopup 생성 지점으로, Input 진입과 Delete 진입 중 어느 쪽인지 알 수 없다."
   },
   {
    "rows": [
     "V-c2d97238"
    ],
-   "why": "ShipmentLotSize 팝업의 또 다른 생성 지점으로, 모드(상태)가 다를 수 있어 묶지 않는다."
+   "why": "ShipmentLotSizePopup 생성 지점이다. V-aa6bec9e와 문장은 같지만 다른 진입(I/D)일 수 있어 묶지 않았다."
   },
   {
    "rows": [
     "V-c4a9dc2c"
    ],
-   "why": "AS-IS ShowDialog 호출 지점 가운데 하나로, 대상 팝업·모드가 특정되지 않는다."
+   "why": "ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다."
   },
   {
    "rows": [
     "V-d41bec0d"
    ],
-   "why": "AS-IS Form_Load(\"I\") 호출 지점으로, Input 모드라는 별도 상태다."
+   "why": "'I' 모드 Form_Load 지점으로, 'D' 모드와는 상태가 다르다."
   },
   {
    "rows": [
     "V-d816896f"
    ],
-   "why": "AS-IS ShowDialog 호출 지점 가운데 하나로, 대상 팝업·모드가 특정되지 않는다."
-  },
-  {
-   "rows": [
-    "V-e81107e5"
-   ],
-   "why": "팝업 레이아웃 전반을 보는 일반 규칙으로, 특정 행과 대상·기대가 같지 않다."
+   "why": "ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 09:38:29",
- "cost": 0.2015456
+ "at": "2026-11-20 13:01:39",
+ "cost": 0.12715839999999998
 }

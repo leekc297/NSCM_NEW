@@ -17,6 +17,10 @@ const lines = () => { try { return fs.readFileSync(errlog.file(), 'utf8').trim()
   errlog.note('modA', 'fnB', 'plain text error');
   chk('다른 서명 = 기록', lines().length === 2 && lines()[1].msg === 'plain text error');
   const s = errlog.stats(0); chk('서명별 집계 2종', s.length === 2 && s.every(x => x.count === 1), JSON.stringify(s.map(x => [x.sig, x.count])));
+  // info: true 기록(중지 뒤 잠금 정리 등) = 파일에는 남고 stats 집계에서 빠진다
+  const ri = errlog.note('orch-watch', 'lockStopClean', '중지 뒤 잠금 정리: Doc/e2e/x.lock', { kind: 'lock.stopclean', info: true });
+  const si = errlog.stats(0);
+  chk('info 기록 = 파일 기록 · stats 제외', !!ri && lines().length === 3 && lines()[2].info === true && si.length === 2 && !si.some(x => x.fn === 'lockStopClean'), JSON.stringify(si.map(x => x.sig)));
   // 감시기 tick 안 예외 → 파일에 남는다(종전 빈 catch)
   watch.init(p, {}); const sweep = st.sweep; st.sweep = () => { throw new Error('injected sweep failure'); };
   watch.tick(); st.sweep = sweep;

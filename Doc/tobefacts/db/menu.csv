@@ -31,11 +31,11 @@ DM0035,Waterfall,dm0035,,MNU00203,MKT FCST Waterfall_bk,510,3,SCREEN,D,N,NSCM,,,
 DM0036,Demand_Master,dm0036,,MNU00183,Capacity Allocation,562,3,SCREEN,D,N,NSCM,,,,,,,,,,hwwoonins,2018-09-04 12:56:44,admin,2026-11-10 10:47:02,demand/demand-master/dm0036
 DMD0001,Dashboard,,,MNU00005,AS 수요예측 대시보드,1,3,SCREEN,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-11-12 11:10:15,minyonglee1,2026-11-12 11:11:09,demand/demand-as-dashboard
 DMF0003,Demand_Plan,mkt-fcst,,MNU00182,MKT FCST,1,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-08-16 00:33:47,admin,2026-08-16 00:33:47,demand/demand-plan/mkt-fcst
-DMF0003_01,Demand_Plan,mkt-fcst-01,,MNU01032,MKT FCST_01,2,3,SCREEN,D,Y,NSCM,,,,,,,,,,ZIONEX,2026-11-04 20:34:41,ZIONEX,2026-11-13 21:51:32,demand/demand-plan/mkt-fcst-01
+DMF0003_01,Demand_Plan,mkt-fcst-01,,MNU01036,MKT FCST_01,2,3,SCREEN,D,Y,NSCM,,,,,,,,,,ZIONEX,2026-11-04 20:34:41,admin,2026-11-20 09:36:24,demand/demand-plan/mkt-fcst-01
 DMF0003_1,Demand_Plan,dmf0003_1,,MNU00040,MKT FCST (Auto),532,3,SCREEN,D,N,NSCM,,,,,,,,,,admin,2026-08-16 00:33:47,admin,2026-08-16 00:33:47,demand/demand-plan/dmf0003_1
 DMF0004,Demand_Master,sales-site,,MNU00026,Sales Site,1,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,minyonglee1,2026-09-17 15:43:16,demand/demand-master/sales-site
 DMF0005,Demand_Master,sales-site-project-model,,MNU00027,Sales Site Project Model,2,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,admin,2026-07-21 19:28:58,demand/demand-master/sales-site-project-model
-DMF0005_01,Demand_Master,sales-site-project-model-01,,MNU00027,Sales Site Project Model (Model Group),3,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-11-03 11:05:45,admin,2026-11-03 16:35:09,master/sales-site-project-model-01
+DMF0005_01,Demand_Master,sales-site-project-model-01,,MNU01038,Sales Site Project Model (Model Group),3,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-11-03 11:05:45,admin,2026-11-20 11:17:01,master/sales-site-project-model-01
 DMF0006,Demand_Master,customer-model-mapping,,MNU00028,Customer Model Mapping,4,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,admin,2026-11-03 16:35:09,demand/demand-master/customer-model-mapping
 DMF0007,Demand_Master,customer-fcst-master,,MNU00029,Customer FCST Master,5,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,admin,2026-11-03 16:35:09,demand/demand-master/customer-fcst-master
 DMF0008,Demand_Master,erp-edi-master,,MNU00032,ERP EDI MASTER 정비,11,3,SCREEN,D,Y,NSCM,,,,,,,,,,chano0612,2023-05-03 21:37:06,admin,2026-11-10 10:47:02,demand/demand-master/erp-edi-master
@@ -44,13 +44,13 @@ DMF0010,Demand_Master,dmf0010,,MNU00185,Biz Plan Price,574,3,SCREEN,D,N,NSCM,,,,
 DMF0013,Demand_Plan,dmf0013,,MNU00186,Customer PSI Upload,50,3,SCREEN,D,N,NSCM,,,,,,,,,,20140001,2018-03-13 13:35:00,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0013
 DMF0014,Demand_Plan,customer-fcst-upload,,MNU00036,Customer FCST Upload,4,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:35:00,admin,2026-07-21 17:30:41,demand/demand-plan/customer-fcst-upload
 DMF0020,Demand_Master,sales-future-price,,MNU00187,Sales Price,6,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-05-22 16:47:50,admin,2026-11-16 14:38:57,demand/demand-master/sales-future-price
-DMF0020_01,Demand_Master,sales-future-price-01,,MNU_DMF0020_01,Sales Price(82),7,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-11-10 10:46:03,minyonglee1,2026-11-10 11:36:58,demand/demand-master/sales-future-price-01
+DMF0020_01,Demand_Master,sales-future-price-01,,MNU01039,Sales Price(82),7,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-11-10 10:46:03,admin,2026-11-20 11:17:01,demand/demand-master/sales-future-price-01
 DMF0021,Demand_Plan,sales-plan,,MNU00034,Sales Plan,32,3,SCREEN,D,Y,NSCM,,,,,,,,,,greenzun,2018-07-17 12:50:25,minyonglee1,2026-09-17 15:39:13,demand/demand-plan/sales-plan
-DMF0021_01,Demand_Plan,sales-plan-01,,MNU01030,Sales Plan_01,33,3,SCREEN,D,Y,NSCM,,,,,,,,,,ZIONEX,2026-11-13 21:40:10,ZIONEX,2026-11-13 21:40:10,demand/demand-plan/sales-plan-01
+DMF0021_01,Demand_Plan,sales-plan-01,,MNU01040,Sales Plan_01,33,3,SCREEN,D,Y,NSCM,,,,,,,,,,ZIONEX,2026-11-13 21:40:10,admin,2026-11-20 11:17:01,demand/demand-plan/sales-plan-01
 DMF0022,Waterfall,sales-plan-waterfall,,MNU00044,Sales Plan Waterfall,22,3,SCREEN,D,Y,NSCM,,,,,,,,,,greenzun,2018-07-17 12:54:01,admin,2026-07-21 19:28:58,report/waterfall/sales-plan-waterfall
 DMF0026,Demand_Plan,dmf0026,,MNU00188,ESS Channel PSI,60,3,SCREEN,D,N,NSCM,,,,,,,,,,20140001,2018-03-13 13:35:00,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0026
 DMF0035,Demand_Waterfall,demand-plan-waterfall,,MNU00212,Demand Plan Waterfall,1,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:37:22,minyonglee1,2026-10-01 14:54:58,report/demand-plan-waterfall
-DMF0035_01,Demand_Waterfall,demand-plan-waterfall-01,,MNU01031,Demand Plan Waterfall_01,5,3,SCREEN,D,Y,NSCM,,,,,,,,,,ZIONEX,2026-11-13 21:40:10,ZIONEX,2026-11-13 21:40:10,report/demand-plan-waterfall-01
+DMF0035_01,Demand_Waterfall,demand-plan-waterfall-01,,MNU01037,Demand Plan Waterfall_01,5,3,SCREEN,D,Y,NSCM,,,,,,,,,,ZIONEX,2026-11-13 21:40:10,admin,2026-11-20 10:31:35,report/demand-plan-waterfall-01
 DMF0039,Demand_Master,dmf0039,,MNU00189,ESS Shipment Priority,571,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-12-10 11:58:00,admin,2026-11-10 10:47:02,demand/demand-master/dmf0039
 DMF0040,Demand_Waterfall,mkt-fcst-comparison,,MNU00046,MKT FCST Comparison,2,3,SCREEN,D,Y,NSCM,,,,,,,,,,greenzun,2018-12-10 11:58:35,admin,2026-08-26 23:52:29,demand/demand-waterfall/mkt-fcst-comparison
 DMF0041,Demand_Plan,dmf0041,,MNU00190,MDF Simulator,70,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2019-04-04 12:33:01,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0041

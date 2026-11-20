@@ -595,6 +595,12 @@
           "default": true,
           "description": "VMO 큰 그림 점검 적용 여부. 적용(true) = visionEveryDays 일마다 VM, VMO 가 목적에 맞는지 점검하고 개선안을 올립니다(반영은 승인 뒤). 미적용(false) = 주기 점검을 하지 않습니다. Overview 의 큰 그림 점검 단추는 설정과 상관없이 실행됩니다."
         },
+        "vibeManager.jobs.interruptedKeepHours": {
+          "type": "number",
+          "default": 24,
+          "minimum": 0,
+          "description": "중단된 작업 보관 시간(시간). VMW 작업과 Workbench 체인이 창 다시 로드, VS Code 종료로 중단된 뒤 이 시간이 지나면 작업 목록과 재개 기록을 자동 삭제합니다. 기본 24. 0 = 자동 삭제 안 함."
+        },
         "vibeManager.orch.visionEveryDays": {
           "type": "number",
           "default": 1,

@@ -39,15 +39,18 @@ function addRecentSel(p, itemLabel, screens) {
   return list.slice(0, 10);
 }
 
-function open(api) {
+function open(api, focusId) {
   jr.init(api);
+  // 2026-11-20 사용자 지적 '다시 로드 후 작업 재개 시 WORKBENCH 에서는 재개 되는데 VMW 에 재개된 작업이 보이지 않습니다': 작업 ID 를 받으면 열린 VMW 창이 있을 때 새 창 없이 그 창을 그 작업으로 바꾼다
+  if (focusId && panels.size) { const st0 = [...panels][panels.size - 1]; st0.cur = focusId; try { st0.panel.reveal(); st0.panel.webview.postMessage({ type: 'jobs', items: jr.list(30) }); st0.panel.webview.postMessage({ type: 'job', job: jr.get(focusId) }); } catch { } return; }
   const p0 = api.paths(); const ko = p0.language === 'ko';
   const panel = vscode.window.createWebviewPanel('vibeManager.jobs', 'VMW', vscode.ViewColumn.Active, { enableScripts: true, retainContextWhenHidden: true });
   try { panel.iconPath = { light: vscode.Uri.file(path.join(api.ctx.extensionPath, 'media', 'vibe.svg')), dark: vscode.Uri.file(path.join(api.ctx.extensionPath, 'media', 'vibe-color.svg')) }; } catch { }
-  const st = { panel, cur: '' }; panels.add(st);
+  const st = { panel, cur: focusId || '' }; panels.add(st);
   const post = m => { try { panel.webview.postMessage(m); } catch { } };
   const un = jr.on((jobId, kind, data) => {
     if (kind === 'end') post({ type: 'jobs', items: jr.list(30) });
+    if (kind === 'start') { post({ type: 'jobs', items: jr.list(30) }); const cj = st.cur ? jr.get(st.cur) : null; if (jobId !== st.cur && (!cj || cj.status !== 'running')) { st.cur = jobId; post({ type: 'job', job: jr.get(jobId) }); } } // 2026-11-20 시작·재개된 작업을 보이게(보던 작업이 실행 중이면 그대로)
     if (jobId !== st.cur) return;
     if (kind === 'job') post({ type: 'job', job: data }); else if (kind === 'log') post({ type: 'log', screen: data.screen, text: data.text, append: true });
   });
@@ -62,7 +65,7 @@ function open(api) {
           let mode = ''; try { mode = require('./workbench').workMode(p).db ? 'DB Mode' : 'UI&DB Mode'; } catch { }
           const jc = jr.loadCfg();
           post({ type: 'init', items: jr.batchItems(), screens: screenList(p), jobs: jr.list(30), recentSel: recentSel(p), mode, cfg: { maxPar: jc.jobMaxPar, maxClaude: jc.jobMaxClaude, cpuMax: jc.cpuMax, memMin: jc.memMin, rampSec: jc.rampSec } });
-          if (!st.cur) { const cut = jr.list(30).find(x => x.status === 'interrupted' && (jr.get(x.id) || {}).resumable); if (cut) st.cur = cut.id; } // 2026-11-20 작업 재개: 열 때 가장 최근 재개 가능 작업을 고름
+          if (!st.cur) { const ls = jr.list(30); const cut = ls.find(x => x.status === 'running') || ls.find(x => x.status === 'interrupted' && (jr.get(x.id) || {}).resumable); if (cut) st.cur = cut.id; } // 2026-11-20 작업 재개: 열 때 실행 중 작업, 없으면 가장 최근 재개 가능 작업을 고름
           if (st.cur) { const j = jr.get(st.cur); if (j) post({ type: 'job', job: j }); }
           break;
         }
@@ -88,8 +91,7 @@ function open(api) {
         case 'stop': { const a = await vscode.window.showWarningMessage(ko ? '실행 중인 화면도 중지합니다. 그 화면의 진행분은 없어집니다.' : 'Stop running screens too?', { modal: true }, ko ? '중지' : 'Stop'); if (a) jr.stop(m.id); break; }
         case 'log': post({ type: 'log', screen: m.screen, text: jr.logOf(m.id, m.screen) || readLogFile(p, m.id, m.screen), append: false }); break;
         case 'openWb': {
-          const wbm = require('./workbench'); const wb = wbm.open(api, { fresh: true }); const id = String(m.screen || '').toUpperCase();
-          if (wb) { try { wb.setState(Object.assign({}, wb.getState(), { id })); } catch { } setTimeout(() => { try { wb.post({ type: 'setId', id }); } catch { } }, 900); }
+          require('./workbench').openForScreen(api, m.screen); // 2026-11-20 같은 화면 창이 열려 있으면 그 창 Console, 없으면 새 창
           break;
         }
         case 'openFile': { const f = path.resolve(p.root, String(m.path || '')); if (!path.relative(p.root, f).startsWith('..') && fs.existsSync(f)) api.openPath(f); else post({ type: 'note', text: `파일 없음: ${m.path}` }); break; }
@@ -230,9 +232,9 @@ function paintSel(){ const a=[...sel]; $('selTxt').textContent=a.length?(KO?'선
 function paintDoms(){ const ds=[...new Set(screens.map(s=>s.dom))].sort(); $('doms').innerHTML='<button data-d=""'+(dom===''?' class="on"':'')+'>'+(KO?'전체':'All')+'</button>'+ds.map(d=>'<button data-d="'+d+'"'+(dom===d?' class="on"':'')+'>'+d+' '+screens.filter(s=>s.dom===d).length+'</button>').join(''); $('doms').querySelectorAll('button').forEach(b=>b.onclick=()=>{dom=b.dataset.d;paintDoms();paintList();}); }
 let CFG={maxPar:5,maxClaude:2,cpuMax:80,memMin:3072,rampSec:120};
 function paintPar(){ const it=items.find(x=>x.label===$('item').value); const par=document.querySelector('input[name=md]:checked').value==='par'; let n=Math.max(1,Math.min(CFG.maxPar,parseInt($('mp').value,10)||3)); $('mp').disabled=!par;
-  $('parInfo').textContent=par?((KO?'동시 '+n+'화면까지(상한 '+CFG.maxPar+'). ':'Up to '+n+'. ')+(it&&it.selfAdmit?(KO?'CheckList 는 실행 스크립트가 부하를 재서 스스로 입장을 기다림. ':'CheckList admits itself. '):(KO?'두 번째 화면부터 CPU < '+CFG.cpuMax+'% · 여유 메모리 ≥ '+CFG.memMin+'MB · 입장 간격 '+CFG.rampSec+'초일 때만 시작, 아니면 순차. ':'2nd+ screen only when load allows. '))+(it&&it.claudeSteps?(KO?'Claude 는 동시에 '+CFG.maxClaude+'개까지.':'Claude sessions up to '+CFG.maxClaude+'.'):'')):(KO?'같은 화면이 다른 창에서 실행 중이면 뒤로 미룸':'Screens busy elsewhere are deferred'); }
+  $('parInfo').textContent=par?((KO?'동시 '+n+'화면까지(상한 '+CFG.maxPar+'). ':'Up to '+n+'. ')+(it&&it.selfAdmit?(KO?'CheckList 는 실행 스크립트가 부하를 재서 스스로 입장을 기다림. ':'CheckList admits itself. '):(KO?'두 번째 화면부터 CPU < '+CFG.cpuMax+'% · 여유 메모리 ≥ '+CFG.memMin+'MB · 입장 간격 '+CFG.rampSec+'초일 때만 시작, 아니면 순차. ':'2nd+ screen only when load allows. '))+(it&&it.claudeSteps?(KO?'AI Agent 는 동시에 '+CFG.maxClaude+'개까지.':'AI Agent sessions up to '+CFG.maxClaude+'.'):'')):(KO?'같은 화면이 다른 창에서 실행 중이면 뒤로 미룸':'Screens busy elsewhere are deferred'); }
 function paintItem0(){ { const it0=items.find(x=>x.label===$('item').value); const w=$('itemWarn'); const msg=it0&&it0.disabled?it0.why:(it0&&it0.newScreen?(KO?'이미 생성된 화면은 건너뜁니다(일괄 작업은 기존 화면을 지우지 않음)':'Screens that already exist are skipped'):''); w.style.display=msg?'':'none'; w.textContent=msg; paintPar(); }
-  const it=items.find(x=>x.label===$('item').value); $('itemInfo').textContent=it?((KO?'단계 ':'steps ')+(it.steps||1)+(it.claudeSteps?(KO?' · Claude 단계 ':' · Claude steps ')+it.claudeSteps:(KO?' · 스크립트만':' · script only'))+(it.hint?' · '+it.hint:'')):''; $('askRow').style.display=it&&it.hasAsk?'':'none'; if(it&&it.hasAsk) $('askTxt').textContent=(KO?'승인이 필요한 단계도 전 화면에 실행: ':'Also run steps that need approval: ')+String(it.askText||'').replace(/\\$\\{id\\}/g,KO?'화면':'screen').slice(0,120); paintSel(); }
+  const it=items.find(x=>x.label===$('item').value); $('itemInfo').textContent=it?((KO?'단계 ':'steps ')+(it.steps||1)+(it.claudeSteps?(KO?' · AI Agent 단계 ':' · AI Agent steps ')+it.claudeSteps:(KO?' · 스크립트만':' · script only'))+(it.hint?' · '+it.hint:'')):''; $('askRow').style.display=it&&it.hasAsk?'':'none'; if(it&&it.hasAsk) $('askTxt').textContent=(KO?'승인이 필요한 단계도 전 화면에 실행: ':'Also run steps that need approval: ')+String(it.askText||'').replace(/\\$\\{id\\}/g,KO?'화면':'screen').slice(0,120); paintSel(); }
 // 2026-11-20 B 스튜디오: 화면별 카드(상태 점 · 진행 원 · 지금 단계 · 세부 진행 · 주체 · 소요 · 실패 원인 · 링크)
 function pctOf(s){ if(s.status==='done'||s.status==='warn') return 100; const t=String(s.prog||''); let p=0; const st=/단계 (\\d+)\\/(\\d+)/.exec(t); if(st){ const i=+st[1], n=+st[2]||1; let f=0; const sub=/(?:시험|세부|AI 묶음) (\\d+)\\/(\\d+)/.exec(t); if(sub&&+sub[2]) f=Math.min(1,+sub[1]/+sub[2]); p=Math.round(((i-1)+f)/n*100); } return Math.max(0,Math.min(99,p)); }
 function paintItem(){ paintItem0(); $('itemInfo').title=$('itemInfo').textContent; $('askTxt').parentNode.title=$('askTxt').textContent; $('parInfo').title=$('parInfo').textContent; }
@@ -245,10 +247,10 @@ function paintJob(){ const j=job; const has=!!j; const g=$('grid'); g.querySelec
   j.screens.forEach((s)=>{ const d=document.createElement('div'); d.className='card'+(s.id===logScreen?' sel':''); d.dataset.s=s.id; const p=pctOf(s); const bad=s.status==='fail'||s.status==='cancel';
     const stage=String(s.step||'').replace(/^\\[\\d+\\]\\s*/,''); const why=s.why||s.summary||'';
     d.innerHTML='<div class="top"><span class="dot d-'+esc(s.status)+'"></span><span class="id">'+esc(s.id)+'</span><span class="st">'+esc(KO?(SK[s.status]||s.status):s.status)+'</span><div class="ring'+(s.status==='done'||s.status==='warn'?' done':bad?' fail':'')+'" style="--p:'+p+'"><b>'+(s.status==='done'||s.status==='warn'?'✓':bad?'!':s.status==='run'?p+'%':'·')+'</b></div></div>'
-      +(s.resume?'<div class="why ok" title="'+esc((KO?'창 다시 로드로 끊긴 체인 ':'interrupted chain ')+(s.resume.label||''))+'">↻ '+(KO?'재개 가능 · '+s.resume.from+'/'+s.resume.of+' 단계부터 · '+esc(s.resume.at):'resumable from step '+s.resume.from+'/'+s.resume.of)+'</div>':'')
+      +(s.resume?'<div class="why ok" title="'+esc((KO?'창 다시 로드로 끊긴 체인 ':'interrupted chain ')+(s.resume.label||''))+'">↻ '+(KO?(s.resume.restart?'재시작 가능(단계 처음부터) · ':'재개 가능 · ')+esc(s.resume.what||(s.resume.from+'/'+s.resume.of+' 단계부터'))+' · '+esc(s.resume.at):(s.resume.restart?'restartable · ':'resumable · ')+esc(s.resume.what||('step '+s.resume.from+'/'+s.resume.of)))+'</div>':'')
       +(stage?'<div class="stage" title="'+esc(s.step)+'">'+esc(stage)+'</div>':'')+(s.prog?'<div class="prog" title="'+esc(s.prog)+'">'+esc(s.prog)+'</div>':'')
       +(why&&s.status!=='run'?'<div class="why'+(bad?'':' ok')+'" title="'+esc(why)+'">'+esc(why)+'</div>':'')+(s.actorNote?'<div class="prog" title="'+esc(s.actorNote)+'">'+esc(s.actorNote)+'</div>':'')
-      +'<div class="meta">'+(s.actor?'<span class="actor '+(s.actor==='claude'?'claude':'')+'">'+(s.actor==='claude'?'Claude':(KO?'스크립트':'script'))+'</span>':'')+'<span class="sp"></span>'+(s.sec?'<span>'+sec(s.sec)+'</span>':'')
+      +'<div class="meta">'+(s.actor?'<span class="actor '+(s.actor==='claude'?'claude':'')+'">'+(s.actor==='claude'?'AI Agent':'Script')+'</span>':'')+'<span class="sp"></span>'+(s.sec?'<span>'+sec(s.sec)+'</span>':'')
       +' <a class="lk" data-wb="'+esc(s.id)+'" title="'+(KO?'이 화면의 Workbench 열기':'Open Workbench')+'">↗</a>'+(s.md?' <a class="lk" data-f="'+esc(s.md)+'" title="'+(KO?'실행 기록':'Run record')+'">📄</a>':'')+(s.log?' <a class="lk" data-f="'+esc(s.log)+'" title="'+(KO?'로그 파일':'Log file')+'">≡</a>':'')+'</div>';
     d.onclick=e=>{ const a=e.target.closest('a.lk'); if(a){ if(a.dataset.wb) vscode.postMessage({type:'openWb',screen:a.dataset.wb}); else vscode.postMessage({type:'openFile',path:a.dataset.f}); return; } logScreen=s.id; window._pin=true; $('log').textContent=''; vscode.postMessage({type:'log',id:j.id,screen:s.id}); paintJob(); };
     g.appendChild(d); });

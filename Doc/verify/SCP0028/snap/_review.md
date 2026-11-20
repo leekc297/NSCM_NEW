@@ -1,4 +1,4 @@
-# 스냅샷 검토 SCP0028 — 2026-11-20 01:02
+# 스냅샷 검토 SCP0028 — 2026-11-20 06:04
 
 | 키 | 종류 | 범위 | 상태 | 골든 | 수신 | 차이 | 설명 |
 |---|---|---|---|---|---|---|---|
@@ -7,6 +7,6 @@
 | 헤더_Shipment_Lot_Size | 헤더 | Shipment Lot Size | MATCH | Doc\verify\SCP0028\snap\golden\헤더_Shipment_Lot_Size.txt | Doc\verify\SCP0028\snap\received\헤더_Shipment_Lot_Size.txt |  | 골든 Doc\verify\SCP0028\snap\golden\헤더_Shipment_Lot_Size.txt 와 일치 · 헤더 1행 · 칸 15 |
 | 화면샷_1920 | 화면샷 | 1920 | MATCH | Doc\verify\SCP0028\snap\golden\화면샷_1920.png |  |  | 골든 화면샷과 일치(maxDiffPixelRatio 0.002) |
 | 화면샷_1366 | 화면샷 | 1366 | MATCH | Doc\verify\SCP0028\snap\golden\화면샷_1366.png |  |  | 골든 화면샷과 일치(maxDiffPixelRatio 0.002) |
-| 팝업_Model | 팝업 | Model | MATCH | Doc\verify\SCP0028\snap\golden\팝업_Model.aria.yml | Doc\verify\SCP0028\snap\received\팝업_Model.aria.yml |  | 골든 Doc\verify\SCP0028\snap\golden\팝업_Model.aria.yml 와 일치 · 팝업 aria(60줄) |
+| 팝업_Model | 팝업 | Model | DIFF | Doc\verify\SCP0028\snap\golden\팝업_Model.aria.yml | Doc\verify\SCP0028\snap\received\팝업_Model.aria.yml | Doc\verify\SCP0028\snap\diff\팝업_Model.txt | 골든 Doc\verify\SCP0028\snap\golden\팝업_Model.aria.yml 와 29줄 다름(Doc\verify\SCP0028\snap\diff\팝업_Model.txt) — 첫 차이: - [골든 22]           - checkbox "Deselect All Row |
 
 승인: `python tools/Harness/verify/snap_expect.py <ID>` → `snap_validate.py <ID>`(불일치 0 확인) → `snap_approve.py <ID> [--item 키] --by 이름 --opinion 사유`

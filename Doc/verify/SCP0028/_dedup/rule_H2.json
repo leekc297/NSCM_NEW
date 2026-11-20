@@ -1,246 +1,202 @@
 {
  "rule_id": "H2",
- "hash": "97fe0659da6e6f72",
+ "hash": "3fa0acc4bbe124e3",
  "groups": [
-  {
-   "rows": [
-    "V-6c53510a",
-    "V-6e73db0d"
-   ],
-   "why": "두 행 모두 조회 후 입력 불가 컬럼의 배경색을 확인하고, 기대 결과도 같은 표준 3색(입력 불가=흰색, 편집 가능=노랑)이다. 출처만 GENERAL 일반화와 CONFIRMED로 다르다."
-  },
-  {
-   "rows": [
-    "V-47bf8dc7",
-    "V-f3825e2a"
-   ],
-   "why": "두 행 모두 실적 구간 셀의 배경색을 확인하고, 기대 결과도 같은 표준 구간색(회색)이다. 출처만 CONFIRMED와 GENERAL 일반화로 다르다."
-  },
-  {
-   "rows": [
-    "V-352a0746"
-   ],
-   "why": "같은 실적 구간 배경색이지만 기대 결과가 '구간과 상관없이 흰색'이라 회색을 기대하는 묶음과 달라 따로 둔다."
-  },
   {
    "rows": [
     "EG-514b2b1d"
    ],
-   "why": "TO-BE 코드에 조건부 셀 색이 구현돼 있는지 확인하는 행이다. 색 값을 측정하는 행과 성질이 달라 따로 둔다."
+   "why": "Checks that the TO-BE code implements the conditional cell color at SaveData. This is a check of code presence, not a runtime color measurement like V-a99ddb18, so it stays alone."
   },
   {
    "rows": [
     "V-a99ddb18"
    ],
-   "why": "AS-IS의 SetBGColor(Action 컬럼 LockColor) 색 규칙과 같은지 비교하는 행이다. 구현 여부를 보는 EG 행과 기대 결과가 달라 따로 둔다."
+   "why": "Checks at runtime that the Action column has the same LockColor rule as AS-IS when action is M. This is a different kind of check from EG-514b2b1d, which only confirms the code exists."
   },
   {
    "rows": [
     "T-092101ec"
    ],
-   "why": "INCREMENT 컬럼의 대조표 추적 행이다. 컬럼 색 측정과 성질이 같은지 확신할 수 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "T-4f008f49"
-   ],
-   "why": "SmartColMerge(셀 병합)를 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-4f69770d"
-   ],
-   "why": "CreateSpread 진입점을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-730ab462"
-   ],
-   "why": "checkValidSize 검증 로직을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-7b306e42"
-   ],
-   "why": "조회 결과 바인딩(FindData)을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-81eb0db7"
-   ],
-   "why": "필수값 검증(checkRequiredOfSpread)을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-8e0e10c5"
-   ],
-   "why": "SPLIT_YN 컬럼의 대조표 추적 행이다. COLUMN 색 측정 행과 성질이 같은지 확신할 수 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "T-916f876d"
-   ],
-   "why": "LockColumn 편집 잠금을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-bdc22af1"
-   ],
-   "why": "VALID_YN 컬럼의 대조표 추적 행이다. COLUMN 색 측정 행과 성질이 같은지 확신할 수 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "T-d233d70c"
-   ],
-   "why": "LOT_SIZE 컬럼의 대조표 추적 행이다. COLUMN 색 측정 행과 성질이 같은지 확신할 수 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "T-e3b75e51"
-   ],
-   "why": "팝업 OK 버튼의 SaveData 흐름을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-e8824582"
-   ],
-   "why": "팝업 검색영역과 Find 버튼을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-ec3bc4f9"
-   ],
-   "why": "기본값으로 되돌아간 행의 BGColor·CRUD 해제를 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-f2027c89"
-   ],
-   "why": "SwitchLock 미이식 여부를 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "T-f28a6054"
-   ],
-   "why": "신규행만 지우는 Delete 동작을 대조표로 추적하는 행이고, 다른 행과 대상 요소가 다르다."
-  },
-  {
-   "rows": [
-    "V-207b87b5"
-   ],
-   "why": "NICK_NAME 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-20cf6e59"
-   ],
-   "why": "SPLIT_YN 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-2fa7e39e"
-   ],
-   "why": "VALID_YN 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-36266ac3"
-   ],
-   "why": "FROM_SITE_DESCRIPTION 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "TRACE check of trace-table row 5 for INCREMENT. Its expected result (trace-table row) differs from V-65ae4e60's standard 3-color expectation, so it stays alone."
   },
   {
    "rows": [
     "V-65ae4e60"
    ],
-   "why": "INCREMENT 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the INCREMENT column."
   },
   {
    "rows": [
-    "V-7f992fa3"
+    "T-8e0e10c5"
    ],
-   "why": "CREATION_DATE 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "TRACE check of trace-table row 1 for SPLIT_YN. Its expected result differs from the COLUMN row V-20cf6e59, so it stays alone."
   },
   {
    "rows": [
-    "V-8cca9060"
+    "V-20cf6e59"
    ],
-   "why": "OPERATION_GROUP_ID 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the SPLIT_YN column."
+  },
+  {
+   "rows": [
+    "T-bdc22af1"
+   ],
+   "why": "TRACE check of trace-table row 1 for VALID_YN. Its expected result differs from the COLUMN row V-2fa7e39e, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-2fa7e39e"
+   ],
+   "why": "Standard 3-color background check for the VALID_YN column."
+  },
+  {
+   "rows": [
+    "T-d233d70c"
+   ],
+   "why": "TRACE check of trace-table row 5 for LOT_SIZE. Its expected result differs from the COLUMN row V-c5219535, so it stays alone."
   },
   {
    "rows": [
     "V-c5219535"
    ],
-   "why": "LOT_SIZE 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the LOT_SIZE column."
+  },
+  {
+   "rows": [
+    "T-4f008f49"
+   ],
+   "why": "TRACE check for the cell-merge logic (SmartColMerge). No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-4f69770d"
+   ],
+   "why": "TRACE check for the CreateSpread entry point. No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-730ab462"
+   ],
+   "why": "TRACE check for the checkValidSize validation logic. No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-7b306e42"
+   ],
+   "why": "TRACE check for the query binding (FindData). No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-81eb0db7"
+   ],
+   "why": "TRACE check for the required-field validation (checkRequiredOfSpread). No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-916f876d"
+   ],
+   "why": "TRACE check for edit locking (LockColumn). No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-e3b75e51"
+   ],
+   "why": "TRACE check for the popup OK button handling (SaveData). No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-e8824582"
+   ],
+   "why": "TRACE check for the popup search area and Find button. No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-ec3bc4f9"
+   ],
+   "why": "TRACE check for reverting to default values and clearing the CRUD flag. Its target and expected result differ from the SetBGColor rows."
+  },
+  {
+   "rows": [
+    "T-f2027c89"
+   ],
+   "why": "TRACE check for SwitchLock not being ported and for edit permission. No other row covers the same element."
+  },
+  {
+   "rows": [
+    "T-f28a6054"
+   ],
+   "why": "TRACE check for deleting new rows only. No other row covers the same element."
+  },
+  {
+   "rows": [
+    "V-207b87b5"
+   ],
+   "why": "Standard 3-color background check for the NICK_NAME column."
+  },
+  {
+   "rows": [
+    "V-36266ac3"
+   ],
+   "why": "Standard 3-color background check for the FROM_SITE_DESCRIPTION column."
+  },
+  {
+   "rows": [
+    "V-7f992fa3"
+   ],
+   "why": "Standard 3-color background check for the CREATION_DATE column."
+  },
+  {
+   "rows": [
+    "V-8cca9060"
+   ],
+   "why": "Standard 3-color background check for the OPERATION_GROUP_ID column."
   },
   {
    "rows": [
     "V-c68682e9"
    ],
-   "why": "ITEM_ID 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the ITEM_ID column."
   },
   {
    "rows": [
     "V-d6ea5ee6"
    ],
-   "why": "TO_SITE_DESCRIPTION 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the TO_SITE_DESCRIPTION column."
   },
   {
    "rows": [
     "V-e1cc7e1e"
    ],
-   "why": "LAST_UPDATED_BY 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the LAST_UPDATED_BY column."
   },
   {
    "rows": [
     "V-f19d838c"
    ],
-   "why": "DIVISION_ID 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the DIVISION_ID column."
   },
   {
    "rows": [
     "V-f8c905c6"
    ],
-   "why": "TRANS_MODE_NAME 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the TRANS_MODE_NAME column."
   },
   {
    "rows": [
     "V-fb4dc86a"
    ],
-   "why": "LAST_UPDATE_DATE 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the LAST_UPDATE_DATE column."
   },
   {
    "rows": [
     "V-fd905226"
    ],
-   "why": "CREATED_BY 컬럼의 색만 확인하는 행이다. 다른 컬럼과 요소가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-2fe30674"
-   ],
-   "why": "다른 화면(SCP0006)의 Main Grid 배경색 결함 유형으로, 기대 결과가 'AS-IS 배경색 표시'라서 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-573a694c"
-   ],
-   "why": "Partial 주차 편집 구간과 실적 구분선을 보는 행이다. 대상 요소와 기대 결과가 모두 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-595a4fea"
-   ],
-   "why": "팝업 입력 셀(FPModal)이 노랑인지 보는 행이다. 대상 요소가 일반 컬럼과 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-5d9a94a0"
-   ],
-   "why": "CA1 행을 더블클릭한 상태에서 전 컬럼이 흰색인지 보는 행이다. 대상 상태와 기대 결과가 달라 따로 둔다."
+   "why": "Standard 3-color background check for the CREATED_BY column."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:20:38",
- "cost": 0.14772000000000002
+ "at": "2026-11-20 13:01:14",
+ "cost": 0.11029100000000001
 }

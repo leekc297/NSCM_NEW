@@ -1,173 +1,149 @@
 {
  "rule_id": "D3",
- "hash": "90df4a2251482a25",
+ "hash": "3e3b56a69dc88f13",
  "groups": [
-  {
-   "rows": [
-    "T-53391d50",
-    "T-80409fc6"
-   ],
-   "why": "둘 다 같은 EditButton SwitchLock(cs:232는 cs:229~236 범위 안)을 추적하고, 기대 결과도 '미이식, canEdit=hasButton('EDIT') 로드 시 1회 판정(상시편집)'으로 같다."
-  },
-  {
-   "rows": [
-    "T-992a6002"
-   ],
-   "why": "같은 EditButton 진입점(ENTRY)이지만 기대 요지가 적혀 있지 않아 SwitchLock 미이식 행과 기대가 같은지 확신할 수 없어 따로 둔다."
-  },
   {
    "rows": [
     "EG-12a208c4"
    ],
-   "why": "ShipmentLotSizePopup의 Input 버튼에서 팝업 행이 잠기는지 보는 행이며, 다른 행과 버튼과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-f70cad2d"
    ],
-   "why": "ShipmentLotSizePopup의 Delete 버튼과 관련해 AS-IS 소스 cs:223에 DIVISION 컬럼 잠금 호출이 있는지 확인하는 행이라 Input 버튼 행과 대상과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-fb231b5d"
    ],
-   "why": "다른 팝업(ItembyDivisionPopup)의 Model 조건에서 전 컬럼 잠금 호출이 있는지 확인하는 행이라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-0c40b2d8"
    ],
-   "why": "Delete()가 신규행에만 적용되는지 추적하는 행이며 상태(신규행)와 대상이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4bc81061"
    ],
-   "why": "SPLIT_YN 컬럼만 대상으로 하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4d6f6c87"
    ],
-   "why": "LOT_SIZE 컬럼만 대상으로 하며, 같은 3행 기대를 가진 INCREMENT와는 컬럼이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "T-a14b1ffd"
+    "T-53391d50"
    ],
-   "why": "INCREMENT 컬럼만 대상으로 하며 LOT_SIZE와는 컬럼이 다르다."
-  },
-  {
-   "rows": [
-    "T-657a057c"
-   ],
-   "why": "DIVISION_ID 컬럼만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "T-686860e9"
-   ],
-   "why": "VALID_YN 컬럼만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "T-8249bbe9"
-   ],
-   "why": "TRANS_MODE_NAME 컬럼만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "T-8c50b747"
-   ],
-   "why": "CREATED_BY 감사 컬럼만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "T-950d3d65"
-   ],
-   "why": "LAST_UPDATE_DATE 감사 컬럼만 대상으로 하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-6242b38f"
    ],
-   "why": "기본값으로 되돌린 행의 CRUD 해제(isDefaultRevertRow)를 추적하는 행이라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "T-ef36c4d3"
+    "T-657a057c"
    ],
-   "why": "저장 대상이 편집한 행만인지(EditTracker의 M 표시)를 추적하는 행이며, 기본값 회귀 행과 관련은 있지만 확인하는 성질이 달라 묶지 않는다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-686860e9"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-80409fc6"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-8249bbe9"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-85aedacc"
    ],
-   "why": "Input 일괄입력 커스텀 버튼에서 팝업을 거쳐 GET_INPUT 후보로 이어지는 흐름을 추적하는 행이라 팝업 잠금 행과 기대가 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-8c50b747"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-950d3d65"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-992a6002"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-a14b1ffd"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-aa1aa43e"
    ],
-   "why": "필수값 검사(checkRequiredOfSpread)를 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-bbdb321d"
    ],
-   "why": "LOT<INC 및 0값 검증(checkValidSize)을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d3fac0ba"
    ],
-   "why": "조회 결과 바인딩(FindData, o_rc1)을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-e1abe0cf"
    ],
-   "why": "LockColumn 범위를 isLotSizeCellEditable과 beginningEdit cancel로 구현했는지 추적하는 행이라 SwitchLock 행과 대상이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-e9e792b4"
    ],
-   "why": "SmartColMerge 셀 병합을 추적하는 행이며 잠금과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-111488bf"
+    "T-ef36c4d3"
    ],
-   "why": "신규 행에서 Sales Site 유형별 Measure 콤보 후보를 보는 행이며, 조건과 기대가 다른 GENERAL 행과 다르다."
-  },
-  {
-   "rows": [
-    "V-38e4250a"
-   ],
-   "why": "Current 버전에서 Div와 권한별 입력 Measure 통제 및 AS From Site 콤보를 보는 행이라 기대 범위가 다르다."
-  },
-  {
-   "rows": [
-    "V-70f738e9"
-   ],
-   "why": "Div 81에서 Sales Site 유형별 AS From Site 활성 여부를 보는 행이라 조건과 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-a1d74301"
-   ],
-   "why": "CA1 행의 그리드 색상(편집 불가)을 보는 행이라 대상이 다르다."
-  },
-  {
-   "rows": [
-    "V-c481c8d8"
-   ],
-   "why": "Div 82에서 권한별 FCST Type 콤보 노출을 보는 행이라 대상과 기대가 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:17:43",
- "cost": 0.12442809999999999
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:00:10",
+ "cost": 0,
+ "open": 0
 }

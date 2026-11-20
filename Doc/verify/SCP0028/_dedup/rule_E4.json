@@ -1,268 +1,184 @@
 {
  "rule_id": "E4",
- "hash": "a1ef7d1346116d4c",
+ "hash": "460c294f8ae158f7",
  "groups": [
   {
    "rows": [
-    "T-239d320f",
     "T-1572ce8c",
-    "V-fb2bb601"
+    "T-239d320f"
    ],
-   "why": "All three check that MSG00006 (save failed) appears under the same else branch at SaveData line 700 and that processing stops."
+   "why": "두 행 모두 SaveData:700의 MSG00006(저장 실패) 대조표 추적이고 기대 결과도 같으며, 원장 유형(LEDGER/MSG)만 다르다."
   },
   {
    "rows": [
     "T-16ce7bee",
-    "T-a5c1bb0f",
-    "V-4ff698de"
+    "T-a5c1bb0f"
    ],
-   "why": "All three check that MSG00084 (enter an integer greater than 0) appears from checkValidSize line 771 when LOT_SIZE is 0, and that processing stops."
-  },
-  {
-   "rows": [
-    "T-e025353a",
-    "T-fdfe4318",
-    "V-fe6dcb91"
-   ],
-   "why": "All three check that MSG00099 appears from checkValidSize line 764 when Lot Size is less than Increment, and that processing stops."
-  },
-  {
-   "rows": [
-    "V-1f64fec6",
-    "V-86208af2"
-   ],
-   "why": "Both check the same Lot Size<Increment validation message when the language is KO, and both expect the KO message to be shown."
-  },
-  {
-   "rows": [
-    "T-a48de69e",
-    "T-cc3cc178",
-    "V-356aae9e"
-   ],
-   "why": "All three check that MSG00133 (no changes made) appears from SaveData line 608 when modiCnt==0, and that processing stops."
+   "why": "두 행 모두 checkValidSize:771의 MSG00084(0보다 큰 정수) 대조표 추적이고 기대 결과도 같으며, 원장 유형만 다르다."
   },
   {
    "rows": [
     "T-281e8ef6",
-    "T-d35a8011",
-    "V-88b49284"
+    "T-d35a8011"
    ],
-   "why": "All three check that MSG00004 (N records saved) appears from SaveData line 691 when the save succeeds with result S."
+   "why": "두 행 모두 SaveData:691의 MSG00004(저장 건수 안내) 대조표 추적이고 기대 결과도 같으며, 원장 유형만 다르다."
   },
   {
    "rows": [
-    "V-2a373e9a",
-    "V-bba93c1b"
+    "T-a48de69e",
+    "T-cc3cc178"
    ],
-   "why": "Both save a new row whose key duplicates an existing row, and both expect the save to be blocked with a duplicate message."
+   "why": "두 행 모두 SaveData:608의 MSG00133(수정 내용 없음) 대조표 추적이고 기대 결과도 같으며, 원장 유형만 다르다."
+  },
+  {
+   "rows": [
+    "T-e025353a",
+    "T-fdfe4318"
+   ],
+   "why": "두 행 모두 checkValidSize:764의 MSG00099(Increment>Lot Size) 대조표 추적이고 기대 결과도 같으며, 원장 유형만 다르다."
+  },
+  {
+   "rows": [
+    "V-1f64fec6",
+    "V-fe6dcb91"
+   ],
+   "why": "두 행 모두 Lot Size가 Increment보다 작은 행을 저장할 때 MSG00099 계열의 'Increment은 Lot Size보다 클 수 없습니다' 문구를 띄우고 저장을 막는지 확인한다."
   },
   {
    "rows": [
     "T-0caf6c62"
    ],
-   "why": "MSG00031 (FindDelete deleted) is the only row for this message."
-  },
-  {
-   "rows": [
-    "T-4677b9e5"
-   ],
-   "why": "MSG00284 (FindDelete error) is the only row for this message."
+   "why": "FindDelete 삭제 완료 메시지 MSG00031 추적만 있는 단독 행이다."
   },
   {
    "rows": [
     "T-141a62a1"
    ],
-   "why": "Trace row for the LOT_SIZE column meta (required M); no other row checks the same thing."
+   "why": "LOT_SIZE 컬럼 메타(필수 M) 대조표 추적으로, 다른 행과 성질이 다르다."
   },
   {
    "rows": [
     "T-2030b1b3"
    ],
-   "why": "Trace row for the checkRequiredOfSpread / useSaveWithValidation implementation, which is a different kind of check."
+   "why": "checkRequiredOfSpread의 구현 위치(useSaveWithValidation) 추적으로, 성질이 달라 단독으로 둔다."
   },
   {
    "rows": [
     "T-2eca880a"
    ],
-   "why": "The From Site search condition is a separate element."
-  },
-  {
-   "rows": [
-    "T-833aceab"
-   ],
-   "why": "The To Site search condition is a separate element."
-  },
-  {
-   "rows": [
-    "T-61a9d269"
-   ],
-   "why": "The Division search condition is a separate element."
+   "why": "조회조건 From Site 추적만 있는 단독 행이다."
   },
   {
    "rows": [
     "T-2f878317"
    ],
-   "why": "MSG00059 has no e4 information, so it stays alone."
+   "why": "MSG00059 추적만 있고 같은 대상의 행이 없다."
   },
   {
    "rows": [
-    "T-627e2743"
+    "T-4677b9e5"
    ],
-   "why": "MSG00429 has no e4 information, so it stays alone."
-  },
-  {
-   "rows": [
-    "T-86090cf3"
-   ],
-   "why": "MSG01091 has no e4 information, so it stays alone."
-  },
-  {
-   "rows": [
-    "T-884ad9f3"
-   ],
-   "why": "MSG00002 has no e4 information, so it stays alone."
-  },
-  {
-   "rows": [
-    "T-9c0060f9"
-   ],
-   "why": "MSG00016 has no e4 information, so it stays alone."
-  },
-  {
-   "rows": [
-    "T-a79c50f4"
-   ],
-   "why": "MSG00014 has no e4 information, so it stays alone."
-  },
-  {
-   "rows": [
-    "T-c96012e6"
-   ],
-   "why": "MSG00683 has no e4 information, so it stays alone."
+   "why": "FindDelete 실행 에러 MSG00284 추적만 있는 단독 행이다."
   },
   {
    "rows": [
     "T-61a37bf5"
    ],
-   "why": "Trace row for the rule that only edited rows are saved, which is a different property."
+   "why": "저장 대상을 편집행만으로 한정하는 구현 추적으로, 다른 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-61a9d269"
+   ],
+   "why": "조회조건 Division 추적만 있는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-627e2743"
+   ],
+   "why": "MSG00429 추적만 있고 같은 대상의 행이 없다."
+  },
+  {
+   "rows": [
+    "T-833aceab"
+   ],
+   "why": "조회조건 To Site 추적만 있는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-86090cf3"
+   ],
+   "why": "MSG01091 추적만 있고 같은 대상의 행이 없다."
+  },
+  {
+   "rows": [
+    "T-884ad9f3"
+   ],
+   "why": "MSG00002 추적만 있고 같은 대상의 행이 없다."
+  },
+  {
+   "rows": [
+    "T-9c0060f9"
+   ],
+   "why": "MSG00016 추적만 있고 같은 대상의 행이 없다."
+  },
+  {
+   "rows": [
+    "T-a79c50f4"
+   ],
+   "why": "MSG00014 추적만 있고 같은 대상의 행이 없다."
+  },
+  {
+   "rows": [
+    "T-c96012e6"
+   ],
+   "why": "MSG00683 추적만 있고 같은 대상의 행이 없다."
   },
   {
    "rows": [
     "T-dbdb5f4b"
    ],
-   "why": "Trace row for the whole useShipmentLotSizeValidation implementation, covering both LOT<INC and the 0 value, so it stays alone."
+   "why": "checkValidSize의 구현 위치(useShipmentLotSizeValidation) 추적으로, 메시지 동작을 확인하는 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-2a373e9a"
+   ],
+   "why": "신규행 키 중복을 막는지 확인하는 단독 시나리오다."
+  },
+  {
+   "rows": [
+    "V-356aae9e"
+   ],
+   "why": "수정 건수 0일 때 MSG00133을 띄우는 ASIS 동작 확인으로, 대조표 추적과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-4ff698de"
+   ],
+   "why": "LOT_SIZE 등이 0일 때 MSG00084를 띄우는 ASIS 동작 확인으로, 대조표 추적과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-88b49284"
+   ],
+   "why": "저장 성공 시 MSG00004를 띄우는 ASIS 동작 확인으로, 대조표 추적과 성질이 달라 단독으로 둔다."
   },
   {
    "rows": [
     "V-904e7990"
    ],
-   "why": "Checks that editing and saving LOT_SIZE on an existing row raises no false required-field alert, which differs in state and expected result."
+   "why": "기존행 LOT_SIZE를 수정 저장할 때 필수 오탐 문구가 없어야 한다는 기대로, 다른 행과 기대 결과가 다르다."
   },
   {
    "rows": [
-    "V-3add823f"
+    "V-fb2bb601"
    ],
-   "why": "General type from another screen: RTF unit-price check and Waterfall sync; separate."
-  },
-  {
-   "rows": [
-    "V-411bc395"
-   ],
-   "why": "General type: Unit Price conditionally required; separate."
-  },
-  {
-   "rows": [
-    "V-61e0df0d"
-   ],
-   "why": "General type: Cell Prod Site check; separate."
-  },
-  {
-   "rows": [
-    "V-6ee8c35c"
-   ],
-   "why": "General type: false alerts from the unit-price check; separate."
-  },
-  {
-   "rows": [
-    "V-71c70424"
-   ],
-   "why": "General type: BP Version Create; separate."
-  },
-  {
-   "rows": [
-    "V-76046ea6"
-   ],
-   "why": "General type: blocking key-in values in combo cells; separate."
-  },
-  {
-   "rows": [
-    "V-8386b5e5"
-   ],
-   "why": "General type: Project required check; separate."
-  },
-  {
-   "rows": [
-    "V-889edbd2"
-   ],
-   "why": "General type: RTF edit-permission conditions; separate."
-  },
-  {
-   "rows": [
-    "V-88f389d9"
-   ],
-   "why": "General type: Biz Type not-found message; separate."
-  },
-  {
-   "rows": [
-    "V-99a40358"
-   ],
-   "why": "General type: multiple Owners in the lower grid; separate."
-  },
-  {
-   "rows": [
-    "V-bcc7826c"
-   ],
-   "why": "General type: Text required / ETC save; separate."
-  },
-  {
-   "rows": [
-    "V-c043b51a"
-   ],
-   "why": "General type: Cust Group relationship / Active; separate."
-  },
-  {
-   "rows": [
-    "V-c2dd419b"
-   ],
-   "why": "General type: digit-count overflow message; separate."
-  },
-  {
-   "rows": [
-    "V-d818149d"
-   ],
-   "why": "General type: Excel Upload check messages; separate."
-  },
-  {
-   "rows": [
-    "V-dc6b83b4"
-   ],
-   "why": "Composite general type (Currency, duplicate Keyset, Insert position, Delete button) with different expected results, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-f3396c0a"
-   ],
-   "why": "General type: blocking old-code Sold to/Ship to combinations; separate."
-  },
-  {
-   "rows": [
-    "V-faf1a2c8"
-   ],
-   "why": "Confirmed rule for the Edit-button path, which checks a different property (edit state)."
+   "why": "저장 실패 시 MSG00006을 띄우는 ASIS 동작 확인으로, 대조표 추적과 성질이 달라 단독으로 둔다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:18:35",
- "cost": 0.17912899999999998
+ "at": "2026-11-20 13:00:52",
+ "cost": 0.1360573
 }

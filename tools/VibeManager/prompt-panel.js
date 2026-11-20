@@ -161,7 +161,7 @@ const $=id=>document.getElementById(id);const state=()=>({id:$('id').value,ctx:$
 const save=()=>vscode.postMessage(Object.assign({type:'saveState'},state()));
 ['id','ctx','harness'].forEach(k=>$(k).addEventListener('change',save));
 function send(){const text=$('t').value;if(!text.trim())return;vscode.postMessage(Object.assign({type:'send',text},state()));$('t').value='';}
-$('send').onclick=send;$('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.altKey&&!e.isComposing&&e.keyCode!==229){e.preventDefault();send();}});  // 1.9.30: Enter 전송 · Shift+Enter 줄바꿈 · 한글 조합 중 Enter 는 조합 확정만
+$('send').onclick=send;$('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.altKey&&!e.isComposing&&e.keyCode!==229){e.preventDefault();send();}});  // 1.9.30: Enter 전송, Shift+Enter 줄바꿈, 한글 조합 중 Enter 는 조합 확정만
 $('new').onclick=()=>vscode.postMessage(Object.assign({type:'new'},state()));
 $('newScr').onclick=()=>vscode.postMessage(Object.assign({type:'newScreen'},state()));
 $('cont').onclick=()=>vscode.postMessage(Object.assign({type:'continue'},state()));

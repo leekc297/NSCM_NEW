@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0028",
  "asis_id": "SCP0028",
- "generated": "2026-11-20T10:02:12",
+ "generated": "2026-11-20T15:04:02",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size\\__asis-mapping__.md",
  "rows": 397,
  "fe_rows": 42,
@@ -11,28 +11,28 @@
  "fe_mapping_missing": false,
  "verdict": {
   "FAIL": 80,
-  "미검증": 279,
-  "검증완료": 34,
+  "미검증": 278,
+  "검증완료": 35,
   "해당없음": 4
  },
  "instances": 393,
  "instance_result": {
-  "PASS": 85,
-  "NOT_RUN": 147,
+  "PASS": 91,
+  "NOT_RUN": 139,
   "REVIEW": 20,
   "FAIL": 4,
-  "NOPATH": 12,
+  "NOPATH": 6,
   "WARN": 6,
-  "NA": 24,
-  "ERROR": 95
+  "NA": 27,
+  "ERROR": 100
  },
  "by_layer": {
   "동적 생성·조회": {
-   "PASS": 50,
-   "NOT_RUN": 14,
+   "PASS": 51,
+   "NOT_RUN": 13,
    "REVIEW": 20,
-   "NA": 10,
-   "NOPATH": 2,
+   "NA": 11,
+   "NOPATH": 1,
    "ERROR": 20,
    "FAIL": 3
   },
@@ -52,16 +52,15 @@
   },
   "팝업": {
    "WARN": 6,
-   "NOT_RUN": 36,
+   "NOT_RUN": 29,
    "PASS": 1,
-   "NA": 5,
-   "ERROR": 5,
-   "NOPATH": 4
+   "ERROR": 10,
+   "NA": 11
   },
   "DB 실행·접근": {
-   "NOPATH": 3,
-   "PASS": 7,
-   "NA": 8,
+   "NOPATH": 2,
+   "PASS": 12,
+   "NA": 4,
    "NOT_RUN": 4
   },
   "편집·검증": {
@@ -93,10 +92,10 @@
    "PASS": 15
   },
   "A6": {
-   "NOPATH": 2,
-   "NA": 2,
-   "NOT_RUN": 2,
-   "PASS": 2
+   "NOPATH": 1,
+   "PASS": 3,
+   "NA": 3,
+   "NOT_RUN": 1
   },
   "B3": {
    "NOT_RUN": 3
@@ -139,9 +138,7 @@
    "NOT_RUN": 1
   },
   "DB-SYN": {
-   "PASS": 6,
-   "NA": 4,
-   "NOPATH": 1
+   "PASS": 11
   },
   "E1": {
    "NOT_RUN": 2
@@ -191,8 +188,8 @@
   "G5": {
    "PASS": 1,
    "NOT_RUN": 12,
-   "NA": 5,
-   "NOPATH": 3
+   "ERROR": 5,
+   "NA": 3
   },
   "G6": {
    "NOT_RUN": 7,
@@ -218,8 +215,8 @@
   },
   "H6": {
    "WARN": 6,
-   "NOT_RUN": 14,
-   "NOPATH": 1
+   "NOT_RUN": 12,
+   "NA": 3
   },
   "I1": {
    "NOT_RUN": 1
@@ -240,8 +237,9 @@
    "NOT_RUN": 3
   },
   "M4": {
-   "NOT_RUN": 7,
-   "ERROR": 5
+   "NOT_RUN": 2,
+   "ERROR": 5,
+   "NA": 5
   },
   "SC1": {
    "NOT_RUN": 1
@@ -263,10 +261,10 @@
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "NOT_RUN": 401,
-  "NOPATH": 8,
+  "NOT_RUN": 397,
   "WARN": 1,
-  "ERROR": 124,
-  "REVIEW": 33
+  "ERROR": 125,
+  "REVIEW": 33,
+  "NOPATH": 6
  }
 }

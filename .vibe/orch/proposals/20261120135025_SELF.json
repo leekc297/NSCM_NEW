@@ -1,0 +1,118 @@
+{
+  "id": "20261120135025_SELF",
+  "at": "2026-11-20T13:50:25+09:00",
+  "ms": 1795150225728,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn small modules nb rn rn",
+  "title": "작은 모듈 8개 고정 문구 정리(orchestra, history, orch-agent, orch-watch, orch-usercheck, orch-dict, prompt-panel, orch-vision 17건, orch-usercheck.js:223 추가)",
+  "evidence": "이전 안 20261120131344_SELF_2 반영 결과(13:48:13): doc_style.py 위반 25 → 9건. 남은 9건 중 제외 목록 8건(orchestra.js L13 정규식, history.js L167·L172 버튼 아이콘, orch-vision.js L63 판단한다, orch-vision.js L65·L67 정합성, orch-dict.js L52 정합성, orch-usercheck.js L354 '없음 → 추가')과 orch-usercheck.js L223 가운뎃점 나열 1건. 현재 소스 기준 줄: orch-agent.js 272, orch-usercheck.js 223·323, prompt-panel.js 164. 시험 파일에서 L223 문구('stream fe 0줄', '늘어남 ·')를 비교하는 곳 없음(grep tools/VibeManager/*.js 결과 orch-usercheck.js만 걸림). (반영 실패한 20261120131344_SELF_2 를 고친 안 · 원인 개선안 근거 수집 때 tools/VibeManager/orch-usercheck.js:223 가운뎃점 나열 1건이 빠짐. 2026-11-20 13:48:13 검증에서 doc_style.py 위반이 25건에서 9건으로 줄었고 8건은 제외 목록과 일치함. 남은 1건이 L223 '늘어남 · 같은 동안 log.out stream fe 0줄 · 5173'임(.vibe/orch/selfcheck/doc_style/orch-usercheck.js.style.csv 2행). 반영한 Claude는 범위 밖이라 고치지 않았고 기대값 '제외 목록 8건만'과 달라 verified false 처리됨. 반영 전 게이트는 시험 47/47개 파일 통과(13:47:22), 반영 뒤 게이트 결과는 null이라 환경 문제는 확인되지 않음.)",
+  "targets": [
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/history.js",
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-dict.js",
+    "tools/VibeManager/prompt-panel.js",
+    "tools/VibeManager/orch-vision.js"
+  ],
+  "before_after": "이전 안 before_after 그대로(줄 번호는 문구로 찾음: orch-agent.js 272, orch-usercheck.js 323). 추가 1건: orch-usercheck.js:223 detail 템플릿 '${grew} 늘어남 · 같은 동안 log.out stream fe 0줄 · 5173 ${last.state}(…) ${hm(last.ms)} · FE LOG 켜짐 ${hm(…)}' → '${grew} 늘어남, 같은 동안 log.out stream fe 0줄, 5173 ${last.state}(…) ${hm(last.ms)}, FE LOG 켜짐 ${hm(…)}'. 템플릿 식(${…})과 key 값 S13|U15|${port}는 바꾸지 않음. 제외 목록은 이전 안과 같음.",
+  "verify": "node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → ALL PASS. python tools/Docs/doc_style.py 대상 8개 파일 --out .vibe/orch/selfcheck/doc_style --quiet → 위반 8건(위반이 있으면 종료코드 1). 남은 위치는 orchestra.js L13, history.js L167·L172, orch-vision.js L63·L65·L67, orch-dict.js L52, orch-usercheck.js L354 8건이고 orch-usercheck.js L223은 없음. 줄 번호가 밀리면 같은 문구로 대조.",
+  "rollback": "반영 전 게이트 백업 태그로 대상 8개 파일 복원(이전 시도와 같은 방식, VMO 자동 복원)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:05:30+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T14:08:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1405"
+    },
+    {
+      "at": "2026-11-20T14:08:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T14:12:42+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 7개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T14:12:42+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 14:09:40. node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행 결과 ALL PASS. python tools/Docs/doc_style.py 대상 8개 파일 --out .vibe/orch/selfcheck/doc_style --quiet 실행 결과 종료코드 1, 위반 8건. 위치는 orchestra.js L13, history.js L167·L172, orch-usercheck.js L354, orch-dict.js L52, orch- · 변경 16개 파일 · 대상 목록 밖 변경 8개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json, Doc/verify/SCP0028/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json, Doc/verify/SCP0028/dyn_facts.json, Doc/verify/SCP0028/e2e/shots/index_trace.json, Doc/verify/SCP0028/e2e/shots/trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행.png",
+      "log": ".vibe\\logs\\2026-11-20T14-08-17_claude_orch.log",
+      "sec": 96,
+      "costUsd": 0.8558513999999999,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json",
+        "Doc/verify/SCP0028/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json",
+        "Doc/verify/SCP0028/dyn_facts.json",
+        "Doc/verify/SCP0028/e2e/shots/index_trace.json",
+        "Doc/verify/SCP0028/e2e/shots/trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행.png",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/history.js",
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-dict.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orch-vision.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/prompt-panel.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|orchestra.js",
+  "repairOf": "20261120131344_SELF_2",
+  "repairRoot": "20261120131344_SELF_2",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795151130560,
+  "autoFp": "e642cb94fb",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1405",
+  "needsReload": true,
+  "appliedMs": 1795151562904,
+  "synced": [
+    "history.js",
+    "orch-agent.js",
+    "orch-dict.js",
+    "orch-usercheck.js",
+    "orch-vision.js",
+    "orch-watch.js",
+    "prompt-panel.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orchestra.js",
+      "tools/VibeManager/history.js",
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/orch-dict.js",
+      "tools/VibeManager/prompt-panel.js",
+      "tools/VibeManager/orch-vision.js"
+    ],
+    "verify_result": "2026-11-20 14:09:40. node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행 결과 ALL PASS. python tools/Docs/doc_style.py 대상 8개 파일 --out .vibe/orch/selfcheck/doc_style --quiet 실행 결과 종료코드 1, 위반 8건. 위치는 orchestra.js L13, history.js L167·L172, orch-usercheck.js L354, orch-dict.js L52, orch-vision.js L63·L65·L67 이고 제외 목록과 일치함. orch-usercheck.js L223 없음.",
+    "note": "시작 시점 doc_style.py 위반 24건. 이전 안 20261120131344_SELF_2 수정분이 원래대로 돌아가 있어 before_after 의 '이전 안 그대로' 범위를 다시 고침. orchestra.js L380·L381·L419·L452·L455, history.js L153·L164, orch-agent.js L272, orch-watch.js L91, orch-usercheck.js L223·L323, orch-dict.js L50, prompt-panel.js L164, orch-vision.js L65 'A가 아니라 B' 틀. orch-vision.js L65 의 정합성 1건은 제외 목록이라 그대로 둠. 시험 파일에서 바꾼 구분 기호를 비교하는 곳은 grep 결과 없음."
+  },
+  "snap": "prop_20261120135025_SELF"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "J20261120_115055",
+  "itemLabel": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "kind": "chain",
+  "status": "interrupted",
+  "mode": "par",
+  "maxPar": 3,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "createdAt": "2026-11-20T11:50:55+09:00",
+  "startedAt": "2026-11-20T11:50:55+09:00",
+  "endedAt": "2026-11-20T13:54:53+09:00",
+  "note": "VS Code 종료로 중단됨",
+  "screens": [
+    {
+      "id": "SCP0028",
+      "status": "wait",
+      "step": "",
+      "actor": "",
+      "sec": 7438,
+      "summary": "중단됨(창 다시 로드). 작업 재개 대상",
+      "why": "",
+      "md": "Doc\\gen\\SCP0028\\FULLRUN.md",
+      "startedAt": "2026-11-20T11:50:55+09:00",
+      "endedAt": "2026-11-20T13:54:53+09:00",
+      "tries": 1,
+      "prog": "",
+      "actorNote": "실행 주체: 스크립트 1단계 · Claude 1회 · Claude 단계 건너뜀 2 · AI 검토 켬 — 이번 실행 57회 호출 · 1543행 · 18.06 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261120_115055\\SCP0028.log"
+    }
+  ],
+  "resumable": 0,
+  "interruptedAt": "2026-11-20T14:24:27+09:00"
+}

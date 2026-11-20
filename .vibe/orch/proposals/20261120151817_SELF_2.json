@@ -1,0 +1,25 @@
+{
+  "id": "20261120151817_SELF_2",
+  "at": "2026-11-20T15:18:17+09:00",
+  "ms": 1795155497517,
+  "source": "self",
+  "status": "pending",
+  "sig": "sn|newdet|resumerestartfromstart",
+  "title": "사용자 지적 감지기 추가 U18 resumeRestartFromStart: UI 생성·UI 보완 체인도 재개하면 끊긴 단계를 처음부터 다시 돎. 끊긴 시점이나 바로 앞 시점부터 이어 돌아야 함",
+  "evidence": "사용자 지적(2026-11-20T15:04:49+09:00) \"CHECKLIST 가 아닌 UI 생성, UI 보완 작업일 때의 작업재개도 중단된 시점이나 그 바로 이전 시점부터 재개되도록 되어야 합니다. 이것도 같이 고민해주세요.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 resumeRestartFromStart 없음 → 추가. 판정: chain_progress 에 interruptedAt 이 있는 실행에서 끊긴 단계 번호와 세부 진행을 읽음. 재개한 chain.start 뒤 처음 시작한 단계 번호가 그보다 작거나, 끊긴 단계를 세부 진행 0부터 다시 시작하면 fail. 해당 단계가 재개 지원(VM_RESUME 처리)을 한다고 표시된 경우에만 판정함 · 읽을 기록: .vibe/orch/chain_progress/*.json(runId, job, screen, interruptedAt, 단계 번호·세부 진행 필드는 미확인), .vibe/orch/events.jsonl(chain.start, 단계 시작 사건 type 미확인), 단계 로그 줄 수. user_checks.json U18 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "incident": "",
+  "screen": "",
+  "history": [],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U18"
+}

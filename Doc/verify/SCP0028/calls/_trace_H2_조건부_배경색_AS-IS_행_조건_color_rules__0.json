@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 266,
+  "dur": 155,
+  "at": "2026-11-20T06:10:21.031Z",
+  "user": "minyonglee1",
+  "test": "H2 조건부 배경색 = AS-IS 행 조건(color_rules)"
+ }
+]

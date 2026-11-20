@@ -1,66 +1,47 @@
 {
  "rule_id": "E1",
- "hash": "b334191cd78757f9",
+ "hash": "b213f65125b67e0f",
  "groups": [
   {
    "rows": [
-    "T-593d0c8b",
-    "V-597f4433"
+    "T-593d0c8b"
    ],
-   "why": "Both rows check the same INCREMENT column against the same numeric rule (0 decimal places, integers only, minimum 0, range limits), and the TRACE row checks the rule itself, not whether the code exists in the source."
+   "why": "단독"
   },
   {
    "rows": [
-    "T-e7ce5e82",
-    "V-6259d313"
+    "T-e7ce5e82"
    ],
-   "why": "Both rows check the same LOT_SIZE column against the same numeric rule (0 decimal places, integers only, minimum 0, range limits), and the TRACE row checks the rule itself, not whether the code exists in the source."
+   "why": "단독"
   },
   {
    "rows": [
     "V-57fd6f09"
    ],
-   "why": "This row enters a negative number in INCREMENT, clicks Save and checks that the save request does not carry it, which is a different method and expected result from the input-rule check, so it stays alone."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-597f4433"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-6259d313"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "V-b4192f37"
    ],
-   "why": "This row enters a negative number in LOT_SIZE, clicks Save and checks that the save request does not carry it, which is a different method and expected result from the input-rule check, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-5f177434"
-   ],
-   "why": "This is a defect type from another screen (DMF0082) about integer and 3-decimal limits on specific columns, and its matching element on this screen is unclear, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-668e1781"
-   ],
-   "why": "This is a defect type from another screen about blocking negative QTY, and it does not say which column on this screen it maps to, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-8a9952cb"
-   ],
-   "why": "This row checks saving at the maximum digit count and the message format when a calculated value overflows, and that expected result differs from every other row."
-  },
-  {
-   "rows": [
-    "V-b3a0292d"
-   ],
-   "why": "This row checks for SQL errors and digit-limit blocking when saving after a paste, and that method and expected result differ from every other row."
-  },
-  {
-   "rows": [
-    "V-b4000962"
-   ],
-   "why": "This is a defect group from other screens about rejecting decimals in integer-only columns, and it does not say which element on this screen it maps to, so it stays alone."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:18:02",
- "cost": 0.0630534
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:00:24",
+ "cost": 0,
+ "open": 0
 }

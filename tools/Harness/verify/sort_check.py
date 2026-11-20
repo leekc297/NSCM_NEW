@@ -26,6 +26,55 @@ def asis_of(mid):
     return mid
 
 
+# 2026-11-20 T488(SCP0028 T-653f1a5d A6 PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION · T-6dc0e2d5 A6 PR_GET_MNU_BTN_AUTH):
+#   AS-IS sort_rules 에 없는 SP 는 이 검사기 행이 없어 대조표 A6 가 미검증으로 남았다. TO-BE 에서만 부르는 SP(AS-IS 경로 SP 집합에 없음)는
+#   AS-IS 정렬 원천을 요구하지 않고 CR-075 로 판정한다: ① TO-BE ORDER BY 있음 → PASS(키 기록) · 없음 + 그리드 메타 있는 메뉴 배선 → FAIL
+#   ③ PROC_M 배선 0 + BE 매퍼에서만 호출(그리드 비바인딩 보조 SP) → NA(호출 위치 기재). AS-IS 경로 SP 집합을 못 만들면 행을 만들지 않는다(미검증 유지).
+def asis_path_sps(asis):
+    """AS-IS 화면 경로 SP 이름 집합(화면 원문 + new 로 여는 팝업·폼 원문, tools/AsisLive screen_sp_universe) → (이름 집합, 접두 집합) · 못 만들면 None"""
+    try:
+        sys.path.insert(0, os.path.join(ROOT, 'tools', 'AsisLive'))
+        from asis_live_proof_answers import screen_sp_universe
+        return screen_sp_universe(asis)
+    except Exception:
+        return None
+
+
+def be_mapper_calls(name):
+    """BE MyBatis 매퍼(nscm-be/src/main/resources/**/*.xml)의 CALL [스키마.]패키지.프로시저 위치 → [(경로:줄, 패키지.프로시저, 스키마 또는 '')]"""
+    import glob as _g
+    out = []
+    pr = name.split('.')[-1].upper()
+    rx = re.compile(r'(?i)\bCALL\s+(?:(\w+)\.)?(\w+)\.(' + re.escape(pr) + r')\s*\(')
+    for f in _g.glob(os.path.join(ROOT, 'nscm-be', 'src', 'main', 'resources', '**', '*.xml'), recursive=True):
+        try:
+            lines = open(f, encoding='utf-8', errors='replace').read().split('\n')
+        except OSError:
+            continue
+        for i, ln in enumerate(lines, 1):
+            m = rx.search(ln)
+            if m: out.append((f"{os.path.relpath(f, ROOT).replace(os.sep, '/')}:{i}", f'{m.group(2).upper()}.{m.group(3).upper()}', (m.group(1) or '').upper()))
+    return out
+
+
+def tobe_only_verdict(has_order, wired_menus, be_locs, grid_menus, proc):
+    """T488 TO-BE 전용 SP 판정(CR-075) → (판정, 사유)"""
+    if has_order: return 'PASS', 'AS-IS 에 없던 ORDER BY 를 TO-BE 가 둠 — 결정적 순서(TO-BE 룰 CR-075 ①)'
+    if not wired_menus and be_locs: return 'NA', f'PROC_M 배선 0(그리드 시트 바인딩 없음) · BE 매퍼 호출 {be_locs[0]} → 그리드 비바인딩 보조 SP(TO-BE 룰 CR-075 ③ 대상 아님)'
+    if wired_menus and not ({m.upper() for m in wired_menus} & grid_menus): return 'NA', f"배선 메뉴 {','.join(sorted(set(wired_menus)))} 에 SHEET_COLUMNS 0 → 그리드 비바인딩(TO-BE 룰 CR-075 ③ 대상 아님)"
+    if not wired_menus: return 'REVIEW', 'PROC_M 배선 0 · BE 매퍼 호출 0 — 그리드 바인딩 근거 없음'
+    return 'FAIL', f'TO-BE PKG 에 ORDER BY 없음 — 그리드 표시 조회 SP 는 결정적 순서 필수(TO-BE 룰 CR-075 ①) → PKG {proc} 에 ORDER BY 추가(DB 객체 보완)'
+
+
+def tobe_only_candidates(mid, done):
+    """대조표 A6 SP 요소(직전 mapping_trace_instances.csv 의 이름) 중 이 검사기 행이 없는 것 · done = 이미 행이 있는 꼬리 이름 집합"""
+    out = []
+    for r in rdcsv(os.path.join(DOC, 'verify', mid, 'mapping_trace_instances.csv')):
+        n = (r.get('name') or '').strip()
+        if r.get('check') == 'A6' and r.get('et') == 'SP' and n and tail(n) not in done and n not in out: out.append(n)
+    return out
+
+
 def strip_comments(sql):
     from facts_sortrules import strip_comments as sc
     return sc(sql)
@@ -121,7 +170,12 @@ def selftest():
              ('T290 한 컬럼의 보정 식 2개 = 키 1개', k2 == ['DIVISION_ID', 'CUTOFF_DATE DESC', 'ITEM_ID']),
              ('T290 떨어져 다시 나오는 키는 유지(변이)', dedup_adjacent(['A', 'B', 'A']) == ['A', 'B', 'A']),
              ('T290 방향이 다르면 다른 키', dedup_adjacent(['A', 'A DESC']) == ['A', 'A DESC']),
-             ('T290 다른 컬럼은 여전히 다름(변이)', effective(tobe_order_by("OPEN O FOR SELECT 1 FROM T ORDER BY FN_ASIS_SORT_KEY(A.SITE_ID);")[1], '') != ['DIVISION_ID'])]
+             ('T290 다른 컬럼은 여전히 다름(변이)', effective(tobe_order_by("OPEN O FOR SELECT 1 FROM T ORDER BY FN_ASIS_SORT_KEY(A.SITE_ID);")[1], '') != ['DIVISION_ID']),
+             ('T488 TO-BE 전용 SP ORDER BY 있음 = PASS', tobe_only_verdict(True, ['COM9'], [], {'COM9'}, 'P.X')[0] == 'PASS'),
+             ('T488 PROC_M 0 + BE 매퍼만 = NA(CR-075 ③)', tobe_only_verdict(False, [], ['a.xml:3'], {'COM9'}, 'P.X')[0] == 'NA'),
+             ('T488 그리드 메타 메뉴 배선 + ORDER BY 없음 = FAIL', tobe_only_verdict(False, ['COM9'], [], {'COM9'}, 'P.X')[0] == 'FAIL'),
+             ('T488 배선 메뉴 그리드 메타 0 = NA', tobe_only_verdict(False, ['COM8'], [], {'COM9'}, 'P.X')[0] == 'NA'),
+             ('T488 위치 근거 없음 = REVIEW', tobe_only_verdict(False, [], [], {'COM9'}, 'P.X')[0] == 'REVIEW')]
     bad = 0
     for n, ok in cases:
         print(('PASS ' if ok else 'FAIL ') + n); bad += 0 if ok else 1
@@ -326,6 +380,33 @@ def main():
                     i = next((k for k in range(min(len(eff), len(want))) if eff[k] != want[k]), min(len(eff), len(want)))
                     v, note = 'FAIL', f"{i + 1}번째 키부터 다름: AS-IS {want[i:i + 3]} ↔ TO-BE {eff[i:i + 3]}" + (' · TO-BE 키 부족' if len(eff) < len(want) else '')
                 out.append({**base, 'tobe_keys': ','.join(eff), 'verdict': v, 'note': note})
+        # T488 TO-BE 전용 SP(AS-IS 경로 SP 집합에 없음) — CR-075 ①·③ 로 판정
+        done = {tail(x['sp']) for x in out} | {tail(x['tobe_proc']) for x in out if x.get('tobe_proc')}
+        cands = tobe_only_candidates(mid, done)
+        uni = asis_path_sps(asis) if cands else None
+        paired = {tail(v) for v in pairs.values()}
+        grid_menus = None
+        for n in cands:
+            if uni is None: break
+            full, pre = uni
+            t = tail(n)
+            if t in {tail(x) for x in full} or any(t.startswith(tail(p)) for p in pre) or t in paired: continue  # AS-IS 경로에 있음 → 이 규칙 대상 아님(종전대로)
+            wired = [r for r in pm_all if tail(r['proc']) == t]
+            tp = n if '.' in n else (wired[0]['proc'] if wired else '')
+            be = [] if wired else be_mapper_calls(n)
+            if not tp and be: tp = be[0][1]
+            ev = f"TO-BE 전용 SP — AS-IS 경로 SP 집합(화면·팝업 원문 {len(full)}종)에 {t} 없음"
+            base = {'menu_id': mid, 'sp': n, 'asis_file': '', 'asis_line': '', 'guard': '', 'asis_keys': '', 'tobe_proc': tp, 'tobe_last_ddl': '', 'tobe_order_by': ''}
+            if not tp: out.append({**base, 'tobe_keys': '', 'verdict': 'REVIEW', 'note': ev + ' · TO-BE 프로시저 위치 못 찾음(PROC_M·BE 매퍼 0)'}); continue
+            pkg, proc = tp.split('.')[-2:] if '.' in tp else ('', tp)
+            src, ddl = body_of(pkg.upper()) if pkg else ('', '')
+            body = proc_body(src, proc) if src else ''
+            base['tobe_last_ddl'] = ddl
+            if not body: out.append({**base, 'tobe_keys': '', 'verdict': 'REVIEW', 'note': ev + f' · TO-BE 본문 없음(ALL_SOURCE {pkg}.{proc} 미발견)'}); continue
+            ob, tkeys = tobe_order_by(body)
+            if grid_menus is None: grid_menus = {(g.get('program_id') or '').upper() for g in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'sheet_columns.csv'))}
+            v, why = tobe_only_verdict(bool(tkeys), [w.get('menu_id', '') for w in wired], [x[0] for x in be], grid_menus, f'{pkg}.{proc}')
+            out.append({**base, 'tobe_order_by': ' '.join(ob.split())[:2000] if tkeys else '', 'tobe_keys': ','.join(effective(tkeys, '')) if tkeys else '', 'verdict': v, 'note': ev + ' · ' + why})
     od = os.path.join(DOC, 'verify', mid); os.makedirs(od, exist_ok=True)
     with open(os.path.join(od, 'tobe_pkg_msgs.csv'), 'w', encoding='utf-8-sig', newline='') as fp:  # MS1 메시지 의미 대조(judge) 입력
         w = csv.DictWriter(fp, fieldnames=['pkg', 'proc', 'msg_ids']); w.writeheader(); w.writerows(pkg_msgs)

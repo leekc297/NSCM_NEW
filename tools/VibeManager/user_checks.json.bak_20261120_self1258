@@ -1,0 +1,168 @@
+{
+ "about": "사용자 지적 원장(2026-11-20 사용자 지시: 상황을 보고 입력한 지적은 VMO 감시가 자가진단하고 보완). 항목 = 지적 원문 + 감지기. orch-usercheck.js 가 자가진단 S13 으로 실행. 새 지적은 학습기가 더함",
+ "coveredUntil": "2026-11-20T12:55:10+09:00",
+ "items": [
+  {
+   "id": "U1",
+   "at": "2026-11-20 03:43",
+   "quote": "VM 업무 작업 으로 4개 UI 에 대한 CHECKLIST 작업 요청 했는데, 스크립트 1/7 의 시작상태에서 진도가 나가지 않는 것으로 보임",
+   "symptom": "업무 작업 화면 카드의 단계, 세부 진행 표시가 실제 진행(로그 증가)을 따라가지 않음",
+   "detector": "progressShown",
+   "params": {
+    "staleMin": 20
+   },
+   "status": "active"
+  },
+  {
+   "id": "U2",
+   "at": "2026-11-20 03:48",
+   "quote": "화면1개에 대한 CHECKLIST 작업이 4시간 이상 소요된다는건 필요한 시점에 CHECKLIST 작업을 돌려서 볼 수 없다는 것과 동일합니다",
+   "also": [
+    "2026-11-20 05:21 1회차 실행까지 너무 시간 많이 걸릴 것 같아요"
+   ],
+   "symptom": "CheckList 화면 1개 소요가 목표(checklistTargetMin, 기본 30분)를 넘음. 정합성이 같은 방법만 속도 개선 대상",
+   "detector": "chainTarget",
+   "params": {},
+   "status": "active",
+   "level": "warn"
+  },
+  {
+   "id": "U3",
+   "at": "2026-11-20 03:52",
+   "quote": "VMO 가 자동반영 기록이 00:59 분 이후에 어떤 것도 발생시키지 않았습니다. 이것도 왜 10분 간격으로 모니터링 해서 새로운 문제점을 도출하지 않았는지",
+   "symptom": "열린 사건, 자동 반영 대상 개선안이 있는데 진단, 반영 기록이 오래 없음",
+   "detector": "vmoCadence",
+   "params": {},
+   "status": "active"
+  },
+  {
+   "id": "U4",
+   "at": "2026-11-20 04:01",
+   "quote": "SSP0014 UI 오픈 시 아래 오류 발생합니다 ... VMO 가 이를 확인해서 오류를 조치했어야 하는데 조치를 하지 못했습니다",
+   "also": [
+    "2026-11-20 04:04 SCP0028 오픈 시 같은 오류",
+    "2026-11-20 04:20 VMO 을 만든 목적이 ... 2개 화면이 열리지 않았을 때, 이를 캐치해서 원인을 찾고, 해결을 해서 ... 정상적으로 기동이 되도록"
+   ],
+   "symptom": "화면 진입 실패(R13)가 해결되지 않은 채 남거나 복구 뒤 재발",
+   "detector": "openFail",
+   "params": {
+    "openMin": 30
+   },
+   "status": "active"
+  },
+  {
+   "id": "U5",
+   "at": "2026-11-20 04:21",
+   "quote": "체인 실행시에도 VMO 의 진단 기능만 활성화 된다면 화면 열리지 않았던 것에 대해서도 보완 절차가 들어갔을까요?",
+   "symptom": "체인 실행 중 VMO 점검, 진단이 멈춤",
+   "detector": "vmoCadence",
+   "params": {},
+   "status": "active"
+  },
+  {
+   "id": "U6",
+   "at": "2026-11-20 04:26",
+   "quote": "VMO 에이전트를 통해서 SCP0028, SSP0014 CHECKLIST 을 중지시켰습니다. 중지가 제대로 되었는지 확인해주세요.",
+   "symptom": "사용자 또는 에이전트 중지 뒤 실패 사건(R1, R2, R5, R11)이 거짓으로 올라감",
+   "detector": "falseIncident",
+   "params": {
+    "withinSec": 120
+   },
+   "status": "active"
+  },
+  {
+   "id": "U7",
+   "at": "2026-11-20 09:02",
+   "quote": "VMO 개선안을 보면 06:54분 이후는 진단도 조치된 것도 없습니다. 그 이후 시간에는 진단도 조치도 없는 이유 확인해주세요.",
+   "symptom": "VMO 진단, 조치 공백",
+   "detector": "vmoCadence",
+   "params": {},
+   "status": "active"
+  },
+  {
+   "id": "U8",
+   "at": "2026-11-20 09:20",
+   "quote": "VMO 개선안 6:54 이후에도 발생 이력이 있다고 회신받았는데, 화면에 표기가 되지 않습니다.",
+   "symptom": "원본 파일에 있는 최근 활동이 VMO 화면에 오지 않음(목록 자르기, 정렬)",
+   "detector": "uiShown",
+   "params": {
+    "gapMin": 10
+   },
+   "status": "active"
+  },
+  {
+   "id": "U9",
+   "at": "2026-11-20 10:01",
+   "quote": "VM 업무 작업 에서 4개의 작업이 수행중이였는데, 제가 중지를 눌렀습니다. 상단에 사용자 중지라는 TEXT 가 보이는데 아직 상황판에는 4개의 작업이 수행중인 것으로 보이고 있습니다.",
+   "symptom": "중지 뒤에도 체인이 다음 단계를 띄움(R14), 업무 작업 기록은 중지인데 화면 실행 표시가 남음",
+   "detector": "stopLeak",
+   "params": {},
+   "status": "active",
+   "also": [
+    "2026-11-20 10:07 VMO 의 모니터링이 방금과 같이 중지를 했는데 중지가 되지 않고 수행되고 있는 이런것을 찾아서 스스로 개선하는 보완을 수행해야 합니다. VMO 모니터링에게 요청하는 것은 어제부터 오늘까지의 제가 VM 을 보완하기 위해서 입력한 프롬프트와 같이 상황을 보고 입력한 내용에 대해서는 모니터링을 통해서 자가진단하고 보완이 이루어 지도록 되어야 합니다. VM 의 "
+   ]
+  },
+  {
+   "id": "U10",
+   "at": "2026-11-19 16:30",
+   "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상",
+   "symptom": "CheckList 체인이 Claude 단계를 건너뛴 채 FAIL, 미검증을 남기고 끝남",
+   "detector": "claudeUsed",
+   "params": {},
+   "status": "active"
+  },
+  {
+   "id": "U11",
+   "at": "2026-11-20 00:01",
+   "quote": "반영 실패 항목은 자동으로 다시 반영하나요?",
+   "symptom": "반영 실패 개선안이 재진단 없이 오래 남음",
+   "detector": "repairRetry",
+   "params": {
+    "hours": 6
+   },
+   "status": "active"
+  },
+  {
+   "id": "U12",
+   "at": "2026-11-20 11:10",
+   "quote": "History의 선택분(영역, 기간, 찾기) Backcolor 처리해주세요 Back theme 인데 White Backcolor 라 보기 좋지 않습니다. theme 에 맞춰 주세요.",
+   "symptom": "VMO History 탭 선택 영역(영역, 기간, 찾기) 배경이 흰색이라 어두운 테마와 맞지 않음",
+   "detector": "",
+   "params": {},
+   "status": "no-detector",
+   "why": "웹뷰 CSS 표시 결함임. events.jsonl, incidents, usercheck/ui.json 어디에도 색상, 테마 값이 남지 않아 실행 기록으로 판정할 수 없음"
+  },
+  {
+   "id": "U13",
+   "at": "2026-11-20 11:14",
+   "quote": "VM 에서 작업을 진행하다가 reload 작업을 하면 작업하던 모든 task 가 중지됩니다. reload  후 작업을 재개할 수 없나요? 작업을 재개할 수 있으면 VM 업무 작업에 표기하고 작업재개 버턴 활성화 되도록 해주세요, workbench에서도 보이고 작업재개 버턴 활성화 되도록 해주세요. \n그리고 VM 업무 작업 의 명칭을 VMW 로 명명하도록 변경할게요. VMW 는 VM Work 이고 지금 사용하는 VMO 는 VM 오케스트라 의 약칭입니다...",
+   "symptom": "VS Code 창 다시 로드 뒤 VMW 작업 전체가 중단되고 재개할 수 없음",
+   "detector": "reloadResumeMissing",
+   "params": {
+    "waitMin": 30
+   },
+   "status": "active",
+   "why": "중단이 결함 지적이고 재개 버튼은 기능 요청임. 목록의 9개 감지기 중 창 다시 로드로 끊긴 작업을 보는 것이 없음(stopLeak 는 중지 뒤 계속 실행을 봄). J20261120_060728 job.json 에 status 'interrupted', note 'VS Code 종료로 중단됨' 이 남아 기록으로 판정할 수 있음"
+  },
+  {
+   "id": "U14",
+   "at": "2026-11-20 11:17",
+   "quote": "VMW 의 좌하단 UI 목록에 명칭이 누락된 부분이 확인됩니다. UI 명칭 누락분현재 메뉴에서 찾아서 명칭 채워주세요.",
+   "symptom": "VMW 좌하단 화면 목록에 화면 명칭이 빠진 항목이 있음",
+   "detector": "screenNameMissing",
+   "params": {},
+   "status": "active",
+   "why": "표시 누락 지적임. uiShown 은 최근 활동 목록 자르기, 정렬만 보고 화면 명칭은 보지 않음. events.jsonl job.item.start 에도 screen ID 만 있고 이름 없음"
+  },
+  {
+   "id": "U15",
+   "at": "2026-11-20 11:48",
+   "quote": "BE LOG, FE  LOG 는 켜고/꺼는 버턴을 추가할게요... BE LOG 의 경우 양이 많아서 상시 볼 필요는 없는 것 같구. 필요할때만 켜서 보도록 할게요. 그리고 FE LOG 는 계속 안보이는데 연결여부 확인해주세요.",
+   "symptom": "VMO 의 FE LOG 탭에 FE 서버 로그가 계속 표시되지 않음",
+   "detector": "logTabShown",
+   "params": {},
+   "status": "pending-detector",
+   "why": "버튼 추가와 BE LOG 기본 꺼짐은 기능 요청임. 'FE LOG 는 계속 안보이는데 연결여부 확인해주세요' 는 표시가 안 되는 동작을 지적함. 기존 감지기 uiShown(U8) 은 VMO 최근 활동 목록만 보고 서버 로그 탭은 보지 않음. server-service.js:200 이 FE 로그를 _server_5173.log 에서 읽지만 탭 송출 건수는 기록하지 않음"
+  }
+ ]
+}

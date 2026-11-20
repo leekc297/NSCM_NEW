@@ -88,7 +88,7 @@ function failure(o) { // 실패 1건 → 반복 기준을 넘으면 R2, 아니�
   if (rp.dup) return null;
   if (o.cut) return raise('R1', Object.assign({}, o, { repeat: rp, title: `${o.title} (창 종료로 끊긴 실행 · 반복 집계 제외)` }));
   const repeated = rp.same >= cfg.repeatSameScreen || rp.all >= cfg.repeatAllScreens;
-  return raise(repeated ? 'R2' : 'R1', Object.assign({}, o, { repeat: rp, title: repeated ? `같은 오류 반복 ${rp.same >= cfg.repeatSameScreen ? `${o.screen || '공통'} ${rp.same}회` : `전 화면 ${rp.all}회`} — ${o.title}` : o.title }));
+  return raise(repeated ? 'R2' : 'R1', Object.assign({}, o, { repeat: rp, title: repeated ? `같은 오류 반복 ${rp.same >= cfg.repeatSameScreen ? `${o.screen || '공통'} ${rp.same}회` : `전 화면 ${rp.all}회`}: ${o.title}` : o.title }));
 }
 
 // ── 죽은 잠금 반복 이력(.vibe/orch/lock_history.json) ──
@@ -136,7 +136,8 @@ function stopCleanLock(l, fileScreen, evs) {
   try { const j = readJson(f, null); if (!j || Number(j.pid) !== Number(l.pid) || state.pidAlive(Number(j.pid))) return false; fs.unlinkSync(f); } catch (e) { errlog.note('orch-watch', 'stopCleanLock', e); return false; }
   const stopKo = st.type === 'user.stop' ? `중지 ${st.by || ''}`.trim() : `VMW 작업 ${st.job || ''} ${st.status}`;
   const msg = `중지 뒤 잠금 정리: Doc/e2e/${l.file} (PID ${l.pid} 없음 · 화면 ${scr} · ${stopKo} ${orchEv ? orchEv.nowLocal(st.ms).slice(11, 19) : st.ms})`;
-  const rec = { kind: 'lock.stopclean', what: '중지 뒤 잠금 정리', file: `Doc/e2e/${l.file}`, lockPid: l.pid, screen: scr, started: l.started || '', args: String(l.args || '').slice(0, 200), stopType: st.type, stopBy: st.by || '', stopJob: st.job || '', stopStatus: st.status || '', stopAt: st.at || '' };
+  // 개선안 20261120143326_SELF_2: info: true = 정상 처리 기록. vm_errors.jsonl 에는 남기고 errlog.stats()(S5) 집계에서 뺀다
+  const rec = { kind: 'lock.stopclean', info: true, what: '중지 뒤 잠금 정리', file: `Doc/e2e/${l.file}`, lockPid: l.pid, screen: scr, started: l.started || '', args: String(l.args || '').slice(0, 200), stopType: st.type, stopBy: st.by || '', stopJob: st.job || '', stopStatus: st.status || '', stopAt: st.at || '' };
   errlog.note('orch-watch', 'lockStopClean', msg, rec);
   try { fs.appendFileSync(path.join(orchDir, 'activations.jsonl'), JSON.stringify(Object.assign({ at: orchEv ? orchEv.nowLocal() : new Date().toISOString() }, rec)) + '\n', 'utf8'); } catch (e) { errlog.note('orch-watch', 'stopCleanLock.act', e); }
   return true;
@@ -187,7 +188,7 @@ function checkChecklist(ev, beforeInit) {
     raise('R10', { screen: id, sig: `R10|${id}`, title: `CheckList 판정 정체. ${id} 연속 2회 FAIL ${cur.fail} · 미검증 ${cur.unverified} 행 집합 같음`, detail: `직전 실행 ${prev.started} → 이번 ${cur.started}. FAIL·미검증 행 ${cur.issues.length}개가 그대로. 처리 대상(actionable) ${prev.actionable} → ${cur.actionable}`, evidence: { result: `Doc/verify/${id}/run_verify.result.json`, fixlist: `Doc/verify/${id}/fixlist.csv`, issues: cur.issues.slice(0, 80) } });
   if (!prev || prev.started !== cur.started) writeJson(f, cur);
   if (!beforeInit && ev.claudeRan === 0 && !userStopped(ev.wb) && (cur.fail > 0 || cur.unverified > 0))
-    raise('R11', { screen: id, sig: `R11|${id}|${ev.chain}`, title: `Claude 없이 끝난 체인. ${id} FAIL ${cur.fail} · 미검증 ${cur.unverified} 남음`, detail: `체인 ${ev.chainLabel}: 스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md, result: `Doc/verify/${id}/run_verify.result.json` } });
+    raise('R11', { screen: id, sig: `R11|${id}|${ev.chain}`, title: `AI Agent 없이 끝난 체인. ${id} FAIL ${cur.fail} · 미검증 ${cur.unverified} 남음`, detail: `체인 ${ev.chainLabel}: 스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md, result: `Doc/verify/${id}/run_verify.result.json` } });
 }
 
 // ── 사건 → 규칙 ──
@@ -246,19 +247,19 @@ function onEvent(ev) {
     // 실패를 보낸 VM 프로세스가 처리 시점에 없음 = VS Code 종료, 창 다시 로드로 끊긴 실행(실측: jobs/J20261120_003352 'VS Code 종료로 중단됨'). 반복 집계에서 뺀다
     const cutRun = ev.src === 'vm' && !!ev.pid && ev.pid !== process.pid && !state.pidAlive(ev.pid);
     if (t === 'proc.end' && ev.exit !== 0 && ev.exit != null && !ev.server) {
-      if (beforeInit || userStopped(ev.wb, ev.screen)) return;
+      if (beforeInit || ev.stopped === true || userStopped(ev.wb, ev.screen)) return; // 개선안 20261120131344_SELF: 끝 기록의 중지 표시 먼저. userStopped 는 stopped 필드 없는 옛 기록용
       const inChain = state.snapshot().chains.some(c => c.wb === ev.wb && c.screen === ev.screen);
       if (inChain) return;                               // 체인 안 실패는 step.end 가 판정(okCodes · verify 반영)
       failure({ screen: ev.screen, sig: ev.sig || `proc|${ev.label}`, key: `${ev.ms || ''}|${ev.pid || ''}`, cut: cutRun, title: `${ev.label} 실패 (exit ${ev.exit})`, detail: ev.why || '', evidence: { log: ev.log, exit: ev.exit, whySrc: ev.whySrc, pid: ev.pid } });
     }
     else if (t === 'step.end') {
       noteStep(ev);
-      if (ev.status === 'FAIL' && !beforeInit && !userStopped(ev.wb, ev.screen)) failure({ screen: ev.screen, sig: ev.sig || `step|${ev.task || ev.name}`, key: ev.runId ? `${ev.runId}|${ev.no != null ? ev.no : ''}` : `${ev.ms || ''}|${ev.pid || ''}`, cut: cutRun, title: `${ev.name} 실패${ev.exit != null ? ` (exit ${ev.exit})` : ''} — ${ev.chainLabel || ''}`, detail: ev.why || ev.note || '', evidence: { runId: ev.runId, task: ev.task, actor: ev.actor, failFrom: ev.failFrom, repairs: ev.repairs } });
+      if (ev.status === 'FAIL' && !beforeInit && ev.stopped !== true && !userStopped(ev.wb, ev.screen)) failure({ screen: ev.screen, sig: ev.sig || `step|${ev.task || ev.name}`, key: ev.runId ? `${ev.runId}|${ev.no != null ? ev.no : ''}` : `${ev.ms || ''}|${ev.pid || ''}`, cut: cutRun, title: `${ev.name} 실패${ev.exit != null ? ` (exit ${ev.exit})` : ''} — ${ev.chainLabel || ''}`, detail: ev.why || ev.note || '', evidence: { runId: ev.runId, task: ev.task, actor: ev.actor, failFrom: ev.failFrom, repairs: ev.repairs } });
     }
     else if (t === 'chain.end') {
-      if (userStopped(ev.wb, ev.screen)) return; // 사용자(또는 사용자 지시를 받은 에이전트, VMO 자가 복구)가 멈춘 체인 = 실패 사건 없음
+      if (ev.stopped === true || userStopped(ev.wb, ev.screen)) return; // 사용자(또는 사용자 지시를 받은 에이전트, VMO 자가 복구)가 멈춘 체인 = 실패 사건 없음
       if (/^checklist$/i.test(ev.chain || '') || /CheckList/i.test(ev.chainLabel || '')) checkChecklist(ev, beforeInit);
-      else if (!beforeInit && ev.claudeRan === 0 && ev.ok === false && !userStopped(ev.wb)) raise('R11', { screen: ev.screen, sig: `R11|${ev.screen}|${ev.chain}`, title: `Claude 없이 끝난 체인. ${ev.chainLabel} ${ev.failNo ? `${ev.failNo}단계에서 중단` : '미완료'}`, detail: `스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md } });
+      else if (!beforeInit && ev.claudeRan === 0 && ev.ok === false && !userStopped(ev.wb)) raise('R11', { screen: ev.screen, sig: `R11|${ev.screen}|${ev.chain}`, title: `AI Agent 없이 끝난 체인. ${ev.chainLabel} ${ev.failNo ? `${ev.failNo}단계에서 중단` : '미완료'}`, detail: `스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md } });
     }
     else if (t === 'claude.end' && ev.exit !== 0 && ev.exit != null) {
       // 개선안 20261120094530_REVIEW_3: 중지 주체(stoppedBy: 시간 초과, 중지 요청, VS Code 종료)가 있는 끝 기록은 R7 대상 아님

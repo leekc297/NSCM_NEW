@@ -442,18 +442,53 @@ def p_dirty(S):
         else:
             why.append(f'{meth}:{a["line"]} 컨트롤 형식 미확인({ctl}={typ or "없음"})')
     # DM-52 일반 규칙(문서 general_rule=Y): 편집 중 데이터가 있을 때 다른 기능 실행 → 모든 화면 단일 코드 MSG00680
-    #   대상 = AS-IS 화면의 기능 버튼(공통 버튼 제외) — AS-IS 에 FlagI 검사가 없어도 TO-BE 확정 규칙(O2)이라 생성
+    #   2026-11-20 T485(SCP0028 V-c346a4a2 H10 '편집 중 Input → MSG00680' · AS-IS btnInput_Click cs:260-274 검사 없이 팝업 열기):
+    #   CR-022 원문 = '다른 기능 실행을 막는 메시지는 단일 코드(MSG00680)를 사용한다' · 원 결함 DM-52 = DMF0082 편집 모드(IsLock) 차단 메시지 2종(MSG00142·MSG00408) 혼재 → 단일화.
+    #   규칙은 차단 메시지의 코드만 정한다. 차단이 없던 버튼에 차단을 추가하라는 규칙이 아니다 →
+    #   AS-IS 버튼 Click 핸들러(events.csv · 없으면 <버튼>_Click · CALL_LOCAL 2단계)에 편집 중 검사 MESSAGE 가 있는 버튼만 생성한다.
     t680 = glob_facts()['tobe_msg'].get('MSG00680', {})
     m680 = text_re([x for x in (t680.get('KO'), t680.get('EN')) if x])
     common = re.compile(r'^(search|save|insert|delete|excel|edit|close|ok|cancel|확인|취소|닫기|조회|저장|추가|삭제|reset.*|column.*|measure.*|excel\s*(form|upload|download).*|upload|download|apply|select|선택|\.\.\.)$', re.I)
+    edit_guard = re.compile(r'IsLock\s*\(|CAppSetting\.(FlagI|StringI|FlagU|StringU)\b|IsChang|HasChang|Changed\b|Modif|Dirty|IsEdit|EditMode|RowState', re.I)
+    edit_text = re.compile(r'edit\s*mode|unsaved|not\s+saved|변경\s*중|수정\s*(중|모드)|편집\s*중|저장하지\s*않|저장\s*또는\s*취소|미저장', re.I)
+    events = rcsv(os.path.join(S.dir, 'events.csv'))
+    by_meth = defaultdict(list)
+    for a in S.actions:
+        by_meth[a['method']].append(a)
+
+    def _edit_guard_line(ctl):
+        hs = {e['handler'] for e in events if re.sub(r'^this\.', '', e.get('target') or '') == ctl and e.get('event') == 'Click' and e.get('handler')}
+        hs.add(f'{ctl}_Click')
+        todo, done = [(h, 0) for h in hs], set()
+        while todo:
+            h, dep = todo.pop()
+            if h in done:
+                continue
+            done.add(h)
+            for a in by_meth.get(h, []):
+                if a['kind'] == 'MESSAGE':
+                    mm = re.search(r'"(MSG\d+)"', a['value'])
+                    txt = ' '.join(msg_texts(mm.group(1))[0]) if mm else a['value']
+                    # '수정모드가 아니므로'(MSG00135) 처럼 편집 모드가 아닐 때 막는 문구는 편집 중 차단이 아님
+                    if re.search(r'아니|아닌|not\s+in\s+(edit|modify)', txt or '', re.I):
+                        continue
+                    if edit_guard.search(a.get('guard') or '') or edit_text.search(txt or ''):
+                        return f"{h}:{a['line']}"
+                elif a['kind'] == 'CALL_LOCAL' and dep < 2 and a.get('target'):
+                    todo.append((a['target'], dep + 1))
+        return ''
     for c, typ in S.ctype.items():
         if not re.search(r'Button', typ):
             continue
         lab = S.text.get(c, '').strip()
         if not lab or common.match(lab) or ('H10', lab) in seen or len(lab) > 30:
             continue
+        gl = _edit_guard_line(c)
+        if not gl:
+            why.append(f'DM-52 제외: AS-IS 버튼 {c}({lab}) Click 핸들러에 편집 중 차단 메시지 없음(CR-022 = 차단 메시지 코드 규칙)')
+            continue
         seen.add(('H10', lab))
-        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f"{S.prefix()}search;{'edit' if getattr(S, 'insert_noop', False) else 'insert'};btn:{re.escape(lab)}", f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
+        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f"{S.prefix()}search;{'edit' if getattr(S, 'insert_noop', False) else 'insert'};btn:{re.escape(lab)}", f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r} · 편집 중 차단 {gl}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
     if not out and not why:
         why.append('AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음')
     return out, why
@@ -1141,7 +1176,7 @@ PATTERN_INFO = {
     'P12': ('p_reqfp', 'E4', '기존 행 수정 저장 → 필수 칸 오탐 없음(DM-215)', 'btn_auth SAVE · 기존 행 편집 숫자/글자 칸(없으면 AS-IS 동적 기간 칸)'),
     'P13': ('p_blank_save', 'E3', '빈 신규 행 저장 → 필수 안내·저장 요청 0', 'btn_auth INSERT·SAVE · 필수 칸(M/IM) 또는 AS-IS 저장 메서드의 빈값 검사 메시지(가장 안쪽 조건 · 성공/확인 문구 제외)'),
     'P14': ('p_dirty', 'C4', '신규 행 있을 때 조회조건 변경 차단', 'AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 조회조건 컨트롤'),
-    'P15': ('p_dirty', 'H10', '신규 행·편집 중 기능 버튼 차단 안내(DM-52)', 'AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 버튼 컨트롤(또는 기능 버튼 — TO-BE 확정 규칙 O2)'),
+    'P15': ('p_dirty', 'H10', '신규 행·편집 중 기능 버튼 차단 안내(DM-52)', 'AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 버튼 컨트롤(또는 기능 버튼 중 AS-IS Click 핸들러에 편집 중 차단 메시지가 있는 버튼 · CR-022 · T485)'),
     'P16': ('p_clear', 'C3', '나머지(%) 조건 → 안내·칸 비움', 'AS-IS cell_clear cond 에 % (정수 배수 검사)'),
     'P17': ('p_clear', 'C3', '나누어떨어짐 → 몫 표시', 'P16 · cell_clear refilled=Y'),
     'P18': ('p_dyn', 'H2', '당주 구분선 = 이번 주', 'AS-IS W_ 접두 동적 칸 검사'),

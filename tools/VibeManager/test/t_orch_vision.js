@@ -33,6 +33,13 @@ v.init({ paths: () => ({ root, vibeDir }), vmDir: dir, memDir: mem, planFile: pa
   const sc = require(path.join(dir, 'orch-selfcheck')); sc.init({ paths: () => ({ root, vibeDir }), vmDir: dir, timer: false, incidents: false });
   const pr = { source: 'vision', targets: ['tools/VibeManager/orch-watch.js'], title: '안' };
   chk('vision 안 = 자동 반영 대상 아님(visionAutoApply false)', sc.autoEligible(pr).ok === false && /승인/.test(sc.autoEligible(pr).why));
+  // 2026-11-20 사용자 지시 '버그성이나 시스템 관련 항목은 권장안으로 · 사용자승인은 VM 근간 로직 변경 때만': impact fix = 자동, core = 승인
+  chk('vision 안 impact fix = 권장안으로 자동 반영', sc.autoEligible(Object.assign({}, pr, { impact: 'fix' })).ok === true);
+  chk('vision 안 impact core = 사용자 승인', sc.autoEligible(Object.assign({}, pr, { impact: 'core' })).ok === false && /근간/.test(sc.autoEligible(Object.assign({}, pr, { impact: 'core' })).why));
+  chk('self 안이라도 impact core = 사용자 승인', sc.autoEligible({ source: 'self', self: true, impact: 'core', targets: ['tools/VibeManager/orch-watch.js'], title: '안' }).ok === false);
+  chk('impact fix 라도 자동 범위 밖(FE) = 사용자 승인', sc.autoEligible({ source: 'vision', impact: 'fix', targets: ['nscm-fe/apps/web/src/a.tsx'], title: '안' }).ok === false);
+  const imp = require(path.join(dir, 'orch-improve'));
+  chk('지시문 구분 기준에 core·fix 정의', /core = VM 근간 로직 변경/.test(imp.IMPACT_RULE) && /fix = 결함 수정/.test(imp.IMPACT_RULE));
   fs.writeFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { visionAutoApply: true } }));
   chk('visionAutoApply true 면 VM 코드 대상 자동 반영 가능', sc.autoEligible(pr).ok === true);
   chk('같은 대상 self 안 = 종전대로 자동', sc.autoEligible(Object.assign({}, pr, { source: 'self' })).ok === true);

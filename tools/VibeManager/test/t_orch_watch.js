@@ -138,6 +138,16 @@ const sleep = t => new Promise(r => setTimeout(r, t));
     const addD = got.slice(nD).map(x => x.rule);
     chk('VS Code 종료(dispose) 뒤 두 화면 FAIL = R1, R2, R11 0건 · 반복 이력 0건', addD.length === 0 && !sigH()['S8.checklistRun | [FAIL] 중지됨'], addD.join(',') || '0건');
   }
+  // 끝 기록의 중지 표시(stopped:true)만 있고 user.stop 없음 = proc.end, step.end FAIL, chain.end 에 R1, R11 0건 (개선안 20261120131344_SELF)
+  {
+    const nS = got.length;
+    E('proc.end', { wb: 14, screen: 'TST0014', label: 'S8.solo', procId: 140, exit: 1, why: 'stopped', sig: 'S8.solo | stopped', stopped: true });
+    E('chain.start', { wb: 15, screen: 'TST0015', chain: 'docs', chainLabel: '문서 생성', runId: 's15', shown: 2 });
+    E('step.end', { wb: 15, screen: 'TST0015', runId: 's15', chainLabel: '문서 생성', no: 1, name: 'S3.stop', task: 'S3.stop', actor: 'script', status: 'FAIL', exit: 1, ms_run: 1000, why: 'stopped', sig: 'S3.stop | stopped', stopped: true });
+    E('chain.end', { wb: 15, screen: 'TST0015', chain: 'docs', chainLabel: '문서 생성', runId: 's15', ok: false, failNo: 1, claudeRan: 0, claudeSkipped: 1, scriptRan: 1, stopped: true });
+    const addS = got.slice(nS).map(x => x.rule);
+    chk('stopped:true 끝 기록(user.stop 없음) = R1, R11 0건', !addS.includes('R1') && !addS.includes('R11'), addS.join(',') || '0건');
+  }
   // 같은 runId·단계 step.end FAIL 2번 = R1 1건, R2 없음 · init 이전 ms 의 step.end FAIL = 사건 0건 · 끝난 VM pid 의 FAIL = 반복 집계 제외 (개선안 20261120005059_INC)
   {
     const sigH = () => { try { return JSON.parse(fs.readFileSync(path.join(p.vibeDir, 'orch', 'sig_history.json'), 'utf8')); } catch { return {}; } };

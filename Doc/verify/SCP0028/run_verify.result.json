@@ -1,10 +1,10 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-20T09:47:29+09:00",
+ "ts": "2026-11-20T13:10:16+09:00",
  "producer": "run_verify",
  "id": "SCP0028",
  "skip_e2e": false,
- "started": "2026-11-20 08:28:54",
+ "started": "2026-11-20 11:50:56",
  "state": "completed",
  "verdict": "fail",
  "issues": [
@@ -15,7 +15,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-20 09:46"
+     "ref": "E2E @trace @11-20 13:07"
     }
    ],
    "grade": "hard"
@@ -27,7 +27,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 입력 검증 @11-20 09:46"
+     "ref": "E2E @verify 입력 검증 @11-20 13:07"
     }
    ],
    "grade": "hard"
@@ -39,7 +39,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify 입력 검증 @11-20 09:46"
+     "ref": "E2E @verify 입력 검증 @11-20 13:07"
     }
    ],
    "grade": "hard"
@@ -51,7 +51,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-20 09:46"
+     "ref": "E2E @verify @11-20 13:07"
     }
    ],
    "grade": "hard"
@@ -63,19 +63,67 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @verify @11-20 09:46"
+     "ref": "E2E @verify @11-20 13:07"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-a788a765",
-   "class": "G4",
-   "msg": "SCP0028 스냅샷 조회조건 Div 40",
+   "id": "V-45ef80f7",
+   "class": "H6",
+   "msg": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @snap 조회조건 @11-20 09:46"
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0be83995",
+   "class": "H6",
+   "msg": "[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c145c351",
+   "class": "H6",
+   "msg": "[DMF0005 결함 일반화] 팝업 No. 컬럼(Model/Owner/Project/Version 팝업)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6008a294",
+   "class": "H6",
+   "msg": "팝업 No. 컬럼(Model/Owner/Project/Version 팝업)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-db0f51c6",
+   "class": "H6",
+   "msg": "SCP0028 스냅샷 팝업 Model",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @snap 팝업 @11-20 13:07"
     }
    ],
    "grade": "hard"
@@ -99,7 +147,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-20 09:46"
+     "ref": "E2E @trace @11-20 13:07"
     }
    ],
    "grade": "hard"
@@ -145,34 +193,34 @@
   "검사기 회귀 오라클 위반 — Doc/verify/SCP0028/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발(이 CheckList 는 검사기 결함을 안고 있을 수 있음)"
  ],
  "summary": {
-  "rows": 1838,
-  "PASS": 886,
-  "FAIL": 11,
+  "rows": 1833,
+  "PASS": 909,
+  "FAIL": 15,
   "판정필요": 19,
-  "미검증": 138,
-  "해당없음": 784,
+  "미검증": 87,
+  "해당없음": 803,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1255,
+   "기계": 1305,
    "없음(판정 대기)": 19,
-   "사람": 3,
-   "없음(미검증)": 138,
-   "AI 작성·인용 확인": 7,
-   "기계(상속·집계)": 404,
-   "출처 미기록": 12
+   "사람": 2,
+   "AI 작성·인용 확인": 22,
+   "없음(미검증)": 87,
+   "기계(상속·집계)": 387,
+   "출처 미기록": 11
   },
-  "fail_listed": 11,
+  "fail_listed": 15,
   "coverage": {
    "rules": 89,
-   "measured": 666,
-   "not_run_error": 100,
-   "na": 258,
+   "measured": 678,
+   "not_run_error": 75,
+   "na": 262,
    "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v15.xlsx",
-  "ActionItemList": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_ActionItemList_v15.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v16.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_ActionItemList_v16.xlsx"
  },
  "evidence": [
   {

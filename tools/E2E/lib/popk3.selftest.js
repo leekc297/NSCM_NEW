@@ -1,0 +1,44 @@
+// popk3·condcol 판정 변이 입증(2026-11-20 T496·T499) · 결함 상태 FAIL · 측정 불가 ERROR · 정상 PASS · 실패 1건이라도 있으면 exit 1
+const fs = require('fs'), path = require('path');
+const ts = require(path.join(__dirname, '..', '..', '..', 'nscm-fe', 'node_modules', 'typescript'));
+const load = f => { const m = { exports: {} }; new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.join(__dirname, f), 'utf8'), { compilerOptions: { module: 'commonjs', target: 'es2020' } }).outputText)(m, m.exports); return m.exports; };
+const { judgePopK3: j, popK3Keys: keys } = load('popk3.ts');
+const { pickCondCol: pc } = load('condcol.ts');
+const P = { name: "조건 'Model' 아이콘", title: 'Material', opened: true, cond: true, grid: true, rows: 30, hasSearch: true,
+  no: { corner: ['No.'], firstHdr: 'Material', n: 1 }, count: 'Total : 30', ctrl: { ok: true, rs: '[[0,0],[2,2]]' }, shift: { ok: true, rs: '[[0,2]]' },
+  f5: { pop: 1, main: 0, nav: 0, sheets: 'COM0013/SEARCH' }, sort: { on: true, s1: 'A ASC', s2: 'A DESC' }, filter: { n0: 30, n1: 3, n2: 30, count1: '3 / 30', why: '' },
+  pickf5: { picked: true, main: 1, nav: 0 } };
+const cases = [
+  ['정상 ctrl', j([P], ['ctrl'], ['X']).res, 'PASS'], ['ctrl 비연속 안 됨', j([{ ...P, ctrl: { ok: false, rs: '[[0,2]]' } }], ['ctrl'], ['X']).res, 'FAIL'],
+  ['ctrl 2행', j([{ ...P, rows: 2 }], ['ctrl'], ['X']).res, 'ERROR'], ['0행', j([{ ...P, rows: 0, fill: 'From Site 1개' }], ['ctrl', 'f5'], ['X']).res, 'ERROR'],
+  ['안 열림', j([{ ...P, opened: false, why: 'x' }], ['ctrl'], ['X']).res, 'ERROR'], ['그리드 없음만', j([{ ...P, grid: false }], ['ctrl'], ['X']).res, 'NA'],
+  ['그리드 없음+정상', j([{ ...P, grid: false }, P], ['ctrl'], ['X']).res, 'PASS'],
+  ['F5 정상', j([P], ['f5'], ['X']).res, 'PASS'], ['F5 메인만', j([{ ...P, f5: { pop: 0, main: 1, nav: 0, sheets: '' } }], ['f5'], ['X']).res, 'FAIL'],
+  ['F5 새로고침', j([{ ...P, f5: { pop: 1, main: 0, nav: 1, sheets: '' } }], ['f5'], ['X']).res, 'FAIL'], ['F5 조회 버튼 없음', j([{ ...P, hasSearch: false }], ['f5'], ['X']).res, 'NA'],
+  ['F5 측정 실패', j([{ ...P, f5: null }], ['f5'], ['X']).res, 'ERROR'],
+  ['No 1개', j([P], ['no'], ['X']).res, 'PASS'], ['No 없음', j([{ ...P, no: { corner: [], firstHdr: 'A', n: 0 } }], ['no'], ['X']).res, 'FAIL'],
+  ['건수 없음', j([{ ...P, count: '' }], ['count'], ['X']).res, 'FAIL'], ['Sort 토글 안 됨', j([{ ...P, sort: { on: true, s1: 'A ASC', s2: 'A ASC' } }], ['sort'], ['X']).res, 'FAIL'],
+  ['Filter 정상', j([P], ['filter'], ['X']).res, 'PASS'], ['Filter 건수 없음', j([{ ...P, filter: { n0: 30, n1: 3, n2: 30, count1: '', why: '' } }], ['filter'], ['X']).res, 'FAIL'],
+  ['Filter 측정 실패', j([{ ...P, filter: { n0: 30, n1: -1, n2: -1, count1: '', why: 'F4 후 필터 아이콘 없음' } }], ['filter'], ['X']).res, 'ERROR'],
+  ['고른 직후 F5', j([P], ['pickf5'], ['X']).res, 'PASS'], ['고른 직후 조회 없음', j([{ ...P, pickf5: { picked: true, main: 0, nav: 0 } }], ['pickf5'], ['X']).res, 'FAIL'],
+  ['고르지 못함', j([{ ...P, pickf5: { picked: false, main: 0, nav: 0 } }], ['pickf5'], ['X']).res, 'ERROR'],
+  ['버튼 팝업 고른 직후', j([{ ...P, cond: false, pickf5: null }], ['pickf5'], ['X']).res, 'NA'],
+  ['조건 팝업 0행 고른 직후', j([{ ...P, rows: 0, pickf5: null }], ['pickf5'], ['X']).res, 'ERROR'],
+  ['팝업 0개 AS-IS 0', j([], ['ctrl'], []).res, 'NA'], ['팝업 0개 AS-IS 있음', j([], ['ctrl'], ['SCM0002_ItembyDivisionPopup']).res, 'ERROR'],
+  ['팝업 하나 FAIL 하나 ERROR', j([{ ...P, ctrl: { ok: false, rs: '' } }, { ...P, rows: 0 }], ['ctrl'], ['X']).res, 'FAIL'],
+  ['Shift 연속 선택', j([P], ['shift'], ['X']).res, 'PASS'], ['Shift 연속 안 됨', j([{ ...P, shift: { ok: false, rs: '[[2,2]]' } }], ['shift'], ['X']).res, 'FAIL'],
+  ['키: Shift/드래그', keys('모든 그리드(팝업 포함)에서 Ctrl+클릭 다중 선택, Shift/드래그로 연속 선택').join(','), 'ctrl,shift'],
+  ['키: 팝업 없는 문구', keys('Ctrl+클릭 다중 선택').length, 0],
+  ['키: 팝업 Ctrl', keys('그리드 Ctrl+클릭 다중 선택(팝업 그리드 포함)').join(','), 'ctrl'],
+  ['키: No·건수·Sort·Filter·F5', keys('전체 팝업 No. 컬럼·건수 · 필터 적용 시 · 팝업 그리드는 공통 그리드(단축키·Sort 규칙 동일)').join(','), 'f5,no,count,sort,filter'],
+  ['키: 고른 직후 F5', keys('Version 팝업에서 버전을 고른 직후에도 F5로 조회가 실행된다').join(','), 'pickf5'],
+  // condcol(T499): 후보 = 코드 · 라벨 컬럼 = 설명 · 숨은 코드 컬럼에서 찾음
+  ['후보 코드 ↔ 숨은 코드 컬럼', pc(['SELECT ALL', 'AU000062_81-P', 'HQ05-W', 'MI00-A'], { FROM_SITE_DESCRIPTION: ['HQ Ochang', 'HQ Ochang', 'MI Holland'], FROM_SITE: ['HQ05-W', 'HQ05-W', 'MI00-A'] }, ['FROM_SITE_DESCRIPTION']).col, 'FROM_SITE'],
+  ['드문 값 후보', pc(['SELECT ALL', 'AU000062_81-P', 'HQ05-W', 'MI00-A'], { FROM_SITE: ['HQ05-W', 'HQ05-W', 'MI00-A'] }).cand, 'MI00-A'],
+  ['후보 이름 ↔ 라벨 컬럼 우선', pc(['ALL', 'Pack', 'Cell'], { OPERATION_GROUP_NAME: ['Pack', 'Cell', 'Cell'], OG: ['P', 'A', 'A'] }, ['OPERATION_GROUP_NAME']).col, 'OPERATION_GROUP_NAME'],
+  ['후보 첫 토큰(코드 이름)', pc(['ALL', '81 Automotive', '40 Mobility'], { DIVISION_ID: ['81', '81', '40'] }).value, '40'],
+  ['겹침 없음', pc(['ALL', 'X1', 'X2'], { A: ['Y'], B: ['Z'] }).col, ''],
+  ['결과에 없는 후보는 안 고름', pc(['ALL', 'AU000062_81-P', 'HQ05-W'], { FROM_SITE: ['HQ05-W'] }).cand, 'HQ05-W'],
+];
+let bad = 0; for (const [n, got, want] of cases) { const ok = got === want; if (!ok) bad++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${n}: ${got}${ok ? '' : ` (기대 ${want})`}`); }
+console.log(`${cases.length - bad}/${cases.length}`); process.exit(bad ? 1 : 0);

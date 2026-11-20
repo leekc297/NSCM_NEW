@@ -152,6 +152,10 @@ class Screen:
             if is_main(c, self.dir):
                 self.ctype.setdefault(c['name'], c['type'].split('.')[-1])
         self.env = self._env()
+        # 2026-11-20 T493(SCP0028 V-a1923fff H10 '편집 중 Input → MSG00680' · insert 뒤 신규 0행 · 편집기 null): AS-IS Insert 진입점 본문이 비어(InsertRow 빈 구현) 신규 행이 생기지 않는 화면은
+        #   '편집 중' 상태를 Insert 로 만들 수 없다 → 기존 행 칸 입력(edit 단계)으로 만든다. 규칙 = newrow.ts asisInsertNoop · judge._asis_insert_noop(CALL_LOCAL·RETURN·BRANCH·LOCAL 외 문장 0)
+        _ins = {e.get('method') for e in rcsv(os.path.join(d, 'actions_entries.csv')) if re.search('insert', e.get('entry') or '', re.I)}
+        self.insert_noop = bool(_ins) and bool(self.actions) and not any(a.get('method') in _ins and a.get('kind') not in ('CALL_LOCAL', 'RETURN', 'BRANCH', 'LOCAL') for a in self.actions)
 
     def _env(self):
         G = glob_facts()
@@ -449,7 +453,7 @@ def p_dirty(S):
         if not lab or common.match(lab) or ('H10', lab) in seen or len(lab) > 30:
             continue
         seen.add(('H10', lab))
-        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f'{S.prefix()}search;insert;btn:{re.escape(lab)}', f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
+        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f"{S.prefix()}search;{'edit' if getattr(S, 'insert_noop', False) else 'insert'};btn:{re.escape(lab)}", f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
     if not out and not why:
         why.append('AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음')
     return out, why

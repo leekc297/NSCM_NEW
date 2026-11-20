@@ -590,6 +590,22 @@ class Elems:
         for (cls, meth), rs in acts.items():  # 다른 팝업 메서드에서 트리거·수신 컨트롤이면 인자 전용 아님
             if not any(r['kind'] == 'POPUP' for r in rs): continue
             for t in _ev_h.get(meth, set()) | {(r.get('target') or '').replace('this.', '').split('.')[0] for r in rs if r['kind'] == 'VALUE_SET'}: self.popup_arg_only.pop(t, None)
+        # 2026-11-20 T480: 요소의 팝업 연결 판단 재료(AS-IS 메인 클래스 문장, 현행 이벤트, 컨트롤 선언, 정적 팝업 인자 대조 AS-IS 행)
+        self.acts = acts
+        self.events_cur = [ev for ev in rdcsv(os.path.join(sd, 'events.csv')) if is_cur(ev)]
+        self.ctl_decl = collections.defaultdict(list)
+        for r in rdcsv(os.path.join(sd, 'controls.csv')):
+            if is_cur(r): self.ctl_decl[r.get('name', '')].append(r)
+        self.prop_get = {}   # 메인 클래스 속성 getter 원문(팝업 인자가 속성을 거쳐 컨트롤 값을 읽는 경우)
+        try:
+            for f in sorted(main_files(sd) or []):
+                p = next((q for q in (os.path.join(ROOT, 'GSCM', f), os.path.join(ROOT, 'GSCM_20260512', f)) if os.path.isfile(q)), '')
+                if p.lower().endswith('.cs') and not p.lower().endswith('.designer.cs'):
+                    src = open(p, encoding='utf-8-sig', errors='ignore').read()
+                    for m in re.finditer(r'\b(\w+)\s*\{\s*get\s*\{(.{0,600}?)\}\s*(?:set\b|\})', src, re.S): self.prop_get.setdefault(m.group(1), m.group(2))
+        except Exception:
+            self.prop_get = {}
+        self.popup_args_asis = [r for r in rdcsv(os.path.join(DOC, 'verify', MENU, 'popup_args.csv')) if r.get('side') == 'ASIS']
         # 콤보 SQL ID(plan.json comboId) → 조회조건 컨트롤 — FE 대조표 행이 SQL_ID 만 적은 경우 조건 요소로 잇는다
         self.combo_of = {}
         if os.path.exists(pf):
@@ -629,6 +645,10 @@ class Elems:
             if p in text: out.append(('POPUP', p))
         for m in RX_MSG.finditer(text): out.append(('MSG', m.group(0)))
         return list(dict.fromkeys(out))
+
+    def popup_link(self, check, et, name):
+        """T480: popup_linkage 를 이 화면 사실로 부른다"""
+        return popup_linkage(check, et, name, self.acts, self.main_cls, self.events_cur, self.ctl_decl, self.popup_args_asis, self.trigger_cols, self.prop_get)
 
     def aliases(self, et, n):
         if et == 'COND': return [n] + self.lab.get(n, [])
@@ -1205,6 +1225,14 @@ def main():
             d['hits'] = []  # 이전 E2E·원장 판정(같은 죽은 코드 근거)은 쓰지 않는다
             d['dead'] = drs[0]['dead'][:200]  # 2026-10-30: 조건 JSON "dead" 로 실어 검증 엔진(_trace/_verify)·judge E2E 반입이 이 행을 측정·덮어쓰기하지 않게(SCP0041 SCP0040 F4 가 14:38 E2E 로 다시 FAIL 되던 원인)
 
+    # 2026-11-20 T480: G5, H6, M4 요소 검사는 AS-IS 사실로 팝업 연결이 있는 요소에만. 연결 없음이 사실로 확인되면 NA(근거 = AS-IS 파일:줄, 찾은 이벤트), 재료 없으면 종전대로
+    for d in inst.values():
+        if d['check'] not in ('G5', 'H6', 'M4') or d['et'] not in ('COND', 'COL', 'BTN') or d['static']: continue
+        st_, why_, ref_ = E.popup_link(d['check'], d['et'], d['name'])
+        if st_ is False:
+            d['static'] = ('NA', why_); d['hits'] = []
+            if ref_: d['asis_ref'] = ref_   # 대조표 행 이름(팝업 클래스 줄 인용) 대신 AS-IS 메인 사실 위치
+
     # ── 인스턴스 결과 ──
     for d in inst.values():
         rs = [h[0] for h in d['hits']]
@@ -1497,6 +1525,191 @@ def a6_measured_wins(hits):
     return out
 
 
+# 2026-11-20 T480(SCP0028 G5 3행, H6 3행, M4 5행 'AI 검토 검사기오판'): FE 대조표 '팝업' 행(EVT_POPUP 낱말 일치)에 적힌 요소 이름만 보고 G5, H6, M4 를 붙였다.
+#   팝업 클래스 안 같은 이름 컨트롤(clbFromSite, clbToSite), 저장 인자로만 쓰는 숨김 컬럼, 팝업을 열고 재조회만 하는 버튼까지 대상이 됐고 asis_ref 에 팝업 클래스 줄이 들어갔다.
+#   AS-IS 메인 클래스 사실(actions.csv, events.csv, controls.csv, popup_args.csv, 속성 getter 원문)로 요소의 팝업 연결을 확인한다.
+#   연결 없음이 사실로 확인될 때만 NA. 재료가 없거나 팝업 클래스에만 선언된 요소, 컬럼 조건 없이 셀 팝업이 열리는 화면은 None(종전 동작)
+_RX_FW_FORM = re.compile(r'^(GSCM\.Windows\.Forms\.|System\.Windows\.Forms\.)|(^|\.)(ProgressForm|MessageBox)$')
+_RX_GRID_EV = re.compile(r'Cell|ButtonClicked|EditMode|EditChange|LeaveCell', re.I)
+_RX_DATA_WRITE = re.compile(r'\b(SetValue|SetText)\s*\(|\bdr\w*\s*\[|\.Rows\s*\[[^\]]*\]\s*\[[^\]]*\]\s*=|\.Cells\s*\[')
+_RX_ECOL_DEF = re.compile(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*Def[A-Z]\w*\.([A-Z0-9_]+)\s*\)')
+_RX_POP_ARGS = re.compile(r'(?:\bForm_Load|\bInit\w*|\bnew\s+[A-Za-z_][\w.]*)\s*\(([^;]*)\)')
+_RX_IDENT = re.compile(r'[A-Za-z_]\w*')
+
+
+def popup_linkage(check, et, name, acts, main_cls, events, ctl_decl=None, popup_args=(), trigger_cols=(), prop_get=None):
+    """T480: AS-IS 사실로 본 요소의 팝업 연결 → (상태, 근거, AS-IS 위치).
+    상태 True = 연결 있음, False = 연결 없음(근거 문장 있음), None = 판단 재료 없음(종전 동작 유지).
+    acts = {(클래스, 메서드): [actions.csv 행]}, events = 현행 events.csv 행, ctl_decl = {컨트롤: [controls.csv 행(전 클래스)]},
+    popup_args = popup_args.csv AS-IS 행, prop_get = {속성 이름: getter 원문}(메인 클래스)"""
+    meths = {m: rs for (c, m), rs in (acts or {}).items() if c == main_cls and rs}
+    if not meths or et not in ('COND', 'COL', 'BTN') or check not in ('G5', 'H6', 'M4'):
+        return None, '', ''
+    ctl_decl = ctl_decl or {}; prop_get = prop_get or {}
+    fb = os.path.basename((next(iter(meths.values()))[0].get('file') or '').replace(chr(92), '/'))
+    wb = lambda t: re.compile(r'(?<![A-Za-z0-9_])' + re.escape(t) + r'(?![A-Za-z0-9_])')
+    if et in ('COND', 'BTN'):
+        decl = ctl_decl.get(name) or []
+        if decl and not any(x.get('class') == main_cls for x in decl):
+            return None, f"{name} 은 팝업 클래스({decl[0].get('class', '')}) 요소", ''   # 팝업 안 요소는 그 팝업 기준 검사(종전 동작)
+
+    def pop_rows(rs):
+        out = []
+        for r in rs:
+            if r.get('kind') != 'POPUP': continue
+            m = re.search(r'new\s+([A-Za-z_][\w.]*)\s*\(', r.get('raw') or '')
+            if (m and not _RX_FW_FORM.search(m.group(1))) or (not m and re.search(r'\.(ShowDialog|Form_Load)\s*\(', r.get('raw') or '')): out.append(r)
+        return out
+    direct = {m: v for m, v in ((m, pop_rows(rs)) for m, rs in meths.items()) if v}
+    callees = {m: [(r.get('target') or '', r.get('value') or '') for r in rs if r.get('kind') == 'CALL_LOCAL'] for m, rs in meths.items()}
+
+    def reach(m):
+        seen, stack = set(), [(m, 0)]
+        while stack:
+            x, dp = stack.pop()
+            if x in seen or x not in meths or dp > 4: continue
+            seen.add(x); stack += [(t, dp + 1) for t, _ in callees.get(x, [])]
+        return seen
+    reach_of = {m: reach(m) for m in meths}
+    ctx = {m for m in meths if reach_of[m] & set(direct)}   # 팝업을 열거나 팝업 여는 메서드를 부르는 메서드
+    where = lambda ms: ', '.join(f"{x}({fb}:{direct[x][0].get('line', '')})" for x in sorted(ms) if x in direct)[:220]
+    opened = where(direct) or '없음'
+
+    def popname(ms):
+        out = []
+        for x in sorted(ms):
+            if x not in direct: continue
+            cl = re.findall(r'new\s+([A-Za-z_][\w.]*)', ' '.join(r.get('raw') or '' for r in meths[x])) or [x]
+            out.append(f"{cl[0].split('.')[-1]}({fb}:{direct[x][0].get('line', '')})")
+        return ', '.join(out)[:220]
+
+    def handlers(ctl):
+        hs = {(e.get('handler') or '').strip() for e in events if (e.get('op') or '+=') == '+=' and re.sub(r'^this\.', '', e.get('target') or '').split('.')[0] == ctl}
+        hs |= {m for m in meths if m.startswith(ctl + '_')}
+        return sorted(h for h in hs if h)
+
+    def arg_closure():
+        """팝업 인자(Form_Load, Init, new 팝업(…))에 쓰인 식별자 + 그 값의 출처(지역 변수 대입, 메인 메서드 본문, 속성 getter) 3단계"""
+        rows_ctx = [r for m in ctx for r in meths[m]]
+        seen = set()
+        for m in direct:
+            for r in meths[m]:
+                for am in _RX_POP_ARGS.finditer(r.get('raw') or ''): seen |= set(_RX_IDENT.findall(am.group(1)))
+        assigns = collections.defaultdict(list)
+        for rs in meths.values():
+            for r in rs:
+                mm = re.match(r'^\s*(?:[\w<>\[\],.]+\s+)?(?:this\.)?(\w+)\s*=(?!=)\s*(.+)$', r.get('raw') or '')
+                if mm: assigns[mm.group(1)].append(mm.group(2))
+        for r in rows_ctx:
+            mm = re.match(r'^\s*(?:[\w<>\[\],.]+\s+)?(\w+)\s*=(?!=)\s*(.+)$', r.get('raw') or '')
+            if mm: assigns[mm.group(1)].append(mm.group(2))
+        front = set(seen)
+        for _ in range(4):
+            nxt = set()
+            for t in front:
+                for rhs in assigns.get(t, []): nxt |= set(_RX_IDENT.findall(rhs))
+                if t in prop_get: nxt |= set(_RX_IDENT.findall(prop_get[t]))
+                if t in meths and t not in direct: nxt |= {w for r in meths[t] for w in _RX_IDENT.findall(r.get('raw') or '')}
+            front = nxt - seen; seen |= nxt
+            if not front: break
+        return seen
+
+    def chain_writes(h):
+        """h 와 h 가 닿는 팝업 여는 메서드의 값 대입 문장 + 팝업 반환값(팝업 변수, 그 값을 받은 변수)을 인자로 받는 화면 메서드의 값 대입 문장"""
+        ch = reach_of.get(h, set()); ops = [m for m in ch if m in direct]
+        pv = {mm.group(1) for m in ops for r in direct[m] for mm in re.finditer(r'(\w+)\.(?:ShowDialog|Form_Load)\s*\(', r.get('raw') or '')}
+        pv |= {mm.group(1).split('.')[-1] for m in ops for r in direct[m] for mm in re.finditer(r'new\s+([A-Za-z_][\w.]*)\s*\(', r.get('raw') or '')}
+        tn = set(pv)
+        for _ in range(3):
+            for m in ch:
+                for r in meths[m]:
+                    mm = re.match(r'^\s*(?:[\w<>\[\],.]+\s+)?(\w+)\s*=(?!=)\s*(.+)$', r.get('raw') or '')
+                    if mm and any(wb(t).search(mm.group(2)) for t in tn): tn.add(mm.group(1))
+        cnt = {h} | set(ops); stack = list(cnt)
+        while stack:
+            m = stack.pop()
+            for t, v in callees.get(m, []):
+                if t in meths and t not in cnt and (any(wb(x).search(v) for x in tn) or any(wb(x).search(' '.join(r.get('raw') or '' for r in meths[t])) for x in pv)):
+                    cnt.add(t); stack.append(t)
+        w = [(m, r) for m in sorted(cnt) for r in meths[m] if r.get('kind') in ('VALUE_SET', 'GRID_SET') or (r.get('kind') == 'DATA_OP' and _RX_DATA_WRITE.search(r.get('raw') or ''))]
+        return w, sorted(cnt - {h} - set(ops)), ops
+
+    def grid_cols(m, depth=0):
+        """셀 이벤트 m 이 팝업을 여는 컬럼 → (컬럼 집합, 컬럼을 못 정함). guard 가장 안쪽 e.Column 조건이 '==' 일 때만 컬럼으로 본다"""
+        cols, unk = set(), False
+        for r in meths.get(m, []):
+            if not (r in direct.get(m, []) or (r.get('kind') == 'CALL_LOCAL' and (r.get('target') or '') in ctx)): continue
+            segs = [s for s in re.split(r'\s*▸\s*', r.get('guard') or '') if 'e.Column' in s]
+            if segs:
+                s = segs[-1]
+                cs = set(_RX_ECOL_DEF.findall(s))
+                if s.strip().startswith('else of') or '!=' in s or '…' in s or not cs: unk = True; continue
+                cols |= cs
+            elif r.get('kind') == 'CALL_LOCAL' and depth < 3:
+                c2, u2 = grid_cols(r.get('target') or '', depth + 1); cols |= c2; unk = unk or u2 or not c2
+            else:
+                unk = True
+        return cols, unk
+
+    if et == 'COND':
+        hs = handlers(name)
+        op = [h for h in hs if h in ctx]
+        if op: return True, f"{name} 이벤트 처리 {op[0]} 가 팝업을 엶", ''
+        refs = sorted(m for m in ctx if any(wb(name).search(r.get('raw') or '') for r in meths[m]))
+        if refs: return True, f"팝업 여는 메서드 {refs[0]} 본문이 {name} 을 읽거나 씀", ''
+        if name in arg_closure(): return True, f"{name} 값이 팝업 인자로 넘어감", ''
+        pa = [x for x in popup_args if wb(name).search(f"{x.get('asis_source', '')} {x.get('asis_arg', '')}")]
+        if pa: return True, f"popup_args.csv AS-IS {pa[0].get('asis_ref', '')}", ''
+        dc = next((x for x in ctl_decl.get(name) or [] if x.get('class') == main_cls), None)
+        if not dc: return None, f"{name} 컨트롤 선언 미확인(controls.csv)", ''
+        dpos = f"{os.path.basename((dc.get('file') or '').replace(chr(92), '/'))}:{dc.get('line', '')}"
+        why = (f"검사 대상 아님: AS-IS 팝업 연결 없음. {name}({(dc.get('type') or '').split('.')[-1]}, {dpos}) 이벤트 처리 {', '.join(hs) or '0건'}(events.csv), "
+               f"메인 클래스 팝업 여는 메서드 {opened} 본문과 팝업 인자 출처에 {name} 0건, popup_args.csv AS-IS 행 0건")
+        return False, why, f"{dpos} {name}, 팝업 여는 메서드 {opened}"[:200]
+
+    if et == 'COL':
+        if name in set(trigger_cols): return True, f"{name} 셀 이벤트가 팝업을 엶(guard e.Column == {name})", ''
+        if check == 'G5':
+            pa = [x for x in popup_args if wb(name).search(f"{x.get('asis_source', '')} {x.get('asis_arg', '')}")]
+            if pa: return True, f"popup_args.csv AS-IS {pa[0].get('asis_ref', '')}", ''
+        grid_h = sorted({(e.get('handler') or '').strip() for e in events if (e.get('handler') or '').strip() in ctx and _RX_GRID_EV.search(f"{e.get('event', '')} {e.get('handler', '')}")})
+        gcols = set()
+        for h in grid_h:
+            cs, unk = grid_cols(h)
+            if unk: return None, f"셀 이벤트 {h} 가 팝업을 여는 컬럼을 guard 로 못 정함", ''
+            gcols |= cs
+        if name in gcols: return True, f"{name} 셀 이벤트가 팝업을 엶", ''
+        if check == 'M4':
+            ws = [wr for h in sorted(ctx) for wr in chain_writes(h)[0]]
+            if any(wb(name).search(r.get('raw') or '') for _, r in ws): return True, f"팝업 뒤 {name} 값 대입", ''
+            if any(r.get('kind') != 'VALUE_SET' and not re.search(r'Def[A-Z]\w*\.\w+|"[A-Z0-9_]+"', r.get('raw') or '') for _, r in ws):
+                return None, '팝업 뒤 셀 대입 문장의 컬럼을 못 읽음', ''
+        why = (f"검사 대상 아님: AS-IS 팝업 연결 없음. {name} 칸에서 팝업을 여는 셀 이벤트 0건(셀 이벤트 처리 {', '.join(grid_h) or '0건'}, 팝업을 여는 컬럼 {', '.join(sorted(gcols)) or '없음'}, 메인 클래스 팝업 여는 메서드 {opened})"
+               + (f", 팝업 뒤 {name} 값 대입 0건" if check == 'M4' else '') + (", popup_args.csv AS-IS 행 0건" if check == 'G5' else ''))
+        return False, why, f"{fb} {name}, 팝업 여는 메서드 {opened}"[:200]
+
+    # BTN
+    hs = handlers(name)
+    if not hs: return None, f"{name} 클릭 처리 미확인(events.csv)", ''
+    op = [h for h in hs if h in ctx]
+    if not op:
+        why = f"검사 대상 아님: AS-IS 팝업 연결 없음. {name} 클릭 처리 {', '.join(hs)} 와 그 호출 메서드에 팝업 열기 0건(메인 클래스 팝업 여는 메서드 {opened})"
+        return False, why, f"{fb} {', '.join(hs)}"[:200]
+    if check != 'M4': return True, f"{name} 클릭 처리 {op[0]} 가 팝업을 엶", ''
+    res = [(h, chain_writes(h)) for h in op]
+    if any(w for _, (w, _, _) in res): return True, f"{name} 팝업 뒤 값 대입", ''
+    for h in op:   # 팝업이 화면, 그리드를 받아 직접 채우면 이 문장들로는 판단 못 함
+        for m in reach_of[h] & set(direct):
+            for r in meths[m]:
+                for am in _RX_POP_ARGS.finditer(r.get('raw') or ''):
+                    if re.search(r'\bthis\b|\bsi[A-Z]\w*|\bspd[A-Z]\w*|\bgrd[A-Z]\w*|\b[sS]heet\w*', am.group(1)):
+                        return None, f"팝업 인자로 화면, 그리드를 넘김({m} {fb}:{r.get('line', '')})", ''
+    h0, (_, passed, ops) = res[0]
+    why = (f"검사 대상 아님: AS-IS 팝업 선택값 반영 없음. {name} 클릭 처리 {h0} 가 팝업 {popname(ops)} 을 연 뒤 셀, 컨트롤 값 대입(VALUE_SET, GRID_SET) 0건"
+           + (f", 팝업 반환값은 {', '.join(passed)} 호출 인자로만 씀(재조회)" if passed else ''))
+    return False, why, f"{fb} {h0}, 팝업 {popname(ops)}"[:200]
+
+
 def m4_popups(acts, main_cls):
     """AS-IS 팝업 핸들러 → [{handler, trigger, targets, popup}]. 트리거 = 팝업 문장(kind=POPUP) guard 의 가장 안쪽 'e.Column == …DefColumns.X'. T307
     팝업 guard 에 컬럼 조건이 없으면 그 팝업은 내지 않는다(종전: 핸들러의 첫 e.Column 조건 = 다른 분기의 컬럼을 집었다)."""
@@ -1766,6 +1979,42 @@ def selftest():
               ('T470 주장 없는 미이식 = 근거 없음', reason_claim(_r5['Z01'], _r5) == ''),
               ('T470 AS-IS 줄 인용 없는 주장 = 근거 없음', reason_claim(_r5['Z02'], _r5) == ''),
               ('T470 근거 없는 행 참조 = 상속 안 함', reason_claim(_r5['Z03'], _r5) == '')]
+    # 2026-11-20 T480: 요소 팝업 연결(AS-IS 메인 클래스 사실). True = 연결, False = 연결 없음(NA 근거), None = 판단 재료 없음
+    _R = lambda m, k, raw, tgt='', val='', g='', ln='1', c='M': {'class': c, 'method': m, 'kind': k, 'raw': raw, 'target': tgt, 'value': val, 'guard': g, 'line': ln, 'file': 'X.cs'}
+    _pa = collections.defaultdict(list)
+    for _r in [_R('btnItem_Click', 'LOCAL', 'string sItem = txtItem.Text;'), _R('btnItem_Click', 'POPUP', 'new ItemPopup()', ln='10'),
+               _R('btnItem_Click', 'POPUP', 'pop.Form_Load(true, division, sItem)'), _R('btnItem_Click', 'POPUP', 'pop.ShowDialog()'),
+               _R('btnItem_Click', 'LOCAL', 'string division = cboDiv.ControlValues;'),
+               _R('btnItem_Click', 'VALUE_SET', 'txtItem.Text = pop.ItemID', 'txtItem.Text'),
+               _R('btnInput_Click', 'POPUP', 'new BatchPopup()', ln='20'), _R('btnInput_Click', 'POPUP', 'pop.Form_Load("I", sDiv.ToString())'),
+               _R('btnInput_Click', 'POPUP', 'pop.ShowDialog()'), _R('btnInput_Click', 'LOCAL', 'string divList = pop.GetDivList;'),
+               _R('btnInput_Click', 'CALL_LOCAL', 'FindInput(divList)', 'FindInput', '(divList)'),
+               _R('FindInput', 'DATA_OP', 'request.Parameters["p_div"] = divList'), _R('FindInput', 'GRID_BIND', 'siMain.Query(ds)'),
+               _R('FindData', 'POPUP', 'new GSCM.Windows.Forms.UI.ProgressForm()'), _R('FindData', 'LOCAL', 'object p = clbFromSite.ControlValues;'),
+               _R('spdMain_CellDoubleClick', 'POPUP', 'new RoutePopup()', g='if (e.Column == siMain.GetColumnIndex(DefColumns.ROUTE_ID))', ln='30'),
+               _R('spdMain_CellDoubleClick', 'GRID_SET', 'siMain.SetText(e.Row, siMain.GetColumnIndex(DefColumns.PRIORITY), dr["P"])', g='if (e.Column == siMain.GetColumnIndex(DefColumns.ROUTE_ID))'),
+               _R('btnSrch_Click', 'POPUP', 'new CityPopup()', c='P'), _R('btnSrch_Click', 'POPUP', 'p.ShowDialog()', c='P')]:
+        _pa[(_r['class'], _r['method'])].append(_r)
+    _ev = [{'target': f'this.{t}', 'event': e, 'handler': h, 'op': '+='} for t, e, h in [('btnItem', 'Click', 'btnItem_Click'), ('btnInput', 'Click', 'btnInput_Click'), ('spdMain', 'CellDoubleClick', 'spdMain_CellDoubleClick'), ('btnSrch', 'Click', 'btnSrch_Click'), ('btnRefresh', 'Click', 'FindData')]]
+    _cd = {n: [{'class': c, 'name': n, 'type': 'GSCM.Windows.Forms.Controls.' + t, 'file': 'X.Designer.cs', 'line': '5'}] for n, c, t in [('clbFromSite', 'M', 'UsrCheckedList'), ('txtItem', 'M', 'TextBox'), ('cboDiv', 'M', 'UsrCombo'), ('btnItem', 'M', 'UsrButton'), ('btnInput', 'M', 'UsrButton'), ('btnSrch', 'P', 'UsrButton'), ('btnRefresh', 'M', 'UsrButton')]}
+    _pl = lambda ck, et, n, cd=_cd, pa=(): popup_linkage(ck, et, n, _pa, 'M', _ev, cd, pa, set())[0]
+    cases += [('T480 체크 목록 조건, 이벤트, 팝업 인자, 참조 0 = 연결 없음', _pl('G5', 'COND', 'clbFromSite') is False and _pl('H6', 'COND', 'clbFromSite') is False),
+              ('T480 진행창(ProgressForm)만 여는 메서드의 참조는 팝업 연결 아님', _pl('M4', 'COND', 'clbFromSite') is False),
+              ('T480 팝업 인자로 넘어가는 조건(지역 변수 경유) = 연결', _pl('G5', 'COND', 'cboDiv') is True),
+              ('T480 팝업 선택값을 받는 조건 = 연결', _pl('M4', 'COND', 'txtItem') is True),
+              ('T480 popup_args.csv 에 있는 조건 = 연결', _pl('G5', 'COND', 'clbFromSite', pa=[{'asis_source': 'clbFromSite.ControlValues'}]) is True),
+              ('T480 컨트롤 선언 없음 = 판단 재료 없음', _pl('G5', 'COND', 'clbNoDecl') is None),
+              ('T480 팝업 클래스에만 선언된 버튼 = 종전 동작', _pl('H6', 'BTN', 'btnSrch') is None),
+              ('T480 팝업 열고 재조회만 하는 버튼 M4 = 연결 없음', _pl('M4', 'BTN', 'btnInput') is False),
+              ('T480 팝업 여는 버튼 G5, H6 = 연결', _pl('G5', 'BTN', 'btnInput') is True and _pl('H6', 'BTN', 'btnInput') is True),
+              ('T480 팝업 뒤 컨트롤에 값 대입하는 버튼 M4 = 연결', _pl('M4', 'BTN', 'btnItem') is True),
+              ('T480 팝업 안 여는 버튼 = 연결 없음', _pl('H6', 'BTN', 'btnRefresh') is False),
+              ('T480 셀 팝업 트리거 컬럼 = 연결', _pl('H6', 'COL', 'ROUTE_ID') is True),
+              ('T480 셀 팝업 뒤 값 대입 컬럼 M4 = 연결', _pl('M4', 'COL', 'PRIORITY') is True),
+              ('T480 저장 인자로만 쓰는 컬럼 = 연결 없음', _pl('G5', 'COL', 'TRANS_MODE_CODE') is False and _pl('M4', 'COL', 'TRANS_MODE_CODE') is False),
+              ('T480 컬럼 조건 없이 셀 팝업이 열리면 = 판단 재료 없음', popup_linkage('H6', 'COL', 'X_COL', {('M', 'spdMain_CellDoubleClick'): [_R('spdMain_CellDoubleClick', 'POPUP', 'new P()', g='else of (e.Column == siMain.GetColumnIndex(DefColumns.A))')]}, 'M', _ev, _cd)[0] is None),
+              ('T480 AS-IS 문장 없음 = 판단 재료 없음', popup_linkage('G5', 'COND', 'clbFromSite', {}, 'M', _ev, _cd)[0] is None),
+              ('T480 NA 근거에 파일:줄 인용', 'X.Designer.cs:5' in popup_linkage('G5', 'COND', 'clbFromSite', _pa, 'M', _ev, _cd)[1] and popup_linkage('G5', 'COND', 'clbFromSite', _pa, 'M', _ev, _cd)[1].startswith('검사 대상 아님'))]
     bad = 0
     for n, ok in cases:
         print(('PASS ' if ok else 'FAIL ') + 'T261 ' + n)
@@ -2081,7 +2330,7 @@ def to_ledger(inst, od, rmap):
         add.append({**{c: '' for c in cols}, 'row_id': rid, 'source': 'TRACE', 'family': fam, 'rule_id': d['check'], 'axis': AXIS.get(fam, ''), 'area': '대조표',
                     'target': CLEAN(f"{d['display'][:80]}" if d['et'] != 'ROW' else f"{d['name']} · {(rmap.get(d['name'], {}).get('label') or rmap.get(d['name'], {}).get('section', ''))[:70]}"),
                     'condition': CLEAN(engine_condition(d, rmap)), 'oracle': 'O1', 'expected': CLEAN(f"{df.get('how', '')} — 대조표 {len(d['rows'])}행" + (f" · 요지: {rmap[d['name']].get('label', '')[:120]}" + (f" · 사유: {rmap[d['name']].get('why', '')[:160]}" if rmap[d['name']].get('why') else '') if d['et'] == 'ROW' and d['name'] in rmap else '')),
-                    'asis_ref': CLEAN(' '.join(dict.fromkeys(d['cs']))[:200] or ' '.join(d['rows'][:3])[:200]), 'method': df.get('method', 'E2E'),
+                    'asis_ref': CLEAN(d.get('asis_ref') or ' '.join(dict.fromkeys(d['cs']))[:200] or ' '.join(d['rows'][:3])[:200]), 'method': df.get('method', 'E2E'),  # T480 asis_ref
                     'result': res, 'evidence': CLEAN(ev[:900]), 'tobe_ref': tobe or ('STATIC mapping_trace' if d['static'] else ''),
                     'note': f"impl={df.get('impl', '?')} · {df.get('checker', '')[:60]} · key={d['key'][:80]}"})
     with open(p, 'w', encoding='utf-8-sig', newline='') as fp:

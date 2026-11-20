@@ -1,7 +1,7 @@
 {
  "id": "SCP0028",
  "asis": "SCP0028",
- "at": "2026-11-20 10:01:52",
+ "at": "2026-11-20 15:03:42",
  "has_asis": true,
  "tobe_cols": 15,
  "buttons": [
@@ -56,8 +56,10 @@
    "why_not": []
   },
   "p_dirty": {
-   "rows": 1,
-   "why_not": []
+   "rows": 0,
+   "why_not": [
+    "DM-52 제외: AS-IS 버튼 btnInput(Input) Click 핸들러에 편집 중 차단 메시지 없음(CR-022 = 차단 메시지 코드 규칙)"
+   ]
   },
   "p_clear": {
    "rows": 0,
@@ -129,8 +131,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 20,
-   "used": 18
+   "rows": 19,
+   "used": 17
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -141,7 +143,7 @@
    "used": 0
   }
  },
- "rows": 20,
- "rows_used": 18,
+ "rows": 19,
+ "rows_used": 17,
  "dup_of_hand": 2
 }

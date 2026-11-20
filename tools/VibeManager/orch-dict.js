@@ -18,7 +18,7 @@ function csvRows(text) { // 따옴표 안 쉼표·줄바꿈 처리
 }
 
 const R_DESC = {
-  R1: ['단계, 프로세스가 0 이 아닌 종료코드로 끝남', '에이전트(Claude) 조치'],
+  R1: ['단계, 프로세스가 0 이 아닌 종료코드로 끝남', '에이전트(AI Agent) 조치'],
   R2: ['같은 오류가 14일 안 같은 화면 2회 또는 전 화면 3회 반복. 같은 죽은 잠금이 60분 안 3회 이상이어도 R2 로 묶음', '에이전트 조치. 죽은 잠금 묶음은 VMO 가 잠금 파일 삭제'],
   R3: ['단계 소요가 같은 작업 최근 10회 중앙값의 2배 초과(60초 이상)', '에이전트 조치'],
   R4: ['대기(부하 입장, 화면 잠금, 동시 상한, 시험 데이터 구간 등)가 10분 초과', '에이전트 조치'],
@@ -28,26 +28,26 @@ const R_DESC = {
   R8: ['TCP 연결 수 12,000 이상(E2E 소켓 고갈 위험)', 'VMO 코드 조치(점유 프로세스 집계), VMW 작업 일시 중지'],
   R9: ['죽은 잠금. 잠금 파일 주인 프로세스가 없음', 'VMO 가 잠금 파일 삭제'],
   R10: ['CheckList 판정 정체. 연속 2회 FAIL, 미검증 행 집합이 같음', '에이전트 조치'],
-  R11: ['Claude 단계 없이 끝난 체인에 FAIL, 미검증이 남음', '에이전트 조치'],
-  R12: ['VM 자가진단(S1~S13) 실패 항목. orch-selfcheck.js 가 올림', 'Claude 진단 → 개선안 → VM 코드면 게이트 통과 조건 자동 반영'],
+  R11: ['AI Agent 단계 없이 끝난 체인에 FAIL, 미검증이 남음', '에이전트 조치'],
+  R12: ['VM 자가진단(S1~S13) 실패 항목. orch-selfcheck.js 가 올림', 'AI Agent 진단 → 개선안 → VM 코드면 게이트 통과 조건 자동 반영'],
   R13: ['화면 진입 실패 반복. 실행 로그에 화면 진입 실패 5회 이상 또는 진입 확인 실패', 'VMO 자가 복구(공용 파일 받기 → 변환 확인 → 그 화면 다시 실행), 못 풀면 에이전트'],
-  R14: ['중지 뒤 계속 실행. 중지한 체인이 새 단계, 프로세스, Claude 를 띄우거나 VMW 작업 기록은 중지인데 체인이 60초 넘게 살아 있음', 'VMO 자가 복구(프로세스 종료, 중지 다시 요청), 재발하면 에이전트'],
+  R14: ['중지 뒤 계속 실행. 중지한 체인이 새 단계, 프로세스, AI Agent 를 띄우거나 VMW 작업 기록은 중지인데 체인이 60초 넘게 살아 있음', 'VMO 자가 복구(프로세스 종료, 중지 다시 요청), 재발하면 에이전트'],
 };
 const S_DESC = {
   S1: ['VM JS 구문, package.json·quick.json·steps.json JSON 형식', '무거운 점검'], S2: ['VM 시험 test/run_all.js 실행 결과', '무거운 점검'], S3: ['저장소와 설치 폴더 파일 내용 차이', '가벼운 점검'],
   S4: ['정의 파일 정합(quick.json, steps.json, package.json 명령, require 대상)', '무거운 점검'], S5: ['VM 실행 오류 기록(.vibe/orch/vm_errors.jsonl) 반복', '가벼운 점검'], S6: ['CHANGELOG 미확인 항목 원장 추적', '가벼운 점검'],
   S7: ['VMO 자기 상태(감시기 tick, 에이전트, 미해결 사건)', '가벼운 점검'], S8: ['반영한 개선안의 재발', '가벼운 점검'], S9: ['반복 수정 지점(작업 이력에서 여러 번 고친 파일, 되풀이된 지시)', '가벼운 점검'],
-  S10: ['용량(로그, 백업, 스냅샷)', '하루 1회'], S11: ['고정 문구 문장 규칙(doc_style.py)', '무거운 점검'], S12: ['설정 정합(harness.json orch 절, 환경설정 키 사용)', '무거운 점검'],
+  S10: ['용량(.vibe 로그, BE 파일 로그 nscm-be/logs, 백업, 스냅샷, 디스크 남은 용량)', '하루 1회'], S11: ['고정 문구 문장 규칙(doc_style.py)', '무거운 점검'], S12: ['설정 정합(harness.json orch 절, 환경설정 키 사용)', '무거운 점검'],
   S13: ['사용자 지적 점검. user_checks.json 원장의 감지기 실행(U1~)', '가벼운 점검(10분)'],
 };
 const STATIC = [
   { id: 'P', title: 'VMO 1차 플랜 단계', src: '메모리 project_vm_orchestra_plan_20261119 · 2026-11-19', items: [
     ['P0', '사건 기록(orch-events.js, .vibe/orch/events.jsonl)'], ['P1', '체인·단계 사건 기록(실행 주체 script, claude)'], ['P2', 'VMO 창(공통 기능, BE/FE Log, 상황판) 분리, 서버 소유 server-service.js'], ['P3', '규칙 감시기 R1~R11(orch-watch.js)'],
     ['P4', '에이전트 조치(orch-agent.js, .claude/agents/vm-orchestra.md)'], ['P5', '상시 개선안(orch-improve.js, 승인 뒤 반영)'], ['P6', '실행 주체 표시, 체인 요약에 스크립트/Claude 수'], ['P7', '창 없는 체인 실행기(chain-runner.js)'],
-    ['P8', 'VMW 창(업무 작업, job-runner.js, jobs.js)'], ['P9', '동시 실행(부하 입장, Claude 세션 상한, R6/R8 일시 중지)'], ['P10', '생성·보완 체인 batch 4개']] },
+    ['P8', 'VMW 창(업무 작업, job-runner.js, jobs.js)'], ['P9', '동시 실행(부하 입장, AI Agent 세션 상한, R6/R8 일시 중지)'], ['P10', '생성·보완 체인 batch 4개']] },
   { id: 'Q', title: 'VMO 2차 플랜(자가진단)', src: '메모리 project_vm_orchestra_plan_20261119 · 2026-11-19', items: [
-    ['Q1', 'VM 실행 오류 기록(orch-errlog.js)'], ['Q2', '작업 이력 취합(orch-history.js, 원천 H1~H8)'], ['Q3', '이력 탭(주제별 정리)'], ['Q4', '자가진단 점검 S1~S12(orch-selfcheck.js)'], ['Q5', '자가진단 탭과 미확인 원장'], ['Q6', '자가 보완(Claude 진단 → 개선안 → 게이트 통과 자동 반영)']] },
-  { id: 'SP', title: 'CheckList 속도 개선 플랜(A~G, R0~R5)', src: 'CheckList 속도 개선 플랜 · 2026-11-19 · CHANGELOG 2026-11-20 05:30 절', items: [
+    ['Q1', 'VM 실행 오류 기록(orch-errlog.js)'], ['Q2', '작업 이력 취합(orch-history.js, 원천 H1~H8)'], ['Q3', '이력 탭(주제별 정리)'], ['Q4', '자가진단 점검 S1~S12(orch-selfcheck.js)'], ['Q5', '자가진단 탭과 미확인 원장'], ['Q6', '자가 보완(AI Agent 진단 → 개선안 → 게이트 통과 자동 반영)']] },
+  { id: 'SP', title: 'CheckList 속도 개선 플랜(A~G, R0~R5)', src: 'CheckList 속도 개선 플랜(2026-11-19), CHANGELOG 2026-11-20 05:30 절', items: [
     ['A1', '진입 확인 선행. E2E 앞에서 화면 열기 1회 확인, 열리지 않으면 원인별 1회 조치 뒤 다시(_open.spec, preflight_open)'], ['A2', 'SCP0028, SSP0014 진입 실패 원인 조사(공용 파일 빠짐)'], ['A3', 'AI 검토 앞 차단. 같은 사유 미검증 대량이면 원인 1건으로 묶어 보고'],
     ['B1', '0행 응답 뒤 행 대기 생략(pagereg.emptyAnswered)'], ['B2', '조회 120초 시간 초과 원인 확인(알림에 막힌 조회는 대기 생략)'], ['B3', '화면 열기 고정 2초 → 조건 대기(하지 않음: 정합성)'], ['B4', '고정 대기 조건화(시나리오 0.8초는 하지 않음)'], ['B5', 'CRUD 2회 실행 묶기(하지 않음: 다른 측정)'],
     ['C1', '미검증 자동 해소를 AI 검토 앞으로'], ['C2', '같은 원인 미검증 행 묶어 1번 질의'], ['C3', 'AI 검토 동시 호출(llmReviewPar 4)'], ['C4', 'AI 검토 캐시를 행 단위로(llm_rowcache.json)'], ['C5', '답 JSON 해석 실패 1회 다시 요청'],
@@ -56,7 +56,7 @@ const STATIC = [
     ['G1', '결함 유형 중복 정리(AI 판단, dedup_general.py, 727건 → 586묶음)'], ['G2', '화면 안 중복 정리(규칙별 AI 판단, 대표 결과 상속, dedup_screen.py)'],
     ['R0~R5', '속도 플랜 진행 단계(R0 기준선, R1 F·E, R2 A, R3 B, R4 C, R5 D). 감시 규칙 R1~R14 와 다른 번호']] },
   { id: 'H', title: '작업 이력 원천(H1~H8)', src: 'tools/VibeManager/orch-history.js', items: [
-    ['H1', 'CHANGELOG.md 절'], ['H2', 'Claude Code 세션 기록(~/.claude/projects/<프로젝트>/*.jsonl)'], ['H3', '.vibe/history 실행 meta.json'], ['H4', '.vibe/logs Claude 실행 로그 머리'], ['H5', 'VMO 사건, 개선안'], ['H6', '백업 파일(.bak_<날짜>_<태그>)'], ['H7', 'Claude 메모리 frontmatter'], ['H8', '검사기 결함 문서, 룰 변경 이력']] },
+    ['H1', 'CHANGELOG.md 절'], ['H2', 'Claude Code 세션 기록(~/.claude/projects/<프로젝트>/*.jsonl)'], ['H3', '.vibe/history 실행 meta.json'], ['H4', '.vibe/logs AI Agent 실행 로그 머리'], ['H5', 'VMO 사건, 개선안'], ['H6', '백업 파일(.bak_<날짜>_<태그>)'], ['H7', 'Claude 메모리 frontmatter'], ['H8', '검사기 결함 문서, 룰 변경 이력']] },
   { id: 'G', title: '에이전트 조치 등급', src: '.claude/agents/vm-orchestra.md · orch-agent.js', items: [
     ['A', '진단, 단독 재실행. 자동'], ['B', 'tools/Harness, tools/E2E, tools/Docs 수정. 자동 + 보고(수정 전 스냅샷, 되돌리기 가능)'], ['C', 'FE, BE, DB 객체, VM, 룰 수정. 개선안만(승인 뒤 반영)'], ['D', '금지(운영 DB, 파괴적 Git 등)']] },
   { id: 'NM', title: '창 이름', src: '2026-11-20 사용자 지정', items: [

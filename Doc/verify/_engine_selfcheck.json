@@ -1,8 +1,8 @@
 {
- "at": "2026-11-20 10:16:03",
+ "at": "2026-11-20 14:59:35",
  "mode": "full",
- "seconds": 29.2,
- "fingerprint": "d554550746e7a7ae6474fe8ef5fb66e8bcfbe36c",
+ "seconds": 73.6,
+ "fingerprint": "a7cd5c6b21fda496a70963f6322be95d6e53cee1",
  "result": "PASS",
  "counts": {
   "PY_COMPILE": {
@@ -54,23 +54,23 @@
   "RULE_REGISTRY": []
  },
  "meta": {
-  "selftest_js_ran": 32,
-  "selftest_py_ran": 63,
+  "selftest_js_ran": 34,
+  "selftest_py_ran": 65,
   "selftest_py_skipped_db": [
    "orch_event.py",
    "safe_io.py"
   ]
  },
  "sizes": {
-  "Doc/e2e/specs/_verify.spec.ts": 747824,
-  "Doc/e2e/specs/_trace.spec.ts": 386585,
+  "Doc/e2e/specs/_verify.spec.ts": 763511,
+  "Doc/e2e/specs/_trace.spec.ts": 418882,
   "Doc/e2e/specs/_snap.spec.ts": 20536,
   "Doc/e2e/specs/eg_popup.spec.ts": 114664,
-  "tools/Harness/verify/judge.py": 322530,
-  "tools/Harness/verify/run_verify.py": 105872,
-  "tools/Harness/verify/mapping_trace.py": 190839,
+  "tools/Harness/verify/judge.py": 326891,
+  "tools/Harness/verify/run_verify.py": 106392,
+  "tools/Harness/verify/mapping_trace.py": 211748,
   "tools/E2E/lib/nscm.ts": 105632,
   "tools/E2E/lib/probe.ts": 51842
  },
- "full_pass_fingerprint": "d554550746e7a7ae6474fe8ef5fb66e8bcfbe36c"
+ "full_pass_fingerprint": "a7cd5c6b21fda496a70963f6322be95d6e53cee1"
 }

@@ -1,78 +1,73 @@
 {
  "screen": "SCP0028",
- "made": "2026-11-20 09:57",
+ "made": "2026-11-20 13:21",
  "checklist": {
-  "version": 15,
-  "total": 1750,
+  "version": 16,
+  "total": 1825,
   "totals": {
-   "PASS": 861,
-   "FAIL": 11,
+   "PASS": 905,
+   "FAIL": 15,
    "판정필요": 19,
-   "미검증": 132,
-   "해당없음": 727
+   "미검증": 86,
+   "해당없음": 800
   },
   "axes": [
    {
     "axis": "1.디자인·다국어",
-    "total": 238,
-    "PASS": 118,
-    "FAIL": 0,
+    "total": 262,
+    "PASS": 127,
+    "FAIL": 5,
     "판정필요": 2,
-    "미검증": 33,
-    "해당없음": 85
+    "미검증": 24,
+    "해당없음": 104
    },
    {
     "axis": "2.AS-IS 로직",
-    "total": 211,
-    "PASS": 119,
+    "total": 212,
+    "PASS": 128,
     "FAIL": 0,
     "판정필요": 1,
-    "미검증": 5,
-    "해당없음": 86
+    "미검증": 0,
+    "해당없음": 83
    },
    {
     "axis": "3.SMOKE",
-    "total": 534,
-    "PASS": 234,
-    "FAIL": 5,
+    "total": 562,
+    "PASS": 250,
+    "FAIL": 4,
     "판정필요": 16,
-    "미검증": 57,
-    "해당없음": 222
+    "미검증": 40,
+    "해당없음": 252
    },
    {
     "axis": "4.CRUD",
-    "total": 444,
-    "PASS": 131,
+    "total": 461,
+    "PASS": 137,
     "FAIL": 6,
     "판정필요": 0,
-    "미검증": 33,
-    "해당없음": 274
+    "미검증": 20,
+    "해당없음": 298
    },
    {
     "axis": "5.권한별 CRUD",
-    "total": 31,
-    "PASS": 18,
+    "total": 35,
+    "PASS": 21,
     "FAIL": 0,
     "판정필요": 0,
     "미검증": 0,
-    "해당없음": 13
+    "해당없음": 14
    },
    {
     "axis": "분류 없음",
-    "total": 292,
-    "PASS": 241,
+    "total": 293,
+    "PASS": 242,
     "FAIL": 0,
     "판정필요": 0,
-    "미검증": 4,
-    "해당없음": 47
+    "미검증": 2,
+    "해당없음": 49
    }
   ],
   "action": [
-   [
-    "V-a788a765",
-    "G4",
-    "SCP0028 스냅샷 조회조건 Div 40"
-   ],
    [
     "V-be29b7a4",
     "F5",
@@ -82,6 +77,11 @@
     "V-57fd6f09",
     "E1",
     "SCP0028 입력검증 음수 INCREMENT"
+   ],
+   [
+    "V-db0f51c6",
+    "H6",
+    "SCP0028 스냅샷 팝업 Model"
    ],
    [
     "T-b3755ed5",
@@ -101,7 +101,7 @@
     "SCP0028 저장 중 로딩"
    ],
    [
-    "AD-34e30c64",
+    "AD-62e23a4b",
     "A6",
     "SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서"
    ],
@@ -132,10 +132,11 @@
    ]
   ],
   "ledger": {
-   "PASS": 38,
-   "미검증": 265
+   "PASS": 49,
+   "미검증": 282,
+   "FAIL": 3
   },
-  "unverified_sheet_rows": 492
+  "unverified_sheet_rows": 474
  },
  "fe_mapping": {
   "total": 0,
@@ -155,35 +156,33 @@
  },
  "counts": {
   "menu_id": "SCP0028",
-  "unverified_sheet": 492,
+  "unverified_sheet": 474,
   "unverified_by_reason": {
-   "측정못함": 132,
    "시험검사": 1,
-   "상속생략": 296,
-   "대상불명": 63
+   "측정못함": 86,
+   "상속생략": 338,
+   "대상불명": 49
   },
-  "direct_unmeasured": 203
+  "direct_unmeasured": 242
  },
  "ledger": {
   "menu_id": "SCP0028",
-  "generated": "2026-11-20T09:47:07",
+  "generated": "2026-11-20T13:07:35",
   "instances": 393,
-  "done": 277,
-  "open": 116,
+  "done": 305,
+  "open": 88,
   "by_type": {
    "W3": 7,
-   "W5": 7,
-   "W6": 2,
-   "W7": 28,
-   "W9": 72
+   "W5": 2,
+   "W7": 18,
+   "W9": 61
   },
   "by_owner": {
    "DB": 1,
    "화면 FE": 6,
-   "하네스": 7,
-   "E2E": 2,
-   "사람 판정 / AS-IS 원문 확인 → 재판정": 28,
-   "하네스·환경": 72
+   "하네스": 2,
+   "사람 판정 / AS-IS 원문 확인 → 재판정": 18,
+   "하네스·환경": 61
   },
   "suspect_not_implemented": 1,
   "by_check": {
@@ -198,31 +197,16 @@
    },
    "X-ROW": {
     "W3": 3,
-    "W9": 8
+    "W9": 7
    },
    "DB-SYN": {
     "W5": 1
    },
    "A6": {
-    "W5": 2,
-    "W7": 1
-   },
-   "G5": {
-    "W5": 3,
-    "W9": 10
-   },
-   "H6": {
-    "W5": 1,
-    "W6": 2,
-    "W7": 1,
-    "W9": 13
+    "W5": 1
    },
    "A1": {
-    "W7": 19
-   },
-   "M4": {
-    "W7": 7,
-    "W9": 5
+    "W7": 18
    },
    "F4": {
     "W9": 6
@@ -233,14 +217,17 @@
    "H2": {
     "W9": 13
    },
-   "I1": {
-    "W9": 1
-   },
    "E4": {
     "W9": 2
    },
    "G1": {
     "W9": 10
+   },
+   "G5": {
+    "W9": 6
+   },
+   "H6": {
+    "W9": 13
    },
    "M3": {
     "W9": 2
@@ -251,8 +238,8 @@
  "name": "Shipment_Lot_Size",
  "sources": [
   {
-   "file": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v15.xlsx",
-   "time": "2026-11-20 09:47"
+   "file": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v16.xlsx",
+   "time": "2026-11-20 13:10"
   },
   {
    "file": "nscm-fe/features/shipping/src/pages/shipment-lot-size/__asis-mapping__.md",
@@ -264,11 +251,11 @@
   },
   {
    "file": "Doc/verify/SCP0028/checklist_counts.json",
-   "time": "2026-11-20 09:47"
+   "time": "2026-11-20 13:10"
   },
   {
    "file": "Doc/verify/SCP0028/work_ledger_summary.json",
-   "time": "2026-11-20 09:47"
+   "time": "2026-11-20 13:07"
   }
  ]
 }

@@ -1,0 +1,44 @@
+{
+  "id": "20261120115806_VISION_3",
+  "at": "2026-11-20T11:58:06+09:00",
+  "ms": 1795143486192,
+  "source": "vision",
+  "status": "approved",
+  "sig": "selfcheck sn sync before incident",
+  "title": "설치본 차이(S3)는 자동 동기화를 먼저 하고 남은 차이만 사건으로 올림",
+  "evidence": "digest7d 사건 126건 중 R12 51건, R12:resolved 50. topRepeats R12|S3|CHANGELOG.md 8건, R12|S3|orchestra.js 3건, R12|S3|orch-selfcheck.js 3건. orch-selfcheck.js:279 syncIncidents(res, ids) 뒤 283~284줄 syncInstalled 와 syncIncidents(res, ['S3'])",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "before_after": "S3 차이로 R12 사건을 먼저 올리고 같은 회차 자동 동기화로 닫음 → 자동 동기화 조건(S1, S2 통과, S4 통과 또는 같은 지문 경고)이 맞으면 동기화를 먼저 하고 S3 를 다시 잰 뒤 syncIncidents 를 부름. 조건이 안 맞거나 동기화 뒤에도 차이가 남으면 종전대로 사건을 올림",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. 자가진단 시험에 '동기화 조건 충족 → R12 S3 사건 0건', '동기화 조건 미충족 → R12 S3 사건 1건' 2건 추가, 기대 통과",
+  "rollback": "git checkout -- tools/VibeManager/orch-selfcheck.js tools/VibeManager/test/t_orch_selfcheck.js 뒤 설치 폴더 동기화",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:43:46+09:00",
+      "by": "사용자 지시(Claude Code 세션 분류)",
+      "what": "권장안 승인. 분류 fix: R12 S3 사건 중복(올렸다 같은 회차에 닫음) 결함 수정. 사용자 지시 11-20 '버그성이나 시스템 관련 항목은 권장안으로 처리'. VMO 자동 반영(게이트 통과 조건)으로 반영"
+    },
+    {
+      "at": "2026-11-20T15:19:12+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    }
+  ],
+  "plain": {
+    "what": "VM 파일을 고칠 때마다 '설치본과 다름' 사건이 올라갔다가 몇 초 뒤 닫히던 것을 없앱니다. 자동으로 맞출 수 없는 차이만 사건으로 남습니다.",
+    "risk": "동기화가 사건 기록보다 먼저 일어나므로 Events 탭에서 동기화 이력은 사건 대신 처리 기록으로만 보입니다.",
+    "undo": "파일을 이전 판으로 돌리고 설치 폴더를 다시 동기화합니다."
+  },
+  "needsApproval": "큰 그림 점검 안 = 사용자 승인 뒤 반영(harness.json orch.visionAutoApply false)",
+  "impact": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795155552640,
+  "autoFp": "3134ce2392"
+}

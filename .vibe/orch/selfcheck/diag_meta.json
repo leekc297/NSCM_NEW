@@ -1,10 +1,10 @@
 {
- "lastMs": 1795101576236,
- "lastAt": "2026-11-20T00:19:36+09:00",
+ "lastMs": 1795152806634,
+ "lastAt": "2026-11-20T14:33:26+09:00",
  "manual": false,
- "log": ".vibe\\logs\\2026-11-20T00-16-41_claude_orch.log",
- "sec": 175,
- "costUsd": 1.7176727999999999,
- "lastResult": "개선안 3건 등록",
- "summary": "S8 fail 1건은 orch-selfcheck.js:190 이 S9 누적 건수 key 를 재발로 본 오판이고, 반영 실패 2건은 확인 기준 오류와 시험 파일 누락이라 고친 안을 새 sig 로 다시 올림. repeatFiles 는 CHANGELOG 2026-11-13 이후 절 91개 중 workbench.js 57절, quick.json 29절, orchestra.js 15절, harness.json 17절, orch-agent.js 11절을 대조했고 절마다 다른 기능 요청이라 묶지 않음(공통 원인이던 웹뷰 구문 수동 확인과 harness.json EPERM 은 known 에서 반영됨). S11 이번에 못 올린 파일은 workbench.js 333건, extension.js 51건, orchestra.js 7건이고 doc_style.py 개선안 반영 뒤 주석, 정규식 행이 빠진 건수로 다시 나눔. S10 로그 삭제는 known pending 이라 올리지 않았고, S6 미확인 107건은 창 다시 로드 뒤 사용자 화면 확인 대상이라 코드 개선안 없음."
+ "log": ".vibe\\logs\\2026-11-20T14-28-54_claude_orch.log",
+ "sec": 272,
+ "costUsd": 2.3110516,
+ "lastResult": "개선안 5건 등록",
+ "summary": "새로 확인한 결함은 잠금 시각 변환 오류(orch-state.js:104, server_guard.py:92 글자 at)와 정상 잠금 정리가 오류로 집계되는 문제이고, 반복 수정 파일은 CHANGELOG 절을 from 일자부터 대조했으나(workbench.js 80절, orchestra.js 34절, orch-watch.js 29절, extension.js 21절, job-runner.js 19절, orch-selfcheck.js 15절) 절마다 기능이 달라 한 원인으로 묶지 못함(orch-watch.js 약 10절이 중지 알림 전달 보완인데 모두 반영 끝남), failed 의 R2 반복 집계 안은 06:06 끊긴 반영 때 이미 들어가 시험을 통과하는 상태라 다시 올리지 않고 사람 판단으로 둠. S11 이번 미제출: workbench.js 210건(L132 DB MODE 지시문 9건, L1446 웹뷰 템플릿 34건, L1806~L3426 144건, ✖ ▶ 상태 표식 22건, 🛠️ 1건), 오탐이거나 메뉴 라벨이라 대상 아님: extension.js 1, history.js 2, jobs.js 1(메뉴 아이콘), orchestra.js 1(HTML 머리), "
 }

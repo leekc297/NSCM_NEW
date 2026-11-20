@@ -13,16 +13,18 @@ import * as path from 'node:path';
 import type { Locator } from '@playwright/test';
 
 import { test } from '../../../tools/E2E/fixtures/test';
-import { withFileLock } from '../../../tools/E2E/lib/writeguard';  // 2026-11-20 D1 동시 실행: 결과 파일 잠금
+import { PHASE, withFileLock } from '../../../tools/E2E/lib/writeguard';  // 2026-11-20 D1 동시 실행: 결과 파일 잠금
 import type { Nscm } from '../../../tools/E2E/lib/nscm';
 import { judgePeriodReverse } from '../../../tools/E2E/lib/shellcheck';
 import { dropdownOptions, parseCsv, probe } from '../../../tools/E2E/lib/probe';
 import { judgeLabel, loadLabelAliases } from '../../../tools/E2E/lib/labelalias';  // TO-BE 라벨 별칭(CR-092 SCP·SSP Valid→Active, 2026-10-30)
-import { clickSheetTab, closeVisibleDialogs, ensureRows, findCondAny as findCond, periodReverseTry, periodShiftEnd, pickComboOption, tagPopup, waitAlert } from '../../../tools/E2E/lib/smoke-extra';
+import { clickSheetTab, closeVisibleDialogs, condColForOpts, ensureRows, findCondAny as findCond, periodReverseTry, periodShiftEnd, pickComboOption, tagPopup, waitAlert } from '../../../tools/E2E/lib/smoke-extra';
 import { useScreenLookups, evalExpr, evalRules, loadAccountCtx, parseRules, type CondCtx } from '../../../tools/E2E/lib/condeval';  // 계정 그룹 컨텍스트(D3 GROUP 조건 · 2026-10-30)  // 모드 전환 뒤 숨은 조건까지(2026-10-29)
 import { staleKids } from '../../../tools/E2E/lib/cellclear';
 import { extraButtons } from '../../../tools/E2E/lib/extrabtn';
 import { combine, loadFormScen, loadResults, runFormScen, saveResult, scenariosOfRow, setVars } from '../../../tools/E2E/lib/formscen';  // 2026-11-16 폼 저장형 화면 시나리오
+import { asisControlColor, branchBody, guardBranch, isDestructive, judgeMsgBranch, onlyViaPopupButtons, popupButtonPaths, respSample, runtimeEditAtoms, type BtnPath } from '../../../tools/E2E/lib/btnpopup';  // 2026-11-20 T501~T505 팝업 버튼 경로
+import { labelVariants, msgTexts } from '../../../tools/E2E/lib/labeltrans';  // 2026-11-20 T501 버튼 글자 다른 언어
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
 useScreenLookups(ID);  // 2026-11-18 INLOOKUP 원자(공통 코드 값)
@@ -145,6 +147,146 @@ async function divFixedOf(root: import('@playwright/test').Locator, id: string):
   const shown = ((await cb.inputValue().catch(() => '')) || (await root.innerText().catch(() => ''))).replace(/\s+/g, ' ').trim().slice(0, 40);
   let asis = ''; try { for (const a of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', id, 'actions.csv'), 'utf8').replace(/^﻿/, ''))) if (a.kind === 'STATE' && /Division[^.]*\.Enabled$/i.test(a.target || '') && /^false$/i.test(String(a.value || '').trim())) { asis = `${a.target}=false · ${a.method}:${a.line}`; break; } } catch { /* 사실 없음 */ }
   return { shown, asis };
+}
+
+// 2026-11-20 T501~T504(SCP0028): 팝업을 여는 AS-IS 기능 버튼 경로(this.<btn>.Click → 팝업 → OK → FindInput·FindDelete) 사실 — 'BTN 팝업 경로' 시험과 G4·W4 E4 가 함께 쓴다
+const BTNPOP = (() => { try { const ents = ID ? parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), 'utf8').replace(/^﻿/, '')) : []; return { ents, ps: ID ? popupButtonPaths(ROOT, ID) : [] as BtnPath[] }; } catch { return { ents: [] as Record<string, string>[], ps: [] as BtnPath[] }; } })();
+const viaPopBtn = (meth: string): BtnPath | null => (meth ? onlyViaPopupButtons(BTNPOP.ents, BTNPOP.ps, meth) : null);
+const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/** T501: AS-IS 버튼 글자(Designer Text)와 같은 이름의 TO-BE 버튼 — 단축키 붙은 공용 툴바 단추('Delete(F9)' · T430)·대화상자·그리드·조회영역 안 버튼은 제외 */
+async function funcButton(nscm: Nscm, text: string): Promise<{ loc: Locator | null; names: string[] }> {
+  const names = [...new Set([text, ...labelVariants(text)].map(s => String(s || '').trim()).filter(Boolean))];
+  if (!names.length) return { loc: null, names };
+  const all = nscm.page.getByRole('button', { name: new RegExp(`^(?:${names.map(escRe).join('|')})$`, 'i') });
+  const n = Math.min(await all.count().catch(() => 0), 12);
+  for (let i = 0; i < n; i++) {
+    const b = all.nth(i); if (!(await b.isVisible().catch(() => false))) continue;
+    const inside = await b.evaluate(e => !!e.closest('[role="dialog"], [role="alertdialog"], .wj-flexgrid, [class*="searchArea" i], [class*="SearchArea"]')).catch(() => true);
+    if (!inside) return { loc: b, names };
+  }
+  return { loc: null, names };
+}
+type PopDrive = { opened: boolean; driven: boolean; why: string; trail: string[]; confirm: string; title: string; picked: string };
+/** T502·T503: 기능 버튼 → 팝업 → (진입 자동 조회 · 없으면 팝업 조회 · 필수 칸 알림이면 그 칸 첫 후보 선택 뒤 다시 조회) → 첫 행 체크 → OK → (확인창이 뜨면 confirmOk 일 때만 OK)
+ *  stopAtOpen = true 면 팝업이 열리는지까지만(G4). 저장 버튼은 누르지 않는다 */
+async function drivePopupPath(nscm: Nscm, text: string, opt: { confirmOk: boolean; stopAtOpen?: boolean }): Promise<PopDrive> {
+  const p = nscm.page; const trail: string[] = []; const out: PopDrive = { opened: false, driven: false, why: '', trail, confirm: '', title: '', picked: '' };
+  const dlgs = p.locator('[role="dialog"]:visible, [role="alertdialog"]:visible');
+  let fb = await funcButton(nscm, text);
+  if (!fb.loc) { out.why = `TO-BE 버튼 '${fb.names.join('/') || text}' 없음(공용 툴바 단축키 단추 제외)`; return out; }
+  if (!(await fb.loc.isEnabled().catch(() => false))) {
+    await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs();
+    fb = await funcButton(nscm, text);
+    if (!fb.loc || !(await fb.loc.isEnabled().catch(() => false))) { out.why = `TO-BE 버튼 '${fb.names.join('/')}' 비활성(조회 뒤에도)`; return out; }
+    trail.push('조회 뒤 버튼 활성');
+  }
+  const n0 = await dlgs.count().catch(() => 0);
+  await fb.loc.click({ timeout: 5_000 }).catch(() => undefined);
+  let pop: Locator | null = null;
+  for (let k = 0; k < 25 && !pop; k++) { await p.waitForTimeout(400); if ((await dlgs.count().catch(() => 0)) > n0) { const d = dlgs.last(); if (await d.locator('.wj-flexgrid, [class*="formItem"]').count().catch(() => 0)) pop = d; } }
+  if (!pop) { const al = await nscm.alertText().catch(() => ''); out.why = `'${text}' 클릭 → 팝업 안 열림${al ? ` · 알림 '${al.slice(0, 80)}'` : ''}`; await nscm.clearDialogs(); return out; }
+  out.opened = true;
+  out.title = ((await pop.locator('h1, h2, h3, [class*="title" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+  const closePop = async () => { const cl = pop!.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).last(); if (await cl.isVisible().catch(() => false)) await cl.click({ timeout: 3_000 }).catch(() => undefined); else await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(400); };
+  if (opt.stopAtOpen) { await closePop(); return out; }
+  const grid = pop.locator('.wj-flexgrid').first();
+  const rowsN = () => grid.evaluate(e => { const c = (e as unknown as Record<string, { rows?: { length: number } }>)['$WJ-CTRL']; return c && c.rows ? c.rows.length : 0; }).catch(() => 0);
+  for (let k = 0; k < 10 && !(await rowsN()); k++) await p.waitForTimeout(500);  // 진입 자동 조회
+  if (await rowsN()) trail.push(`팝업 진입 자동 조회 ${await rowsN()}행`);
+  const searchBtn = pop.getByRole('button', { name: /^(Search|Find|조회|검색|查询)/i }).first();
+  for (let round = 0; round < 4 && !(await rowsN()); round++) {
+    const nb = await dlgs.count().catch(() => 0); let alert = '';
+    await searchBtn.click({ timeout: 5_000 }).catch(() => undefined);
+    for (let k = 0; k < 120; k++) { await p.waitForTimeout(500); if (await rowsN()) break; if ((await dlgs.count().catch(() => 0)) > nb) { alert = ((await dlgs.last().innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim(); break; } }
+    if (await rowsN()) { trail.push(`팝업 조회 ${await rowsN()}행`); break; }
+    if (!alert) { trail.push('팝업 조회 0행'); break; }
+    await nscm.closeAlert('ok').catch(() => false); await p.waitForTimeout(300);
+    // 필수 알림 문구에 이름이 든 팝업 칸을 표시해 그 칸 콤보의 첫 후보(전체 제외)를 고른다
+    const lab = await pop.evaluate((el, al) => { const nz = (s: string) => s.toLowerCase().replace(/[^a-z0-9가-힣]/g, ''); const hit = [...el.querySelectorAll('[class*="formItem"]')].map(f => ({ f, l: ((f.firstElementChild as HTMLElement | null)?.innerText || '').replace(/[*\n]/g, ' ').trim() })).filter(z => z.l && z.f.querySelector('[role="combobox"]') && nz(al).includes(nz(z.l))).sort((a, b) => b.l.length - a.l.length)[0]; if (!hit) return ''; el.querySelectorAll('[data-e2e-popfld]').forEach(x => x.removeAttribute('data-e2e-popfld')); hit.f.setAttribute('data-e2e-popfld', '1'); return hit.l; }, alert).catch(() => '');
+    if (!lab) { out.why = `팝업 조회 → 알림 '${alert.slice(0, 80)}' · 알림이 가리키는 콤보 칸을 팝업에서 못 찾음`; await closePop(); return out; }
+    const picked = await pickComboOption(nscm, pop.locator('[data-e2e-popfld="1"]').first());
+    trail.push(`필수 알림 '${alert.slice(0, 60)}' → '${lab}' = '${picked || '(못 고름)'}'`);
+    if (!picked) { out.why = `필수 칸 '${lab}' 후보를 고르지 못함`; await closePop(); return out; }
+  }
+  if (!(await rowsN())) { out.why = out.why || `팝업 '${out.title}' 후보 0행 — 체크할 행 없음`; await closePop(); return out; }
+  // 첫 행 체크(행 체크 칸 클릭 → 안 되면 그리드 API 선택)
+  const isSel = () => grid.evaluate(e => { const c = (e as unknown as Record<string, { rows?: { length: number; [i: number]: { isSelected?: boolean } } }>)['$WJ-CTRL']; return !!(c && c.rows && c.rows.length && c.rows[0].isSelected); }).catch(() => false);
+  for (const sel of ['.wj-cells .wj-row input[type="checkbox"]', '.wj-rowheaders input[type="checkbox"]']) { if (await isSel()) break; const b = grid.locator(sel).first(); if (await b.count().catch(() => 0)) { await b.click({ timeout: 3_000, force: true }).catch(() => undefined); await p.waitForTimeout(300); } }
+  if (!(await isSel())) { await grid.evaluate(e => { const c = (e as unknown as Record<string, { rows: { [i: number]: { isSelected: boolean } }; invalidate: () => void }>)['$WJ-CTRL']; if (c) { c.rows[0].isSelected = true; c.invalidate(); } }).catch(() => undefined); await p.waitForTimeout(300); if (await isSel()) trail.push('첫 행 선택 = 그리드 API'); }
+  if (!(await isSel())) { out.why = `팝업 '${out.title}' 첫 행을 체크하지 못함`; await closePop(); return out; }
+  out.picked = await grid.evaluate(e => { const c = (e as unknown as Record<string, { rows: { [i: number]: { dataItem?: Record<string, unknown> } } }>)['$WJ-CTRL']; const d = (c && c.rows[0] && c.rows[0].dataItem) || {}; return Object.entries(d).filter(([k, v]) => v != null && typeof v !== 'object' && String(v).trim() && !/^(CHK|NO|ROW_?NO|_.*)$/i.test(k)).slice(0, 5).map(([k, v]) => `${k}=${String(v).slice(0, 30)}`).join(' · '); }).catch(() => '');
+  const nb2 = await dlgs.count().catch(() => 0);
+  await pop.getByRole('button', { name: /^(OK|확인|Apply|적용|Confirm)$/i }).first().click({ timeout: 5_000 }).catch(() => undefined);
+  for (let k = 0; k < 10; k++) {
+    await p.waitForTimeout(400);
+    if ((await dlgs.count().catch(() => 0)) > nb2) { const d = dlgs.last(); if (!(await d.locator('.wj-flexgrid').count().catch(() => 0))) { out.confirm = ((await d.innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 160); break; } }
+    if (!(await pop.isVisible().catch(() => false))) break;
+  }
+  if (out.confirm) {
+    if (!opt.confirmOk) { await nscm.closeAlert('cancel').catch(() => false); out.why = `OK 뒤 확인창 '${out.confirm.slice(0, 80)}' — 이 경로는 확인창 OK 를 누르지 않음`; await closePop(); return out; }
+    await nscm.closeAlert('ok').catch(() => false); trail.push(`확인창 '${out.confirm.slice(0, 60)}' → OK`);
+  }
+  out.driven = true;
+  return out;
+}
+/** T503: OK 뒤 ms 동안 보인 토스트·알림 글자(확인창·팝업 글자 제외) — 끝에 알림을 닫는다 */
+async function collectMsgs(nscm: Nscm, ms: number, skip: string[]): Promise<string[]> {
+  const p = nscm.page; const seen: string[] = []; const t0 = Date.now();
+  const add = (t: string) => { const v = String(t || '').replace(/\s+/g, ' ').trim(); if (v && !skip.some(s => s && (v === s || s.includes(v))) && !seen.includes(v)) seen.push(v); };
+  while (Date.now() - t0 < ms) {
+    for (const z of await p.locator('.MuiSnackbar-root, [role="alert"], [role="status"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) add(z);
+    const d = p.locator('[role="dialog"]:visible, [role="alertdialog"]:visible').last();
+    if (await d.isVisible().catch(() => false) && !(await d.locator('.wj-flexgrid').count().catch(() => 0))) add(await d.innerText().catch(() => ''));
+    await p.waitForTimeout(300);
+  }
+  await nscm.clearDialogs().catch(() => undefined);
+  return seen;
+}
+/** T505: 행 머리(행 상태 표시 칸 · data-status = CRUD_TYPE)의 표시·색 · 그 행 수정 표시 */
+const rowHeadState = (p: import('@playwright/test').Page, r: number) => p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c || !c.rows[${r}]) return null; try { c.scrollIntoView(${r}, 0); } catch (e) { } await new Promise(z => requestAnimationFrame(() => requestAnimationFrame(z))); const el = c.rowHeaders.getCellElement(${r}, 0); const d = c.rows[${r}].dataItem || {}; const st = el ? getComputedStyle(el) : null; return { status: el ? String(el.getAttribute('data-status') || '') : '', bg: st ? st.backgroundColor : '', text: el ? (el.textContent || '').trim().slice(0, 20) : '', crud: String(d.CRUD_TYPE || '') }; })()`).catch(() => null) as Promise<{ status: string; bg: string; text: string; crud: string } | null>;
+
+/** T505(2026-11-20 SCP0028 V-a99ddb18): 저장 때 수정 표시 행에 거는 색 규칙(AS-IS SaveData 'action == FlagM && 칸 조건' → 행 상태 칸 SetValue("")·SetBGColor) — 조회 결과에는 수정 표시 행이 없어 '조건 만족 0행' 이었다.
+ *  기존 행 1개를 편집기로 고쳐(칸 조건 값으로) 수정 표시를 만들고, 쓰기 요청을 전부 막은 채(probe.blockWrites · 서버 미전송) Save → 행 상태 칸(행 머리 data-status)의 표시·색을 읽는다.
+ *  끝에 화면을 다시 열어(openScreen = 새 주소 열기) 편집을 버린다. 쓰기 요청이 나가려 했으면 막은 건수를 증거에 남긴다 */
+async function h2RuntimeEdit(nscm: Nscm, cr: Record<string, string>, atoms: { flag: string; cols: { col: string; val: string }[] }, head: string): Promise<{ result: 'PASS' | 'FAIL' | 'ERROR'; why: string }> {
+  const p = nscm.page;
+  if (!atoms.cols.length) return { result: 'ERROR', why: `[측정 경로 없음] ${head} · 칸 조건 없음 — 어떤 편집으로 조건을 만들지 원문에 없음` };
+  const names = atoms.cols.map(a => a.col);
+  const readRows = (max: number) => p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const ns = ${JSON.stringify(names)}; const o = []; for (let i = 0; i < Math.min(c.rows.length, ${max}); i++) { const d = c.rows[i].dataItem; if (!d) { o.push(null); continue; } const r = { __crud: String(d.CRUD_TYPE || '') }; for (const n of ns) r[n] = d[n] == null ? '' : String(d[n]).trim(); o.push(r); } return o; })()`).catch(() => []) as Promise<(Record<string, string> | null)[]>;
+  const data = await readRows(200);
+  const cands = data.map((r, i) => (r && !r.__crud ? { i, need: atoms.cols.filter(a => (r[a.col] ?? '') !== a.val) } : null)).filter((z): z is { i: number; need: { col: string; val: string }[] } => !!z && z.need.length > 0).sort((a, b) => a.need.length - b.need.length);
+  let row = -1; let need: { col: string; val: string }[] = [];
+  for (const z of cands.slice(0, 20)) { let ok = true; for (const a of z.need) if ((await probe.editable(p, z.i, a.col)) !== true) { ok = false; break; } if (ok) { row = z.i; need = z.need; break; } }
+  if (row < 0) return { result: 'ERROR', why: `[측정 경로 없음] ${head} · 칸 조건(${atoms.cols.map(a => `${a.col}='${a.val}'`).join(', ')})을 편집으로 맞출 수 있는 기존 행 없음(앞 200행 · 후보 ${cands.length}행 · 편집 가능 칸 기준)` };
+  const base = data.findIndex((r, i) => !!r && !r.__crud && i !== row);
+  const hBase = base >= 0 ? await rowHeadState(p, base) : null;
+  const hBefore = await rowHeadState(p, row);
+  const want = asisControlColor(ROOT, (cr.color_edit || '').trim());
+  const guard = await probe.blockWrites(p); const typed: string[] = []; let msgs: string[] = []; let hAfter: Awaited<ReturnType<typeof rowHeadState>> = null; let hMid: Awaited<ReturnType<typeof rowHeadState>> = null; let unmet = '';
+  try {
+    for (let k = 0; k < 2; k++) for (const a of need) { const now = ((await probe.value(p, row, a.col)) || '').trim(); if (now === a.val) continue; const ok = await probe.setByEditor(p, row, a.col, a.val); typed.push(`${a.col} '${now}'→'${a.val}'${ok ? '' : '(편집기 입력 실패)'}`); await p.waitForTimeout(300); }
+    const r1 = (await readRows(row + 1))[row] || null;
+    const miss = atoms.cols.filter(a => !r1 || (r1[a.col] ?? '') !== a.val);
+    hMid = await rowHeadState(p, row);
+    if (miss.length || !r1 || r1.__crud !== atoms.flag) unmet = `편집 뒤 ${miss.map(a => `${a.col}='${r1 ? r1[a.col] : '?'}'(기대 '${a.val}')`).join(', ') || '칸 조건 충족'} · 수정 표시 '${r1 ? r1.__crud : '?'}'(기대 '${atoms.flag}')`;
+    else {
+      await (await nscm.toolbarButton('Save')).click({ timeout: 10_000 }).catch(() => undefined);
+      // 저장 확인창이 뜨면 OK(뒤 쓰기 요청은 막혀 서버로 가지 않는다) · 그 뒤 알림·토스트
+      msgs = await collectMsgs(nscm, 5_000, []);
+      await p.waitForTimeout(800);
+      hAfter = await rowHeadState(p, row);
+    }
+  } finally { await guard.off(); }
+  const fmt = (h: Awaited<ReturnType<typeof rowHeadState>>) => (h ? `표시 '${h.status || h.text || '-'}'·색 ${h.bg || '-'}·CRUD '${h.crud || '-'}'` : '읽지 못함');
+  const ev = `${head} · r${row} 편집 ${typed.join(', ') || '-'} · 행 머리(행 상태 칸) 편집 전 ${fmt(hBefore)} → 편집 뒤 ${fmt(hMid)} → Save 뒤 ${fmt(hAfter)} · 수정 안 한 행 r${base} ${fmt(hBase)} · 막은 쓰기 요청 ${guard.st.n}건(서버 미전송) · 알림 '${msgs.join(' | ').slice(0, 120) || '없음'}' · AS-IS ${cr.ref} 수정 표시 지움 + ${cr.color_edit || '-'}${want ? `(${want})` : ''} 칠함 · 규칙 칸 ${cr.columns || '-'} = TO-BE 행 머리 data-status`;
+  await nscm.openScreen(ID).catch(() => undefined);  // 편집 버림(저장 안 함)
+  if (unmet) return { result: 'ERROR', why: `[측정 전제 미충족] ${unmet} · ${ev}` };
+  if (!hAfter) return { result: 'ERROR', why: `[측정 실패] Save 뒤 행 머리를 읽지 못함 · ${ev}` };
+  if (guard.st.n > 0) return { result: 'FAIL', why: `Save 가 이 행 저장 요청을 냄(막음) — AS-IS 는 이 행의 수정 표시를 지우고 저장 대상에서 뺌 · ${ev}` };
+  const still = hAfter.status === atoms.flag || hAfter.crud === atoms.flag;
+  const colorOk = !!hAfter.bg && ((!!want && hAfter.bg.replace(/\s+/g, '') === want.replace(/\s+/g, '')) || (!!hBase && hAfter.bg === hBase.bg));
+  if (still) return { result: 'FAIL', why: `Save 뒤에도 행 상태 칸에 수정 표시 '${atoms.flag}' 유지 — AS-IS 는 수정 표시를 지우고 ${cr.color_edit || ''} 로 칠함 · ${ev}` };
+  return { result: colorOk ? 'PASS' : 'FAIL', why: `${colorOk ? '수정 표시 지워짐 · 행 상태 칸 색 = 수정 안 한 행·AS-IS 색과 같음' : `수정 표시는 지워졌으나 행 상태 칸 색 ${hAfter.bg} ≠ AS-IS ${want || cr.color_edit || '-'} · 수정 안 한 행 ${hBase ? hBase.bg : '-'}`} · ${ev}` };
 }
 
 test.describe(`검증엔진 ${ID} @trace`, () => {
@@ -890,6 +1032,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       // 2026-11-12 CR-103(사용자 결정): AS-IS 편집(Edit) 버튼 진입점에서만 닿는 메시지 = TO-BE 는 편집 버튼이 없고 조회 때 편집 가능 상태면 자동 편집 모드 — 메시지 없어도 정상(해당없음 · TO-BE 룰)
       if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && editReach.has(e.meth)) { put(rid, 'NA', `${e.msg || '(동적)'} — ${e.meth} = AS-IS 편집(Edit) 버튼 경로 메시지 · TO-BE 는 편집 버튼 없이 조회 시 편집 가능 상태면 자동 편집 모드 — 메시지 없어도 정상(TO-BE 룰 CR-103 · 편집 가능·배경색은 D1·H2 에서 판정)`); continue; }
       // 2026-11-18 SCP0111 V-f679aa42·V-8f1324a1: 다른 시험에 판정을 넘기는 행 — 부분 재판정(--only)에서 이 시험만 돌면 앞 실행의 확정 판정(NA 'catch 블록 예외 메시지')을 판정필요로 덮었다 → 이전 결과에 확정 판정(PASS·FAIL·NA)이 있으면 쓰지 않는다
+      // T504(2026-11-20 SCP0028 T-0caf6c62·T-4677b9e5): 팝업 버튼에서만 닿는 메서드(FindDelete 등)의 결과 분기 메시지는 'BTN 팝업 경로' 시험이 재므로 여기서 판정필요를 쓰지 않는다
+      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && viaPopBtn(e.meth) && guardBranch(e.guard)) continue;
       if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth)) { const pv = prevVerdict(rid); if (pv && ['PASS', 'FAIL', 'NA'].includes(pv.result)) continue; put(rid, '판정필요', `${e.msg || '(동적)'} — ${e.meth} 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(${e.meth})에서 판정`); continue; }
       const viol = planViolation(e.guard, e.vars);
       if (!viol) {
@@ -1489,6 +1633,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       }
       const baseRows = await probe.rowCount(p);
       const o = await comboOpts(box.root);
+      { const cc = await condColForOpts(nscm, o.texts, col, base); col = cc.col; base = cc.base; }  // T499(V-dd4f9db4): 후보 글자와 값이 가장 많이 겹치는 결과 칸(숨은 칸 포함)
       if (o.multi) {
         // ALL 해제 → 결과에 실제로 있는 값 1개 체크 → 조회
         const freq = new Map<string, number>(); for (const v of base) if (v) freq.set(v, (freq.get(v) || 0) + 1);
@@ -2523,6 +2668,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
           const it = data[i]; const ctx: CondCtx = { group: ac.group, admin: ac.admin, div: curDiv, self: '', rows: data, col: (n: string) => { const k = Object.keys(it).find(q => q.toUpperCase() === n.toUpperCase()); return k ? it[k] : null; } };
           try { if (evalExpr(cond, ctx)) hit.push(i); } catch { unk++; }
         }
+        // T505(2026-11-20 SCP0028 V-a99ddb18): 조건에 실행 중 수정 표시(RAW action == FlagM)가 들면 조회 결과에는 만족 행이 없다 — 편집으로 조건을 만들고 쓰기 차단 Save 로 잰다
+        if (!hit.length) { const ra = runtimeEditAtoms(cond); if (ra && ra.flag === 'M') { const r2 = await h2RuntimeEdit(nscm, cr, ra, `계정 ${cur} · Div ${curDiv || '-'} · 조회 ${data.length}행 · 조건 ${cond.slice(0, 160)}`); put(x.row_id, r2.result, r2.why); continue; } }
         if (!hit.length) { put(x.row_id, 'ERROR', `[측정 경로 없음] 계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${curDiv || '-'} 조회 ${data.length}행 중 조건 만족 0행${unk ? ` · 평가 불가 ${unk}행` : ''} — 조건 ${cond.slice(0, 200)}`); continue; }
         const cells: { r: number; b: string; cls: string; bg: string }[] = [];
         for (const r of hit.slice(0, 4)) {
@@ -2555,6 +2702,15 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       // T459(2026-11-20 SCP0005 T-85f3a8bb·T-7e1a41bb): popup_args 에 클릭 메서드 행은 있는데 TO-BE 칸 라벨(host_label)이 빈 경우 — AS-IS 인자 원천 조회조건 컨트롤 이름(txtFromCity.Text → 'From City')으로 칸을 찾는다
       let labs: string[] = hit ? [hit.host_label, ...hit.host_label.split(/\s*\/\s*/)] : [];
       if (!hit) { const rowsM = pa.filter(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase()); if (rowsM.length) { hit = rowsM[0]; labs = [...new Set(rowsM.map(a => (/^(?:txt|cbo|cmb|clb|usr)([A-Z]\w*)\./.exec(a.asis_source || '') || [])[1] || '').filter(Boolean).map(n => n.replace(/([a-z0-9])([A-Z])/g, '$1 $2')))].reverse(); } }
+      // T501(2026-11-20 SCP0028 T-d6ad4a4e btnDelete): 클릭 메서드 행은 있는데 인자 원천이 조회조건 컨트롤이 아닌 버튼('"D"' · sDivision_id) = 조회조건 돋보기가 아닌 기능 버튼(TO-BE 버튼영역 'Delete' → 일괄삭제 팝업).
+      //   AS-IS 버튼 글자(props.csv Designer Text)와 같은 이름의 TO-BE 버튼(다른 언어 글자 포함 · 단축키 붙은 공용 툴바 'Delete(F9)' 제외 T430)을 눌러 팝업이 열리는지 재고 닫는다(선택·OK 없음)
+      if (hit && !labs.length) {
+        const bp = BTNPOP.ps.find(b => b.btn.toLowerCase() === name.toLowerCase());
+        if (!bp || !bp.text) { put(x.row_id, 'ERROR', `[측정 경로 없음] AS-IS ${name} 은 팝업 ${hit.asis_popup} 을 여는 기능 버튼인데 Designer 글자(props.csv Text)·진입점(actions_entries.csv this.${name}.Click) 사실 없음`); continue; }
+        const dv = await drivePopupPath(nscm, bp.text, { confirmOk: false, stopAtOpen: true });
+        put(x.row_id, dv.opened ? 'PASS' : /비활성/.test(dv.why) ? 'ERROR' : 'FAIL', `${dv.opened ? '' : /비활성/.test(dv.why) ? '[측정 전제 미충족] ' : ''}AS-IS 기능 버튼 ${name} '${bp.text}'(${hit.asis_ref}) → 팝업 ${hit.asis_popup} · TO-BE 버튼영역 '${bp.text}' ${dv.opened ? `표시·활성 · 눌러서 팝업 '${dv.title || '(제목 없음)'}' 열림(닫음)` : `→ ${dv.why}`}${dv.trail.length ? ` · ${dv.trail.join(' · ')}` : ''} — 조회조건 칸 돋보기가 아닌 기능 버튼(인자 원천 ${pa.filter(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase()).map(a => a.asis_source).join(', ')})`);
+        await nscm.expandSearchArea(true).catch(() => undefined); continue;
+      }
       if (!hit || !labs.length) { put(x.row_id, 'ERROR', `[측정 경로 없음] AS-IS ${name} 클릭 메서드가 popup_args.csv 에 없음(팝업을 여는 버튼인지 미확인)`); continue; }
       await nscm.expandSearchArea(true).catch(() => undefined);
       let box = null as Awaited<ReturnType<typeof findCond>>; for (const l of hit.host_label ? [labs] : labs.map(l => [l])) { const b0 = await findCond(nscm, l, `g4btn_${name}`); if (b0 && (!box || (await b0.root.locator('button').first().isVisible().catch(() => false)))) { box = b0; if (await b0.root.locator('button').first().isVisible().catch(() => false)) break; } }
@@ -2638,6 +2794,94 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       }
     } finally {
       if (cur !== ACCT.account && ACCT.account) await nscm.loginAs(ACCT.account).catch(() => undefined);
+    }
+  });
+  // 2026-11-20 T502·T503(SCP0028 T-6b9a8ce8 F4 · T-0caf6c62·T-4677b9e5 E4 · V-86e7f1e2·V-a89007be G1): AS-IS 기능 버튼 → 팝업 → OK → 후속 메서드(팝업 버튼에서만 닿는 메서드) 경로를 구동한다.
+  //   ① 읽기 경로(메서드 엔드포인트 종류 GET·LOG · 예 FindInput): 팝업 OK 로 나간 호출(원장 callProc 시트·버튼 = PROC)을 기록해 F4 판정(HTTP·응답 code·5xx). Save 는 누르지 않고 끝에 화면을 다시 열어 버린다
+  //   ② 데이터 변경 경로(종류 SAVE · 예 FindDelete): 지운 행을 되돌릴 복원 경로가 없다(cleanup_spec editonly · restore_touched 키 없는 복원은 '저장이 지운 행' 대상 밖).
+  //      그래서 데이터 변경 요청은 서버로 보내지 않고(page.route fulfill) 같은 시트·버튼의 실제 성공 응답 표본(이전 실저장 증거 '<sheet>/<btn>:200 응답=')으로 답한다.
+  //      AS-IS 'Rows[0][0] == 리터럴' 성공 분기 = 표본 그대로 · else 분기 = 그 값만 다른 값으로 바꾼 표본. 화면 메시지를 AS-IS·짝 TO-BE 문구와 의미(성공·오류 · 삭제·저장)로 대조한다.
+  //      표본이 없으면 요청을 끊고(서버 미전송) ERROR
+  test('BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드', async ({ nscm }) => {
+    const ledger = ID ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
+    if (!BTNPOP.ps.length || !ledger.length) return;
+    type E4 = { meth: string; msg: string; tobe: string; text: string; guard: string };
+    const e4Of = (r: Record<string, string>): E4[] => { try { return (JSON.parse(r.condition || '{}').e4 || []) as E4[]; } catch { return []; } };
+    type MsgRow = { rid: string; meth: string; msg: string; guard: string; expect: string[]; bp: BtnPath };
+    const msgRows: MsgRow[] = [];
+    const trE4 = ledger.filter(r => r.source === 'TRACE' && r.rule_id === 'E4' && !/"dead":\s*"/.test(r.condition || ''));
+    for (const r of trE4) for (const e of e4Of(r)) { const bp = viaPopBtn(e.meth); if (bp && guardBranch(e.guard)) { msgRows.push({ rid: r.row_id, meth: e.meth, msg: e.msg, guard: e.guard, expect: [e.text, ...msgTexts(e.tobe)].filter(Boolean), bp }); break; } }
+    for (const r of ledger.filter(y => y.source === 'ASIS' && (y.rule_id === 'G1' || y.rule_id === 'E4') && /^MSG\d+$/.test(y.target || ''))) {
+      const meth = ((r.asis_ref || '').trim().split(/\s+/).pop() || '').split('.').pop() || ''; const bp = viaPopBtn(meth); if (!bp || !guardBranch(r.condition || '')) continue;
+      const tr = trE4.flatMap(t => e4Of(t)).find(e => e.msg === r.target && e.meth === meth);
+      msgRows.push({ rid: r.row_id, meth, msg: r.target, guard: r.condition || '', expect: tr ? [tr.text, ...msgTexts(tr.tobe)].filter(Boolean) : [], bp });
+    }
+    type SpRow = { rid: string; proc: string; calls: { sheet: string; btn: string }[]; bp: BtnPath; meth: string; kind: string };
+    const spRows: SpRow[] = [];
+    for (const r of ledger.filter(y => y.source === 'TRACE' && y.rule_id === 'F4' && /"et":\s*"SP"/.test(y.condition || '') && !/"dead":\s*"/.test(y.condition || ''))) {
+      const c = condOf(r); const proc = String(c.name || '').toUpperCase();
+      for (const bp of BTNPOP.ps) { const m = bp.methods.find(mm => mm.eps.some(e => e.tobeProc.toUpperCase() === proc) && !!viaPopBtn(mm.method) && !isDestructive(mm)); if (m) { spRows.push({ rid: r.row_id, proc, calls: (c.callProc || []).map(z => ({ sheet: z.sheet, btn: z.btn })), bp, meth: m.method, kind: (m.eps.find(e => e.tobeProc.toUpperCase() === proc) || { kind: '' }).kind }); break; } }
+    }
+    if (!msgRows.length && !spRows.length) return;
+    test.setTimeout(600_000); const p = nscm.page;
+    const r0 = await openReady(nscm); if (!r0.authorized) { for (const x of [...msgRows.map(m => m.rid), ...spRows.map(s => s.rid)]) put(x, 'ERROR', '[측정 경로 없음] 화면 권한 없음'); return; }
+    const noDrive: PopDrive = { opened: false, driven: false, why: '구동 전 중단', trail: [], confirm: '', title: '', picked: '' };
+    // ② 데이터 변경 경로 결과 분기 메시지 — 버튼·메서드·분기마다 한 번 구동
+    const samples = [...PREV.values()].map(z => String(z.evidence || '')).concat(ledger.map(z => z.evidence || ''));
+    const groups = new Map<string, MsgRow[]>();
+    for (const m of msgRows) { const g = guardBranch(m.guard); if (!g) continue; const k = `${m.bp.btn}|${m.meth}|${g.literal}|${g.elseBranch ? 'else' : 'if'}`; groups.set(k, [...(groups.get(k) || []), m]); }
+    const WRITE_RE = /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i;
+    for (const [k, ms] of groups) {
+      const [, meth, literal, br] = k.split('|'); const bp = ms[0].bp; const mobj = bp.methods.find(z => z.method === meth);
+      if (!mobj || !isDestructive(mobj)) { for (const m of ms) put(m.rid, 'ERROR', `[측정 경로 없음] ${m.msg} — ${bp.btn} → ${meth} 는 읽기 경로의 결과 분기 메시지 · 서버 응답을 바꿔야 재현(읽기 경로 응답 대체 미구현)`); continue; }
+      const flip = br === 'else'; const held: string[] = []; let noSample = '';
+      const h = async (rt: import('@playwright/test').Route) => {
+        const mm = /\/([^/]+)\/([^/]+)\/([^/]+)\/call-proc/.exec(rt.request().url()); const sheet = mm ? decodeURIComponent(mm[2]) : ''; const btn = mm ? decodeURIComponent(mm[3]) : '';
+        held.push(`${sheet}/${btn} ${(rt.request().postData() || '').slice(0, 120)}`);
+        const smp = respSample(samples, sheet, btn); const bb = smp ? branchBody(smp, literal, flip) : null;
+        if (!bb) { noSample = `${sheet}/${btn} 실제 응답 표본${smp ? `에 '${literal}' 값 칸 없음` : ' 없음'}`; await rt.abort('blockedbyclient').catch(() => undefined); return; }
+        await rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(bb.body) }).catch(() => undefined);
+      };
+      let dv: PopDrive = noDrive; let seen: string[] = [];
+      await p.route(WRITE_RE, h);
+      try { dv = await drivePopupPath(nscm, bp.text, { confirmOk: true }); if (dv.driven) seen = await collectMsgs(nscm, 8_000, [dv.confirm]); }
+      finally { await p.unroute(WRITE_RE, h).catch(() => undefined); }
+      const path0 = `AS-IS ${bp.btn} '${bp.text}' → 팝업 ${bp.popup} → OK → ${meth}(결과 ${flip ? `'${literal}' 아님 · else 분기` : `'${literal}'`}) · TO-BE '${bp.text}' 팝업 '${dv.title || '-'}' 첫 행(${dv.picked || '-'}) 체크 → OK${dv.confirm ? ` → 확인창 '${dv.confirm.slice(0, 50)}' OK` : ''} · 데이터 변경 요청 ${held.length}건 서버 미전송(${held.map(z => z.split(' ')[0]).join(',') || '-'}) · 가짜 응답 = 같은 시트·버튼 실제 성공 응답 표본${flip ? `의 '${literal}' 값만 바꿈` : ''}${dv.trail.length ? ` · ${dv.trail.join(' · ')}` : ''}`;
+      for (const m of ms) {
+        if (!dv.driven) { put(m.rid, 'ERROR', `[측정 경로 없음] ${m.msg} · ${dv.why} · ${path0}`); continue; }
+        if (noSample) { put(m.rid, 'ERROR', `[측정 경로 없음] ${m.msg} · ${noSample} — 가짜 응답 형식 근거 없음(요청 끊음 · 서버 미전송) · 실저장 시험(@verify CRUD)이 같은 시트·버튼 응답을 남긴 뒤 재측정 · ${path0}`); continue; }
+        if (!held.length) { put(m.rid, 'ERROR', `[측정 실패] ${m.msg} · OK 뒤 데이터 변경 요청 없음 — ${meth} 결과 분기를 만들지 못함 · 화면 '${seen.join(' | ').slice(0, 100) || '없음'}' · ${path0}`); continue; }
+        if (!m.expect.length) { put(m.rid, 'ERROR', `[측정 경로 없음] ${m.msg} · 같은 메서드 E4 대조(짝 TO-BE 문구) 없음 — 기대 문구 미상 · 화면 '${seen.join(' | ').slice(0, 100) || '없음'}' · ${path0}`); continue; }
+        const j = judgeMsgBranch({ expect: m.expect, seen, driven: true, why: '' });
+        put(m.rid, j.result, `${m.msg} · ${j.why.replace(/^\s*→\s*/, '')} · [가짜 응답 · 서버 미전송] ${path0}`);
+      }
+      await openReady(nscm);
+    }
+    // ① 읽기 경로 PROC(F4) — 팝업 OK 로 나간 호출 기록
+    for (const s of spRows) {
+      const fake = !!(process.env.VERIFY_NO_SAVE || process.env.CL_FAKE_SAVE);
+      const z0 = s.calls[0]; const reRoute = z0 ? new RegExp(`/${escRe(z0.sheet)}/${escRe(z0.btn)}/call-proc`, 'i') : null;
+      const hc = async (rt: import('@playwright/test').Route) => { await rt.continue().catch(() => undefined); };
+      // 가짜 저장 실행(VERIFY_NO_SAVE·CL_FAKE_SAVE)은 버튼 이름(INS…)으로 이 호출도 가짜 응답으로 돌린다 — 읽기 종류(GET·LOG) PROC 이므로 이 호출만 서버로 보낸다. 동시 실행 단계(read)는 쓰기 보호에 맡긴다
+      const routed = !!reRoute && fake && PHASE !== 'read' && /^(GET|LOG)$/.test(s.kind);
+      if (routed) await p.route(reRoute!, hc);
+      const c0 = nscm.calls.length; let dv: PopDrive = noDrive;
+      try {
+        dv = await drivePopupPath(nscm, s.bp.text, { confirmOk: false });
+        if (dv.driven) for (let k = 0; k < 180; k++) { if (nscm.calls.slice(c0).some(c => s.calls.some(z => c.sheet === z.sheet && c.btn === z.btn) && c.done)) break; await p.waitForTimeout(500); }
+      } finally { if (routed) await p.unroute(reRoute!, hc).catch(() => undefined); }
+      const after = nscm.calls.slice(c0); const hitC = after.filter(c => s.calls.some(z => c.sheet === z.sheet && c.btn === z.btn));
+      const msgs = await collectMsgs(nscm, 1_500, []);
+      const path0 = `AS-IS ${s.bp.btn} '${s.bp.text}' → 팝업 ${s.bp.popup} → OK → ${s.meth} → ${s.proc}(${s.kind || '종류 미상'}) · TO-BE '${s.bp.text}' 팝업 '${dv.title || '-'}' 첫 행(${dv.picked || '-'}) 체크 → OK${dv.trail.length ? ` · ${dv.trail.join(' · ')}` : ''} · Save 안 누름(화면 다시 열어 버림)`;
+      if (!dv.driven) put(s.rid, 'ERROR', `[측정 경로 없음] ${dv.why} · ${path0}`);
+      else if (!hitC.length && PHASE === 'read') put(s.rid, 'ERROR', `[측정 경로 없음] 동시 실행 단계 쓰기 보호가 ${s.calls.map(z => `${z.sheet}/${z.btn}`).join(',')} 요청을 끊음 — 차례 실행 단계에서 재측정 · ${path0}`);
+      else if (!hitC.length) put(s.rid, 'FAIL', `팝업 OK 뒤 ${s.calls.map(z => `${z.sheet}/${z.btn}`).join(',') || '(callProc 없음)'} 호출 0건 · 나간 호출 ${[...new Set(after.map(c => `${c.sheet}/${c.btn}`))].join(',') || '없음'} · 알림 '${msgs.join(' | ').slice(0, 100) || '없음'}' — AS-IS 는 팝업 OK 뒤 ${s.meth} 에서 이 PROC 짝 SP 호출 · ${path0}`);
+      else {
+        const bad = hitC.filter(c => c.status >= 400 || /"(?:code|CODE)"\s*:\s*"?-?[1-9]\d*"?/.test(c.res || '')); const se = nscm.serverErrors.filter(e => hitC.some(c => e.url && c.url.startsWith(e.url.slice(0, 120))));
+        const desc = hitC.map(c => `${c.sheet}/${c.btn} HTTP ${c.status} · 응답 code ${(/"code"\s*:\s*"?(-?\d+)/.exec(c.res || '') || [])[1] ?? '-'} · 행 ${c.rows ?? '-'}`).join(' | ');
+        put(s.rid, bad.length || se.length ? 'FAIL' : 'PASS', `${desc}${se.length ? ` · 서버 오류 ${se.map(e => `${e.status} ${String(e.body || '').slice(0, 80)}`).join(' / ')}` : ''}${fake ? ' · 가짜 저장 실행에서도 읽기 종류 PROC 이라 서버로 보냄' : ''} · 알림 '${msgs.join(' | ').slice(0, 80) || '없음'}' · ${path0}`);
+      }
+      await openReady(nscm);  // 불러온 후보·편집을 버린다(저장 안 함)
     }
   });
 });

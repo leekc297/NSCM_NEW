@@ -711,3 +711,20 @@
 | T473 | SSP0005 EG-57ab9048 '실전송 건수 calendar TO-BE 0행' FAIL | 조회 1회에 본 조회·보조 조회(calendar)가 함께 나가면 마지막 호출(보조)을 기록하고 행 수는 본 그리드 것을 기록 | _verify.spec.ts 실전송 건수(A1): 응답 행 수 = 그리드 행 수인 호출 중 마지막 선택 | tsc 0 · E2E 동작 미측정 |
 | T474 | SSP0005 EG022 8행·EG271 1행 'Div 선택 실패' | authprobe selectDiv 가 다중 선택 Division 에서 옵션을 눌러 기존 선택에 더하거나 빼고, 입력값(칩 칸은 빈 값)으로 확인 | selectDiv: 칩·지우기 버튼이면 먼저 비우고 고른 뒤 닫음 · 칩 1개 앞 토큰으로 확인 | tsc 0 · E2E 동작 미측정 |
 | T475 | SSP0005 '조회 결과 0행' 데이터전제 77행 외 0행 파생 검사기공백 | ① ensureRows Division 순회가 '보이는 첫 콤보'(Company)를 Division 으로 봐 순회 0회 ② Division·기간 외 단일 선택 조건(Company 기본값 AA00, SSP_MST_SHIP_CALENDAR 0행 · 데이터 HQ00 등 8개 Company)을 바꾸지 않음 | smoke-extra.ts divSweep 라벨 Div·Division 칸 우선 · sweepCondCombos(칩 없는 단일 선택 콤보 후보 칸마다 최대 8개, 기간 확대 전) · _verify.spec.ts Division 컬럼(A5) 0행 때 같은 순회 | tsc 0 · 사내 DB 실측(Company별 행 수) · E2E 동작 미측정 |
+| T480 | SCP0028 G5 3행, H6 3행, M4 5행(clbFromSite, clbToSite, TRANS_MODE_CODE, btnInput, btnDelete) 미검증. asis_ref 가 팝업 클래스 줄 인용 | FE 대조표 행 글의 '팝업' 낱말(EVT_POPUP)로 G5, H6, M4 를 붙이고 행에 적힌 이름 전부를 대상으로 잡음. 셀 이벤트 칸 제한은 AS-IS 액션 행에만, M4 는 제한 없음 | mapping_trace.py popup_linkage(AS-IS 메인 클래스 actions, events, controls, popup_args 기준 연결 확인. 연결 없음 확인 때만 해당없음과 파일:줄), to_ledger asis_ref | selftest 108/108, SCP0028 드라이런 11/11, 93화면 1,522건 중 해당없음 240 |
+| T485 | SCP0028 V-c346a4a2 H10 '편집 중 Input → MSG00680' FAIL | P15 DM-52 가 AS-IS 차단 없는 버튼까지 생성. CR-022 는 차단 메시지 코드 규칙 | gen_expect.py DM-52 반복문(Click 핸들러 2단계 안 차단 메시지 있는 버튼만) | DM-52 행 58화면 36 → 8 |
+| T486 | SCP0028 EG-bd80125c MS1 고정 한글 | remember(MSG.X, '기본') 같은 감싼 함수의 기본 문구 미인식 | i18n_static.py wrap_default_code(첫 인자가 KO 등록 코드일 때만) | selftest 12/12 |
+| T487 | SCP0028 EG-2644dff3 H6 AI 검토가 CR-005 로 FAIL → PASS | AI 반영이 FAIL 근거와 같은 룰, 같은 출처 문서를 허용. 무관한 AS-IS 인용 1건으로 반영 | llm_review.py same_rule_block, decide | selftest 5건 추가, SCP0005 3행 반영 빠짐 |
+| T488 | SCP0028 T-653f1a5d, T-6dc0e2d5 A6, T-52d59336 DB-SYN 미검증 | TO-BE 전용 SP, BE 매퍼 공용 SP 의 정렬, 시노님 측정 경로 없음 | sort_check.py TO-BE 전용 SP(CR-075 ①③), syn_check.py ①-c | sort_check selftest 10/10, syn_check.csv 3행 OK |
+| T489 | SCP0028 V-5d06fca9 B6, V-480372c9, V-86b2f489 G5, V-8da88867 A7 | 기준표 0행 화면 B6 기대 없음, 상태 변수 경유 고정 플래그 미추적, golden 인자 원천 사유 없음 | judge.py B6·A7, popup_args_check.py state_literal_trace, golden.py sqllog_args·no_arg_source_note | popup_args selftest 10/10 |
+| T496 | SCP0028 K3 '미포함: 팝업 그리드(이 시험은 메인 그리드만)' 5행 | K3 시험이 팝업을 열지 않음. Shift, 드래그 미측정 | _verify.spec.ts K3, tools/E2E/lib/popk3.ts, popk3run.ts | tsc 0, popk3.selftest 40/40 |
+| T497 | SCP0028 V-db17a330 G2 Model 측정 경로 없음 | G8/G9 시험이 G2 를 고르지 않음. _trace 는 텍스트 칸 G2 를 건너뜀 | _verify.spec.ts G8/G9 시험 | tsc 0 |
+| T498 | SCP0028 V-99331be4 G5 Model 측정 경로 없음 | SEARCH G5 는 G10 행이 있을 때만 잼 | _verify.spec.ts G5, popk3run.condPopupArgs | tsc 0 |
+| T499 | SCP0028 V-dd4f9db4 G1 From Site 임의 후보 0행 | 후보는 코드, 라벨 칸은 설명. 숨은 코드 칸을 보지 않음 | tools/E2E/lib/condcol.ts, smoke-extra.ts condColForOpts, _trace.spec.ts 멀티선택 | selftest 6건, tsc 0 |
+| T500 | SCP0028 V-04302ccf 신규 입력 그리드 붙여넣기 등 '별도 확인' | K3 키에 없고 E6 는 K3 행을 받지 않음 | _verify.spec.ts E6_IN_K3, 붙여넣기, 병합 셀 | tsc 0 |
+| T501 | SCP0028 T-d6ad4a4e G4 btnDelete 'popup_args 에 없음' | 인자 원천이 조회조건 컨트롤이 아닌 기능 단추라 라벨 0개를 없음으로 기록 | _trace.spec.ts G4 기능 단추(Designer Text, 다른 언어 글자) | tsc 0, btnpopup selftest 30/30 |
+| T502 | SCP0028 T-6b9a8ce8 F4 INPUT SP T210 미검증 | 단추 → 팝업 → OK → 조회 SP 경로 시나리오 없음 | _trace.spec.ts 'BTN 팝업 경로' | tsc 0 |
+| T503 | SCP0028 E4, G1 MSG00031, MSG00284 4행 | 삭제 결과 분기 메시지 시나리오 없음, 지운 행 복원 경로 없음 | _trace.spec.ts 'BTN 팝업 경로' 가짜 응답(서버 미전송), tools/E2E/lib/btnpopup.ts | tsc 0 |
+| T504 | 같은 4행을 W4 E4 가 판정필요로 덮음 | 팝업 단추에서만 닿는 메서드 분기 메시지를 W4 가 수동 대상으로 기록 | _trace.spec.ts W4 E4 | tsc 0 |
+| T505 | SCP0028 V-a99ddb18 H2 '조건 만족 0행' | 실행 중 수정 표시 조건을 조회 결과에서만 찾음 | _trace.spec.ts H2, h2RuntimeEdit | tsc 0 |
+| T506 | SCP0028 T-6b9a8ce8 _trace 결과를 _verify CRUD 가 T210 미검증으로 덮음 | 저장 SP 대상 선택이 버튼 이름(INSERT)만 봄 | _verify.spec.ts 저장 SP 대상에서 _GET_ SP 제외 | 정규식 시험 2건, tsc 0 |

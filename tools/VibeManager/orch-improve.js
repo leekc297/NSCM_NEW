@@ -40,13 +40,15 @@ function list() {
 function get(id) { return readJson(path.join(propDir(), `${id}.json`), null); }
 function save(pr) { writeJson(path.join(propDir(), `${pr.id}.json`), pr); changed(); return pr; }
 function log(pr, by, what, extra) { pr.history = pr.history || []; pr.history.push(Object.assign({ at: nowLocal(), by, what }, extra || {})); return pr; }
+// 2026-11-20 사용자 지시 '버그성이나 시스템 관련 항목은 권장안으로 처리 · 사용자승인은 최소화(VM 의 근간을 흔드는 로직의 변경이나 보완 시)': 개선안마다 impact(core|fix). core 만 사용자 승인(orch-selfcheck autoEligible)
+const IMPACT_RULE = '개선안마다 impact 를 적는다. core = VM 근간 로직 변경(CheckList 판정 기준, 단계 구성과 순서, 체인 정의, 작업 모드, 자동 반영과 승인 규칙, 기능 삭제, 설정 기본값 변경) = 사용자 승인 뒤 반영. fix = 결함 수정, 기록·표시·로그 보완, 성능, 문구, 시험 추가처럼 지금 동작 안에서 고치는 것 = 권장안으로 자동 반영(대상 범위 규칙 안). 판단이 서지 않으면 core.';
 function add(o, source) {
   const sig = normSig(o.sig || o.title);
   const dup = list().find(x => normSig(x.sig || x.title) === sig && /^(pending|approved|applying|applied|rejected)$/.test(x.status));
   if (dup) return { dup: dup.id, status: dup.status };
   const sfx = source === 'review' ? 'REVIEW' : source === 'self' ? 'SELF' : source === 'vision' ? 'VISION' : 'INC'; // VISION = 큰 그림 점검(orch-vision.js) · 사용자 승인 뒤 반영 // SELF = VM 자가진단(orch-selfcheck.js)이 올린 개선안
   let id = `${stamp()}_${sfx}`; let n = 1; while (fs.existsSync(path.join(propDir(), `${id}.json`))) id = `${stamp()}_${sfx}_${++n}`;
-  const pr = { id, at: nowLocal(), ms: Date.now(), source, status: 'pending', sig, title: String(o.title || '').slice(0, 200), evidence: o.evidence || '', targets: Array.isArray(o.targets) ? o.targets.map(String) : [], before_after: o.before_after || '', verify: o.verify || '', rollback: o.rollback || '', incident: o.incident || '', screen: o.screen || '', history: [] };
+  const pr = { id, at: nowLocal(), ms: Date.now(), source, status: 'pending', sig, title: String(o.title || '').slice(0, 200), evidence: o.evidence || '', targets: Array.isArray(o.targets) ? o.targets.map(String) : [], before_after: o.before_after || '', verify: o.verify || '', rollback: o.rollback || '', impact: o.impact === 'core' || o.impact === 'fix' ? o.impact : '', incident: o.incident || '', screen: o.screen || '', history: [] };
   if (o.plain && typeof o.plain === 'object') pr.plain = { what: String(o.plain.what || '').slice(0, 300), risk: String(o.plain.risk || '').slice(0, 300), undo: String(o.plain.undo || '').slice(0, 300) }; // 승인 대상의 업무 말 설명
   if (source === 'self') { pr.self = true; pr.check = String(o.check || ''); pr.selfKey = String(o.selfKey || ''); }
   save(pr); if (orchEv) orchEv.emit('proposal', { id, title: pr.title, source });
@@ -69,6 +71,8 @@ function digest(days) {
   // VMO 개선안 20261119193539_REVIEW_4(사용자 승인 2026-11-19): 끝 사건 없이 사라진 대기와 Claude 호출도 센다 — 종전에는 wait.end · claude.end 만 세어 중간에 끝난 실행의 대기 3건과 호출 1건이 집계에 없었다
   const wOpen = new Map(); const wKey = e => `${e.src}:${e.pid}:${e.kind}:${e.screen || ''}`; const wOf = k => waits[k] || (waits[k] = { kind: k, n: 0, sec: 0, max: 0, gaveUp: 0, screens: {}, started: 0, gone: 0, goneSec: 0, goneUnknown: 0, open: [] });
   let cStart = 0;
+  // 개선안 20261120115806_VISION: chain.start 뒤 chain.end 가 없는 체인(끝 기록 없음)을 runId 로 따로 센다. 종전 = chain.end 만 세어 끊긴 체인이 집계에서 빠짐
+  const chOpen = new Map(); const chOf = (k, label) => chains[k] || (chains[k] = { chain: k, label, n: 0, ok: 0, stopped: 0, ms: [], claudeRan: 0, claudeSkipped: 0, noClaude: 0 });
   // VMO 개선안 20261120094530_REVIEW(사용자 승인 2026-11-20): 중지된 실행을 실패와 따로 센다. 같은 screen 의 job.item.end status cancel, user.stop, proc.end stopped=true 가 앞뒤 60초 안에 있으면 stopped
   const STOP_WIN = 60000; const stopMarks = {};
   for (const e of evs) { if (!e.screen) continue; if ((e.type === 'job.item.end' && e.status === 'cancel') || e.type === 'user.stop' || (e.type === 'proc.end' && e.stopped === true)) (stopMarks[e.screen] || (stopMarks[e.screen] = [])).push(e.ms); }
@@ -80,7 +84,8 @@ function digest(days) {
     else if (e.type === 'claude.start') cStart++;
     if (e.type === 'step.end') { const k = e.task || e.name; const s = steps[k] || (steps[k] = { key: k, actor: e.actor, n: 0, fail: 0, stopped: 0, warn: 0, ms: [], repairs: 0 }); s.n++; if (e.status === 'FAIL') { if (wasStopped(e)) s.stopped++; else s.fail++; } if (e.status === 'WARN' || e.status === 'HOLD') s.warn++; if (e.ms_run) s.ms.push(e.ms_run); s.repairs += e.repairs || 0; }
     else if (e.type === 'wait.end') { const w = wOf(e.kind); wOpen.delete(wKey(e)); w.n++; w.sec += e.sec_wait || 0; w.max = Math.max(w.max, e.sec_wait || 0); if (e.gave_up) w.gaveUp++; if (e.screen) w.screens[e.screen] = (w.screens[e.screen] || 0) + (e.sec_wait || 0); }
-    else if (e.type === 'chain.end') { const k = e.chain || e.chainLabel; const c = chains[k] || (chains[k] = { chain: k, label: e.chainLabel, n: 0, ok: 0, stopped: 0, ms: [], claudeRan: 0, claudeSkipped: 0, noClaude: 0 }); c.n++; if (e.ok) c.ok++; else if (wasStopped(e)) c.stopped++; if (e.ms_run) c.ms.push(e.ms_run); c.claudeRan += e.claudeRan || 0; c.claudeSkipped += e.claudeSkipped || 0; if (!e.claudeRan) c.noClaude++; }
+    else if (e.type === 'chain.start') { if (e.runId) chOpen.set(e.runId, e); }
+    else if (e.type === 'chain.end') { if (e.runId) chOpen.delete(e.runId); const k = e.chain || e.chainLabel; const c = chOf(k, e.chainLabel); c.n++; if (e.ok) c.ok++; else if (wasStopped(e)) c.stopped++; if (e.ms_run) c.ms.push(e.ms_run); c.claudeRan += e.claudeRan || 0; c.claudeSkipped += e.claudeSkipped || 0; if (!e.claudeRan) c.noClaude++; }
     // 개선안 20261120094530_REVIEW_3: 시간 초과(timedOut)와 중지(stoppedBy 중지 요청, VS Code 종료)를 fail 과 따로 센다. stoppedBy 없는 종전 기록은 같은 VM 프로세스의 VS Code 종료 user.stop 뒤 15초 안 끝 또는 wasStopped 면 stopped
     else if (e.type === 'claude.end') { claude.n++; if (e.stoppedBy === '시간 초과' || e.timedOut === true) claude.timedOut++; else if (e.stoppedBy) claude.stopped++; else if (e.exit !== 0 && (wasStopped(e) || vsStops.some(s => s.src === e.src && s.pid === e.pid && e.ms >= s.ms && e.ms - s.ms <= 15000))) claude.stopped++; else if (e.exit !== 0) claude.fail++; if (e.hasResult === false && !e.stoppedBy && !e.timedOut) claude.noResult++; claude.ms += e.ms_run || 0; if (e.costUsd != null) { claude.cost += e.costUsd; claude.costN++; } }
     else if (e.type === 'claude.result' && e.costUsd != null) { claude.cost += e.costUsd; claude.costN++; }
@@ -89,6 +94,7 @@ function digest(days) {
     else if (e.type === 'proc.end' && !e.server) { const k = e.label; const pr = procs[k] || (procs[k] = { label: k, n: 0, fail: 0, stopped: 0, exits: {} }); pr.n++; if (e.exit !== 0 && wasStopped(e)) pr.stopped++; else if (e.exit !== 0) { pr.fail++; pr.exits[e.exit] = (pr.exits[e.exit] || 0) + 1; } }
   }
   for (const e of wOpen.values()) wOf(e.kind).open.push(e);           // 끝 사건이 없는 대기(지금 기다리는 중인 것 포함)
+  for (const e of chOpen.values()) { const c = chOf(e.chain || e.chainLabel, e.chainLabel); (c.open || (c.open = [])).push(e); } // 끝 기록 없는 체인(주인 VM 프로세스가 살아 있으면 실행 중일 수 있어 noEndLive 로 따로 셈)
   let cRunning = 0; try { cRunning = state.snapshot().claudes.length; } catch { }
   const cut = Date.now() - days * 86400000; const incs = watch.list(1000).filter(x => (x.ms || 0) >= cut);
   const byRule = {}, bySig = {};
@@ -98,7 +104,8 @@ function digest(days) {
     at: nowLocal(), days, events: evs.length, firstEventAt: evs.length ? evs[0].at : '', lastEventAt: evs.length ? evs[evs.length - 1].at : '',
     steps: Object.values(steps).map(s => ({ key: s.key, actor: s.actor, n: s.n, fail: s.fail, stopped: s.stopped, warn: s.warn, repairs: s.repairs, medianSec: r1(med(s.ms)), p90Sec: r1(pct(s.ms, 0.9)), totalSec: r1(s.ms.reduce((a, b) => a + b, 0)) })).sort((a, b) => b.totalSec - a.totalSec).slice(0, 30),
     waits: Object.values(waits).map(w => ({ kind: w.kind, started: w.started, unfinished: w.open.length, unfinishedLive: w.open.filter(e => state.pidAlive(e.pid)).length, unfinishedScreens: [...new Set(w.open.map(e => e.screen).filter(Boolean))], gone: w.gone, goneSec: w.goneSec, goneUnknown: w.goneUnknown, n: w.n, totalSec: w.sec, maxSec: w.max, gaveUp: w.gaveUp, topScreens: Object.entries(w.screens).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([s, v]) => `${s} ${v}s`) })).sort((a, b) => b.totalSec - a.totalSec),
-    chains: Object.values(chains).map(c => ({ chain: c.chain, label: c.label, n: c.n, ok: c.ok, stopped: c.stopped, medianSec: r1(med(c.ms)), claudeRan: c.claudeRan, claudeSkipped: c.claudeSkipped, runsWithoutClaude: c.noClaude })),
+    chains: Object.values(chains).map(c => ({ chain: c.chain, label: c.label, n: c.n, ok: c.ok, stopped: c.stopped, medianSec: r1(med(c.ms)), claudeRan: c.claudeRan, claudeSkipped: c.claudeSkipped, runsWithoutClaude: c.noClaude, noEnd: (c.open || []).length, noEndLive: (c.open || []).filter(e => state.pidAlive(e.pid)).length, noEndScreens: [...new Set((c.open || []).map(e => e.screen).filter(Boolean))] })),
+    chainsNoEnd: Object.values(chains).reduce((a, c) => a + (c.open || []).length, 0),
     claude: { started: cStart, unfinished: Math.max(0, cStart - claude.n), runningNow: cRunning, calls: claude.n, fail: claude.fail, timedOut: claude.timedOut, stopped: claude.stopped, noResult: claude.noResult, totalSec: r1(claude.ms), costUsd: Math.round(claude.cost * 1000) / 1000, costCounted: claude.costN, sessionRetry: claude.retry, waitedSec: r1(claude.waitMs) },
     procFails: Object.values(procs).filter(x => x.fail || x.stopped).sort((a, b) => b.fail - a.fail || b.stopped - a.stopped).slice(0, 20),
     incidents: { total: incs.length, byRule, topRepeats: Object.values(bySig).sort((a, b) => b.n - a.n).slice(0, 15).map(s => ({ rule: s.rule, n: s.n, screens: [...s.screens], title: s.title, statuses: s.statuses, sig: s.sig })) },
@@ -126,8 +133,9 @@ async function review(manual) {
     '- 대상이 tools/VibeManager, tools/Harness, tools/E2E, tools/Docs 의 코드뿐인 안과 로그, 백업, 스냅샷 삭제 안은 VMO 가 승인 없이 반영한다(게이트 통과 조건, 삭제는 7일 지난 것만). 그 밖의 대상(FE, BE, DB 객체, 룰, hook, 설정 파일)은 사용자 승인 대상이므로 plain 에 개발 용어 없이 업무 말로 what(무엇이 달라지는지), risk(잘못되면 보이는 증상), undo(되돌리는 방법)를 1문장씩 적는다.',
     '- 올릴 것이 없으면 proposals 를 빈 배열로 낸다.',
     '- 마지막 출력은 아래 형식의 JSON 코드 블록 1개다.',
+    IMPACT_RULE,
     '```json',
-    '{ "proposals": [ { "title": "", "evidence": "수치와 출처 파일", "targets": ["바꿀 파일 경로 또는 DB 객체"], "before_after": "변경 전 → 변경 후", "verify": "반영 뒤 실행할 검증 명령과 기대 결과", "rollback": "되돌리는 방법", "sig": "같은 안을 가리는 짧은 열쇠말", "plain": { "what": "", "risk": "", "undo": "" } } ], "summary": "분석 요약 2~3문장" }',
+    '{ "proposals": [ { "title": "", "impact": "core|fix", "evidence": "수치와 출처 파일", "targets": ["바꿀 파일 경로 또는 DB 객체"], "before_after": "변경 전 → 변경 후", "verify": "반영 뒤 실행할 검증 명령과 기대 결과", "rollback": "되돌리는 방법", "sig": "같은 안을 가리는 짧은 열쇠말", "plain": { "what": "", "risk": "", "undo": "" } } ], "summary": "분석 요약 2~3문장" }',
     '```',
     '',
     '[집계]', JSON.stringify(d, null, 1),
@@ -164,15 +172,23 @@ function changedSince(dir) {
 }
 const fileSig = f => { try { const st = fs.statSync(f); return `${st.size}|${Math.round(st.mtimeMs)}`; } catch { return ''; } };
 /** Claude 가 끝난 직후 대상 파일 지문을 남긴다. 되돌릴 때 이 지문과 다르면 그 뒤 다른 쪽이 고친 것이므로 덮지 않는다 */
-function markAfter(pr) { const root = P().root; const dir = path.join(orchDir(), 'snap', `prop_${pr.id}`); const b = readJson(path.join(dir, 'before.json'), null); if (!b) return; const sig = {}; for (const rel of [...(b.kept || []), ...(b.absent || [])]) sig[rel] = fileSig(path.join(root, rel)); writeJson(path.join(dir, 'after.json'), { at: nowLocal(), sig }); }
+function markAfter(pr, logRel) { const root = P().root; const dir = path.join(orchDir(), 'snap', `prop_${pr.id}`); const b = readJson(path.join(dir, 'before.json'), null); if (!b) return; const sig = {}; for (const rel of [...(b.kept || []), ...(b.absent || [])]) sig[rel] = fileSig(path.join(root, rel)); writeJson(path.join(dir, 'after.json'), { at: nowLocal(), sig, log: logRel || '' }); } // 2026-11-20 log = AI 실행 기록(되돌릴 때 AI 편집만 거꾸로 적용, orch-undo.js)
 function restoreTargets(pr, opt) {
   const root = P().root; const dir = path.join(orchDir(), 'snap', `prop_${pr.id}`); const b = readJson(path.join(dir, 'before.json'), null); if (!b) return { ok: false, why: '사본 없음' };
   const done = [], fail = [], skipped = []; const after = (opt && opt.force) ? null : readJson(path.join(dir, 'after.json'), null);
   const touched = rel => after && after.sig && rel in after.sig && after.sig[rel] !== fileSig(path.join(root, rel));
-  for (const rel of b.kept || []) { if (touched(rel)) { skipped.push(rel); continue; } try { fs.copyFileSync(path.join(dir, 'files', rel), path.join(root, rel)); done.push(rel); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
+  // 2026-11-20 사고 정정(13:34:52 자가 보완 되돌림이 AI 실행 도중 들어온 다른 세션 편집을 지움): 파일마다 AI 가 한 편집만 거꾸로 적용한다(orch-undo.js).
+  //   그게 안 될 때만 종전처럼 사본으로 덮되, 반영 뒤 다른 쪽이 고친 파일은 덮지 않고(touched) 덮을 때는 지금 파일을 .bak_prerestore_ 로 남긴다
+  const undo = require('./orch-undo'); const info = after && after.log ? undo.readOps(root, after.log) : { ok: false, why: '실행 기록 경로 없음' }; const notes = [], keeps = [];
+  for (const rel of b.kept || []) {
+    const r = undo.restoreFile({ root, rel, snapFile: path.join(dir, 'files', rel), info, wholeOk: () => !touched(rel) });
+    if (r.how === 'skip') skipped.push(rel); else if (r.how === 'fail') fail.push(`${rel}: ${r.why}`); else done.push(rel);
+    if (r.keep) keeps.push(r.keep); if (r.how !== 'same') notes.push(`${rel.split('/').pop()} ${r.why}`);
+  }
   for (const rel of b.absent || []) { try { if (fs.existsSync(path.join(root, rel))) { fs.unlinkSync(path.join(root, rel)); done.push(`${rel}(삭제)`); } } catch (e) { fail.push(`${rel}: ${e.message}`); } }
   if (skipped.length) { try { require('./orch-errlog').note('orch-improve', 'restoreSkipped', `${pr.id} 되돌리지 않은 파일 ${skipped.join(', ')}(반영 뒤 다른 쪽이 고침)`); } catch { } }
-  return { ok: !fail.length && !skipped.length, done, fail, skipped };
+  if (notes.length) { try { errlog.note('orch-improve', 'restore', `${pr.id} ${notes.join(' / ')}`.slice(0, 1500)); } catch { } }
+  return { ok: !fail.length && !skipped.length, done, fail, skipped, keeps, note: notes.join(' / ').slice(0, 600) };
 }
 /** 사용자 승인 → 반영. 반환 { ok, status } */
 async function approve(id, by) {
@@ -206,7 +222,7 @@ async function approve(id, by) {
   // 2026-11-20 00:1x 정정: 사본을 게이트 앞에서 뜨면 그 사이 다른 작업이 고친 내용이 되돌릴 때 지워졌다(실제: 개선안 20261119232524_SELF_3 되돌림이 같은 시각 Claude Code 세션의 orchestra.js 수정을 지움)
   snap = backupTargets(pr);
   const r = await agent.withLock(`prop_${id}`, async () => { const p2 = get(id); p2.status = 'applying'; log(p2, 'VMO', '반영 시작'); save(p2); agent.say('start', { id, text: `개선안 반영. ${pr.title}` }); return agent.runClaude(prompt, { label: `개선안 반영 ${pr.title}` }); });
-  try { markAfter(get(id)); } catch (ex) { errlog.note('orch-improve', 'markAfter', ex); }
+  try { markAfter(get(id), r && r.log); } catch (ex) { errlog.note('orch-improve', 'markAfter', ex); }
   const cur = get(id);
   if (r && r.busy) { cur.status = 'pending'; log(cur, 'VMO', '반영 보류. 사건 조치 중. 다시 승인 필요'); save(cur); return { ok: false, why: 'busy' }; }
   const out = agent.lastJsonBlock(r.text); const files = changedSince(snap.dir);
@@ -214,7 +230,7 @@ async function approve(id, by) {
   if (!r.ok || !out || out.applied !== true || out.verified !== true) {
     const rs = restoreTargets(cur);
     cur.status = 'apply-failed'; cur.result = out || null;
-    log(cur, 'VMO', `반영 실패. ${!r.ok ? `Claude exit ${r.code}${r.timedOut ? ' (시간 초과)' : ''}` : !out ? '결과 JSON 없음' : out.applied !== true ? `반영 안 됨: ${String(out.note || '').slice(0, 200)}` : `검증 실패: ${String(out.verify_result || '').slice(0, 200)}`} · 대상 파일 ${rs.done ? rs.done.length : 0}개 복원${rs.fail && rs.fail.length ? ` · 복원 실패 ${rs.fail.length}개` : ''}${rs.skipped && rs.skipped.length ? ` · 반영 뒤 다른 쪽이 고친 파일 ${rs.skipped.join(', ')} 는 되돌리지 않음(확인 필요)` : ''}${files && files.some(f => !(snap.kept.includes(f) || snap.absent.includes(f))) ? ` · 대상 밖 변경 ${files.filter(f => !(snap.kept.includes(f) || snap.absent.includes(f))).slice(0, 6).join(', ')} 는 그대로 남음` : ''}`, meta);
+    log(cur, 'VMO', `반영 실패. ${!r.ok ? `Claude exit ${r.code}${r.timedOut ? ' (시간 초과)' : ''}` : !out ? '결과 JSON 없음' : out.applied !== true ? `반영 안 됨: ${String(out.note || '').slice(0, 200)}` : `검증 실패: ${String(out.verify_result || '').slice(0, 200)}`} · 대상 파일 ${rs.done ? rs.done.length : 0}개 복원${rs.note ? `(${rs.note})` : ''}${rs.fail && rs.fail.length ? ` · 복원 실패 ${rs.fail.length}개` : ''}${rs.skipped && rs.skipped.length ? ` · 반영 뒤 다른 쪽이 고친 파일 ${rs.skipped.join(', ')} 는 되돌리지 않음(확인 필요)` : ''}${files && files.some(f => !(snap.kept.includes(f) || snap.absent.includes(f))) ? ` · 대상 밖 변경 ${files.filter(f => !(snap.kept.includes(f) || snap.absent.includes(f))).slice(0, 6).join(', ')} 는 그대로 남음` : ''}`, meta);
     save(cur); agent.say('end', { id, ok: false, text: `개선안 반영 실패. ${cur.title}` }); if (notifier) notifier(`개선안 반영 실패. ${cur.title}`);
     return { ok: false, status: cur.status };
   }
@@ -224,7 +240,7 @@ async function approve(id, by) {
     const g = await sc.gate(); const preBad = new Set((selfPre && selfPre.detail) || []); const newBad = g.detail.filter(x => !preBad.has(x));
     if (newBad.length || (!g.ok && !g.detail.length)) {
       const rs = restoreTargets(cur); cur.status = 'apply-failed'; cur.result = out; cur.gate = { ok: false, text: g.text, newBad };
-      log(cur, 'VMO', `반영 실패. 게이트에서 새로 어긋난 항목 ${newBad.length}건: ${newBad.slice(0, 3).join(' / ').slice(0, 400)} · ${g.text} · 대상 파일 ${rs.done ? rs.done.length : 0}개 복원${rs.skipped && rs.skipped.length ? ` · 반영 뒤 다른 쪽이 고친 파일 ${rs.skipped.join(', ')} 는 되돌리지 않음(확인 필요)` : ''}${outside.length ? ` · 대상 밖 변경 ${outside.slice(0, 6).join(', ')} 는 그대로 남음` : ''}`, meta);
+      log(cur, 'VMO', `반영 실패. 게이트에서 새로 어긋난 항목 ${newBad.length}건: ${newBad.slice(0, 3).join(' / ').slice(0, 400)} · ${g.text} · 대상 파일 ${rs.done ? rs.done.length : 0}개 복원${rs.note ? `(${rs.note})` : ''}${rs.skipped && rs.skipped.length ? ` · 반영 뒤 다른 쪽이 고친 파일 ${rs.skipped.join(', ')} 는 되돌리지 않음(확인 필요)` : ''}${outside.length ? ` · 대상 밖 변경 ${outside.slice(0, 6).join(', ')} 는 그대로 남음` : ''}`, meta);
       save(cur); agent.say('end', { id, ok: false, text: `자가 보완 반영 실패(게이트). ${cur.title}` }); if (notifier) notifier(`자가 보완 반영 실패(게이트). ${cur.title}`);
       return { ok: false, status: cur.status };
     }
@@ -271,7 +287,7 @@ function revert(id, by) {
     try { const sc = require('./orch-selfcheck'); const d = new Date(); const vmRel = (pr.synced || []); const sy = vmRel.length ? sc.syncInstalled('VMO 자가 보완 되돌림', `selfrev${two(d.getHours())}${two(d.getMinutes())}`, vmRel) : { copied: [] };
       changelogSelf(pr, null, rs.done || [], null, sy, '', true); pr.needsReload = !!(sy.copied && sy.copied.length); rs.synced = sy.copied || []; } catch (ex) { errlog.note('orch-improve', 'revertSelf', ex); }
   }
-  log(pr, by || '사용자', `되돌리기. ${rs.done ? rs.done.length : 0}개 파일 복원${rs.fail && rs.fail.length ? ` · 실패 ${rs.fail.length}개` : ''}${rs.skipped && rs.skipped.length ? ` · 반영 뒤 다른 쪽이 고친 파일 ${rs.skipped.join(', ')} 는 되돌리지 않음` : ''}`, { files: rs.done, fail: rs.fail, skipped: rs.skipped }); save(pr);
+  log(pr, by || '사용자', `되돌리기. ${rs.done ? rs.done.length : 0}개 파일 복원${rs.note ? `(${rs.note})` : ''}${rs.fail && rs.fail.length ? ` · 실패 ${rs.fail.length}개` : ''}${rs.skipped && rs.skipped.length ? ` · 반영 뒤 다른 쪽이 고친 파일 ${rs.skipped.join(', ')} 는 되돌리지 않음` : ''}`, { files: rs.done, fail: rs.fail, skipped: rs.skipped }); save(pr);
   return rs;
 }
 
@@ -286,4 +302,4 @@ function init(opts) {
 }
 function dispose() { if (timer) { clearInterval(timer); timer = null; } started = false; }
 
-module.exports = { init, dispose, on, list, get, save, add, approve, reject, revert, review, reviewDue, digest, meta, changelogSelf, STATUS_KO, DEF };
+module.exports = { IMPACT_RULE, init, dispose, on, list, get, save, add, approve, reject, revert, review, reviewDue, digest, meta, changelogSelf, STATUS_KO, DEF };

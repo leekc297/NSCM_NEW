@@ -371,6 +371,36 @@ def is_asis_ref(ref):
     return p.startswith('gscm/') or p.startswith('gscm_') or p.startswith('db_ddl/') or p.startswith('doc/asisfacts/db/modules/')
 
 
+RX_RULE_NO = re.compile(r'(?:CR|DD|SPR|AG)-\d{3}')
+RX_DOC_NO = re.compile(r'\b(?!(?:CR|DD|SPR|AG)-)([A-Z]{2,}-[A-Z]?\d+)\b')
+
+
+def rule_docs(ids):
+    """등록 룰 번호 → 그 룰의 출처 문서 번호(registry origin 의 'DM-C6' 같은 토큰)"""
+    out = set()
+    for x in registry():
+        if (x.get('rule_id') or '').upper() in ids:
+            out |= set(RX_DOC_NO.findall((x.get('origin') or '').upper()))
+    return out
+
+
+def same_rule_block(r, rule_ref):
+    """2026-11-20 T487(SCP0028 EG-2644dff3 H6 BTN_ORDER · 검사기 FAIL 근거 RULE:CR-005(문서 DM-C6) · AI 가 rule_ref CR-005 로 FAIL→PASS):
+    FAIL 을 만든 룰(행 expect_src·asis_ref 의 CR 번호)이나 같은 출처 문서(DM-C6 등)를 근거로 그 FAIL 을 낮추지 않는다.
+    반환 = 막는 이유('' 이면 통과) · 행의 룰 근거 번호 집합"""
+    basis = ' '.join(str(r.get(k) or '') for k in ('expect_src', 'asis_ref')).upper()
+    row_rules = set(RX_RULE_NO.findall(basis))
+    row_docs = set(RX_DOC_NO.findall(basis)) | rule_docs(row_rules)
+    ref_rules = set(RX_RULE_NO.findall(str(rule_ref or '').upper()))
+    same = ref_rules & row_rules
+    if same:
+        return f"FAIL 근거 룰과 같은 룰({','.join(sorted(same))})로 낮추지 않음", row_rules
+    sd = rule_docs(ref_rules) & row_docs
+    if sd:
+        return f"FAIL 근거와 같은 출처 문서({','.join(sorted(sd))}) 룰로 낮추지 않음", row_rules
+    return '', row_rules
+
+
 def decide(r, it):
     """답 1건 → llm_review.csv 행(인용 확인 · 반영 여부)"""
     cur = eff_result(r)
@@ -406,8 +436,14 @@ def decide(r, it):
         else:
             why = '데이터 차이는 판정필요로만'
     elif ver in ('PASS', 'NA'):
+        blk, row_rules = same_rule_block(r, rule_ref) if cur == 'FAIL' else ('', set())
         if cls not in ('검사기오판', 'TOBE룰', '추출오류'):
             why = f'분류 {cls} 는 PASS·NA 로 낮추지 않음'
+        elif blk:
+            why = blk
+        elif cur == 'FAIL' and cls == 'TOBE룰' and not (rule_ok and set(RX_RULE_NO.findall(rule_ref.upper())) - row_rules):
+            # T487: TO-BE 룰 예외 주장 = FAIL 근거 룰과 다른 등록 룰 번호가 있어야 함(AS-IS 인용만으로 TO-BE 룰 예외를 세우지 않음)
+            why = 'TO-BE 룰 예외는 FAIL 근거 룰과 다른 등록 룰 번호 필요'
         elif ok_asis or (rule_ok and ok_any):
             apply, why = 'Y', 'AS-IS 원문 인용 확인' if ok_asis else f'등록 룰 {rule_ref} + 인용 확인'
         else:
@@ -738,6 +774,27 @@ def selftest():
     chk('답 정규화 — 모르는 분류·판정', d['class'] == '확인불가' and d['verdict'] == 'FAIL' and d['apply'] == 'N')
     chk('AS-IS 경로 판별', is_asis_ref('GSCM/06.UIL/x.cs:10') and is_asis_ref('DB_DDL/AsIs_SP.sql:3') and is_asis_ref('Doc/asisfacts/db/modules/dbo.X.sql:9') and not is_asis_ref('Doc/asisfacts/screens/X/lock_rules.csv'))
     chk('룰 번호 — 없는 번호', not rule_exists('CR-' + '9' * 3) and not rule_exists(''))
+    # T487: FAIL 근거 룰·같은 출처 문서로 낮추기 금지 · TO-BE 룰 예외는 다른 등록 룰 필요(인용 확인은 대역으로 고정)
+    global _REG
+    reg0, vq0 = _REG, llm_call.verify_quote
+    try:
+        _f1, _f2, _f3 = ('CR' + '-901', 'CR' + '-902', 'CR' + '-903')  # 가짜 룰 번호(원장 무결성 검사 RX_ID 에 잡히지 않게 나눠 씀)
+        _REG = [{'rule_id': _f1, 'origin': 'DM-C6 전체 팝업 UI'}, {'rule_id': _f2, 'origin': 'DM-C6 팝업 크기'}, {'rule_id': _f3, 'origin': 'DM-77 다른 문서'}]
+        llm_call.verify_quote = lambda ref, q: (True, '확인')
+        ga = [{'ref': 'GSCM/x.cs:1', 'quote': 'x'}]
+        rr = {'row_id': 'EG-1', 'result': 'FAIL', 'evidence': 'x', 'expect_src': 'RULE:' + _f1, 'asis_ref': '문서 DM-C6'}
+        d = decide(rr, {'class': '검사기오판', 'verdict': 'PASS', 'evidence': ga, 'rule_ref': _f1})
+        chk('반영 — FAIL 근거 룰과 같은 룰로 PASS 불가', d['apply'] == 'N' and '같은 룰' in d['apply_why'])
+        d = decide(rr, {'class': 'TOBE룰', 'verdict': 'PASS', 'evidence': ga, 'rule_ref': _f2})
+        chk('반영 — 같은 출처 문서 룰로 PASS 불가', d['apply'] == 'N' and '출처 문서' in d['apply_why'])
+        d = decide(rr, {'class': 'TOBE룰', 'verdict': 'PASS', 'evidence': ga, 'rule_ref': ''})
+        chk('반영 — TO-BE 룰 예외는 다른 등록 룰 필요', d['apply'] == 'N' and '다른 등록 룰' in d['apply_why'])
+        d = decide(rr, {'class': 'TOBE룰', 'verdict': 'PASS', 'evidence': ga, 'rule_ref': _f3})
+        chk('반영 — 다른 문서의 다른 등록 룰 예외는 반영', d['apply'] == 'Y')
+        d = decide(dict(rr, expect_src='GENERAL', asis_ref=''), {'class': '검사기오판', 'verdict': 'PASS', 'evidence': ga, 'rule_ref': ''})
+        chk('반영 — 룰 근거 없는 FAIL 은 AS-IS 인용으로 반영(종전 유지)', d['apply'] == 'Y')
+    finally:
+        _REG, llm_call.verify_quote = reg0, vq0
     p = build_prompt('ZZZ0000', {'asis_id': 'ZZZ0000', 'asis_files': [], 'page_dir': '', 'facts_dir': 'f', 'verify_dir': 'v'}, [dict(r0, rule_id='A1')])
     chk('프롬프트 — 행·출력 형식 포함', '"row_id": "V-1"' in p and '"items"' in p)
     print('SELFTEST ' + ('OK' if ok else 'FAIL'))

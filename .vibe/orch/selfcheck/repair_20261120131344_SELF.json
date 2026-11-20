@@ -1,0 +1,48 @@
+{
+ "proposal": {
+  "id": "20261120131344_SELF",
+  "title": "체인 끝 기록(step.end, chain.end)에 중지 표시(stopped) 기록, 감시기와 U10 감지기가 시간 창 추정 전에 그 값을 봄",
+  "evidence": "repeatFiles orch-watch.js 35, t_orch_watch.js 14, run_all.js 30, job-runner.js 19. CHANGELOG.md 2026-11-19~20 절에서 orch-watch.js 가 나온 절 27개를 대조함. 제목 기준 10개가 중지나 창 종료로 끝난 실행을 실패 사건으로 올린 결함의 정정임(작업 목록 중지 user.stop 알림 2절, dispose 중지 알림, VM 다시 시작 R5, VM 창 끝 기록, 중지 직후 잠금, 창 다시 로드 사건 분리, 에이전트 대화 중지, 창 로드로 끊긴 실행 알림, 강제 종료 '중지' 표시). 소스 원인: workbench.js:1128 step.end, :1162~1164 chain.end 에 중지 필드 없음(proc.end 만 :581 stopped 있음). 중지 여부를 소비자가 따로 추정함: orch-watch.js:198 userStopped(처리 시각 Date.now() 기준 15초, 메모리 맵), orch-improve.js:74~76 wasStopped(STOP_WIN), orch-usercheck.js:88, :120, :147 각기 다른 창. events.jsonl chain.end 중 stopped 필드 0건. 이번 S13 U10 경고 8건 중 5건(S13|U10|SCP0005|1795102426111, S13|U10|SSP0005|1795103254248, S13|U10|SCP0005|1795103254402, S13|U10|SSP0005|1795119254671, S13|U10|SCP0005|1795119254819)은 같은 시각 job.item.end status cancel 인데 orch-usercheck.js:120 stopped() 가 user.stop 만 보아 경고로 셈. 3건(SCP0014 00:34, SCP0028 04:15, SSP0014 04:15)은 job.item.end fail, 1단계 S8.checklistRun exit 1 로 Claude 단계 2, 4, 6 이 NOT_RUN.",
+  "targets": [
+   "tools/VibeManager/workbench.js",
+   "tools/VibeManager/orch-watch.js",
+   "tools/VibeManager/orch-usercheck.js",
+   "tools/VibeManager/test/t_orch_watch.js",
+   "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "workbench.js:1128 step.end, :1162 chain.end 객체에 stopped: !!this.stopReq 추가(stopAll :664 가 넣는 값, chain-runner.js:75 stop 도 같은 경로). orch-watch.js:249 proc.end, :256 step.end, :259 chain.end 판정 앞에 ev.stopped === true 면 실패 사건 없음(종전 userStopped 는 옛 기록용으로 유지). orch-usercheck.js:120 stopped(e) = e.aborted || user.stop 창 → e.stopped === true || e.aborted || 같은 job, screen 의 job.item.end status cancel(chain.end 뒤 2초 안) || 종전 user.stop 창. :121 detail '건너뜀 N · 실행 스크립트 M' → '<failNo>단계 <rows 실패 task> FAIL 로 Claude 단계 N개 미실행'. orch-improve.js:76 은 이미 e.stopped 를 봐 변경 없음. 시험: t_orch_watch.js 에 user.stop 없이 stopped:true 인 step.end FAIL, chain.end 를 넣어 R1, R11 이 없는지. t_orch_usercheck.js 에 chain.end 뒤 job.item.end cancel 이면 U10 없음, fail 이면 U10 warn 이고 detail 에 '1단계' 가 있는지.",
+  "verify": "node tools/VibeManager/test/t_orch_watch.js → FAIL 0. node tools/VibeManager/test/t_orch_usercheck.js → FAIL 0",
+  "sig": "chain end stopped flag",
+  "check": "S9",
+  "selfKey": "S9|file|orch-watch.js"
+ },
+ "result": {
+  "applied": true,
+  "verified": true,
+  "changed_files": [
+   "tools/VibeManager/workbench.js",
+   "tools/VibeManager/orch-watch.js",
+   "tools/VibeManager/orch-usercheck.js",
+   "tools/VibeManager/test/t_orch_watch.js",
+   "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "verify_result": "2026-11-20 13:31 실행. node tools/VibeManager/test/t_orch_watch.js → PASS 31, FAIL 0, ALL PASS(추가 'stopped:true 끝 기록 = R1, R11 0건', 'stopped:false = R1, R11 사건' PASS). node tools/VibeManager/test/t_orch_usercheck.js → FAIL 0, ALL PASS(추가 U10 3건 PASS: cancel·stopped:true 경고 없음, fail = 경고 detail '1단계 S8.checklistRun FAIL 로 Claude 단계 3개 미실행', cancel 2초 초과 = 경고)",
+  "note": "workbench.js 위치는 개선안 기재 줄과 다름: step.end 1157행, chain.end 1193행. orch-watch.js 판정 줄 250(proc.end), 257(step.end), 260(chain.end)에 ev.stopped === true 선행 검사 추가, userStopped 유지. orch-usercheck.js U10 stopped() = e.stopped === true || e.aborted || 같은 job·screen job.item.end cancel(chain.end 뒤 2초 안) || 종전 user.stop 창. 작업 중 orch-watch.js 디스크 변경 알림 1회, 반영한 3줄 유지 확인. orch-improve.js 변경 없음."
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 25개 파일 통과, 시험 46/47개 파일 통과(PASS 580, FAIL 1), 정의 정합 통과",
+  "newBad": [
+   "S2 t_chain_runner.js 실패: exit 1 · PASS 15 · FAIL 1 · FAIL 실행 주체 요약 실행 주체: 스크립트 1단계 · Assistant 1회 / SOME FAIL"
+  ]
+ },
+ "history": [
+  "13:27:32 VMO 자동(게이트 통과 조건): 승인",
+  "13:30:18 VMO: 반영 전 게이트: 구문 검사 25개 파일 통과, 시험 47/47개 파일 통과(PASS 576, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1327",
+  "13:30:22 VMO: 반영 시작",
+  "13:34:52 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S2 t_chain_runner.js 실패: exit 1 · PASS 15 · FAIL 1 · FAIL 실행 주체 요약 실행 주체: 스크립트 1단계 · Assistant 1회 / SOME FAIL · 구문 검사 25개 파일 통과, 시험 46/47개 파일 통과(PASS 580, FAIL 1), 정의 정합 통과 · 대상 파일 5개 복원 · 대상 밖 변경 Doc/e2e/specs/_verify.spec.ts, Doc/verify/SCP0028/sort_check.csv, tools/Harness/verify/sort_check.py, tools/Harness/verify/syn_check.py, tools/VibeManager/jobs.js, tools/VibeManager/orch-dict.js 는 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120131344_SELF"
+}

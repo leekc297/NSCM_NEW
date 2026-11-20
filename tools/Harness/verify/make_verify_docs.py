@@ -1084,6 +1084,15 @@ def main():
                     [[rp['row_id'], (rp.get('target') or '')[:120], r.get('result', ''), r['row_id'], r.get('source', ''), r.get('rule_id', ''), (r.get('target') or '')[:160], (r.get('condition') or '')[:160]] for r, rp in sorted(dup_rows, key=lambda x: (x[1]['row_id'], x[0]['row_id']))],
                     [12, 40, 8, 12, 12, 7, 50, 40], result_col=3)
         ws0.append([]); ws0.append([f"중복 정리(AI 판단 Doc/verify/{mid}/dedup_screen.csv): 같은 확인으로 묶인 {len(dup_rows)}행은 대표 행 결과와 같아 '중복 정리' 시트로 옮김 · 위 집계는 대표 행 기준"])
+    # 2026-11-20 사용자 지시 '사용자판정도 우선 권장안으로 진행, 차후 판정필요 항목으로 필요할 때만 코멘트': decide_apply.py 가 남긴 Doc/verify/<ID>/ai_recommend.csv
+    _rec = read_csv(os.path.join(ROOT, 'Doc', 'verify', mid, 'ai_recommend.csv')) if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'ai_recommend.csv')) else []
+    _rec_ap = [x for x in _rec if x.get('status') == 'applied']; _rec_kp = [x for x in _rec if x.get('status') == 'kept']
+    if _rec_ap or _rec_kp:
+        _st_ko = {'applied': '권장안 적용', 'kept': '권장안으로 풀 수 없음'}
+        write_sheet(wb, '판정필요(권장안 적용)', ['행', '규칙', '대상', '상태', '권장 판정', '신뢰', '이유', '근거', '다른 선택지', '필요한 조치'],
+                    [[x.get('row_id', ''), x.get('rule_id', ''), (x.get('target') or '')[:160], _st_ko.get(x.get('status'), ''), x.get('recommend', ''), x.get('confidence', ''), x.get('reason', ''), x.get('evidence_ref', ''), x.get('alternatives', ''), x.get('action', '')] for x in _rec_ap + _rec_kp],
+                    [12, 7, 44, 14, 10, 7, 60, 40, 34, 44])
+        ws0.append([]); ws0.append([f"권장안 적용(Doc/verify/{mid}/ai_recommend.csv): 사용자 판정 대상 {len(_rec_ap)}행은 AI 권장안으로 '판정필요' 처리 · 다르게 판정할 행만 사용자의견 칸에 적음 · 권장안으로 풀 수 없는 행 {len(_rec_kp)}(사유와 필요한 조치는 '판정필요(권장안 적용)' 시트)"])
     write_sheet(wb, '검출 규칙', ['규칙', '유형', '명칭', '정답', '방법', '기대 원천', '판정 방법'],
                 [[k, v['family'], v['name'], v['oracle'], v['method'], v['expected_source'], v['how']] for k, v in rules.items()], [7, 6, 30, 8, 12, 40, 60])
     p1, n1 = next_path(mid, name, 'CheckList')

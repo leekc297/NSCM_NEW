@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 1941,
+  "dur": 293,
+  "at": "2026-11-20T06:10:44.341Z",
+  "user": "minyonglee1",
+  "test": "D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)"
+ }
+]

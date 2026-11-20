@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "SCP0028",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"itemId\":\"\",\"actionFlag\":\"D\"}",
+  "status": 200,
+  "rows": 384,
+  "dur": 142,
+  "at": "2026-11-20T06:10:53.809Z",
+  "user": "minyonglee1",
+  "test": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드"
+ },
+ {
+  "menu": "SCP0028",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"itemId\":\"\",\"actionFlag\":\"D\"}",
+  "status": 200,
+  "rows": 384,
+  "dur": 138,
+  "at": "2026-11-20T06:11:09.374Z",
+  "user": "minyonglee1",
+  "test": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드"
+ },
+ {
+  "menu": "SCP0028",
+  "sheet": "popup",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/popup/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"AU000062_81-P\",\"toSite\":\"\",\"itemId\":\"\",\"actionFlag\":\"I\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 1614,
+  "at": "2026-11-20T06:12:13.579Z",
+  "user": "minyonglee1",
+  "test": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드"
+ }
+]

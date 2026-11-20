@@ -1,0 +1,93 @@
+{
+  "id": "20261120143326_SELF_2",
+  "at": "2026-11-20T14:33:26+09:00",
+  "ms": 1795152806822,
+  "source": "self",
+  "status": "applied",
+  "sig": "errlog info stopclean skip",
+  "title": "중지 뒤 잠금 정리 기록을 오류 집계(S5, 자가진단 errors)에서 제외",
+  "evidence": "orch-watch.js:140 이 정상 처리인 잠금 정리를 errlog.note 로 vm_errors.jsonl 에 기록함. orch-errlog.js:85~ stats() 는 kind 구분 없이 집계하고, orch-selfcheck.js:140 S5 는 새 서명을 실패(F)로 올림. diag_in errors 5건 중 3개 서명 6건(14:13:17, 14:24:34)이 이 정리 기록임. CHANGELOG 10:55 절은 'errlog 와 activations 에 1줄' 기록을 의도했고 test/t_orch_lock_repeat.js:34 가 vm_errors 기록을 확인하므로 기록은 유지함.",
+  "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-errlog.js",
+    "tools/VibeManager/test/t_orch_errlog.js"
+  ],
+  "before_after": "orch-watch.js:139 rec 에 info: true 없음, stats() 가 정리 기록을 오류로 셈 → rec 에 info: true 추가, orch-errlog.js stats() 가 r.info 가 true 인 줄을 건너뜀(vm_errors.jsonl 기록과 t_orch_lock_repeat.js:34 기대는 그대로). t_orch_errlog.js 에 info 기록 1건이 stats 에 안 잡히는 시험 추가",
+  "verify": "node tools/VibeManager/test/t_orch_errlog.js → ALL PASS(info 기록 제외 시험 포함), node tools/VibeManager/test/t_orch_lock_repeat.js → PASS 11, FAIL 0",
+  "rollback": "세 파일을 반영 전 백업으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:41:05+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T14:43:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 26개 파일 통과, 시험 51/51개 파일 통과(PASS 624, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1441"
+    },
+    {
+      "at": "2026-11-20T14:43:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T14:47:26+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 26개 파일 통과, 시험 51/51개 파일 통과(PASS 625, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T14:47:26+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_errlog.js → PASS 11, FAIL 0, ALL PASS('info 기록 = 파일 기록 · stats 제외' 포함) · node tools/VibeManager/test/t_orch_lock_repeat.js → PASS 11, FAIL 0, ALL PASS('처리 기록 errlog' PASS) · 2026-11-20 14:44:34 · 변경 4개 파일 · 대상 목록 밖 변경 1개: Doc/verify/SCP0028/touched_rows.json",
+      "log": ".vibe\\logs\\2026-11-20T14-43-59_claude_orch.log",
+      "sec": 43,
+      "costUsd": 0.5189904000000001,
+      "files": [
+        "tools/VibeManager/orch-errlog.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_errlog.js",
+        "Doc/verify/SCP0028/touched_rows.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S5",
+  "selfKey": "orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.admit.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795153265581,
+  "autoFp": "4ee7650b3d",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 26개 파일 통과, 시험 51/51개 파일 통과(PASS 625, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1441",
+  "needsReload": true,
+  "appliedMs": 1795153646127,
+  "synced": [
+    "orch-errlog.js",
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-errlog.js",
+      "tools/VibeManager/test/t_orch_errlog.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_errlog.js → PASS 11, FAIL 0, ALL PASS('info 기록 = 파일 기록 · stats 제외' 포함) · node tools/VibeManager/test/t_orch_lock_repeat.js → PASS 11, FAIL 0, ALL PASS('처리 기록 errlog' PASS) · 2026-11-20 14:44:34",
+    "note": "orch-watch.js stopCleanLock rec 에 info: true 추가. orch-errlog.js stats() 가 info === true 줄을 건너뜀. vm_errors.jsonl 기록과 activations 기록은 유지함. 작업 모드와 hook 차단 없음."
+  },
+  "snap": "prop_20261120143326_SELF_2"
+}

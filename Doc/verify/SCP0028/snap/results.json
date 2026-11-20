@@ -9,7 +9,7 @@
   "diff": "",
   "lines": 0,
   "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\조회조건_Div_40.aria.yml 와 일치 · 조회영역 aria(24줄 · formItem 공통 조상) · 시각 순서 7칸",
-  "at": "2026-11-20T01:02:26.616Z"
+  "at": "2026-11-20T06:04:20.127Z"
  },
  {
   "key": "버튼_Div_40",
@@ -21,7 +21,7 @@
   "diff": "",
   "lines": 0,
   "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(13줄) · 보이는 버튼 KOR,이 이민용,Home,SSP Lot Size,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),입력,Delete,Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
-  "at": "2026-11-20T01:02:26.668Z"
+  "at": "2026-11-20T06:04:20.224Z"
  },
  {
   "key": "헤더_Shipment_Lot_Size",
@@ -33,7 +33,7 @@
   "diff": "",
   "lines": 0,
   "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\헤더_Shipment_Lot_Size.txt 와 일치 · 헤더 1행 · 칸 15",
-  "at": "2026-11-20T01:02:33.978Z"
+  "at": "2026-11-20T06:04:27.840Z"
  },
  {
   "key": "화면샷_1920",
@@ -63,12 +63,12 @@
   "key": "팝업_Model",
   "kind": "팝업",
   "scope": "Model",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0028\\snap\\golden\\팝업_Model.aria.yml",
   "received": "Doc\\verify\\SCP0028\\snap\\received\\팝업_Model.aria.yml",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\팝업_Model.aria.yml 와 일치 · 팝업 aria(60줄)",
-  "at": "2026-11-20T01:02:41.412Z"
+  "diff": "Doc\\verify\\SCP0028\\snap\\diff\\팝업_Model.txt",
+  "lines": 29,
+  "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\팝업_Model.aria.yml 와 29줄 다름(Doc\\verify\\SCP0028\\snap\\diff\\팝업_Model.txt) — 첫 차이: - [골든 22]           - checkbox \"Deselect All Rows\" [checked=mixed] · 팝업 aria(59줄)",
+  "at": "2026-11-20T06:04:35.461Z"
  }
 ]

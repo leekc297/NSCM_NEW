@@ -1,0 +1,29 @@
+{
+  "id": "20261120_133451_R12_ALL",
+  "at": "2026-11-20T13:34:51+09:00",
+  "ms": 1795149291871,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_chain_runner.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_chain_runner.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 15 · FAIL 1 · FAIL 실행 주체 요약 실행 주체: 스크립트 1단계 · Assistant 1회 / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_chain_runner.js",
+    "file": "t_chain_runner.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T13:40:13+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

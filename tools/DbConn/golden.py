@@ -370,6 +370,78 @@ def write_summary(summary, only_case=None):
     return cnt
 
 
+_ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+_pkey = lambda k: nkey(re.sub(r'^@?p_', '', str(k), flags=re.I))
+
+
+def sqllog_args(sc, proc, keys):
+    """T489 이번 TO-BE 호출 기록(Doc/verify/<sc>/sqllog_calls.json)에서 proc 호출의 fe 인자로 keys 를 채운다 → ({키: 값}, 사유) · 한 호출에서 keys 전부를 못 채우면 ({}, '')"""
+    try:
+        calls = json.load(open(os.path.join(_ROOT, 'Doc', 'verify', sc, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or []
+    except (OSError, ValueError):
+        return {}, ''
+    for c in calls:
+        if (c.get('proc') or '').upper().split('.')[-1] != proc.upper().split('.')[-1] or not isinstance(c.get('fe'), dict):
+            continue
+        fe = {_pkey(k): v for k, v in c['fe'].items()}
+        hit = {k: str(fe[_pkey(k)]) for k in keys if str(fe.get(_pkey(k), '') or '') != ''}
+        if len(hit) == len(keys):
+            return hit, f"빈 인자 {', '.join(sorted(hit))} = TO-BE 호출 기록 sqllog_calls.json #{c.get('seq')} 실측 인자({c.get('at', '')})"
+    return {}, ''
+
+
+def no_arg_source_note(sc, sp, proc, keys):
+    """T489 빈 인자의 AS-IS 원천(actions.csv request.Parameters["k"] = 변수 ← 대입식 · 팝업 객체면 팝업 클래스)과 실행 기록 0 을 한 줄로. 원천 판독 실패 = '원천 미확인'"""
+    asis = sc
+    try:
+        for r in csv.DictReader(open(os.path.join(_ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv'), encoding='utf-8-sig')):
+            if (r.get('tobe_id') or '').upper() == sc.upper(): asis = r['asis_id'].upper(); break
+    except OSError:
+        pass
+    try:
+        acts = list(csv.DictReader(open(os.path.join(_ROOT, 'Doc', 'asisfacts', 'screens', asis, 'actions.csv'), encoding='utf-8-sig')))
+    except OSError:
+        acts = []
+    pops = {}  # 메서드 → {객체 변수: 팝업 클래스}
+    for a in acts:
+        m = re.match(r'^(?:[\w.]+\s+)?(\w+)\s*=\s*new\s+(?:\w+\.)*(\w*Pop\w*)\s*\(', a.get('raw') or '')
+        if m: pops.setdefault(a['method'], {})[m.group(1)] = m.group(2)
+    for meth in {a['method'] for a in acts if a.get('kind') == 'POPUP'}:  # 'new X()' 행 + '<객체>.Form_Load/ShowDialog' 행(같은 메서드 팝업 1종)
+        cls_ = {re.sub(r'^new\s+(?:\w+\.)*', '', a['target']) for a in acts if a['method'] == meth and a.get('kind') == 'POPUP' and re.match(r'^new\s+(?:\w+\.)*\w*Pop\w*$', a.get('target') or '')}
+        if len(cls_) == 1:
+            for a in acts:
+                om = re.match(r'^(\w+)\.(Form_Load|ShowDialog|Show)$', a.get('target') or '') if a['method'] == meth and a.get('kind') == 'POPUP' else None
+                if om: pops.setdefault(meth, {}).setdefault(om.group(1), next(iter(cls_)))
+    orig = []
+    ep = {a['method'] for a in acts if a.get('kind') == 'ENDPOINT' and re.search(r'[".]' + re.escape(sp) + r'"', (a.get('target') or '') + (a.get('value') or ''), re.I)}  # 이 SP 를 부르는 메서드
+    callers = ep | {a['method'] for a in acts if a.get('kind') == 'CALL_LOCAL' and a.get('target') in ep}
+    for k in keys:
+        dm = next((a for a in acts if a.get('method') in ep and a.get('kind') == 'DATA_OP' and re.fullmatch(r'\w+\.Parameters\[\s*"' + re.escape(k.lstrip('@')) + r'"\s*\]', a.get('target') or '', re.I)), None)
+        if not dm:
+            orig.append(f'{k}(원천 미확인)'); continue
+        var = (dm.get('value') or '').strip()
+        lo = next((a for a in acts if a.get('method') in callers and a.get('kind') == 'LOCAL' and re.search(r'(?:^|\s)' + re.escape(var) + r'\s*=\s*(.+?);?$', a.get('target') or '')), None)
+        ex = re.search(r'(?:^|\s)' + re.escape(var) + r'\s*=\s*(.+?);?$', lo['target']).group(1).strip() if lo else ''
+        ob = re.match(r'^(\w+)\.', ex)
+        pc = pops.get(lo['method'], {}).get(ob.group(1)) if (lo and ob) else None
+        orig.append(f"{k}={var}" + (f" ← {ex}({lo['method']}:{lo['line']}{' · 팝업 ' + pc + ' 선택 결과' if pc else ''})" if lo else ''))
+    n_sql = 0
+    try:
+        n_sql = sum(1 for c in json.load(open(os.path.join(_ROOT, 'Doc', 'verify', sc, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or [] if (c.get('proc') or '').upper().split('.')[-1] == proc.upper().split('.')[-1])
+    except (OSError, ValueError):
+        pass
+    n_diff = 0
+    try:
+        n_diff = sum(1 for r in csv.DictReader(open(os.path.join(_ROOT, 'Doc', 'verify', sc, 'diff', 'diff_summary.csv'), encoding='utf-8-sig')) if (r.get('asis_sp') or '').upper() == sp.upper())
+    except OSError:
+        pass
+    import glob as _g
+    n_live = sum(1 for f in _g.glob(os.path.join(_ROOT, 'Doc', 'asislive', asis, 'run_*', '*.json')) if sp.upper() in open(f, encoding='utf-8', errors='replace').read().upper())
+    if n_sql or n_diff or n_live:
+        return f"입력 인자 미정: {' · '.join(orig)} · 실행 기록은 있으나 빈 인자를 못 채움(TO-BE 호출 {n_sql} · 차등 검증 {n_diff} · AS-IS 실측 파일 {n_live})"
+    return f"입력 인자 원천 없음: {' · '.join(orig)} · 실행 기록 없음(TO-BE sqllog_calls.json {proc} 호출 0 · 차등 검증 diff_summary {sp} 0 · AS-IS 실측 Doc/asislive/{asis} {sp} 0)"
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else list(argv)
     WRITE = '--write' in argv
@@ -422,7 +494,16 @@ def main(argv=None):
                         break
             except (OSError, ValueError):
                 pass
-        md = [f"# {sc} · {sp} ↔ {proc or '(미매칭)'}", '', f"- 실행: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}", f"- 파라미터: `{json.dumps(params, ensure_ascii=False)}`", f"- 종류: {c['kind']}"] + ([f'- {_live_note}'] if _live_note else [])
+        # ④ 2026-11-20 T489(SCP0028 V-8da88867 A7 SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT '파라미터 값 미정' SKIP): 남은 빈 값 = 이번 TO-BE 호출 기록(sqllog_calls.json fe 인자)으로 채운다.
+        #   이름 대응 = 'p_' 접두·밑줄·대소문자 무시(p_from_site ↔ fromSite). 기록이 없으면 인자를 만들지 않고 원천·기록 0 을 사유로 남긴다(judge A7 가 반입)
+        _src_note = ''
+        if proc and any(v == '' and k not in _blank_ok for k, v in params.items()):
+            _hit, _note = sqllog_args(sc, proc, {k for k, v in params.items() if v == '' and k not in _blank_ok})
+            if _hit:
+                params.update(_hit); _live_note = (_live_note + ' · ' if _live_note else '') + _note
+            else:
+                _src_note = no_arg_source_note(sc, sp, proc, [k for k, v in params.items() if v == '' and k not in _blank_ok])
+        md = [f"# {sc} · {sp} ↔ {proc or '(미매칭)'}", '', f"- 실행: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}", f"- 파라미터: `{json.dumps(params, ensure_ascii=False)}`", f"- 종류: {c['kind']}"] + ([f'- {_live_note}'] if _live_note else []) + ([f'- {_src_note}'] if _src_note else [])
         a_sets = t_sets = None
         if c['kind'] == 'SAVE' and not WRITE: verdict = 'SKIP'; md.append('- SAVE 류 — `--write` 없이 건너뜀')
         elif not proc: verdict = 'SKIP'; md.append('- To-Be proc 미매칭 — golden_cases.csv 의 tobe_proc 를 지정(manual=Y)')

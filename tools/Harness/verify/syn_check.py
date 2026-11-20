@@ -50,6 +50,37 @@ def tokens_from_sql(sql):
     return {t for t in out if t.split('.')[-1] not in SQL_KW}
 
 
+tail_ = lambda s: re.sub(r'^(P_|UP_|SP_)', '', (s or '').split('.')[-1].upper())
+
+
+def be_mapper_calls(name):
+    """T488 BE 매퍼 CALL 위치(sort_check.be_mapper_calls 재사용) → [(경로:줄, 패키지.프로시저, 스키마)]"""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from sort_check import be_mapper_calls as _b
+    return _b(name)
+
+
+def shared_sp_candidates(menu):
+    """T488 화면이 부르는 SP 이름 후보 → [(이름, 출처)] · 대조표 DB-SYN SP 요소 + sqllog_calls.json 호출 프로시저"""
+    import json
+    vd = os.path.join(ROOT, 'Doc', 'verify', menu)
+    out = []
+    p = os.path.join(vd, 'mapping_trace_instances.csv')
+    if os.path.exists(p):
+        for r in csv.DictReader(open(p, encoding='utf-8-sig')):
+            if r.get('check') == 'DB-SYN' and r.get('et') == 'SP' and (r.get('name') or '').strip():
+                out.append((r['name'].strip(), '대조표 DB-SYN 요소'))
+    try:
+        for c in json.load(open(os.path.join(vd, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or []:
+            if c.get('proc'): out.append((c['proc'], 'sqllog_calls.json 호출 기록'))
+    except (OSError, ValueError):
+        pass
+    seen, res = set(), []
+    for n, s in out:
+        if tail_(n) not in seen: seen.add(tail_(n)); res.append((n, s))
+    return res
+
+
 def main():
     pm = rd('proc_meta.csv')
     menus = sorted({r['menu_id'] for r in pm if r.get('proc')}) if a.all else [a.menu.upper()]
@@ -127,6 +158,23 @@ def main():
                 callee = r['pkg'] or r['proc'].split('.')[0]
                 v, path, tgt = resolve(callee, 'EXEC')
                 rows.append({'menu_id': menu, 'kind': 'PROC', 'source': f"{r['sheet']}/{r['btn']}", 'name': r['proc'], 'resolved': tgt, 'verdict': v, 'path': path, 'error_if_called': {'SYN_MISSING': 'PLS-00201 / ORA-06550', 'PRIV_MISSING': 'PLS-00201 / ORA-01031', 'TARGET_MISSING': 'ORA-00980', 'INVALID': 'ORA-04063 / ORA-06508'}.get(v, '')})
+            # ①-c 2026-11-20 T488(SCP0028 T-52d59336 DB-SYN PR_GET_MNU_BTN_AUTH '실행 경로 없음'): 이 화면 PROC_M 에 없는 공용 SP(버튼 권한 등 BE 매퍼 직접 호출 ·
+            #   다른 메뉴 PROC_M 배선)도 화면이 부르면 같은 계정 이름 해석·EXECUTE 권한을 본다. 대상 = 대조표 DB-SYN SP 요소(직전 mapping_trace_instances.csv) + 이번 호출 기록(sqllog_calls.json)
+            #   호출 이름 = BE 매퍼 CALL 문(스키마 한정 그대로) → 없으면 다른 메뉴 PROC_M 패키지 · 둘 다 없으면 UNKNOWN(사유 기재)
+            _done = {tail_(x['proc']) for x in pm if x['menu_id'].upper() == menu and x.get('proc')}
+            for nm_, src_ in shared_sp_candidates(menu):
+                if tail_(nm_) in _done: continue
+                _done.add(tail_(nm_))
+                be_ = be_mapper_calls(nm_)
+                oth_ = [x for x in pm if x.get('proc') and tail_(x['proc']) == tail_(nm_)]
+                if be_:
+                    callee, how, full_ = (f'{be_[0][2]}.{be_[0][1].split(".")[0]}' if be_[0][2] else be_[0][1].split('.')[0]), f'BE 매퍼 {be_[0][0]}', be_[0][1]
+                elif oth_:
+                    callee, how, full_ = (oth_[0]['pkg'] or oth_[0]['proc'].split('.')[0]), f"PROC_M {oth_[0]['menu_id']}/{oth_[0]['sheet']}/{oth_[0]['btn']}", oth_[0]['proc']
+                else:
+                    continue  # 호출 위치 못 찾음 — 행을 만들지 않는다(대조표 API 이름·AS-IS SP 이름은 mapping_trace 가 종전 경로로 판정)
+                v, path, tgt = resolve(callee, 'EXEC')
+                rows.append({'menu_id': menu, 'kind': 'PROC', 'source': f'{src_} · {how}', 'name': full_, 'resolved': tgt, 'verdict': v, 'path': path, 'error_if_called': {'SYN_MISSING': 'PLS-00201 / ORA-06550', 'PRIV_MISSING': 'PLS-00201 / ORA-01031', 'TARGET_MISSING': 'ORA-00980', 'INVALID': 'ORA-04063 / ORA-06508'}.get(v, '')})
             # ①-b 메타(CR-076, 2026-10-29): 메뉴·PROC_M(SEARCH)·SHEET_COLUMNS 가 없으면 화면이 뜨지도/조회되지도 않는다 → META_MISSING(차단)
             menus_meta = {m['mnu_id'].upper() for m in _mrows if (m.get('use_yn') or 'Y') != 'N'}
             if _alias and menu not in menus_meta: print(f"   [INFO] {menu}: 메뉴 행은 USE_YN=N 이지만 같은 화면 경로({_route})의 사용 메뉴 {', '.join(str(a) for a in _alias)} 가 있어 사용 화면으로 봄")

@@ -1,0 +1,78 @@
+[
+ {
+  "run_at": "2026-11-20 06:07:32",
+  "wall_min": 136.7,
+  "stage_min": {
+   "pre": 2.0,
+   "facts": 0.1,
+   "static": 0.4,
+   "e2e": 54.5,
+   "eg": 10.2,
+   "diff": 11.7,
+   "post": 36.7,
+   "docs": 11.9
+  },
+  "top": [
+   {
+    "stage": "e2e",
+    "tool": "playwright _verify _trace _snap",
+    "start": "06:19:11",
+    "min": 54.5
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "07:46:08",
+    "min": 25.8
+   },
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "08:12:29",
+    "min": 11.5
+   },
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "07:13:44",
+    "min": 10.2
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "07:36:51",
+    "min": 9.3
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "07:27:55",
+    "min": 7.7
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "07:23:57",
+    "min": 2.9
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "06:08:42",
+    "min": 1.9
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "07:27:02",
+    "min": 0.9
+   },
+   {
+    "stage": "post",
+    "tool": "master_sweep.py",
+    "start": "07:35:52",
+    "min": 0.3
+   }
+  ]
+ }
+]

@@ -1,21 +1,21 @@
 {
-  "at": "2026-11-20T11:18:48+09:00",
+  "at": "2026-11-20T14:58:49+09:00",
   "days": 7,
-  "events": 823,
+  "events": 1114,
   "firstEventAt": "2026-11-19T17:10:46+09:00",
-  "lastEventAt": "2026-11-20T11:18:09+09:00",
+  "lastEventAt": "2026-11-20T14:58:30+09:00",
   "steps": [
     {
       "key": "S8.checklistRun",
       "actor": "script",
-      "n": 15,
+      "n": 19,
       "fail": 3,
       "stopped": 8,
       "warn": 0,
       "repairs": 0,
-      "medianSec": 5767.2,
+      "medianSec": 1928.7,
       "p90Sec": 14608.3,
-      "totalSec": 89152.6
+      "totalSec": 97062.3
     },
     {
       "key": "S8.checklistRecheck",
@@ -32,14 +32,14 @@
     {
       "key": "2. 검증 보완 (미검증 처리 대상 전체 목록 → 검사엔진 일괄 신설·보완 · 처리 대상이 있을 때만)",
       "actor": "claude",
-      "n": 4,
+      "n": 5,
       "fail": 0,
       "stopped": 0,
       "warn": 1,
       "repairs": 0,
-      "medianSec": 2263.5,
+      "medianSec": 2425.9,
       "p90Sec": 3279.7,
-      "totalSec": 8680.1
+      "totalSec": 11356.8
     },
     {
       "key": "2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)",
@@ -63,6 +63,7 @@
       "unfinishedScreens": [],
       "gone": 0,
       "goneSec": 0,
+      "goneUnknown": 0,
       "n": 8,
       "totalSec": 1140,
       "maxSec": 270,
@@ -82,8 +83,9 @@
       "unfinishedScreens": [
         "DMF0042"
       ],
-      "gone": 3,
+      "gone": 8,
       "goneSec": 70097,
+      "goneUnknown": 5,
       "n": 1,
       "totalSec": 30,
       "maxSec": 30,
@@ -97,36 +99,36 @@
     {
       "chain": "checklist",
       "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
-      "n": 11,
+      "n": 15,
       "ok": 0,
-      "stopped": 8,
+      "stopped": 12,
       "medianSec": 1054.9,
       "claudeRan": 0,
       "claudeSkipped": 33,
-      "runsWithoutClaude": 11
+      "runsWithoutClaude": 15
     }
   ],
   "claude": {
-    "started": 98,
-    "unfinished": 4,
+    "started": 125,
+    "unfinished": 3,
     "runningNow": 1,
-    "calls": 94,
+    "calls": 122,
     "fail": 7,
     "timedOut": 0,
-    "stopped": 4,
+    "stopped": 7,
     "noResult": 0,
-    "totalSec": 22852.3,
-    "costUsd": 268.405,
-    "costCounted": 89,
+    "totalSec": 28679.3,
+    "costUsd": 408.304,
+    "costCounted": 118,
     "sessionRetry": 0,
     "waitedSec": 520.7
   },
   "procFails": [
     {
       "label": "CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
-      "n": 15,
+      "n": 19,
       "fail": 3,
-      "stopped": 8,
+      "stopped": 11,
       "exits": {
         "1": 2,
         "6": 1
@@ -141,12 +143,12 @@
     }
   ],
   "incidents": {
-    "total": 120,
+    "total": 154,
     "byRule": {
-      "R12": 45,
+      "R5": 15,
+      "R12": 76,
+      "R9": 37,
       "R7": 20,
-      "R9": 36,
-      "R5": 13,
       "R3": 1,
       "R2": 15,
       "R11": 16,
@@ -154,6 +156,16 @@
       "R4": 1
     },
     "topRepeats": [
+      {
+        "rule": "R12",
+        "n": 11,
+        "screens": [],
+        "title": "VM 자가진단 S3 설치본 차이: CHANGELOG.md 내용 다름",
+        "statuses": {
+          "resolved": 11
+        },
+        "sig": "R12|S3|CHANGELOG.md"
+      },
       {
         "rule": "R7",
         "n": 11,
@@ -207,14 +219,14 @@
         "sig": "R7|미분류"
       },
       {
-        "rule": "R12",
+        "rule": "R9",
         "n": 8,
         "screens": [],
-        "title": "VM 자가진단 S3 설치본 차이: CHANGELOG.md 내용 다름",
+        "title": "죽은 잠금. _run.admit.lock (PID 42384 없음)",
         "statuses": {
           "resolved": 8
         },
-        "sig": "R12|S3|CHANGELOG.md"
+        "sig": "R9|_run.admit.lock"
       },
       {
         "rule": "R9",
@@ -227,16 +239,6 @@
           "resolved": 8
         },
         "sig": "R9|_run.dbwin.DMF0042.lock"
-      },
-      {
-        "rule": "R9",
-        "n": 7,
-        "screens": [],
-        "title": "죽은 잠금. _run.admit.lock (PID 7540 없음)",
-        "statuses": {
-          "resolved": 7
-        },
-        "sig": "R9|_run.admit.lock"
       },
       {
         "rule": "R11",
@@ -318,28 +320,24 @@
         "sig": "S8.checklistRun | $ <path> <path> <ID> --asis <ID>"
       },
       {
-        "rule": "R9",
+        "rule": "R12",
         "n": 3,
-        "screens": [
-          "SSP0005"
-        ],
-        "title": "죽은 잠금. _run.verify.SSP0005.lock (PID 7540 없음)",
+        "screens": [],
+        "title": "VM 자가진단 S2 시험: t_job_runner.js 실패",
         "statuses": {
           "resolved": 3
         },
-        "sig": "R9|_run.verify.SSP0005.lock"
+        "sig": "R12|S2|t_job_runner.js"
       },
       {
-        "rule": "R9",
+        "rule": "R12",
         "n": 3,
-        "screens": [
-          "SSP0005"
-        ],
-        "title": "죽은 잠금. _run.dbwin.SSP0005.lock (PID 7540 없음)",
+        "screens": [],
+        "title": "VM 자가진단 S3 설치본 차이: orchestra.js 내용 다름",
         "statuses": {
           "resolved": 3
         },
-        "sig": "R9|_run.dbwin.SSP0005.lock"
+        "sig": "R12|S3|orchestra.js"
       }
     ]
   }

@@ -90,9 +90,12 @@ function revert(incId) {
   const dir = path.join(orchDir(), 'snap', incId); const af = readJson(path.join(dir, 'after.json'), null);
   if (!af) return { ok: false, why: '스냅샷 없음' };
   const root = P().root; const done = [], fail = [];
-  for (const rel of [...af.changed, ...af.deleted]) { try { fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true }); fs.copyFileSync(path.join(dir, 'files', rel), path.join(root, rel)); done.push(rel); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
+  // 2026-11-20: 바뀐 파일은 AI 가 한 편집만 거꾸로 적용(조치 뒤 다른 쪽 편집 유지). 안 되면 사본으로 덮고 덮기 전 파일을 .bak_prerestore_ 로 남김(orch-undo.js)
+  const undo = require('./orch-undo'); const info = af.log ? undo.readOps(root, af.log) : { ok: false, why: '실행 기록 경로 없음' }; const notes = [];
+  for (const rel of af.changed) { const r = undo.restoreFile({ root, rel, snapFile: path.join(dir, 'files', rel), info }); if (r.how === 'fail') fail.push(`${rel}: ${r.why}`); else { done.push(rel); if (r.how !== 'same') notes.push(`${rel.split('/').pop()} ${r.why}`); } }
+  for (const rel of af.deleted) { try { fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true }); fs.copyFileSync(path.join(dir, 'files', rel), path.join(root, rel)); done.push(rel); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
   for (const rel of af.created) { try { fs.unlinkSync(path.join(root, rel)); done.push(`${rel}(삭제)`); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
-  act(incId, { status: 'need-user', reverted: true }, `되돌리기. ${done.length}개 파일 복원${fail.length ? ` · 실패 ${fail.length}개` : ''}`, { files: done, fail });
+  act(incId, { status: 'need-user', reverted: true }, `되돌리기. ${done.length}개 파일 복원${notes.length ? `(${notes.join(' / ').slice(0, 500)})` : ''}${fail.length ? ` · 실패 ${fail.length}개` : ''}`, { files: done, fail });
   say('note', { text: `되돌리기 ${incId}: ${done.length}개 파일 복원${fail.length ? ` · 실패 ${fail.join(' / ')}` : ''}` });
   return { ok: !fail.length, done, fail };
 }
@@ -242,7 +245,7 @@ async function claudeAction(inc, extra, manual) {
   say('start', { id: inc.id, text: `${inc.rule} ${inc.ruleName} · ${inc.screen || '공통'} — ${inc.title}` });
   const snap = snapshot(inc.id);
   const r = await runClaude(buildPrompt(inc, extra), { screen: inc.screen, label: `${inc.rule} ${inc.title}` });
-  const df = diffAfter(snap); const out = lastJsonBlock(r.text);
+  const df = diffAfter(snap); const out = lastJsonBlock(r.text); try { writeJson(path.join(snap.dir, 'after.json'), Object.assign({}, df, { log: r.log || '' })); } catch { } // 2026-11-20 되돌리기에서 AI 편집만 거꾸로 적용(orch-undo.js)
   const files = [...df.changed, ...df.created.map(x => `${x}(신규)`), ...df.deleted.map(x => `${x}(삭제)`)];
   const meta = { log: r.log, sec: Math.round(r.ms / 1000), turns: r.turns, costUsd: r.costUsd, files };
   // 개선안 20261119193539_REVIEW_2: exit≠0 이어도 결과 JSON 이 있으면 그 결과로 처리하고 종료 상태는 기록만 한다(결과를 낸 뒤 종료 단계에서 끊긴 경우)
@@ -266,7 +269,7 @@ async function claudeAction(inc, extra, manual) {
     notes.push(a.id ? `개선안 등록 ${a.id}(승인 대기)` : `같은 개선안이 이미 있음 ${a.dup}(${a.status})`);
   }
   if (exitNote) notes.push(`결과 JSON 뒤 비정상 종료(${exitNote})`);
-  const what = `Claude 조치 ${status === 'resolved' ? '완료' : status === 'proposal' ? '— 개선안 올림' : '— 사용자 확인 필요'} · 원인 ${out.cause_class || 'unknown'}: ${String(out.cause || '').slice(0, 300)}${files.length ? ` · 수정 ${files.length}개 파일` : ''}${notes.length ? ' · ' + notes.join(' · ') : ''}`;
+  const what = `Claude 조치 ${status === 'resolved' ? '완료' : status === 'proposal' ? '중단, 개선안 올림' : '중단, 사용자 확인 필요'} · 원인 ${out.cause_class || 'unknown'}: ${String(out.cause || '').slice(0, 300)}${files.length ? ` · 수정 ${files.length}개 파일` : ''}${notes.length ? ' · ' + notes.join(' · ') : ''}`;
   act(inc.id, { status: status === 'proposal' ? 'need-user' : status, agent: out, proposal: propId || undefined, snap: files.length ? inc.id : undefined }, what, Object.assign({ grade: files.length ? 'B' : 'A' }, meta));
   say('end', { id: inc.id, ok: status === 'resolved', text: what });
   if (files.length || status !== 'resolved') notify(inc, what);

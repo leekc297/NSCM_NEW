@@ -1,0 +1,103 @@
+{
+  "id": "20261120143326_SELF",
+  "at": "2026-11-20T14:33:26+09:00",
+  "ms": 1795152806663,
+  "source": "self",
+  "status": "applied",
+  "sig": "orch state lock at parse",
+  "title": "잠금 파일 시각(at) 형식별 변환으로 Invalid time value 오류 제거",
+  "evidence": "오류 서명 'orch-watch.tick | Invalid time value'(13:56:08 1건), 'orch-selfcheck.chainBusy | Invalid time value'(13:56:17 1건). 스택 orch-state.js:104 locks() 에서 new Date(j.at * 1000).toISOString() 실행. tools/Harness/verify/server_guard.py:92 가 Doc/e2e/_server_<port>.lock 의 at 을 time.strftime('%Y-%m-%d %H:%M:%S') 글자로 써서 Number 변환 결과 NaN. tools/E2E/lib/langlock.ts:22, langacct.ts:42 는 at 을 Date.now() 밀리초로 써서 1000을 곱하면 연도 58000대로 표시됨.",
+  "targets": [
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/test/t_orch_state_locks.js"
+  ],
+  "before_after": "orch-state.js:104 at 을 초 단위 숫자로만 보고 *1000 → at 이 숫자면 1e11 이상은 밀리초, 미만은 초로 변환하고, 글자면 그대로 쓰고, 변환 결과가 유효한 날짜가 아니면 '' 로 둠(toISOString 예외 없음). 시험 t_orch_state_locks.js 에 at 글자, 초, 밀리초, 깨진 값 4종 잠금 파일로 snapshot().locks 의 started 확인 추가",
+  "verify": "node tools/VibeManager/test/t_orch_state_locks.js → 4건 PASS, 예외 없이 started 가 각각 '2026-11-20 13:55:00', ISO 날짜 2종, '' 로 나옴",
+  "rollback": "tools/VibeManager/orch-state.js 와 test/t_orch_state_locks.js 를 반영 전 백업으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:34:04+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T14:36:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 26개 파일 통과, 시험 49/49개 파일 통과(PASS 604, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1434"
+    },
+    {
+      "at": "2026-11-20T14:36:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T14:40:42+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 26개 파일 통과, 시험 51/51개 파일 통과(PASS 619, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 4개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T14:40:42+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_state_locks.js 실행(2026-11-20 14:37:44). 4건 PASS, ALL PASS, 예외 0건. started 값: 글자 '2026-11-20 13:55:00', 초 '2026-11-18T11:06:40.000Z', 밀리초 '2026-11-18T11:06:40.123Z', 깨진 값 '' · 변경 14개 파일 · 대상 목록 밖 변경 12개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/dyn_facts.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/job-runner.js, tools/VibeManager/package.json",
+      "log": ".vibe\\logs\\2026-11-20T14-36-54_claude_orch.log",
+      "sec": 62,
+      "costUsd": 0.5830661,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/dyn_facts.json",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/package.json",
+        "tools/VibeManager/workbench.js",
+        "Doc/verify/SCP0028/calls/_trace_D3_조건부_잠금_AS-IS_조건_만족_계정_Division__0.json",
+        "Doc/verify/SCP0028/calls/_trace_G4_조회조건_팝업_버튼_BTN_AS-IS_버튼_TO-BE_칸_버튼_0.json",
+        "Doc/verify/SCP0028/calls/_trace_H2_조건부_배경색_AS-IS_행_조건_color_rules__0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4d_잔여_판정필요_실측_0.json",
+        "tools/VibeManager/test/t_job_autodel.js",
+        "tools/VibeManager/test/t_orch_state_locks.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S5",
+  "selfKey": "orch-watch.tick | Invalid time value",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795152844329,
+  "autoFp": "26d5f87383",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 26개 파일 통과, 시험 51/51개 파일 통과(PASS 619, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1434",
+  "needsReload": true,
+  "appliedMs": 1795153242820,
+  "synced": [
+    "job-runner.js",
+    "orch-state.js",
+    "workbench.js",
+    "package.json"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-state.js",
+      "tools/VibeManager/test/t_orch_state_locks.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_state_locks.js 실행(2026-11-20 14:37:44). 4건 PASS, ALL PASS, 예외 0건. started 값: 글자 '2026-11-20 13:55:00', 초 '2026-11-18T11:06:40.000Z', 밀리초 '2026-11-18T11:06:40.123Z', 깨진 값 ''",
+    "note": "orch-state.js:98 에 lockAt(at) 추가. locks() 가 new Date(j.at*1000).toISOString() 대신 lockAt(j.at) 를 씀. 숫자 1e11 이상 = 밀리초, 미만 = 초, Date.parse 로 읽히는 글자 = 그대로, 그 밖 = ''. 시험 파일은 저장소에 없어 새로 만듦. 설치 폴더, CHANGELOG.md, .bak 은 건드리지 않음"
+  },
+  "snap": "prop_20261120143326_SELF"
+}

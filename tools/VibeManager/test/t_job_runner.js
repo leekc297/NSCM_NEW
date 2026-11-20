@@ -40,7 +40,7 @@ const reload = () => { for (const k of Object.keys(require.cache)) if (/job-runn
   jr.start(j1.id); let a = await waitEnd(j1.id);
   chk('순차 실행 · 실패 뒤 계속', a.status === 'done' && st(a) === 'TST0001:done TST0002:fail TST0003:done', st(a));
   chk('실행 순서 = 선택 순서', R('order.txt').trim().split('\n').join(',') === 'TST0001,TST0002,TST0003', R('order.txt').trim().split('\n').join(','));
-  chk('실패 원인 1줄 · 실행 주체 · 실행 기록 경로', /분석 자료 없음/.test(a.screens[1].why) && /스크립트 1단계/.test(a.screens[0].actorNote) && /FULLRUN\.md$/.test(a.screens[0].md), a.screens[1].why);
+  chk('실패 원인 1줄 · 실행 주체 · 실행 기록 경로', /분석 자료 없음/.test(a.screens[1].why) && /Script 1단계/.test(a.screens[0].actorNote) && /FULLRUN\.md$/.test(a.screens[0].md), a.screens[1].why);
   const sm = R(`.vibe/jobs/${j1.id}/SUMMARY.md`); chk('SUMMARY.md 3행 · 결과 집계', (sm.match(/^\| \d+ \|/gm) || []).length === 3 && /완료 2 · 실패 1/.test(sm) && /분석 자료 없음/.test(sm));
   chk('화면별 로그 파일', /설계서 생성 TST0001/.test(R(`.vibe/jobs/${j1.id}/TST0001.log`)) && /설계서 생성 TST0001/.test(jr.logOf(j1.id, 'TST0001')));
   chk('끝 알림 1회', evs.length === 1 && evs[0].counts.done === 2 && evs[0].counts.fail === 1);

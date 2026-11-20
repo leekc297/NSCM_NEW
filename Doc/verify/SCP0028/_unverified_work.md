@@ -95,3 +95,52 @@
 - 다른 세션 겹침: judge.py 를 SSP0014 세션이 같은 시각에 고침(T405·T38x). 수정 직전 다시 읽고 필요한 부분만 고침. 내 표식 T430~T449 21종 남아 있음 확인
 - 시험 데이터: TO-BE 저장 없음. 사내 오라클 조회(ALL_SOURCE PKG_SCP0028, ALL_TAB_COLUMNS 2표). Doc/asisfacts/screens/SCP0028/combo_src.csv 재생성(facts_combosrc)
 - FE 가이드: FE_GUIDE_20261120_0817.md 1건(대조표 17행 Model 팝업). doc_style 위반 0
+
+## 2026-11-20 라운드 3 (13:10 ~ 13:44 · CheckList 13:07 원장 · 일괄 보완)
+
+- 입력: 원장 `verify_ledger.csv`(13:07:33), 분류 `unverified_triage.*`(13:10:16). 원장 미검증 87 = 엔진 19, 결정 2, 집계 66. AI 검토 행 20 포함 처리 대상 39
+- 행별 조치 표 `_unverified_plan.md`(41행 = 처리 대상 39 + 결정 2, 끝에 처리 결과 표). 결정 목록 `_unverified_decisions.md`(R3-D1~D13). 지난 라운드 표는 `*.r2_20261120`
+- 하위 에이전트 4개로 나눔(P1 mapping_trace, P2 파이썬 검사기 8종, T1 _verify.spec.ts, T2 _trace.spec.ts). 고친 곳은 T 표식과 llm_review 반영 조건 코드로 다시 확인함
+- 재측정: run_verify, Playwright 실행 안 함. 확인은 selftest, 사본 원장 드라이런, 산출물 재생성 diff, tsc, engine_selfcheck
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|---|
+| P1 팝업 규칙 대상 | 11 | mapping_checks.csv EVT_POPUP 이 FE 대조표 행 글의 '팝업' 낱말로 G5, H6, M4 를 붙이고 행에 적힌 이름 전부를 대상으로 잡음. AS-IS clbFromSite(Designer.cs:42), clbToSite(:63) 체크 목록, TRANS_MODE_CODE(cs:75, 646, 499) 셀 이벤트 0건, btnInput(cs:270~284)·btnDelete(cs:298~312) 팝업 뒤 재조회만 | tools/Harness/verify/mapping_trace.py:593~608, 649~652, 1228~1235, 1528~1712, 2333 (T480) | selftest 108/108, 드라이런 11/11 해당없음, 93화면 1,522건 중 해당없음 240 |
+| P2a DM-52 | 1 | gen_expect.py P15 가 AS-IS 차단 없는 버튼에도 행 생성. CR-022 는 차단 메시지 코드 규칙. btnInput_Click cs:260~274 차단 없음 | gen_expect.py (T485) | DM-52 행 58화면 36 → 8 |
+| P2a 기본 문구 | 1 | remember(MSG.INC_GT_LOT, '…')(useShipmentLotSizeValidation.ts:52) 기본 문구 미인식. MSG01127 KO, EN, CN 등록(msg_master.csv:3675~3677) | i18n_static.py (T486) | selftest 12/12, i18n_static.csv 1행 빠짐 |
+| P2a AI 반영 | 1 | 실측 [Open, Search, Close, OK](popup_results.json 12:49) FAIL 을 AI 가 같은 룰 CR-005 와 무관한 인용(cs:246)으로 PASS 처리. SCP0007 사용자 정정은 OK 먼저인 팝업 건 | llm_review.py same_rule_block (T487) | selftest 5건 추가, tobe_rule_registry --check 위반 0 |
+| P2b 정렬·시노님 | 3 | sort_check 가 AS-IS sort_rules 에 있는 SP 만 행 생성. MATERIAL SP, PR_GET_MNU_BTN_AUTH 는 AS-IS 경로 SP 8종에 없음. PR_GET_MNU_BTN_AUTH = Auth.xml:26 BE 매퍼 전용 | sort_check.py, syn_check.py (T488) | sort_check selftest 10/10, sort_check.csv 2행(PASS, NA), syn_check.csv 3행 OK |
+| P2b B6·G5·A7 | 4 | B6 기준표 0행 화면 기대 없음(cboValid.DataBind(YesOrNo, true) cs:135). G5 setBatchMode → mode prop → actionFlag(ShipmentLotSize.tsx:338·343, BatchModal:142·173) 미추적. A7 INPUT SP 인자 = 팝업 선택 결과(cs:278~280, 417~423), 실행 기록 0건 | judge.py B6·A7, popup_args_check.py, golden.py (T489) | popup_args selftest 10/10, popup_args.csv 2행 PASS, golden md 사유 기록 |
+| T1 K3 팝업 그리드 | 5 | _verify.spec.ts 가 행 문구에 '팝업'이 있으면 재지 않고 '미포함: 팝업 그리드' 를 붙임 | _verify.spec.ts:3592, 3663~3700, 173, 3710, 3795~3848, tools/E2E/lib/popk3.ts, popk3run.ts (T496, T500) | tsc 0, popk3.selftest 40/40 |
+| T1 Model 조건 | 2 | G8/G9 시험이 G2 행을 고르지 않음. SEARCH G5 는 G10 행이 있을 때만 잼 | _verify.spec.ts:4055~4076, 3229, 3318~3335 (T497, T498) | tsc 0 |
+| T1·T2 From Site 후보 | 1 | 후보는 코드(AU000062_81-P), 라벨 칸 FROM_SITE_DESCRIPTION 은 설명. 코드는 숨은 칸 FROM_SITE(constants.ts:183) | tools/E2E/lib/condcol.ts, smoke-extra.ts:890, _trace.spec.ts:1636 (T499) | selftest 6건, tsc 0 |
+| T2 기능 단추 팝업 | 1 | popup_args btnDelete_Click 2행 인자 원천이 "D", sDivision_id 라 칸 라벨 0개를 '없음'으로 기록 | _trace.spec.ts G4 (T501) | tsc 0, btnpopup selftest 30/30 |
+| T2 일괄 입력 경로 | 1 | INPUT SP 는 Input 팝업 OK 뒤 조회(cs:260~284, FindInput cs:417). 시나리오 없음. _verify CRUD 가 btn INSERT 로 저장 SP 로 보고 T210 으로 덮음(_verify.spec.ts:1022) | _trace.spec.ts 'BTN 팝업 경로'(T502), _verify.spec.ts 저장 SP 대상에서 _GET_ SP 제외(T506) | tsc 0, 정규식 시험 2건 |
+| T2 일괄 삭제 메시지 | 4 | FindDelete 결과 S → MSG00031(cs:544), 그 밖 MSG00284(cs:553). 삭제 행 복원 경로 없음(restore_touched 키 없는 복원은 지운 행 제외) | _trace.spec.ts 'BTN 팝업 경로' 가짜 응답, W4 E4 넘김, tools/E2E/lib/btnpopup.ts (T503, T504) | tsc 0. 실삭제 안 함 |
+| T2 H2 배경색 | 1 | 조건 action==FlagM 을 조회 결과 265행에서 찾음 | _trace.spec.ts H2, h2RuntimeEdit (T505) | tsc 0 |
+
+### 고치지 않고 결정 목록으로 보낸 행
+
+- R3-D2 3행(Model 팝업 교체), R3-D3, R3-D4 각 1행. R3-D1(EG-2644dff3)은 검사기를 고쳤고 화면 결함 확정 여부를 결정 목록에 올림
+
+### 다음 CheckList 에서 바뀔 판정(미측정)
+
+- 미검증 → 해당없음: P1 11행, T-6dc0e2d5
+- 미검증·판정필요 → 통과 경로: T-653f1a5d, T-52d59336, V-5d06fca9, V-480372c9, V-86b2f489
+- 행 생성 안 됨: V-c346a4a2, EG-bd80125c
+- PASS(AI 반영) → FAIL: EG-2644dff3
+- 미검증 → 실측(통과 또는 오류): K3 5행, V-db17a330, V-99331be4, V-dd4f9db4, T-d6ad4a4e, T-6b9a8ce8, 삭제 메시지 4행, V-a99ddb18
+- 미검증 유지(사유 명시): V-8da88867
+- 다른 화면: T480 해당없음 240건(종전 PASS 9건은 R3-D7), T485 DM-52 행 28건 빠짐, T487 SCP0005 AI 반영 3행 빠짐(R3-D8), 팝업이 있는 화면의 K3 팝업 측정, 숨은 코드 칸이 있는 다중 선택 조회조건
+
+### 점검
+
+- engine_selfcheck PASS(13:44:10 · TSC 0 · SELFTEST_JS 34 · PY 65 · RULE_REGISTRY 0). 13:38 FAIL(llm_review selftest 가짜 룰 번호, golden.py 작업 중 미정의 이름)은 13:41 해소
+- inventory_check --write-registry 13:4x 실행. 새 파일 tools/E2E/lib/popk3.ts, popk3run.ts, condcol.ts, btnpopup.ts 는 등록부 tools/Harness/README.md 에 0건(등록 범위 밖 여부 미확인)
+- 줄바꿈: _verify.spec.ts CRLF 4247/4247, _trace.spec.ts CRLF, mapping_trace.py CRLF 유지. 새 lib 파일 LF
+- 백업 `*.bak_20261120_scp28u3`(gen_expect, i18n_static, llm_review, sort_check, syn_check, judge, popup_args_check, golden, _verify.spec, smoke-extra, _trace.spec), mapping_trace.py.bak_20261120_scp28u3b
+- 다른 세션 겹침: judge.py 에 다른 세션의 미커밋 'AI 권장안 되돌리기' 블록 있음(건드리지 않음). T490~T495 는 다른 세션 사용
+- 시험 데이터: TO-BE 저장, 삭제 없음. 사내 오라클 읽기만(PKG_SCP0028 예외 분기, MATERIAL SP ORDER BY, 시노님). 재생성 산출물: i18n_static.csv, sort_check.csv, syn_check.csv, popup_args.csv, Doc/golden INPUT md
+- FE 가이드: FE_GUIDE_20261120_1320.md 1건(Model 팝업 단추 순서). doc_style 위반 0. fixlist.csv 에 EG-2644dff3 행 없음(지금 원장 PASS)이라 고치지 않음

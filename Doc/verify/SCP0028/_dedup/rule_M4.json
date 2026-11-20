@@ -1,137 +1,94 @@
 {
  "rule_id": "M4",
- "hash": "b061c0865763e512",
+ "hash": "2d4abc87b8378692",
  "groups": [
-  {
-   "rows": [
-    "V-56d81a6a",
-    "V-b6ac431c"
-   ],
-   "why": "Both target the popup-input column right after a popup selection and expect the value to appear in the cell immediately; only the source (DEFECT vs CONFIRMED) and wording differ."
-  },
   {
    "rows": [
     "EG-8d8c9f55"
    ],
-   "why": "Only row checking that confirming the condition-area Model popup with OK puts the value into the target field."
+   "why": "Model 조건 팝업에서 OK를 눌러 선택값이 대상 칸에 들어가는지 확인하는 행이다. 같은 요소·방법·기대를 가진 다른 행이 없다."
   },
   {
    "rows": [
     "EG-ac9382f0"
    ],
-   "why": "Checks that the condition-area Model popup is multi-select; the grid-cell Model popup row expects single-select, so the element and expected result differ."
+   "why": "팝업의 선택 모드(_bMultiSelect=true)를 확인하는 행으로, 값 반영과는 기대가 다르다."
   },
   {
    "rows": [
     "EG-ad8eaa01"
    ],
-   "why": "Only row checking that the popup's period is carried back to the main screen's Period."
+   "why": "팝업 기간이 메인 Period로 넘어가는지 확인하는 행으로, 대상 요소가 Period라 다르다."
   },
   {
    "rows": [
     "EG-ea38ffcb"
    ],
-   "why": "Checks double-click confirm on the condition-area Model popup; the DMF0003 general row targets the Project/Model popups on a new grid row, so the element and state differ."
-  },
-  {
-   "rows": [
-    "V-31ed3615"
-   ],
-   "why": "Checks that OK and double-click return the same values to new-row grid popups (Project, Model and others), which is a different element and state from the condition-area Model popup."
-  },
-  {
-   "rows": [
-    "V-8c1055e7"
-   ],
-   "why": "Only row checking that closing the Model condition popup without a selection keeps the existing value."
-  },
-  {
-   "rows": [
-    "V-c0280822"
-   ],
-   "why": "Checks the Exchange Rate popup discarding unsaved edits on Close and re-querying when reopened; no other row checks this popup or behavior."
-  },
-  {
-   "rows": [
-    "V-cd91e8b8"
-   ],
-   "why": "Checks that the grid-cell Model popup allows only single-select, which differs from the condition-area popup's multi-select in both element and expected result."
+   "why": "더블클릭으로 선택하는 방법을 확인하는 행이라 OK 버튼 행(EG-8d8c9f55)과 방법이 달라 따로 둔다."
   },
   {
    "rows": [
     "T-2a9cd623"
    ],
-   "why": "TRACE row for the btnDelete button; it confirms the trace entry exists, not the selected value being applied."
+   "why": "btnDelete 버튼의 대조표 추적 행으로, 대상이 다른 요소다."
   },
   {
    "rows": [
     "T-365b3790"
    ],
-   "why": "TRACE row for the 6 parameters of procedure P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP; it checks an implementation trace, which is a different property."
+   "why": "팝업 조회 프로시저의 인자 6개를 확인하는 추적 행이라 성질이 다르다."
   },
   {
    "rows": [
     "T-41bb3f1f"
    ],
-   "why": "TRACE row for the TRANS_MODE_CODE column; no other row targets this column."
+   "why": "TRANS_MODE_CODE 컬럼 메타를 추적하는 행으로, 대상 컬럼이 다르다."
   },
   {
    "rows": [
     "T-5bb8509f"
    ],
-   "why": "TRACE row for the clbFromSite condition; this condition element is different from all other rows."
+   "why": "From Site 조회조건을 추적하는 행으로, 대상 조건이 다르다."
   },
   {
    "rows": [
     "T-71daa499"
    ],
-   "why": "TRACE row for the popup search area layout and Find button; it checks the implementation location and layout."
+   "why": "팝업 검색영역과 Find 버튼의 배치를 추적하는 행으로, 요소와 기대가 다르다."
   },
   {
    "rows": [
     "T-84c5ee4c"
    ],
-   "why": "TRACE row for the clbToSite condition, a different element from From Site."
+   "why": "To Site 조회조건을 추적하는 행으로, From Site와는 다른 조건이다."
   },
   {
    "rows": [
     "T-8ef356b6"
    ],
-   "why": "TRACE row for the btnInput button; no other row targets this button."
+   "why": "btnInput 버튼의 추적 행으로, btnDelete와는 다른 버튼이다."
   },
   {
    "rows": [
     "T-8f84f97b"
    ],
-   "why": "TRACE row for the toolbar DeleteButton being visible but doing nothing; it checks the implementation location."
-  },
-  {
-   "rows": [
-    "T-ba663c76"
-   ],
-   "why": "TRACE row for the txtItemId/Model condition; because it is a trace-existence check, it is not grouped with the EG rows."
+   "why": "툴바 Delete 버튼이 보이기만 하고 동작하지 않는지 확인하는 행이라 기대가 다르다."
   },
   {
    "rows": [
     "T-beee3244"
    ],
-   "why": "TRACE row for the popup's automatic query on entry ('D' only); this is a different property from applying the selected value."
-  },
-  {
-   "rows": [
-    "T-c5782dcb"
-   ],
-   "why": "TRACE row for the btnItemId button; it checks the trace, not a reflection result."
+   "why": "팝업이 열릴 때 자동조회하는지('D'만 조회, 'I'는 조회 없음) 확인하는 행으로, 상태와 기대가 다르다."
   },
   {
    "rows": [
     "T-fde69078"
    ],
-   "why": "TRACE row for the popup OK handleConfirm message branches and checked-row return; it checks the implementation location and logic, so it is kept separate from EG-8d8c9f55."
+   "why": "팝업 OK의 검증 메시지(MSG01091/MSG00014/MSG00683)와 체크한 행 반환을 확인하는 행이라 PICK_OK의 '대상 칸에 선택값' 기대와 다르다. 확신이 없어 단독으로 둔다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:22:30",
- "cost": 0.08686719999999999
+ "at": "2026-11-20 13:01:30",
+ "cost": 0.0681808
 }

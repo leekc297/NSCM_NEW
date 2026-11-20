@@ -117,8 +117,12 @@ const DETECTORS = {
     const out = [];
     for (const i of x.incidents) if (i.rule === 'R11' && i.status === 'open' && !(i.actions || []).length && x.now - (i.ms || 0) > 3600000 && x.now - (i.ms || 0) < DAY) out.push({ level: 'fail', what: `Claude 없이 끝난 체인 사건 미조치 ${i.screen}`, detail: `${i.id} ${String(i.title).slice(0, 100)}`, key: `S13|U10|${i.id}` });
     // 중지(사용자, VMO, 창 종료)로 끝난 체인은 뺀다(실측 11-20: 11건 중 중지·중단 체인이 섞임). 체인 시작~끝 사이 같은 창 user.stop 또는 aborted
-    const stopped = e => e.aborted || x.events.some(s => s.type === 'user.stop' && s.wb === e.wb && s.ms >= (e.ms - (e.ms_run || 0)) && s.ms <= e.ms + 1000);
-    for (const e of x.events) if (e.type === 'chain.end' && isCL(e) && e.ok === false && e.claudeRan === 0 && e.claudeSkipped > 0 && x.now - (e.ms || 0) < DAY && !stopped(e)) out.push({ level: 'warn', what: `Claude 단계 건너뛰고 끝난 CheckList ${e.screen}`, detail: `${hm(e.ms)} · 건너뜀 ${e.claudeSkipped} · 실행 스크립트 ${e.scriptRan || 0}`, key: `S13|U10|${e.screen}|${e.ms}` });
+    // 개선안 20261120131344_SELF: 끝 기록의 중지 표시(stopped)를 먼저 본다. 없는 옛 기록은 같은 업무 작업·화면의 job.item.end cancel(chain.end 뒤 2초 안), 종전 user.stop 창으로 본다
+    const up = v => String(v || '').toUpperCase();
+    const itemCancel = e => x.events.some(s => s.type === 'job.item.end' && s.status === 'cancel' && up(s.screen) === up(e.screen) && (!e.job || !s.job || s.job === e.job) && (s.ms || 0) >= (e.ms || 0) && (s.ms || 0) <= (e.ms || 0) + 2000);
+    const stopped = e => e.stopped === true || e.aborted || itemCancel(e) || x.events.some(s => s.type === 'user.stop' && s.wb === e.wb && s.ms >= (e.ms - (e.ms_run || 0)) && s.ms <= e.ms + 1000);
+    const failText = e => { const rows = e.rows || []; const f = rows.find(r => e.failNo != null && r.no === e.failNo) || rows.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const no = e.failNo != null ? e.failNo : (f ? f.no : '?'); return `${no}단계 ${(f && f.task) || '-'} ${(f && f.status) || 'FAIL'} 로 Claude 단계 ${e.claudeSkipped}개 미실행`; };
+    for (const e of x.events) if (e.type === 'chain.end' && isCL(e) && e.ok === false && e.claudeRan === 0 && e.claudeSkipped > 0 && x.now - (e.ms || 0) < DAY && !stopped(e)) out.push({ level: 'warn', what: `Claude 단계 건너뛰고 끝난 CheckList ${e.screen}`, detail: `${hm(e.ms)} · ${failText(e)}`, key: `S13|U10|${e.screen}|${e.ms}` });
     return out;
   },
   // U11 반영 실패 개선안 방치
@@ -132,7 +136,104 @@ const DETECTORS = {
     }
     return out;
   },
+  // U13 창 다시 로드 뒤 VMW 작업 재개 누락: 중단(interrupted) 작업에 다시 실행할 화면(wait, run)이 남았는데
+  //   재개 표시(chain_progress 끊긴 기록, job.json resumable, 화면 resume)가 없거나 waitMin 넘게 같은 작업의 job.start, chain.start 가 없음.
+  //   R5 reloadcut 알림 사건의 끊긴 실행(evidence.runs) 뒤 같은 화면 chain.start 가 waitMin 넘게 없어도 같은 판정
+  reloadResumeMissing(u, x) {
+    const out = []; const waitMs = (u.params.waitMin || 30) * 60000; const settleMs = 120000;
+    const prog = []; const pd = path.join(P().vibeDir, 'orch', 'chain_progress');
+    for (const e of lsDir(pd)) { if (!e.isFile() || !e.name.endsWith('.json')) continue; const r = readJson(path.join(pd, e.name), null); if (r && r.runId && x.now - (r.updatedMs || 0) <= DAY && r.interruptedAt) prog.push(r); }
+    const startedAfter = (pred, ms) => x.events.some(e => (e.type === 'job.start' || e.type === 'chain.start') && (e.ms || 0) > ms && pred(e));
+    for (const e of lsDir(path.join(P().vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jf = path.join(P().vibeDir, 'jobs', e.name, 'job.json'); let m = 0; try { m = fs.statSync(jf).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY) continue; const j = readJson(jf, null); if (!j || j.status !== 'interrupted') continue;
+      const left = (j.screens || []).filter(s => s.status === 'wait' || s.status === 'run'); if (!left.length) continue;
+      const stops = x.events.filter(v => v.type === 'user.stop' && v.job === j.id && (v.ms || 0) <= m + 1000).map(v => v.ms || 0);
+      const cutMs = stops.length ? Math.max(...stops) : m; if (x.now - cutMs < settleMs) continue;
+      if (startedAfter(v => v.job === j.id, cutMs)) continue; // 이미 다시 실행함
+      const marked = new Set(prog.filter(r => r.job === j.id).map(r => String(r.screen || '').toUpperCase()));
+      for (const s of left) if (s.resume) marked.add(String(s.id).toUpperCase());
+      const noMark = left.filter(s => !marked.has(String(s.id).toUpperCase()) && !j.resumable);
+      const ids = left.map(s => s.id).join(', ');
+      if (noMark.length) out.push({ level: 'fail', what: `VMW 재개 표시 없음 ${j.id}`, detail: `작업 중단 ${hm(cutMs)}(${j.note || ''}) · 남은 화면 ${ids} 중 ${noMark.map(s => s.id).join(', ')} 에 재개 기록 없음(.vibe/orch/chain_progress 끊긴 기록, job.json resumable 없음). 작업 재개 단추를 쓸 수 없음`, key: `S13|U13|mark|${j.id}` });
+      else if (x.now - cutMs > waitMs) out.push({ level: 'fail', what: `VMW 중단 뒤 재개 안 됨 ${j.id}`, detail: `작업 중단 ${hm(cutMs)}(${j.note || ''}) 뒤 ${Math.round((x.now - cutMs) / 60000)}분째 job.start, chain.start 없음 · 남은 화면 ${ids}`, key: `S13|U13|wait|${j.id}` });
+    }
+    for (const i of x.incidents) {
+      if (i.rule !== 'R5' || !String(i.sig || '').startsWith('R5|reloadcut|') || x.now - (i.ms || 0) > DAY || x.now - (i.ms || 0) <= waitMs) continue;
+      const runs = ((i.evidence || {}).runs || []).filter(r => r && r.screen);
+      for (const r of runs) {
+        const scr = String(r.screen).toUpperCase(); if (startedAfter(v => String(v.screen || '').toUpperCase() === scr, i.ms || 0)) continue;
+        out.push({ level: 'fail', what: `창 다시 로드 뒤 재실행 없음 ${r.screen}`, detail: `${i.id} ${hm(i.ms)} 끊긴 ${r.label || r.what || ''} 뒤 ${Math.round((x.now - i.ms) / 60000)}분째 같은 화면 chain.start 없음`, key: `S13|U13|r5|${i.id}|${scr}` });
+      }
+    }
+    return out;
+  },
+  // U14 VMW 화면 목록에 화면 명칭 빠짐: VMW 목록에 올리는 화면(flow-panel targets = jobs.js screenList 원본) + 24시간 안 업무 작업 job.json screens[].id
+  //   + 웹뷰 보고(ui.json scr.blank: 목록에 이름 없이 그린 ID) 가운데 TO-BE 메뉴(Doc/tobefacts/db/menu.csv mnu_id → mnu_desc)에 이름이 있는데
+  //   목록 표시 이름이 비었거나 ID 와 같은 항목이 1건 이상이면 fail. 메뉴 파일이 없으면 판정 못 함(warn)
+  screenNameMissing(u, x) {
+    const p = P(); const mf = path.join(p.tobeOutDir || path.join(p.root, 'Doc', 'tobefacts'), 'db', 'menu.csv');
+    let txt = ''; try { txt = fs.readFileSync(mf, 'utf8').replace(/^﻿/, ''); } catch { return [{ level: 'warn', what: 'VMW 화면 명칭 판정 못 함', detail: `메뉴 파일 없음 ${mf}`, key: 'S13|U14|nomenu' }]; }
+    const menu = new Map(); const rows = csvRows(txt); const h = (rows.shift() || []).map(c => String(c).trim().toLowerCase()); const ci = h.indexOf('mnu_id'); const cd = h.indexOf('mnu_desc');
+    if (ci < 0 || cd < 0) return [{ level: 'warn', what: 'VMW 화면 명칭 판정 못 함', detail: `${mf} 에 mnu_id, mnu_desc 열 없음`, key: 'S13|U14|nomenu' }];
+    for (const r of rows) { const id = String(r[ci] || '').trim().toUpperCase(); const nm = String(r[cd] || '').trim(); if (id && nm && !menu.has(id)) menu.set(id, nm); }
+    const shown = new Map(); // ID → 목록 표시 이름
+    const fl = mod('flow-panel'); let tg = []; try { tg = fl && fl.targets ? fl.targets(p) || [] : []; } catch (e) { errlog.note('orch-usercheck', 'screenNameMissing targets', e); }
+    for (const t of tg) if (t && t.id) shown.set(String(t.id).toUpperCase(), String(t.title || '').trim());
+    for (const e of lsDir(path.join(p.vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jf = path.join(p.vibeDir, 'jobs', e.name, 'job.json'); let m = 0; try { m = fs.statSync(jf).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY) continue; const j = readJson(jf, null); if (!j) continue;
+      for (const s of j.screens || []) { const id = String(s.id || '').toUpperCase(); if (id && !shown.has(id)) shown.set(id, String(s.title || s.name || '').trim()); }
+    }
+    const ui = readJson(path.join(ucDir(), 'ui.json'), {}); const rep = ui.scr && x.now - (ui.scr.ms || 0) < DAY ? ui.scr : null;
+    if (rep) for (const id of rep.blank || []) shown.set(String(id).toUpperCase(), '');
+    const miss = [...shown.entries()].filter(([id, nm]) => menu.has(id) && (!nm || nm.toUpperCase() === id)).map(([id]) => id).sort();
+    if (!miss.length) return [];
+    return [{ level: 'fail', what: `VMW 화면 목록 명칭 빠짐 ${miss.length}건`, detail: `메뉴(${path.relative(p.root, mf)} mnu_desc)에 이름이 있는데 목록 이름이 비었거나 ID 와 같음: ${miss.slice(0, 10).map(id => `${id} '${menu.get(id)}'`).join(', ')}${miss.length > 10 ? ` 외 ${miss.length - 10}건` : ''}${rep ? ` · 웹뷰 보고 ${hm(rep.ms)}` : ''}`, key: 'S13|U14|names' }];
+  },
+  // U15 VMO FE LOG 탭에 FE 서버 로그가 안 보임: FE LOG 켜짐 + 5173 up 동안 서버 로그 파일은 windowSec(60) 넘게 늘었는데 FE 스트림 송출 줄 수 0 = fail
+  //   서버 로그 = server.state 마지막 사건이 VM 기동(owner vm 또는 source start)이면 .vibe/logs/<시각>_<서버 이름>.log, 아니면 Doc/e2e/logs/_server_5173.log
+  //   송출 = events.jsonl log.out(stream fe · lines) · 켜짐 = log.toggle(stream fe · on) 또는 log.out on 필드. 두 기록이 없으면 판정 못 함(warn)
+  logTabShown(u, x) {
+    const port = Number(u.params.port || 5173); const winMs = (u.params.windowSec || 60) * 1000; const st = x.state.logTab = x.state.logTab || {};
+    const ss = x.events.filter(e => e.type === 'server.state' && Number(e.port) === port).sort((a, b) => (a.ms || 0) - (b.ms || 0)); const last = ss[ss.length - 1];
+    const up = !!last && /^(up|ready|listen)$/.test(String(last.state || ''));
+    if (!up) { delete st.fe; return []; }
+    const vmOwned = last.owner === 'vm' || last.source === 'start';
+    let f = path.join(P().root, 'Doc', 'e2e', 'logs', `_server_${port}.log`);
+    if (vmOwned) {
+      const ld = path.join(P().vibeDir, 'logs'); const nm = String(last.name || '').replace(/[^\w.-]/g, '_');
+      const cand = lsDir(ld).filter(e => e.isFile() && (nm ? e.name.endsWith(`_${nm}.log`) : /_[\w.-]*FE\.log$/i.test(e.name))).map(e => e.name).sort();
+      if (cand.length) f = path.join(ld, cand[cand.length - 1]);
+    }
+    let size = 0; try { size = fs.statSync(f).size; } catch { delete st.fe; return []; }
+    const fe = x.events.filter(e => (e.type === 'log.out' || e.type === 'log.toggle') && e.stream === 'fe');
+    const tg = fe.filter(e => typeof e.on === 'boolean').sort((a, b) => (a.ms || 0) - (b.ms || 0)); const on = tg.length ? tg[tg.length - 1].on : null;
+    const rel = path.relative(P().root, f);
+    if (on === false) { delete st.fe; return []; }
+    const prev = st.fe;
+    if (!prev || prev.file !== f || size < prev.size) { st.fe = { file: f, size, ms: x.now }; return []; }
+    if (x.now - prev.ms < winMs) return [];
+    st.fe = { file: f, size, ms: x.now };
+    if (size <= prev.size) return [];
+    const grew = `${Math.round((size - prev.size) / 1024)}KB`; const sec = Math.round((x.now - prev.ms) / 1000);
+    if (on === null) return [{ level: 'warn', what: 'FE LOG 표시 판정 못 함', detail: `${rel} ${sec}초 동안 ${grew} 늘어남 · events.jsonl 에 log.out, log.toggle(stream fe) 기록 없음(server-service.js out('fe') 송출 건수 기록 추가 필요)`, key: `S13|U15|norec` }];
+    const lines = x.events.filter(e => e.type === 'log.out' && e.stream === 'fe' && (e.ms || 0) > prev.ms && (e.ms || 0) <= x.now).reduce((s, e) => s + (Number(e.lines) || 0), 0);
+    if (lines > 0) return [];
+    return [{ level: 'fail', what: `FE LOG 탭 송출 0줄(포트 ${port} up)`, detail: `${rel} ${sec}초 동안 ${grew} 늘어남, 같은 동안 log.out stream fe 0줄, 5173 ${last.state}(${vmOwned ? `VM 기동 ${last.name || ''}` : `owner ${last.owner || '-'}`}) ${hm(last.ms)}, FE LOG 켜짐 ${hm(tg[tg.length - 1].ms)}`, key: `S13|U15|${port}` }];
+  },
 };
+/** CSV 텍스트 → 행 배열(따옴표, 줄바꿈 포함 칸 처리) */
+function csvRows(t) {
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) { if (c === '"') { if (t[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; continue; }
+    if (c === '"') q = true; else if (c === ',') { row.push(cur); cur = ''; } else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; } else cur += c;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
 
 /** 자가진단 S13: 원장 항목의 감지기를 모두 실행. 반환 { items, info } */
 function check() {
@@ -143,14 +244,20 @@ function check() {
   x.incidents = incidents(); x.proposals = proposals(); try { const s = mod('orch-state'); x.snap = s ? s.snapshot() : x.snap; } catch { /* 상태 없음 */ }
   const items = []; const per = {}; const unknown = [];
   for (const u of L.items || []) {
-    if (u.status !== 'active') continue; const fn = DETECTORS[u.detector]; if (!fn) { unknown.push(u.id); continue; }
+    if (u.status !== 'active') continue; const fn = DETECTORS[u.detector]; if (!fn) { unknown.push({ id: u.id, det: String(u.detector || '') }); continue; }
     const uu = Object.assign({ params: {} }, u, { params: u.params || {} });
     let r = []; try { r = fn(uu, x) || []; } catch (e) { errlog.note('orch-usercheck', u.detector, e); r = [{ level: 'warn', what: `감지기 오류 ${u.detector}`, detail: e.message, key: `S13|${u.id}|err` }]; }
     per[u.id] = r.length; for (const it of r) items.push(Object.assign({ uid: u.id, quote: String(u.quote || '').slice(0, 120) }, it));
   }
   // 같은 key 는 1건(여러 지적이 같은 감지기를 씀: U3 U5 U7)
   const seen = new Set(); const uniq = items.filter(it => (seen.has(it.key) ? false : (seen.add(it.key), true)));
-  for (const id of unknown) uniq.push({ uid: id, level: 'fail', what: `감지기 없는 지적 ${id}`, detail: '원장 detector 이름이 orch-usercheck.js DETECTORS 에 없음', key: `S13|${id}|nodet` });
+  // 파일에는 정의가 있고 실행 중 모듈(require 캐시)에만 없음 = 반영 직후 창 다시 로드 전 → 경고
+  let src = ''; if (unknown.length) { try { src = fs.readFileSync(__filename, 'utf8'); } catch (e) { errlog.note('orch-usercheck', 'readSelf', e); } }
+  for (const { id, det } of unknown) {
+    const inFile = !!det && /^[A-Za-z_$][\w$]*$/.test(det) && new RegExp(`^\\s*${det}\\(u, x\\)`, 'm').test(src);
+    if (inFile) uniq.push({ uid: id, level: 'warn', what: `감지기 ${id} 파일 반영됨, 창 다시 로드 뒤 실행`, detail: `원장 detector ${det} 정의가 orch-usercheck.js 파일에 있고 실행 중 DETECTORS 에 없음`, key: `S13|${id}|reload` });
+    else uniq.push({ uid: id, level: 'fail', what: `감지기 없는 지적 ${id}`, detail: '원장 detector 이름이 orch-usercheck.js DETECTORS 에 없음', key: `S13|${id}|nodet` });
+  }
   writeJson(path.join(ucDir(), 'state.json'), st);
   const lj = readJson(path.join(ucDir(), 'learn.json'), {});
   return { items: uniq, info: { ledger: (L.items || []).length, active: (L.items || []).filter(u => u.status === 'active').length, per, coveredUntil: L.coveredUntil || '', lastLearnAt: lj.lastAt || '', lastLearn: lj.lastResult || '', newPrompts: pendingPrompts().length } };
@@ -160,6 +267,8 @@ function check() {
 function noteUi(m) {
   try {
     const tab = String(m.tab || ''); let src = [];
+    // U14 VMW 화면 목록 보고: 받은 화면 수 + 이름 없이 그린 ID(blank) → ui.json scr 에 덮어씀(screenNameMissing 이 읽음)
+    if (tab === 'scr') { const f = path.join(ucDir(), 'ui.json'); const ui = readJson(f, { miss: [] }); const blank = (Array.isArray(m.blank) ? m.blank : []).map(v => String(v).toUpperCase()).filter(v => /^[A-Z]{2,4}\d{4}[A-Z]?$/.test(v)).slice(0, 500); ui.scr = { ms: Date.now(), received: Number(m.received) || 0, blank }; writeJson(f, ui); return { blank: blank.length }; }
     if (tab === 'prop') src = proposals().map(p => ({ id: p.id, ms: Math.max(p.ms || 0, ...((p.history || []).map(h => Date.parse(String(h.at || '').replace(' ', 'T')) || 0))) }));
     else if (tab === 'inc') src = incidents().map(i => ({ id: i.id, ms: Math.max(i.ms || 0, i.lastMs || 0, ...((i.actions || []).map(a => Date.parse(String(a.at || '').replace(' ', 'T')) || 0))) }));
     else return null;
@@ -211,7 +320,7 @@ async function learn(manual) {
     const prompt = [
       '.claude/agents/vm-orchestra.md 의 지킬 것을 따른다. 이번 일은 사용자 지적 학습이다. 파일을 고치지 않는다(읽기만).',
       '아래 [새 프롬프트] 는 사용자가 VM(Vibe_Manager), VMO 를 쓰다가 직접 입력한 글이다. 글마다 판단한다.',
-      '- issue: VM, VMO 의 동작을 보고 잘못을 지적한 글(멈춤, 표시 안 됨, 조치 안 함, 중지 안 됨, 너무 오래 걸림, 오류 등).',
+      '- issue: VM, VMO 의 동작을 보고 잘못을 지적한 글(멈춤, 표시 안 됨, 조치 안 함, 중지 안 됨, 오래 걸림, 오류 등).',
       '- not-issue: 기능 요청, 디자인 선택, 승인, 진행 지시, 화면(UI) 업무 작업 지시, 질문만 있는 글.',
       'issue 이면 [감지기] 중 이 현상을 실행 기록으로 잡을 수 있는 것을 고른다. 맞는 감지기가 없으면 newDetector 에 무엇을 어떤 기록(파일, 사건 기록 type, 필드)으로 판정할지 적는다. 기록으로 판정할 수 없는 지적이면 detector 와 newDetector 를 비우고 why 에 이유를 적는다.',
       '필요하면 tools/VibeManager/orch-usercheck.js, orch-watch.js, .vibe/orch/events.jsonl 을 읽어 확인한다.',

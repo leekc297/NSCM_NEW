@@ -147,7 +147,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 ### 도구 등록부
 
 <!-- TOOL-REGISTRY:BEGIN -->
-> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-20 10:12 · 도구 254개 · 손 실행 38개). 직접 고치지 말고 다시 생성한다.
+> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-20 13:46 · 도구 256개 · 손 실행 38개). 직접 고치지 말고 다시 생성한다.
 > 진입 열: `체인 <단계>` = `run_verify.py`(CheckList) 가 그 단계에서 실행 · `VM <작업 id>` = `tools/VibeManager/steps.json` 작업 · `다른 도구가 사용` = import·호출만 · `손 실행` = 어떤 진입점에도 연결 없음(명령줄에서 직접).
 
 
@@ -172,7 +172,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `asis_live_fill.py` | 다른 도구가 사용: asis_live_batch.py, asis_live_datafind.py, asis_live_save.py 외 2 | AS-IS 실측 2차 — 필수 조회조건을 "가장 최근 값"으로 채운다 (2026-11-12 · 사용자 결정 "최근 값으로 진행") |
 | `asis_live_msg_cover.py` | 다른 도구가 사용: asis_live_proof_answers.py | AS-IS 경로 메시지 실측 대조 (2026-11-15) |
 | `asis_live_overlap.py` | 다른 도구가 사용: asis_live_scen_cov.py | asis_live_overlap.py — 런처 실행이 서로 겹친 실행 폴더 찾기 (2026-11-14 잠금 결함 사후 점검) |
-| `asis_live_proof_answers.py` | 다른 도구가 사용: asis_live_proof_join.py | asis_live_proof_answers.py — 런처 몫 미증명 항목(_proof_live_targets.csv)마다 AS-IS 런처 실행 결과(정답)가 있는지 연결한다 (2026-11-15, 27화면 미검증·미판단 0 작업) |
+| `asis_live_proof_answers.py` | 다른 도구가 사용: asis_live_proof_join.py, sort_check.py | asis_live_proof_answers.py — 런처 몫 미증명 항목(_proof_live_targets.csv)마다 AS-IS 런처 실행 결과(정답)가 있는지 연결한다 (2026-11-15, 27화면 미검증·미판단 0 작업) |
 | `asis_live_proof_join.py` | 손 실행(진입점 연결 없음) | asis_live_proof_join.py — 런처 정답 연결(_proof_live_answers.csv)에 판정 단위와 다음 조치를 붙인다 (2026-11-16 사용자 지시: 정적으로 되는 것은 정적으로, 런처는 동적 항목만) |
 | `asis_live_proof_targets.py` | 다른 도구가 사용: asis_live_proof_answers.py | asis_live_proof_targets.py — 증명 목록(_proof_backlog)의 미증명 검사 단위 가운데 AS-IS 런처 실행으로 정답을 줄 수 있는 것을 고른다 (2026-11-14 사용자 지시: 27화면에서 미검증·미판단 0 먼저) |
 | `asis_live_rule_map.py` | VM S1.liveRuleMap | AS-IS 관찰 문구 → TO-BE 룰 대응표 생성 (2026-11-13 · 사용자 "TO-BE RULE 로 정의된 부분은 AS-IS 와 차이가 발생해도 오류가 아니다") |
@@ -229,7 +229,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `doc_archive.py` | 다른 도구가 사용: make_docs.py, make_test_report.py, make_testcases.py 외 1 | 버전 문서 공용 — 다음 버전 번호 · 이전 버전 old/ 이동 (2026-10-28 사용자 요청) |
-| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 6 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
+| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 7 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
 | `make_docs.py` | VM S3.xlsx | make_docs — 화면 ID 하나로 사람이 보는 Excel 문서 4종을 팀 양식(hook #105 · TestCases4)으로 생성한다. |
 | `make_testcases.py` | 다른 도구가 사용: doc_archive.py, make_docs.py | make_testcases — 단위테스트(TestCases4) 를 '실제 사용자 흐름' 으로 재구성해 생성한다 (2026-10-27 사용자 지시). |
 | `md2xlsx.py` | 다른 도구가 사용: agent.ps1 | md2xlsx — 화면 문서(MD) + Fact Pack CSV + GAP CSV 를 사용자가 보는 Excel 1권으로 묶는다. |
@@ -307,9 +307,10 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `db_ref_check.py` | 체인 post | DB 참조 정합(2026-11-02 엔진 갭 EG142·EG143) |
 | `db_snapshot.py` | 다른 도구가 사용: _verify.spec.ts | 저장 전후 DB 스냅샷(2026-10-31 E05) — 저장 대상 테이블에서 화면 행과 같은 키의 행을 읽는다. 저장 세부 판정(행 수 불변·감사 컬럼·연계 테이블)의 원천 |
 | `dbq.py` | 다른 도구가 사용: _verify.spec.ts | E2E 시나리오용 단건 DB 조회 — 결과를 JSON 으로 출력(2026-11-03 · dbcell 단계 EG129/EG103) |
+| `decide_apply.py` | 다른 도구가 사용: judge.py, make_verify_docs.py, unverified_resolve.py | 사용자 판정 대상 행에 AI 권장안을 먼저 적용 (2026-11-20 사용자 지시) |
 | `decisions.py` | 손 실행(진입점 연결 없음) | 결정표 — 기계로 PASS/FAIL 을 못 정한 항목(판정필요·WARN)을 사람이 한 번에 답할 수 있는 표로 만들고, 답을 원장에 '수동' 판정으로 반영한다 (2026-10-26) |
-| `dedup_general.py` | 다른 도구가 사용: ledger.py | 결함 유형 행 중복 정리 — AI 판단 (2026-11-20 사용자 지시) |
-| `dedup_screen.py` | 다른 도구가 사용: judge.py, llm_review.py, make_verify_docs.py 외 1 | 화면 안 중복 정리 — AI 판단 (2026-11-20 사용자 지시 G2) |
+| `dedup_general.py` | 다른 도구가 사용: ledger.py, orch-dict.js | 결함 유형 행 중복 정리 — AI 판단 (2026-11-20 사용자 지시) |
+| `dedup_screen.py` | 다른 도구가 사용: judge.py, llm_review.py, make_verify_docs.py 외 2 | 화면 안 중복 정리 — AI 판단 (2026-11-20 사용자 지시 G2) |
 | `defects_import.py` | VM S8.defects | 결함 원장(사람이 수행한 단위테스트 결과) → Doc/verify/defects_baseline.csv |
 | `defects_sources_merge.py` | VM S8.merge | 원천 CSV(Doc/verify/sources/*.csv · sources_extract.py 산출) → 결함 원장 확장 (2026-10-30 2단계) |
 | `delta_scope.py` | 다른 도구가 사용: checklist_run.py, run_verify.py, source_snap.py | 수정분 재점검 범위 결정 — 코드 규칙 + AI 판단 (2026-11-20 사용자 지시) |
@@ -321,7 +322,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `doc_patterns.py` | 다른 도구가 사용: gen_expect.py, pattern_coverage.py | doc_patterns.py — 문서 행 → 결함 패턴 연결표(W8-3, 2026-11-05) |
 | `doc_proof.py` | 다른 도구가 사용: doc_patterns.py, engine_audit.py, run_docs_batch.py | 3개 문서(defects_classified.csv) 기준 검증엔진 입증 현황 — 진행율의 단일 출처(2026-10-31 사용자: 감·예측 금지, 3개 문서 전체 확인 가능해야 함) |
 | `e2e_paths.py` | 다른 도구가 사용: e2e_suite.py, e2e_suite_ingest.py, judge.py 외 4 | e2e_paths — 화면별 E2E 결과·로그 위치 찾기 (2026-11-06 사용자 지시: 화면 ID 중간 폴더) |
-| `e2e_shard.py` | 다른 도구가 사용: run_verify.py | 한 화면 E2E 나눠 동시 실행 (2026-11-20 D1 · 사용자 지시) |
+| `e2e_shard.py` | 다른 도구가 사용: orch-dict.js, run_verify.py | 한 화면 E2E 나눠 동시 실행 (2026-11-20 D1 · 사용자 지시) |
 | `e2e_suite.py` | 다른 도구가 사용: e2e_suite_ingest.py, run_verify.py, unverified_resolve.py | CheckList 안에서 E2E 테스트 4종 실행 (2026-11-18 사용자 지시) |
 | `e2e_suite_ingest.py` | 다른 도구가 사용: e2e_suite.py, run_verify.py | E2E 테스트 결과 중 CheckList 판정에 들어가지 않던 기능 시험 → 원장 ES- 행 (2026-11-18 사용자 지시 |
 | `eg_chain.py` | 체인 eg | 엔진 갭 전용 검사기 실행(2026-11-01) — 팝업(eg_popup)·Division·권한(eg_auth). run_verify 가 화면 잠금을 쥔 채로 부른다(--tier all/slow) |
@@ -329,7 +330,8 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `engine_audit.py` | 다른 도구가 사용: inventory_check.py | 검사엔진 존재 전수 조사(2026-10-31) — impl=Y 표시를 믿지 않고 규칙마다 코드에서 확인한다 |
 | `engine_gap_cluster.py` | 손 실행(진입점 연결 없음) | 엔진 갭 항목을 신설 묶음(engine)으로 분류해 _engine_gap.csv 에 고정하고 진행 현황을 출력한다(2026-10-31) — 진행율의 분모는 이 파일 |
 | `engine_gap_merge.py` | 손 실행(진입점 연결 없음) | 엔진 갭 대조표 병합·온전성 점검(2026-10-31) — gap_*.csv → Doc/verify/_engine_gap.csv(항목 ID 부여·상태 열 유지) |
-| `engine_selfcheck.py` | 다른 도구가 사용: inventory_check.py, run_verify.py | 엔진 변경 게이트(EN-00 · 2026-11-11) — 검증·생성 도구를 고친 뒤 실행에 투입하기 전에 '돌려 보면 드러나는' 결함을 실제로 돌려서 잡는다. |
+| `engine_gate.py` | VM S8.engineGate | 검사기 보완 구간 보호 (2026-11-20 CheckList 한 번 실행 구조 2.4) |
+| `engine_selfcheck.py` | 다른 도구가 사용: engine_gate.py, inventory_check.py, run_verify.py | 엔진 변경 게이트(EN-00 · 2026-11-11) — 검증·생성 도구를 고친 뒤 실행에 투입하기 전에 '돌려 보면 드러나는' 결함을 실제로 돌려서 잡는다. |
 | `envelope.py` | 다른 도구가 사용: decisions.py, evidence_check.py, run_verify.py 외 1 | 결과 봉투 vibe-result/1 — 판정 산출물 옆 <이름>.result.json (2026-10-26) |
 | `evidence_check.py` | 다른 도구가 사용: decisions.py, e2e-judge.js, llm_call.py 외 1 | 근거 확인기 — 결과 봉투(vibe-result/1)의 인용 근거가 실제로 있는지 기계로 확인해 근거 등급(hard/soft)을 매긴다 (2026-10-26) |
 | `excel_stage_clean.py` | 다른 도구가 사용: _verify.spec.ts | Excel 업로드 시험이 남긴 스테이징 행 정리(2026-11-02) |
@@ -380,7 +382,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `lookup_check.py` | 체인 post | Lookup 기반 셀 편집 후보 판정(2026-11-01 엔진 갭 EG066) |
 | `make_test_report.py` | VM S8.report | 테스트결과서 — UI CheckList(run_verify) 결과를 사용자가 읽는 '테스트 내역 · 결과' Excel 로 (2026-10-30 사용자 요청) |
 | `make_ui_test_sheet.py` | VM S8.uitest | UI 테스트 Sheet — CheckList '조치 필요' 시트를 Doc/UI_TEST(SCP&SSP) 의 화면별 테스트 Excel 로 옮긴다 |
-| `make_verify_docs.py` | 다른 도구가 사용: decisions.py, dedup_screen.py, doc_archive.py 외 7 | 화면 정합검증서 + 보완대상목록 xlsx 생성 |
+| `make_verify_docs.py` | 다른 도구가 사용: decide_apply.py, decisions.py, dedup_screen.py 외 8 | 화면 정합검증서 + 보완대상목록 xlsx 생성 |
 | `mapping_trace.py` | 체인 static·post | 대조표 ↔ 검증 추적표 v2 — 대조표의 모든 행을 '검증 대상'으로 보고, 행마다 해야 할 검사를 카탈로그로 정해 결과를 단다 (2026-10-26) |
 | `master_sweep.py` | 체인 post | 기준정보 존재·활성 스윕(2026-11-02 엔진 갭 EG455) |
 | `measure_by_site_check.py` | 체인 post | Sales Site 유형별 입력 Measure 허용 목록(B5 · EG068 · DM-37/DM-135/DM-139/DM-153) — Doc/verify/<ID>/measure_by_site.csv (2026-11-03) |
@@ -426,7 +428,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `snap_validate.py` | 체인 post | 수신 스냅샷(snap/received) ↔ AS-IS 유래 기대(snap/expected) 대조 — 골든 승인 전 기계 검증(2026-11-06 플랜 3-4) |
 | `sort_check.py` | 체인 static | 결과 정렬(A6) 정적 대조 — AS-IS SP ORDER BY(sort_rules.csv) ↔ TO-BE PKG 프로시저 ORDER BY(사내오라클 ALL_SOURCE 새로 조회) (2026-10-26) |
 | `sort_ci_check.py` | 체인 post | 문자 정렬 키의 대소문자 무시·NULL 먼저 점검(2026-11-02 엔진 갭 EG034) |
-| `source_snap.py` | 다른 도구가 사용: delta_scope.py, run_verify.py | 화면 소스 기준선(지문) — 수정분 재점검의 바탕 (2026-11-20 사용자 지시) |
+| `source_snap.py` | 다른 도구가 사용: delta_scope.py, engine_gate.py, run_verify.py | 화면 소스 기준선(지문) — 수정분 재점검의 바탕 (2026-11-20 사용자 지시) |
 | `sources_extract.py` | VM S8.sources | 검증 지식 원천 xlsx 3개 → MD + 기계판독 CSV + 이미지 (누락 0 증명 포함) — Doc/verify/sources/ |
 | `sp_branch_check.py` | 체인 post | 저장 SP 검증 분기 대조(2026-11-01 엔진 갭 EG161) — AS-IS 저장 SP 의 오류 문구 ↔ TO-BE 저장 PROC·화면 코드 |
 | `sp_dml_check.py` | 체인 post | 저장 SP 쓰기 컬럼 대조(2026-11-01 엔진 갭 EG238·EG230·EG223) — AS-IS 저장 SP 가 쓰는 표·컬럼 ↔ TO-BE 저장 PROC |

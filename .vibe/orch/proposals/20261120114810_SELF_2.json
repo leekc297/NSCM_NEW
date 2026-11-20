@@ -1,0 +1,89 @@
+{
+  "id": "20261120114810_SELF_2",
+  "at": "2026-11-20T11:48:10+09:00",
+  "ms": 1795142890774,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|screennamemissing",
+  "title": "사용자 지적 감지기 추가 U14 screenNameMissing: VMW 좌하단 화면 목록에 화면 명칭이 빠진 항목이 있음",
+  "evidence": "사용자 지적(2026-11-20T11:17:28+09:00) \"VMW 의 좌하단 UI 목록에 명칭이 누락된 부분이 확인됩니다. UI 명칭 누락분현재 메뉴에서 찾아서 명칭 채워주세요.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 screenNameMissing 없음 → 추가. 판정: VMW 목록에 올리는 화면 ID 가운데 메뉴 목록에 이름이 있는데 목록 표시 이름이 비어 있거나 ID 와 같은 항목이 1건 이상이면 fail · 읽을 기록: .vibe/jobs/<job>/job.json screens[].id 와 화면 이름 필드(현재 job.json 에 이름 필드 없음 확인), VM 메뉴 목록 원본(경로 미확인), 웹뷰 보고 .vibe/orch/usercheck/ui.json 에 목록 표시 이름 기록 추가 필요. user_checks.json U14 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T12:00:35+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T12:03:19+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 44/44개 파일 통과(PASS 537, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1200"
+    },
+    {
+      "at": "2026-11-20T12:03:21+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T12:09:25+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 44/44개 파일 통과(PASS 544, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T12:09:25+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node test/t_orch_usercheck.js C:/Projects/NSCM/tools/VibeManager (2026-11-20 12:05:36) → ALL PASS. 시험 43건 통과, U14 통과·실패 표본 7건 포함(빈 이름 2건 실패, 이름 채움 통과, ID 와 같은 이름 실패, 웹뷰 보고 실패·통과, 메뉴 파일 없음 경고) · 변경 6개 파일 · 대상 목록 밖 변경 3개: Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv, Doc/verify/_llm_usage.csv",
+      "log": ".vibe\\logs\\2026-11-20T12-03-22_claude_orch.log",
+      "sec": 148,
+      "costUsd": 1.3823756999999999,
+      "files": [
+        "Doc/verify/SCP0028/llm_cache.json",
+        "Doc/verify/SCP0028/llm_usage.csv",
+        "Doc/verify/_llm_usage.csv",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U14",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795143635559,
+  "autoFp": "6b3afa9676",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 44/44개 파일 통과(PASS 544, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1200",
+  "needsReload": true,
+  "appliedMs": 1795144165474,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node test/t_orch_usercheck.js C:/Projects/NSCM/tools/VibeManager (2026-11-20 12:05:36) → ALL PASS. 시험 43건 통과, U14 통과·실패 표본 7건 포함(빈 이름 2건 실패, 이름 채움 통과, ID 와 같은 이름 실패, 웹뷰 보고 실패·통과, 메뉴 파일 없음 경고)",
+    "note": "DETECTORS.screenNameMissing 추가. 목록 원본은 flow-panel targets, 24시간 안 job.json screens[].id, ui.json scr.blank 보고이고 이름 기준은 Doc/tobefacts/db/menu.csv mnu_id → mnu_desc임. 메뉴 파일이 없으면 warn. noteUi 에 tab 'scr' 보고 처리 추가함. jobs.js 웹뷰가 보고를 보내는 코드는 targets 밖이라 넣지 않았고 지금은 앞의 두 원본으로 판정함. 목록 이름을 메뉴에서 채우는 코드는 flow-panel.js:39-40 에 이미 있음. 실제 저장소 데이터로는 감지기를 실행하지 않음(flow-panel.js 가 vscode 모듈을 불러와 확장 밖에서 실행 불가). 작업 모드 DB_ONLY 이지만 tools/VibeManager 는 FE·BE 대상이 아니라 hook 차단 없음"
+  },
+  "snap": "prop_20261120114810_SELF_2"
+}

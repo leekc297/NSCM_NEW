@@ -1,0 +1,22 @@
+{
+  "id": "20261120_142854_R12_ALL",
+  "at": "2026-11-20T14:28:54+09:00",
+  "ms": 1795152534628,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U13 VMW 재개 표시 없음 J20261120_003352",
+  "screen": "",
+  "sig": "R12|S13|U13|mark|J20261120_003352",
+  "count": 1,
+  "repeat": null,
+  "detail": "작업 중단 11-20 14:24(VS Code 종료로 중단됨) · 남은 화면 SCP0028 중 SCP0028 에 재개 기록 없음(.vibe/orch/chain_progress 끊긴 기록, job.json resumable 없음). 작업 재개 단추를 쓸 수 없음",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U13|mark|J20261120_003352",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": []
+}

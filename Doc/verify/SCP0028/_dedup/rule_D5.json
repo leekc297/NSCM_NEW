@@ -1,118 +1,95 @@
 {
  "rule_id": "D5",
- "hash": "55a5f91456623dac",
+ "hash": "64c32a6f44d0f135",
  "groups": [
   {
    "rows": [
     "EG-42a2c7ad"
    ],
-   "why": "Input 버튼으로 여는 ShipmentLotSizePopup이 AS-IS와 같은 팝업인지 본다. Delete 버튼은 다른 버튼이라 따로 둔다."
-  },
-  {
-   "rows": [
-    "EG-dcd1c347"
-   ],
-   "why": "Delete 버튼으로 여는 ShipmentLotSizePopup이 AS-IS와 같은 팝업인지 본다. Input 버튼과는 대상 버튼이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-be9d2e58"
    ],
-   "why": "Model 조건 팝업이 AS-IS와 같은 팝업인지 보는 행이다. 같은 요소의 입력 칸 형태를 보는 EG-fbe06cfe와는 기대 결과가 달라 따로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-dcd1c347"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-fbe06cfe"
    ],
-   "why": "Model 조건이 텍스트 입력과 아이콘 팝업을 함께 쓰는 입력 칸인지 본다. 팝업이 같은지를 보는 행과는 기대 결과가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-a53e3cf6"
    ],
-   "why": "LOT_SIZE의 대조표 추적 행이다. 확인하는 성질이 COLUMN 메타 행(에디터 유형)과 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-facf1db7"
    ],
-   "why": "INCREMENT의 대조표 추적 행이다. 확인하는 성질이 COLUMN 메타 행(에디터 유형)과 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-fbb53708"
    ],
-   "why": "CreateSpread 진입점을 추적하는 행이다. 같은 요소를 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2bdf7955"
    ],
-   "why": "INCREMENT 컬럼이 NUMBER(소수 0자리) 에디터인지 본다. LOT_SIZE와는 다른 컬럼이다."
-  },
-  {
-   "rows": [
-    "V-77100d57"
-   ],
-   "why": "LOT_SIZE 컬럼이 NUMBER(소수 0자리) 에디터인지 본다. INCREMENT와는 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2ce779cb"
    ],
-   "why": "LAST_UPDATE_DATE 컬럼이 DATETIME 에디터인지 본다. CREATION_DATE와는 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3ae7c623"
    ],
-   "why": "CREATION_DATE 컬럼이 DATETIME 에디터인지 본다. LAST_UPDATE_DATE와는 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-618e561f"
    ],
-   "why": "VALID_YN 컬럼이 COMBO 에디터인지 본다. 다른 콤보 컬럼과는 대상 컬럼이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-66b1a489"
    ],
-   "why": "OPERATION_GROUP_ID 컬럼이 COMBO 에디터인지 본다. 다른 콤보 컬럼과는 대상 컬럼이 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-77100d57"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "V-aa075cf2"
    ],
-   "why": "SPLIT_YN 컬럼이 COMBO 에디터인지 본다. 다른 콤보 컬럼과는 대상 컬럼이 다르다."
-  },
-  {
-   "rows": [
-    "V-ab8afbe4"
-   ],
-   "why": "콤보와 팝업 셀 전체를 AS-IS와 비교하는 확정 규칙이다. 범위가 넓어 특정 컬럼 하나를 보는 행과 묶으면 검사가 빠질 수 있다."
-  },
-  {
-   "rows": [
-    "V-3dfd7310"
-   ],
-   "why": "DMF0020 결함 유형 행이다. 콤보 편집기, COL_LIST 비노출, Measure 위치를 함께 보므로 기대 결과가 다른 행과 다르다."
-  },
-  {
-   "rows": [
-    "V-b0fdad1f"
-   ],
-   "why": "코드성 컬럼(Menu Type, Auth Unit, System)을 Lookup 콤보로 입력하는지 보는 결함 유형 행이다. 같은 대상을 보는 행이 없다."
-  },
-  {
-   "rows": [
-    "V-d55534ed"
-   ],
-   "why": "DMF0021 결함 유형 행으로 신규 행 상태의 팝업과 후보 동작을 본다. 상태와 기대 결과가 다른 행과 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:17:45",
- "cost": 0.0804338
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:00:10",
+ "cost": 0,
+ "open": 0
 }

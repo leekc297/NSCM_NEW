@@ -1,270 +1,71 @@
 {
  "rule_id": "B4",
- "hash": "f9ba2e3f2c87ebd0",
+ "hash": "29df59331504f37a",
  "groups": [
-  {
-   "rows": [
-    "V-6aff1e68",
-    "V-fddb89e2"
-   ],
-   "why": "같은 Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)을 보고, 기대도 'Active Y/N 무관 전체 후보 표시'로 같다."
-  },
-  {
-   "rows": [
-    "V-ab06b7aa",
-    "V-22e43ac8"
-   ],
-   "why": "같은 그리드 셀 콤보(End Customer·Sold-to Customer)를 신규 행 Insert 상태에서 보고, 기대도 '빈 콤보 아님·중복 0·원천 정렬'로 같다."
-  },
-  {
-   "rows": [
-    "V-c6f45f97"
-   ],
-   "why": "조회조건 전체 후보에 더해 그리드 셀 콤보는 validYn=Y만 보인다는 기대가 하나 더 있어 V-6aff1e68/V-fddb89e2와 기대가 다르므로 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-60523ab7"
-   ],
-   "why": "Team(DEPT) 원천이 SSPM DEPT_ID인지만 확인한다. 다른 콤보의 AS-IS 원천까지 확인하는 V-e4b3958d와 기대 범위가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-e4b3958d"
-   ],
-   "why": "Sales Site·End Customer·Sold to·Plant Site의 AS-IS 원천과 Team cascade를 함께 확인해 V-60523ab7보다 기대 범위가 넓으므로 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-35386e98"
-   ],
-   "why": "조회조건과 그리드 셀 콤보 전체를 AS-IS와 비교하는 포괄 확정 규칙이라 특정 요소 행과 대상이 다르다."
-  },
   {
    "rows": [
     "EG-39246d2d"
    ],
-   "why": "화면 전체를 대상으로 GET_ADMIN_GROUP_MEASURE 행을 확인하는 화면 규칙이라 같은 행이 없다."
-  },
-  {
-   "rows": [
-    "V-09d08863"
-   ],
-   "why": "Filter 콤보 6종의 상위→하위 cascade와 Active 무관 후보를 jaehyeok 권한으로 확인하는 고유 조건이다."
-  },
-  {
-   "rows": [
-    "V-0bdad6b8"
-   ],
-   "why": "FCST Type 후보만 대상으로 하는 행이다."
-  },
-  {
-   "rows": [
-    "V-193697f9"
-   ],
-   "why": "신규 팀을 저장한 뒤 Team 조회조건이 다시 채워지는지 보는 저장 후 상태라 다른 Team 행과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-1e7e6e50"
-   ],
-   "why": "To Site 조회조건 콤보의 원천이 AS-IS인지 보는 결함 유형 행으로, 증거 형식이 다른 SEARCH 행과는 확신이 없어 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2c13dbe7"
    ],
-   "why": "조회조건 Valid 하나만 대상으로 한다."
-  },
-  {
-   "rows": [
-    "V-2ce07fe9"
-   ],
-   "why": "Owner 팝업의 사용자 목록이 대상이다."
-  },
-  {
-   "rows": [
-    "V-31b69874"
-   ],
-   "why": "Sales Site 유형별로 AS From Site 활성 여부와 Measure 후보를 보는 고유 조건이다."
-  },
-  {
-   "rows": [
-    "V-37f555b9"
-   ],
-   "why": "Version 조회조건이 대상이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-45432329"
    ],
-   "why": "신규 행의 SPLIT_YN 컬럼이 대상이다."
-  },
-  {
-   "rows": [
-    "V-47675c72"
-   ],
-   "why": "Module, Sub Module 등 SYS0016 유형의 여러 요소를 함께 보는 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-4dbd6436"
-   ],
-   "why": "Customs Handbook 콤보 후보가 대상이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4eb9eeac"
    ],
-   "why": "조회조건 Operation Group이 대상이며, 신규 행 그리드 컬럼(V-a48fca29)과는 요소가 다르다."
-  },
-  {
-   "rows": [
-    "V-5c5481e8"
-   ],
-   "why": "조건 후보와 결과 컬럼값의 차이를 보는 다른 성질의 확인이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6d2f93ab"
    ],
-   "why": "신규 행의 VALID_YN 컬럼이 대상이다."
-  },
-  {
-   "rows": [
-    "V-70dee691"
-   ],
-   "why": "Approval Result 조회조건 콤보가 대상이다."
-  },
-  {
-   "rows": [
-    "V-8c2d6edf"
-   ],
-   "why": "Current 버전에서 입력 Measure 통제와 AS From Site 콤보를 함께 보는 고유 조건이다."
-  },
-  {
-   "rows": [
-    "V-91988712"
-   ],
-   "why": "조회 전 Insert 행에서 To Site 콤보와 City 매핑을 보는 상태라 조회조건 To Site와 다르다."
-  },
-  {
-   "rows": [
-    "V-9307b7d9"
-   ],
-   "why": "DEPT_ID 변경 후 재조회했을 때 Team 셀에 표시되는 값을 본다."
-  },
-  {
-   "rows": [
-    "V-9f07da36"
-   ],
-   "why": "81_HD 신규 행에서 Team 후보와 그리드 콤보 중복을 함께 보는 고유 조건이다."
-  },
-  {
-   "rows": [
-    "V-a190e6f2"
-   ],
-   "why": "Div 40에서 Sales Site 조회조건의 표시 명칭을 본다."
-  },
-  {
-   "rows": [
-    "V-a44fdea0"
-   ],
-   "why": "Div에 데이터가 없는 후보가 숨겨지는지 보는 기대라 다른 행과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a48fca29"
    ],
-   "why": "신규 행의 OPERATION_GROUP_ID 그리드 컬럼이 대상이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a5481297"
    ],
-   "why": "조회조건 From Site가 대상이다."
-  },
-  {
-   "rows": [
-    "V-b30790d6"
-   ],
-   "why": "Company를 바꾼 뒤 하단 그리드 Sales Company/Plant 콤보를 보는 고유 상태다."
-  },
-  {
-   "rows": [
-    "V-b750b733"
-   ],
-   "why": "Div 81 신규 행에서 End Customer 셀 콤보 후보를 Div 기준으로 보는 기대로, 중복·정렬을 보는 B4-G03과 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-bd004e37"
-   ],
-   "why": "신규 Sales Site를 저장한 뒤 조회조건에 바로 반영되는지 보는 저장 후 상태다."
-  },
-  {
-   "rows": [
-    "V-be3ae0ca"
-   ],
-   "why": "FCST Type=ETC 신규 행에서 Team과 Measure 컬럼을 본다."
-  },
-  {
-   "rows": [
-    "V-cf8dc1cb"
-   ],
-   "why": "LOOKUP에 새로 등록한 뒤 그리드 콤보에 반영되는지 보는 고유 상태다."
-  },
-  {
-   "rows": [
-    "V-d57feeae"
-   ],
-   "why": "Sales Plant 셀 콤보의 Active=Y 필터가 대상이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d6983a85"
    ],
-   "why": "조회조건 Trans Mode가 대상이다."
-  },
-  {
-   "rows": [
-    "V-d8db3dbf"
-   ],
-   "why": "Div 81에서 Team 조회조건 후보 건수가 AS-IS와 같은지 보는 고유 조건이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e2e65f2c"
    ],
-   "why": "조회조건 Division이 대상이다."
-  },
-  {
-   "rows": [
-    "V-f221bf2c"
-   ],
-   "why": "저장 성공과 Sales Site 셀 콤보의 Div 필터를 함께 보는 고유 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f8085a99"
    ],
-   "why": "조회조건 To Site의 후보 차이 0 증거를 보는 SEARCH 행으로, 결함 유형 행(V-1e7e6e50)과 묶을 확신이 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-faa23276"
-   ],
-   "why": "API Type 조회조건이 대상이다."
-  },
-  {
-   "rows": [
-    "V-fdaa2d7c"
-   ],
-   "why": "System 컬럼의 입력 방식이 대상이다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:17:01",
- "cost": 0.1471564
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 12:59:56",
+ "cost": 0,
+ "open": 0
 }

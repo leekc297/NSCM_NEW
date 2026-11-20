@@ -1,124 +1,35 @@
 {
  "rule_id": "N1",
- "hash": "b2d464aeb11ea974",
+ "hash": "a14c0f81a50742d9",
  "groups": [
   {
    "rows": [
     "EG-e18fa1ad"
    ],
-   "why": "기준표 키 존재와 비활성 코드 후보 제외를 함께 확인하는 화면 규칙이며, 같은 대상과 같은 기대를 가진 다른 행이 없다."
-  },
-  {
-   "rows": [
-    "V-1170d727"
-   ],
-   "why": "Unit Price(LOC) 조건부 필수에 따른 저장 차단과 Plant Site ID 정합을 확인하는 고유 항목이다."
-  },
-  {
-   "rows": [
-    "V-1549fff4"
-   ],
-   "why": "Div 40/81의 Measure 추가·제거 셋팅을 확인하며, 기대 내용이 다른 Measure 구성 행과 다르다."
-  },
-  {
-   "rows": [
-    "V-36ecd6cf"
-   ],
-   "why": "Div별 컬럼과 Measure 구성이 AS-IS와 같은지(예: 81 컬럼 29개) 확인하며, UI Category 기준 Measure(V-becb345b)와는 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-41835768"
-   ],
-   "why": "BOM Explosion Plant Assign 정합만 확인하는 고유 대상이다."
-  },
-  {
-   "rows": [
-    "V-59ca3b25"
-   ],
-   "why": "LBL/MSG/MENU 코드 사전의 중복 채번을 확인하는 것으로, 화면 데이터 요소가 아니다."
-  },
-  {
-   "rows": [
-    "V-74f3b873"
-   ],
-   "why": "Exchange Rate 팝업의 기간 컬럼과 이상 데이터를 확인하며, 조회 결과 기간 칸(V-d6820165)과는 요소가 다르다(팝업 vs 메인 그리드)."
-  },
-  {
-   "rows": [
-    "V-77164742"
-   ],
-   "why": "Sales Site라는 특정 조회조건의 명칭 표시를 확인하며, 조회조건 콤보 전체를 보는 V-965ac2dd와 범위가 같다고 확신할 수 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-84801f55"
-   ],
-   "why": "Measure 콤보의 오타 'Cutomer FCST'를 정비했는지 확인하는 고유 항목이다."
-  },
-  {
-   "rows": [
-    "V-8a08b2cc"
-   ],
-   "why": "Sales Plant 셀 콤보에 Active Flag=Y만 나오는지 확인하며, 기준표 키 대상(EG-e18fa1ad)과는 요소가 다르다."
-  },
-  {
-   "rows": [
-    "V-8fb8e871"
-   ],
-   "why": "AS From Site 컬럼 하나의 공란 센티널 통일만 확인하므로, Company 컬럼 행이나 두 컬럼을 함께 보는 묶음 행과는 대상 범위가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-965ac2dd"
    ],
-   "why": "조회조건 콤보 후보 전체가 기호 일색이 아닌지 확인하는 화면 규칙이다."
-  },
-  {
-   "rows": [
-    "V-9f49b852"
-   ],
-   "why": "Company 컬럼에서 필터 적용 시 Blanks 항목이 하나만 나오는지 확인하며, AS From Site 행과는 대상 컬럼이 다르다."
-  },
-  {
-   "rows": [
-    "V-b16b9dd2"
-   ],
-   "why": "ROLLING 이후 Customer FCST Master 기준정보가 생성됐는지 확인하는 고유 상태 조건이다."
-  },
-  {
-   "rows": [
-    "V-b21a857c"
-   ],
-   "why": "AS From Site와 Company 등 여러 컬럼을 함께 대상으로 하므로, 단일 컬럼 행 하나와 묶으면 나머지 컬럼 검사가 빠질 수 있다."
-  },
-  {
-   "rows": [
-    "V-becb345b"
-   ],
-   "why": "Div별 UI Category 기준 Measure 표시를 확인하며, AS-IS 구성 일치(V-36ecd6cf)와는 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c80495b1"
    ],
-   "why": "조회 결과에 센티널 '/'가 보이지 않는지 확인하며, 센티널 통일 저장과는 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d6820165"
    ],
-   "why": "메인 조회 결과 기간 칸에 달력에 없는 값이 있는지 확인하며, Exchange Rate 팝업과는 요소가 다르다."
-  },
-  {
-   "rows": [
-    "V-dc093d6f"
-   ],
-   "why": "컬럼셋팅의 VERSION 처리와 Div 40의 AS FROM SITE 비노출을 확인하는 고유 항목이다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:22:47",
- "cost": 0.087358
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:01:23",
+ "cost": 0,
+ "open": 0
 }

@@ -68,12 +68,12 @@ function create(opts) {
 }
 // 2026-11-20 작업 재개: 창 다시 로드로 끊긴 화면의 체인 진행 기록(workbench.resumable) → s.resume = { from, of, at, label }. 화면 카드와 작업 재개 단추가 쓴다
 function resumeMap(jobId) { const m = {}; try { for (const r of require('./workbench').resumable(P(), { job: jobId })) if (!m[r.screen]) m[r.screen] = r; } catch (e) { errlog.note('job-runner', 'resumeMap', e); } return m; }
-function decorate(job) { if (!job || !job.screens) return job; const m = resumeMap(job.id); for (const s of job.screens) { const r = s.status === 'wait' ? m[s.id] : null; if (r) s.resume = { from: r.resumeFrom, of: r.steps, at: String(r.interruptedAt || '').replace('T', ' ').slice(5, 16), label: r.label }; else delete s.resume; } job.resumable = job.screens.filter(s => s.resume).length; return job; }
+function decorate(job) { if (!job || !job.screens) return job; const m = resumeMap(job.id); for (const s of job.screens) { const r = s.status === 'wait' ? m[s.id] : null; if (r) { let pl = { text: '', restart: false }; try { pl = require('./workbench').resumePlan(P(), api, r); } catch (e) { errlog.note('job-runner', 'resumePlan', e); } s.resume = { from: r.resumeFrom, of: r.steps, at: String(r.interruptedAt || '').replace('T', ' ').slice(5, 16), label: r.label, what: pl.text, restart: pl.restart }; } /* 2026-11-20 이어갈 지점 · 재시작 여부 */ else delete s.resume; } job.resumable = job.screens.filter(s => s.resume).length; return job; }
 function get(id) { const h = jobs.get(id); if (h) return decorate(h.job); const j = readJson(path.join(jobDir(id), 'job.json'), null); if (j) { adopt(j); return decorate(j); } return null; }
 // 파일에서 읽은 작업을 메모리에 올린다. 실행 중으로 적혀 있으면 이 프로세스가 돌리던 것이 아니므로 '중단됨'으로 바꾼다
 function adopt(job) {
   if (jobs.has(job.id)) return jobs.get(job.id).job;
-  if (/^(running|pausing)$/.test(job.status)) { job.status = 'interrupted'; job.note = 'VS Code 창을 닫거나 다시 로드해 중단됨. 이어서 실행으로 남은 화면을 실행'; for (const s of job.screens) if (!DONE.has(s.status)) { if (s.status === 'run' || s.status === 'admit' || s.status === 'busy') { s.status = 'wait'; s.step = ''; s.summary = '중단됨. 다시 실행 대상'; } } }
+  if (/^(running|pausing)$/.test(job.status)) { job.status = 'interrupted'; job.interruptedAt = nowLocal(); job.note = 'VS Code 창을 닫거나 다시 로드해 중단됨. 이어서 실행으로 남은 화면을 실행'; for (const s of job.screens) if (!DONE.has(s.status)) { if (s.status === 'run' || s.status === 'admit' || s.status === 'busy') { s.status = 'wait'; s.step = ''; s.summary = '중단됨. 다시 실행 대상'; } } }
   // 2026-11-20 S13 U9 실측: 창 다시 로드(dispose)는 작업 상태만 '중단됨'으로 바꾸고 화면 7개(J20261120_003352·054831·060728)를 '실행 중'으로 남겼다 → 불러올 때 화면 상태도 맞춘다
   let fixed = false; if (/^(interrupted|stopped|done)$/.test(job.status)) for (const s of job.screens) if (s.status === 'run' || s.status === 'admit' || s.status === 'busy') { const st = job.status === 'stopped'; s.status = st ? 'cancel' : 'wait'; s.step = ''; s.prog = ''; s.actor = ''; s.summary = st ? '중지됨' : '중단됨. 다시 실행 대상'; fixed = true; }
   jobs.set(job.id, { job, runners: new Map(), loop: null, logs: new Map() });
@@ -123,7 +123,7 @@ async function runOne(h, s) {
     onNote: text => { pushLog(h, s.id, `ℹ ${text}\n`); if (ws) try { ws.write(`ℹ ${text}\n`); } catch { } } });
   h.runners.set(s.id, runner);
   let rec = null; if (s.resume) { rec = resumeMap(job.id)[s.id] || null; delete s.resume; } // 2026-11-20 작업 재개: 끊긴 단계부터
-  if (rec) { const t = `↻ 작업 재개: ${rec.resumeFrom}/${rec.steps} 단계부터(끊긴 시각 ${String(rec.interruptedAt || '').replace('T', ' ').slice(0, 16)})\n`; pushLog(h, s.id, t); if (ws) try { ws.write(t); } catch { } }
+  if (rec) { let pl = null; try { pl = require('./workbench').resumePlan(P(), api, rec); } catch { /* 문구만 */ } const t = `↻ ${pl && pl.restart ? '작업 재시작' : '작업 재개'}: ${pl ? pl.text : `${rec.resumeFrom}/${rec.steps} 단계부터`}(끊긴 시각 ${String(rec.interruptedAt || '').replace('T', ' ').slice(0, 16)})\n`; pushLog(h, s.id, t); if (ws) try { ws.write(t); } catch { } }
   let r; try { r = await runner.run(item, rec ? { resume: rec } : undefined); } catch (e) { r = { ok: false, status: 'FAIL', summary: `예외: ${e.message}`, sec: Math.round((Date.now() - t0) / 1000) }; }
   h.runners.delete(s.id); runner.dispose(); if (ws) try { ws.end(`\n===== 끝 ${nowLocal()} ${r.status} =====\n`); } catch { }
   const map = { OK: 'done', WARN: 'warn', HOLD: 'hold', FAIL: 'fail', CANCEL: 'cancel', BLOCKED: 'skip', UNSUPPORTED: 'skip' };
@@ -212,7 +212,7 @@ function writeSummary(job) {
   } catch (ex) { errlog.note('job-runner', 'loop', ex); }
 }
 
-function begin(h) { const job = h.job; if (h.loop) return false; job.status = 'running'; job.note = ''; if (!job.startedAt) job.startedAt = nowLocal(); job.endedAt = ''; save(job); state.init(P()); evt('job.start', { job: job.id, label: job.itemLabel, total: job.screens.length, pending: job.screens.filter(s => !DONE.has(s.status)).length }); h.loop = loop(h); return true; }
+function begin(h) { const job = h.job; if (h.loop) return false; job.status = 'running'; job.note = ''; delete job.interruptedAt; if (!job.startedAt) job.startedAt = nowLocal(); job.endedAt = ''; save(job); state.init(P()); evt('job.start', { job: job.id, label: job.itemLabel, total: job.screens.length, pending: job.screens.filter(s => !DONE.has(s.status)).length }); h.loop = loop(h); emit(job.id, 'start', summaryOf(job)); return true; } // 2026-11-20 'start' = VMW 창이 목록을 갱신하고 그 작업을 보이게(Workbench 재개 단추로 다시 시작한 작업이 VMW 에 안 보이던 결함)
 /** 시작 · 이어서 실행(끝나지 않은 화면만) */
 function start(id) { const j = get(id); const h = jobs.get(id); if (!j || !h) return false; if (!j.screens.some(s => !DONE.has(s.status))) return false; return begin(h); }
 /** 2026-11-20 사용자 지시 'VMO 가 화면이 열리지 않은 것을 캐치해서 원인을 찾고 해결한 뒤 정상 기동되게': VMO 가 원인을 고친 뒤 그 화면 실행을 다시 시작한다.
@@ -286,12 +286,30 @@ function attachWatch(watch) {
 function logOf(id, screen) { const h = jobs.get(id); return h && h.logs.get(screen) ? h.logs.get(screen).slice(-400).join('') : ''; }
 function running() { return [...jobs.values()].filter(h => !!h.loop).map(h => summaryOf(h.job)); }
 function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
-let reqTimer = null;
+let reqTimer = null; let sweepTimer = null;
+/** 2026-11-20 사용자 지시 '중단된 프로세스는 특정시간(DEFAULT:24시간)이 지나면 자동삭제': 설정 vibeManager.jobs.interruptedKeepHours(기본 24, 0 = 자동 삭제 안 함) */
+function keepHours() { try { const v = require('vscode').workspace.getConfiguration('vibeManager').get('jobs.interruptedKeepHours'); if (v != null && v !== '' && !isNaN(Number(v))) return Math.max(0, Number(v)); } catch { /* VS Code 밖(시험) */ } return 24; }
+/** 중단(interrupted)된 지 hours 시간이 지난 VMW 작업을 지운다(🗑 삭제와 같은 remove · 작업 폴더와 재개 기록). 중단 시각이 없는 옛 작업은 job.json 수정 시각을 중단 시각으로 적고 그때부터 센다.
+ *  반환 [{ id, at, hours }] */
+async function sweepInterrupted(hours) {
+  const hh = hours == null ? keepHours() : Number(hours); if (!(hh > 0)) return [];
+  let names = []; try { names = fs.readdirSync(jobsDir()).filter(n => /^J\d{8}_\d{6}/.test(n)); } catch { return []; }
+  const out = [];
+  for (const id of names) {
+    const h = jobs.get(id); if (h && h.loop) continue; const f = path.join(jobDir(id), 'job.json');
+    const j = h ? h.job : readJson(f, null); if (!j || j.status !== 'interrupted') continue;
+    if (!j.interruptedAt) { let mt = Date.now(); try { mt = fs.statSync(f).mtimeMs; } catch { } j.interruptedAt = nowLocal(mt); save(j); }
+    const t = Date.parse(j.interruptedAt); if (!(t > 0) || Date.now() - t < hh * 3600000) continue;
+    const r = await remove(id); if (r.ok) { out.push({ id, at: j.interruptedAt, hours: hh }); evt('job.autodelete', { job: id, interruptedAt: j.interruptedAt, hours: hh, progress: r.progress }); } else errlog.note('job-runner', 'sweepInterrupted', `${id} 삭제 실패: ${r.why}`);
+  }
+  return out;
+}
 // 2026-11-20 S13 U9 실측(10:43 다시 로드 뒤): 끝난 작업(중단, 중지, 끝남)의 '실행 중' 화면은 작업창을 열기 전까지 남았다 → 켜질 때 최근 30건을 정리한다.
 //   실행 중(running, pausing)으로 적힌 작업은 다른 VS Code 창이 돌리는 중일 수 있어 여기서 건드리지 않는다(종전대로 작업창을 열 때 adopt)
 function tidyRecent() { let names = []; try { names = fs.readdirSync(jobsDir()).filter(n => /^J\d{8}_\d{6}/.test(n)).sort().reverse().slice(0, 30); } catch { return 0; } let n = 0; for (const id of names) { if (jobs.has(id)) continue; const j = readJson(path.join(jobDir(id), 'job.json'), null); if (!j || !/^(interrupted|stopped|done)$/.test(j.status) || !(j.screens || []).some(s => /^(run|admit|busy)$/.test(s.status))) continue; adopt(j); n++; } return n; }
-function init(wbApi) { api = wbApi; setTimeout(() => { try { tidyRecent(); } catch (e) { errlog.note('job-runner', 'tidyRecent', e); } }, 3000); if (!reqTimer) { reqTimer = setInterval(() => { try { pollRequests(); } catch (e) { errlog.note('job-runner', 'pollRequests', e); } }, 2000); if (reqTimer.unref) reqTimer.unref(); } }
-function dispose() { if (reqTimer) { clearInterval(reqTimer); reqTimer = null; } for (const h of jobs.values()) if (h.loop) { h.job.status = 'interrupted'; h.job.note = 'VS Code 종료로 중단됨'; for (const [scr, r] of h.runners) { evt('user.stop', { wb: `${h.job.id}:${scr}`, screen: scr, job: h.job.id, by: 'VS Code 종료', why: 'vscode.dispose', ms: Date.now() }); /* 개선안 20261120005403_INC: stop() 과 같은 필드(job, ms) + why */ try { r.stop(); } catch { } } /* 2026-11-20 05:14 실측: 창 다시 로드로 끊긴 SCP0005, SSP0005 가 실패 사건 R2, R11 4건으로 올라와 에이전트가 Claude 를 불렀다 → 사용자 중지로 알림 */ try { fs.writeFileSync(path.join(jobDir(h.job.id), 'job.json'), JSON.stringify(h.job, null, 2), 'utf8'); } catch { } } }
+function init(wbApi) { api = wbApi; setTimeout(() => { try { tidyRecent(); } catch (e) { errlog.note('job-runner', 'tidyRecent', e); } }, 3000); if (!reqTimer) { reqTimer = setInterval(() => { try { pollRequests(); } catch (e) { errlog.note('job-runner', 'pollRequests', e); } }, 2000); if (reqTimer.unref) reqTimer.unref(); }
+  if (!sweepTimer) { const sw = () => sweepInterrupted().catch(e => errlog.note('job-runner', 'sweepInterrupted', e)); setTimeout(sw, 5000); sweepTimer = setInterval(sw, 3600000); if (sweepTimer.unref) sweepTimer.unref(); } } // 켤 때 5초 뒤 + 1시간마다 중단 작업 자동 삭제
+function dispose() { if (reqTimer) { clearInterval(reqTimer); reqTimer = null; } if (sweepTimer) { clearInterval(sweepTimer); sweepTimer = null; } for (const h of jobs.values()) if (h.loop) { h.job.status = 'interrupted'; h.job.interruptedAt = nowLocal(); h.job.note = 'VS Code 종료로 중단됨'; for (const [scr, r] of h.runners) { evt('user.stop', { wb: `${h.job.id}:${scr}`, screen: scr, job: h.job.id, by: 'VS Code 종료', why: 'vscode.dispose', ms: Date.now() }); /* 개선안 20261120005403_INC: stop() 과 같은 필드(job, ms) + why */ try { r.stop(); } catch { } } /* 2026-11-20 05:14 실측: 창 다시 로드로 끊긴 SCP0005, SSP0005 가 실패 사건 R2, R11 4건으로 올라와 에이전트가 Claude 를 불렀다 → 사용자 중지로 알림 */ try { fs.writeFileSync(path.join(jobDir(h.job.id), 'job.json'), JSON.stringify(h.job, null, 2), 'utf8'); } catch { } } }
 
 /** 2026-11-20 사용자 지시 '삭제 = 중지 후 삭제 · 목록에서 완전 삭제 · 재개 불가': 실행 중이면 중지하고 루프가 끝난 뒤 작업 폴더(job.json, 화면 로그, SUMMARY)와 그 작업의 체인 진행 기록을 지운다. 반환 { ok, why } */
 async function remove(id) {
@@ -302,4 +320,4 @@ async function remove(id) {
   try { fs.rmSync(jobDir(id), { recursive: true, force: true }); } catch (e) { return { ok: false, why: `작업 폴더 삭제 실패: ${e.message}` }; }
   jobs.delete(id); evt('job.delete', { job: id, progress: progN }); emit(id, 'end', { id, deleted: true }); return { ok: true, progress: progN };
 }
-module.exports = { remove, decorate, resumeMap, tidyRecent, stopScreen, pollRequests, requeueScreen, parseProg, progText, init, dispose, on, create, get, list, start, retryFailed, pause, stop, pauseAll, resumeOrch, attachWatch, loadCfg, isSelfAdmit, admitWhy, logOf, running, batchItems, findItem, parseIds, summaryOf, STATUS_KO, JOB_KO, DONE };
+module.exports = { sweepInterrupted, keepHours, remove, decorate, resumeMap, tidyRecent, stopScreen, pollRequests, requeueScreen, parseProg, progText, init, dispose, on, create, get, list, start, retryFailed, pause, stop, pauseAll, resumeOrch, attachWatch, loadCfg, isSelfAdmit, admitWhy, logOf, running, batchItems, findItem, parseIds, summaryOf, STATUS_KO, JOB_KO, DONE };

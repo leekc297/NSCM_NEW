@@ -1,0 +1,85 @@
+{
+ "menu_id": "SCP0028",
+ "at": "2026-11-20 13:10:16",
+ "round": 1,
+ "ledger": "Doc\\verify\\SCP0028\\verify_ledger.csv",
+ "before": {
+  "total": 87,
+  "by_actor": {
+   "엔진": 19,
+   "집계": 66,
+   "판단": 2
+  },
+  "by_class": {
+   "검사기공백": 17,
+   "미분류": 1,
+   "데이터전제": 1,
+   "집계": 66,
+   "판단": 2
+  },
+  "actionable": 21,
+  "ai_review": 0,
+  "human": 0,
+  "aggregate": 66,
+  "blocked": 0,
+  "guide": 0,
+  "decide": 0
+ },
+ "after": {
+  "total": 87,
+  "by_actor": {
+   "엔진": 19,
+   "집계": 66,
+   "결정": 2
+  },
+  "by_class": {
+   "검사기공백": 17,
+   "미분류": 1,
+   "데이터전제": 1,
+   "집계": 66,
+   "판단": 2
+  },
+  "actionable": 39,
+  "ai_review": 20,
+  "human": 0,
+  "aggregate": 66,
+  "blocked": 0,
+  "guide": 0,
+  "decide": 2
+ },
+ "actionable": 39,
+ "human": 0,
+ "rerun": null,
+ "unverified_sheet": 474,
+ "ledger_mtime": 1795147653.753,
+ "prev_actionable": 54,
+ "continue": 1,
+ "stalled": false,
+ "resolved_actionable": [
+  "EG-273588ca",
+  "EG-6cc339e1",
+  "EG-c77e3290",
+  "EG-ea38ffcb",
+  "T-18793b28",
+  "T-a239a7e1",
+  "T-ba663c76",
+  "T-c5782dcb",
+  "V-00ec53f0",
+  "V-1f64fec6",
+  "V-2611b990",
+  "V-78baf3af",
+  "V-9b370c0f",
+  "V-a1923fff",
+  "V-ca2072cf",
+  "V-df3bcadf",
+  "V-e9891c92",
+  "V-f3e94ee4"
+ ],
+ "new_actionable": [
+  "EG-2644dff3",
+  "EG-ac06e957",
+  "V-c346a4a2"
+ ],
+ "pending_recheck": null,
+ "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
+}

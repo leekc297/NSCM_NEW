@@ -1,133 +1,101 @@
 {
  "rule_id": "D4",
- "hash": "dc57e4b4d3c14ed9",
+ "hash": "ae8fbd3f749dfe2a",
  "groups": [
-  {
-   "rows": [
-    "EG-ab8129bb",
-    "EG-cfe1f9a1"
-   ],
-   "why": "Both rows check inserting into the same merged DIVISION_ID group (r0~36) with r1 selected, and both expect the new row to land at or above the group's top row r0 (GAPSELF-15); only the rule number (EG140 vs EG319) differs."
-  },
-  {
-   "rows": [
-    "V-213565c5",
-    "V-8119d79a"
-   ],
-   "why": "Same element (Insert row's Div / grid when Div changes), same state (Insert before query, then Div condition changed) and same expected result (default = condition Div, grid reset on change); only the source differs (confirmed rule vs DMF0004 generalization)."
-  },
-  {
-   "rows": [
-    "V-2e978e8e",
-    "V-c5620010"
-   ],
-   "why": "Same element (Insert under filter/Sort) and same expected result (row added above the selected row, Sort/Filter kept, new row editable); only the source differs (DMF0068 generalization vs confirmed rule)."
-  },
-  {
-   "rows": [
-    "V-a005cb70"
-   ],
-   "why": "The condition is 'after Insert' rather than 'Insert before query', so the state may differ from the V-213565c5 group, and the expected result is worded as 'zero unsaved rows'; since that isn't certain to be the same, it stays on its own."
-  },
   {
    "rows": [
     "EG-2ae4d809"
    ],
-   "why": "Checks only that a specific sort (OPERATION_GROUP_ID asc, r2 selected) survives Insert, so its expected result has a different scope from the general filter/Sort rows and it stays on its own."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-6e7f354b"
    ],
-   "why": "Checks header merging (ColumnHeaderSpan), a different element."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-ab8129bb"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-cfe1f9a1"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-03ff2f8e"
    ],
-   "why": "Trace row that confirms the DeleteButton no-op implementation exists in the source; different nature from the other checks."
+   "why": "단독"
   },
   {
    "rows": [
     "T-32e9d118"
    ],
-   "why": "Trace row checking the 6 parameters of the lookup SP; different element."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4460c3a4"
    ],
-   "why": "Trace row checking the button display permission gate; different element."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4a966fcf"
    ],
-   "why": "Trace row checking that CRUD is cleared when a value reverts to its default; different element."
+   "why": "단독"
   },
   {
    "rows": [
     "T-566e4214"
    ],
-   "why": "Trace row that confirms the InsertButton no-op implementation exists in the source; different nature from the other checks."
+   "why": "단독"
   },
   {
    "rows": [
     "T-8e0c6de4"
    ],
-   "why": "Column trace for INCREMENT; different column."
+   "why": "단독"
   },
   {
    "rows": [
     "T-a221b18f"
    ],
-   "why": "Trace row checking that only edited rows are saved; different element."
+   "why": "단독"
   },
   {
    "rows": [
     "T-ce022866"
    ],
-   "why": "Trace row checking the SAVE SP branch (fixed to M); different element."
+   "why": "단독"
   },
   {
    "rows": [
     "T-e0206256"
    ],
-   "why": "Column trace for LOT_SIZE; different column."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-38a0b363"
+    "V-a005cb70"
    ],
-   "why": "Insert on the lower message settings tab; different element."
-  },
-  {
-   "rows": [
-    "V-3bc5ba16"
-   ],
-   "why": "SYS0016 defect type (Module combo, Active default, etc.); different element and expected result."
-  },
-  {
-   "rows": [
-    "V-b4091aaf"
-   ],
-   "why": "DMF0021 Team/Measure columns for ETC input; different element and expected result."
+   "why": "단독"
   },
   {
    "rows": [
     "V-b48e5d97"
    ],
-   "why": "AS-IS DeleteButton before query is a no-op because fps is null; different button and expected result."
-  },
-  {
-   "rows": [
-    "V-fac221a3"
-   ],
-   "why": "To Site combo / City mapping on an Insert row before query; different element."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:17:38",
- "cost": 0.09137989999999999
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:00:10",
+ "cost": 0,
+ "open": 0
 }

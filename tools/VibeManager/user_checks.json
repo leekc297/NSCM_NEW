@@ -1,6 +1,6 @@
 {
  "about": "사용자 지적 원장(2026-11-20 사용자 지시: 상황을 보고 입력한 지적은 VMO 감시가 자가진단하고 보완). 항목 = 지적 원문 + 감지기. orch-usercheck.js 가 자가진단 S13 으로 실행. 새 지적은 학습기가 더함",
- "coveredUntil": "2026-11-20T10:42:30+09:00",
+ "coveredUntil": "2026-11-20T15:13:51+09:00",
  "items": [
   {
    "id": "U1",
@@ -121,6 +121,81 @@
     "hours": 6
    },
    "status": "active"
+  },
+  {
+   "id": "U12",
+   "at": "2026-11-20 11:10",
+   "quote": "History의 선택분(영역, 기간, 찾기) Backcolor 처리해주세요 Back theme 인데 White Backcolor 라 보기 좋지 않습니다. theme 에 맞춰 주세요.",
+   "symptom": "VMO History 탭 선택 영역(영역, 기간, 찾기) 배경이 흰색이라 어두운 테마와 맞지 않음",
+   "detector": "",
+   "params": {},
+   "status": "no-detector",
+   "why": "웹뷰 CSS 표시 결함임. events.jsonl, incidents, usercheck/ui.json 어디에도 색상, 테마 값이 남지 않아 실행 기록으로 판정할 수 없음"
+  },
+  {
+   "id": "U13",
+   "at": "2026-11-20 11:14",
+   "quote": "VM 에서 작업을 진행하다가 reload 작업을 하면 작업하던 모든 task 가 중지됩니다. reload  후 작업을 재개할 수 없나요? 작업을 재개할 수 있으면 VM 업무 작업에 표기하고 작업재개 버턴 활성화 되도록 해주세요, workbench에서도 보이고 작업재개 버턴 활성화 되도록 해주세요. \n그리고 VM 업무 작업 의 명칭을 VMW 로 명명하도록 변경할게요. VMW 는 VM Work 이고 지금 사용하는 VMO 는 VM 오케스트라 의 약칭입니다...",
+   "symptom": "VS Code 창 다시 로드 뒤 VMW 작업 전체가 중단되고 재개할 수 없음",
+   "detector": "reloadResumeMissing",
+   "params": {
+    "waitMin": 30
+   },
+   "status": "active",
+   "why": "중단이 결함 지적이고 재개 버튼은 기능 요청임. 목록의 9개 감지기 중 창 다시 로드로 끊긴 작업을 보는 것이 없음(stopLeak 는 중지 뒤 계속 실행을 봄). J20261120_060728 job.json 에 status 'interrupted', note 'VS Code 종료로 중단됨' 이 남아 기록으로 판정할 수 있음"
+  },
+  {
+   "id": "U14",
+   "at": "2026-11-20 11:17",
+   "quote": "VMW 의 좌하단 UI 목록에 명칭이 누락된 부분이 확인됩니다. UI 명칭 누락분현재 메뉴에서 찾아서 명칭 채워주세요.",
+   "symptom": "VMW 좌하단 화면 목록에 화면 명칭이 빠진 항목이 있음",
+   "detector": "screenNameMissing",
+   "params": {},
+   "status": "active",
+   "why": "표시 누락 지적임. uiShown 은 최근 활동 목록 자르기, 정렬만 보고 화면 명칭은 보지 않음. events.jsonl job.item.start 에도 screen ID 만 있고 이름 없음"
+  },
+  {
+   "id": "U15",
+   "at": "2026-11-20 11:48",
+   "quote": "BE LOG, FE  LOG 는 켜고/꺼는 버턴을 추가할게요... BE LOG 의 경우 양이 많아서 상시 볼 필요는 없는 것 같구. 필요할때만 켜서 보도록 할게요. 그리고 FE LOG 는 계속 안보이는데 연결여부 확인해주세요.",
+   "symptom": "VMO 의 FE LOG 탭에 FE 서버 로그가 계속 표시되지 않음",
+   "detector": "logTabShown",
+   "params": {
+    "port": 5173,
+    "windowSec": 60
+   },
+   "status": "active",
+   "why": "버튼 추가와 BE LOG 기본 꺼짐은 기능 요청임. 'FE LOG 는 계속 안보이는데 연결여부 확인해주세요' 는 표시가 안 되는 동작을 지적함. 기존 감지기 uiShown(U8) 은 VMO 최근 활동 목록만 보고 서버 로그 탭은 보지 않음. server-service.js:200 이 FE 로그를 _server_5173.log 에서 읽지만 탭 송출 건수는 기록하지 않음"
+  },
+  {
+   "id": "U16",
+   "at": "2026-11-20 14:16",
+   "quote": "다시 로드 후 작업 재개 시 WORKBENCH 에서는 재개 되는데 VMW 에 재개된 작업이 보이지 않습니다.",
+   "symptom": "창 다시 로드 뒤 WORKBENCH 에서는 작업이 재개되는데 VMW 목록에는 재개된 작업이 보이지 않음",
+   "detector": "resumedJobShown",
+   "params": {},
+   "status": "pending-detector",
+   "why": "VMW 표시 누락을 지적함. reloadResumeMissing 은 재개 기록이 없을 때만 fail 이고 재개된 작업이 VMW 에 그려졌는지는 보지 않음(orch-usercheck.js:153 startedAfter 로 건너뜀). uiShown 은 VMO 화면 대상임"
+  },
+  {
+   "id": "U17",
+   "at": "2026-11-20 14:30",
+   "quote": "VMW 에 J20261120_115055 목록은 보이지 않습니다.",
+   "symptom": "VMW 목록에 J20261120_115055 작업이 보이지 않음",
+   "detector": "resumedJobShown",
+   "params": {},
+   "status": "pending-detector",
+   "why": "1번 현상에 작업 id 를 붙여 다시 지적함. 기존 감지기 12종 가운데 VMW 작업 목록 표시를 보는 것이 없음"
+  },
+  {
+   "id": "U18",
+   "at": "2026-11-20 15:04",
+   "quote": "CHECKLIST 가 아닌 UI 생성, UI 보완 작업일 때의 작업재개도 중단된 시점이나 그 바로 이전 시점부터 재개되도록 되어야 합니다. 이것도 같이 고민해주세요.",
+   "symptom": "UI 생성·UI 보완 체인도 재개하면 끊긴 단계를 처음부터 다시 돎. 끊긴 시점이나 바로 앞 시점부터 이어 돌아야 함",
+   "detector": "resumeRestartFromStart",
+   "params": {},
+   "status": "pending-detector",
+   "why": "13번 배경 기준 실측값은 단계 4/8, E2E 50/81 에서 끊긴 뒤 1단계부터 다시 돈 것임. 12번 조사 결과도 재개가 끊긴 단계를 처음부터 다시 시작한다고 함. reloadResumeMissing 은 재개 여부만 보고 어디서부터 재개했는지는 보지 않음"
   }
  ]
 }

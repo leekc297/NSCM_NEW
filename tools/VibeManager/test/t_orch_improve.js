@@ -52,6 +52,22 @@ const sleep = t => new Promise(r => setTimeout(r, t));
     chk('집계: 끝 사건 없는 대기 2건 · 화면 목록 · 사라진 대기 1건', wd && wd.started === 3 && wd.unfinished === 2 && wd.unfinishedLive === 0 && wd.unfinishedScreens.join(',') === 'TST0091,TST0092' && wd.gone === 1 && wd.goneSec === 1749 && wd.n === 1 && wd.totalSec === 30, JSON.stringify(wd));
     chk('집계: 기존 항목은 그대로(admit 3건 1500초)', wa2 && wa2.n === 3 && wa2.totalSec === 1500 && wa2.unfinished === 0);
     chk('집계: 끝 사건 없는 Claude 호출 1건', d2.claude.started === 3 && d2.claude.calls === 2 && d2.claude.unfinished === 1, JSON.stringify(d2.claude)); }
+  // 개선안 20261120115806_VISION: 끊긴 체인 끝 기록에 실행 단계 수 · chain.start 뒤 chain.end 없는 체인 = 끝 기록 없음
+  { const Module = require('module'); const vs = new Proxy({}, { get: (t, k) => { if (k === 'window') return new Proxy({}, { get: () => () => Promise.resolve(undefined) }); if (k === 'commands') return { executeCommand: () => Promise.resolve(), registerCommand: () => ({ dispose() { } }) }; if (k === 'workspace') return { getConfiguration: () => ({ get: () => undefined }), workspaceFolders: [] }; if (k === 'Uri') return { file: f => ({ fsPath: f }), parse: s => s }; return function () { }; } });
+    const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
+    const wbm = require(path.join(dir, 'workbench')); Module._load = orig;
+    const t0 = Date.now() - 60000; const evA = { wb: 7, screen: 'TSTA001', chain: 'abtest', chainLabel: 'CheckList', runId: `TSTA001_${t0}`, job: '' };
+    ev.emit('chain.start', Object.assign({ steps: 3, shown: 3 }, evA));
+    wbm._liveChains.set(evA.runId, { p, evCh: evA, t0, prog: { runId: evA.runId, screen: 'TSTA001', res: [{ no: 1, name: 'Claude 검토', status: 'OK', code: 0, sec: 10, actor: 'claude', task: '' }], cur: 1, curActor: 'script', curTask: 'S8.checklistRun', steps: 3 } });
+    wbm.abortRunningChains('시험: 창 다시 로드');
+    const evB = { wb: 8, screen: 'TSTB001', chain: 'notend', chainLabel: 'CheckList', runId: `TSTB001_${t0}`, job: '' };
+    ev.emit('chain.start', Object.assign({ steps: 2, shown: 2 }, evB));
+    const d4 = im.digest(7); const ca = d4.chains.find(x => x.chain === 'abtest'); const cb = d4.chains.find(x => x.chain === 'notend');
+    const endA = fs.readFileSync(ev.file(), 'utf8').split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l)).find(e => e.type === 'chain.end' && e.runId === evA.runId);
+    chk('abort 끝 기록: Claude 1단계 실행 뒤 끊김 → claudeRan 1 · scriptRan 1(돌던 단계)', endA && endA.aborted === true && endA.claudeRan === 1 && endA.scriptRan === 1 && endA.claudeSkipped === 0, JSON.stringify(endA && { claudeRan: endA.claudeRan, scriptRan: endA.scriptRan, rows: endA.rows }));
+    chk('집계: Claude 1단계 실행 뒤 abort 된 체인 → claudeRan 1, 끝 기록 없음 0', ca && ca.n === 1 && ca.claudeRan === 1 && ca.runsWithoutClaude === 0 && ca.noEnd === 0, JSON.stringify(ca));
+    chk('집계: chain.start 만 있는 체인 → 끝 기록 없음 1', cb && cb.n === 0 && cb.noEnd === 1 && cb.noEndScreens.join(',') === 'TSTB001' && d4.chainsNoEnd === 1, JSON.stringify(cb) + ' total ' + d4.chainsNoEnd);
+    chk('abortCounts: 기록 없는 체인 = 0', JSON.stringify(wbm.abortCounts(null)) === JSON.stringify({ claudeRan: 0, claudeSkipped: 0, scriptRan: 0, rows: [] })); }
   // 중지된 실행은 실패와 따로 센다(개선안 20261120094530_REVIEW): step.end FAIL 2건 중 1건 뒤에 같은 화면 job.item.end cancel → fail 1 · stopped 1
   ev.emit('step.end', { task: 'S8.stopTest', name: 'CheckList', actor: 'script', status: 'FAIL', ms_run: 1000, screen: 'TSTS001' });
   ev.emit('chain.end', { chain: 'stoptest', chainLabel: 'CheckList', ok: false, ms_run: 1000, screen: 'TSTS001' });

@@ -1,5 +1,5 @@
 {
- "at": "2026-11-19T23:41:07.097Z",
+ "at": "2026-11-20T03:14:21.604Z",
  "search": {
   "Valid": {
    "label": "Active",
@@ -591,43 +591,10 @@
  },
  "grid": {},
  "rr": {
-  "search": "20261120083420",
-  "combos": "20261120083420"
+  "search": "20261120120742",
+  "combos": "20261120120742"
  },
  "combos": [
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'TRANSPORT_MODE_CODE'\",\"mnuId\":\"SCP0028\"}",
-   "status": 200,
-   "n": 5,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "AIR",
-     "v": "AIR"
-    },
-    {
-     "c": "FRY",
-     "v": "FERRY"
-    },
-    {
-     "c": "TRK",
-     "v": "TRUCK"
-    },
-    {
-     "c": "SEA",
-     "v": "SEA"
-    },
-    {
-     "c": "RAI",
-     "v": "RAIL"
-    }
-   ],
-   "user": "minyonglee1"
-  },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SCP0028\"}",
@@ -649,6 +616,27 @@
     {
      "c": "E",
      "v": "Electrode"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0028\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
     }
    ],
    "user": "minyonglee1"
@@ -1096,21 +1084,33 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0028\"}",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'TRANSPORT_MODE_CODE'\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
-   "n": 2,
+   "n": 5,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "Y",
-     "v": "Y"
+     "c": "AIR",
+     "v": "AIR"
     },
     {
-     "c": "N",
-     "v": "N"
+     "c": "FRY",
+     "v": "FERRY"
+    },
+    {
+     "c": "TRK",
+     "v": "TRUCK"
+    },
+    {
+     "c": "SEA",
+     "v": "SEA"
+    },
+    {
+     "c": "RAI",
+     "v": "RAIL"
     }
    ],
    "user": "minyonglee1"
@@ -1222,6 +1222,15 @@
    "user": "minyonglee1"
   },
   {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"SCM0001_GET_DIVISION\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
@@ -1288,15 +1297,6 @@
      "v": "Electrode(UC)"
     }
    ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": [],
    "user": "minyonglee1"
   },
   {

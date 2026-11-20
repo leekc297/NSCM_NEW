@@ -86,6 +86,7 @@ function stats(sinceMs) {
   const by = new Map();
   for (const r of tail(4 * 1024 * 1024)) {
     if (sinceMs && r.ms < sinceMs) continue;
+    if (r.info === true) continue; // 개선안 20261120143326_SELF_2: 정상 처리 기록(중지 뒤 잠금 정리 등)은 오류 집계에서 뺀다
     const g = by.get(r.sig) || { sig: r.sig, mod: r.mod, fn: r.fn, msg: r.msg, count: 0, firstAt: r.at, firstMs: r.ms, lastAt: r.at, lastMs: r.ms, stack: r.stack || [] };
     g.count += 1 + (r.skipped || 0); g.lastAt = r.at; g.lastMs = r.ms; g.msg = r.msg; if (r.stack && r.stack.length) g.stack = r.stack;
     by.set(r.sig, g);

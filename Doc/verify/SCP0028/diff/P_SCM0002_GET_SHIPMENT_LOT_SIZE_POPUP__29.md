@@ -1,6 +1,6 @@
 # SCP0028 · SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP ↔ PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP
 
-- 실행 2026-11-20 09:29:19 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-20 12:55:29 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 1행 전 컬럼 일치 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+from_site+from_site_description+TO_SITE+to_site_description+ITEM_ID · golden 집합 판정 PASS
 - 호출 #29 sheet=popup btn=SEARCH user=minyonglee1 FE 응답 행 2 · 원천 Doc\verify\SCP0028\calls\eg_popup__eg-popup_MAIN_SCP0028_0_SCM0002_ShipmentLotSizePopup_BTN_bt_0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "81", "operationGroup": "", "fromSite": "", "toSite": "", "itemId": "apvcc517h-a4", "actionFlag": "D"}`

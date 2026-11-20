@@ -1,0 +1,143 @@
+{
+  "id": "20261120115806_VISION",
+  "at": "2026-11-20T11:58:06+09:00",
+  "ms": 1795143486091,
+  "source": "vision",
+  "status": "applied",
+  "sig": "chain end abort real counts",
+  "title": "중지되거나 끊긴 체인의 끝 기록에 실제 실행 단계 수를 남김",
+  "evidence": "events.jsonl 640~739줄 Claude 단계 6건이 실행됐으나 digest7d chains.checklist claudeRan 0, runsWithoutClaude 11. workbench.js:55 claudeRan 0, scriptRan 0 고정. 같은 체인들의 chain.end 기록 없음(마지막 chain.end 525줄). orch-improve.js:83 은 chain.end 만 집계함",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "abortRunningChains 가 claudeRan 0, scriptRan 0 고정값을 기록하고, chain.end 없는 체인은 집계에서 빠짐 → lv.prog.res 에서 단계별 실행 여부를 세어 claudeRan, scriptRan, claudeSkipped 를 기록함. digest 에 chain.start 뒤 chain.end 가 없는 체인 수(끝 기록 없음)를 따로 셈",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. t_orch_improve.js 에 'Claude 1단계 실행 뒤 abort 된 체인 → claudeRan 1, 끝 기록 없음 0' 과 'chain.start 만 있는 체인 → 끝 기록 없음 1' 시험 추가, 기대 통과",
+  "rollback": "git checkout -- tools/VibeManager/workbench.js tools/VibeManager/orch-improve.js tools/VibeManager/test/t_orch_improve.js 뒤 설치 폴더 동기화",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:43:46+09:00",
+      "by": "사용자 지시(Claude Code 세션 분류)",
+      "what": "권장안 승인. 분류 fix: 중지·끊긴 체인 끝 기록의 claudeRan 0 고정값 결함 수정. 사용자 지시 11-20 '버그성이나 시스템 관련 항목은 권장안으로 처리'. VMO 자동 반영(게이트 통과 조건)으로 반영"
+    },
+    {
+      "at": "2026-11-20T15:01:02+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T15:03:47+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 52/52개 파일 통과(PASS 638, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1501"
+    },
+    {
+      "at": "2026-11-20T15:03:49+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T15:16:42+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 27개 파일 통과, 시험 52/52개 파일 통과(PASS 642, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T15:16:42+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 15:10:53 node test/t_orch_improve.js . → ALL PASS 27건(추가 시험 'Claude 1단계 실행 뒤 abort 된 체인 → claudeRan 1, 끝 기록 없음 0', 'chain.start 만 있는 체인 → 끝 기록 없음 1' 통과). 2026-11-20 15:11:00~15:13:41 node test/run_all.js → ALL OK 파일 52/52 PASS 642 FAIL 0 · 변경 50개 파일 · 대상 목록 밖 변경 47개: Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE.md, Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT.md, Doc/golden/SCP0028/SCP0028_SAVE_SHIPMENT_LOT_SIZE.md, Doc/golden/SCP0028/_summary.md, Doc/golden/_summary.csv, Doc/golden/_summary.md",
+      "log": ".vibe\\logs\\2026-11-20T15-03-50_claude_orch.log",
+      "sec": 603,
+      "costUsd": 1.044655,
+      "files": [
+        "Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE.md",
+        "Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT.md",
+        "Doc/golden/SCP0028/SCP0028_SAVE_SHIPMENT_LOT_SIZE.md",
+        "Doc/golden/SCP0028/_summary.md",
+        "Doc/golden/_summary.csv",
+        "Doc/golden/_summary.md",
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/b7_check.json",
+        "Doc/verify/SCP0028/calls/_snap__snap_그리드_헤더_텍스트_모델_시트_0.json",
+        "Doc/verify/SCP0028/calls/_snap__snap_조회조건_팝업_정적_aria_0.json",
+        "Doc/verify/SCP0028/calls/_snap__snap_화면샷_패널_헤더_띠_1920_1366_0.json",
+        "Doc/verify/SCP0028/calls/_trace_A10_조회_전_그리드_K4_버튼_구성_X-REOPEN_닫기_재오픈_0.json",
+        "Doc/verify/SCP0028/calls/_trace_A6_조회_결과_행_순서_AS-IS_ORDER_BY_0.json",
+        "Doc/verify/SCP0028/calls/_trace_D6_Insert_위치_상태_AS-IS_0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4b_H3_F5_F3_M3_J1_H4_0.json",
+        "Doc/verify/SCP0028/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json",
+        "Doc/verify/SCP0028/dyn_facts.json",
+        "Doc/verify/SCP0028/e2e/shots/index_trace.json",
+        "Doc/verify/SCP0028/e2e/shots/trace_W4b_H3_F5_F3_M3_J1_H4.png",
+        "Doc/verify/SCP0028/e2e/shots/trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행.png",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_results.json.prev",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/mapping_trace.csv",
+        "Doc/verify/SCP0028/mapping_trace.md",
+        "Doc/verify/SCP0028/mapping_trace_checks.csv",
+        "Doc/verify/SCP0028/mapping_trace_instances.csv",
+        "Doc/verify/SCP0028/mapping_trace_summary.json",
+        "Doc/verify/SCP0028/popup_args.csv",
+        "Doc/verify/SCP0028/snap/_review.md",
+        "Doc/verify/SCP0028/snap/received/팝업_Model.aria.yml",
+        "Doc/verify/SCP0028/snap/results.json",
+        "Doc/verify/SCP0028/sort_check.csv",
+        "Doc/verify/SCP0028/syn_check.csv",
+        "Doc/verify/SCP0028/verify_ledger.csv",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/test/t_orch_improve.js",
+        "tools/VibeManager/workbench.js",
+        "Doc/e2e/_run.admit.lock",
+        "Doc/e2e/_run.verify.SCP0028.lock",
+        "Doc/verify/SCP0028/calls/_trace_BTN_팝업_경로_F4_E4_G1_AS-IS_버튼_팝업_OK_후속_메서드_0.json",
+        "Doc/verify/SCP0028/calls/_trace_D3_조건부_잠금_AS-IS_조건_만족_계정_Division__0.json",
+        "Doc/verify/SCP0028/calls/_trace_G4_조회조건_팝업_버튼_BTN_AS-IS_버튼_TO-BE_칸_버튼_0.json",
+        "Doc/verify/SCP0028/calls/_trace_H2_조건부_배경색_AS-IS_행_조건_color_rules__0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4c_정밀_판정_판정필요_해소_0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4d_잔여_판정필요_실측_0.json",
+        "Doc/verify/SCP0028/snap/diff/팝업_Model.txt"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "체인을 중지하거나 창을 다시 로드하면 VMO 가 'Claude 가 한 번도 안 돌았다'고 기록하던 것을 실제 돈 횟수로 기록합니다. 끝 기록 없이 사라진 체인도 따로 셉니다.",
+    "risk": "R11(Claude 없이 끝난 체인) 판정 입력값이 바뀝니다. 사용자 중지 체인은 이미 R11 에서 빠지므로 사건 수 변화는 미측정입니다.",
+    "undo": "두 파일을 이전 판으로 돌리고 설치 폴더를 다시 동기화합니다."
+  },
+  "needsApproval": "큰 그림 점검 안 = 사용자 승인 뒤 반영(harness.json orch.visionAutoApply false)",
+  "impact": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795154462000,
+  "autoFp": "48224e5fb2",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 27개 파일 통과, 시험 52/52개 파일 통과(PASS 642, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1501",
+  "needsReload": true,
+  "appliedMs": 1795155401996,
+  "synced": [
+    "orch-improve.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_improve.js"
+    ],
+    "verify_result": "2026-11-20 15:10:53 node test/t_orch_improve.js . → ALL PASS 27건(추가 시험 'Claude 1단계 실행 뒤 abort 된 체인 → claudeRan 1, 끝 기록 없음 0', 'chain.start 만 있는 체인 → 끝 기록 없음 1' 통과). 2026-11-20 15:11:00~15:13:41 node test/run_all.js → ALL OK 파일 52/52 PASS 642 FAIL 0",
+    "note": "abortRunningChains 가 abortCounts(lv.prog) 로 prog.res 의 actor 별 실행 수와 끊길 때 돌던 단계(curActor)를 세어 claudeRan, scriptRan, claudeSkipped, rows 를 기록함. 단계 시작 때 prog.res 항목에 actor, task 를, prog 에 curActor, curTask 를 저장함. digest 는 runId 로 chain.start 와 chain.end 를 맞춰 체인별 noEnd, noEndLive(주인 VM 프로세스 살아 있음), noEndScreens 와 전체 chainsNoEnd 를 셈. 설치 폴더, CHANGELOG.md, .bak 은 손대지 않음"
+  },
+  "snap": "prop_20261120115806_VISION"
+}

@@ -1,0 +1,88 @@
+{
+  "id": "20261120131343_SELF",
+  "at": "2026-11-20T13:13:43+09:00",
+  "ms": 1795148023733,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn nodet stale module",
+  "title": "S13 감지기 없음 판정: 파일에는 있고 실행 중 모듈에만 없으면 실패 대신 '창 다시 로드 뒤 적용' 경고로 올림",
+  "evidence": "diag_in S13 항목 S13|U13|nodet, S13|U14|nodet, S13|U15|nodet. raised.json 사건 20261120_115556_R12_ALL(11:55:56), 20261120_121026_R12_ALL(12:10:26), 20261120_130634_R12_ALL(13:06:34)이 감지기 추가 반영 CHANGELOG.md:34(11:55), :16(12:09), :1(13:05) 직후 같은 VM 프로세스 pid 21260 에서 올라옴(.vibe/orch/events.jsonl). 저장소와 설치본 marisoft.vibe-manager-2.0.1/orch-usercheck.js 는 같은 크기 38219, 수정 13:02:31 이고 reloadResumeMissing(:138), screenNameMissing(:170), logTabShown(:193) 정의가 있음. 원장은 check() 때마다 파일에서 다시 읽고(orch-usercheck.js:27, :236) DETECTORS(:36)는 require 때 1번 읽힘(orch-selfcheck.js:46 mod 는 require 캐시 사용). 반영 직후 원장에 생긴 감지기 이름이 실행 중 DETECTORS 에 없어 :243 unknown, :250 fail 이 나고 R12 사건과 Claude 진단이 생김.",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "orch-usercheck.js:243, :250 원장 detector 가 메모리 DETECTORS 에 없으면 level fail, key S13|<id>|nodet → fs.readFileSync(__filename) 원문에 '<detector>(u, x)' 정의가 있으면 level warn, what '감지기 <id> 파일 반영됨, 창 다시 로드 뒤 실행', key S13|<id>|reload. 원문에도 없을 때만 종전 fail(nodet). 시험 t_orch_usercheck.js:122 근처에 표본 추가: uc.DETECTORS.logTabShown 을 잠시 지우고 run() 결과 U15 가 warn, key S13|U15|reload 인지 확인 뒤 복원. U99 noSuch 는 계속 fail.",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js → FAIL 0, reload 표본 통과",
+  "rollback": "orch-usercheck.js, test/t_orch_usercheck.js 를 반영 전 백업으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T13:14:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T13:17:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 45/45개 파일 통과(PASS 559, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1314"
+    },
+    {
+      "at": "2026-11-20T13:17:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T13:20:32+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 45/45개 파일 통과(PASS 560, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T13:20:32+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_usercheck.js 실행, ALL PASS(FAIL 0), reload 표본 PASS(U15 level warn, key S13|U15|reload), U99 noSuch 는 fail S13|U99|nodet 유지, 2026-11-20 13:17:42 · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-20T13-17-17_claude_orch.log",
+      "sec": 33,
+      "costUsd": 0.5215867999999999,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U15|nodet",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795148072200,
+  "autoFp": "8c7cf328cb",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 45/45개 파일 통과(PASS 560, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1314",
+  "needsReload": true,
+  "appliedMs": 1795148432081,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js 실행, ALL PASS(FAIL 0), reload 표본 PASS(U15 level warn, key S13|U15|reload), U99 noSuch 는 fail S13|U99|nodet 유지, 2026-11-20 13:17:42",
+    "note": "orch-usercheck.js:243 unknown 에 detector 이름을 같이 담음. :250 은 fs.readFileSync(__filename) 원문에 '<detector>(u, x)' 정의가 있으면 warn S13|<id>|reload, 없으면 종전 fail S13|<id>|nodet. 설치 폴더와 CHANGELOG.md 는 건드리지 않음."
+  },
+  "snap": "prop_20261120131343_SELF"
+}

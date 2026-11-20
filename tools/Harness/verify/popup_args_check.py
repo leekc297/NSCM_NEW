@@ -25,7 +25,7 @@
 
   python popup_args_check.py <MENU_ID> [--asis <AS-IS ID>]   → Doc/verify/<ID>/popup_args.csv
 """
-import csv, os, re, sys
+import csv, glob, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live import dead_methods, dead_sps, sp_base  # noqa: E402
 from collections import Counter
 from asis_variant import is_cur  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
@@ -434,8 +434,64 @@ def judge_literal(param, value, hit):
     return 'NA', f'고정 플래그 {param}={v} · TO-BE {hit[0]} 는 변수({(hit[1] or "")[:40]}) — 값 미확인'
 
 
+def modal_source(srcs, modal):
+    """모달 정의 파일 → (경로, 원문). 화면 폴더 원문 먼저 · 없으면 nscm-fe/features 아래 <모달>.tsx"""
+    rx = re.compile(r'\b(?:const|function|class)\s+' + re.escape(modal) + r'\b')
+    for f, s in srcs.items():
+        if rx.search(s):
+            return f, s
+    for f in glob.glob(P('nscm-fe', 'features', '**', modal + '.tsx'), recursive=True):
+        try:
+            return f, open(f, encoding='utf-8', errors='replace').read()
+        except OSError:
+            pass
+    return '', ''
+
+
+def state_literal_trace(srcs, u, it, lit, rel):
+    """2026-11-20 T489(SCP0028 V-480372c9·V-86b2f489 G5 '고정 플래그 _action_flag=D/I 를 TO-BE 팝업에 전달 안 함'):
+    TO-BE 는 버튼 처리에서 setBatchMode('I'|'D') 로 상태를 정하고 그 상태를 mode={batchMode} 로 넘기며, 모달이 actionFlag: mode 로 조회에 싣는다.
+    사슬 = ① prop 값 식의 식별자 S 가 useState 상태([S, setS]) ② 모달 open 식이 S 를 참조 ③ setS('<고정값>') 호출 ④ 모달 원문에 '<같은 개념 키>: <prop>'.
+    ①~④가 모두 있으면 (판정, 사유, (prop, 값 식)) · 하나라도 없으면 None(종전 ERROR 유지). ③의 고정값 집합에 AS-IS 값이 없으면 FAIL"""
+    mf, ms = modal_source(srcs, u['modal'])
+    for k, v, prop in u['params']:
+        if prop:
+            continue
+        for S in dict.fromkeys(re.findall(r'\b([A-Za-z_]\w*)\b', v or '')):
+            setter = None
+            for s in srcs.values():
+                sm = re.search(r'\bconst\s*\[\s*' + re.escape(S) + r'\s*,\s*(\w+)\s*\]\s*=\s*useState\b', s)
+                if sm:
+                    setter = sm.group(1); break
+            if not setter or not re.search(r'\b' + re.escape(S) + r'\b', u.get('open') or ''):
+                continue
+            sets = []
+            for f, s in srcs.items():
+                for m in re.finditer(r'\b' + re.escape(setter) + r"\(\s*(['\"])([^'\"]*)\1\s*\)", s):
+                    sets.append((m.group(2), f"{rel(f)}:{line_of(s, m.start())}"))
+            mk = next((mm for mm in re.finditer(r'\b(\w+)\s*:\s*' + re.escape(k) + r'\b', ms) if concept(mm.group(1)) in it.get('cands', {it['concept']})), None) if ms else None
+            if not sets or not mk:
+                continue
+            mloc = f"{rel(mf)}:{line_of(ms, mk.start())} {mk.group(1)}: {k}"
+            hit = [loc for val, loc in sets if val == lit]
+            if hit:
+                return 'PASS', f"고정 플래그 {it['param']}={lit} = TO-BE {k} ← 상태 {S}(여는 처리 {setter}('{lit}') {hit[0]}) · 모달 {mloc}", (k, v)
+            return 'FAIL', f"고정 플래그 {it['param']}={lit} · TO-BE {k} ← 상태 {S} 값 {sorted({x for x, _ in sets})} 에 {lit} 없음 · 모달 {mloc}", (k, v)
+    return None
+
+
 def selftest():
     cases = [('같음', judge_literal('_mdmActive_Sw', '"Y"', ('mdmActiveSw', "'Y'"))[0], 'PASS'), ('다름', judge_literal('_mdmActive_Sw', '"Y"', ('mdmActiveSw', "'N'"))[0], 'FAIL'), ('미전달', judge_literal('_mdmActive_Sw', '"Y"', None)[0], 'ERROR'), ('변수 전달', judge_literal('_mdmActive_Sw', '"Y"', ('a', 'state.x'))[0], 'NA'), ('플래그 아님', judge_literal('sProgramID', '"DMF0003"', None)[0], 'NA'), ('빈 값', judge_literal('sw', '""', None)[0], 'NA')]
+    # T489 상태 사슬: useState 상태 → 여는 처리 setS('I') → mode={S ?? 'I'} → 모달 actionFlag: mode
+    page_ = "const [batchMode, setBatchMode] = useState(null);\nconst a = () => setBatchMode('I');\nconst b = () => setBatchMode('D');\n"
+    modal_ = "export const BM = ({ mode }) => { const q = { actionFlag: mode }; };\n"
+    u_ = {'modal': 'BM', 'open': 'batchMode !== null', 'params': [('mode', "batchMode ?? 'I'", '')]}
+    it_ = {'param': '_action_flag', 'concept': 'actionflag', 'cands': {'actionflag'}}
+    rel_ = lambda f: f
+    cases += [('상태 사슬 같음', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_}, u_, it_, 'D', rel_) or ('없음',))[0], 'PASS'),
+              ('상태 사슬 값 없음', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_}, u_, it_, 'X', rel_) or ('없음',))[0], 'FAIL'),
+              ('모달이 같은 개념 키로 안 씀', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_.replace('actionFlag', 'other')}, u_, it_, 'D', rel_) or ('없음',))[0], '없음'),
+              ('open 이 상태 참조 안 함', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_}, dict(u_, open='flag'), it_, 'D', rel_) or ('없음',))[0], '없음')]
     bad = 0
     for nm, got, want in cases:
         k = got == want
@@ -514,6 +570,11 @@ def main():
                           tobe_modal=u['modal'], host_label=hosts.get(pair[i], ''))
             if it['kind'] == 'LITERAL':
                 lv_ = it['source'] or it['arg']; lh_ = next((tparams[c] for c in it.get('cands', [it['concept']]) if c in tparams), None); vd_, nt_ = judge_literal(it['param'], lv_, lh_)
+                if lh_ is None and vd_ == 'ERROR':
+                    # T489 같은 개념 이름의 prop 이 없으면 '여는 처리에서 상태에 고정값 대입 → prop = 그 상태 → 모달이 prop 을 같은 개념 키로 사용' 사슬을 찾는다
+                    st_ = state_literal_trace(srcs, u, it, lv_.strip().strip('"').strip("'"), rel)
+                    if st_:
+                        vd_, nt_, lh_ = st_
                 if lh_:
                     common.update(tobe_key=lh_[0], tobe_value=(lh_[1] or '')[:120])
                 rows.append(base(**common, verdict=vd_, note=nt_))

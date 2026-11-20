@@ -1,100 +1,76 @@
 {
  "rule_id": "MS1",
- "hash": "ce5f77b1b0b7c55e",
+ "hash": "12005124b4923884",
  "groups": [
   {
    "rows": [
     "EG-bd80125c"
    ],
-   "why": "Static i18n check that the screen's fixed Korean text uses a registered code; no other row checks this with the same method or expected result."
+   "why": "화면에 고정된 한글 문구를 등록 코드로 바꿨는지 정적으로 점검하는 행이라, 특정 경로에서 MSG_ID 의미가 같은지 확인하는 다른 행들과 방법과 기대 결과가 다르다."
   },
   {
    "rows": [
     "V-08ec4f80"
    ],
-   "why": "MSG00004 meaning match on the SaveData path. It stays separate from the BRANCH row because a different conditional branch can mean a different trigger state."
+   "why": "SaveData 기본 경로의 MSG00004만 확인하며, 같은 ID가 나오는 SaveData(BRANCH)나 FindDelete 경로와 같은 호출 지점인지 확신할 수 없어 단독으로 둔다."
   },
   {
    "rows": [
     "V-98e58390"
    ],
-   "why": "MSG00004 on a SaveData branch. It is not certain this is the same branch as the main SaveData path, so it stays on its own."
+   "why": "SaveData 분기(BRANCH) 경로의 MSG00004로, 기본 경로와 같은 호출 지점이라는 근거가 없어 묶지 않는다."
   },
   {
    "rows": [
     "V-43018ae7"
    ],
-   "why": "MSG00004 on the FindDelete branch, which is a different action path from SaveData."
+   "why": "FindDelete 분기 경로의 MSG00004로, SaveData 경로와는 확인하는 대상 경로가 다르다."
   },
   {
    "rows": [
     "V-1c79fc25"
    ],
-   "why": "MSG00006 on the SaveData path; no other row covers this message."
+   "why": "SaveData 경로의 MSG00006만 확인하는 행이며, 같은 메시지와 같은 경로를 확인하는 행이 따로 없다."
   },
   {
    "rows": [
     "V-bbc7bc80"
    ],
-   "why": "MSG00133 on the SaveData path. It stays separate from the BRANCH row because the branch condition may differ."
+   "why": "SaveData 기본 경로의 MSG00133만 확인하며, 분기 경로와 같은 호출 지점인지 확신할 수 없어 단독으로 둔다."
   },
   {
    "rows": [
     "V-6102c1f2"
    ],
-   "why": "MSG00133 on a SaveData branch. It is not certain this is the same trigger as the main path, so it stays on its own."
+   "why": "SaveData 분기(BRANCH) 경로의 MSG00133으로, 기본 경로와 같은 지점이라는 근거가 없어 묶지 않는다."
   },
   {
    "rows": [
     "V-1a428856"
    ],
-   "why": "MSG00284 on the FindDelete path; no other row covers this message."
+   "why": "FindDelete 경로의 MSG00284만 확인하는 행이며, 같은 메시지와 같은 경로를 확인하는 행이 따로 없다."
   },
   {
    "rows": [
     "V-2692f262"
    ],
-   "why": "MSG00031 on the FindDelete path; no other row covers this message."
+   "why": "FindDelete 경로의 MSG00031만 확인하는 행이며, 같은 메시지와 같은 경로를 확인하는 행이 따로 없다."
   },
   {
    "rows": [
     "V-285fe540"
    ],
-   "why": "MSG00084 on the checkValidSize path, a different message from the other rows on that path."
+   "why": "checkValidSize 경로의 MSG00084로, 같은 경로의 MSG00099와 메시지가 달라 따로 둔다."
   },
   {
    "rows": [
     "V-ff130081"
    ],
-   "why": "MSG00099 on the checkValidSize path, a different message from the other rows on that path."
-  },
-  {
-   "rows": [
-    "V-2b135b3b"
-   ],
-   "why": "Language display of the Version popup's no-selection message (MSG00701), a different element (popup) from the other rows."
-  },
-  {
-   "rows": [
-    "V-771a5b30"
-   ],
-   "why": "Cancel confirmation (MSG00684) in the common Upload window, a different element (upload popup) from the other rows."
-  },
-  {
-   "rows": [
-    "V-b98f3e7c"
-   ],
-   "why": "Save with no changes, where the expected result is that the code is registered in KO/EN/CN. That differs from the MSG00004 meaning-match rows, so it is not grouped with them."
-  },
-  {
-   "rows": [
-    "V-fd2b1f3b"
-   ],
-   "why": "Search/save notice messages such as the empty-Division message (MSG00667), different messages and conditions from the per-message path rows."
+   "why": "checkValidSize 경로의 MSG00099로, 같은 경로의 MSG00084와 메시지가 달라 따로 둔다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:22:34",
- "cost": 0.0713305
+ "at": "2026-11-20 13:01:38",
+ "cost": 0.0618347
 }

@@ -1,0 +1,29 @@
+{
+  "id": "20261120_135618_R12_ALL_2",
+  "at": "2026-11-20T13:56:18+09:00",
+  "ms": 1795150578210,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: orch-selfcheck.chainBusy 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|orch-selfcheck.chainBusy | Invalid time value",
+  "count": 1,
+  "repeat": null,
+  "detail": "Invalid time value · at Date.toISOString (<anonymous>) < at locks (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-state.js:104:89) · 마지막 2026-11-20T13:56:17+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|orch-selfcheck.chainBusy | Invalid time value",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T14:16:29+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S5 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

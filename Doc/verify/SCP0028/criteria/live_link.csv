@@ -47,7 +47,7 @@ COND:VALID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.valid,,,,ASIS_ONLY,판단
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800,1,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800,12800,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,12801,12801,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
@@ -60,7 +60,7 @@ COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
@@ -73,7 +73,7 @@ COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
@@ -86,7 +86,7 @@ COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800,1,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800,12800,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,12801,12801,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
@@ -99,7 +99,7 @@ COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
@@ -112,7 +112,7 @@ COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81^81,81^81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A^HQ07-A,HQ07-A^HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800^288,1^288,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800^288,12800^288,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1^ACEN1053I-A1,ACEP2065I-B1^ACEN1053I-A1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,12801^5761,12801^5761,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A^A,A^A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
@@ -125,7 +125,7 @@ COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y^Y,Y^Y,SAME
 ,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
-COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,0,1,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,0,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
 COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,0,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
 COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv

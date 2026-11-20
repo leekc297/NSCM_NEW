@@ -1,0 +1,29 @@
+{
+  "id": "20261120_141629_R12_ALL_2",
+  "at": "2026-11-20T14:16:29+09:00",
+  "ms": 1795151789472,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: orch-watch.lockStopClean 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.admit.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)",
+  "count": 1,
+  "repeat": null,
+  "detail": "중지 뒤 잠금 정리: Doc/e2e/_run.admit.lock (PID 39556 없음 · 화면 SCP0028 · VMW 작업 J20261120_140047 interrupted 14:12:46) ·  · 마지막 2026-11-20T14:13:17+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.admit.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T14:24:52+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S5 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

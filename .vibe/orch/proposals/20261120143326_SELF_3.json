@@ -1,0 +1,95 @@
+{
+  "id": "20261120143326_SELF_3",
+  "at": "2026-11-20T14:33:26+09:00",
+  "ms": 1795152806984,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn workbench n n nnd",
+  "title": "workbench.js 592~1397줄 알림 문구 정리 2차 34건(줄표 12, 문장 잇는 화살표 2, 틀 1, 장식 기호 19)",
+  "evidence": ".vibe/orch/selfcheck/doc_style/workbench.js.style.csv 의 L592~L1397 57건 중 34건. 줄표: L592, L1180, L1267, L1273, L1304, L1305, L1306, L1307, L1344, L1355, L1391, L1397. 화살표: L836, L1125. 틀: L618. 장식 기호 ⛔ ⚠ ✅ ★: L659, L735, L738, L933, L956(2), L1074, L1079, L1095, L1106, L1125, L1167, L1246, L1248, L1273, L1306, L1307, L1355. 제외 23건: ✖ 18건, ▶ 4건, 🛠️ 메뉴 아이콘 1건(L881). ✖ 는 workbench.js:564 FAIL_RE(^✖)와 test/t_wb_stopmark.js:37 이 상태 표식으로 씀. known 의 '83~1100줄 1차 71건'과 겹치지 않는 남은 항목임.",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "예: L1306 '보완 완료 — ✅' → '보완 완료.' / L836 '이어받지 못함 → \"새 세션\" 후 다시 보내세요' → '이어받지 못했습니다. \"새 세션\" 후 다시 보내세요' / L618 '...가 아니라 실행하지 않았습니다' → '...와 달라 실행하지 않았습니다'. 해당 줄 문자열 리터럴만 Edit, 변수, 식별자, ✖ ▶ 🛠️ 🩹 🔌 는 그대로",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet → workbench.js 위반 244건에서 34건 줄어 210건, node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → PASS",
+  "rollback": "tools/VibeManager/workbench.js 를 반영 전 백업으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:48:04+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T14:50:48+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 26개 파일 통과, 시험 51/51개 파일 통과(PASS 625, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1448"
+    },
+    {
+      "at": "2026-11-20T14:50:50+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T14:55:55+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 27개 파일 통과, 시험 52/52개 파일 통과(PASS 638, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T14:55:55+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 14:52:42 실행. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet → 위반 211건(반영 전 244건, 33건 감소, 기호 233→201, 틀 1→0). node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → ALL PASS · 변경 11개 파일 · 대상 목록 밖 변경 10개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/orchestra.js, Doc/_doc_style/workbench.js.style.csv, Doc/verify/SCP0028/calls/_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json",
+      "log": ".vibe\\logs\\2026-11-20T14-50-50_claude_orch.log",
+      "sec": 141,
+      "costUsd": 0.9686818999999999,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/workbench.js",
+        "Doc/_doc_style/workbench.js.style.csv",
+        "Doc/verify/SCP0028/calls/_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json",
+        "Doc/verify/SCP0028/calls/_verify_병합_셀_입력_Delete_원값_복원_H3_F5_D1_F3__0.json",
+        "Doc/verify/SCP0028/calls/_verify_조회_전_합계_기간_이상값_정렬_Copy_A10_N1_K1__0.json",
+        "Doc/verify/SCP0028/calls/_verify_텍스트_부분_삭제_Insert_행_Div_변경_E6_D1__0.json",
+        "tools/VibeManager/test/t_claude_usage.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795153684261,
+  "autoFp": "1b3ea5da39",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 27개 파일 통과, 시험 52/52개 파일 통과(PASS 638, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1448",
+  "needsReload": true,
+  "appliedMs": 1795154155131,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-20 14:52:42 실행. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet → 위반 211건(반영 전 244건, 33건 감소, 기호 233→201, 틀 1→0). node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → ALL PASS",
+    "note": "개선안 목표 210건과 1건 차이. 근거에 장식 기호 19건이라고 적혀 있지만 나열된 위치는 18건이라 고칠 대상 합계가 33건이고, 나열된 위치 33건은 전부 고쳤음. 다른 작업이 먼저 고쳐 CSV 줄 번호가 현재 파일보다 2줄 앞서 있어(CSV L592 = 현재 L594) 문구로 위치를 찾아 고쳤음. 바꾼 문구를 읽는 JS 코드 없음 확인(테스트에는 검사 이름으로만 같은 글자가 있음). 같은 범위의 L1017·L1044·L1052 '— SKIP', L1108 '→ 단계 CANCEL', L1160, L1361 등은 개선안 목록에 없어 고치지 않음. ✖ ▶ 🛠️ 🩹 ⏸ ⏭ 는 그대로 둠."
+  },
+  "snap": "prop_20261120143326_SELF_3"
+}

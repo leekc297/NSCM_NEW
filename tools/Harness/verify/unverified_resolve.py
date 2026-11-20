@@ -337,7 +337,18 @@ def main():
                 t['actor'] = '가이드'; t['remedy'] = 'DB MODE(repairScope DB_ONLY): 대조표(FE 폴더) 수정 불가, FE 가이드(FE_GUIDE_*.md)로 남기고 결정 목록에 적음 · 재수행으로 줄지 않아 처리 대상에서 뺌'
     ai_n = ai_review_rows(mid, tri)
     dec_n = judge_rows_to_decision(mid, tri)   # 2026-11-20 C1
-    after = counts(tri)
+    # 2026-11-20 사용자 지시 '사용자판정도 우선 권장안으로 진행, 차후 판정필요 항목으로 필요할 때만 코멘트': 담당 '결정' 행에 AI 권장안 적용(decide_apply.py).
+    #   적용한 행은 원장 결과가 '판정필요'가 되어 미검증에서 빠진다. 고칠 곳이 검사기인 행은 담당 '엔진'으로 되돌린다. 원장을 고쳤으면 원장 시각을 다시 읽는다(반복 중단 판정이 이 변경을 재측정으로 보지 않게)
+    rec_c = {}
+    if not prc:
+        try:
+            import decide_apply
+            rec_c = decide_apply.apply_in_triage(mid, tri)
+            if rec_c.get('applied'):
+                lmt = round(os.path.getmtime(lp), 3)
+        except Exception as _e:
+            print(f'[WARN] 권장안 적용 생략: {type(_e).__name__}: {str(_e)[:160]}', flush=True)
+    after = counts(tri); after['recommended'] = rec_c.get('applied', 0)
     print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}(AI 판정 검토가 가린 엔진 보완 대상 {ai_n} 포함), 사람 확인 {after["human"]}, 결정 목록 {after["decide"]}(판단 행 중 AI 검토로 결론 안 남 {dec_n}), 집계 {after["aggregate"]}'), flush=True)
     os.makedirs(vd, exist_ok=True)
     with open(os.path.join(vd, 'unverified_triage.csv'), 'w', encoding='utf-8-sig', newline='') as fh:

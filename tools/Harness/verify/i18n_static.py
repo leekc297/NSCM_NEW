@@ -20,6 +20,19 @@ KO = re.compile(r'[가-힣]')
 RX_STR = re.compile(r"""'([^'\n]*[가-힣][^'\n]*)'|"([^"\n]*[가-힣][^"\n]*)"|`([^`\n]*[가-힣][^`\n]*)`""")
 RX_JSX = re.compile(r'>\s*([^<>{}\n]*[가-힣][^<>{}\n]*)\s*<')
 RX_T_DEFAULT = re.compile(r"\bt\(\s*[^,()]+,\s*$")
+# 2026-11-20 T486(SCP0028 EG-bd80125c MS1 remember(MSG.INC_GT_LOT, '{0}은 {1} 보다 클 수 없습니다.')): 화면 안 감싼 함수
+#   (remember(msgId, fallback) → t(msgId, fallback))의 둘째 인자도 기본 문구다. 첫 인자가 'MSGnnnnn' 문자열이거나
+#   화면 폴더 상수(이름: 'MSGnnnnn')로 풀리고 그 코드가 msg_master 에 KO 로 등록돼 있을 때만 제외한다(등록 코드 없으면 그대로 잡음).
+RX_WRAP_DEFAULT = re.compile(r"\b[A-Za-z_$][\w$]*\(\s*(?:(['\"`])(MSG\d{5})\1|([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*))\s*,\s*$")
+RX_MSG_CONST = re.compile(r"\b([A-Za-z_$][\w$]*)\s*[:=]\s*['\"`](MSG\d{5})['\"`]")
+
+
+def wrap_default_code(prefix, constmap, registered):
+    """문자열 바로 앞이 '함수(코드, ' 이고 코드가 등록 메시지면 그 코드 · 아니면 ''"""
+    m = RX_WRAP_DEFAULT.search(prefix)
+    if not m: return ''
+    code = m.group(2) or constmap.get((m.group(3) or '').split('.')[-1], '')
+    return code if code and code in registered else ''
 
 
 def page_dir(mid):
@@ -91,7 +104,12 @@ def selftest():
              ('본문 선언 변수 미사용', decl_use("  V_T VARCHAR2(10) := '전극';", "PROCEDURE P IS\n  V_T VARCHAR2(10) := '전극';\nBEGIN NULL; END;"), ''),
              ('직접 RAISE', msg_use_line("RAISE_APPLICATION_ERROR(-20001, '오류');"), 'RAISE'),
              ('메시지 변수', msg_use_line("  O_RTN_MSG := '저장 실패';"), 'OUTMSG'),
-             ('비교값', msg_use_line("  WHERE A.NAME = '전극'"), '')]
+             ('비교값', msg_use_line("  WHERE A.NAME = '전극'"), ''),
+             ('감싼 함수 상수 코드 기본 문구', wrap_default_code("          remember(MSG.INC_GT_LOT, ", {'INC_GT_LOT': 'MSG01127'}, {'MSG01127'}), 'MSG01127'),
+             ('감싼 함수 코드 문자열 기본 문구', wrap_default_code("  show('MSG01127', ", {}, {'MSG01127'}), 'MSG01127'),
+             ('미등록 코드는 제외 안 함', wrap_default_code("  remember(MSG.X, ", {'X': 'MSG99999'}, {'MSG01127'}), ''),
+             ('상수 못 풂은 제외 안 함', wrap_default_code("  remember(label, ", {}, {'MSG01127'}), ''),
+             ('첫 인자 자리 아님', wrap_default_code("  setText(", {}, {'MSG01127'}), '')]
     bad = 0
     for n, got, want in cases:
         ok = got == want; bad += not ok; print(('OK ' if ok else 'NG ') + n, got)
@@ -107,6 +125,15 @@ def main():
     if '--selftest' in sys.argv: return selftest()
     ap = argparse.ArgumentParser(); ap.add_argument('menu'); a = ap.parse_args(); mid = a.menu.upper(); vd = os.path.join(DOC, 'verify', mid); os.makedirs(vd, exist_ok=True)
     rows = []; ids = set()
+    registered = {x['msg_id'] for x in rd(os.path.join(DOC, 'tobefacts', 'db', 'msg_master.csv')) if (x.get('msg_id') or '').startswith('MSG') and x.get('use_yn') != 'N' and x.get('lang_cd') == 'KO'}
+    constmap = {}  # T486 화면 폴더 메시지 상수 이름 → 코드
+    for d in page_dir(mid):
+        for dp, dn, fn in os.walk(d):
+            dn[:] = [x for x in dn if x != 'node_modules']
+            for f in fn:
+                if f.endswith(('.ts', '.tsx')):
+                    for cm in RX_MSG_CONST.finditer(strip_ts(open(os.path.join(dp, f), encoding='utf-8', errors='replace').read())):
+                        constmap.setdefault(cm.group(1), cm.group(2))
     for d in page_dir(mid):
         for dp, dn, fn in os.walk(d):
             dn[:] = [x for x in dn if x != 'node_modules']
@@ -116,6 +143,7 @@ def main():
                 ids |= set(re.findall(r'MSG\d{5}', src))
                 for m in RX_STR.finditer(src):
                     if RX_T_DEFAULT.search(src[max(0, m.start() - 80):m.start()]): continue  # t(코드, '기본 문구')
+                    if wrap_default_code(src[max(0, m.start() - 120):m.start()], constmap, registered): continue  # T486 감싼 함수(코드, '기본 문구')
                     txt = next(g for g in m.groups() if g is not None)
                     if txt.startswith('_'): continue
                     rows.append({'menu_id': mid, 'kind': 'FE', 'where': f"{rel}:{src.count(chr(10), 0, m.start()) + 1}", 'text': txt[:100]})

@@ -22,8 +22,8 @@
    "why": "후보 2건 집합 일치",
    "b3": "PASS",
    "b3_why": "고정 목록 순서 일치: TO-BE ['Y', 'N'] / AS-IS ['Y', 'N']",
-   "g7": "판정필요",
-   "g7_why": "AS-IS 표시 열 해석 불가(cboValid: 컨트롤 유형 UsrComboBox · 바인딩 없음)"
+   "g7": "NA",
+   "g7_why": "AS-IS 후보 CODE=NAME(형식 구분 불가) · AS-IS 표시 NAME (UsrComboBox DataBind(Data.Type) → DataBind(dt) DisplayMember=NAME(UsrComboBox.cs:47~55) @SCP0028_Shipment_Lot_Size.cs:135)"
   },
   {
    "kind": "SEARCH",

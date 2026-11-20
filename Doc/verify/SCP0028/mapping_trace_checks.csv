@@ -62,7 +62,7 @@ clbToSite `ToSiteByDivision` (cs:169),FE 대조표,J2,J2|SCREEN,FAIL
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,A1,A1|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,REVIEW
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,A1,A1|SP:P_SCM0002_GET_MATERIAL_BY_DIVISION,NA
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,A6,A6|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,NOPATH
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,A6,A6|SP:P_SCM0002_GET_MATERIAL_BY_DIVISION,NOPATH
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,A6,A6|SP:P_SCM0002_GET_MATERIAL_BY_DIVISION,PASS
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,F4,F4|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,NOPATH
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,F4,F4|SP:P_SCM0002_GET_MATERIAL_BY_DIVISION,NOPATH
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,DB-SYN,DB-SYN|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,PASS
@@ -83,7 +83,7 @@ Query(ds) FindData (cs:368),FE 대조표,H3,H3|ROW:Query(ds) FindData (cs:368),E
 Query(ds) FindData (cs:368),FE 대조표,A1,A1|ROW:Query(ds) FindData (cs:368),REVIEW
 Query(ds) FindData (cs:368),FE 대조표,A6,A6|ROW:Query(ds) FindData (cs:368),NA
 Query(ds) FindData (cs:368),FE 대조표,F4,F4|ROW:Query(ds) FindData (cs:368),NA
-Query(ds) FindData (cs:368),FE 대조표,DB-SYN,DB-SYN|ROW:Query(ds) FindData (cs:368),NA
+Query(ds) FindData (cs:368),FE 대조표,DB-SYN,DB-SYN|ROW:Query(ds) FindData (cs:368),PASS
 Query(ds) FindData (cs:368),FE 대조표,D1,D1|ROW:Query(ds) FindData (cs:368),ERROR
 Query(ds) FindData (cs:368),FE 대조표,D3,D3|ROW:Query(ds) FindData (cs:368),ERROR
 Query(ds) FindData (cs:368),FE 대조표,J2,J2|SCREEN,FAIL
@@ -230,7 +230,7 @@ SaveButton SaveData (cs:574~),FE 대조표,X-LOC,X-LOC|ROW:SaveButton SaveData (
 SaveButton SaveData (cs:574~),FE 대조표,F1,F1|SCREEN,PASS
 SaveButton SaveData (cs:574~),FE 대조표,F6,F6|SCREEN,NOT_RUN
 SaveButton SaveData (cs:574~),FE 대조표,F4,F4|ROW:SaveButton SaveData (cs:574~),NA
-SaveButton SaveData (cs:574~),FE 대조표,DB-SYN,DB-SYN|ROW:SaveButton SaveData (cs:574~),NA
+SaveButton SaveData (cs:574~),FE 대조표,DB-SYN,DB-SYN|ROW:SaveButton SaveData (cs:574~),PASS
 SaveButton SaveData (cs:574~),FE 대조표,F2,F2|SCREEN,NOT_RUN
 SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 **저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,X-LOC,X-LOC|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),PASS
@@ -255,7 +255,7 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 "**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,J2,J2|SCREEN,FAIL
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,X-LOC,"X-LOC|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",PASS
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,H6,"H6|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",WARN
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,G5,"G5|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",NA
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,G5,"G5|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",ERROR
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,M4,"M4|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",ERROR
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,D4,"D4|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",ERROR
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,D6,D6|SCREEN,NOT_RUN
@@ -267,9 +267,9 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 두 버튼 **노출** 조건,FE 대조표,X-LOC,X-LOC|ROW:두 버튼 **노출** 조건,PASS
 두 버튼 **노출** 조건,FE 대조표,A5,A5|ROW:두 버튼 **노출** 조건,PASS
 두 버튼 **노출** 조건,FE 대조표,A1,A1|SP:PR_GET_MNU_BTN_AUTH,REVIEW
-두 버튼 **노출** 조건,FE 대조표,A6,A6|SP:PR_GET_MNU_BTN_AUTH,NOT_RUN
+두 버튼 **노출** 조건,FE 대조표,A6,A6|SP:PR_GET_MNU_BTN_AUTH,NA
 두 버튼 **노출** 조건,FE 대조표,F4,F4|SP:PR_GET_MNU_BTN_AUTH,NOT_RUN
-두 버튼 **노출** 조건,FE 대조표,DB-SYN,DB-SYN|SP:PR_GET_MNU_BTN_AUTH,NOPATH
+두 버튼 **노출** 조건,FE 대조표,DB-SYN,DB-SYN|SP:PR_GET_MNU_BTN_AUTH,PASS
 두 버튼 **노출** 조건,FE 대조표,D4,D4|ROW:두 버튼 **노출** 조건,ERROR
 두 버튼 **노출** 조건,FE 대조표,D6,D6|SCREEN,NOT_RUN
 두 버튼 **노출** 조건,FE 대조표,J2,J2|SCREEN,FAIL
@@ -278,7 +278,7 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,X-LOC,"X-LOC|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",PASS
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,H6,H6|BTN:btnInput,NOT_RUN
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,G5,G5|BTN:btnInput,NOT_RUN
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,M4,M4|BTN:btnInput,NOT_RUN
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,M4,M4|BTN:btnInput,NA
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,D1,"D1|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",ERROR
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,D3,"D3|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",ERROR
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,J2,J2|SCREEN,FAIL
@@ -287,7 +287,7 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,X-LOC,"X-LOC|ROW:btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",PASS
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,H6,H6|BTN:btnDelete,NOT_RUN
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,G5,G5|BTN:btnDelete,NOT_RUN
-"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,M4,M4|BTN:btnDelete,NOT_RUN
+"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,M4,M4|BTN:btnDelete,NA
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,F1,F1|SCREEN,PASS
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,F2,F2|SCREEN,NOT_RUN
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,J2,J2|SCREEN,FAIL
@@ -297,9 +297,9 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 "btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,G5,G5|BTN:btnItemId,NOT_RUN
 "btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,M4,M4|BTN:btnItemId,NOT_RUN
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,X-LOC,X-LOC|ROW:**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),PASS
-**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,H6,H6|COND:clbFromSite,NOT_RUN
-**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,G5,G5|COND:clbFromSite,NOPATH
-**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,M4,M4|COND:clbFromSite,NOT_RUN
+**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,H6,H6|COND:clbFromSite,NA
+**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,G5,G5|COND:clbFromSite,NA
+**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,M4,M4|COND:clbFromSite,NA
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,G1,G1|COND:clbFromSite,PASS
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,A1,A1|ROW:**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),REVIEW
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,J2,J2|SCREEN,FAIL
@@ -310,42 +310,42 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,H10,H10|SCREEN,PASS
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,X-LOC,X-LOC|ROW:팝업 Form_Load `//FindData();` (cs:146),PASS
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,H6,H6|ROW:팝업 Form_Load `//FindData();` (cs:146),WARN
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G5,G5|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G5,G5|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,M4,M4|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,A1,A1|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,A6,A6|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,F4,F4|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,DB-SYN,DB-SYN|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,DB-SYN,DB-SYN|ROW:팝업 Form_Load `//FindData();` (cs:146),PASS
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G1,G1|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,J2,J2|SCREEN,FAIL
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,X-LOC,X-LOC|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),PASS
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,K-SA,K-SA|SCREEN,PASS
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G3,G3|SCREEN,PASS
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,H6,H6|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),WARN
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G5,G5|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),NA
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G5,G5|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,M4,M4|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,H2,H2|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G1,G1|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,A1,A1|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,J2,J2|SCREEN,FAIL
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,X-LOC,X-LOC|ROW:팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,PASS
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,H6,H6|COND:clbFromSite,NOT_RUN
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,H6,H6|COND:clbToSite,NOT_RUN
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,G5,G5|COND:clbFromSite,NOPATH
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,G5,G5|COND:clbToSite,NOPATH
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,M4,M4|COND:clbFromSite,NOT_RUN
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,M4,M4|COND:clbToSite,NOT_RUN
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,H6,H6|COND:clbFromSite,NA
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,H6,H6|COND:clbToSite,NA
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,G5,G5|COND:clbFromSite,NA
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,G5,G5|COND:clbToSite,NA
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,M4,M4|COND:clbFromSite,NA
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,M4,M4|COND:clbToSite,NA
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,X-LOC,X-LOC|ROW:**팝업 OK `SaveData` (cs:308~369)**,PASS
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,A5,A5|ROW:**팝업 OK `SaveData` (cs:308~369)**,PASS
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H5,H5|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H2,H2|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H6,H6|ROW:**팝업 OK `SaveData` (cs:308~369)**,WARN
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,G5,G5|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,G5,G5|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,M4,M4|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F1,F1|SCREEN,PASS
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F6,F6|SCREEN,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F4,F4|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,DB-SYN,DB-SYN|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,DB-SYN,DB-SYN|ROW:**팝업 OK `SaveData` (cs:308~369)**,PASS
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F5,F5|SCREEN,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,J2,J2|SCREEN,FAIL
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,E4,E4|MSG:MSG01091,NOT_RUN
@@ -358,9 +358,9 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,FAIL
 **`FindInput` 5 CSV 위치조인 (cs:394~429)**,FE 대조표,X-LOC,X-LOC|ROW:**`FindInput` 5 CSV 위치조인 (cs:394~429)**,PASS
 **`FindInput` 5 CSV 위치조인 (cs:394~429)**,FE 대조표,X-ROW,X-ROW|ENTRY:**`FindInput` 5 CSV 위치조인 (cs:394~429)**,NA
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,X-LOC,"X-LOC|ROW:`FindDelete` `p_transport_mode=""X""` (cs:498)",PASS
-"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,H6,H6|COL:TRANS_MODE_CODE,NOPATH
-"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,G5,G5|COL:TRANS_MODE_CODE,NOPATH
-"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,M4,M4|COL:TRANS_MODE_CODE,NOT_RUN
+"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,H6,H6|COL:TRANS_MODE_CODE,NA
+"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,G5,G5|COL:TRANS_MODE_CODE,NA
+"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,M4,M4|COL:TRANS_MODE_CODE,NA
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,F1,F1|SCREEN,PASS
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,F5,F5|SCREEN,NOT_RUN
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,J2,J2|SCREEN,FAIL
@@ -388,7 +388,7 @@ P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,D6,D6|SCREEN,NOT_RUN
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,J2,J2|SCREEN,FAIL
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,X-LOC,X-LOC|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,PASS
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,H6,H6|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,WARN
-P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,G5,G5|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,NA
+P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,G5,G5|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,ERROR
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,M4,M4|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,ERROR
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,A1,A1|SP:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,REVIEW
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,A6,A6|SP:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,NOT_RUN

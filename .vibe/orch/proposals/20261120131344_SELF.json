@@ -1,0 +1,156 @@
+{
+  "id": "20261120131344_SELF",
+  "at": "2026-11-20T13:13:44+09:00",
+  "ms": 1795148024025,
+  "source": "self",
+  "status": "applied",
+  "sig": "chain end stopped flag",
+  "title": "체인 끝 기록(step.end, chain.end)에 중지 표시(stopped) 기록, 감시기와 U10 감지기가 시간 창 추정 전에 그 값을 봄",
+  "evidence": "repeatFiles orch-watch.js 35, t_orch_watch.js 14, run_all.js 30, job-runner.js 19. CHANGELOG.md 2026-11-19~20 절에서 orch-watch.js 가 나온 절 27개를 대조함. 제목 기준 10개가 중지나 창 종료로 끝난 실행을 실패 사건으로 올린 결함의 정정임(작업 목록 중지 user.stop 알림 2절, dispose 중지 알림, VM 다시 시작 R5, VM 창 끝 기록, 중지 직후 잠금, 창 다시 로드 사건 분리, 에이전트 대화 중지, 창 로드로 끊긴 실행 알림, 강제 종료 '중지' 표시). 소스 원인: workbench.js:1128 step.end, :1162~1164 chain.end 에 중지 필드 없음(proc.end 만 :581 stopped 있음). 중지 여부를 소비자가 따로 추정함: orch-watch.js:198 userStopped(처리 시각 Date.now() 기준 15초, 메모리 맵), orch-improve.js:74~76 wasStopped(STOP_WIN), orch-usercheck.js:88, :120, :147 각기 다른 창. events.jsonl chain.end 중 stopped 필드 0건. 이번 S13 U10 경고 8건 중 5건(S13|U10|SCP0005|1795102426111, S13|U10|SSP0005|1795103254248, S13|U10|SCP0005|1795103254402, S13|U10|SSP0005|1795119254671, S13|U10|SCP0005|1795119254819)은 같은 시각 job.item.end status cancel 인데 orch-usercheck.js:120 stopped() 가 user.stop 만 보아 경고로 셈. 3건(SCP0014 00:34, SCP0028 04:15, SSP0014 04:15)은 job.item.end fail, 1단계 S8.checklistRun exit 1 로 Claude 단계 2, 4, 6 이 NOT_RUN.",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_watch.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "workbench.js:1128 step.end, :1162 chain.end 객체에 stopped: !!this.stopReq 추가(stopAll :664 가 넣는 값, chain-runner.js:75 stop 도 같은 경로). orch-watch.js:249 proc.end, :256 step.end, :259 chain.end 판정 앞에 ev.stopped === true 면 실패 사건 없음(종전 userStopped 는 옛 기록용으로 유지). orch-usercheck.js:120 stopped(e) = e.aborted || user.stop 창 → e.stopped === true || e.aborted || 같은 job, screen 의 job.item.end status cancel(chain.end 뒤 2초 안) || 종전 user.stop 창. :121 detail '건너뜀 N · 실행 스크립트 M' → '<failNo>단계 <rows 실패 task> FAIL 로 Claude 단계 N개 미실행'. orch-improve.js:76 은 이미 e.stopped 를 봐 변경 없음. 시험: t_orch_watch.js 에 user.stop 없이 stopped:true 인 step.end FAIL, chain.end 를 넣어 R1, R11 이 없는지. t_orch_usercheck.js 에 chain.end 뒤 job.item.end cancel 이면 U10 없음, fail 이면 U10 warn 이고 detail 에 '1단계' 가 있는지.",
+  "verify": "node tools/VibeManager/test/t_orch_watch.js → FAIL 0. node tools/VibeManager/test/t_orch_usercheck.js → FAIL 0",
+  "rollback": "workbench.js, orch-watch.js, orch-usercheck.js 와 시험 2개를 반영 전 백업으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T13:27:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T13:30:18+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 47/47개 파일 통과(PASS 576, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1327"
+    },
+    {
+      "at": "2026-11-20T13:30:22+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T13:34:52+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 게이트에서 새로 어긋난 항목 1건: S2 t_chain_runner.js 실패: exit 1 · PASS 15 · FAIL 1 · FAIL 실행 주체 요약 실행 주체: 스크립트 1단계 · Assistant 1회 / SOME FAIL · 구문 검사 25개 파일 통과, 시험 46/47개 파일 통과(PASS 580, FAIL 1), 정의 정합 통과 · 대상 파일 5개 복원 · 대상 밖 변경 Doc/e2e/specs/_verify.spec.ts, Doc/verify/SCP0028/sort_check.csv, tools/Harness/verify/sort_check.py, tools/Harness/verify/syn_check.py, tools/VibeManager/jobs.js, tools/VibeManager/orch-dict.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T13-30-22_claude_orch.log",
+      "sec": 99,
+      "costUsd": 1.1666831000000002,
+      "files": [
+        "Doc/e2e/specs/_verify.spec.ts",
+        "Doc/verify/SCP0028/sort_check.csv",
+        "tools/Harness/verify/sort_check.py",
+        "tools/Harness/verify/syn_check.py",
+        "tools/VibeManager/jobs.js",
+        "tools/VibeManager/orch-dict.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/test/t_orch_watch.js",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-20T13:36:46+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 게이트 실패 1건 = tools/VibeManager/test/t_chain_runner.js:62 기대값 /스크립트 1단계 · Claude 1회/ 와 게이트 실측 '실행 주체: 스크립트 1단계 · Assistant 1회' 불일치. 개선안 범위 밖 변경임. 같은 시각 다른 작업이 workbench.js 의 Claude 표기를 바꿈(현재 workbench.js:1174 'AI Agent ${cN}회', git diff 상 tab_claude, chat_hint, askClaudeWhenIdle 라벨도 'AI Agent' 로 바뀜). 반영 로그 .vibe/logs/2026-11-20T13-30-22_claude_orch.log 에 해당 표기 변경 없음. 13:34:52 실패 기록의 대상 밖 변경 jobs.js, orch-dict.js 와 복원 뒤 workbench.js, jobs.js, orch-dict.js 수정 시각 13:35:38 이 같음. 반영 전 게이트 13:30:18 은 47/47 통과, 반영 Claude 13:31 시험 2종 FAIL 0. t_chain_runner.js 수정 시각 2026-11-19 22:24 로 변경 없음. 현재 소스에 stopp"
+    },
+    {
+      "at": "2026-11-20T13:37:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T13:40:13+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 46/47개 파일 통과(PASS 575, FAIL 1), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261120_self1337"
+    },
+    {
+      "at": "2026-11-20T13:40:15+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T13:44:28+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 47/47개 파일 통과(PASS 578, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T13:44:28+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 13:41:30 node tools/VibeManager/test/t_orch_watch.js → ALL PASS(FAIL 0, 신규 'stopped:true 끝 기록(user.stop 없음) = R1, R11 0건' PASS). 2026-11-20 13:41:31 node tools/VibeManager/test/t_orch_usercheck.js → ALL PASS(FAIL 0, 신규 'U10 job.item.end cancel = 없음 · fail = 경고(1단계 S8.checklistRun) · stopp · 변경 10개 파일 · 대상 목록 밖 변경 5개: Doc/e2e/specs/_trace.spec.ts, Doc/verify/_engine_selfcheck.json, tools/Harness/README.md, tools/E2E/lib/btnpopup.selftest.js, tools/E2E/lib/btnpopup.ts",
+      "log": ".vibe\\logs\\2026-11-20T13-40-15_claude_orch.log",
+      "sec": 90,
+      "costUsd": 1.1201532,
+      "files": [
+        "Doc/e2e/specs/_trace.spec.ts",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/README.md",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/test/t_orch_watch.js",
+        "tools/VibeManager/workbench.js",
+        "tools/E2E/lib/btnpopup.selftest.js",
+        "tools/E2E/lib/btnpopup.ts"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S9",
+  "selfKey": "S9|file|orch-watch.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795149452571,
+  "autoFp": "dea1242995",
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_watch.js",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-20 13:41:30 node tools/VibeManager/test/t_orch_watch.js → ALL PASS(FAIL 0, 신규 'stopped:true 끝 기록(user.stop 없음) = R1, R11 0건' PASS). 2026-11-20 13:41:31 node tools/VibeManager/test/t_orch_usercheck.js → ALL PASS(FAIL 0, 신규 'U10 job.item.end cancel = 없음 · fail = 경고(1단계 S8.checklistRun) · stopped:true = 없음' PASS, detail '1단계 S8.checklistRun FAIL 로 Claude 단계 3개 미실행')",
+    "note": "개선안 줄 번호가 현재 파일과 다름. workbench.js step.end 1157줄, chain.end 1191줄에 stopped: !!this.stopReq 추가함. orch-watch.js proc.end, step.end, chain.end 판정 앞에 ev.stopped === true 검사 추가함. userStopped 는 옛 기록용으로 유지함. orch-usercheck.js U10 stopped() 판정 순서: e.stopped === true, e.aborted, 같은 job·screen job.item.end cancel(chain.end 뒤 2초 안, job 필드 없으면 screen 만 대조), 종전 user.stop 창. detail 은 '<failNo>단계 <실패 task> <status> 로 Claude 단계 N개 미실행' 형식으로 바꿈. orch-improve.js 는 변경 없음. 작업 모드와 저장소 hook 차단 없음."
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 47/47개 파일 통과(PASS 578, FAIL 0), 정의 정합 통과"
+  },
+  "repair": {
+    "at": "2026-11-20T13:36:46+09:00",
+    "decision": "retry",
+    "cause": "게이트 실패 1건 = tools/VibeManager/test/t_chain_runner.js:62 기대값 /스크립트 1단계 · Claude 1회/ 와 게이트 실측 '실행 주체: 스크립트 1단계 · Assistant 1회' 불일치. 개선안 범위 밖 변경임. 같은 시각 다른 작업이 workbench.js 의 Claude 표기를 바꿈(현재 workbench.js:1174 'AI Agent ${cN}회', git diff 상 tab_claude, chat_hint, askClaudeWhenIdle 라벨도 'AI Agent' 로 바뀜). 반영 로그 .vibe/logs/2026-11-20T13-30-22_claude_orch.log 에 해당 표기 변경 없음. 13:34:52 실패 기록의 대상 밖 변경 jobs.js, orch-dict.js 와 복원 뒤 workbench.js, jobs.js, orch-dict.js 수정 시각 13:35:38 이 같음. 반영 전 게이트 13:30:18 은 47/47 통과, 반영 Claude 13:31 시험 2종 FAIL 0. t_chain_runner.js 수정 시각 2026-11-19 22:24 로 변경 없음. 현재 소스에 stopp",
+    "reason": "개선안 안의 변경과 시험은 통과함. 실패는 같은 시각 다른 작업이 실행 주체 표기 'Claude' 를 바꾼 데서 남. 같은 안을 다시 반영함. 표기 변경 쪽에서 t_chain_runner.js:62 기대값을 맞춰야 함.",
+    "log": ".vibe\\logs\\2026-11-20T13-35-33_claude_orch.log",
+    "costUsd": 0.6338507999999998,
+    "sec": 73
+  },
+  "retryN": 1,
+  "selfTag": "20261120_self1337",
+  "needsReload": true,
+  "appliedMs": 1795149868132,
+  "synced": [
+    "orch-usercheck.js",
+    "orch-watch.js",
+    "workbench.js"
+  ],
+  "snap": "prop_20261120131344_SELF"
+}

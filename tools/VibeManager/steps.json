@@ -1993,6 +1993,24 @@
           "kind": "open",
           "path": "${e2eOutDir}/specs/_matrix.csv",
           "title_en": "Open account × Division matrix (_matrix.csv)"
+        },
+        {
+          "id": "S8.engineGate",
+          "title": "검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/engine_gate.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--check"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
         }
       ]
     },

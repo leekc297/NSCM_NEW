@@ -1,0 +1,40 @@
+{
+  "id": "20261120143327_SELF_2",
+  "at": "2026-11-20T14:33:27+09:00",
+  "ms": 1795152807334,
+  "source": "self",
+  "status": "pending",
+  "sig": "del be bootrun n n",
+  "title": "BE 기동 로그 2개 삭제(합계 54.8GB)",
+  "evidence": "diag_in S10: .vibe/logs/be_bootrun_20261112_1031.log 28.9GB 마지막 수정 2026-11-13T17:28, .vibe/logs/be_bootrun_20261114_0148.log 25.9GB 마지막 수정 2026-11-16T11:34. 로그 전체 56.7GB 중 54.8GB. 7일 기준 도달은 첫 파일 2026-11-20 17:28, 둘째 파일 2026-11-23 11:34. 이 로그를 만드는 코드는 tools 아래에서 찾지 못함(미확인).",
+  "targets": [
+    ".vibe/logs/be_bootrun_20261112_1031.log",
+    ".vibe/logs/be_bootrun_20261114_0148.log"
+  ],
+  "before_after": "로그 2개 54.8GB 남음 → 마지막 수정 뒤 7일이 지난 파일부터 삭제, delete_log.jsonl 에 경로와 크기 기록",
+  "verify": "",
+  "rollback": "생성물 로그라 복원 없음. 지우기 전 목록은 .vibe/orch/selfcheck/delete_log.jsonl",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T14:34:04+09:00",
+      "by": "VMO",
+      "what": "자동 삭제 대기. 7일 기준 대기 2개 · 다음 삭제 가능 2026-11-20T17:28"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S10",
+  "selfKey": "S10|log|be_bootrun_20261112_1031.log",
+  "auto": true,
+  "autoMs": 1795152844191,
+  "autoWaitMs": 1795163300041.108,
+  "needsApproval": "",
+  "waitNote": "7일 기준 대기 2개 · 다음 삭제 가능 2026-11-20T17:28",
+  "lastWaitNote": "7일 기준 대기 2개 · 다음 삭제 가능 2026-11-20T17:28"
+}

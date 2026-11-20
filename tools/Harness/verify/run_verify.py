@@ -964,6 +964,11 @@ def main():
         stage_end()
         print(f"[{'FAIL' if rc_sg == 2 else 'OK'}] 정적 게이트 — Doc/verify/{mid}/static_gate.md" + (' · 정적 FAIL 있음(보완 뒤 다시 --static)' if rc_sg == 2 else ' · 정적 FAIL 0 → E2E 포함 정규 실행(run_verify.py ' + mid + ') 가능'))
         return rc_sg
+    if os.environ.get('VERIFY_SKIP_DOCS') == '1' and not a.resume_docs:
+        # 2026-11-20 CheckList 한 번 실행 구조: 반복 중간 회차는 문서를 만들지 않는다. 문서·회귀 점검은 끝 단계(checklist_run.py --docs → --resume-docs)가 1회
+        stage('docs', '반복 중간 회차라 생략(끝 단계에서 1회 생성)', m=1); stage_end()
+        print('[INFO] 문서 생성 생략(VERIFY_SKIP_DOCS) — CheckList·ActionItemList 는 끝 단계에서 1회 생성')
+        return 0
     stage('docs')
     cmd = [py, os.path.join(HERE, 'make_verify_docs.py'), mid] + (['--scope', a.scope] if a.scope else [])
     if docs_once(py, mid, cmd):   # 2026-11-20 A6: 설명 문장 작성 뒤 문서 1회(종전 = 문서 → 설명 → 문서 2회 · 판 번호 2개)

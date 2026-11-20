@@ -1,0 +1,27 @@
+{
+ "proposal": {
+  "id": "20261120131344_SELF_3",
+  "title": "extension.js, server-service.js 고정 문구 정리(38건, 줄표, 화살표 잇기, 상태 기호)",
+  "evidence": "diag_in S11 항목 S11|extension.js 21(수식어 1 기호 19 추상어 1), S11|server-service.js 17(기호 17). 보고 extension.js.style.csv: L326, L327, L333 '… 있음 → 열기/재실행', L332, L335 '★', '❌', L372, L384, L459, L470, L489, L502, L525, L587, L632 줄표와 가운뎃점 나열, L632 '모두', L742 '활성화'. server-service.js 소스: :224, :228 '✖', :240 '✅', :255 '⚠', :281 '⛔' 2건, :282 '⚠' 2건, :296 '✅' 2건, :297 '⚠' 2건, :315, :317 '⛔', :324 '✅', :325, :326 '✖', :236 ' — ' + hint. 상태는 out() 세 번째 인자(ok, warn, bad)와 알림 종류(showInformationMessage, showWarningMessage, showErrorMessage)로 이미 구분됨. 기호를 비교하는 코드 없음(VibeManager *.js 에서 includes, test, startsWith 로 ✅ ⚠ ⛔ ✖ 검색 0건). t_wb_stopmark.js:37 의 ✖ 검사는 workbench 메시지만 봄.",
+  "targets": [
+   "tools/VibeManager/extension.js",
+   "tools/VibeManager/server-service.js"
+  ],
+  "before_after": "extension.js:326, :327, :333 '결과 있음 → 열기' → '결과가 있으면 열기'(재실행도 같은 틀). :332, :335 '★', '❌' 삭제. :372, :384, :459, :470, :489, :502, :525, :587, :632 줄표 → 쉼표 또는 문장 나눔, 가운뎃점 나열 → 쉼표. :470 '🔎 CheckList', :489 '🎥 AS-…' 는 메뉴 이름 인용이라 그대로 둠. :632 '모두' 삭제. :742 '활성화' → '켜짐'. server-service.js 위 줄의 문구 맨 앞 ✅ ⚠ ⛔ ✖ 삭제(예 '✖ ${name} 실행 실패' → '${name} 실행 실패', 'Vibe_Manager ⛔ ${name}:' → 'Vibe_Manager ${name}:'). :236 ' — ' + hint → ', ' + hint.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet → server-service.js 0건, extension.js 는 메뉴 이름 인용 2건(🔎, 🎥)만. node tools/VibeManager/test/t_server_service.js → FAIL 0",
+  "sig": "sn ext server service",
+  "check": "S11",
+  "selfKey": "S11|extension.js"
+ },
+ "result": null,
+ "gate": null,
+ "history": [
+  "13:50:32 VMO 자동(게이트 통과 조건): 승인",
+  "13:53:18 VMO: 반영 전 게이트: 구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1350",
+  "13:53:20 VMO: 반영 시작",
+  "13:54:55 VMO: 반영 실패. Claude exit 1 · 대상 파일 2개 복원 · 대상 밖 변경 Doc/gen/SCP0028/FULLRUN.md 는 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120131344_SELF_3"
+}

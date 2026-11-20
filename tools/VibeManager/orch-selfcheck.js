@@ -205,7 +205,12 @@ function s10() {
   for (const b of big.sort((x, y) => y.gb - x.gb)) items.push(W(`.vibe/logs/${b.file} ${b.gb}GB`, `마지막 수정 ${b.mtime}`, `S10|log|${b.file}`, { file: `.vibe/logs/${b.file}`, gb: b.gb }));
   const cnt = (d, re, depth) => { let k = 0; for (const e of lsDir(d)) { if (e.isDirectory()) { if (depth > 0 && e.name !== 'node_modules') k += cnt(path.join(d, e.name), re, depth - 1); } else if (re.test(e.name)) k++; } return k; };
   const bakRepo = cnt(vmDir(), /\.bak_\d{8}/, 2); const bakInst = extDir() && fs.existsSync(extDir()) && path.resolve(extDir()) !== path.resolve(vmDir()) ? cnt(extDir(), /\.bak_\d{8}/, 2) : 0; const snaps = lsDir(path.join(P().vibeDir, 'orch', 'snap')).filter(e => e.isDirectory()).length;
-  return R('S10', items, { logsGB: Math.round(total / 1073741824 * 10) / 10, logFiles: n, bigFiles: big.length, bakRepo, bakInstalled: bakInst, snapDirs: snaps });
+  // 2026-11-20 사용자 지시 'BE 로그 용량도 용량 점검에': nscm-be/logs(로컬 BE 파일 로그, logback local FILE). 기준 = selfLogBigGB(종전 값 그대로) · 실측 11:38 nscm.log 15GB(오늘 하루치)
+  const beDir = path.join(P().root, 'nscm-be', 'logs'); let beTotal = 0, beN = 0; const beBig = [];
+  for (const e of lsDir(beDir)) { if (!e.isFile()) continue; try { const s = fs.statSync(path.join(beDir, e.name)); beTotal += s.size; beN++; if (s.size >= c.selfLogBigGB * 1073741824) beBig.push({ file: e.name, bytes: s.size, gb: Math.round(s.size / 1073741824 * 10) / 10, mtime: nowLocal(s.mtimeMs) }); } catch { /* 읽기 실패 = 건너뜀 */ } }
+  for (const b of beBig.sort((x, y) => y.bytes - x.bytes)) items.push(W(`nscm-be/logs/${b.file} ${b.gb}GB`, `마지막 수정 ${b.mtime} · BE 로컬 파일 로그(logback-spring.xml local FILE, config-local.yml logging.file.path ./logs) · 정리와 로그 수준 조정은 사용자 승인 대상`, `S10|belog|${b.file}`, { file: `nscm-be/logs/${b.file}`, gb: b.gb }));
+  let diskFreeGB = null; try { if (fs.statfsSync) { const sf = fs.statfsSync(P().root); diskFreeGB = Math.round(sf.bavail * sf.bsize / 1073741824 * 10) / 10; } } catch { diskFreeGB = null; }
+  return R('S10', items, { logsGB: Math.round(total / 1073741824 * 10) / 10, logFiles: n, bigFiles: big.length, bakRepo, bakInstalled: bakInst, snapDirs: snaps, beLogsGB: Math.round(beTotal / 1073741824 * 10) / 10, beLogFiles: beN, beBigFiles: beBig.length, diskFreeGB });
 }
 // ── S11 고정 문구 ──
 async function s11() {
@@ -314,8 +319,9 @@ async function diagnose(manual) {
     '- 로그, 백업(.bak_), 스냅샷(.vibe/orch/snap) 삭제 안은 targets 에 지울 경로를 하나씩 적고 제목에 "삭제"를 넣는다. 마지막 수정 뒤 7일이 지난 것만 VMO 가 지운다.',
     '- known 과 같은 내용, 반려된 내용은 올리지 않는다. 올릴 것이 없으면 proposals 를 빈 배열로 낸다.',
     '- 마지막 출력은 아래 형식의 JSON 코드 블록 1개다.',
+    mod('orch-improve').IMPACT_RULE,
     '```json',
-    '{ "proposals": [ { "title": "", "check": "S5", "key": "입력 항목의 key", "evidence": "근거", "targets": ["tools/VibeManager/…"], "before_after": "변경 전 → 변경 후", "verify": "", "rollback": "", "sig": "같은 안을 가리는 짧은 열쇠말", "plain": { "what": "", "risk": "", "undo": "" } } ], "summary": "진단 요약 2~3문장" }',
+    '{ "proposals": [ { "title": "", "impact": "core|fix", "check": "S5", "key": "입력 항목의 key", "evidence": "근거", "targets": ["tools/VibeManager/…"], "before_after": "변경 전 → 변경 후", "verify": "", "rollback": "", "sig": "같은 안을 가리는 짧은 열쇠말", "plain": { "what": "", "risk": "", "undo": "" } } ], "summary": "진단 요약 2~3문장" }',
     '```',
   ].join('\n');
   lastDiagMs = Date.now();
@@ -344,7 +350,8 @@ const DEL_OK = [/^\.vibe\/logs\/[^/]+\.(?:log|txt|out)$/i, /^\.vibe\/orch\/snap\
 const isDeleteTitle = pr => /삭제|지움|delete|remove file/i.test(String(pr.title || '')) && /파일|로그|폴더|백업|스냅샷|file|log|backup/i.test(String(pr.title || ''));
 function autoEligible(pr) {
   if (!pr) return { ok: false, why: '개선안 없음' };
-  if (pr.source === 'vision' && !cfg().visionAutoApply) return { ok: false, why: '큰 그림 점검 안 = 사용자 승인 뒤 반영(harness.json orch.visionAutoApply false)' }; // 2026-11-20 사용자 지시 '사용자가 승인할때만 적용되도록 초기값'
+  if (pr.impact === 'core') return { ok: false, why: 'VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영' }; // 2026-11-20 사용자 지시 '사용자승인은 최소화 · VM 의 근간을 흔드는 로직의 변경이나 보완 시'
+  if (pr.source === 'vision' && !cfg().visionAutoApply && pr.impact !== 'fix') return { ok: false, why: '큰 그림 점검 안 중 영향 구분이 없는 안 = 사용자 승인 뒤 반영(fix 로 분류된 안은 권장안으로 자동 반영)' }; // 2026-11-20 사용자 지시 '사용자가 승인할때만 적용되도록 초기값'
   const ts = (pr.targets || []).map(t => String(t).replace(/\\/g, '/').replace(/^\.\//, '')); if (!ts.length) return { ok: false, why: '대상 파일 없음' };
   for (const t of ts) if (t.includes('..') || /^[A-Za-z]:|^\//.test(t)) return { ok: false, why: `저장소 밖 경로 ${t}` };
   if (ts.every(t => DEL_OK.some(re => re.test(t)))) return isDeleteTitle(pr) ? { ok: true, kind: 'delete', why: '' } : { ok: false, why: '생성물 대상인데 삭제 안이 아님' };

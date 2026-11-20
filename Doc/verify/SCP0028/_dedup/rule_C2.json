@@ -1,100 +1,29 @@
 {
  "rule_id": "C2",
- "hash": "6b6b40dc7d01d12d",
+ "hash": "1eb8d3189c9e7c46",
  "groups": [
   {
    "rows": [
     "T-c8fd6fcd"
    ],
-   "why": "Checks the INCREMENT column against the comparison table. It is the only row for this column, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "T-caa356c6"
    ],
-   "why": "Checks the LOT_SIZE column against the comparison table. That is a different column from INCREMENT, so this row stays separate."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d15cf4c2"
    ],
-   "why": "Checks whether the ClbDivision_SelectedIndexChanged entry exists in the source. That is a different kind of check from the grid-cell rows, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-0b63cd50"
-   ],
-   "why": "Covers only the Sales Company→Plant and Sales Site→Company/Plant cascade and does not set a row state. V-df3bcadf also covers End Customer and is limited to new rows, so the two do not match exactly and stay apart."
-  },
-  {
-   "rows": [
-    "V-df3bcadf"
-   ],
-   "why": "Covers a wider set of cells (including End Customer→Sales Site/Sold-to) in the new-row state. It only partly overlaps V-0b63cd50 and V-becafb26, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-becafb26"
-   ],
-   "why": "Covers only the End Customer→Sold-to cascade with the condition 'Div 40 외' (all Divs except 40). That is a different element and condition from the other cascade rows."
-  },
-  {
-   "rows": [
-    "V-2611b990"
-   ],
-   "why": "Checks permission control for Current-version input Measures and the AS From Site candidates. No other row has the same elements and expected result."
-  },
-  {
-   "rows": [
-    "V-9b370c0f"
-   ],
-   "why": "Checks whether AS From Site is enabled and which Measure candidates appear for each Sales Site type under Div 81. Its condition and expected result differ from V-2611b990 and V-b3d210ef."
-  },
-  {
-   "rows": [
-    "V-b3d210ef"
-   ],
-   "why": "Checks the new-row Measure combo candidates for each Sales Site type. Its expected result (AS_In_Request appears only for stock-build sites, 비축용) differs from V-9b370c0f, so they are not grouped."
-  },
-  {
-   "rows": [
-    "V-6145b13e"
-   ],
-   "why": "Checks that Key-in cannot save a value outside the combo candidates. The expected result differs from V-61dc6e5f, which checks candidates after a Company change."
-  },
-  {
-   "rows": [
-    "V-61dc6e5f"
-   ],
-   "why": "Checks the Company candidates and Key-in saving after the Sales Site Company changes under Div 81/82. The condition and expected result are its own."
-  },
-  {
-   "rows": [
-    "V-67a95082"
-   ],
-   "why": "Checks that the Div cell can change on an inserted row and that the Site candidates below it are rebuilt. The target element (Div) is different from the other rows."
-  },
-  {
-   "rows": [
-    "V-e50e09ac"
-   ],
-   "why": "Checks the Cust Group→End Customer→Sales Site cascade under Div 40, including zero duplicate candidates. The expected result differs from V-f3e94ee4."
-  },
-  {
-   "rows": [
-    "V-e9891c92"
-   ],
-   "why": "Checks that W35–W38 quantities are kept when AS From Site is entered after the save-validation popup. The target and expected result are its own."
-  },
-  {
-   "rows": [
-    "V-f3e94ee4"
-   ],
-   "why": "Checks that saving data with a broken Cust Group–End Customer–Sales Site relationship is blocked and that Active=N is kept. It is a save-time check, unlike the cascade row V-e50e09ac."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:17:15",
- "cost": 0.0761085
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:00:10",
+ "cost": 0,
+ "open": 0
 }

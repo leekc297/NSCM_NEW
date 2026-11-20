@@ -15,6 +15,7 @@ import type { Nscm, ProcCall } from './nscm';
 import { CFG, FE, bePortOpen } from './nscm';
 import { probe } from './probe';
 import { stdAlias } from './labelalias';
+import { pickCondCol } from './condcol';  // 2026-11-20 T499 후보 ↔ 결과 컬럼 대응
 
 export type Verdict = 'OK' | 'FAIL' | 'WARN' | 'NA' | 'ERROR';
 export type Item = { name: string; kind: string; verdict: Verdict; note: string };
@@ -878,4 +879,21 @@ export async function clickSheetTab(nscm: Nscm, name: string): Promise<boolean> 
   const g0 = await grids(); if (g0 >= 2) return true; /* 탭 없이 이미 열린 하단 그리드 — 호출부가 pickGrid 로 그 시트 컬럼을 가진 그리드를 고른다(DMF0005 Purchase · 2026-11-02) */ const boxes = p.locator('[class*="_formItem_"] input[type="checkbox"], [class*="SubTitle" i] input[type="checkbox"], [class*="subTitle" i] input[type="checkbox"]'); const nb = await boxes.count().catch(() => 0);
   for (let k = 0; k < nb; k++) { const b = boxes.nth(k); if (!(await b.isVisible().catch(() => false)) || await b.isChecked().catch(() => true)) continue; await b.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(1_000); if ((await grids()) > g0) return true; await b.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(400); }
   return false;
+}
+
+/**
+ * 2026-11-20 T499(SCP0028 G1 V-dd4f9db4 From Site): 다중 선택 조건의 후보 글자(opts)와 라벨로 찾은 결과 컬럼(col) 값이 하나도 안 겹치면
+ *   (후보 = 코드 'AU000062_81-P' · 컬럼 = 설명 FROM_SITE_DESCRIPTION) 숨은 컬럼 포함 전 컬럼에서 후보와 값이 가장 많이 겹치는 컬럼(FROM_SITE)을 찾는다.
+ *   반환 col/base = 바꿀 결과 컬럼과 그 값(겹치면 그대로) · how = 근거 문구('' = 바꾸지 않음). 호출 예(_trace.spec.ts G1 멀티선택 · comboOpts 직후):
+ *     const cc = await condColForOpts(nscm, o.texts, col, base); col = cc.col; base = cc.base;
+ */
+export async function condColForOpts(nscm: Nscm, opts: string[], col: string, base: string[]): Promise<{ col: string; base: string[]; how: string }> {
+  const p = nscm.page;
+  const hits = (vals: string[]) => { const vs = new Set(vals.map(v => String(v ?? '').trim()).filter(Boolean)); return opts.filter(t => { const s0 = String(t || '').trim(); return s0 && (vs.has(s0) || vs.has(s0.split(/\s+/)[0])); }).length; };
+  if (col && hits(base) > 0) return { col, base, how: '' };
+  const cols: Record<string, string[]> = {};
+  for (const b of ((await probe.allBindings(p).catch(() => null)) || [])) cols[b] = (await probe.columnValues(p, b).catch(() => null)) || [];
+  const pk = pickCondCol(opts, cols, col ? [col] : []);
+  if (!pk.col) return { col, base, how: '' };
+  return { col: pk.col, base: cols[pk.col], how: `${col ? `라벨 컬럼 ${col} 값과 후보 겹침 0 → ` : ''}${pk.how}` };
 }

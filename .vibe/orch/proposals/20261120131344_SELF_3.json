@@ -1,0 +1,153 @@
+{
+  "id": "20261120131344_SELF_3",
+  "at": "2026-11-20T13:13:44+09:00",
+  "ms": 1795148024338,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn ext server service",
+  "title": "extension.js, server-service.js 고정 문구 정리(38건, 줄표, 화살표 잇기, 상태 기호)",
+  "evidence": "diag_in S11 항목 S11|extension.js 21(수식어 1 기호 19 추상어 1), S11|server-service.js 17(기호 17). 보고 extension.js.style.csv: L326, L327, L333 '… 있음 → 열기/재실행', L332, L335 '★', '❌', L372, L384, L459, L470, L489, L502, L525, L587, L632 줄표와 가운뎃점 나열, L632 '모두', L742 '활성화'. server-service.js 소스: :224, :228 '✖', :240 '✅', :255 '⚠', :281 '⛔' 2건, :282 '⚠' 2건, :296 '✅' 2건, :297 '⚠' 2건, :315, :317 '⛔', :324 '✅', :325, :326 '✖', :236 ' — ' + hint. 상태는 out() 세 번째 인자(ok, warn, bad)와 알림 종류(showInformationMessage, showWarningMessage, showErrorMessage)로 이미 구분됨. 기호를 비교하는 코드 없음(VibeManager *.js 에서 includes, test, startsWith 로 ✅ ⚠ ⛔ ✖ 검색 0건). t_wb_stopmark.js:37 의 ✖ 검사는 workbench 메시지만 봄.",
+  "targets": [
+    "tools/VibeManager/extension.js",
+    "tools/VibeManager/server-service.js"
+  ],
+  "before_after": "extension.js:326, :327, :333 '결과 있음 → 열기' → '결과가 있으면 열기'(재실행도 같은 틀). :332, :335 '★', '❌' 삭제. :372, :384, :459, :470, :489, :502, :525, :587, :632 줄표 → 쉼표 또는 문장 나눔, 가운뎃점 나열 → 쉼표. :470 '🔎 CheckList', :489 '🎥 AS-…' 는 메뉴 이름 인용이라 그대로 둠. :632 '모두' 삭제. :742 '활성화' → '켜짐'. server-service.js 위 줄의 문구 맨 앞 ✅ ⚠ ⛔ ✖ 삭제(예 '✖ ${name} 실행 실패' → '${name} 실행 실패', 'Vibe_Manager ⛔ ${name}:' → 'Vibe_Manager ${name}:'). :236 ' — ' + hint → ', ' + hint.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet → server-service.js 0건, extension.js 는 메뉴 이름 인용 2건(🔎, 🎥)만. node tools/VibeManager/test/t_server_service.js → FAIL 0",
+  "rollback": "두 파일을 반영 전 백업으로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T13:50:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T13:53:18+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1350"
+    },
+    {
+      "at": "2026-11-20T13:53:20+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T13:54:55+09:00",
+      "by": "VMO",
+      "what": "반영 실패. Claude exit 1 · 대상 파일 2개 복원 · 대상 밖 변경 Doc/gen/SCP0028/FULLRUN.md 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T13-53-21_claude_orch.log",
+      "sec": 92,
+      "costUsd": null,
+      "files": [
+        "Doc/gen/SCP0028/FULLRUN.md",
+        "tools/VibeManager/extension.js",
+        "tools/VibeManager/server-service.js"
+      ]
+    },
+    {
+      "at": "2026-11-20T13:57:27+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 13:54:52 VS Code 창 종료(.vibe/orch/events.jsonl 970행 user.stop why vscode.dispose)로 반영 Claude 가 끝나기 전에 종료됨. 977행 claude.end exit 1, stoppedBy 'VS Code 종료', hasResult false, timedOut false. 로그 .vibe/logs/2026-11-20T13-53-21_claude_orch.log 는 대상 2개 파일 Edit 37회, t_server_service.js ALL PASS 뒤 마지막 확인 명령 실행 중(13:54:52) 끊김. orch-improve.js:225 가 이를 'Claude exit 1' 로만 기록함."
+    },
+    {
+      "at": "2026-11-20T13:57:29+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T14:00:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1357"
+    },
+    {
+      "at": "2026-11-20T14:00:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T14:05:08+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T14:05:08+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 14:02:09 실행. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet → extension.js 위반 1(기호 1: L470 메뉴 이름 인용 '🔎 CheckList'), server-service.js 위반 0. node tools/VibeManager/test/t_server_service.js → AL · 변경 23개 파일 · 대상 목록 밖 변경 21개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0028/artifacts/.last-run.json, Doc/e2e/results/SCP0028/shots/SCP0028_open.png, Doc/e2e/results/SCP0028/shots/SCP0028_searched.png, Doc/e2e/specs/SCP0028.plan.json, Doc/tobefacts/db/_export_log.md",
+      "log": ".vibe\\logs\\2026-11-20T14-00-16_claude_orch.log",
+      "sec": 130,
+      "costUsd": 1.1010299,
+      "files": [
+        "Doc/e2e/results/SCP0028/_test_timing.jsonl",
+        "Doc/e2e/results/SCP0028/artifacts/.last-run.json",
+        "Doc/e2e/results/SCP0028/shots/SCP0028_open.png",
+        "Doc/e2e/results/SCP0028/shots/SCP0028_searched.png",
+        "Doc/e2e/specs/SCP0028.plan.json",
+        "Doc/tobefacts/db/_export_log.md",
+        "Doc/tobefacts/db/menu.csv",
+        "Doc/tobefacts/db/msg_master.csv",
+        "Doc/tobefacts/db/procs_catalog.csv",
+        "Doc/tobefacts/db/sheet_columns.csv",
+        "Doc/tobefacts/db/users.csv",
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/open_check.json",
+        "Doc/verify/SCP0028/run_mode.json",
+        "Doc/verify/SCP0028/screen_sync.json",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/E2E/accounts.json",
+        "tools/VibeManager/extension.js",
+        "tools/VibeManager/server-service.js",
+        "Doc/db/probe_20261120_140133.md",
+        "Doc/e2e/_run.dbwin.SCP0028.lock",
+        "Doc/e2e/_run.e2e.SCP0028.lock"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|extension.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795150648978,
+  "autoFp": "8b980266c3",
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/extension.js",
+      "tools/VibeManager/server-service.js"
+    ],
+    "verify_result": "2026-11-20 14:02:09 실행. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet → extension.js 위반 1(기호 1: L470 메뉴 이름 인용 '🔎 CheckList'), server-service.js 위반 0. node tools/VibeManager/test/t_server_service.js → ALL PASS. node --check 두 파일 통과",
+    "note": "반영 전 위반 extension.js 21건, server-service.js 17건. L489 '🎥' 는 검사기에 걸리지 않음. extension.js L332 '❌ 만 확인' 은 '실패 항목만 확인' 으로 바꿈. '모두'와 L632 HTML 줄표, 가운뎃점은 현재 파일 L642~643 에 있어 그 줄을 고침. server-service.js.style.csv 는 위반 0건이라 검사기가 다시 쓰지 않아 반영 전 17행이 남아 있음. repairScope DB_ONLY 이지만 tools/VibeManager 는 FE·BE 대상이 아니어서 hook 차단 없음"
+  },
+  "repair": {
+    "at": "2026-11-20T13:57:27+09:00",
+    "decision": "retry",
+    "cause": "13:54:52 VS Code 창 종료(.vibe/orch/events.jsonl 970행 user.stop why vscode.dispose)로 반영 Claude 가 끝나기 전에 종료됨. 977행 claude.end exit 1, stoppedBy 'VS Code 종료', hasResult false, timedOut false. 로그 .vibe/logs/2026-11-20T13-53-21_claude_orch.log 는 대상 2개 파일 Edit 37회, t_server_service.js ALL PASS 뒤 마지막 확인 명령 실행 중(13:54:52) 끊김. orch-improve.js:225 가 이를 'Claude exit 1' 로만 기록함.",
+    "reason": "반영 도중 VS Code 창이 닫혀 작업이 끊겼습니다. 개선안 내용은 문제가 없으니 같은 안을 다시 반영합니다.",
+    "log": ".vibe\\logs\\2026-11-20T13-56-18_claude_orch.log",
+    "costUsd": 0.664171,
+    "sec": 69
+  },
+  "retryN": 1,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 26개 파일 통과, 시험 48/48개 파일 통과(PASS 596, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1357",
+  "needsReload": true,
+  "appliedMs": 1795151108164,
+  "synced": [
+    "extension.js",
+    "server-service.js"
+  ],
+  "snap": "prop_20261120131344_SELF_3"
+}

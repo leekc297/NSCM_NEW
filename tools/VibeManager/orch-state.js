@@ -95,13 +95,22 @@ function tailTick() {
 }
 
 // ── 잠금 파일 · 부하 ──
+// 개선안 20261120143326_SELF: 잠금 파일 at 형식이 쓰는 쪽마다 다르다(server_guard.py:92 = 'YYYY-MM-DD HH:MM:SS' 글자 · langlock.ts:22 · langacct.ts:42 = Date.now() 밀리초 · 그 밖 = 초).
+//   숫자 1e11 이상 = 밀리초, 미만 = 초, 글자 = 그대로, 유효 날짜가 아니면 ''(toISOString 예외 없음)
+function lockAt(at) {
+  if (at == null || at === '') return '';
+  const n = typeof at === 'number' ? at : (/^\s*\d+(\.\d+)?\s*$/.test(String(at)) ? Number(at) : NaN);
+  if (!Number.isFinite(n)) return typeof at === 'string' && Number.isFinite(Date.parse(at.trim().replace(' ', 'T'))) ? at : '';
+  const d = new Date(n >= 1e11 ? n : n * 1000);
+  return Number.isFinite(d.getTime()) ? d.toISOString() : '';
+}
 function locks() {
   const out = []; const d = path.join(root, 'Doc', 'e2e');
   let names = []; try { names = fs.readdirSync(d).filter(f => /^_run(\.[\w.-]+)?\.lock$/.test(f) || /^_server_\d+\.lock$/.test(f)); } catch { }
   for (const n of names) {
     let j = null; try { j = JSON.parse(fs.readFileSync(path.join(d, n), 'utf8')); } catch { j = null; }
     const pid = j && Number(j.pid) || 0;
-    out.push({ file: n, pid, started: (j && (j.started || (j.at ? new Date(j.at * 1000).toISOString() : ''))) || '', args: (j && (j.args || j.tag || j.id)) || '', alive: pid ? pidAlive(pid) : null, ppid: (j && j.ppid) || null, parent: (j && j.parent) || '', chain: (j && j.chain) || '' });
+    out.push({ file: n, pid, started: (j && (j.started || lockAt(j.at))) || '', args: (j && (j.args || j.tag || j.id)) || '', alive: pid ? pidAlive(pid) : null, ppid: (j && j.ppid) || null, parent: (j && j.parent) || '', chain: (j && j.chain) || '' });
   }
   return out;
 }
@@ -116,7 +125,8 @@ function sampleTcp() {
   tcpBusy = true;
   cp.exec('netstat -ano -p tcp | find /c "TCP"', { windowsHide: true, timeout: 15000 }, (e, so) => { tcpBusy = false; tcpAt = Date.now(); const n = parseInt(String(so || '').trim(), 10); tcpN = Number.isFinite(n) ? n : null; });
 }
-function load() { return { cpu: cpuPct, memFreeMB: Math.round(os.freemem() / 1048576), memTotalMB: Math.round(os.totalmem() / 1048576), tcp: tcpN, tcpAt, at: Date.now() }; }
+function aiUsage() { try { return vibeDir ? require('./claude-usage').read(vibeDir) : null; } catch { return null; } } // 2026-11-20 AI 주간 한도(최근 AI 실행 기록의 rate_limit_event)
+function load() { return { cpu: cpuPct, memFreeMB: Math.round(os.freemem() / 1048576), memTotalMB: Math.round(os.totalmem() / 1048576), tcp: tcpN, tcpAt, ai: aiUsage(), at: Date.now() }; }
 
 /** 상황판용 현재 상태 */
 function snapshot() {

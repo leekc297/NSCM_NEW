@@ -137,7 +137,7 @@ button.sec:hover{background:color-mix(in srgb,var(--fg) 16%,transparent)}
 @media (max-width:820px){.common.haslog{grid-template-columns:1fr;grid-template-rows:minmax(0,46%) minmax(0,1fr)}.common:not(.haslog){grid-template-rows:minmax(0,1fr)}}
 /* Log 탭: 하위 탭 2개(BE · FE) + 아이콘 도구 */
 .pane>.logwrap{flex:1;min-height:0;margin:14px;display:flex;flex-direction:column;overflow:hidden}
-.lsub{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--gb)}
+.lsub{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--gb)}.ls.lgoff .dot,.ls.lgoff .lss{display:none}.lgsw{display:inline-flex;border:1px solid var(--b);border-radius:999px;overflow:hidden;margin-left:6px}.lgb{font:inherit;font-size:11px;padding:2px 10px;border:0;background:transparent;color:var(--mut);cursor:pointer;display:inline-flex;align-items:center;gap:5px}.lgb:before{content:'';width:7px;height:7px;border-radius:50%;background:rgba(128,128,128,.55)}.lgb.on{color:inherit;background:rgba(63,185,80,.14)}.lgb.on:before{background:var(--ok,#3fb950)}.lgb+.lgb{border-left:1px solid var(--b)}
 .lst{display:flex;gap:4px}
 .ls{display:flex;align-items:center;gap:7px;background:transparent;color:inherit;border:1px solid transparent;border-radius:8px;padding:5px 12px;font-family:inherit;font-size:12px;cursor:pointer;opacity:.72}
 .ls:hover{opacity:1;background:var(--g2)}
@@ -376,9 +376,9 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
   <button class="tab" data-t="log" title="${T('로그(BE · FE)', 'Logs (BE · FE)')}">Logs<span class="dot" id="dbe" title="BE"></span><span class="dot" id="dfe" title="FE"></span></button>
   <span class="sp"></span>
   <span class="chip" id="cbusy" style="display:none"></span>
-  <span class="chip" id="cai" title="${T('AI 검토 = CheckList 수행 중 Claude 가 사용자의견 처리, AS-IS 사실 추출 검토, 판정 검토, 설명 작성을 함. 켜고 끄기 = 기능 탭 환경설정의 AI 검토 · 상한 = harness.json llmReviewBudgetUsd', 'AI review inside CheckList')}"></span>
-  <span class="chip" id="cmode" title="${T('작업 모드 — 변경은 기능 탭 환경설정의 작업 모드', 'Work mode')}"></span>
-  <button class="ib" id="stop" style="display:none" title="${T('이 창에서 실행한 기능 중지(서버는 종료하지 않음)', 'Stop actions started here')}" aria-label="${T('실행 중인 기능 중지', 'Stop')}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/></svg></button><button class="tgl" id="vmoTgl" role="switch" aria-checked="true" title="${T('VMO 켜고 끄기 — 끄면 감시 · 자동 조치 · 자동 분석을 멈춤. 서버 · 로그 · 기능 · 직접 지시는 그대로', 'Turn VMO monitoring and auto actions on or off')}"><span class="tk"><i></i></span><span class="tl" id="vmoLbl">ON</span></button>
+  <span class="chip" id="cai" title="${T('AI 검토 = CheckList 수행 중 AI Agent 가 사용자의견 처리, AS-IS 사실 추출 검토, 판정 검토, 설명 작성을 함. 켜고 끄기 = 기능 탭 환경설정의 AI 검토 · 상한 = harness.json llmReviewBudgetUsd', 'AI review inside CheckList')}"></span>
+  <span class="chip" id="cmode" title="${T('작업 모드. 변경은 기능 탭 환경설정의 작업 모드', 'Work mode')}"></span>
+  <button class="ib" id="stop" style="display:none" title="${T('이 창에서 실행한 기능 중지(서버는 종료하지 않음)', 'Stop actions started here')}" aria-label="${T('실행 중인 기능 중지', 'Stop')}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/></svg></button><button class="tgl" id="vmoTgl" role="switch" aria-checked="true" title="${T('VMO 켜고 끄기. 끄면 감시, 자동 조치, 자동 분석을 멈춤. 서버, 로그, 기능, 직접 지시는 그대로', 'Turn VMO monitoring and auto actions on or off')}"><span class="tk"><i></i></span><span class="tl" id="vmoLbl">ON</span></button>
 </div>
 
 <div class="pane" id="board"><div class="dash adash">
@@ -391,24 +391,24 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
     <div class="a-col">
       <section class="panel glass"><h2>${T('부하', 'Load')}<small>${T('동시 실행 입장 기준', 'admission limits')}</small></h2><div class="a-rings" id="bLoad"></div></section>
       <section class="panel glass"><h2>${T('오늘 흐름', 'Today')}<small id="bFlowN"></small></h2><div class="a-body" id="bFlow"></div></section>
-      <section class="panel glass"><h2 title="${T('큰 그림 점검: VM, VMO 가 목적에 맞게 움직이는지 Claude 가 판단하고 개선 방향을 올림(반영은 승인 뒤)', 'Checks whether VM and VMO serve their purpose and proposes directions (applied after approval)')}">Overall Review<span class="a-sp"></span><button class="sec" id="vsFix" title="${T('이 점검이 올린 개선안 보기', 'Show its proposals')}">Fixes</button> <button class="sec" id="vsRun" title="${T('지금 점검(Claude 호출 1회, 읽기 전용)', 'Run now (one read-only Claude call)')}">${T('지금 점검', 'Run now')}</button></h2><div class="a-body" id="vsBody"><div class="empty">${T('점검 이력 없음', 'Never run')}</div></div></section>
+      <section class="panel glass"><h2 title="${T('큰 그림 점검: VM, VMO 가 목적에 맞게 움직이는지 AI Agent 가 판단하고 개선 방향을 올림(반영은 승인 뒤)', 'Checks whether VM and VMO serve their purpose and proposes directions (applied after approval)')}">Overall Review<span class="a-sp"></span><button class="sec" id="vsFix" title="${T('이 점검이 올린 개선안 보기', 'Show its proposals')}">Fixes</button> <button class="sec" id="vsRun" title="${T('지금 점검(AI Agent 호출 1회, 읽기 전용)', 'Run now (one read-only AI Agent call)')}">${T('지금 점검', 'Run now')}</button></h2><div class="a-body" id="vsBody"><div class="empty">${T('점검 이력 없음', 'Never run')}</div></div></section>
       <section class="panel glass"><h2>${T('알림', 'Notices')}</h2><div class="pbody notice" id="bNote"><div class="empty">${T('없음', 'None')}</div></div></section>
     </div>
   </div>
-  <section class="panel glass a-tlbox"><h2>${T('시간별 흐름', 'Timeline')}<small id="bTlN"></small><span class="a-sp"></span><span class="a-leg"><span><i class="s"></i>${T('스크립트', 'script')}</span><span><i class="c"></i>Claude</span><span><i class="w"></i>${T('대기', 'wait')}</span><span><i class="f"></i>${T('실패', 'fail')}</span></span><span class="a-tlm"><button data-tlm="60" class="on">60${T('분', 'm')}</button><button data-tlm="180">3${T('시간', 'h')}</button><button data-tlm="720">12${T('시간', 'h')}</button></span></h2><div id="bTl"></div></section>
+  <section class="panel glass a-tlbox"><h2>${T('시간별 흐름', 'Timeline')}<small id="bTlN"></small><span class="a-sp"></span><span class="a-leg"><span><i class="s"></i>Script</span><span><i class="c"></i>AI Agent</span><span><i class="w"></i>${T('대기', 'wait')}</span><span><i class="f"></i>${T('실패', 'fail')}</span></span><span class="a-tlm"><button data-tlm="60" class="on">60${T('분', 'm')}</button><button data-tlm="180">3${T('시간', 'h')}</button><button data-tlm="720">12${T('시간', 'h')}</button></span></h2><div id="bTl"></div></section>
 </div></div></section>
   </div>
 </div></div>
 
 <div class="pane" id="log"><div class="logwrap glass">
-  <div class="lsub"><span class="lst" role="tablist"><button class="ls on" role="tab" data-ls="be">☕ BE Log<span class="dot" id="dbe2"></span><span class="lss" id="sbe"></span></button><button class="ls" role="tab" data-ls="fe">🎨 FE Log<span class="dot" id="dfe2"></span><span class="lss" id="sfe"></span></button><button class="ls" role="tab" data-ls="task" title="${T('사이드바에서 실행한 공통 기능(서버, Source Download, Source Backup, 환경설정)의 출력', 'Output of common actions run from the sidebar')}">📋 Task Log</button></span><span class="sp"></span><button class="ib" id="lStart" title="${T('가동(선택한 서버 Start)', 'Start server')}" aria-label="${T('가동(선택한 서버 Start)', 'Start server')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></button><button class="ib" id="lStop" title="${T('중지(선택한 서버 Finish)', 'Stop server')}" aria-label="${T('중지(선택한 서버 Finish)', 'Stop server')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/></svg></button><span class="isep"></span><button class="ib" id="lLatest" title="${T('최신 줄로 이동', 'Jump to latest')}" aria-label="${T('최신 줄로 이동', 'Jump to latest')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v10.5M7.5 11l4.5 4.5 4.5-4.5M5.5 19.5h13"/></svg></button><button class="ib" id="lClear" title="${T('화면의 로그 지우기', 'Clear log')}" aria-label="${T('화면의 로그 지우기', 'Clear log')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5h14M10 7.5V5.2h4v2.3M7.2 7.5l.9 11.3h7.8l.9-11.3M10.3 11v4.8M13.7 11v4.8"/></svg></button></div>
+  <div class="lsub"><span class="lst" role="tablist"><button class="ls on" role="tab" data-ls="be">☕ BE Log<span class="dot" id="dbe2"></span><span class="lss" id="sbe"></span></button><button class="ls" role="tab" data-ls="fe">🎨 FE Log<span class="dot" id="dfe2"></span><span class="lss" id="sfe"></span></button><button class="ls" role="tab" data-ls="task" title="${T('사이드바에서 실행한 공통 기능(서버, Source Download, Source Backup, 환경설정)의 출력', 'Output of common actions run from the sidebar')}">📋 Task Log</button></span><span class="lgsw" title="${T('BE · FE Log 켜고 끄기. 꺼 두면 로그를 읽지 않음(BE 는 양이 많아 필요할 때만 켬). 켜면 최근 부분부터 다시 읽음', 'Turn BE / FE log streaming on or off')}"><button class="lgb" data-lg="be" id="lgBe">BE</button><button class="lgb" data-lg="fe" id="lgFe">FE</button></span><span class="sp"></span><button class="ib" id="lStart" title="${T('가동(선택한 서버 Start)', 'Start server')}" aria-label="${T('가동(선택한 서버 Start)', 'Start server')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></button><button class="ib" id="lStop" title="${T('중지(선택한 서버 Finish)', 'Stop server')}" aria-label="${T('중지(선택한 서버 Finish)', 'Stop server')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/></svg></button><span class="isep"></span><button class="ib" id="lLatest" title="${T('최신 줄로 이동', 'Jump to latest')}" aria-label="${T('최신 줄로 이동', 'Jump to latest')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v10.5M7.5 11l4.5 4.5 4.5-4.5M5.5 19.5h13"/></svg></button><button class="ib" id="lClear" title="${T('화면의 로그 지우기', 'Clear log')}" aria-label="${T('화면의 로그 지우기', 'Clear log')}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5h14M10 7.5V5.2h4v2.3M7.2 7.5l.9 11.3h7.8l.9-11.3M10.3 11v4.8M13.7 11v4.8"/></svg></button></div>
   <div class="log lbody" id="belogB"></div><div class="log lbody" id="felogB" style="display:none"></div><div class="log lbody" id="taskB" style="display:none" data-empty="${T('사이드바에서 공통 기능을 실행하면 출력이 여기에 나옵니다', 'Output of common actions appears here')}"></div>
 </div></div>
 <div class="pane" id="inc"><div class="wrap">
   <div class="sect"><h2 title="${T('사건', 'Incidents')}">Events(Incidents)<span class="sp"></span><button class="sec" id="incCloseAll" style="margin-right:10px" title="${T('고른 사건(없으면 보이는 열린 사건 전부) 닫기 · 두 번 눌러 확인', 'Close selected (or all open shown) · click twice')}"></button><label style="font-weight:400" title="${T('해결·닫은 사건도 해결 칸에 보임', 'Show resolved and closed in the Resolved column')}"><input type="checkbox" id="incAll"> ${T('해결 포함', 'Include resolved')}</label></h2><div class="tlbar" id="incRules"></div><div id="incList"><div class="empty">${T('없음', 'None')}</div></div></div>
 </div></div>
 <div class="pane" id="prop"><div class="wrap">
-  <div class="sect"><h2>${T('개선안', 'Proposals')}<small id="prMeta"></small><span class="sp"></span><label style="font-weight:400"><input type="checkbox" id="prAll"> ${T('끝난 것 포함', 'Include finished')}</label> <button class="sec" id="prNow" title="${T('최근 실행 기록을 지금 분석해 개선안을 올림(Claude 호출 1회)', 'Analyze now (one Claude call)')}">${T('지금 분석', 'Analyze now')}</button></h2>
+  <div class="sect"><h2>${T('개선안', 'Proposals')}<small id="prMeta"></small><span class="sp"></span><label style="font-weight:400"><input type="checkbox" id="prAll"> ${T('끝난 것 포함', 'Include finished')}</label> <button class="sec" id="prNow" title="${T('최근 실행 기록을 지금 분석해 개선안을 올림(AI Agent 호출 1회)', 'Analyze now (one AI Agent call)')}">${T('지금 분석', 'Analyze now')}</button></h2>
   <div class="s" style="display:none">${T('여기에는 승인이 필요한 안만 보입니다(화면 소스, DB 객체, 룰, hook, 설정 파일, 생성물이 아닌 파일 삭제). 반려한 안과 같은 안은 다시 올리지 않습니다.', 'Only proposals that need approval are listed here. Rejected ones are not proposed again.')}</div>
   <div class="tlbar" id="prBar"></div><div id="prList"><div class="empty">${T('없음', 'None')}</div></div></div>
   <div class="sect" hidden><h2>${T('자동 반영 기록', 'Automatic repairs')}<small id="prAutoN"></small></h2>
@@ -416,10 +416,10 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
   <div id="prAuto"><div class="empty">${T('없음', 'None')}</div></div></div>
 </div></div>
 <div class="pane" id="dict"><div class="wrap">
-  <div class="dc"><nav class="dc-nav" id="dcNav"></nav><div class="dc-main"><div class="dc-top"><input class="tlq dc-q" id="dcQ" placeholder="${T('약자 · 이름 · 설명 검색 (예: R14, D1, CR-092)', 'Search code, name, text (e.g. R14, D1)')}"><span class="mutx" id="dcN"></span></div><div id="dcList"><div class="empty">${T('읽는 중', 'Loading')}</div></div></div></div>
+  <div class="dc"><nav class="dc-nav" id="dcNav"></nav><div class="dc-main"><div class="dc-top"><input class="tlq dc-q" id="dcQ" placeholder="${T('약자, 이름, 설명 검색 (예: R14, D1, CR-092)', 'Search code, name, text (e.g. R14, D1)')}"><span class="mutx" id="dcN"></span></div><div id="dcList"><div class="empty">${T('읽는 중', 'Loading')}</div></div></div></div>
 </div></div>
 <div class="pane" id="self"><div class="wrap">
-  <div class="sect"><h2 title="${T('VM 자가진단', 'VM self-check')}">Health<small id="scMeta"></small><span class="sp"></span><button class="sec" id="scRun" title="${T('점검 항목 S1~S12 를 지금 실행(시험 실행 포함, Claude 호출 없음)', 'Run all checks now (no Claude call)')}">${T('지금 점검', 'Check now')}</button> <button class="sec" id="scDiag" title="${T('어긋난 항목과 오류 기록의 원인을 Claude 가 확인해 개선안을 올림(Claude 호출 1회, 읽기 전용)', 'Diagnose with Claude (one call, read-only)')}">${T('지금 진단', 'Diagnose')}</button> <button class="sec" id="scSync" title="${T('저장소의 VM 파일을 설치 폴더로 복사(설치본은 .bak 으로 남김). 적용은 VS Code 창 다시 로드 뒤', 'Copy repo files to the installed extension folder')}">${T('설치 폴더 동기화', 'Sync installed')}</button> <button class="sec" id="scOpen">${T('결과 파일', 'Result file')}</button></h2>
+  <div class="sect"><h2 title="${T('VM 자가진단', 'VM self-check')}">Health<small id="scMeta"></small><span class="sp"></span><button class="sec" id="scRun" title="${T('점검 항목 S1~S12 를 지금 실행(시험 실행 포함, AI Agent 호출 없음)', 'Run all checks now (no AI Agent call)')}">${T('지금 점검', 'Check now')}</button> <button class="sec" id="scDiag" title="${T('어긋난 항목과 오류 기록의 원인을 AI Agent 가 확인해 개선안을 올림(AI Agent 호출 1회, 읽기 전용)', 'Diagnose with AI Agent (one call, read-only)')}">${T('지금 진단', 'Diagnose')}</button> <button class="sec" id="scSync" title="${T('저장소의 VM 파일을 설치 폴더로 복사(설치본은 .bak 으로 남김). 적용은 VS Code 창 다시 로드 뒤', 'Copy repo files to the installed extension folder')}">${T('설치 폴더 동기화', 'Sync installed')}</button> <button class="sec" id="scOpen">${T('결과 파일', 'Result file')}</button></h2>
   <div class="s" style="color:var(--mut);margin-bottom:6px">${T('VM 코드, 정의 파일, 설치본, 실행 오류, 변경 기록의 미확인 항목을 점검하고 진단합니다. VM 코드와 점검 도구 보완은 게이트(구문, 시험, 정합)를 통과하면 승인 없이 반영하고, 새로 어긋나면 되돌립니다. 파일 삭제, 설정, 룰, hook, FE, BE, DB 객체는 개선안 탭에서 승인한 뒤에만 반영합니다.', 'Checks and diagnoses VM code. Code repairs are applied automatically when gates pass and reverted otherwise. Deletions, settings, rules, hooks, FE, BE and DB objects need approval.')}</div>
   <div class="hc"><nav class="hc-nav"><div id="scRing"></div><div id="scCards"></div><div class="hc-sep"></div><div id="scNavX"></div></nav>
   <div class="hc-main">
@@ -430,7 +430,7 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
   </div></div></div>
 </div></div>
 <div class="pane" id="hist"><div class="wrap">
-  <div class="sect"><h2 title="${T('작업 이력', 'Work history')}">History<small id="hsMeta"></small><span class="sp"></span><button class="sec" id="hsCollect" title="${T('변경 기록, Claude Code 세션, VM 실행 이력, VMO 기록, 백업 파일, 메모리, 검사기 결함 문서를 읽어 원장을 갱신(Claude 호출 없음)', 'Collect from all sources (no Claude call)')}">${T('지금 수집', 'Collect now')}</button> <label style="font-weight:400;font-size:12px;margin:0 8px 0 4px"><input type="checkbox" id="hsAuto"> ${T('자동 수집', 'Auto collect')}</label><button class="sec" id="hsMd">WORKLOG.md</button></h2>
+  <div class="sect"><h2 title="${T('작업 이력', 'Work history')}">History<small id="hsMeta"></small><span class="sp"></span><button class="sec" id="hsCollect" title="${T('변경 기록, Claude Code 세션, VM 실행 이력, VMO 기록, 백업 파일, 메모리, 검사기 결함 문서를 읽어 원장을 갱신(AI Agent 호출 없음)', 'Collect from all sources (no AI Agent call)')}">${T('지금 수집', 'Collect now')}</button> <label style="font-weight:400;font-size:12px;margin:0 8px 0 4px"><input type="checkbox" id="hsAuto"> ${T('자동 수집', 'Auto collect')}</label><button class="sec" id="hsMd">WORKLOG.md</button></h2>
   <div class="cards" id="hsCards" style="margin-bottom:10px"></div>
   <div class="tlw hs"><div class="tls hs-f">
     <h5>${T('종류', 'Kinds')}</h5><div id="hsKinds"></div>
@@ -440,7 +440,7 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
     <label class="hs-ck" style="margin-top:6px"><input type="checkbox" id="hsVm" checked> ${T('세션은 VM 관련만', 'VM sessions only')}</label>
     <div style="display:flex;gap:6px;align-items:center;margin-top:8px"><button class="sec" id="hsGo">${T('조회', 'Search')}</button><span class="s" id="hsCnt" style="color:var(--mut)"></span></div>
   </div><div class="tlm" id="hsList"><div class="empty">${T('없음', 'None')}</div></div></div></div>
-  <div class="sect"><h2>${T('주제별 정리', 'Weekly summary')}<small>${T('주 단위, 누르면 Claude 호출 1회(읽기 전용). 끝난 주는 결과를 보관하고 다시 부르지 않음', 'Per week, one Claude call (read-only). Closed weeks are cached')}</small></h2><div id="hsWeeks"><div class="empty">${T('없음', 'None')}</div></div><div id="hsSum"></div></div>
+  <div class="sect"><h2>${T('주제별 정리', 'Weekly summary')}<small>${T('주 단위, 누르면 AI Agent 호출 1회(읽기 전용). 끝난 주는 결과를 보관하고 다시 부르지 않음', 'Per week, one AI Agent call (read-only). Closed weeks are cached')}</small></h2><div id="hsWeeks"><div class="empty">${T('없음', 'None')}</div></div><div id="hsSum"></div></div>
 </div></div>
 <div class="pane" id="agent"><div class="agwrap">
   <div class="agcon glass">
@@ -449,10 +449,10 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
   </div>
   <div class="agprompt">
     <div class="pbox" id="agBox" data-mode="acceptEdits">
-      <textarea id="agIn" placeholder="${T('VMO 에이전트에게 질문 · 지시 (Enter 전송 · Shift+Enter 줄바꿈 · ↑↓ 이전 입력)', 'Ask the VMO agent (Enter to send, Shift+Enter for newline)')}"></textarea>
+      <textarea id="agIn" placeholder="${T('VMO 에이전트에게 질문, 지시 (Enter 전송, Shift+Enter 줄바꿈, ↑↓ 이전 입력)', 'Ask the VMO agent (Enter to send, Shift+Enter for newline)')}"></textarea>
       <div class="pbar"><div class="pl"><span class="pchip" id="agInfo"></span></div><div class="pr">
         <button class="pgo" id="agStop" title="${T('진행 중인 에이전트 조치 중지', 'Stop the agent')}" aria-label="${T('에이전트 중지', 'Stop the agent')}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/></svg></button>
-        <button class="pgo" id="agSend" title="${T('전송 (Enter · 줄바꿈 Shift+Enter) — 에이전트가 작업 중이면 대기열에 넣음', 'Send (Enter). Queued while the agent is busy')}" aria-label="${T('전송', 'Send')}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5.5M6 11.5l6-6 6 6"/></svg></button>
+        <button class="pgo" id="agSend" title="${T('전송 (Enter, 줄바꿈 Shift+Enter). 에이전트가 작업 중이면 대기열에 넣음', 'Send (Enter). Queued while the agent is busy')}" aria-label="${T('전송', 'Send')}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5.5M6 11.5l6-6 6 6"/></svg></button>
       </div></div>
     </div>
     <div id="agq" aria-live="polite"></div>
@@ -477,6 +477,10 @@ let cur = '';
 let sub='be';
 function showSub(k){ sub=(k==='fe'||k==='task')?k:'be'; document.querySelectorAll('.ls').forEach(b=>{const on=b.dataset.ls===sub;b.classList.toggle('on',on);b.setAttribute('aria-selected',on?'true':'false');if(on){const x=b.querySelector('.nb');if(x)x.remove();}}); $('belogB').style.display=sub==='be'?'':'none'; $('felogB').style.display=sub==='fe'?'':'none'; $('taskB').style.display=sub==='task'?'':'none'; scrollEnd(subBox()); paintSrvBtns(); }
 function subBox(){ return sub==='fe'?'felogB':sub==='task'?'taskB':'belogB'; }
+// 2026-11-20 BE · FE Log 켜고 끄기(사용자 지시). 꺼진 로그 칸에는 안내 1줄
+let lgOn={be:false,fe:false};
+function paintLg(){ ['be','fe'].forEach(function(k){ const b=$(k==='be'?'lgBe':'lgFe'); const on=!!lgOn[k]; b.classList.toggle('on',on); b.textContent=(k==='be'?'BE':'FE')+' '+(on?'On':'Off'); const tb=document.querySelector('.ls[data-ls="'+k+'"]'); if(tb) tb.classList.toggle('lgoff',!on); /* 2026-11-20 사용자 지시: 꺼짐이면 탭의 상태 점·응답 문구 숨김 */ b.title=(k==='be'?'BE':'FE')+' Log '+(on?(KO?'켜짐. 누르면 끔':'on. Click to turn off'):(KO?'꺼짐. 누르면 켜고 최근 부분부터 다시 읽음':'off. Click to turn on')); const box=$(boxOf(k)); if(!on){ box.textContent=''; const d=document.createElement('span'); d.className='mut'; d.textContent=(KO?'⏸ '+(k==='be'?'BE':'FE')+' Log 꺼짐. 위 '+(k==='be'?'BE':'FE')+' Off 단추를 누르면 켜지고 최근 부분부터 보입니다':'⏸ log off')+String.fromCharCode(10); box.appendChild(d); } }); }
+document.querySelectorAll('[data-lg]').forEach(function(b){ b.onclick=function(){ const k=b.dataset.lg; lgOn[k]=!lgOn[k]; paintLg(); vscode.postMessage({type:'orch:logOn',stream:k,on:lgOn[k]}); }; });
 function show(t){ if(t==='task'){ t='log'; setTimeout(()=>showSub('task'),0); } if(t==='belog'||t==='felog'){ const k=t==='felog'?'fe':'be'; t='log'; setTimeout(()=>showSub(k),0); } if(!$(t)) t='board'; cur=t; document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.t===t;b.classList.toggle('on',on);if(on){const n=b.querySelector('.nb');if(n)n.remove();}}); document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('on',x.id===t)); const lb={log:subBox(),agent:'agB'}[t]; if(lb)scrollEnd(lb); try{vscode.setState({tab:t});}catch(e){} }
 function scroller(id){ return $(id); }
 function scrollEnd(id){ const s=scroller(id); s.scrollTop=s.scrollHeight; }
@@ -501,12 +505,12 @@ function paintBoard(d){
   $('bAt').textContent = hm(d.at);
   if(d.ai){ const c=$('cai'); c.textContent=(KO?'AI 검토 ':'AI review ')+(d.ai.on?(KO?'켬':'on'):(KO?'끔':'off'))+(d.ai.on?' · '+(d.ai.budget>0?(KO?'상한 ':'cap ')+d.ai.budget+' USD':(KO?'상한 없음':'no cap')):''); c.style.color=d.ai.on?'':'var(--warn)'; }
   if(d.mode) $('cmode').textContent=d.mode;
-  const actor = a => '<span class="actor '+(a==='claude'?'claude':'')+'">'+(a==='claude'?'Claude':(KO?'스크립트':'script'))+'</span>';
+  const actor = a => '<span class="actor '+(a==='claude'?'claude':'')+'">'+(a==='claude'?'AI Agent':'Script')+'</span>';
   const win = w => w==null?'':(w===0?(KO?'VMO':'orch'):'VM#'+w);
   const rows=[];
   for(const j of d.jobs||[]) rows.push('<tr><td>'+'VMW'+'</td><td></td><td>'+esc(j.label)+'</td><td>'+j.done+'/'+j.total+(KO?' 완료 · 실행 ':' done · running ')+j.running+'</td><td></td><td class="n">'+sec(j.sec)+'</td></tr>');
   for(const c of d.chains||[]) rows.push('<tr><td>'+(KO?'체인':'Chain')+'</td><td>'+esc(c.screen)+'</td><td>'+esc(c.label)+'</td><td>'+(c.step?('['+c.step.no+'] '+esc(c.step.name)+' · '+sec(c.step.sec)):(KO?'단계 사이':'between steps'))+'</td><td>'+(c.step?actor(c.step.actor):'')+' '+win(c.wb)+'</td><td class="n">'+sec(c.sec)+'</td></tr>');
-  for(const c of d.claudes||[]) rows.push('<tr><td>Claude</td><td>'+esc(c.screen)+'</td><td>'+esc(c.label||c.source)+'</td><td>PID '+(c.pid||'-')+'</td><td>'+actor('claude')+' '+win(c.wb)+'</td><td class="n">'+sec(c.sec)+'</td></tr>');
+  for(const c of d.claudes||[]) rows.push('<tr><td>AI Agent</td><td>'+esc(c.screen)+'</td><td>'+esc(c.label||c.source)+'</td><td>PID '+(c.pid||'-')+'</td><td>'+actor('claude')+' '+win(c.wb)+'</td><td class="n">'+sec(c.sec)+'</td></tr>');
   for(const p of d.procs||[]) rows.push('<tr><td>'+(KO?'프로세스':'Process')+'</td><td>'+esc(p.screen)+'</td><td>'+esc(p.label)+'</td><td>PID '+(p.pid||'-')+' · '+esc(p.log)+'</td><td>'+actor('script')+' '+win(p.wb)+'</td><td class="n">'+sec(p.sec)+'</td></tr>');
   $('bRun').innerHTML = tbl(KO?['종류','화면','이름','현재','주체 · 창','경과']:['Kind','Screen','Name','Now','Actor · Window','Elapsed'], rows);
   const kindKo={admit:'부하 입장',lock:'화면 잠금',slot:'동시 상한',dbwin:'시험 데이터 구간',langwait:'언어 전환 대기',e2elock:'E2E 잠금'};
@@ -518,7 +522,8 @@ function paintBoard(d){
   const tcpC=L.tcp==null?'na':L.tcp>=14000?'bad':L.tcp>=12000?'warn':'';
   $('bLoad').innerHTML = gz('CPU',L.cpu==null?(KO?'미측정':'n/a'):L.cpu+'%',L.cpu||0,80,cpuC,KO?'입장 기준 < 80%':'admit < 80%')
     +gz(KO?'메모리':'Memory',L.memFreeMB!=null?(KO?'여유 ':'free ')+L.memFreeMB.toLocaleString()+' MB':'',memUsed,memMark,memC,(KO?'입장 기준 여유 ≥ 3,072 MB · 전체 ':'admit free ≥ 3,072 MB · total ')+(L.memTotalMB||0).toLocaleString()+' MB')
-    +gz(KO?'TCP 연결 수':'TCP connections',L.tcp==null?(KO?'미측정':'n/a'):L.tcp.toLocaleString(),L.tcp==null?0:100*L.tcp/16000,75,tcpC,(KO?'경고 12,000 · E2E 중단 14,000':'warn 12,000 · abort 14,000')+(L.tcpAt?' · '+hm(L.tcpAt):''));
+    +gz(KO?'TCP 연결 수':'TCP connections',L.tcp==null?(KO?'미측정':'n/a'):L.tcp.toLocaleString(),L.tcp==null?0:100*L.tcp/16000,75,tcpC,(KO?'경고 12,000 · E2E 중단 14,000':'warn 12,000 · abort 14,000')+(L.tcpAt?' · '+hm(L.tcpAt):''))
+    +(function(){ const w=aiWk(L); return gz(KO?'AI 주간 한도':'AI weekly limit',w?w.pct+'%':(KO?'미측정':'n/a'),w?w.pct:0,80,w?w.cls:'na',w?esc(w.sub):(KO?'AI 실행 기록 없음':'no AI run log')); })();
   lastBoard=d; paintKpi();
 }
 let lastBoard=null;
@@ -527,7 +532,7 @@ function paintKpi(){ const d=lastBoard||{}; const run=(d.jobs||[]).length+(d.cha
   const io=incs.filter(x=>x.status==='open'||x.status==='acting').length, iu=incs.filter(x=>x.status==='need-user').length, pp=props.filter(x=>x.status==='pending').length;
   const k=(cls,label,val,sub,tab)=>'<div class="kpi '+cls+'"'+(tab?' data-go="'+tab+'" style="cursor:pointer"':'')+'><span class="kl">'+label+'</span><span class="kv">'+val+'</span><span class="ks">'+sub+'</span></div>';
   $('bKpi').innerHTML = k(run?'on':'',KO?'실행 중':'Running',run,(d.chains||[]).length?(KO?'체인 ':'chains ')+(d.chains||[]).length+((d.jobs||[]).length?' · VMW '+(d.jobs||[]).length:''):(KO?'실행 중인 체인 없음':'no chains'))
-    +k(cl?'on':'','Claude',cl,cl?(d.claudes||[]).map(c=>c.screen||(c.wb===0?'VMO':'')).filter(Boolean).join(', ')||(KO?'세션 실행 중':'sessions'):(KO?'실행 중인 세션 없음':'no sessions'))
+    +k(cl?'on':'','AI Agent',cl,cl?(d.claudes||[]).map(c=>c.screen||(c.wb===0?'VMO':'')).filter(Boolean).join(', ')||(KO?'세션 실행 중':'sessions'):(KO?'실행 중인 세션 없음':'no sessions'))
     +k(wmax>600?'warn':'',KO?'대기':'Waiting',wt,wt?(KO?'가장 오래 ':'longest ')+sec(wmax):(KO?'대기 없음':'none'))
     +k(iu?'warn':io?'on':'',KO?'사건':'Incidents',io+iu,(KO?'열림 ':'open ')+io+(KO?' · 사용자 확인 ':' · need user ')+iu,'inc')
     +k(pp?'on':'',KO?'개선안':'Proposals',pp,KO?'승인 대기':'pending','prop');
@@ -562,7 +567,7 @@ function tsOf(s){ const t=Date.parse(String(s||'').replace(' ','T')); return isF
 function p2(n){ return String(n).padStart(2,'0'); }
 function hhmm(ms){ const d=new Date(ms); return p2(d.getHours())+':'+p2(d.getMinutes()); }
 function hourKey(ms){ const d=new Date(ms); return p2(d.getMonth()+1)+'-'+p2(d.getDate())+' '+p2(d.getHours())+(KO?'시':':00'); }
-function incLast(x){ let m=x.lastMs||x.ms||0; for(const a of x.actions||[]){ const t=tsOf(a.at); if(t>m) m=t; } return m; }
+function incLast(x){ let m=Math.max(x.ms||0, x.lastMs||0, tsOf(x.at), tsOf(x.lastAt)); for(const a of x.actions||[]){ const t=tsOf(a.at); if(t>m) m=t; } return m; }
 function uiStat(tab,list,lastOf){ let n=0; for(const x of list){ const t=lastOf(x); if(t>n) n=t; } const k=list.length+'|'+n; if(uiSent[tab]===k) return; uiSent[tab]=k; vscode.postMessage({type:'orch:uiStat',tab:tab,received:list.length,newestMs:n}); }
 function tlBar(id,chips,cur,q,ph){ const b=$(id); if(!b.querySelector('.tlq')){ b.innerHTML='<span class="tlchips"></span><input class="tlq" placeholder="'+ph+'"><span class="sp"></span>'; } const cs=b.querySelector('.tlchips'); cs.innerHTML=chips.map(function(c){ return '<span class="kchip'+(c[0]===cur?' on':'')+'" data-ch="'+c[0]+'" title="'+esc(c[2]||'')+'">'+esc(c[1])+'</span>'; }).join(''); return b; }
 function flowPill(cls,text,full){ return '<i class="'+cls+'" title="'+esc(full||text)+'">'+esc(String(text).slice(0,26))+'</i>'; }
@@ -721,7 +726,7 @@ $('incAll').onchange=paintInc;
 /* ── 2026-11-19 자가진단 · 이력 탭 ── */
 let scSt=null, scLedRows=[], hsSt=null, hsAsked=false, hsWeeks=[];
 const scStKo={ok:'정상',fail:'어긋남',warn:'주의',skip:'건너뜀'}; let scPick=''; let scView='check'; let scBadN=0; function scDot(s){ return s==='ok'?'s-res':s==='warn'?'s-need':s==='fail'?'s-open':'s-close'; }
-const hsKindKo={change:'변경',session:'세션',run:'VM 실행',claude:'Claude 호출',incident:'사건',proposal:'개선안',defect:'검사기 결함',rule:'룰 변경'};
+const hsKindKo={change:'변경',session:'세션',run:'VM 실행',claude:'AI Agent 호출',incident:'사건',proposal:'개선안',defect:'검사기 결함',rule:'룰 변경'};
 function dtm(s){ return String(s||'').replace('T',' ').slice(5,16); }
 function infoLine(id,k){ if(!k||!k.info) return ''; const i=k.info;
   if(id==='S1') return (KO?'파일 ':'files ')+(i.files||0);
@@ -733,7 +738,7 @@ function infoLine(id,k){ if(!k||!k.info) return ''; const i=k.info;
   if(id==='S7') return (KO?'7일 사건 ':'7d incidents ')+(i.incidents7d||0)+(KO?' · 해결 ':' · resolved ')+(i.resolved||0)+'/'+(i.acted||0);
   if(id==='S8') return (KO?'반영 ':'applied ')+(i.applied||0)+(KO?' · 로드 대기 ':' · reload ')+(i.waitingReload||0);
   if(id==='S9') return (KO?'파일 ':'files ')+(i.repeatFiles||0)+(KO?' · 지시 ':' · asks ')+(i.repeatAsks||0);
-  if(id==='S10') return 'logs '+(i.logsGB||0)+'GB · bak '+((i.bakRepo||0)+(i.bakInstalled||0));
+  if(id==='S10') return 'logs '+(i.logsGB||0)+'GB · BE logs '+(i.beLogsGB||0)+'GB · bak '+((i.bakRepo||0)+(i.bakInstalled||0))+(i.diskFreeGB!=null?(KO?' · 디스크 남음 ':' · disk free ')+i.diskFreeGB+'GB':'');
   if(id==='S11') return i.violations!=null?((KO?'위반 ':'violations ')+i.violations):'';
   if(id==='S12') return 'orch '+(i.orchKeys||0)+(KO?' · 설정 ':' · settings ')+(i.settings||0);
   if(id==='S13') return (KO?'지적 ':'issues ')+(i.active||0)+'/'+(i.ledger||0)+(KO?' · 새 프롬프트 ':' · new prompts ')+(i.newPrompts||0)+(i.lastLearnAt?(KO?' · 학습 ':' · learned ')+dtm(i.lastLearnAt):'');
@@ -778,12 +783,12 @@ $('scSync').onclick=function(){ vscode.postMessage({type:'orch:selfSync'}); };
 $('scOpen').onclick=function(){ vscode.postMessage({type:'orch:selfOpen'}); };
 $('scLedAll').onchange=paintLedger;
 $('scLedLoaded').onclick=function(){ vscode.postMessage({type:'orch:selfMarkLoaded'}); };
-function paintHist(m){ if(m.status) hsSt=m.status; if(m.weeks) hsWeeks=m.weeks; if(!hsSt) return; if(hsSt.auto){ $('hsAuto').checked=!!hsSt.auto.on; $('hsAuto').parentNode.title=KO?('켜면 '+hsSt.auto.min+'분마다 원천을 읽어 원장을 갱신(Claude 호출 없음). 값은 harness.json orch.historyAuto, 주기는 orch.historyAutoMin'):('Collect every '+hsSt.auto.min+' min (no Claude call)'); } const s=hsSt.stats; const pg=hsSt.progress;
+function paintHist(m){ if(m.status) hsSt=m.status; if(m.weeks) hsWeeks=m.weeks; if(!hsSt) return; if(hsSt.auto){ $('hsAuto').checked=!!hsSt.auto.on; $('hsAuto').parentNode.title=KO?('켜면 '+hsSt.auto.min+'분마다 원천을 읽어 원장을 갱신(AI Agent 호출 없음). 값은 harness.json orch.historyAuto, 주기는 orch.historyAutoMin'):('Collect every '+hsSt.auto.min+' min (no AI Agent call)'); } const s=hsSt.stats; const pg=hsSt.progress;
   $('hsMeta').textContent = hsSt.busy ? ((KO?'수집 중 … ':'collecting … ')+(pg?pg.step+(pg.total?' '+pg.n+'/'+pg.total:''):'')) : (s?(KO?'마지막 수집 ':'collected ')+dtm(s.at)+' · '+s.sec+'s · '+(s.firstDate||'')+' ~ '+(s.lastDate||''):(KO?'수집 기록 없음. 지금 수집을 누르면 원천을 읽음':'not collected yet'));
   if(!s){ $('hsCards').innerHTML=''; return; }
   const card=function(l,v,sub){ return '<div class="card"><span class="s">'+esc(l)+'</span><span class="scv">'+esc(v)+'</span><span class="s">'+esc(sub||'')+'</span></div>'; };
   const k=s.byKind||{};
-  $('hsCards').innerHTML = card(KO?'변경 기록':'Changes',k.change||0,(KO?'미확인 항목 ':'unverified ')+(s.unverified||0)) + card(KO?'Claude Code 세션':'Sessions',k.session||0,(KO?'VM 관련 ':'VM ')+(s.vmSessions||0)+(KO?' · VM 파일 수정 ':' · edits ')+(s.vmEdits||0)) + card(KO?'VM 실행':'Runs',k.run||0,(KO?'Claude 호출 로그 ':'Claude logs ')+(k.claude||0)) + card(KO?'사건 / 개선안':'Incidents / Proposals',(k.incident||0)+' / '+(k.proposal||0),'') + card(KO?'백업 파일':'Backups',s.baks||0,(KO?'저장소 ':'repo ')+(s.bakRepo||0)+(KO?' · 설치 폴더 ':' · installed ')+(s.bakInstalled||0)) + card(KO?'검사기 결함 / 룰 변경':'Defects / Rules',(k.defect||0)+' / '+(k.rule||0),'');
+  $('hsCards').innerHTML = card(KO?'변경 기록':'Changes',k.change||0,(KO?'미확인 항목 ':'unverified ')+(s.unverified||0)) + card(KO?'Claude Code 세션':'Sessions',k.session||0,(KO?'VM 관련 ':'VM ')+(s.vmSessions||0)+(KO?' · VM 파일 수정 ':' · edits ')+(s.vmEdits||0)) + card(KO?'VM 실행':'Runs',k.run||0,(KO?'AI Agent 호출 로그 ':'AI Agent logs ')+(k.claude||0)) + card(KO?'사건 / 개선안':'Incidents / Proposals',(k.incident||0)+' / '+(k.proposal||0),'') + card(KO?'백업 파일':'Backups',s.baks||0,(KO?'저장소 ':'repo ')+(s.bakRepo||0)+(KO?' · 설치 폴더 ':' · installed ')+(s.bakInstalled||0)) + card(KO?'검사기 결함 / 룰 변경':'Defects / Rules',(k.defect||0)+' / '+(k.rule||0),'');
   const sel=$('hsArea'); if(sel.options.length<=1){ Object.keys(s.byArea||{}).sort().concat(['화면 작업']).forEach(function(a){ const o=document.createElement('option'); o.value=a; o.textContent=a; sel.appendChild(o); }); }
   paintWeeks(); paintKinds();
   if(!hsAsked||m.done){ hsAsked=true; hsQuery(); }
@@ -815,7 +820,7 @@ function paintHistItem(m){ const e=m.item; if(!e) return; let tr=null; $('hsList
     + row(KO?'상태':'Status', esc(e.status||'')) + row(KO?'조치':'Actions',list(e.actions,10)) + row(KO?'경과':'History',list(e.history,12))
     + row(KO?'원천':'Source',(e.sources||[]).map(function(s){ return esc(s.src)+(s.line?':'+s.line:'')+(s.id?' '+esc(s.id):''); }).join(', '));
 }
-function paintWeeks(){ $('hsWeeks').innerHTML = hsWeeks.length ? '<table><tr><th>'+(KO?'주 시작일':'Week of')+'</th><th class="n">'+(KO?'건수':'Items')+'</th><th>'+(KO?'정리':'Summary')+'</th><th></th></tr>'+hsWeeks.map(function(w){ return '<tr><td>'+esc(w.week)+(w.closed?'':(KO?' (이번 주)':' (this week)'))+'</td><td class="n">'+w.count+'</td><td>'+(w.done?dtm(w.at):(KO?'없음':'none'))+'</td><td style="white-space:nowrap">'+(w.done?'<button class="sec" data-wv="'+esc(w.week)+'">'+(KO?'보기':'View')+'</button> ':'')+((!w.done||!w.closed)?'<button class="sec" data-ws="'+esc(w.week)+'">'+(w.done?(KO?'다시 정리':'Redo'):(KO?'정리(Claude)':'Summarize'))+'</button>':'')+'</td></tr>'; }).join('')+'</table>' : '<div class="empty">'+(KO?'없음':'None')+'</div>';
+function paintWeeks(){ $('hsWeeks').innerHTML = hsWeeks.length ? '<table><tr><th>'+(KO?'주 시작일':'Week of')+'</th><th class="n">'+(KO?'건수':'Items')+'</th><th>'+(KO?'정리':'Summary')+'</th><th></th></tr>'+hsWeeks.map(function(w){ return '<tr><td>'+esc(w.week)+(w.closed?'':(KO?' (이번 주)':' (this week)'))+'</td><td class="n">'+w.count+'</td><td>'+(w.done?dtm(w.at):(KO?'없음':'none'))+'</td><td style="white-space:nowrap">'+(w.done?'<button class="sec" data-wv="'+esc(w.week)+'">'+(KO?'보기':'View')+'</button> ':'')+((!w.done||!w.closed)?'<button class="sec" data-ws="'+esc(w.week)+'">'+(w.done?(KO?'다시 정리':'Redo'):(KO?'정리(AI Agent)':'Summarize'))+'</button>':'')+'</td></tr>'; }).join('')+'</table>' : '<div class="empty">'+(KO?'없음':'None')+'</div>';
   $('hsWeeks').querySelectorAll('[data-wv]').forEach(function(b){ b.onclick=function(){ vscode.postMessage({type:'orch:histSummary',week:b.dataset.wv}); }; });
   $('hsWeeks').querySelectorAll('[data-ws]').forEach(function(b){ b.onclick=function(){ b.disabled=true; b.textContent=KO?'정리 중 …':'working …'; vscode.postMessage({type:'orch:histSummarize',week:b.dataset.ws}); }; });
 }
@@ -846,7 +851,7 @@ function aVmo(){
   const ap2=props.filter(function(x){ return x.status==='pending'&&!x.auto&&!x.autoTarget; }).length;
   const d=lastBoard||{}; const cl=(d.claudes||[]).length;
   const c=function(v,l,cls,go){ return '<div class="a-n'+(go?' a-go':'')+'"'+(go?' data-go="'+go+'"':'')+'><b class="'+cls+'">'+v+'</b><small>'+l+'</small></div>'; };
-  $('bKpi').innerHTML='<div class="a-ai"><div class="a-h"><span class="a-cl">●</span> '+(KO?'VMO 오늘':'VMO today')+(cl?'<span class="chip a-run-chip">Claude '+cl+(KO?' 실행 중':' running')+'</span>':'')+'</div><div class="a-row">'
+  $('bKpi').innerHTML='<div class="a-ai"><div class="a-h"><span class="a-cl">●</span> '+(KO?'VMO 오늘':'VMO today')+(cl?'<span class="chip a-run-chip">AI Agent '+cl+(KO?' 실행 중':' running')+'</span>':'')+'</div><div class="a-row">'
     +c(ap,KO?'자동 보완':'auto-repaired','a-ok','prop')+c(rv,KO?'되돌림':'reverted',rv?'a-wa':'','prop')+c(io,KO?'열린 사건':'open incidents',io?'a-ba':'','inc')+c(ap2,KO?'승인 필요':'need approval',ap2?'a-wa':'','prop')+'</div></div>';
   $('bKpi').querySelectorAll('[data-go]').forEach(function(e){ e.onclick=function(){ show(e.dataset.go); }; });
 }
@@ -854,18 +859,18 @@ function aSteps(c){
   const n=Math.max(c.total||0,(c.doneN||0)+(c.step?1:0),1); let h='';
   for(let i=1;i<=n;i++){ const dn=(c.done||[]).find(function(x){ return x.no===i; }); const pa=(c.plan||[]).find(function(x){ return x.no===i; });
     let cls=''; if(dn) cls=dn.status==='FAIL'?'f':(dn.status==='SKIP'?'k':'d'); else if(c.step&&c.step.no===i) cls=c.step.actor==='claude'?'rc':'rs';
-    h+='<i class="'+cls+'" title="'+i+(pa&&pa.task?' · '+esc(pa.task):'')+(pa?' · '+(pa.actor==='claude'?'Claude':(KO?'스크립트':'script')):'')+(dn?' · '+esc(dn.status):'')+'"></i>'; }
+    h+='<i class="'+cls+'" title="'+i+(pa&&pa.task?' · '+esc(pa.task):'')+(pa?' · '+(pa.actor==='claude'?'AI Agent':'Script'):'')+(dn?' · '+esc(dn.status):'')+'"></i>'; }
   return '<div class="a-steps">'+h+'</div>';
 }
 // 2026-11-20 화면별 작업 카드 오른쪽 Workbench 연결(↗) · 같은 창이 열려 있으면 앞으로, 없으면 그 화면 ID 로 새 창
 function aWbIco(scr,wb){ const id=String(scr||'').toUpperCase(); if(!/^[A-Z]{2,4}\\d{4}[A-Z0-9_]*$/.test(id)) return ''; return '<button class="a-wb" data-wbopen="'+esc(id)+'" data-wbn="'+(wb==null?'':esc(String(wb)))+'" title="'+(KO?id+' Workbench 열기':'Open '+id+' Workbench')+'">↗</button>'; }
 function aRun(d){
-  const cards=[]; const act=function(a){ return a==='claude'?'<span class="a-cl">● Claude</span>':'<span class="a-sc">● '+(KO?'스크립트':'script')+'</span>'; };
+  const cards=[]; const act=function(a){ return a==='claude'?'<span class="a-cl">● AI Agent</span>':'<span class="a-sc">● Script</span>'; };
   for(const c of d.chains||[]){ const st=c.step; cards.push('<div class="a-card '+(st&&st.actor==='claude'?'cl':'sc')+'"><div class="a-l1"><b>'+esc(c.screen||'-')+'</b><span>'+esc(c.label||'')+'</span>'+(aWin(c.wb)?'<span class="chip">'+aWin(c.wb)+'</span>':'')+(c.job?'<span class="chip">'+'VMW'+'</span>':'')+'<span class="a-sp">'+(KO?'경과 ':'elapsed ')+aDur(c.sec)+'</span>'+aWbIco(c.screen,c.wb)+'</div>'+aSteps(c)
     +'<div class="a-l3">'+(st?act(st.actor)+' '+st.no+'/'+(c.total||'?')+' '+esc(st.name)+' · '+aDur(st.sec)+(KO?'째':''):(KO?'단계 사이':'between steps'))+((c.done||[]).length?' · '+(KO?'끝난 단계 ':'done ')+(c.done||[]).length+((c.done||[]).some(function(x){return x.status==='FAIL';})?' <span class="a-ba">'+(KO?'실패 포함':'has failure')+'</span>':''):'')+'</div></div>'); }
   for(const j of d.jobs||[]) cards.push('<div class="a-card jb"><div class="a-l1"><b>'+'VMW'+'</b><span>'+esc(j.label||j.job)+'</span><span class="a-sp">'+j.done+'/'+j.total+(KO?' 완료':' done')+'</span></div><div class="a-bar"><i style="width:'+(j.total?Math.round(100*j.done/j.total):0)+'%"></i></div><div class="a-l3">'+(KO?'실행 중 ':'running ')+j.running+' · '+aDur(j.sec)+'</div></div>');
   const inChain=function(x){ return (d.chains||[]).some(function(c){ return c.wb===x.wb&&c.screen===x.screen; }); };
-  for(const c of (d.claudes||[]).filter(function(x){ return !inChain(x); })) cards.push('<div class="a-card cl"><div class="a-l1"><b>'+esc(c.screen||(c.wb===0?'VMO':'-'))+'</b><span>'+esc(c.label||c.source||'Claude')+'</span>'+(aWin(c.wb)?'<span class="chip">'+aWin(c.wb)+'</span>':'')+'<span class="a-sp">'+aDur(c.sec)+'</span>'+aWbIco(c.screen,c.wb)+'</div><div class="a-l3">'+act('claude')+' PID '+(c.pid||'-')+'</div></div>');
+  for(const c of (d.claudes||[]).filter(function(x){ return !inChain(x); })) cards.push('<div class="a-card cl"><div class="a-l1"><b>'+esc(c.screen||(c.wb===0?'VMO':'-'))+'</b><span>'+esc(c.label||c.source||'AI Agent')+'</span>'+(aWin(c.wb)?'<span class="chip">'+aWin(c.wb)+'</span>':'')+'<span class="a-sp">'+aDur(c.sec)+'</span>'+aWbIco(c.screen,c.wb)+'</div><div class="a-l3">'+act('claude')+' PID '+(c.pid||'-')+'</div></div>');
   for(const p of (d.procs||[]).filter(function(x){ return !inChain(x); })) cards.push('<div class="a-card sc"><div class="a-l1"><b>'+esc(p.screen||'-')+'</b><span>'+esc(p.label||'')+'</span>'+(aWin(p.wb)?'<span class="chip">'+aWin(p.wb)+'</span>':'')+'<span class="a-sp">'+aDur(p.sec)+'</span>'+aWbIco(p.screen,p.wb)+'</div><div class="a-l3">'+act('script')+' PID '+(p.pid||'-')+(p.log?' · '+esc(p.log):'')+'</div></div>');
   // 2026-11-20 재개 대기: 창 다시 로드로 끊긴 체인(24시간 안). ↗ = 그 화면 Workbench(재개 띠의 작업 재개 단추)
   for(const r of d.resume||[]) cards.push('<div class="a-card" style="border-style:dashed"><div class="a-l1"><b>'+esc(r.screen)+'</b><span>'+esc(r.label)+'</span>'+(r.job?'<span class="chip">VMW</span>':'')+'<span class="chip" style="color:var(--warn)">'+(KO?'재개 대기':'resumable')+'</span><span class="a-sp">'+esc(r.at)+'</span>'+aWbIco(r.screen,null)+'</div><div class="a-l3">↻ '+(KO?'창 다시 로드로 끊김 · '+r.from+'/'+r.of+' 단계부터 재개 가능':'interrupted · resume from step '+r.from+'/'+r.of)+'</div></div>');
@@ -880,6 +885,10 @@ function aWait(d){
   $('bWaitN').textContent=(w.length+l.length)?((KO?'대기 ':'waits ')+w.length+(KO?' · 잠금 ':' · locks ')+l.length):'';
   $('bWait').innerHTML=(w.length||l.length)?'<ul class="a-tl">'+w.join('')+l.join('')+'</ul>':'<div class="a-empty">'+(KO?'대기와 잠금 없음':'No waits or locks')+'</div>';
 }
+/* 2026-11-20 사용자 지시 '부하 보드에 클로드 주간한도 사용량 표기': 최근 AI 실행 기록의 주간 한도 사용률 · 80% 이상 주의, 95% 이상 위험 */
+function aiWk(L){ const a=L&&L.ai; const w=a&&a.weekly; if(!w||w.pct==null) return null; const md=function(ms){ const t=new Date(ms); return (t.getMonth()+1)+'-'+String(t.getDate()).padStart(2,'0')+' '+String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0'); };
+  const others=(a.windows||[]).filter(function(x){ return x.type!=='seven_day'&&x.pct!=null; }).map(function(x){ return (x.type==='five_hour'?(KO?'5시간 ':'5h '):x.type+' ')+x.pct+'%'; });
+  return { pct:w.pct, cls:w.status&&w.status!=='allowed'?'bad':w.pct>=95?'bad':w.pct>=80?'warn':'', sub:(w.resetsAt?(KO?'재설정 ':'resets ')+md(w.resetsAt):'')+(a.at?(KO?' · 기준 ':' · as of ')+md(a.at):'')+(others.length?' · '+others.join(' · '):'')+(a.overage?(KO?' · 초과 사용 중':' · overage'):''), title:(KO?'VM 이 띄운 AI 실행 기록의 마지막 한도 정보(':'Last limit info in VM AI run logs (')+(a.file||'')+(KO?'). VM 밖에서 쓴 양은 다음 VM 호출 때 반영':'). Usage outside VM shows after the next VM call') }; }
 function aRing(pct,txt,col,dash){ const p=Math.max(0,Math.min(100,pct||0)); return '<svg width="76" height="76" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--g2)" stroke-width="3.2"'+(dash?' stroke-dasharray="2 2"':'')+'/>'+(dash?'':'<circle cx="18" cy="18" r="15.9" fill="none" stroke="'+col+'" stroke-width="3.2" stroke-dasharray="'+p+' '+(100-p)+'" transform="rotate(-90 18 18)" stroke-linecap="round"/>')+'<text x="18" y="20.6" text-anchor="middle" fill="currentColor" font-size="'+(txt.length>5?5.6:7.6)+'" font-weight="700">'+txt+'</text></svg>'; }
 function aLoad(d){
   const L=d.load||{}; const col=function(c){ return c==='bad'?'var(--bad)':c==='warn'?'var(--warn)':'var(--ok)'; };
@@ -888,7 +897,8 @@ function aLoad(d){
   const r=function(svg,name,sub){ return '<div class="a-ring">'+svg+'<b>'+name+'</b><small>'+sub+'</small></div>'; };
   $('bLoad').innerHTML=r(L.cpu==null?aRing(0,KO?'미측정':'n/a','',true):aRing(L.cpu,L.cpu+'%',col(cpuC)),'CPU',KO?'입장 기준 &lt; 80%':'admit &lt; 80%')
     +r(L.memFreeMB==null?aRing(0,KO?'미측정':'n/a','',true):aRing(memPct,L.memFreeMB.toLocaleString(),col(memC)),KO?'여유 메모리 MB':'free MB',(KO?'기준 ≥ 3,072 · 전체 ':'min 3,072 · total ')+(L.memTotalMB||0).toLocaleString())
-    +r(L.tcp==null?aRing(0,KO?'미측정':'n/a','',true):aRing(100*L.tcp/16000,L.tcp.toLocaleString(),col(tcpC)),KO?'TCP 연결':'TCP',(KO?'경고 12,000 · 중단 14,000':'warn 12,000')+(L.tcpAt?' · '+hm(L.tcpAt):''));
+    +r(L.tcp==null?aRing(0,KO?'미측정':'n/a','',true):aRing(100*L.tcp/16000,L.tcp.toLocaleString(),col(tcpC)),KO?'TCP 연결':'TCP',(KO?'경고 12,000 · 중단 14,000':'warn 12,000')+(L.tcpAt?' · '+hm(L.tcpAt):''))
+    +(function(){ const w=aiWk(L); return '<div class="a-ring" title="'+esc(w?w.title:(KO?'AI 실행 기록에 한도 정보 없음':'No limit info in AI run logs'))+'">'+(w?aRing(w.pct,w.pct+'%',col(w.cls)):aRing(0,KO?'미측정':'n/a','',true))+'<b>'+(KO?'AI 주간 한도':'AI weekly limit')+'</b><small>'+esc(w?w.sub:(KO?'AI 실행 기록 없음':'no AI run log'))+'</small></div>'; })();
 }
 function aFlow(){
   const ev=[];
@@ -911,7 +921,7 @@ function aTl(){
   const span=Math.max(1,T.to-T.from); const x=function(ms){ return (100*(ms-T.from)/span).toFixed(2); };
   const nT=6; /* 세로 격자 6칸과 맞춘다 */ let ticks='';
   for(let i=0;i<=nT;i++){ const ms=T.from+span*i/nT; const dd=new Date(ms); ticks+='<span style="left:'+(100*i/nT)+'%">'+(i===nT?(KO?'지금':'now'):String(dd.getHours()).padStart(2,'0')+':'+String(dd.getMinutes()).padStart(2,'0'))+'</span>'; }
-  const kName={s:KO?'스크립트':'script',c:'Claude',w:KO?'대기':'wait',f:KO?'실패':'fail'};
+  const kName={s:'Script',c:'AI Agent',w:KO?'대기':'wait',f:KO?'실패':'fail'};
   const rows=T.lanes.map(function(l){
     const segs=l.segs.map(function(s){ const w=Math.max(0.35,100*(s.b-s.a)/span); const sec=Math.round((s.b-s.a)/1000); const st=new Date(s.a);
       return '<div class="a-seg '+s.k+(s.open?' now':'')+'" style="left:'+x(s.a)+'%;width:'+w.toFixed(2)+'%" title="'+esc(kName[s.k]+' · '+s.t+' · '+String(st.getHours()).padStart(2,'0')+':'+String(st.getMinutes()).padStart(2,'0')+(KO?' 부터 ':' from ')+aDur(sec)+(s.open?(KO?' · 진행 중':' · running'):''))+'">'+(w>7?esc(s.t)+' '+aDur(sec):'')+'</div>'; }).join('');
@@ -938,7 +948,8 @@ window.addEventListener('message', e=>{ const m=e.data||{};
   if(m.type==='agentStatus'){ agStatus(m.status); return; }
   if(m.type==='agentQueue'){ renderAgQ(m.items||[]); return; }
   if(m.type==='out'){ add(boxOf(m.stream), m.text, m.cls); mark(tabOf(m.stream)); if(m.stream==='be'||m.stream==='fe') markSub(m.stream); else tlOut(); }
-  else if(m.type==='outBulk'){ const id=boxOf(m.stream); const b=$(id); const f=document.createDocumentFragment(); for(const x of m.items){const d=document.createElement('span'); if(x.cls)d.className=x.cls; d.textContent=x.text; f.appendChild(d);} b.insertBefore(f,b.firstChild); scrollEnd(id); }
+  else if(m.type==='logOn'){ lgOn=m.on||{}; paintLg(); }
+  else if(m.type==='outBulk'){ const id=boxOf(m.stream); const b=$(id); if(m.reset) b.textContent=''; const f=document.createDocumentFragment(); for(const x of m.items){const d=document.createElement('span'); if(x.cls)d.className=x.cls; d.textContent=x.text; f.appendChild(d);} b.insertBefore(f,b.firstChild); scrollEnd(id); }
   else if(m.type==='serverState'){ states=m.states||[]; paintServers(); }
   else if(m.type==='server'){ if(!m.sync) note(String(m.name||'').replace(/\\s*(기동|Start|Finish|종료)\\s*$/i,'')+' '+(m.state==='stopped'?(KO?'종료됨':'stopped'):(m.ok?(KO?'기동 완료':'ready'):(KO?'기동 실패':'failed')))+(m.sec!=null?' ('+m.sec+'s)':'')); }
   else if(m.type==='board'){ paintBoard(m.data||{}); }

@@ -59,7 +59,7 @@ const calls = () => { try { return R('.vibe/calls.txt').trim().split('\n').lengt
   const a = await r1.run(chain);
   chk('체인 완료(OK)', a.ok && a.status === 'OK', JSON.stringify({ status: a.status, summary: a.summary }).slice(0, 200));
   chk('단계 결과 OK·OK·SKIP·SKIP', a.steps.map(s => s.status).join(',') === 'OK,OK,SKIP,SKIP', a.steps.map(s => s.status).join(','));
-  chk('실행 주체 요약', /스크립트 1단계 · Claude 1회/.test(a.actorNote || ''), a.actorNote);
+  chk('실행 주체 요약', /Script 1단계 · AI Agent 1회/.test(a.actorNote || ''), a.actorNote);
   chk('산출물 · FULLRUN.md', R('out/TST0001.txt') === 'made' && /시험 체인/.test(R('Doc/gen/TST0001/FULLRUN.md')) && a.md.replace(/\\/g, '/') === 'Doc/gen/TST0001/FULLRUN.md');
   chk('Claude 1회 호출', calls() === 1);
   chk('출력 대상으로 로그·단계 전달', logs.some(t => /made TST0001/.test(t)) && steps.some(s => s.kind === 'start' && s.steps.length === 2) && steps.filter(s => s.kind === 'step' && s.status === 'OK').length === 2 && steps.some(s => s.kind === 'end' && s.ok), `${logs.length}줄 · 단계 메시지 ${steps.length}`);

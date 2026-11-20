@@ -1,6 +1,39 @@
 {
- "ok": false,
+ "ok": true,
  "mode": "dry-run",
- "stamp": "20261120_095755",
- "error": "fetch"
+ "stamp": "20261120_145936",
+ "areas_sel": "fe",
+ "be_login": [],
+ "tip": "21a64d0358d0491f59a3fb97b43b87ea3d630a27",
+ "tip_info": "21a64d035 2026-11-20 14:21 Jeongyun Park fix(SCP0053): SCP YN 빈 값 저장 허용 (AS-IS 패리티)",
+ "base": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
+ "ancestor": true,
+ "commits": 10,
+ "changed": 0,
+ "counts": {
+  "동일": 16
+ },
+ "actions": {
+  "none": 16,
+  "write": 0,
+  "merge": 0,
+  "delete": 0,
+  "keep": 0
+ },
+ "pending": 0,
+ "areas": {
+  "fe": {
+   "base": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
+   "changed": 0,
+   "actions": {
+    "none": 16
+   },
+   "pending": 0,
+   "local_only": 0,
+   "env_keep": 0
+  }
+ },
+ "overwrite_local": true,
+ "local_only": 0,
+ "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261120_145936.md"
 }

@@ -1692,3 +1692,10 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 - 확인: engine_selfcheck PASS(10:14:23) · VM test 33파일 PASS 402 FAIL 0(10:16:40) · 실제 CheckList 동작 미측정(사용자 실행)
 - 남은 것: 행 ID 규칙 변경(승인 결정 3)은 하지 않음 — 11-20 SCP0028 ID 변동 221건의 원인이 줄 번호가 아니라 다른 문서 행 묶음 변경이라 기준 원장(내용 기반 번호)으로 대신함. UI/DB MODE 실화면 시범 미실행(현재 DB MODE)
 - 백업 *.bak_20261120_aipts · 사본·패치 tools/Harness/_verify_next/
+
+## 2026-11-20 13:4x SCP0028 미검증 해소 라운드 3(CheckList 13:07 원장 · 일괄 보완)
+- 입력: 원장 미검증 87(엔진 19, 결정 2, 집계 66) · AI 검토 행 포함 처리 대상 39. 조치 표 Doc/verify/SCP0028/_unverified_plan.md(41행) · 결정 _unverified_decisions.md(R3-D1~D13) · 기록 _unverified_work.md · FE 가이드 FE_GUIDE_20261120_1320.md(1건)
+- 보완 T480(mapping_trace 팝업 연결 판별) · T485~T489(gen_expect DM-52, i18n_static 감싼 함수 기본 문구, llm_review 같은 룰 반영 막음, sort_check·syn_check TO-BE 전용·공용 SP, judge B6·A7, popup_args_check 상태 변수, golden 인자 원천) · T496~T501(K3 팝업 그리드, G2·G5 Model, From Site 숨은 코드 칸, G4 기능 단추) · T502~T506(단추 팝업 경로, 삭제 분기 가짜 응답, H2 실행 중 수정 표시, CRUD 조회 SP 제외)
+- 확인: engine_selfcheck PASS(13:44:10). 실제 E2E 동작 미측정(다음 CheckList)
+- 다른 화면 영향: T480 해당없음 240건(종전 PASS 9건 결정 R3-D7) · T485 DM-52 행 58화면 36 → 8 · T487 SCP0005 AI 반영 3행 빠짐 · 공용 팝업 17개 단추 Close 먼저(CR-005, 결정 R3-D1)
+- 백업 *.bak_20261120_scp28u3(mapping_trace 는 _scp28u3b)

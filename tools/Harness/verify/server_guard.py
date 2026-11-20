@@ -119,7 +119,11 @@ def wait_up(port, sec):
 
 def start(port, it):
     log = os.path.join(ROOT, 'Doc', 'e2e', 'logs', f'_server_{port}.log'); os.makedirs(os.path.dirname(log), exist_ok=True)
-    flags = 0x00000008 | 0x00000200 | NOWIN  # DETACHED_PROCESS · CREATE_NEW_PROCESS_GROUP · 창 없음
+    # 2026-11-20 정정: DETACHED_PROCESS 를 빼고 CREATE_NEW_PROCESS_GROUP · 창 없음만 쓴다.
+    #   DETACHED_PROCESS 로 띄우면 cmd 출력은 로그에 남지만 그 아래 콘솔 프로그램(vite node, gradle java) 출력이 버려졌다
+    #   (실측: _server_5173.log, _server_8080.log 가 기동 머리줄 1줄뿐 · 같은 명령 재현에서 DETACHED+NOWIN = node 출력 없음, NOWIN 만 = node 출력 기록).
+    #   CREATE_NO_WINDOW 는 숨은 콘솔을 따로 주므로 이 스크립트가 끝나거나 창을 닫아도 서버는 계속 돈다
+    flags = 0x00000200 | NOWIN  # CREATE_NEW_PROCESS_GROUP · 창 없음
     with open(log, 'a', encoding='utf-8') as f:
         f.write(f'\n==== {time.strftime("%Y-%m-%d %H:%M:%S")} server_guard 기동 (pid {os.getpid()}) : {it["cmd"]}\n')
     subprocess.Popen(f'cmd /d /c "{it["cmd"]} >> "{log}" 2>&1"', cwd=it['cwd'], creationflags=flags, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, close_fds=True)

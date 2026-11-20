@@ -84,7 +84,7 @@ function stateList() { return Object.keys(states).map(Number).sort((a, b) => por
 
 // ── 파일 이어 읽기 ──
 function tailFile(file, onLine, fromBytes, opt) {
-  let pos = fromBytes == null ? 0 : fromBytes; let buf = ''; let stopped = false; let busy = false; const maxLag = opt && opt.maxLag ? opt.maxLag : 0;
+  let pos = fromBytes == null ? 0 : fromBytes; let buf = ''; let stopped = false; let busy = false; const maxLag = opt && opt.maxLag ? opt.maxLag : 0; let dropFirst = !!(opt && opt.skipPartial && pos > 0); // 중간부터 읽으면 첫 줄은 잘린 줄
   const tick = () => {
     if (stopped || busy) return; busy = true;
     fs.stat(file, (e, st) => {
@@ -97,7 +97,7 @@ function tailFile(file, onLine, fromBytes, opt) {
         if (e2) { busy = false; return; }
         fs.read(fd, b, 0, len, pos, (e3, n) => {
           fs.close(fd, () => { });
-          if (!e3 && n > 0) { pos += n; buf += b.slice(0, n).toString('utf8'); const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { try { onLine(ln); } catch (ex) { errlog.note('server-service', 'tailLine', ex); } } }
+          if (!e3 && n > 0) { pos += n; buf += b.slice(0, n).toString('utf8'); if (dropFirst) { const k = buf.indexOf(String.fromCharCode(10)); if (k < 0) { busy = false; return; } buf = buf.slice(k + 1); dropFirst = false; } const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { try { onLine(ln); } catch (ex) { errlog.note('server-service', 'tailLine', ex); } } }
           busy = false;
         });
       });
@@ -187,17 +187,23 @@ async function pollNow() {
 // 2026-11-20 사용자 지적 'NSCM 실행 후 조회를 하였는데 FE, BE LOG 에 아무것도 찍히지 않음': VM 밖(server_guard, 터미널)에서 띄운 BE 의 화면 출력은 _server_8080.log 에 오지 않았다
 //   (실측 11:33: _server_8080.log = 기동 머리줄 1줄뿐 · BE 는 nscm-be/logs/nscm.log 에 같은 내용을 씀, logback-spring.xml local = CONSOLE + FILE) → VM 이 띄운 BE 가 아니면 BE 파일 로그를 지금 끝에서부터 따라 읽는다
 const BE_APP_LOG = () => path.join(root, 'nscm-be', 'logs', 'nscm.log');
-function watchGuardLogs() {
+// 2026-11-20 사용자 지시 'BE LOG, FE LOG 는 켜고/꺼는 버턴 ... BE LOG 는 양이 많아서 필요할때만': 꺼 둔 로그는 VM 밖 서버 로그 파일을 읽지 않는다(자원 아낌).
+//   켜면 최근 RECENT_BYTES 부터 다시 읽는다. 기본 BE · FE 모두 꺼짐(VMO 창이 저장한 값으로 setLogOn). VM 이 띄운 서버 출력은 VMO 창에 보낼 때 거른다(workbench.js)
+const RECENT_BYTES = 256 * 1024;
+const logOn = { be: false, fe: false }; // 2026-11-20 사용자 지시: FE 도 기본 꺼짐
+function stopExt(port) { for (const k of [port, `${port}app`]) if (guardTail[k]) { try { guardTail[k](); } catch { /* 이미 멈춤 */ } delete guardTail[k]; } }
+function setLogOn(stream, on) { if (!Object.prototype.hasOwnProperty.call(logOn, stream)) return false; logOn[stream] = !!on; const port = stream === 'be' ? 8080 : 5173; stopExt(port); if (on && root) watchGuardLogs(true); return true; }
+function watchGuardLogs(recent) {
   for (const port of BAR_PORTS) {
     if (guardTail[port]) continue;
-    const f = path.join(root, 'Doc', 'e2e', 'logs', `_server_${port}.log`); const stream = streamOf(port, '');
-    let size = 0; try { size = fs.statSync(f).size; } catch { }
+    const stream = streamOf(port, ''); if (logOn[stream] === false) continue;
+    const f = path.join(root, 'Doc', 'e2e', 'logs', `_server_${port}.log`);
+    const from = file => { let s = 0; try { s = fs.statSync(file).size; } catch { return 0; } return recent ? Math.max(0, s - RECENT_BYTES) : s; };
     const appLog = port === 8080 && fs.existsSync(BE_APP_LOG());
-    const tl = tailFile(f, ln => { if (ownerOf(port)) return; if (appLog && !/^====/.test(ln)) return; out(stream, ln + '\n'); }, size);   // VM 이 띄운 서버가 있으면 그 로그만 보인다 · BE 파일 로그를 읽으면 server_guard 기동 머리줄(====)만
+    const tl = tailFile(f, ln => { if (ownerOf(port)) return; if (appLog && !/^====/.test(ln)) return; out(stream, ln + '\n'); }, from(f), { skipPartial: !!recent });   // VM 이 띄운 서버가 있으면 그 로그만 보인다 · BE 파일 로그를 읽으면 server_guard 기동 머리줄(====)만
     guardTail[port] = tl.stop;
     if (appLog) {
-      let s0 = 0; try { s0 = fs.statSync(BE_APP_LOG()).size; } catch { /* 없음 = 처음부터 */ }
-      const at = tailFile(BE_APP_LOG(), ln => { if (ownerOf(port)) return; out(stream, ln + '\n'); }, s0, { maxLag: 8 * 1048576 });
+      const at = tailFile(BE_APP_LOG(), ln => { if (ownerOf(port)) return; out(stream, ln + '\n'); }, from(BE_APP_LOG()), { maxLag: 8 * 1048576, skipPartial: !!recent });
       guardTail[`${port}app`] = at.stop;
     }
   }
@@ -215,11 +221,11 @@ function start(p, it, cwd, name, say) {
   let settle = null; const result = new Promise(r => { settle = r; });
   const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true });
   const logF = path.join(logDir, `${stampFile()}_${String(name || 'server').replace(/[^\w.-]/g, '_')}.log`);
-  let fd = null; try { fd = fs.openSync(logF, 'a'); } catch (e) { say(`✖ ${name} 로그 파일을 열 수 없음: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: '로그 파일 열기 실패' }); }
+  let fd = null; try { fd = fs.openSync(logF, 'a'); } catch (e) { say(`${name} 로그 파일을 열 수 없음: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: '로그 파일 열기 실패' }); }
   out(stream, `▶ ${name}\n  $ cmd /c ${it.cmd}\n`, 'cmd');
   let child;
   try { child = cp.spawn('cmd', ['/c', it.cmd], { cwd, shell: process.platform === 'win32', env: Object.assign({}, process.env), stdio: ['ignore', fd, fd], windowsHide: true }); }
-  catch (e) { try { fs.closeSync(fd); } catch { } out(stream, `✖ ${name} 실행 실패: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: e.message }); }
+  catch (e) { try { fs.closeSync(fd); } catch { } out(stream, `${name} 실행 실패: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: e.message }); }
   try { fs.closeSync(fd); } catch { }
   const s = { name, port: it.port || null, stream, child, pid: child.pid, logF, t0, ready: false, attached: false };
   servers.set(name, s); saveReg();
@@ -227,12 +233,12 @@ function start(p, it, cwd, name, say) {
   const done = (ok, msg) => {
     if (ready) return; ready = true; if (timer) clearTimeout(timer);
     const sec = Math.round((Date.now() - t0) / 1000); try { settle({ ok, sec, msg }); } catch (ex) { errlog.note('server-service', 'settle', ex); }
-    out(stream, `${ok ? '✅' : '✖'} ${name} ${msg} (${sec}s)${it.hint ? ' — ' + it.hint.split(' · ')[0] : ''}\n`, ok ? 'ok' : 'bad');
+    out(stream, `${name} ${msg} (${sec}s)${it.hint ? ', ' + it.hint.split(' · ')[0] : ''}\n`, ok ? 'ok' : 'bad');
     post({ type: 'server', name, ok, sec });
     evt('server.state', { name, port: it.port || null, state: ok ? 'ready' : 'failed', ms_boot: Date.now() - t0, msg: String(msg || '').slice(0, 300), source: 'start' });
     if (ok) { s.ready = true; saveReg(); if (it.port) { const pv = states[it.port] || {}; states[it.port] = Object.assign({ port: it.port, label: LABEL[it.port] || `포트 ${it.port}`, state: 'listen', since: Date.now(), owner: 'vm', name }, pv, { bootSec: sec, owner: 'vm', name }); } pollOnce(); }
-    if (ok) vscode.window.showInformationMessage(`Vibe_Manager ✅ ${name} 기동 완료 (${sec}s)${it.port ? ` · 포트 ${it.port}` : ''}`);
-    else Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ✖ ${name} ${String(msg).split('\n')[0]}`, 'Log 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', stream === 'be' ? 'belog' : stream === 'fe' ? 'felog' : 'board'); }, () => { });
+    if (ok) vscode.window.showInformationMessage(`Vibe_Manager ${name} 기동 완료 (${sec}s)${it.port ? ` · 포트 ${it.port}` : ''}`);
+    else Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ${name} ${String(msg).split('\n')[0]}`, 'Log 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', stream === 'be' ? 'belog' : stream === 'fe' ? 'felog' : 'board'); }, () => { });
   };
   const onLine = ln => {
     out(stream, ln + '\n');
@@ -246,7 +252,7 @@ function start(p, it, cwd, name, say) {
   if (to > 0 && re) timer = setTimeout(() => {
     if (ready) return;
     if (it.port && portOwner(it.port)) { done(true, `포트 ${it.port} LISTEN 확인(완료 로그는 미출력)`); return; }
-    out(stream, `⚠ ${name} ${to}초 안에 완료 로그('${it.ready}')가 보이지 않습니다\n`, 'warn');
+    out(stream, `${name} ${to}초 안에 완료 로그('${it.ready}')가 보이지 않습니다\n`, 'warn');
     try { settle({ ok: false, sec: to, msg: '시간 초과(완료 로그·포트 미확인)', timeout: true }); } catch (ex) { errlog.note('server-service', 'settle', ex); }
   }, to * 1000);
   child.on('error', e => { out(stream, `spawn 실패: ${e.message}\n`, 'bad'); });
@@ -272,8 +278,8 @@ async function stop(p, it, name, say) {
   let acted = false;
   const occ = it.port ? portOwnerInfo(it.port) : null;
   if (occ) {
-    if (PROTECTED_PROC.test(occ.name)) { out(stream, `⛔ ${name} 종료 중단: 포트 ${it.port} 점유 프로세스 ${occ.name}(${occ.pid}) 는 보호 대상(VPN/시스템). 수동 확인 필요.\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ⛔ ${name}: 포트 ${it.port} 점유자 ${occ.name} 는 종료 금지 대상입니다.`); return { ok: false, why: 'protected' }; }
-    if (!expect.test(occ.name)) { out(stream, `⚠ ${name} 종료 보류. 포트 ${it.port} 점유 프로세스가 예상(${it.expectProc || 'java|node'})과 다름: ${occ.name}(${occ.pid}). 직접 확인 후 종료하세요.\n`, 'warn'); vscode.window.showWarningMessage(`Vibe_Manager ⚠ ${name}: 포트 ${it.port} 점유자 ${occ.name}(${occ.pid}) 가 예상 프로세스와 달라 종료하지 않았습니다.`); return { ok: false, why: 'unexpected' }; }
+    if (PROTECTED_PROC.test(occ.name)) { out(stream, `${name} 종료 중단: 포트 ${it.port} 점유 프로세스 ${occ.name}(${occ.pid}) 는 보호 대상(VPN/시스템). 수동 확인 필요.\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ${name}: 포트 ${it.port} 점유자 ${occ.name} 는 종료 금지 대상입니다.`); return { ok: false, why: 'protected' }; }
+    if (!expect.test(occ.name)) { out(stream, `${name} 종료 보류. 포트 ${it.port} 점유 프로세스가 예상(${it.expectProc || 'java|node'})과 다름: ${occ.name}(${occ.pid}). 직접 확인 후 종료하세요.\n`, 'warn'); vscode.window.showWarningMessage(`Vibe_Manager ${name}: 포트 ${it.port} 점유자 ${occ.name}(${occ.pid}) 가 예상 프로세스와 달라 종료하지 않았습니다.`); return { ok: false, why: 'unexpected' }; }
     out(stream, `⏹ ${name} 종료: 포트 ${it.port} 점유 ${occ.name}(${occ.pid}) 트리 종료 ${killTree(occ.pid) ? '요청됨' : '실패(권한?)'}\n`, 'warn'); acted = true;
   }
   for (const s of [...servers.values()]) {
@@ -287,8 +293,8 @@ async function stop(p, it, name, say) {
   let freed = !it.port;
   for (let i = 0; it.port && i < 20; i++) { await new Promise(r => setTimeout(r, 1000)); if (!portOwnerInfo(it.port)) { freed = true; break; } }
   const sec = Math.round((Date.now() - t0) / 1000);
-  if (freed) { out(stream, `✅ ${name} 종료 완료 (${sec}s)${it.port ? `, 포트 ${it.port} 해제` : ''}\n`, 'ok'); post({ type: 'server', name, state: 'stopped', sec }); vscode.window.showInformationMessage(`Vibe_Manager ✅ ${name} 종료 완료 (${sec}s)`); }
-  else { const still = portOwnerInfo(it.port); out(stream, `⚠ ${name} 종료 요청 후 ${sec}s, 포트 ${it.port} 아직 점유: ${still ? still.name + ' ' + still.pid : '?'}\n`, 'bad'); vscode.window.showWarningMessage(`Vibe_Manager ⚠ ${name}: 포트 ${it.port} 가 아직 점유 중입니다 (${still ? still.name + ' ' + still.pid : '?'}).`); }
+  if (freed) { out(stream, `${name} 종료 완료 (${sec}s)${it.port ? `, 포트 ${it.port} 해제` : ''}\n`, 'ok'); post({ type: 'server', name, state: 'stopped', sec }); vscode.window.showInformationMessage(`Vibe_Manager ${name} 종료 완료 (${sec}s)`); }
+  else { const still = portOwnerInfo(it.port); out(stream, `${name} 종료 요청 후 ${sec}s, 포트 ${it.port} 아직 점유: ${still ? still.name + ' ' + still.pid : '?'}\n`, 'bad'); vscode.window.showWarningMessage(`Vibe_Manager ${name}: 포트 ${it.port} 가 아직 점유 중입니다 (${still ? still.name + ' ' + still.pid : '?'}).`); }
   evt('server.state', { name, port: it.port || null, state: freed ? 'stopped' : 'stop-failed', ms_stop: Date.now() - t0, source: 'stop' });
   pollOnce();
   return { ok: freed, sec };
@@ -306,18 +312,18 @@ async function ensure(p, ports, serverItems, resolveCwd, say) {
   const waitPort = (pt, sec) => new Promise(res => { const t1 = Date.now(); const tick = () => { if (portOwnerInfo(pt)) return res(true); if (Date.now() - t1 > sec * 1000) return res(false); setTimeout(tick, 2000); }; tick(); });
   const jobs = need.map(pt => {
     const it = (serverItems || []).find(x => x.kind === 'terminal' && Number(x.port) === pt);
-    if (!it) { say(`⛔ ${label(pt)} 기동 항목(kind terminal · port ${pt})이 quick.json 에 없습니다\n`, 'bad'); return Promise.resolve(false); }
+    if (!it) { say(`${label(pt)} 기동 항목(kind terminal · port ${pt})이 quick.json 에 없습니다\n`, 'bad'); return Promise.resolve(false); }
     const name = it.name || it.label; const cwd = resolveCwd(it);
-    if (!fs.existsSync(cwd)) { say(`⛔ ${name} 폴더 없음: ${cwd}\n`, 'bad'); return Promise.resolve(false); }
+    if (!fs.existsSync(cwd)) { say(`${name} 폴더 없음: ${cwd}\n`, 'bad'); return Promise.resolve(false); }
     if (servers.has(name)) { say(`⏳ ${name} 이미 기동 중. 포트 ${pt} 가 열릴 때까지 대기\n`, 'warn'); return waitPort(pt, Number(it.readyTimeoutSec || 300)); }
     return start(p, it, cwd, name, say).then(r => (r && r.ok) || !!portOwnerInfo(pt));
   });
   const rs = await Promise.all(jobs);
   for (const pt of need) if (!portOwnerInfo(pt)) await waitPort(pt, 10);
   const missing = ports.filter(pt => !portOwnerInfo(pt));
-  if (rs.every(Boolean) && !missing.length) { say(`✅ 선행 완료: ${ports.map(label).join(' · ')} LISTEN\n`, 'ok'); return true; }
-  say(`✖ 선행 실패: ${missing.map(label).join(' · ') || '기동 실패'} (VMO 창 BE Log / FE Log 확인) → E2E 를 실행하지 않습니다\n`, 'bad');
-  try { vscode.window.showWarningMessage(`Vibe_Manager ✖ E2E 선행 실패: ${missing.map(label).join(' · ') || '서버 기동 실패'} (VMO 창 BE/FE Log 확인)`); } catch { }
+  if (rs.every(Boolean) && !missing.length) { say(`선행 완료: ${ports.map(label).join(' · ')} LISTEN\n`, 'ok'); return true; }
+  say(`선행 실패: ${missing.map(label).join(' · ') || '기동 실패'} (VMO 창 BE Log / FE Log 확인) → E2E 를 실행하지 않습니다\n`, 'bad');
+  try { vscode.window.showWarningMessage(`Vibe_Manager E2E 선행 실패: ${missing.map(label).join(' · ') || '서버 기동 실패'} (VMO 창 BE/FE Log 확인)`); } catch { }
   return false;
 }
 
@@ -351,4 +357,4 @@ function dispose(killServers) {
   started = false;
 }
 
-module.exports = { init, dispose, start, stop, ensure, subscribe, snapshot, stateList, isRunning, pollOnce, portOwnerInfo, portOwner, killTree, PROTECTED_PROC, streamOf };
+module.exports = { setLogOn, logOnState: () => Object.assign({}, logOn), init, dispose, start, stop, ensure, subscribe, snapshot, stateList, isRunning, pollOnce, portOwnerInfo, portOwner, killTree, PROTECTED_PROC, streamOf };

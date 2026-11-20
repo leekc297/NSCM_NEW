@@ -1,0 +1,96 @@
+{
+ "at": "2026-11-20T11:58:06+09:00",
+ "summary": "CheckList 화면 1개 소요는 74.8~209.3분으로 목표 30분을 넘습니다. SSP0005 한 번 실행의 E2E 143.3분 중 109.4분이 행 대기(probe.ts:60)입니다. VMO 7일 집계는 중지되거나 끊긴 체인의 Claude 실행을 0으로 세고, 자가진단 S3 사건(R12)은 같은 회차에 자동 동기화로 바로 닫혀 사건 수만 늘립니다. 개선안 3건은 측정과 감시를 바로잡는 내용이고 판정 규칙은 바꾸지 않습니다.",
+ "purposes": [
+  {
+   "purpose": "CheckList 화면 1개 10분, 길어야 30분 안에 끝남",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md, user_checks.json U2",
+   "verdict": "어긋남",
+   "evidence": "Doc/verify/<ID>/run_timing.json 마지막 실행 wall_min: SCP0005 136.7, SCP0028 78.5, SSP0005 209.3, SSP0014 74.8분. 실행 상태 S13 U2 경고 4건(SCP0028 184분, SSP0005 243분). digest7d S8.checklistRun 중앙값 5767.2초"
+  },
+  {
+   "purpose": "속도 개선은 판정 결과가 같은 대체 방법만 씀",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md",
+   "verdict": "미확인",
+   "evidence": "CHANGELOG 11-20 05:30 속도 개선 묶음(중복 정리 AI, E2E 동시 실행, 진입 확인 선행, AS-IS 실측 원장 기준 재사용)과 05:41 AI 검토 행 단위 기억이 들어갔음. 전후 원장 대조(ledger_diff.py) 차이 0건 기록은 이번 점검에서 미확인"
+  },
+  {
+   "purpose": "B1 대기 제거(서버가 0행을 돌려준 뒤 120초 대기 생략) 효과",
+   "source": "tools/E2E/lib/probe.ts:59~60, tools/E2E/lib/pagereg.ts:13~19",
+   "verdict": "어긋남",
+   "evidence": "B1 코드 반영 11-20 05:30 뒤인 SSP0005 E2E 실행(Doc/verify/SSP0005/_test_timing.jsonl run 2026-11-19T21:12:18Z, 80개 시험)에서 wait@probe.ts:60 합계 6,566초(109.4분), 37개 시험. 시험 1개 최대 714초. emptyAnswered 가 false 를 돌려준 사유는 기록이 없어 미확인"
+  },
+  {
+   "purpose": "중복 판단은 AI 가 하고 목록 파일로 관리함",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md",
+   "verdict": "맞음",
+   "evidence": "Doc/verify/_dedup/general_groups.csv, Doc/verify/SCP0028/dedup_screen.csv, Doc/verify/SSP0005/dedup_screen.csv 있음. SSP0005 run_timing.json 에 dedup_screen.py 7.0분 기록"
+  },
+  {
+   "purpose": "체인 실행 중에도 VMO 감시와 자가진단을 멈추지 않음",
+   "source": "memory/feedback_vmo_self_heal_restart_20261120.md, user_checks.json U5",
+   "verdict": "맞음",
+   "evidence": "CheckList 체인 4개가 돌던 11-20 08:00~09:59 사이 .vibe/orch/selfcheck/history.jsonl 기록 11건"
+  },
+  {
+   "purpose": "화면 진입 실패를 감지, 원인 확인, 해결, 확인, 그 화면 다시 실행까지 사람 없이 닫음",
+   "source": "memory/feedback_vmo_self_heal_restart_20261120.md, user_checks.json U4",
+   "verdict": "미확인",
+   "evidence": "orch-heal.js 경로가 .claude/agents/vm-orchestra.md:55 에 정의돼 있음. digest7d incidents.byRule 에 R13 0건이라 실제 사건으로 닫힌 기록이 없음"
+  },
+  {
+   "purpose": "VMO 집계와 감시가 Claude 단계 실행을 바르게 셈",
+   "source": "user_checks.json U10, memory/feedback_no_guess_answers.md",
+   "verdict": "어긋남",
+   "evidence": "digest7d chains.checklist 11회, claudeRan 0, runsWithoutClaude 11. events.jsonl 640, 648, 657, 702, 710, 739줄에서 검증 보완 Claude 단계 step.end 6건 확인(08:28~10:07). 이 체인들의 chain.end 는 events.jsonl 에 없음(chain.end 마지막 기록 525줄). workbench.js:55 abortRunningChains 가 claudeRan 0, scriptRan 0 을 고정값으로 기록함"
+  },
+  {
+   "purpose": "자가진단이 보완까지 스스로 진행함",
+   "source": "memory/feedback_vmo_self_repair_auto_20261119.md",
+   "verdict": "맞음",
+   "evidence": "proposals self:applied 15, incident:applied 12, review:applied 8. 남은 반영 실패 1건(20261120005059_INC)은 아래 항목에 따로 적음"
+  },
+  {
+   "purpose": "반영 실패 개선안을 다시 진단함",
+   "source": "user_checks.json U11",
+   "verdict": "어긋남",
+   "evidence": "applyFailed 20261120005059_INC(R2 반복 집계) 상태가 apply-failed 로 남아 있음. CHANGELOG 09:10 '다시 시도한 개선안이 또 반영 실패하면 다시 진단' 반영 뒤에도 남은 원인은 미확인"
+  },
+  {
+   "purpose": "사용자 지적을 원장과 감지기로 감시함(S13)",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "어긋남",
+   "evidence": "S13 fail 13건 중 'fail U8 VMO inc 화면 표시 누락' 남음. U12 no-detector, U14 pending-detector(개선안 대기 1건)"
+  },
+  {
+   "purpose": "자가진단 사건이 실제 문제만 올림",
+   "source": "memory/feedback_vmo_self_repair_auto_20261119.md",
+   "verdict": "어긋남",
+   "evidence": "7일 사건 126건 중 R12 51건(R12:resolved 50). topRepeats 에 R12|S3|CHANGELOG.md 8건, orchestra.js 3건, orch-selfcheck.js 3건. orch-selfcheck.js:279 syncIncidents 가 S3 사건을 올린 뒤 283~284줄 자동 동기화가 같은 회차에 닫음"
+  },
+  {
+   "purpose": "VM 고정 문구가 문장 규칙을 지킴",
+   "source": "memory/feedback_sentence_rule_3_20261113.md",
+   "verdict": "어긋남",
+   "evidence": "S11 위반 308건(workbench.js 245, extension.js 21, server-service.js 17, orchestra.js 8, history.js 4)"
+  },
+  {
+   "purpose": "창 다시 로드 뒤 VMW, Workbench 작업 재개",
+   "source": "plans/vm-ui-snug-mountain.md, user_checks.json U13",
+   "verdict": "미확인",
+   "evidence": "CHANGELOG 11-20 11:31 반영 기록 있음. 다시 로드 뒤 실화면 확인 기록은 이번 점검에서 미확인"
+  },
+  {
+   "purpose": "하루 1회 Overall Review 수행",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "맞음",
+   "evidence": "이번 실행(digest7d at 2026-11-20T11:53:52+09:00)"
+  }
+ ],
+ "proposals": [
+  "20261120115806_VISION",
+  "20261120115806_VISION_2",
+  "20261120115806_VISION_3"
+ ],
+ "log": ".vibe\\logs\\2026-11-20T11-53-53_claude_orch.log"
+}

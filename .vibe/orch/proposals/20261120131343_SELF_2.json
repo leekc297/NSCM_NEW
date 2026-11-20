@@ -1,0 +1,98 @@
+{
+  "id": "20261120131343_SELF_2",
+  "at": "2026-11-20T13:13:43+09:00",
+  "ms": 1795148023884,
+  "source": "self",
+  "status": "applied",
+  "sig": "vmo inc time fields",
+  "title": "VMO Events 탭에 사건 발생 시각(ms, lastMs) 전달, 조치 없는 새 사건이 7일 보기에서 빠지던 결함 정정",
+  "evidence": "workbench.js:2600 postIncidents 가 웹뷰로 보내는 항목은 id, at, lastAt, rule, title, status, actions 등이고 ms, lastMs 가 없음. orchestra.js:569 incLast = x.lastMs||x.ms||0 에 조치 시각만 더해 조치 없는 사건은 0. :564 기본 보기 incPer '7d', :579 inPer 에서 now-0 이 7일을 넘어 목록에서 빠짐. :591 시각 표시와 :610 uiStat newestMs 도 같은 값을 씀. .vibe/orch/usercheck/ui.json miss 에 received = total(115/115, 117/117, 119/119, 120/120, 123/123)인데 shownAt 이 원본 최신보다 늦은 기록이 반복됨. 원본 최신 예 .vibe/orch/incidents/20261120_105554_R12_ALL.json ms 1795139754664, 보고 시점 actions 0건. 사용자 원문 \"VMO 개선안 6:54 이후에도 발생 이력이 있다고 회신받았는데, 화면에 표기가 되지 않습니다.\"",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_inc_time.js"
+  ],
+  "before_after": "workbench.js:2600 항목 { notice, id, at, lastAt, … } → { notice, id, at, lastAt, ms: x.ms || 0, lastMs: x.lastMs || 0, … }. orchestra.js:569 incLast 시작값 x.lastMs||x.ms||0 → Math.max(x.ms||0, x.lastMs||0, tsOf(x.at), tsOf(x.lastAt)), 조치 시각 최대값 비교는 그대로. 새 시험 test/t_orch_inc_time.js: orchestra.js 원문에서 function tsOf, function incLast 줄을 떼어 new Function 으로 실행해 {at:'2026-11-20T10:55:54+09:00', actions:[]} 결과가 1795139754000 이상인지, workbench.js postIncidents 줄에 'ms:' 와 'lastMs:' 가 있는지 확인.",
+  "verify": "node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → 통과. node tools/VibeManager/test/t_orch_inc_time.js → FAIL 0",
+  "rollback": "workbench.js, orchestra.js 를 반영 전 백업으로 되돌리고 test/t_orch_inc_time.js 삭제",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T13:20:34+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T13:23:16+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 45/45개 파일 통과(PASS 560, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1320"
+    },
+    {
+      "at": "2026-11-20T13:23:18+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T13:27:22+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 47/47개 파일 통과(PASS 576, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 4개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T13:27:22+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_inc_time.js → PASS 8건, ALL PASS(조치 없는 사건 incLast 1795139754000) / node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → PASS 19건, ALL PASS / 시각 2026-11-20 13:24:20(Get-Date, 시험 실행 직전) · 변경 7개 파일 · 대상 목록 밖 변경 4개: tools/Harness/verify/gen_expect.py, tools/VibeManager/quick.json, tools/VibeManager/steps.json, tools/VibeManager/test/t_chain_loop.js",
+      "log": ".vibe\\logs\\2026-11-20T13-23-19_claude_orch.log",
+      "sec": 76,
+      "costUsd": 0.5693438000000001,
+      "files": [
+        "tools/Harness/verify/gen_expect.py",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/steps.json",
+        "tools/VibeManager/workbench.js",
+        "tools/VibeManager/test/t_chain_loop.js",
+        "tools/VibeManager/test/t_orch_inc_time.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U8|inc",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795148434532,
+  "autoFp": "e214178dc8",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 47/47개 파일 통과(PASS 576, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1320",
+  "needsReload": true,
+  "appliedMs": 1795148842813,
+  "synced": [
+    "orchestra.js",
+    "workbench.js",
+    "quick.json",
+    "steps.json"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/orchestra.js",
+      "tools/VibeManager/test/t_orch_inc_time.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_inc_time.js → PASS 8건, ALL PASS(조치 없는 사건 incLast 1795139754000) / node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → PASS 19건, ALL PASS / 시각 2026-11-20 13:24:20(Get-Date, 시험 실행 직전)",
+    "note": "workbench.js postIncidents 위치는 개선안의 2600에서 밀린 2629행임. .bak, 설치 폴더, CHANGELOG.md 손대지 않음. 작업 모드와 hook 차단 없음."
+  },
+  "snap": "prop_20261120131343_SELF_2"
+}

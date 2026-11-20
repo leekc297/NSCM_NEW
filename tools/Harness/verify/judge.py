@@ -716,6 +716,16 @@ def main():
                 r['result'] = origs[-1] if origs else 'NOT_RUN'; r['evidence'] = re.sub(r'^\[AI 검토\].*?원 판정\([^)]*\): ', '', r.get('evidence') or '', flags=re.S); r['tobe_ref'] = ''
             r['note'] = re.sub(r'\s*\|\s*원판정:[^|]*\(AI 검토\)', '', r.get('note') or '')
             stat['AI_RESET'] += 1
+    # 2026-11-20 AI 권장안 적용 행 되돌리기(decide_apply.py · tobe_ref 'AI 권장안'): 위와 같은 이유. 매 실행 기계 판정으로 되돌리고 권장안은 미검증 분류 뒤 decide_apply 가 다시 적용한다
+    try:
+        import decide_apply as _da
+        try:
+            _rec_base = json.load(open(P('Doc', 'verify', mid, 'ai_recommend_base.json'), encoding='utf-8'))
+        except (OSError, ValueError):
+            _rec_base = {}
+        stat['REC_RESET'] = _da.reset_rows(rows, _rec_base)
+    except ImportError:
+        pass
 
     # E2E 반입
     e2e_ids = set()  # 이번 실행에 E2E 결과가 들어온 행 — 뒤 단계(상속·스윕)가 덮지 않는다(2026-10-26)
@@ -1172,6 +1182,37 @@ def main():
             elif _seen and _rt:
                 r['evidence'] = (f"[측정 경로 없음] AS-IS 라벨 '{want}' 을 TO-BE 라벨 목록에서 못 찾음, 정적 Form 라벨 {len(shown)}개({', '.join(s[1] for s in shown)[:160]}) · E2E 덤프 {len(_rt)}개({', '.join(((v or {}).get('label') or k) for k, v in _rt.items())[:160]}) · 텍스트·팝업 칸은 E2E 덤프 대상 아님 · 기준표 행 0 · " + (r.get('evidence') or ''))[:1500]
 
+    # 2026-11-20 T489(SCP0028 V-5d06fca9 B6 'Valid 사양 기준 없음 — 화면 다중=false · ALL=true'): 기준표 행 0 화면은 E2E 가 AS-IS 컨트롤 형식을 'UsrCombo'·'UsrCheckedList'
+    #   두 이름으로만 읽어 UsrComboBox 등은 기대가 비었다. 기준표가 없으면 기대 = AS-IS 사실: 다중 = controls.csv 형식(UsrCheckedList 계열 다중 · UsrCombo 계열 단일),
+    #   ALL = actions.csv '<컨트롤>.DataBind(Data.Type.X, <bool>)' 둘째 인자(UsrComboBox.DataBind → Data.Common(type, isAddALL) · 생략 = false).
+    #   형식·ALL 인자 중 하나라도 못 구하면(여러 바인딩 값이 다름 포함) 종전대로 미검증. 실측은 E2E 증거의 '화면 다중=· ALL=' 값
+    if not sc:
+        _sd = P('Doc', 'asisfacts', 'screens', asis_id)
+        _ctype = {c['name']: c['type'].split('.')[-1] for c in read_csv(os.path.join(_sd, 'controls.csv')) if is_main(c, _sd)}
+        _acts = read_csv(os.path.join(_sd, 'actions.csv'))
+        for r in rows:
+            if r['source'] != 'SEARCH' or r['rule_id'] != 'B6' or r['result'] not in ('판정필요', 'ERROR') or (r.get('evidence') or '').startswith('[사용자판정]'):
+                continue
+            mm_ = re.search(r'사양 기준 없음 — 화면 다중=(true|false) · ALL=(true|false)', r.get('evidence') or '')
+            mc_ = re.search(r'조회조건 패널 (\w+) \((Usr\w+)\)', r.get('asis_ref') or '')
+            if not mm_ or not mc_:
+                continue
+            ctl_ = mc_.group(1); typ_ = _ctype.get(ctl_) or mc_.group(2)
+            want_multi = True if re.match(r'UsrCheckedList', typ_) else False if re.match(r'UsrCombo', typ_) else None
+            binds = [a for a in _acts if a.get('kind') == 'LIST_REBIND' and (a.get('target') or '') == f'{ctl_}.DataBind']
+            alls = set()
+            for a in binds:
+                args_ = [x.strip() for x in re.sub(r'^\(|\)$', '', (a.get('value') or '').strip()).split(',')]
+                alls.add(args_[1].lower() == 'true' if len(args_) > 1 and args_[1].lower() in ('true', 'false') else (False if len(args_) == 1 else None))
+            if want_multi is None or len(alls) != 1 or None in alls:
+                continue
+            want_all = alls.pop(); got_multi = mm_.group(1) == 'true'; got_all = mm_.group(2) == 'true'
+            ok_ = got_multi == want_multi and got_all == want_all
+            src_ = ' ; '.join(f"{os.path.basename(a.get('file') or '')}:{a.get('line')} {a.get('target')}{a.get('value')}" for a in binds[:2])
+            r['result'] = 'PASS' if ok_ else 'FAIL'
+            r['evidence'] = (f"조회조건 {ctl_}: 다중선택 기대 {str(want_multi).lower()}(AS-IS {typ_})/화면 {mm_.group(1)} · ALL 기대 {str(want_all).lower()}({src_})/화면 {mm_.group(2)} · 기준표 행 0 → AS-IS 사실 대조 · 원 실측: " + (r.get('evidence') or ''))[:1500]
+            r['tobe_ref'] = 'E2E 실측 ↔ AS-IS controls·actions(기준표 없음)'; stat['B6_NO_STD'] = stat.get('B6_NO_STD', 0) + 1
+
     # G9 콤마 다중값 — 기준표 유형2 가 '단일' 인 텍스트 조건은 검사 대상 아님(2026-10-30 SCP0100 Cell Group: AS-IS 도 콤마 다중 미지원 · 사용자 판정 오류)
     #   ledger.py 가 새 원장에서는 만들지 않지만, 이전 원장 행이 남아 있으면 FAIL 이 다시 오르므로 여기서도 NA(원 실측은 증거에 보존)
     for r in rows:
@@ -1280,6 +1321,15 @@ def main():
             none_ = [x for x in read_csv(P('tools', 'Harness', 'rules', 'sp_pair.csv')) if (x.get('menu_id') or '').upper() == mid.upper() and (x.get('asis_sp') or '').upper() == r['target'].split('.')[-1].upper() and x.get('source') in ('manual', 'unused') and not x.get('tobe_proc') and 'TO-BE 대응 없음' in (x.get('note') or '')]
             if none_:
                 r['result'] = 'NA'; r['evidence'] = f"비교 대상 아님 — 짝 표: {none_[0]['note'][:200]}"; r['tobe_ref'] = 'STATIC sp_pair.csv(manual · TO-BE 대응 없음)'; stat['A7'] += 1
+                continue
+            # 2026-11-20 T489(SCP0028 V-8da88867): golden.py 가 인자 원천·실행 기록 0 을 사유로 남겼으면(md '- 입력 인자 원천 없음:' / '- 입력 인자 미정:') 미검증 사유로 그대로 적는다(판정은 ERROR 유지)
+            try:
+                _gm = open(P('Doc', 'golden', mid, f"{r['target']}.md"), encoding='utf-8').read()
+            except OSError:
+                _gm = ''
+            _gl = re.search(r'(?m)^- (입력 인자 (?:원천 없음|미정): .+)$', _gm)
+            if _gl:
+                r['result'] = 'ERROR'; r['evidence'] = f"[측정 경로 없음] golden 실행 불가 — {_gl.group(1)}"[:1500]; r['tobe_ref'] = f"golden SKIP (Doc/golden/{mid}/{r['target']}.md)"; stat['A7'] += 1
             continue
         prof = read_csv(cp)
         fails = [x for x in prof if x['verdict'] == 'FAIL']

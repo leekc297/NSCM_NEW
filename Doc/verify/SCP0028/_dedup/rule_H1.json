@@ -1,130 +1,119 @@
 {
  "rule_id": "H1",
- "hash": "d5b4d61ff64ce767",
+ "hash": "588872ae5a65dfb2",
  "groups": [
   {
    "rows": [
     "V-13f34fc0"
    ],
-   "why": "TRANS_MODE_CODE 컬럼에만 해당하는 정렬 검사(AS-IS C)라서 다른 행과 대상이 다르다."
-  },
-  {
-   "rows": [
-    "V-1accc843"
-   ],
-   "why": "다른 화면(DMF0043) 결함 유형으로 Valid_YN을 무조건 가운데 정렬로 기대한다. 확정 규칙에서는 AS-IS Center가 TO-BE Left로 바뀌어도 PASS인데 이 행은 그 경우를 허용하지 않아 V-c9d6b67b와 기대가 다를 수 있다. 확신이 없으므로 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-312c1d29"
    ],
-   "why": "DIVISION_ID 컬럼에만 해당하는 정렬 검사(AS-IS C)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4c720367"
    ],
-   "why": "TO_SITE_DESCRIPTION 컬럼에만 해당하는 정렬 검사(AS-IS L)로, TO_SITE와는 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5ef534b5"
    ],
-   "why": "TRANS_MODE_NAME 컬럼에만 해당하는 정렬 검사(AS-IS C)로, TRANS_MODE_CODE와는 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-677dff38"
    ],
-   "why": "SPLIT_YN 컬럼에만 해당하는 정렬 검사(AS-IS C)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-7de17964"
    ],
-   "why": "LOT_SIZE 숫자 컬럼에만 해당하는 정렬 검사(AS-IS R)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-7f75857b"
    ],
-   "why": "FROM_SITE 컬럼에만 해당하는 정렬 검사(AS-IS C)로, FROM_SITE_DESCRIPTION과는 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-8671cdcf"
    ],
-   "why": "OPERATION_GROUP_ID 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-94cca885"
    ],
-   "why": "CREATION_DATE 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a4f03515"
    ],
-   "why": "LAST_UPDATE_DATE 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-adbbeb7d"
    ],
-   "why": "FROM_SITE_DESCRIPTION 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-b82bf453"
    ],
-   "why": "LAST_UPDATED_BY 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c9d6b67b"
    ],
-   "why": "이 화면 VALID_YN 컬럼의 컬럼 메타 정렬 검사(AS-IS C)다. 확정 규칙 적용 여부 때문에 GENERAL 행과 기대가 다를 수 있어 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-dbed8503"
    ],
-   "why": "ITEM_ID(Model) 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-dd38e808"
    ],
-   "why": "NICK_NAME 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
-  },
-  {
-   "rows": [
-    "V-e1bc643f"
-   ],
-   "why": "특정 컬럼을 측정하는 행이 아니라 Center→Left 차이의 판정 기준을 정하는 확정 규칙이라서 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e6aa4e45"
    ],
-   "why": "INCREMENT 숫자 컬럼에만 해당하는 정렬 검사(AS-IS R)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f6ef3a9d"
    ],
-   "why": "CREATED_BY 컬럼에만 해당하는 정렬 검사(AS-IS L)다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f879d742"
    ],
-   "why": "TO_SITE 컬럼에만 해당하는 정렬 검사(AS-IS C)다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:20:05",
- "cost": 0.0757126
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-20 13:00:51",
+ "cost": 0,
+ "open": 0
 }

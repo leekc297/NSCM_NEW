@@ -1,0 +1,25 @@
+{
+  "id": "20261120151817_SELF",
+  "at": "2026-11-20T15:18:17+09:00",
+  "ms": 1795155497458,
+  "source": "self",
+  "status": "pending",
+  "sig": "sn|newdet|resumedjobshown",
+  "title": "사용자 지적 감지기 추가 U16 resumedJobShown: 창 다시 로드 뒤 WORKBENCH 에서는 작업이 재개되는데 VMW 목록에는 재개된 작업이 보이지 않음",
+  "evidence": "사용자 지적(2026-11-20T14:16:44+09:00) \"다시 로드 후 작업 재개 시 WORKBENCH 에서는 재개 되는데 VMW 에 재개된 작업이 보이지 않습니다.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 resumedJobShown 없음 → 추가. 판정: job.json 의 status 가 interrupted 였던 작업에 중단 시각 뒤 같은 job 의 job.start 또는 chain.start 가 있음. 웹뷰가 보고한 VMW 목록 job id 에 그 작업이 2분 넘게 없으면 fail · 읽을 기록: .vibe/jobs/<id>/job.json(status, screens), .vibe/orch/events.jsonl(type job.start, chain.start, job, ms), .vibe/orch/usercheck/ui.json 에 새로 둘 VMW 작업 목록 보고(ms, received, jobIds). 지금 ui.json 에는 scr(화면 목록)만 있고 작업 id 보고가 없음. user_checks.json U16 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "incident": "",
+  "screen": "",
+  "history": [],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U16"
+}

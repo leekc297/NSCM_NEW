@@ -1,11 +1,11 @@
-# 대조표 ↔ 검증 추적표 v2 — SCP0028 (AS-IS SCP0028) · 2026-11-20T10:02:12
+# 대조표 ↔ 검증 추적표 v2 — SCP0028 (AS-IS SCP0028) · 2026-11-20T15:04:02
 
 > 대조표의 **모든 행이 검증 대상**이다(제외·해당없음 행 = 사유 근거 검사 X-REASON). 행마다 카탈로그(`mapping_checks.csv`)가 정한 검사를 대상 단위 인스턴스로 묶어 판정한다.
 > **NOT_RUN** = 검사기 있음·이 대상 미실행 · **TODO** = 검사기 미구현(검증 엔진 구현 대상) · **BLOCKED** = 대조표 상태 미구현(구현 엔진 대상 — 구현 후 검증) · REVIEW = 판정필요
 
 - 대상: FE 대조표 42행 (nscm-fe\features\shipping\src\pages\shipment-lot-size\__asis-mapping__.md) · AS-IS 액션 355행(진입점 + 전 문장) = **397행** → 검사 인스턴스 **393개**
-- 행 판정: 미검증 279 · FAIL 80 · 검증완료 34 · 해당없음 4
-- 인스턴스 결과: NOT_RUN 147 · ERROR 95 · PASS 85 · NA 24 · REVIEW 20 · NOPATH 12 · WARN 6 · FAIL 4
+- 행 판정: 미검증 278 · FAIL 80 · 검증완료 35 · 해당없음 4
+- 인스턴스 결과: NOT_RUN 139 · ERROR 100 · PASS 91 · NA 27 · REVIEW 20 · NOPATH 6 · WARN 6 · FAIL 4
 
 ## 검사별
 
@@ -22,7 +22,7 @@
 | SC1 | 정적 디자인 | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 조회조건 순서 = 기준표 |
 | A1 | 동적 생성·조회 | 있음 | 1 | 0 | 0 | 19 | 0 | 1 | 0 | 0 | 0 | 0 | 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교 |
 | A10 | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS |
-| A6 | 동적 생성·조회 | 있음 | 2 | 0 | 0 | 0 | 0 | 2 | 2 | 2 | 0 | 0 | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 |
+| A6 | 동적 생성·조회 | 있음 | 3 | 0 | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 |
 | G03-WIRE | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | AS-IS 이벤트가 TO-BE 대조표·핸들러로 전부 연결 |
 | G1 | 동적 생성·조회 | 있음 | 6 | 0 | 0 | 0 | 7 | 0 | 3 | 0 | 0 | 0 | 조회조건 값 변경 → 조회 인자·결과 반영 |
 | G6 | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 0 | 1 | 0 | 7 | 0 | 0 | 0 | 조회조건 초기 기본값 = AS-IS Form_Load |
@@ -47,16 +47,16 @@
 | F2 | CRUD | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1회 저장(변경 감지) |
 | F5 | CRUD | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | CRUD Status 표시 정합 |
 | F6 | CRUD | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 저장 후 값 보존 |
-| G5 | 팝업 | 있음 | 1 | 0 | 0 | 0 | 0 | 5 | 12 | 3 | 0 | 0 | 팝업 조건 연동(인자) |
-| H6 | 팝업 | 있음 | 0 | 0 | 6 | 0 | 0 | 0 | 14 | 1 | 0 | 0 | 팝업 표준·열림 |
+| G5 | 팝업 | 있음 | 1 | 0 | 0 | 0 | 5 | 3 | 12 | 0 | 0 | 0 | 팝업 조건 연동(인자) |
+| H6 | 팝업 | 있음 | 0 | 0 | 6 | 0 | 0 | 3 | 12 | 0 | 0 | 0 | 팝업 표준·열림 |
 | M3 | 팝업 | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 팝업 내부 기능(조회·CRUD) · 팝업 목록 행수(조회조건 변경 후 포함) |
-| M4 | 팝업 | 있음 | 0 | 0 | 0 | 0 | 5 | 0 | 7 | 0 | 0 | 0 | 팝업 선택값 반영 |
+| M4 | 팝업 | 있음 | 0 | 0 | 0 | 0 | 5 | 5 | 2 | 0 | 0 | 0 | 팝업 선택값 반영 |
 | G3 | 공통 기능 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 조회조건 저장·복원 |
 | K-SA | 공통 기능 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 조회영역 토글 |
 | K4 | 공통 기능 | 있음 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 버튼 구성·조건별 노출 |
 | J1 | 권한 | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 권한 Division 노출 — 계정별 Division 후보·기본값 = 권한(단일 권한 자동 선택) |
 | J2 | 권한 | 있음 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 권한별 버튼·기능 |
-| DB-SYN | DB 실행·접근 | 있음 | 6 | 0 | 0 | 0 | 0 | 4 | 0 | 1 | 0 | 0 | BE 계정 시노님·권한·대상 객체 |
+| DB-SYN | DB 실행·접근 | 있음 | 11 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | BE 계정 시노님·권한·대상 객체 |
 | F4 | DB 실행·접근 | 있음 | 1 | 0 | 0 | 0 | 0 | 4 | 4 | 2 | 0 | 0 | 저장·조회 SQL 오류 0(BE 로그 DB 오류 0) |
 
 ## 층별
@@ -64,15 +64,15 @@
 | 층 | PASS | FAIL | WARN | REVIEW | ERROR | NA | NOT_RUN | NOPATH | TODO | BLOCKED |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 정적 디자인 | 23 | 0 | 0 | 0 | 29 | 1 | 16 | 3 | 0 | 0 |
-| 동적 생성·조회 | 50 | 3 | 0 | 20 | 20 | 10 | 14 | 2 | 0 | 0 |
+| 동적 생성·조회 | 51 | 3 | 0 | 20 | 20 | 11 | 13 | 1 | 0 | 0 |
 | 콤보 후보 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 0 | 0 | 0 |
 | Cascade | 0 | 0 | 0 | 0 | 3 | 0 | 12 | 0 | 0 | 0 |
 | 편집·검증 | 0 | 0 | 0 | 0 | 38 | 0 | 55 | 0 | 0 | 0 |
 | CRUD | 1 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
-| 팝업 | 1 | 0 | 6 | 0 | 5 | 5 | 36 | 4 | 0 | 0 |
+| 팝업 | 1 | 0 | 6 | 0 | 10 | 11 | 29 | 0 | 0 | 0 |
 | 공통 기능 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 권한 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
-| DB 실행·접근 | 7 | 0 | 0 | 0 | 0 | 8 | 4 | 3 | 0 | 0 |
+| DB 실행·접근 | 12 | 0 | 0 | 0 | 0 | 4 | 4 | 2 | 0 | 0 |
 
 ## FAIL 인스턴스
 
@@ -139,28 +139,20 @@
 - F5|SCREEN — 검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: 원장 행 실행(@verify)
 - F6|SCREEN — 검사기 있음(_verify.spec(@verify)) — 실행 필요: 원장 행 실행(@verify)
 - D6|SCREEN — 검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: 원장 행 실행(@verify)
-- A6|SP:PR_GET_MNU_BTN_AUTH — 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) —
 - F4|SP:PR_GET_MNU_BTN_AUTH — 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace
 - H6|BTN:btnInput — 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: 원장 행 실행(@verify)
 - G5|BTN:btnInput — 검사기 있음(popup_args_check.py · _verify.spec(@verify)) — 실행 필요: 원장 행 실행(@verify)
-- M4|BTN:btnInput — 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace
 - H6|BTN:btnDelete — 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: 원장 행 실행(@verify)
 - G5|BTN:btnDelete — 검사기 있음(popup_args_check.py · _verify.spec(@verify)) — 실행 필요: 원장 행 실행(@verify)
-- M4|BTN:btnDelete — 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace
-- H6|COND:clbFromSite — 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke
-- M4|COND:clbFromSite — 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace
 - E4|COND:clbFromSite — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00002 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00429 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - I1|SCREEN — 검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: 원장 행 실행(@verify)
-- H6|COND:clbToSite — 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke
-- M4|COND:clbToSite — 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace
 - E4|MSG:MSG01091 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00014 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00683 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00059 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00016 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
-- M4|COL:TRANS_MODE_CODE — 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace
 - F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE — 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace
 - F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT — 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace
 - A6|SP:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP — 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) —

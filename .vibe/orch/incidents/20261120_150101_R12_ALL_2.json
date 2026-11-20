@@ -1,0 +1,22 @@
+{
+  "id": "20261120_150101_R12_ALL_2",
+  "at": "2026-11-20T15:01:01+09:00",
+  "ms": 1795154461744,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 3건",
+  "screen": "",
+  "sig": "R12|S13|U3|stuckProp",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261120115806_VISION_3 설치본 차이(S3)는 자동 동기화를 먼저 하고 남은 차이만 사건으로 올림 (183분) / 20261120115806_VISION_2 행 대기(waitRows)가 상한까지 기다린 사유를 시험 소요 기록에 남김 (183분) / 20261120115806_VISION 중지되거나 끊긴 체인의 끝 기록에 실제 실행 단계 수를 남김 (183분)",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U3|stuckProp",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": []
+}

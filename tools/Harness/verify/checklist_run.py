@@ -97,9 +97,24 @@ def main():
     ap.add_argument('menu_id')
     ap.add_argument('--recheck', action='store_true')
     ap.add_argument('--delta', action='store_true')
+    ap.add_argument('--no-docs', action='store_true', help='2026-11-20 한 번 실행 구조: 반복 중간 회차는 문서를 만들지 않음(끝 단계 --docs 가 1회)')
+    ap.add_argument('--docs', action='store_true', help='문서 단계만: CheckList·ActionItemList·회귀 점검(run_verify --resume-docs)')
     a = ap.parse_args()
     mid = a.menu_id.upper()
     rv = os.path.join(HERE, 'run_verify.py'); ur = os.path.join(HERE, 'unverified_resolve.py')
+    if a.docs:
+        print('[작업 1/1] 문서 생성(CheckList · ActionItemList · UI 테스트 · 회귀 점검) — 판정은 지난 단계 결과 그대로', flush=True)
+        os.environ.pop('VERIFY_SKIP_DOCS', None)
+        rc_d = run(['py', rv, mid, '--resume-docs'])
+        try:
+            j = json.load(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'unverified_triage.json'), encoding='utf-8')); af = j.get('after') or {}
+            print(f"[{'OK' if not j.get('actionable') else 'INFO'}] 끝 상태: 미검증 {af.get('total')}행 · 처리 대상 {j.get('actionable')}" + (' (같은 보완으로 더 줄지 않아 반복을 멈춤)' if j.get('stalled') else '')
+                  + f" · 권장안 적용 {af.get('recommended', 0)} · 사람 확인 {j.get('human')} · 보완 대기 {af.get('blocked', 0)} · 집계 {af.get('aggregate', 0)}", flush=True)
+        except (OSError, ValueError):
+            pass
+        return rc_d
+    if a.no_docs:
+        os.environ['VERIFY_SKIP_DOCS'] = '1'
     import datetime as _dt
     started = _dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     rc = None

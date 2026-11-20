@@ -1,15 +1,17 @@
-# SCP0028 결정 목록 · 2026-11-20 08:24
+# SCP0028 결정 목록 · 2026-11-20 13:4x(라운드 3, CheckList 13:07 원장)
 
-| 결정 | 행 ID | 정할 내용 | 근거 |
-|---|---|---|---|
-| D1 | V-d9f71764, V-d7cde174, V-a5e26726, V-fbb3bbaf | 화면 결함(필수 안내 없음)으로 FAIL 처리할지, 공란 입력 뒤 수정 상태 확인 검사를 먼저 넣을지 | AS-IS SaveData(cs:583~609)는 한 칸만 비운 수정 행을 수정 건수에 세고 checkRequiredOfSpread 필수 안내로 막음. TO-BE 실측 '저장 요청·안내 모두 없음'. 공란 입력이 수정 상태(M)를 만들었는지 실측 없음 |
-| D2 | EG-ea38ffcb | 공용 모달 결함으로 볼지(다른 화면 공통), TO-BE 룰로 볼지 | AS-IS 팝업 더블클릭 = 선택 후 닫기(SCM0002_ItembyDivisionPopup.cs:316~320). TO-BE 공용 모달(COM0013 MaterialByDivisionModal) 더블클릭 뒤 닫히지 않음(OK 경로는 반영) |
-| D3 | T-fad117f6, T-2c20a3fc | Model 팝업 COM0013 교체를 TO-BE 룰로 등록할지(등록하면 FX-018·019 오류 제외), AS-IS 팝업으로 되돌릴지 | 대조표 17행이 쓰지 않는 SP(P_SCM0002_GET_ITEM_BY_DIVISION_POPUP)를 적음. FE 가이드 FE_GUIDE_20261120_0817.md G1. 팝업 교체(COM0013)는 코드 주석 '사용자 지시 2026-10-08' 말고 등록 룰 없음(fixlist FX-SCP0028-018·019 AI 검토 실결함) |
-| D4 | V-480372c9, V-86b2f489 | 권장안 PASS(전달 방식 차이). 승인하면 판정 경로에 넣음 | AS-IS 팝업 고정 플래그 _action_flag D·I 를 TO-BE 는 setBatchMode(I·D)로 전달(ShipmentLotSize.tsx:338~344). CR-096 은 공용 검색 모달 대상이라 화면 고유 일괄 팝업에는 직접 해당 안 함 |
-| D5 | V-5d06fca9 | 권장안 PASS(AS-IS 원문과 같음). 승인하면 B6 기준표 없는 화면 경로를 AS-IS 사실(combo_src args)로 판정 | AS-IS cboValid.DataBind(Data.Type.YesOrNo, true)(cs:135) = 단일 콤보 + ALL. TO-BE 단일 + ALL(실측 다중=false · ALL=true). 조회조건 기준표 행 0 |
-| D6 | EG-6cc339e1, EG-273588ca | 건수 표시는 CR-100 처럼 TO-BE 팝업 룰로 볼지. DATA 는 From Site 를 채운 뒤 재는 검사기 보완(다음 라운드) 승인 | 일괄입력 팝업: 건수 문구 없음(DM-C8 기대) · 'I' 진입 자동 조회 없이 Find 때 From Site 필수 알림(AS-IS 같은 동작 cs:261~266)으로 행 0 |
-| D7 | EG-bd80125c | 메시지 코드 등록 뒤 FE 가이드 작성 여부(DB MODE) | 화면 고정 한글 '{0}은 {1} 보다 클 수 없습니다.'(useShipmentLotSizeValidation.ts:52) |
-| D8 | V-15f47ff2 | CR-116 등록 확인 · 두 그룹 EDIT 권한 데이터를 AS-IS 와 맞출지 | CR-116 등록(사용자의견 SCP0104 V-24ff60ab 일반화). TO-BE 권한 설정에 SCP0028 EDIT 없는 그룹 2개(CAPA Planner, SSP ADMIN · AS-IS CRUD) |
-| D9 | V-f3e94ee4, V-e9891c92, V-2611b990, V-9b370c0f, V-df3bcadf | 권장안 NA(대상 없음). 승인하면 판별 규칙 반영(지난 라운드 D7 과 같음) | 다른 화면 연쇄 결함 유형(DMF0003·DMF0082 AS From Site, DMF0005 Cust Group, Measure, 상위 셀 cascade). SCP0028 그리드 연쇄 칸 없음(C2 TRACE 2행 NA). 칸 이름(From Site·Active)만 겹침 |
-| D10 | V-a99ddb18 | 저장하지 않고 편집으로 조건을 만드는 시험 허용 여부 | H2 배경색 조건(M 행, LOT_SIZE와 INCREMENT 공란, VALID Y, SPLIT N)을 만족하는 행 0(Div 40 265행) |
-| D11 | T-6dc0e2d5, T-52d59336 | 공용 SP 를 화면 단위 대상으로 둘지 | PR_GET_MNU_BTN_AUTH 정렬(A6)·시노님(DB-SYN). 공용 권한 SP(PKG_NSCM_UI_COM_AUTH) |
+| 결정 | 정할 내용 | 행 수 | 행 ID | 권장안 | 근거 경로:줄 |
+|---|---|---|---|---|---|
+| R3-D1 | Model 팝업 하단 단추 Close, OK 순서를 확정 룰 CR-005(OK → CLOSE)대로 고칠지, 공용 팝업을 CR-005 대상에서 뺄지. 같은 순서 공용 팝업 파일 17개 | 1 | EG-2644dff3 | 고침(확정 룰). FE 가이드 G1 반영. AI 검토가 같은 룰로 PASS 처리한 것은 T487 로 막음 | tools/Harness/rules/confirmed_requirements.csv:6, nscm-fe/features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx:371~386, Doc/verify/SCP0028/eg/popup/popup_results.json(실측 [Open, Search, Close, OK]), Doc/verify/SCP0028/FE_GUIDE_20261120_1320.md |
+| R3-D2 | Model 팝업 COM0013 교체를 화면 설계 결정으로 등록할지(등록하면 G4 조건 목록, F4, A6 기준을 COM0013 조회 SP 로 바꿈), AS-IS 팝업으로 되돌릴지 | 3 | EG-ac06e957, T-fad117f6, T-2c20a3fc | 등록. 화면 소스 주석에 사용자 지시 2026-10-08 기록 있음. 다른 SCP 화면에 쓸 일반 룰 근거는 없음 | nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx:362~372, Doc/verify/SCP0028/FE_GUIDE_20261120_0817.md G1 |
+| R3-D3 | 일괄 입력 팝업 조회 건수 표시 없음을 결함으로 볼지 | 1 | EG-6cc339e1 | FAIL. CR-007 은 모든 팝업 그리드 건수 표시. CR-100 예외는 메타 공통 셀 팝업만이고 화면 고유 팝업은 대상 아님 | tools/Harness/rules/confirmed_requirements.csv:8, :101 |
+| R3-D4 | 일괄 입력 팝업 DATA 검사(eg_popup)가 필수 알림 뒤 From Site 를 채워 다시 조회하도록 보완할지 | 1 | EG-273588ca | 보완 승인. 'I' 진입 자동 조회 없음과 Find 때 From Site 필수 알림은 AS-IS 와 같은 동작. 필수 칸 채우기는 T502 btnpopup.ts 를 다시 씀 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:261~266, tools/E2E/lib/btnpopup.ts |
+| R3-D5 | 일괄 삭제 결과 메시지를 가짜 응답(서버 미전송)으로 잰 판정을 확정 판정으로 인정할지. 실삭제는 지운 행 복원 기능이 없어 하지 않음 | 4 | T-0caf6c62, T-4677b9e5, V-86e7f1e2, V-a89007be | 인정. 성공 응답 표본은 이전 실저장 실제 응답(RESULT_CODE S), 실패 분기 'F' 는 PKG_SCP0028 예외 분기 원문. 실삭제 판정이 필요하면 복원 기능(삭제 행 재삽입) 신설 뒤 승인 | Doc/e2e/specs/_trace.spec.ts 'BTN 팝업 경로'(T503), tools/Harness/verify/restore_touched.py(지운 행 복원 대상 밖), SCP0028_Shipment_Lot_Size.cs:544, :553 |
+| R3-D6 | 입력용 SP 골든 대조 인자 원천. 팝업 선택 행 목록이 인자라 실행 기록 0건 | 1 | V-8da88867 | 다음 CheckList 의 'BTN 팝업 경로'(T502)가 호출 기록을 남기면 golden.py 가 인자를 채움(T489). 기록이 없으면 ERROR 유지 | Doc/golden/golden_cases.csv:83, SCP0028_Shipment_Lot_Size.cs:278~280, :417~423 |
+| R3-D7 | T480 적용 뒤 다른 화면 PASS → NA 9건 확인(실측은 다른 칸 팝업 결과) | 9 | SCP0007 M4 FROM_CITY·TO_CITY·FROM_COUNTRY·TO_COUNTRY, SCP0127·SCP0131 M4 SCM_SITE_ID, SSP0025 M4 VALID_YN, SCP0033 G5·H6 txtItemId | NA. AS-IS 원문에서 그 칸에 팝업 연결 없음 확인(SCP0033 은 AS-IS 일반 TextBox) | tools/Harness/verify/mapping_trace.py popup_linkage(T480) |
+| R3-D8 | T487 적용 뒤 AI 검토 반영이 빠지는 다른 화면 3행 판정 | 3 | SCP0005 V-57cbc36c, V-f426f87d, V-612b1d63 | 근거 없음(사람 판정 필요). AI 가 FAIL 근거와 같은 룰 CR-037(DM-116), CR-007(DM-C8)을 들어 낮춘 행 | tools/Harness/verify/llm_review.py same_rule_block |
+| R3-D9 | 다른 화면 결함 유형 18건을 대상 아님(NA)으로 둘지 | 18 | criteria C-50eda4e96b 외 17건 | NA. 대상 기능(Replace, Excel Upload, Version 팝업, Dept 칸 등)이 화면에 없고 검색어만 겹침 | Doc/verify/SCP0028/criteria/criteria.md:12~29 |
+| R3-D10 | 실측-파싱 대조 컨트롤 대응. LIVE_ONLY 13건(panel1, textBox1 등 화면 틀 컨트롤), LIVE 11건(조회조건, 단추, spdMain 요소 연결 없음) | 24 | criteria 실측 행 | LIVE_ONLY 대상 아님, LIVE 11건은 요소 연결 | Doc/verify/SCP0028/criteria/criteria.md:34~57 |
+| R3-D11 | 실측-파싱 대조 SP 호출. INLINE 1, NOT_CALLED 2(INPUT SP, SAVE SP AS-IS 0회), INFO 1 | 4 | criteria 실측 행 | NOT_CALLED 2건은 AS-IS 실측 시나리오에 일괄 입력, 저장 추가 승인. INLINE, INFO 는 대상 아님 | Doc/verify/SCP0028/criteria/criteria.md:30~33 |
+| R3-D12 | 조회 인자 차이. action_flag TO-BE 전용 D, trans_mode, valid AS-IS 전용 | 3 | criteria 실측 행 | 근거 없음. 조회 SP 인자 원문 대조 필요 | Doc/verify/SCP0028/criteria/criteria.md:58~60 |
+| R3-D13 | 저장 인자 차이 20건(lot_size, increment, transport_mode, debug_mode F/N, active_flag D/M)과 사용자 ID 7건 | 27 | criteria 실측 행 | 값 차이는 시험 행이 달라 생긴 데이터 차이(CR-101). debug_mode, active_flag 는 근거 없음. 사용자 ID 는 비교 제외 | Doc/verify/SCP0028/criteria/criteria.md:61~87 |
