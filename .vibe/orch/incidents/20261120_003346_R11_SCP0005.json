@@ -1,0 +1,72 @@
+{
+  "id": "20261120_003346_R11_SCP0005",
+  "at": "2026-11-20T00:33:46+09:00",
+  "ms": 1795102426115,
+  "rule": "R11",
+  "ruleName": "Claude 없이 끝난 체인에 오류 남음",
+  "title": "Claude 없이 끝난 체인. SCP0005 FAIL 27 · 미검증 392 남음",
+  "screen": "SCP0005",
+  "sig": "R11|SCP0005|checklist",
+  "count": 8,
+  "repeat": null,
+  "detail": "체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList): 스크립트 단계 1개 실행, Claude 단계 실행 0, 건너뜀 3",
+  "evidence": {
+    "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+    "result": "Doc/verify/SCP0005/run_verify.result.json"
+  },
+  "status": "closed",
+  "actions": [
+    {
+      "at": "2026-11-20T00:37:42+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T00:39:09+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 사용자 확인 필요 · 원인 engine: 사용자가 작업 목록에서 중지한 실행(job.json J20261120_003243 note '사용자 중지')을 감시기가 R11 로 기록했다. orch-watch.js:120 의 R11 조건은 사용자 중지를 보지 않고, 작업 목록 중지는 user.stop 사건을 남기지 않는다(user.stop 생성처 workbench.js:2643 1곳). 사건 제목의 FAIL 27·미검증 392 는 이번 체인(시작 2026-11-20 00:32:43)보다 앞선 run_verify.result.json(started 2026-11-19 13:48:5 · 허용 범위 밖 파일 변경 7개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SSP0005/_test_timing.jsonl, Doc/e2e/results/SSP0005/shots/SSP0005_common.png, Doc/e2e/results/SCP0028/artifacts/SCP0028.smoke-SCP0028-Ship-7dde6-기준표-순서-·-Checkbox-Radio-디자인-chromium/error-context.md, Doc/e2e/results/SCP0028/artifacts/SCP0028.smoke-SCP0028-Ship-7dde6-기준표-순서-·-Checkbox-Radio-디자인-chromium/test-failed-1.png, Doc/e2e/results/SSP0005/artifacts/SSP0005.smoke-SSP0005-Ship-331dc-·Columns·Search-Area·Manual-chromium/error-context.md, Doc/e2e/results/SSP0005/artifacts/SSP0005.smoke-SSP0005-Ship-331dc-·Columns·Search-Area·Manual-chromium/test-failed-1.png · 개선안 등록 20261120003909_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T00-37-47_claude_orch.log",
+      "sec": 77,
+      "turns": 15,
+      "costUsd": 0.6668904999999999,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T05:56:49+09:00",
+      "by": "사용자",
+      "what": "닫음(일괄)"
+    }
+  ],
+  "agent": {
+    "cause_class": "engine",
+    "cause": "사용자가 작업 목록에서 중지한 실행(job.json J20261120_003243 note '사용자 중지')을 감시기가 R11 로 기록했다. orch-watch.js:120 의 R11 조건은 사용자 중지를 보지 않고, 작업 목록 중지는 user.stop 사건을 남기지 않는다(user.stop 생성처 workbench.js:2643 1곳). 사건 제목의 FAIL 27·미검증 392 는 이번 체인(시작 2026-11-20 00:32:43)보다 앞선 run_verify.result.json(started 2026-11-19 13:48:58, 7행) 값이다. orch-watch.js:107~111 checklistSnap 은 결과 시각을 체인 시작과 비교하지 않는다.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "events.jsonl 240~279행, job.json J20261120_003243, 실행 로그 2026-11-20T00-32-43 CheckList(27행), R1 오케스트라 로그 2026-11-20T00-33-52_claude_orch.log, orch-watch.js 107~142행, run_verify.result.json started 값 읽음",
+        "result": "사용자 중지 확인. user.stop 사건 없음. R11 건수는 11-19 13:48:58 실행 결과임. SCP0005 화면·DB 결함 근거 없음. 같은 화면 체인 J20261120_003352 가 00:33:52 에 다시 시작돼 진행 중임"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 파일을 고치지 않았고 CheckList 재수행은 금지 대상이라 실행하지 않음. 확인 시각 2026-11-20 00:37:59(date 실행값)",
+    "status": "proposal",
+    "next_for_user": "",
+    "proposal": {
+      "title": "작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+      "evidence": "job.json J20261120_003243 note '사용자 중지' · events.jsonl 241~251행 user.stop 없음 · workbench.js:2643 user.stop 생성처 1곳 · orch-watch.js:120 R11 조건 · orch-watch.js:107~111 checklistSnap · run_verify.result.json:7 started 2026-11-19 13:48:58 · 사건 20261120_003346_R1_SCP0005, 20261120_003346_R11_SCP0005",
+      "targets": [
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ],
+      "before_after": "job-runner.js stop(): 변경 전 runner 마다 r.stop() 만 호출함. 변경 후 r.stop() 앞에서 evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms: Date.now() }) 를 남김. orch-watch.js:120: 변경 전 `if (ev.claudeRan === 0 && (cur.fail > 0 || cur.unverified > 0))`. 변경 후 `if (ev.claudeRan === 0 && !userStopped(ev.wb) && resultAfterChainStart(cur, ev) && (cur.fail > 0 || cur.unverified > 0))`. resultAfterChainStart 는 cur.started 를 시각으로 바꿔 ev.ms - ev.ms_run 이상일 때만 참을 돌려줌. t_orch_watch.js 에 user.stop 뒤 chain.end 를 보내는 시험과 started 가 체인 시작보다 앞선 결과로 chain.end 를 보내는 시험을 추가하고, 두 시험 모두 R11 0건을 기대값으로 둠.",
+      "verify": "node --check tools/VibeManager/job-runner.js tools/VibeManager/orch-watch.js · node tools/VibeManager/test/t_orch_watch.js · node tools/VibeManager/test/run_all.js",
+      "rollback": "job-runner.js, orch-watch.js, t_orch_watch.js 를 반영 전 VMO 백업으로 되돌림"
+    }
+  },
+  "proposal": "20261120003909_INC",
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_003346_R11_SCP0005.json",
+  "lastAt": "2026-11-20T00:48:34+09:00",
+  "lastMs": 1795103314978
+}

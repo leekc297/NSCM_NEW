@@ -1,7 +1,142 @@
 {
  "screen": "SCP0028",
- "made": "2026-11-19 17:25",
- "checklist": null,
+ "made": "2026-11-20 09:57",
+ "checklist": {
+  "version": 15,
+  "total": 1750,
+  "totals": {
+   "PASS": 861,
+   "FAIL": 11,
+   "판정필요": 19,
+   "미검증": 132,
+   "해당없음": 727
+  },
+  "axes": [
+   {
+    "axis": "1.디자인·다국어",
+    "total": 238,
+    "PASS": 118,
+    "FAIL": 0,
+    "판정필요": 2,
+    "미검증": 33,
+    "해당없음": 85
+   },
+   {
+    "axis": "2.AS-IS 로직",
+    "total": 211,
+    "PASS": 119,
+    "FAIL": 0,
+    "판정필요": 1,
+    "미검증": 5,
+    "해당없음": 86
+   },
+   {
+    "axis": "3.SMOKE",
+    "total": 534,
+    "PASS": 234,
+    "FAIL": 5,
+    "판정필요": 16,
+    "미검증": 57,
+    "해당없음": 222
+   },
+   {
+    "axis": "4.CRUD",
+    "total": 444,
+    "PASS": 131,
+    "FAIL": 6,
+    "판정필요": 0,
+    "미검증": 33,
+    "해당없음": 274
+   },
+   {
+    "axis": "5.권한별 CRUD",
+    "total": 31,
+    "PASS": 18,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 13
+   },
+   {
+    "axis": "분류 없음",
+    "total": 292,
+    "PASS": 241,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 4,
+    "해당없음": 47
+   }
+  ],
+  "action": [
+   [
+    "V-a788a765",
+    "G4",
+    "SCP0028 스냅샷 조회조건 Div 40"
+   ],
+   [
+    "V-be29b7a4",
+    "F5",
+    "SCP0028 화면"
+   ],
+   [
+    "V-57fd6f09",
+    "E1",
+    "SCP0028 입력검증 음수 INCREMENT"
+   ],
+   [
+    "T-b3755ed5",
+    "A1",
+    "PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP"
+   ]
+  ],
+  "review": [
+   [
+    "V-225e806d",
+    "H4",
+    "SCP0028 헤더 글자 잘림"
+   ],
+   [
+    "V-4633ca25",
+    "H11",
+    "SCP0028 저장 중 로딩"
+   ],
+   [
+    "AD-34e30c64",
+    "A6",
+    "SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서"
+   ],
+   [
+    "T-ea1f18e5",
+    "A1",
+    "cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi · `ShipmentLotSizeForm` Division select"
+   ],
+   [
+    "T-666b17d1",
+    "A1",
+    "cboOperationGroup `LookupCommon(\"OPERATION_GROUP\")` (cs:137) · Operation Group select(+ALL)"
+   ],
+   [
+    "T-0cc9c7d1",
+    "A1",
+    "clbTransMode `LookupCommon(\"TRANSPORT_MODE_CODE\")` (cs:44,14 · Trans Mode multi(+ALL)"
+   ],
+   [
+    "T-5869ab26",
+    "A1",
+    "팝업 Form_Load `//FindData();` (cs:146), 'D' 만 진입 자동조회, 'I' 는 자동조회 없음(AS-IS 파리티 복원)"
+   ],
+   [
+    "T-8f397015",
+    "A1",
+    "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT"
+   ]
+  ],
+  "ledger": {
+   "PASS": 38,
+   "미검증": 265
+  },
+  "unverified_sheet_rows": 492
+ },
  "fe_mapping": {
   "total": 0,
   "by_state": {}
@@ -18,15 +153,107 @@
    "그리드 값 설정": 1
   }
  },
- "counts": null,
- "ledger": null,
- "pending_recheck": {
-  "fixed_at": "2026-11-19 17:10",
-  "ledger_at": "2026-11-19 16:34",
-  "note": "미검증 해소 보완 2026-11-19 17:10 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ "counts": {
+  "menu_id": "SCP0028",
+  "unverified_sheet": 492,
+  "unverified_by_reason": {
+   "측정못함": 132,
+   "시험검사": 1,
+   "상속생략": 296,
+   "대상불명": 63
+  },
+  "direct_unmeasured": 203
  },
+ "ledger": {
+  "menu_id": "SCP0028",
+  "generated": "2026-11-20T09:47:07",
+  "instances": 393,
+  "done": 277,
+  "open": 116,
+  "by_type": {
+   "W3": 7,
+   "W5": 7,
+   "W6": 2,
+   "W7": 28,
+   "W9": 72
+  },
+  "by_owner": {
+   "DB": 1,
+   "화면 FE": 6,
+   "하네스": 7,
+   "E2E": 2,
+   "사람 판정 / AS-IS 원문 확인 → 재판정": 28,
+   "하네스·환경": 72
+  },
+  "suspect_not_implemented": 1,
+  "by_check": {
+   "J2": {
+    "W3": 1
+   },
+   "F5": {
+    "W3": 1
+   },
+   "E1": {
+    "W3": 2
+   },
+   "X-ROW": {
+    "W3": 3,
+    "W9": 8
+   },
+   "DB-SYN": {
+    "W5": 1
+   },
+   "A6": {
+    "W5": 2,
+    "W7": 1
+   },
+   "G5": {
+    "W5": 3,
+    "W9": 10
+   },
+   "H6": {
+    "W5": 1,
+    "W6": 2,
+    "W7": 1,
+    "W9": 13
+   },
+   "A1": {
+    "W7": 19
+   },
+   "M4": {
+    "W7": 7,
+    "W9": 5
+   },
+   "F4": {
+    "W9": 6
+   },
+   "G4": {
+    "W9": 2
+   },
+   "H2": {
+    "W9": 13
+   },
+   "I1": {
+    "W9": 1
+   },
+   "E4": {
+    "W9": 2
+   },
+   "G1": {
+    "W9": 10
+   },
+   "M3": {
+    "W9": 2
+   }
+  }
+ },
+ "pending_recheck": null,
  "name": "Shipment_Lot_Size",
  "sources": [
+  {
+   "file": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v15.xlsx",
+   "time": "2026-11-20 09:47"
+  },
   {
    "file": "nscm-fe/features/shipping/src/pages/shipment-lot-size/__asis-mapping__.md",
    "time": "2026-10-14 09:26"
@@ -34,6 +261,14 @@
   {
    "file": "Doc/asisfacts/screens/SCP0028/__asis-actions__.md",
    "time": "2026-10-23 11:29"
+  },
+  {
+   "file": "Doc/verify/SCP0028/checklist_counts.json",
+   "time": "2026-11-20 09:47"
+  },
+  {
+   "file": "Doc/verify/SCP0028/work_ledger_summary.json",
+   "time": "2026-11-20 09:47"
   }
  ]
 }

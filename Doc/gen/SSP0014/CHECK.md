@@ -1,0 +1,22 @@
+# [Harness] SSP0014 shipment-model-pic — BLOCK 1 / WARN 19
+
+- WARN AC1 액션 대조표 미처리 190행: AC-a5b96e87(상태 빈칸 POPUP new SCM0002_ItembyDivisionPopu), AC-0ce081d0(상태 빈칸 POPUP popItem.Form_Load), AC-09e970d7(상태 빈칸 UI_PROP popItem.StartPosition), AC-5f2f7978(상태 빈칸 POPUP popItem.ShowDialog), AC-2686d1b6(상태 빈칸 VALUE_SET txtItemId.Text), AC-745c17a9(상태 빈칸 GRID_INIT this.AddSheet), AC-be755cc8(상태 빈칸 FLAG siMain), AC-74d22945(상태 빈칸 GRID_INIT siMain.ChangeSheet) … @Doc/asisfacts/screens/SSP0014/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 1행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-f745639b(siMain.SetHAlign @SSP0014_ShipmentModelPIC.cs:359) @Doc/asisfacts/screens/SSP0014/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SSP.SSP0014_GET_SHIPMENT_MODEL_PIC (SSP0014_GET_SHIPMENT_MODEL_PIC) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0014_SAVE_SHIPMENT_MODEL_PIC (SSP0014_SAVE_SHIPMENT_MODEL_PIC) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0014_GET_USER_ID_CHECK (SSP0014_GET_USER_ID_CHECK) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- BLOCK V01 Validation 마커 누락 2/2: V-001(Lundefined) V-002(Lundefined) @hooks/useShipmentModelPicValidation.ts
+- WARN V01 As-is Expression 9건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @shipment-model-pic.constants.ts
+- WARN LB1 라벨 리터럴 'Valid' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @shipment-model-pic.constants.ts:91
+- WARN VC1 대조표 FAIL 113행 (Doc/verify/SSP0014/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 250행 — 검사 사유 ERROR 410 · REVIEW 19 · NOT_RUN 1 · NOPATH 11 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 169건 / 검사 인스턴스 501 — W3 11 · W5 3 · W6 1 · W7 22 · W9 132 (Doc/verify/SSP0014/work_ledger.md)
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentModelPicGrid.tsx:212
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @hooks/useShipmentModelPicValidation.ts:50
+- WARN R16 진입 Page 565 라인 > 400 — components/ 분리 (#9) @ShipmentModelPic.tsx
+- WARN B19 expressions.md 9행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0014/SSP0014_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0014/SSP0014_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

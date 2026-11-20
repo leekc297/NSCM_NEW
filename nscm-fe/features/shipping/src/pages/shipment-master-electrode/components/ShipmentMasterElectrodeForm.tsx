@@ -7,6 +7,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
 
 import { COMBO, LBL, MENU_ID, MSG } from '../shipment-master-electrode.constants';
@@ -188,6 +189,12 @@ export const ShipmentMasterElectrodeForm = ({ onSearch, onMaterialSearch, onMode
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.materialId,
+                      next => set({ materialId: next }),
+                    ),
+                  }}
                   onChange={e => set({ materialId: e.target.value })}
                 />
               )}
@@ -221,6 +228,12 @@ export const ShipmentMasterElectrodeForm = ({ onSearch, onMaterialSearch, onMode
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onModelSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.modelId,
+                      next => set({ modelId: next, nickName: '' }),
                     ),
                   }}
                   // 직접입력은 품번(modelId) 기준 — 이전 팝업에서 세팅된 nickName 보조조건을 지운다.

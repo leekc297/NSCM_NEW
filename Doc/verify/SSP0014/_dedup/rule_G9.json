@@ -1,0 +1,88 @@
+{
+ "rule_id": "G9",
+ "hash": "ff1cf15c3155622a",
+ "groups": [
+  {
+   "rows": [
+    "EG-2127c131"
+   ],
+   "why": "이 행만 SCM0002_ItembyDivisionPopup 팝업의 Model 조회조건을 확인하고, 화면 본체의 Model/Nickname 조건과는 다른 요소라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-311f3ec2"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER1 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-479cad9a"
+   ],
+   "why": "UserInfoPopup의 USER_ID 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6a6e6907"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER2 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-9e326223"
+   ],
+   "why": "UserInfoPopup의 PART_LEADER 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-c7629d03"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER4 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-cb90823d"
+   ],
+   "why": "UserInfoPopup의 TEAM_LEADER 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-cd72fb2f"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER3 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-d81e0c69"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER5 셀에 대한 콤마 필터이고, 다른 셀과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-05b32b94"
+   ],
+   "why": "어느 팝업의 어느 조건인지 정하지 않은 일반 확정 규칙이라 특정 요소 행과 같다고 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-3809bf77"
+   ],
+   "why": "화면 본체의 User ID(Name) 조회조건이고, 팝업 셀이나 Model 조건과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b6d83ecb"
+   ],
+   "why": "Project·Model/Nickname·Owner를 함께 다루고 대소문자 무시와 부분일치까지 기대해 다른 행과 기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-c9418134"
+   ],
+   "why": "화면 본체의 Model/Nickname 조회조건에 콤마 다중값만 기대하는 행이고, 팝업 Model 조건이나 대소문자·부분일치까지 보는 V-b6d83ecb와 요소나 기대가 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:15:23",
+ "cost": 0.06773219999999999
+}

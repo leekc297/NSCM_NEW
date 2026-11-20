@@ -9,6 +9,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useSessionStore, useTabid } from '@shared/stores';
 
 import type {
@@ -247,6 +248,12 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onModelSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}

@@ -1,0 +1,22 @@
+{
+ "rule_id": "F10",
+ "hash": "305cfe8479d376b2",
+ "groups": [
+  {
+   "rows": [
+    "V-1d8d1afb"
+   ],
+   "why": "엑셀 업로드 저장 PROC(P_SCP0005_EXCEL_UPLOAD, UPLOAD_SAVE)를 대상으로 하므로 Route 저장 PROC와는 확인하는 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-2a63a2af"
+   ],
+   "why": "Route 저장 PROC(P_SCP0005_SAVE_ROUTE, SAVE)를 대상으로 하므로 기대 결과 문장이 같아도 엑셀 업로드 PROC와는 요소가 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:41:01",
+ "cost": 0.0308912
+}

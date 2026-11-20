@@ -62,15 +62,17 @@ describe('tactTimeEditLock — Packer', () => {
     expect(isPackerCellEditable('DAILY_CAPACITY', { OSP_YN: 'Y', INPUT_STATUS: 'I' })).toBe(true);
     expect(isPackerCellEditable('LINE_ID', { OSP_YN: 'Y', INPUT_STATUS: 'I' })).toBe(true);
   });
-  it('LINE_ID editable only on new rows', () => {
-    // 신규행만 편집
+  it('LINE_ID insert-only (IM 의미) — 신규/placeholder 만 편집, 기존행 잠금 (사용자 확정 2026-11-19)', () => {
+    // placeholder 'I'(빈 Line) · 신규 삽입(CRUD_TYPE='I') → 편집
     expect(isPackerCellEditable('LINE_ID', { OSP_YN: 'Y', INPUT_STATUS: 'I' })).toBe(true);
     expect(isPackerCellEditable('LINE_ID', { OSP_YN: 'Y', INPUT_STATUS: '', CRUD_TYPE: 'I' })).toBe(
       true
     );
-    // 기존행(조회건) — 'M' 이든 공백이든 잠금
+    // 기존 등록행(Line 값 보유, INPUT_STATUS='M' 또는 CRUD 미설정) → 잠금
     expect(isPackerCellEditable('LINE_ID', { OSP_YN: 'Y', INPUT_STATUS: 'M' })).toBe(false);
     expect(isPackerCellEditable('LINE_ID', { OSP_YN: 'Y', INPUT_STATUS: '' })).toBe(false);
+    // OSP_YN != 'Y' 행은 전체 잠금
+    expect(isPackerCellEditable('LINE_ID', { OSP_YN: 'N', INPUT_STATUS: 'I' })).toBe(false);
   });
 });
 

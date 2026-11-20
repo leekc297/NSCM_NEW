@@ -14,6 +14,7 @@ import type { Locator, TestInfo } from '@playwright/test';
 import type { Nscm, ProcCall } from './nscm';
 import { CFG, FE, bePortOpen } from './nscm';
 import { probe } from './probe';
+import { stdAlias } from './labelalias';
 
 export type Verdict = 'OK' | 'FAIL' | 'WARN' | 'NA' | 'ERROR';
 export type Item = { name: string; kind: string; verdict: Verdict; note: string };
@@ -112,6 +113,8 @@ const bodyOf = (calls: ProcCall[]) => calls.filter(c => !/SAVE|INS|UPD|DEL/i.tes
  */
 export async function findCond(nscm: Nscm, labels: string[], tag: string): Promise<{ root: Locator; kind: string; label: string; labelRight: number; ctlLeft: number; top: number; left: number } | null> {
   const page = nscm.page;
+  // 2026-11-20 T434(SCP0028 G1 V-9e2b9258 'Model 칸을 찾지 못함'): 조회조건 기준표 표준 명칭(AS-IS 'Model' → 'Model/Nickname' 75/78행 · CR-065)도 찾을 라벨에 더한다
+  labels = [...labels, ...labels.map(l => stdAlias(l)?.tobe_label || '').filter(Boolean)];
   // 2026-10-23 실측(SCP0100 DOM): FormItem = class 에 '_formItem_' (commonStyles.formItem) 이 붙은 칸 → 첫 자식 = 라벨 트랙(label>span), 둘째 자식 = 컨트롤.
   //   라벨 글자만으로 찾으면 라디오 선택지('Search Level')·콤보 표시값까지 걸려 옆 칸을 잡는다 → FormItem 칸의 '라벨 트랙' 글자로만 매칭한다.
   return page.evaluate(({ labels, tag }) => {
@@ -645,6 +648,43 @@ export async function findRowAcrossDivisions(nscm: Nscm, pick: () => Promise<num
   return { row: -1, via: `Division 후보 ${codes.length}개 순회 · ${tried.join(' · ') || '시도 없음'}` };
 }
 
+/** 2026-11-20 T475(SSP0005 0행 77행): Division·기간 외 단일 선택 조회조건(Company 등) 기본값에 데이터가 없는 화면 —
+ *  조회영역의 단일 선택 콤보(라벨이 Div·Division 이 아니고 선택 칩이 없는 칸) 후보를 칸마다 최대 8개 차례로 골라 조회한다. 행이 minRows 이상 나오는 첫 후보에서 멈춘다.
+ *  화면 콤보 후보만 쓴다(사전 데이터셋 아님). 못 찾으면 null(시도 기록은 tried 에 덧붙임) · 고른 칸은 fillRequired 재적용용 req 로 돌려준다 */
+export async function sweepCondCombos(nscm: Nscm, minRows = 1, tried: string[] = []): Promise<{ rows: number; via: string; req: { label: string; idx: number } } | null> {
+  const p = nscm.page;
+  const labels: string[] = await p.evaluate(() => {
+    const out: string[] = [];
+    for (const it of Array.from(document.querySelectorAll('[class*="_formItem_"], [class*="formItem"]')) as HTMLElement[]) {
+      if (it.offsetParent === null || it.closest('[role="dialog"], .wj-flexgrid, .MuiDialog-root')) continue;
+      if (!it.querySelector('[role="combobox"]') || it.querySelector('.MuiChip-root, [class*="MuiAutocomplete-tag"]')) continue;  // 다중 선택(칩) 칸 제외
+      const lb = ((it.firstElementChild as HTMLElement | null)?.innerText || '').replace(/\*/g, '').replace(/\s+/g, ' ').trim();
+      if (!lb || /^(Div\.?|Division)$/i.test(lb) || out.includes(lb)) continue;
+      out.push(lb);
+    }
+    return out;
+  }).catch(() => [] as string[]);
+  const before = [...nscm.requiredFilled];
+  try {
+    for (const label of labels) {
+      for (let idx = 0; idx < 8; idx++) {
+        const note = await nscm.fillRequired(label, idx).catch(() => '');
+        if (!note.startsWith('선택')) break;
+        const pick = /\((?:후보 )?(\d+)개 중 (\d+)번째\)/.exec(note); const nCand = pick ? +pick[1] : 0;
+        const b0 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 25_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+        const rows = await probe.rowCount(p); const body = (nscm.calls.slice(b0).find(c => /SEARCH/i.test(c.btn))?.body || '').replace(/\s+/g, '').slice(0, 140);
+        console.log(`[ensureRows] 조건 ${label} ${idx + 1}번째 → ${rows}행 · 본문 ${body}`);
+        tried.push(`${label} ${note.replace(/^선택 /, '').slice(0, 40)}:${rows}행`);
+        if (rows >= minRows) return { rows, via: `조회조건 '${label}' ${idx + 1}번째 후보 대안 조회(${tried.join(' · ')})`, req: { label, idx } };
+        if (nCand && idx + 1 >= nCand) break;  // 후보를 다 돌았다(fillRequired 는 끝 번호를 넘으면 마지막 후보를 다시 고른다)
+      }
+    }
+  } finally {
+    nscm.requiredFilled.splice(0, nscm.requiredFilled.length, ...before);  // 필수 칸 목록(③ 단계 대상)을 바꾸지 않는다
+  }
+  return null;
+}
+
 export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default', minRows = 1): Promise<{ rows: number; via: string }> {
   const p = nscm.page;
   let rows = await probe.rowCount(p);
@@ -697,7 +737,10 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default', minRow
   //   ② Division 순회를 기간 그대로 먼저 하고, 그래도 부족하면 ① 기간 확대 뒤 Division 을 다시 순회한다
   const divSweep = async (wd: number): Promise<{ rows: number; via: string } | null> => {
   try {
-    const combo = await nscm.visibleFirst(p.getByRole('combobox'));
+    // 2026-11-20 T475(SSP0005 0행 77행): '보이는 첫 콤보'가 Company 라 Company 후보(AA00…)로 setDivision 을 불러 전부 실패 → Division 순회 0회였다.
+    //   라벨이 Div·Division 인 조회영역 칸의 콤보를 먼저 쓴다(findRowAcrossDivisions 와 같은 기준) · 없을 때만 종전대로 보이는 첫 콤보
+    const dItem = await nscm.visibleFirst(p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: /^\s*\*?\s*(Div\.?|Division)\s*\*?\s*$/i }) }), 6).catch(() => null);
+    const combo = dItem ? dItem.locator('[role="combobox"]').first() : await nscm.visibleFirst(p.getByRole('combobox'));
     if (combo) {
       await combo.click({ timeout: 3_000 }).catch(() => undefined);
       const opts = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
@@ -717,6 +760,9 @@ export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default', minRow
     return null;
   };
   { const r0 = await divSweep(0); if (r0) return r0; }
+  // ②' 2026-11-20 T475(SSP0005 Company 기본값 AA00 = SSP_MST_SHIP_CALENDAR 0행 · 데이터는 HQ00 등 8개 Company): Division·기간 외 단일 선택 조회조건 후보 순회.
+  //    기간 확대 전에 한다(기간을 넓히면 일자 피벗 화면이 컬럼 한도에 걸린다 — 위 ② 주석)
+  { const r2 = await sweepCondCombos(nscm, minRows, tried); if (r2) { ENSURE_MEMO.set(key, { via: r2.via, req: r2.req }); return { rows: r2.rows, via: r2.via }; } }
   // ① 모든 기간 칸의 시작을 2년 → 5년 앞으로(현재 Division 유지)
   let widened = 0;
   for (const years of [2, 5]) {

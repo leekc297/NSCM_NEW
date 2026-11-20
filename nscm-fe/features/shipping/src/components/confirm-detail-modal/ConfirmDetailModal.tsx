@@ -48,6 +48,10 @@ interface HeaderInfo {
 
 type DetailRow = Record<string, unknown>;
 
+// 2단 헤더(Confirmed/Change)의 leaf 라벨('Trans Mode'·'Shipment Date')은 좁은 폭에서 두 줄로
+//   접힌다. 맨 아래(leaf) 헤더 행 높이(px) — 두 줄이 잘리지 않을 만큼.
+const LEAF_HEADER_HEIGHT = 34;
+
 // AS-IS SSP0060_ShipmentPlanConfirmDetailPopup.cs InitSpread 표시 컬럼(visible=true 분).
 //   Confirmed/Change 6컬럼씩 2단 병합 — sClsLblNm 으로 그룹(TWO_DEPTH). 독립 컬럼은 자기 라벨 그룹.
 const grouped = (sCls: string) => ({ sClsLblNm: sCls });
@@ -176,6 +180,21 @@ export const ConfirmDetailModal = ({ open, onClose, changeReqNo, menuId, sheetNa
               isReadOnly
               itemsSource={rows as unknown as WijmoRowItem[]}
               staticColumns={CONFIRM_DETAIL_COLUMNS}
+              // leaf 헤더('Trans Mode'·'Shipment Date')가 두 줄로 접혀 둘째 줄이 잘리는 문제.
+              //   공용 headerRowHeight(columnHeaders.rows.defaultSize)는 이 그리드 헤더 행이 명시 높이를
+              //   가져(또는 적용 시점에 헤더 row 가 아직 비어) 안 먹었다 → 맨 아래(leaf) 헤더 행 높이를
+              //   직접 올린다. updatedLayout 재적용 + 동일값 guard 로 레이아웃 갱신에도 유지 & 루프 방지.
+              initialized={grid => {
+                const applyLeafHeaderHeight = () => {
+                  const headerRows = grid.columnHeaders?.rows;
+                  if (!headerRows || headerRows.length === 0) return;
+                  const leaf = headerRows[headerRows.length - 1];
+                  if (Math.round(leaf.height ?? 0) !== LEAF_HEADER_HEIGHT)
+                    leaf.height = LEAF_HEADER_HEIGHT;
+                };
+                applyLeafHeaderHeight();
+                grid.updatedLayout.addHandler(applyLeafHeaderHeight);
+              }}
             />
           </Box>
         </Box>

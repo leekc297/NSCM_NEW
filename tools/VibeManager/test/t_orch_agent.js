@@ -1,7 +1,7 @@
 // orch-agent.js 시험 — 임시 폴더 + 가짜 claude(스트림 JSON 을 흉내 내는 node 스크립트)로 조치 흐름을 본다. 실제 Claude 호출 없음
 //   사용: node test/t_orch_agent.js <VibeManager 폴더>
 const path = require('path'); const fs = require('fs'); const os = require('os'); const cp = require('child_process');
-const dir = process.argv[2] || path.join(__dirname, '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-')); const vibeDir = path.join(root, '.vibe');
 const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
 W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_ONLY', orch: { agentMaxAttempts: 2, agentMaxPerHour: 10, agentTimeoutMin: 1 } }));
@@ -14,6 +14,7 @@ fs.writeFileSync(fake, `
 const fs=require('fs'),path=require('path');let inp='';process.stdin.on('data',d=>{inp+=d;if(inp.includes('\\n'))go();});let done=false;
 function go(){if(done)return;done=true;const mode=fs.existsSync(path.join('.vibe','mode.txt'))?fs.readFileSync(path.join('.vibe','mode.txt'),'utf8').trim():'ok';
  const out=o=>console.log(JSON.stringify(o));out({type:'system',subtype:'init',session_id:'sess-1'});
+ if(mode==='cut'){fs.appendFileSync(path.join('.vibe','calls.txt'),mode+'\\n');out({type:'tool_progress',tool_name:'Bash',elapsed_time_seconds:30});setTimeout(()=>process.exit(1),50);return;} // 결과 줄 없이 exit 1(개선안 20261120094530_REVIEW_3)
  fs.mkdirSync('.vibe',{recursive:true});fs.appendFileSync(path.join('.vibe','calls.txt'),mode+'\\n');
  if(mode==='edit'||mode==='outside'){fs.writeFileSync(path.join('tools','Harness','verify','sort_check.py'),'FIXED\\n');fs.writeFileSync(path.join('tools','Harness','verify','new_helper.py'),'NEW\\n');}
  if(mode==='outside')fs.writeFileSync(path.join('nscm-fe','src','x.ts'),'FE CHANGED\\n');
@@ -73,6 +74,20 @@ const R = f => fs.readFileSync(path.join(root, f), 'utf8');
   setMode('noresult'); const iN = watch.raise('R1', { screen: 'TST0005', sig: 'noresult|x', title: '결과 뒤 비정상 종료 시험', evidence: {} });
   await waitFor(() => watch.get(iN.id).agent); const gN = watch.get(iN.id); const lastN = gN.actions[gN.actions.length - 1].what;
   chk('결과 JSON 뒤 exit 1 = 결과대로 해결 · 종료 상태 기록', gN.status === 'resolved' && /결과 JSON 뒤 비정상 종료\(exit 1 · result 줄 없음\)/.test(lastN), gN.status + ' ' + lastN.slice(0, 200));
+  // 5-3) 결과 줄 없이 exit 1 = claude.end 에 exit 1, hasResult false, lastType, stoppedBy '' 기록 · R7 분류 '결과 줄 없이 끊김(마지막 tool_progress:Bash)' (개선안 20261120094530_REVIEW_3)
+  setMode('cut'); const iC = watch.raise('R1', { screen: 'TST0006', sig: 'cut|x', title: '결과 줄 없이 끊김 시험', evidence: {} });
+  await waitFor(() => watch.get(iC.id).status === 'need-user' && watch.get(iC.id).actions.some(a => /Claude 조치 실패/.test(a.what || '')));
+  const evLines = () => { try { return fs.readFileSync(path.join(vibeDir, 'orch', 'events.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return {}; } }); } catch { return []; } };
+  const ceC = evLines().filter(e => e.type === 'claude.end' && /결과 줄 없이 끊김 시험/.test(e.label || '')).pop() || {};
+  chk('결과 줄 없이 exit 1 → claude.end exit 1 · hasResult false · lastType · stoppedBy 빈 값', ceC.exit === 1 && ceC.hasResult === false && ceC.lastType === 'tool_progress:Bash' && ceC.stoppedBy === '', JSON.stringify({ exit: ceC.exit, hasResult: ceC.hasResult, lastType: ceC.lastType, stoppedBy: ceC.stoppedBy }));
+  await waitFor(() => watch.list(200).some(x => x.rule === 'R7' && /결과 줄 없이 끊김/.test(x.sig || '')), 5000);
+  const r7c = watch.list(200).find(x => x.rule === 'R7' && /결과 줄 없이 끊김/.test(x.sig || ''));
+  chk('R7 분류 = 결과 줄 없이 끊김(마지막 tool_progress:Bash)', !!r7c && /결과 줄 없이 끊김\(마지막 tool_progress:Bash\)/.test(r7c.title), r7c ? r7c.title : '사건 없음');
+  // 5-4) 중지 주체가 있는 끝 기록 = R7 대상 아님
+  const nR7 = watch.list(200).filter(x => x.rule === 'R7').length;
+  watch.onEvent({ type: 'claude.end', ms: Date.now(), src: 'vm', pid: process.pid, wb: 0, screen: '', source: 'orch', label: '중지 시험', exit: 1, hasResult: false, lastType: 'system:init', stoppedBy: 'VS Code 종료' });
+  await sleep(200);
+  chk('stoppedBy 있으면 R7 없음', watch.list(200).filter(x => x.rule === 'R7').length === nR7);
   // 6) 자동 대상이 아닌 규칙(R7)은 코드 분류만
   const c7 = calls();
   const i7 = watch.raise('R7', { screen: 'TST0001', sig: 'R7|로그인 만료', title: 'Claude 비정상 종료', evidence: { cls: '로그인 만료' } });

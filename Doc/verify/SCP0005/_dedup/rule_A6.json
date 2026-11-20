@@ -1,0 +1,134 @@
+{
+ "rule_id": "A6",
+ "hash": "ef8cbc2090b86692",
+ "groups": [
+  {
+   "rows": [
+    "V-3f21e469",
+    "T-e5c89bdd"
+   ],
+   "why": "두 행 모두 SCP0005_GET_DISTRIBUTION_ROUTE 조회 결과가 AS-IS ORDER BY 키(FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,PRIORITY) 순서로 정렬되는지 확인하며, 대조표 추적 행도 구현 위치가 아니라 같은 정렬 기대를 확인한다."
+  },
+  {
+   "rows": [
+    "V-dbaedd29",
+    "T-f0f809e9"
+   ],
+   "why": "두 행 모두 SCP0005_GET_COUNTRY_CITY 결과가 AS-IS ORDER BY [COUNTRY,CITY,CITY_NAME] 순서로 정렬되는지 확인하므로 대상 SP·방법·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-fc7cfdc8",
+    "T-2f7778bd"
+   ],
+   "why": "두 행 모두 SCP0005_GET_DISTRIBUTION_ROUTEID(비팝업) 결과가 같은 AS-IS 키 순서로 정렬되는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-f574c4a3",
+    "T-336fa068"
+   ],
+   "why": "두 행 모두 SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID(이력 팝업) 결과가 같은 AS-IS 키 순서로 정렬되는지 확인한다."
+  },
+  {
+   "rows": [
+    "AD-9d969364"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #2(모든 조건 공란)의 결과로, 다른 호출과 조회조건이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "AD-dc3e6a42"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #3(validYn=Y)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-ae47dcde"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #4(validYn=N)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-e49a18e6"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #5(transportMode=AIR)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-80df7337"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #6(transportMode 5종 복수 선택)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-37e31af9"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #10(transportMode=RAI)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-e6ef25e1"
+   ],
+   "why": "DISTRIBUTION_ROUTE 호출 #11(fromCountry=E2E)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-0f58c13d"
+   ],
+   "why": "COUNTRY_CITY 호출 #7(city=CAWND)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-ece96050"
+   ],
+   "why": "COUNTRY_CITY 호출 #8(city=AATES)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-3497e4ef"
+   ],
+   "why": "COUNTRY_CITY 호출 #9(city=ZZ_E2)의 결과로, 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "EG-58b590c3"
+   ],
+   "why": "COUNTRY_CITY의 문자 키 콜레이션(대소문자 무시·NULL 먼저)을 확인하므로 키 순서 확인과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "EG-9afd4a78"
+   ],
+   "why": "DISTRIBUTION_ROUTE의 문자 키 콜레이션(대소문자 무시·NULL 먼저)을 확인하므로 키 순서 확인과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "EG-72e95e0b"
+   ],
+   "why": "정렬이 아니라 TITLESET_USER 보유·미보유 계정쌍을 확인하는 행이라 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-541ffe75"
+   ],
+   "why": "대상이 FindDataMain 파라미터 'ALL'→'' 변환(store setFilter/orEmpty)이라 특정 SP 결과 정렬과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-6f37c2a5"
+   ],
+   "why": "입력 팝업 선택 반영 후라는 다른 상태의 메인 그리드 정렬을 보는 다른 화면 결함 유형이다."
+  },
+  {
+   "rows": [
+    "V-c9fe52b0"
+   ],
+   "why": "그리드 바인딩 SP 전반에 ORDER BY가 있는지와 그리드 정렬 누락을 보고 NA 예외도 정하는 확정 규칙이라, 특정 SP의 키 순서 확인과 기대가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:37:32",
+ "cost": 0.12101880000000001
+}

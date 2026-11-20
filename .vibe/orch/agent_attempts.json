@@ -2,5 +2,48 @@
   "R4|dbwin|DMF0042": [
     1795079892461,
     1795080556194
+  ],
+  "R5|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계": [
+    1795089430079
+  ],
+  "S8.checklistRun | $ <path> <path> <ID> --asis <ID>": [
+    1795102426158,
+    1795103301075
+  ],
+  "R11|SCP0005|checklist": [
+    1795102662579
+  ],
+  "S8.checklistRun | [FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 <ID> 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님": [
+    1795102749781,
+    1795103459959
+  ],
+  "S8.checklistRun | [FAIL] Playwright exit code N - log tail:": [
+    1795103254428,
+    1795103506878
+  ],
+  "R5|gone|proc|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계": [
+    1795103644044,
+    1795103732770
+  ],
+  "R5|gone|chain|🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)": [
+    1795103899480
+  ],
+  "R11|SCP0028|checklist": [
+    1795115725407
+  ],
+  "S8.checklistRun | [FAIL] <path> SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N": [
+    1795116157365
+  ],
+  "R11|SSP0014|checklist": [
+    1795116356784
+  ],
+  "R11|SSP0005|checklist": [
+    1795119254867
+  ],
+  "R3|S8.checklistRun": [
+    1795135535260
+  ],
+  "R5|gone|proc|CheckList 재수행 — 미검증 행만 가능하면 그 규칙만(--only), 아니면 처음부터 → 재분류 · 🔎 CheckList 체인 3단계": [
+    1795135654886
   ]
 }

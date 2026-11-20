@@ -84,6 +84,8 @@ export function judgeBlankExisting(s: { b: string; cleared: boolean; posts: numb
   if (/수정한 내용|변경.*없|no change|nothing to save/i.test(s.msg) || (s.crud !== undefined && !/^(U|M)$/.test(s.crud))) return { result: 'ERROR', why: `[측정 경로 없음] ${s.b} 빈 값이 수정으로 잡히지 않음(상태 '${s.crud ?? ''}' · 안내 '${s.msg}')` };
   if (s.posts > 0) return { result: 'FAIL', why: `${s.b} 필수 칸을 비웠는데 저장 요청이 나감(${s.posts}건 · 시험이 차단)${s.msg ? ` · 안내 '${s.msg}'` : ''}` };
   if (!s.msg) return { result: 'ERROR', why: `[확인 대상] ${s.b} 빈 값 Save — 저장 요청·안내 모두 없음` };
+  // 2026-11-20 T374: 저장 실패·검증 불가 알림은 필수 칸 차단 안내가 아니다(시험이 막은 검증 호출의 실패 알림 · SSP0014 USER_CHECK)
+  if (/(fail|실패|unavailable|오류|error|exception)/i.test(s.msg) && !/(필수|required|mandatory)/i.test(s.msg)) return { result: 'ERROR', why: `[확인 대상] ${s.b} 빈 값 Save — 저장 요청 없음 · 안내가 필수 안내가 아닌 실패 알림 '${s.msg}'` };
   return { result: 'PASS', why: `${s.b} 빈 값 Save 차단 · 안내 '${s.msg}'` };
 }
 

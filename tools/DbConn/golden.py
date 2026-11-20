@@ -400,6 +400,8 @@ def main(argv=None):
                     _d = _dd.get(_k.lstrip('@').lower())
                     if _d and _d[0] is not None:
                         params[_k] = _d[0]
+                        if _d[0] == '':  # 2026-11-20 T447(SCP0028 A7 V-ee003a13 '@p_to_site NVARCHAR(max)=''' · 파라미터 값 미정 SKIP): 선언 기본값이 빈 글자면 빈 값이 AS-IS 의도 값
+                            _blank_ok.add(_k)
                     elif _src.blank_means_all(sp, _k):
                         _blank_ok.add(_k)
         except Exception:  # 원문 판독 실패 = 종전 판단(빈 값이면 SKIP)

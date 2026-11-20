@@ -1,0 +1,122 @@
+{
+  "id": "20261119215147_SELF_3",
+  "at": "2026-11-19T21:51:47+09:00",
+  "ms": 1795092707516,
+  "source": "self",
+  "status": "applied",
+  "sig": "eperm retry setenabled writejson errlog",
+  "title": "VMO 켜고 끄기의 harness.json 교체에 EPERM 재시도 적용, 쓰기 실패를 오류 기록에 남김",
+  "evidence": "오류 기록 서명 'orch-history.writeJson | EPERM: operation not permitted, rename <path> -> <path>'(.vibe/orch/vm_errors_dev_20261119_2147.jsonl 1행, 2026-11-19 21:27:01). orch-history.js:24 와 orch-selfcheck.js:38 에는 재시도 뒤 복사하는 replaceFile 이 들어갔음. orch-agent.js:325 setEnabled 는 harness.json.tmp_orch 를 fs.renameSync 1회로 교체하고 실패하면 { ok:false } 만 돌려주며 tmp_orch 파일이 남음. orch-agent.js:36, orch-improve.js:27, orch-watch.js:32 의 writeJson 은 catch { return false } 라 실패가 vm_errors.jsonl 에 남지 않아 S5 가 세지 못함. setEnabled 호출처는 workbench.js:2733.",
+  "targets": [
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_agent_q.js"
+  ],
+  "before_after": "orch-agent.js:325 renameSync 1회 → EPERM, EBUSY, EACCES 때 3회 재시도 뒤 복사하고 tmp_orch 삭제(orch-selfcheck.js:38 과 같은 처리). 3개 파일 writeJson 의 catch { return false } → catch (e) { errlog.note('<모듈>', 'writeJson', e); return false }. 쓰기 방식(직접 쓰기)은 그대로 둠",
+  "verify": "node tools/VibeManager/test/t_orch_agent_q.js 통과(끄기, 켜기 기존 시험 포함). 추가 시험: 실행 뒤 tools/Harness/harness.json.tmp_orch 파일이 없음을 확인",
+  "rollback": "VMO 백업본으로 4개 파일 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T22:06:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:07:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2206"
+    },
+    {
+      "at": "2026-11-19T22:07:51+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:08:54+09:00",
+      "by": "VMO",
+      "what": "반영 실패 — 검증 실패: ERROR(미실행): node tools/VibeManager/test/t_orch_agent_q.js 를 Bash 2회, PowerShell 1회 실행했으나 'This command requires approval' 로 거부됨. 시험 통과 여부 미확인. Glob tools/Harness/harness.json.tmp_orch = No files found · 대상 파일 4개 복원",
+      "log": ".vibe\\logs\\2026-11-19T22-07-51_claude_orch.log",
+      "sec": 61,
+      "costUsd": 1.546429,
+      "files": [
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_agent_q.js"
+      ]
+    },
+    {
+      "at": "2026-11-19T22:26:20+09:00",
+      "by": "Claude Code 세션",
+      "what": "다시 대기로 돌림 — 반영 실패 원인이 개선안이 아닌 VMO 결함(허용 도구 인자가 셸에서 쪼개져 node 명령 거부)이었고 orch-agent.js 를 고침"
+    },
+    {
+      "at": "2026-11-19T22:26:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:28:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2226"
+    },
+    {
+      "at": "2026-11-19T22:28:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:30:49+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 227, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T22:30:49+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_agent_q.js → 16건 PASS, ALL PASS(기존 12건 + 추가 4건: 끄기·켜기 뒤 tmp_orch 없음, rename EPERM 3회 재시도 뒤 복사 반영 ok=true 시도=3, EPERM 뒤 tmp_orch 없음, writeJson 실패 시 오류 기록 1건). Glob tools/Harness/harness.json.tmp_orch → 파일 없음. 확인 시각 2026-11-19 22:28:59 · 변경 4개 파일",
+      "log": ".vibe\\logs\\2026-11-19T22-28-00_claude_orch.log",
+      "sec": 71,
+      "costUsd": 1.5615898000000001,
+      "files": [
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_agent_q.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S5",
+  "selfKey": "",
+  "auto": true,
+  "autoTried": true,
+  "autoMs": 1795094781404,
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_agent_q.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_agent_q.js → 16건 PASS, ALL PASS(기존 12건 + 추가 4건: 끄기·켜기 뒤 tmp_orch 없음, rename EPERM 3회 재시도 뒤 복사 반영 ok=true 시도=3, EPERM 뒤 tmp_orch 없음, writeJson 실패 시 오류 기록 1건). Glob tools/Harness/harness.json.tmp_orch → 파일 없음. 확인 시각 2026-11-19 22:28:59",
+    "note": "before_after 밖 추가 1건: setEnabled 교체가 끝내 실패하면 tmp_orch 삭제 + errlog.note('orch-agent','setEnabled',e) 기록(반환값은 종전과 같음). 설치 폴더와 CHANGELOG.md 는 건드리지 않음. 구문 검사, test/run_all.js, 정의 정합은 미실행(VMO 가 반영 뒤 실행)."
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 227, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261119_self2226",
+  "needsReload": true,
+  "appliedMs": 1795095049444,
+  "synced": [
+    "orch-agent.js",
+    "orch-improve.js",
+    "orch-watch.js"
+  ],
+  "snap": "prop_20261119215147_SELF_3"
+}

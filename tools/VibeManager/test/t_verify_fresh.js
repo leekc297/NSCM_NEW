@@ -3,7 +3,7 @@
 const Module = require('module'); const path = require('path'); const fs = require('fs'); const os = require('os');
 const stub = new Proxy(function () { }, { get: (t, k) => (k === 'then' ? undefined : stub), apply: () => stub, construct: () => stub });
 const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? stub : orig.call(this, r, ...a); };
-const dir = process.argv[2] || path.join(__dirname, '..'); const wb = require(path.join(dir, 'workbench'));
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..')); const wb = require(path.join(dir, 'workbench'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vfy-')); const p = { root, genDir: path.join(root, 'Doc', 'gen') };
 const f = path.join(root, 'Doc', 'verify', 'TST0001', 'unverified_triage.json'); fs.mkdirSync(path.dirname(f), { recursive: true });
 let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };

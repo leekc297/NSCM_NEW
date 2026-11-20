@@ -1,0 +1,28 @@
+{
+  "id": "20261119_231809_R12_ALL",
+  "at": "2026-11-19T23:18:09+09:00",
+  "ms": 1795097889167,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S3 설치본 차이: orch-watch.js 내용 다름",
+  "screen": "",
+  "sig": "R12|S3|orch-watch.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "저장소 22396바이트 2026-11-19T23:17 / 설치본 20937바이트 2026-11-19T22:28",
+  "evidence": {
+    "check": "S3",
+    "key": "S3|orch-watch.js",
+    "file": "orch-watch.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-19T23:18:09+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S3 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

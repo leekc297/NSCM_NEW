@@ -1,0 +1,35 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-19T11:32:19.893Z",
+ "producer": "check.js",
+ "id": "SSP0014",
+ "final": false,
+ "page": "nscm-fe/features/shipping/src/pages/shipment-model-pic",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 1,
+  "warn": 19
+ },
+ "issues": [
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "Validation 마커 누락 2/2: V-001(Lundefined) V-002(Lundefined)",
+   "where": "hooks/useShipmentModelPicValidation.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

@@ -1,0 +1,73 @@
+{
+ "rule_id": "J1",
+ "hash": "6d25bb0a9adff4e5",
+ "groups": [
+  {
+   "refs": [
+    "DM-137"
+   ],
+   "target": "FCST Type 조회조건 후보",
+   "condition": "Division·권한그룹(ADMIN/DM ADMIN/DM Planner(W/S))별로 확인",
+   "expected": "FCST Type 후보는 Division과 권한그룹에 맞게 제한된다(예: 82 Div는 WS(Free)/WS(Chargeable) 선택 불가). 권한별 후보 수가 AS-IS와 같다.",
+   "why": "확인 대상이 Division이 아니라 FCST Type 후보라서 다른 항목과 묶지 않았다."
+  },
+  {
+   "refs": [
+    "DM-44"
+   ],
+   "target": "Division 조회조건 후보(메뉴별 권한 그룹 기준)",
+   "condition": "여러 권한 그룹에 속하고 메뉴마다 권한이 다른 계정으로 로그인",
+   "expected": "Division 후보에는 로그인 사용자의 그룹 중 해당 메뉴 권한을 가진 그룹의 Div만 나온다.",
+   "why": "후보를 메뉴 권한 그룹으로 거르는지 보는 항목이다. USE_YN으로 거르는 GAPSELF-21과 확인 조건이 달라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-65"
+   ],
+   "target": "Division 기본값 · 메뉴 트리 노출/열림",
+   "condition": "단일 권한 계정으로 로그인",
+   "expected": "메뉴 트리에는 사용자 권한 그룹에 연결된 메뉴만 나오고, 나온 메뉴는 404 없이 열린다. 단일 권한이면 Division 기본값이 그 권한으로 자동 선택된다.",
+   "why": "메뉴 트리 노출과 404를 함께 확인하는 항목이라 Division 콤보만 보는 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P24"
+   ],
+   "target": "Team 조회조건 후보",
+   "condition": "Division을 하나 고른 상태",
+   "expected": "Team 후보에는 선택한 Division(사업부)의 팀만 나오고, 후보 건수가 AS-IS와 같다.",
+   "why": "확인 대상이 Division이 아니라 Team 후보라서 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "GAPSELF-1"
+   ],
+   "target": "Division 콤보(DIVISION_ID) 자동 선택 · Period(PERIOD) 폭",
+   "condition": "화면을 연 직후 확인",
+   "expected": "화면 OPEN 시 Division(DIVISION_ID)이 사용자 권한 기준으로 자동 선택된다. Period(PERIOD) 입력란 너비도 AS-IS와 같다.",
+   "why": "Period 폭 확인이 함께 들어 있고 확인 동작도 화면 오픈 직후라서, 세션을 바꿔 보는 GAPSELF-10과 묶지 않았다."
+  },
+  {
+   "refs": [
+    "GAPSELF-10"
+   ],
+   "target": "Division 콤보(DIVISION_ID) 초기값 세션 잔존",
+   "condition": "다른 Division 권한 계정으로 로그인했다가 바꿔 로그인한 뒤 화면 오픈",
+   "expected": "Division(DIVISION_ID) 기본값은 지금 로그인한 사용자의 권한으로 정해지고, 이전 세션의 값이 남지 않는다.",
+   "why": "계정을 바꿔 로그인하며 이전 세션 값이 남는지 보는 고유한 확인 동작이라 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "GAPSELF-21"
+   ],
+   "target": "Division 권한 콤보 후보 USE_YN 필터",
+   "condition": "USE_YN이 N으로 바뀐 Division 권한을 가진 계정으로 로그인",
+   "expected": "Division(DIVISION_ID) 권한 콤보 후보에는 USE_YN=Y인 권한만 나온다.",
+   "why": "권한 사용여부(USE_YN)로 거르는지 보는 조건이라 메뉴 권한 기준인 DM-44와 확인 조건·기대 결과가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:09",
+ "cost": 0.0710932
+}

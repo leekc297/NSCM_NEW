@@ -1,0 +1,74 @@
+{
+  "id": "20261120_041508_R11_SSP0014",
+  "at": "2026-11-20T04:15:08+09:00",
+  "ms": 1795115708306,
+  "rule": "R11",
+  "ruleName": "Claude 없이 끝난 체인에 오류 남음",
+  "title": "Claude 없이 끝난 체인. SSP0014 FAIL 40 · 미검증 293 남음",
+  "screen": "SSP0014",
+  "sig": "R11|SSP0014|checklist",
+  "count": 1,
+  "repeat": null,
+  "detail": "체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList): 스크립트 단계 1개 실행, Claude 단계 실행 0, 건너뜀 3",
+  "evidence": {
+    "md": "Doc\\gen\\SSP0014\\FULLRUN.md",
+    "result": "Doc/verify/SSP0014/run_verify.result.json"
+  },
+  "status": "closed",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T04:25:56+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T04:27:38+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 사용자 확인 필요 · 원인 engine: R11 제목의 FAIL 40, 미검증 293은 2026-11-19 13:49:48 시작 실행의 결과 파일 값임(Doc/verify/SSP0014/run_verify.result.json ts 2026-11-19T16:17:57). 이번 체인은 2026-11-20 01:10:46 시작 뒤 04:15:07 사용자 지시 taskkill로 1단계가 exit 1로 끝나 결과 파일을 새로 쓰지 않았음(events.jsonl:363,387,389, R1 처리 로그 2026-11-20T04-22-42_claude_orch.log). orch-wa · 허용 범위 밖 파일 변경 2개: .claude/agents/vm-orchestra.md, tools/VibeManager/CHANGELOG.md · 개선안 등록 20261120042738_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T04-26-02_claude_orch.log",
+      "sec": 89,
+      "turns": 19,
+      "costUsd": 0.9144731999999999,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T04:28:11+09:00",
+      "by": "사용자",
+      "what": "닫음"
+    }
+  ],
+  "agent": {
+    "cause_class": "engine",
+    "cause": "R11 제목의 FAIL 40, 미검증 293은 2026-11-19 13:49:48 시작 실행의 결과 파일 값임(Doc/verify/SSP0014/run_verify.result.json ts 2026-11-19T16:17:57). 이번 체인은 2026-11-20 01:10:46 시작 뒤 04:15:07 사용자 지시 taskkill로 1단계가 exit 1로 끝나 결과 파일을 새로 쓰지 않았음(events.jsonl:363,387,389, R1 처리 로그 2026-11-20T04-22-42_claude_orch.log). orch-watch.js:115,120 checkChecklist가 결과 파일의 작성 시각을 체인 시작 시각과 대조하지 않고 이전 실행 값으로 R11을 올림.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "events.jsonl 353~391행, FULLRUN.md, run_verify.result.json, 화면별 작업 로그 .vibe/jobs/J20261120_011046/SSP0014.log, R1 처리 로그 대조",
+        "result": "결과 파일은 이전 실행(11-19 13:49:48 시작) 값임. 이번 체인은 taskkill로 중단. 화면 진입 실패 110건 확인"
+      },
+      {
+        "grade": "A",
+        "what": "tools/VibeManager/orch-watch.js 106~143행 읽기",
+        "result": "120행 R11 조건에 결과 파일 시각 대조 없음. 같은 체인 실패가 R1과 R11 2건으로 올라감"
+      }
+    ],
+    "changed_files": [],
+    "verify": "B 등급 수정 없음. 검증 미실행. 조회 시각 2026-11-20 04:27:06 date 실행값",
+    "status": "proposal",
+    "next_for_user": "SSP0014 CheckList 다시 실행 필요(이번 실행은 화면 진입 실패 110건 뒤 중단되어 판정 근거로 쓸 수 없음).",
+    "proposal": {
+      "title": "CheckList 체인 R11 판정 때 이번 체인이 만든 결과 파일만 사용",
+      "evidence": "orch-watch.js:108 run_verify.result.json을 시각 확인 없이 읽음. 120행 claudeRan 0이면 그 값으로 R11을 올림. 이번 사건의 결과 파일 ts는 2026-11-19T16:17:57, 체인 시작은 2026-11-20 01:10:46(events.jsonl:363)",
+      "targets": [
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ],
+      "before_after": "변경 전: checkChecklist가 결과 파일 시각과 무관하게 cur.fail, cur.unverified로 R11을 올림. 변경 후: 체인 시작 ms(ev.ms - ev.ms_run)보다 결과 파일 ts가 이르면 R11·R10을 올리지 않고 checklist_prev도 갱신하지 않음. 1단계 실패는 R1이 맡음. 143행과 같게 120행 조건에 !userStopped(ev.wb) 추가",
+      "verify": "node tools/VibeManager/test/run_all.js. t_orch_watch.js에 '체인 시작보다 이전 ts의 결과 파일이면 R11 없음' 시험 1건 추가",
+      "rollback": "orch-watch.js, t_orch_watch.js를 반영 전 .bak으로 되돌림"
+    }
+  },
+  "proposal": "20261120042738_INC"
+}

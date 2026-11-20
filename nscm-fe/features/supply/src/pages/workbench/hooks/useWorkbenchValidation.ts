@@ -28,6 +28,7 @@ import {
   COL,
   DIVISION_CODE,
   DUPLICATE_KEYS,
+  EMPTY_PLANT_SITE,
   EXISTING_ROW_REQUIRED_MSG,
   INSERT_REQUIRED_COLUMNS,
   ITEM_EXISTENCE_CHECK,
@@ -95,7 +96,13 @@ const buildDuplicateKey = (
   return keys
     // 대소문자는 접어서 비교한다 — AS-IS `DataTable.Select` 가 CI 였다(`norm` 주석).
     //   구분하면 대소문자만 다른 중복을 놓쳐 SP 의 PK 중복(무음 롤백)까지 흘러간다.
-    .map(key => (key === dateColumn ? toYyyymmdd(row[key]) : norm(row[key])))
+    .map(key => {
+      if (key === dateColumn) return toYyyymmdd(row[key]);
+      // AS-IS 빈 PLANT_SITE_ID('')는 TO-BE 이관 데이터에 '/' 로 적재돼 있다(40·82 실측).
+      //   신규행 공백을 '/' 로 보고 비교해야 AS-IS '' = '' 중복 차단과 등가가 된다.
+      if (key === COL.PLANT_SITE_ID && norm(row[key]) === '') return EMPTY_PLANT_SITE;
+      return norm(row[key]);
+    })
     .join('');
 };
 

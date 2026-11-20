@@ -178,11 +178,18 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
   //   OVER_52W_YN='Y'(계획기간 52주 초과)일 때만 그 행 PLAN_WEEKS 를 넘겨 W{PLAN_WEEKS} 버튼을 띄운다
   //   (예: 73→W73, 92→W92). 공유 over52WeekPreset 로 일괄 적용(사용자 지시 2026-11-17). 종전 division
   //   DAILY_PLAN_PERIOD 기준은 폐기.
-  const over52Weeks = over52WeekPreset(planDates, sc.planStartYyyymmdds[0] ?? '');
+  // Plan Date CODE(=PLAN_START_YYYYMMDD)는 division 별로 중복될 수 있다 — 같은 날짜가 div 40·81 양쪽에 있고
+  //   OVER_52W_YN/PLAN_WEEKS 가 서로 다르다(실측: 20261109 → div40 50/N, div81 73/Y). planDates 는 전 division
+  //   을 담으므로 CODE 만으로 find 하면 타 division 행을 먼저 집어 W{n} 프리셋이 사라지고 planHorizon 이 어긋난다.
+  //   드롭다운(planDateOptions)과 동일하게 선택 division 행으로 좁힌 뒤 매칭한다.
+  const planDatesInDiv = (planDates ?? []).filter(
+    r => !sc.divisionId || str(r.DIVISION_ID) === sc.divisionId
+  );
+  const over52Weeks = over52WeekPreset(planDatesInDiv, sc.planStartYyyymmdds[0] ?? '');
   // 선택 Plan Date 의 계획구간(SCP구간) — 같은 DATE_WEEKLY1_SCP_ALL 행의 HORIZON_END_DATE(계획구간 끝,
   //   8자리)/PLAN_WEEKS(주수). AS-IS SCPPlanPeriod(SCM_MST_PLAN.HORIZON_END_DATE, bucket 무관 PLAN_CYCLE='WEEKLY'
   //   실측 2026-11-18)와 동일 원천이다. 페이지 조회검증(CheckPlanPeriodRange)이 쓰도록 스토어로 올린다(아래 effect).
-  const selectedPlanRow = (planDates ?? []).find(
+  const selectedPlanRow = planDatesInDiv.find(
     r => str(r.CODE) === (sc.planStartYyyymmdds[0] ?? '')
   ) as Record<string, unknown> | undefined;
   const planHorizonEnd = str(selectedPlanRow?.HORIZON_END_DATE).slice(0, 8);

@@ -11,7 +11,7 @@
   "note": "측정 경로 실패 — 해당 Div 판정 없음",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -27,7 +27,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -43,7 +43,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -59,7 +59,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -75,7 +75,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -91,7 +91,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -107,7 +107,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -123,7 +123,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -155,7 +155,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -171,7 +171,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -182,12 +182,12 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -198,12 +198,12 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -214,12 +214,12 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -230,12 +230,12 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -246,12 +246,12 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -262,12 +262,12 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -283,7 +283,7 @@
   "note": "",
   "mctx": {
    "calls": 4,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -299,7 +299,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -315,7 +315,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -326,12 +326,12 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -342,12 +342,12 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -358,12 +358,12 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -374,12 +374,12 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -390,12 +390,12 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -406,12 +406,12 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -427,7 +427,7 @@
   "note": "",
   "mctx": {
    "calls": 4,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -443,7 +443,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -459,7 +459,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -470,12 +470,12 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -486,12 +486,12 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -502,12 +502,12 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -518,12 +518,12 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -534,12 +534,12 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -550,12 +550,12 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -571,7 +571,7 @@
   "note": "",
   "mctx": {
    "calls": 4,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -587,7 +587,7 @@
   "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -603,7 +603,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -614,12 +614,12 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -630,12 +630,12 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -646,12 +646,12 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -662,12 +662,12 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -678,12 +678,12 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -694,12 +694,12 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -715,7 +715,7 @@
   "note": "",
   "mctx": {
    "calls": 4,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -731,7 +731,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -747,7 +747,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -758,12 +758,12 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -774,12 +774,12 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -790,12 +790,12 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -806,12 +806,12 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -822,12 +822,12 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -838,12 +838,12 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "판정필요",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -859,7 +859,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -875,7 +875,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -891,7 +891,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -907,7 +907,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -923,7 +923,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -939,7 +939,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -955,7 +955,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -971,7 +971,7 @@
   "note": "측정 경로 실패",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -987,7 +987,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -1003,7 +1003,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -1019,7 +1019,7 @@
   "note": "",
   "mctx": {
    "calls": 2,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -1066,8 +1066,8 @@
   "asis": "CR-070",
   "note": "",
   "mctx": {
-   "calls": 12,
-   "rows": 2635,
+   "calls": 14,
+   "rows": 2634,
    "req": 0
   }
  },
@@ -1082,8 +1082,8 @@
   "asis": "CR-070",
   "note": "",
   "mctx": {
-   "calls": 12,
-   "rows": 2635,
+   "calls": 14,
+   "rows": 2634,
    "req": 0
   }
  },
@@ -1098,8 +1098,8 @@
   "asis": "CR-070",
   "note": "",
   "mctx": {
-   "calls": 12,
-   "rows": 2635,
+   "calls": 14,
+   "rows": 2634,
    "req": 0
   }
  },
@@ -1227,7 +1227,7 @@
   "note": "",
   "mctx": {
    "calls": 4,
-   "rows": 436,
+   "rows": 435,
    "req": 0
   }
  },
@@ -1254,12 +1254,12 @@
   "ctx": "저장 후 비움",
   "result": "ERROR",
   "expected": "조회 행",
-  "actual": "0행(기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행)",
+  "actual": "0행(기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행)",
   "asis": "",
   "note": "",
   "mctx": {
    "calls": 8,
-   "rows": 1315,
+   "rows": 2634,
    "req": 0
   }
  },

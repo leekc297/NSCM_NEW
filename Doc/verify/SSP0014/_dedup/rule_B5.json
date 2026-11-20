@@ -1,0 +1,82 @@
+{
+ "rule_id": "B5",
+ "hash": "2d2810a0ede1ccec",
+ "groups": [
+  {
+   "rows": [
+    "V-27adb9e0"
+   ],
+   "why": "신규 행의 Sales Site 입력, Project 팝업 자동 조회, Model 룩업, Team 팝업을 한 번에 확인하는 복합 대상이라 같은 요소·기대를 가진 행이 없다."
+  },
+  {
+   "rows": [
+    "V-3a1db4c9"
+   ],
+   "why": "Div 81 신규 행의 End Customer 셀 콤보 후보만 대상으로 하며, 다른 행과 대상 컬럼이 다르다."
+  },
+  {
+   "rows": [
+    "V-496cdb8b"
+   ],
+   "why": "SCM_FCST·MKT_FCST의 Div·권한·SCP 시간대별 편집 가능 여부를 보는 것이라, 후보 목록을 보는 다른 행과 확인 방법과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-4a0eea59"
+   ],
+   "why": "Div 81 Measure 콤보의 오타 항목 \"Cutomer FCST\"가 후보와 데이터에 남아 있는지 보는 고유 기대라 묶을 행이 없다."
+  },
+  {
+   "rows": [
+    "V-544d9fb7"
+   ],
+   "why": "Div별 UI Category 기준 Measure 표시 구성을 보는 행으로, Sales Site 유형별 신규 행 Measure 후보(V-98497859)와는 조건과 기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-62e28995"
+   ],
+   "why": "권한 신청 가능 Group 목록의 REQ_NO_DISPLAY 필터는 다른 행들과 대상 요소가 완전히 다르다."
+  },
+  {
+   "rows": [
+    "V-6bbf6d45"
+   ],
+   "why": "FCST Type 콤보 후보를 Div·권한그룹 전반에서 SALES_TYPE_CODE 기준으로 보고 후보 수까지 확인하므로, Div 82 W/S에 한정해 Measure 입력 제한까지 보는 V-81abf761과는 조건과 기대 범위가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-81abf761"
+   ],
+   "why": "Div 82 DM Planner(W/S)의 FCST Type 노출과 Sales Site 유형별 Measure 입력 제한을 함께 보는 복합 기대라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-98497859"
+   ],
+   "why": "신규 행 Measure 콤보 후보를 Div·Sales Site 유형(VMI=Y/비축용/고객향)별로 보는 행이며, AS From Site나 Current 버전 편집 통제를 포함한 다른 행과 기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ab4a5428"
+   ],
+   "why": "Div 81 W/S에서 AS From Site 활성 여부·콤보와 SCM_FCST 비노출 Measure 후보를 함께 보는 고유 조건과 기대다."
+  },
+  {
+   "rows": [
+    "V-f143daf7"
+   ],
+   "why": "Search 전 화면 진입 직후 Measure 설정 팝업 후보가 Division 기준으로 재조회되는지 보는 상태·대상이라 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-fb724ddb"
+   ],
+   "why": "Current 버전에서 여러 Div와 FCST Type=AS 조건으로 입력 Measure 통제와 AS From Site 목록을 함께 보는 복합 기대라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:11:52",
+ "cost": 0.0712021
+}

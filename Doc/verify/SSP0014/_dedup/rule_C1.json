@@ -1,0 +1,90 @@
+{
+ "rule_id": "C1",
+ "hash": "0c29559090cd15b8",
+ "groups": [
+  {
+   "rows": [
+    "V-388d495d",
+    "T-efbad2c0",
+    "V-e326949a"
+   ],
+   "why": "셋 다 같은 동작을 확인한다. 이 화면의 유일한 상위 조건인 Div(cboDivision, 하위는 clbFromSite)를 바꾸면 하위 후보를 다시 구성하고 선택값을 ALL로 초기화해야 한다."
+  },
+  {
+   "rows": [
+    "EG-a07c02b7"
+   ],
+   "why": "Div=81일 때 From Site 후보 목록이 AS-IS 원천과 같은지 확인하는 행이라, 재조회·초기화 동작을 보는 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "T-3ac15cff"
+   ],
+   "why": "clbFromSite 하나만 대상으로 하는 대조표 추적 행이고, 이 요소에는 handler가 없어 상위 Div 변경 행과는 확인하는 내용이 다르다."
+  },
+  {
+   "rows": [
+    "T-bac3726d"
+   ],
+   "why": "cboOperationGroup이라는 다른 조회조건을 다루는 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-eea30c2f"
+   ],
+   "why": "cboValidYN이라는 다른 조회조건을 다루는 추적 행이다."
+  },
+  {
+   "rows": [
+    "V-040e1d4d"
+   ],
+   "why": "Sales Site·End Customer·Sold to·Plant Site·Team 후보 원천과 Team의 SSPM 기준 cascade를 확인하는 행이라 대상 요소와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-695e5f21"
+   ],
+   "why": "Div에 데이터가 없는 Team·End Customer·Sales Site 후보가 나오지 않는지 확인하는 행이라 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-7b0c0249"
+   ],
+   "why": "Filter 콤보 6종이 Active 여부와 상관없이 전체 후보를 보이는지와 상위 값으로 좁혀지는지를 jaehyeok/Div 81 건수로 확인하는 행이라 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-86e078c5"
+   ],
+   "why": "Div를 바꿀 때 하위 조건뿐 아니라 모든 그리드까지 초기화되는지 보는 행이라 대상 범위와 기대가 더 넓다."
+  },
+  {
+   "rows": [
+    "V-bc6a1755"
+   ],
+   "why": "Report Type을 바꾸면 Data Type이 초기화되는지 보는 행으로, 상위·하위 요소가 모두 다르다."
+  },
+  {
+   "rows": [
+    "V-e29f8d85"
+   ],
+   "why": "Div를 바꿀 때 숫자·ITEM TYPE을 포함한 조회조건 전체가 초기화되는지 보는 행이라 대상 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-e6d811c8"
+   ],
+   "why": "Div를 바꾼 뒤 Version이 Current 기본값으로 돌아오는지 보는 행이라 대상 요소와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-ee049b77"
+   ],
+   "why": "신규행 Insert 상태에서 그리드 콤보의 Team 기준과 중복이 0건인지 보는 행이라 상태와 기대가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:12:23",
+ "cost": 0.0860574
+}

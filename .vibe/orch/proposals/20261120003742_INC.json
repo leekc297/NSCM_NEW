@@ -1,0 +1,84 @@
+{
+  "id": "20261120003742_INC",
+  "at": "2026-11-20T00:37:42+09:00",
+  "ms": 1795102662511,
+  "source": "incident",
+  "status": "applied",
+  "sig": "작업 목록 중지를 감시기에 user.stop 으로 알리고 checklist 체인 rn 판정에서 사용자 중지를 뺀다",
+  "title": "작업 목록 중지를 감시기에 user.stop 으로 알리고 CheckList 체인 R11 판정에서 사용자 중지를 뺀다",
+  "evidence": "job.json J20261120_003243 note '사용자 중지' · events.jsonl 241~251행에 user.stop 없음 · user.stop 생성처는 workbench.js:2643 1곳 · orch-watch.js:139 R1 확인, orch-watch.js:120 R11 확인 없음 · 사건 20261120_003346_R1_SCP0005, 20261120_003346_R11_SCP0005",
+  "targets": [
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "job-runner.js:193 stop(): 변경 전에는 runner 마다 r.stop() 만 호출함. 변경 후에는 r.stop() 앞에서 h.runners 의 [sid, r] 마다 evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms: Date.now() }) 를 남김(wb 값은 job-runner.js:97 name 과 같은 형식). orch-watch.js:120: 변경 전 조건은 `if (ev.claudeRan === 0 && (cur.fail > 0 || cur.unverified > 0))` 임. 변경 후 조건은 `if (ev.claudeRan === 0 && !userStopped(ev.wb) && (cur.fail > 0 || cur.unverified > 0))` 임. t_orch_watch.js 에 'J..:TST0001' 형식 wb 로 user.stop 뒤 step.end FAIL, checklist chain.end 를 보내 R1, R11 이 0건인지 보는 시험을 추가함.",
+  "verify": "node --check tools/VibeManager/job-runner.js tools/VibeManager/orch-watch.js · node tools/VibeManager/test/t_orch_watch.js · node tools/VibeManager/test/t_job_runner.js · node tools/VibeManager/test/run_all.js",
+  "rollback": "job-runner.js, orch-watch.js, t_orch_watch.js 를 반영 전 VMO 백업으로 되돌림",
+  "incident": "20261120_003346_R1_SCP0005",
+  "screen": "SCP0005",
+  "history": [
+    {
+      "at": "2026-11-20T05:24:14+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T05:26:10+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 340, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0524"
+    },
+    {
+      "at": "2026-11-20T05:26:15+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T05:31:03+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 341, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T05:31:03+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 05:27:00 실행. node --check job-runner.js, orch-watch.js = 통과(CHECK_OK). node test/t_orch_watch.js = PASS 21, FAIL 0, ALL PASS. 추가 시험 '작업 목록 중지 뒤 R1, R11 0건' = 0건 PASS. node test/t_job_runner.js = PASS 29, ALL PASS. node test/run_all.js = 파일 27/27, PASS 341, FAIL 0, 110.9s(완료 2026-11-19T20: · 변경 4개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/CHANGELOG.md",
+      "log": ".vibe\\logs\\2026-11-20T05-26-15_claude_orch.log",
+      "sec": 169,
+      "costUsd": 0.7780099999999999,
+      "files": [
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ]
+    }
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795119854798,
+  "autoFp": "c5bb80cbf5",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 341, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0524",
+  "needsReload": true,
+  "appliedMs": 1795120263211,
+  "synced": [
+    "job-runner.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_watch.js"
+    ],
+    "verify_result": "2026-11-20 05:27:00 실행. node --check job-runner.js, orch-watch.js = 통과(CHECK_OK). node test/t_orch_watch.js = PASS 21, FAIL 0, ALL PASS. 추가 시험 '작업 목록 중지 뒤 R1, R11 0건' = 0건 PASS. node test/t_job_runner.js = PASS 29, ALL PASS. node test/run_all.js = 파일 27/27, PASS 341, FAIL 0, 110.9s(완료 2026-11-19T20:27:03Z = 2026-11-20 05:27:03 KST)",
+    "note": "job-runner.js:255 stop(): h.runners 의 [sid, r] 마다 r.stop() 앞에서 evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms }) 를 남김. orch-watch.js:121 R11 조건에 !userStopped(ev.wb) 추가(개선안 기준 120행, 현재 파일 121행). orch-watch.js:150 의 chain.end 는 원래도 userStopped 면 checkChecklist 전에 return 하므로 이번 사건의 원인은 job-runner 가 user.stop 을 남기지 않은 것이고, 121행 조건은 같은 경우를 한 번 더 막음. 작업 모드와 hook 차단 없음. 백업, 설치 폴더, CHANGELOG 는 건드리지 않음."
+  },
+  "snap": "prop_20261120003742_INC"
+}

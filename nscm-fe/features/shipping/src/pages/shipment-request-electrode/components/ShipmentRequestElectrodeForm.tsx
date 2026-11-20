@@ -7,6 +7,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid, Stack } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import { BOH_RADIO_ITEMS, BUCKET_TYPE, COMBO, LBL } from '../shipment-request-electrode.constants';
@@ -298,7 +299,8 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
             onChange={(start, end) => setSearchParams({ fromYyyymmdd: start, toYyyymmdd: end })}
           />
           {/* Material — txtItemId + btnItemId 팝업(MaterialByDivisionModal, page 소유, SSP0023 동일).
-              빈 반환 시 기존값 유지. 메인조회 SP P_ITEM_ID 로 전달(setFilters). */}
+              빈 반환 시 기존값 유지. 메인조회 SP P_ITEM_ID 로 전달(setFilters). 멀티라인 붙여넣기(개행→쉼표)
+              = AS-IS UsrMultiLineEditor 등가(createMultilinePasteHandler, 사용자 지시 2026-11-19, inputProps 소문자). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -319,6 +321,12 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sp.itemId,
+                      next => setSearchParams({ itemId: next }),
+                    ),
+                  }}
                   onChange={e => setSearchParams({ itemId: e.target.value })}
                 />
               )}
@@ -326,7 +334,9 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
           </Grid>
           {/* Model/Nickname — txtModelId + 돋보기(MaterialByDivisionModal, page 소유). Model + NickName 통합
               (사용자 지시 2026-10-22). 팝업 선택 → 품번(ITEM_ID)=modelId + 닉네임(NICK_NAME)=nickName 둘 다 세팅
-              (메인 GET SP p_model_id + p_nick_name). 직접입력은 품번(modelId)만, nickName 은 비운다. */}
+              (메인 GET SP p_model_id + p_nick_name). 직접입력은 품번(modelId)만, nickName 은 비운다.
+              멀티라인 붙여넣기(그리드/엑셀 셀 복사 → 개행을 쉼표로) = AS-IS UsrMultiLineEditor 드롭다운 등가
+              (createMultilinePasteHandler, 사용자 지시 2026-11-19). 네이티브 input 에 달아야 발화하므로 inputProps(소문자). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -345,6 +355,12 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onModelSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sp.modelId,
+                      next => setSearchParams({ modelId: next, nickName: '' }),
                     ),
                   }}
                   onChange={e => setSearchParams({ modelId: e.target.value, nickName: '' })}

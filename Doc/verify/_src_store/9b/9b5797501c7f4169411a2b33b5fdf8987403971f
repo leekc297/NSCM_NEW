@@ -1,0 +1,133 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { test as base } from '@playwright/test';
+import { Nscm, CFG, beLogMark, beLogErrors } from '../lib/nscm';
+import { installRequestMutations, flushMutationLog } from '../lib/mutate';
+import { installWriteGuard, recordKind } from '../lib/writeguard';
+export type Opts = { account: string; division: string };
+
+// 2026-11-06(속도 개선 ① 계측): 테스트 1건의 시간을 구간별로 잰다 — 로그인 · 화면 열기 · 조회 · 고정 대기(page.waitForTimeout) · 나머지(본문).
+//   판정·동작은 바꾸지 않는다(원 함수를 그대로 부르고 걸린 시간만 더함). 결과 = 한 줄 JSON 을 _test_timing.jsonl 에 덧붙인다
+//   (VERIFY_ID 있으면 Doc/verify/<ID>/ · 없으면 E2E_RESULTS 또는 Doc/e2e/results/). 팝업으로 새로 뜬 page 의 대기는 세지 않는다(한계).
+const TIMING_RUN = new Date().toISOString();
+// 시간초과로 끝난 locator.waitFor(= '나타나면 쓰고 아니면 넘어가는' 탐침이 시간을 다 쓴 경우)를 위치별로 센다 — 'miss@파일:줄'.
+//   Locator 프로토타입을 워커당 1회 감싼다(원 함수 그대로 호출 · 예외도 그대로 던짐). 현재 테스트의 기록 함수는 CUR_SITE 로 연결.
+//   ⚠ 한계: Promise.race 에서 진 쪽(다른 쪽이 먼저 성공)의 시간초과도 miss 로 잡힌다 — 이 대기는 뒤에서 혼자 끝나 실제 시간을 쓰지 않는다
+//     (실측 13:54 SCP0127 smoke: miss@nscm.ts:174 = activateScreenTab body() 의 SearchArea 쪽 8.0s, 그 테스트의 open 은 1.9s). miss 는 '후보 위치' 로만 읽는다.
+let CUR_SITE: ((k: string, ms: number, stack?: string) => void) | null = null;
+let LOCATOR_WRAPPED = false;
+function wrapLocatorWaitFor(page: import('@playwright/test').Page) {
+  if (LOCATOR_WRAPPED) return; LOCATOR_WRAPPED = true;
+  const proto = Object.getPrototypeOf(page.locator('body')) as { waitFor: (...a: unknown[]) => Promise<void> };
+  const orig = proto.waitFor;
+  proto.waitFor = async function (this: unknown, ...a: unknown[]) {
+    const s = Date.now(); const st = CUR_SITE ? new Error().stack : '';  // 호출 위치는 await 전에 잡는다(Promise.race 안 호출은 await 뒤 스택에 호출자가 없다)
+    try { return await orig.apply(this, a); } catch (e) { if (CUR_SITE) CUR_SITE('miss', Date.now() - s, st); throw e; }
+  };
+}
+function timingProbe(n: Nscm, page: import('@playwright/test').Page) {
+  const t0 = Date.now();
+  const acc: Record<string, number> = { login: 0, open: 0, search: 0, wait: 0 };
+  const cnt: Record<string, number> = { login: 0, open: 0, search: 0, wait: 0 };
+  const add = (k: string, ms: number) => { acc[k] = (acc[k] || 0) + ms; cnt[k] = (cnt[k] || 0) + 1; };
+  // 호출 위치(스펙·lib 파일:줄)별 누적 — 긴 테스트(W4c 등) 안에서 어느 줄의 대기·조회가 시간을 쓰는지(상위 15곳만 기록)
+  const sites: Record<string, number> = {};
+  const site = (k: string, ms: number, stack?: string) => {
+    const ln = (stack || new Error().stack || '').split(/\r?\n/).slice(2).find(l => /\.spec\.ts:|[\\/]lib[\\/][a-z0-9-]+\.ts:/i.test(l) && !/fixtures[\\/]test\.ts/.test(l)) || '';
+    const m = /([A-Za-z0-9_.-]+\.ts):(\d+)/.exec(ln); const key = k + '@' + (m ? m[1] + ':' + m[2] : '?');
+    sites[key] = (sites[key] || 0) + ms;
+  };
+  const wrap = <K extends 'loginAs' | 'openScreen' | 'search'>(name: K, key: string) => {
+    const orig = (n[name] as unknown as (...a: unknown[]) => Promise<unknown>).bind(n);
+    (n as unknown as Record<string, unknown>)[name] = async (...a: unknown[]) => { const s = Date.now(); try { return await orig(...a); } finally { add(key, Date.now() - s); site(key, Date.now() - s); } };
+  };
+  wrap('openScreen', 'open'); wrap('search', 'search');
+  wrapLocatorWaitFor(page); CUR_SITE = (k, ms, st) => { add(k, ms); site(k, ms, st); };
+  const origWait = page.waitForTimeout.bind(page);
+  page.waitForTimeout = async (ms: number) => { const s = Date.now(); try { return await origWait(ms); } finally { add('wait', Date.now() - s); site('wait', Date.now() - s); } };
+  let wrappedLogin = false;
+  return {
+    add: (k: string, ms: number) => { add(k, ms); if (!wrappedLogin) { wrappedLogin = true; wrap('loginAs', 'login'); } },  // 픽스처 첫 로그인 뒤부터 본문 안 재로그인(계정 순회)도 센다
+    flush(testInfo: import('@playwright/test').TestInfo) {
+      CUR_SITE = null;
+      try {
+        const total = Date.now() - t0;
+        // open 안의 대기·search 안의 대기는 wait 에도 잡힌다(겹침) — 나머지(body)는 겹침을 빼지 않은 보수 값이므로 0 미만이면 0
+        const body = Math.max(0, total - acc.login - acc.open - acc.search);
+        const id = (process.env.VERIFY_ID || '').toUpperCase();
+        const dir = id ? path.join(__dirname, '..', '..', '..', 'Doc', 'verify', id) : (process.env.E2E_RESULTS || path.join(__dirname, '..', '..', '..', 'Doc', 'e2e', 'results'));
+        fs.mkdirSync(dir, { recursive: true });
+        const row = { run: TIMING_RUN, at: new Date().toISOString(), file: path.basename(testInfo.file), title: testInfo.title, status: testInfo.status, retry: testInfo.retry,
+          ms: { total, login: acc.login, open: acc.open, search: acc.search, wait: acc.wait, miss: acc.miss || 0, body }, n: cnt,
+          parts: n.tparts, reqs: n.reqs,
+          sites: Object.fromEntries(Object.entries(sites).sort((x, y) => y[1] - x[1]).slice(0, 15)) };
+        fs.appendFileSync(path.join(dir, '_test_timing.jsonl'), JSON.stringify(row) + '\n', 'utf8');
+      } catch { /* 계측 실패는 판정에 영향 없음 */ }
+    },
+  };
+}
+export const test = base.extend<{ nscm: Nscm } & Opts>({
+  account: [process.env.E2E_ACCOUNT || CFG.defaultAccount, { option: true }],
+  division: [process.env.E2E_DIVISION || CFG.defaultDivision, { option: true }],
+  // 2026-10-29: 픽스처 자체 timeout — 로그인 재시도(풀 고갈 60초 대기 × 최대 4회)가 테스트 timeout(180s)을 깎아 본문 전에 끝나지 않게 분리한다(Playwright fixture timeout 옵션)
+  nscm: [async ({ page, account }, use, testInfo) => {
+    // 2026-10-26: 테스트 구간의 BE 로그 DB 오류(시노님·권한·SQL) 검출 — 모든 스펙(smoke·crud·auth·authcrud·verify) 공통
+    const mark = beLogMark();
+    await installRequestMutations(page);  // CheckList 자기검증 요청 변이(CL_MUTATE 지정 시만, 2026-10-28)
+    // VERIFY_NO_SAVE=1 — 저장 계열 call-proc 를 서버로 보내지 않고 가짜 응답으로 돌려준다(요청 자체는 nscm.calls 에 남아 '저장 요청이 나갔다' 는 사실은 측정된다) · 정리 정의 없는 화면 일괄 실행용
+    if (process.env.VERIFY_NO_SAVE || process.env.CL_FAKE_SAVE) await page.route(/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [], message: '[VERIFY_NO_SAVE] 서버 미전송' }) }));
+    // 2026-11-20 D1: 쓰기 요청 감시(시험 종류 기록) · 동시 실행 단계(E2E_PHASE=read)면 쓰기 요청을 서버로 보내지 않음(lib/writeguard.ts)
+    const wg = await installWriteGuard(page);
+    const n = new Nscm(page);
+    const tm = timingProbe(n, page);
+    const tl = Date.now(); await n.loginAs(account); tm.add('login', Date.now() - tl);
+    await use(n);
+    tm.flush(testInfo);
+    recordKind(testInfo.file, testInfo.title, wg);
+    // 2026-11-06 플랜 2-1: 이 테스트가 보낸 모든 non-SAVE call-proc 본문 → Doc/verify/<ID>/calls/<spec>_<test>_<retry>.json (a1_live.json 은 마지막 1건만) · diff_verify.py 입력
+    try {
+      const vid = (process.env.VERIFY_ID || '').toUpperCase();
+      // 2026-11-20 T443(SCP0028 F4 T-fad117f6·T-a9985ef6 · judge f4_calllog T405): 팝업·권한 검사(eg_chain · CL_SELFTEST_BASE)도 화면 호출을 남겨 '다른 시나리오 호출 기록' 판정에 쓴다(EG_CHAIN=1). 자기검증 기준선(checklist_selftest)·변이 실행은 종전대로 남기지 않음
+      if (vid && !(process.env.CL_MUTATE || (process.env.CL_SELFTEST_BASE && process.env.EG_CHAIN !== '1'))) {
+        const recs = n.allCalls.filter(c => !/SAVE|INS|UPD|DEL/i.test(c.btn) && !!c.body).map(c => ({ menu: c.menu, sheet: c.sheet, btn: c.btn, url: c.url.slice(0, 200), postData: c.body, status: c.status, rows: c.rows, dur: c.dur ?? null, at: c.at || '', user: n.curUser, test: testInfo.title }));
+        if (recs.length) {
+          const d = path.join(__dirname, '..', '..', '..', 'Doc', 'verify', vid, 'calls'); fs.mkdirSync(d, { recursive: true });
+          const slug = (testInfo.title || 'test').replace(/[^A-Za-z0-9가-힣._-]+/g, '_').slice(0, 60);
+          fs.writeFileSync(path.join(d, `${path.basename(testInfo.file, '.spec.ts')}_${slug}_${testInfo.retry}.json`), JSON.stringify(recs, null, 1), 'utf8');
+        }
+      }
+    } catch { /* 포착 실패는 판정에 영향 없음 */ }
+    await flushMutationLog(page, testInfo.title);
+    const errs = beLogErrors(mark);
+    if (errs.length || n.serverErrors.length) {
+      testInfo.annotations.push({ type: 'dberr', description: `BE 5xx ${n.serverErrors.length}건${n.serverErrors.length ? ' (' + n.serverErrors.slice(0, 3).map(e => `${e.status} ${e.url.replace(/^.*\/api\//, '')}`).join(' | ') + ')' : ''} · 같은 시간 BE 로그 DB 오류 ${errs.length}건: ${errs.slice(0, 6).map(e => `[${e.cls}] ${e.code} ${e.object || e.msg.slice(0, 60)}`).join(' | ')}` });
+      // 이 화면 요청이 5xx 를 받았을 때만 실패로 귀속한다(같은 BE 를 쓰는 다른 사용자 요청의 오류는 기록만)
+      // 2026-10-29: 같은 BE 를 쓰는 다른 세션의 ORA-00942 가 이 화면 5xx 와 같은 시간대에 찍혀 이 화면의 차단으로 오인(SCP0007 W4c 중단·허위 DB-SYN FAIL)
+      //   → 이 화면이 받은 5xx 응답 본문에 시노님·권한 오류 코드가 있을 때만 중단(fail-fast). 그 밖의 5xx(ORA-06502 등 업무 SQL 오류)는 각 검사가 FAIL 로 기록하므로 중단하지 않는다
+      // CR-076(2026-10-29): 시노님·권한(SYN) 뿐 아니라 DB 객체 없음·컴파일·인자 불일치(OBJ)·메타 누락(META)도 이 화면 응답 본문에 있으면 '환경 차단' 으로 중단한다 — 비정상 테스트 결과를 결함으로 적지 않기 위해
+      const ownAll = n.serverErrors.filter(e => /ORA-00942|ORA-04043|PLS-00201|PLS-00306|PLS-00302|ORA-00904|ORA-01031|ORA-00980|ORA-04063|ORA-06508|ORA-04068|ORA-04061|ORA-06575|NullPointerException|프로시저 정보 없음/.test(e.body || ''));
+      // 2026-10-29(사용자 승인): 콤보·룩업 API(/admin/combo·lookup·lookup-muti — SCMP_APP 세션에서 직접 실행되는 동적 SQL)의 오류는 메인 조회(call-proc, DEFINER 패키지)와 무관하다
+      //   → 메인 조회가 정상이면 중단하지 않고 '부분 차단' 으로 기록(dberr_partial.json) · 그 콤보에 의존하는 검사만 judge 가 ERROR(차단 영향)로. call-proc·메뉴/권한 API 의 오류만 중단(fail-fast)
+      const isSoft = (u: string) => /\/admin\/(combo|lookup|lookup-muti)\b/.test(u);
+      const ownSyn = ownAll.filter(e => !isSoft(e.url));
+      const ownSoft = ownAll.filter(e => isSoft(e.url));
+      if (ownSoft.length) {
+        try {
+          const dir = process.env.E2E_RESULTS || path.join(__dirname, '..', '..', '..', 'Doc', 'e2e', 'results'); fs.mkdirSync(dir, { recursive: true });
+          const fp = path.join(dir, 'dberr_partial.json'); const prev = fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, 'utf8')) : [];
+          const objs = [...new Set(ownSoft.flatMap(e => [...(e.body || '').matchAll(/"SCMP_APP"\."([A-Z0-9_$#]+)"/g)].map(m => m[1])))];
+          prev.push({ test: testInfo.title, at: new Date().toISOString(), urls: [...new Set(ownSoft.map(e => e.url.replace(/^.*\/api\//, '')))], objects: objs, codes: [...new Set(ownSoft.map(e => ((e.body || '').match(/(ORA|PLS)-\d{5}/) || [''])[0]).filter(Boolean))] });
+          fs.writeFileSync(fp, JSON.stringify(prev, null, 1), 'utf8');
+        } catch { /* 기록 실패는 무시 */ }
+        testInfo.annotations.push({ type: 'dberr-soft', description: `콤보/룩업 API 시노님·객체 오류 ${ownSoft.length}건(부분 차단 — 메인 조회와 무관, 콤보 의존 검사만 차단 영향)` });
+      }
+      if (ownSyn.length && errs.length) {
+        const syn = errs.filter(e => (e.cls === 'SYN' || e.cls === 'OBJ' || e.cls === 'META') && ownSyn.some(o => (o.body || '').includes(e.object.replace(/"/g, '')) || !e.object || e.cls === 'META'));
+        const kinds: Record<string, string> = { SYN: '시노님·권한 누락', OBJ: 'DB 객체 오류(없음·컴파일·인자 불일치)', META: '메타(PROC_M/API_M) 오류' };
+        const grp = (['SYN', 'OBJ', 'META'] as const).map(k => [k, syn.filter(e => e.cls === k)] as const).filter(([, l]) => l.length).map(([k, l]) => `${kinds[k]} ${l.length}건(${l.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')})`).join(' / ');
+        throw new Error(`BE DB 오류 — ${syn.length ? `${grp} — tools/Harness/verify/syn_check.py 로 정적 확인` : ''}${syn.length && errs.length > syn.length ? ' · ' : ''}${errs.length > syn.length ? `SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})` : ''}`);
+      }
+    }
+  }, { timeout: 360_000 }],
+});
+export { expect } from '@playwright/test';

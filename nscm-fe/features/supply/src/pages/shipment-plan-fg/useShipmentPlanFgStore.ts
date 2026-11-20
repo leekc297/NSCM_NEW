@@ -146,7 +146,10 @@ export const useShipmentPlanFgStore = createPersistedStoreWithTab<State & Action
             teamId: joinOrAll(c.teamIds), // P_TEAM_ID
             tosite: joinOrAll(c.toSiteIds), // P_TOSITE
             bucket: c.bucketType, // P_BUCKET
-            toPeriod: '', // P_TO_PERIOD — 용도 확인 필요(design 02/03 미상세)
+            // P_TO_PERIOD — Balance/WH_IN_BALANCE 주/월 기말재고 플래그(WEEK_YN/MONTH_YN) UPDATE 범위 상한
+            //   (PKG_SCP0009 body L2458-2480). 빈 값이면 플래그가 한 행도 안 켜져 재고성 Measure 의 W_/M_ 가
+            //   전부 0 으로 나온다. AS-IS(.cs L1460/1551) 가 p_to_period = p_to_yyyymmdd(조회 종료일) 로 넘기는 것과 맞춘다.
+            toPeriod: c.toYyyymmdd,
             chkAll: c.chkAll ? 'Y' : 'N', // P_CHK_ALL
             programId: MENU_ID, // P_PROGRAM_ID
             // P_SHEET_NAME 은 Measure 레지스트리(`SCM_MST_SHEET_MEASURE`) 조회용이다. 컬럼 메타 시트명(ADMIN_SHEET_NAME)을

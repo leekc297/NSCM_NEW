@@ -48,6 +48,9 @@ export const MSG = {
   SAVE_CONFIRM: 'MSG00001', // "Would you like to save it?" (AS-IS MSG00046 저장 확인)
   PERIOD_INVALID: 'MSG01230', // "시작일자가 종료일자보다 늦을 수 없습니다.\n\r리스트 확인 후 입력하십시오." (From>To, 사용자요청 2026-11-03)
   PRIO_MIN: 'MSG01190', // "{0} must be an integer greater than 0." (AS-IS MSG00175 PRIO_RANK<1, {0}=PRIORITY)
+  PRIO_MAX: 'MSG01036', // "Only values less than or equal to {0} are allowed." (PRIO_RANK > Int32 max 저장 차단,
+  //   AS-IS 는 저장 시 Convert.ToInt32(cs:675) 가 2,147,483,647 초과에서 OverflowException 으로 저장 중단
+  //   — 전용 메시지 없이 abort. TO-BE 는 등가 상한 메시지로 명시 차단. {0}=2,147,483,647. SCM_ADM_MSG_M 실측)
   ITEM_NOT_EXIST: 'MSG01366', // "ITEM_ID does not exist." (AS-IS MSG00458 item 유효성)
   SAVE_SUCCESS: 'MSG00672', // "{0} data saved." (AS-IS MSG00004 저장 성공 건수)
   NO_CHANGE: 'MSG00004', // "No changes to save." (저장 대상 0건 — 공통 규약, AS-IS 대응 없음)

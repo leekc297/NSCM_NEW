@@ -1,0 +1,31 @@
+{
+ "rule_id": "L2",
+ "hash": "7897e2a804b3a2b5",
+ "groups": [
+  {
+   "rows": [
+    "V-4559d4da",
+    "V-5c6d670a",
+    "V-5f993c96"
+   ],
+   "why": "All three check the same thing on the Main Grid while text is typed into the search conditions (Model, Owner, etc.): before the search button is pressed, the grid must not redraw or move."
+  },
+  {
+   "rows": [
+    "V-82575ade",
+    "V-8d2007c3"
+   ],
+   "why": "Both check the same grid with the same condition (Customer FCST Upload, Sales Monitoring, Business Plan, Sales Plan) and expect only zero redraw or flicker; they don't check movement, so they are kept apart from the first group."
+  },
+  {
+   "rows": [
+    "V-a051140a"
+   ],
+   "why": "This row also expects text conditions to work regardless of case and covers lowercase input and top-grid scrolling, so it does not match the others and stays on its own."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:22:08",
+ "cost": 0.043855899999999996
+}

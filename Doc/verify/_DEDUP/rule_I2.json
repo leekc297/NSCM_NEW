@@ -1,0 +1,76 @@
+{
+ "rule_id": "I2",
+ "hash": "495426596eaab468",
+ "groups": [
+  {
+   "refs": [
+    "DM-P4",
+    "GAP-428",
+    "SCPSSP-24"
+   ],
+   "target": "화면 팝업·안내 메시지의 MSG/LBL 코드 다국어 등록",
+   "condition": "화면 언어를 KO/EN/CN으로 바꾸고 메시지를 띄우는 동작 실행",
+   "expected": "FE가 쓰는 모든 MSG/LBL 코드(MSG00445, MSG00657·MSG00658·MSG00659 등)가 SCM_ADM_MSG_M에 KO/EN/CN 3개 언어로 등록되어 런타임 언어로 표시된다. EN·CN에 한글이 남거나 '_' 폴백이 노출되는 경우 0",
+   "why": "세 항목 모두 메시지 코드가 언어별로 등록돼 런타임 언어로 표시되는지를 확인하고, 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-P23",
+    "DM-P49"
+   ],
+   "target": "Team 명칭(조회조건과 결과 컬럼)",
+   "condition": "언어=ENG, 전 Div",
+   "expected": "ENG로 로그인하면 Team 조회조건 값과 결과 컬럼의 Team 명이 모두 영문으로 표시되고 언어가 섞이지 않는다",
+   "why": "둘 다 ENG에서 Team 명칭 데이터가 영문으로 보이는지 확인한다. 묶음의 기대 결과에 조회조건과 결과 컬럼을 모두 넣어 빠지는 검사가 없다."
+  },
+  {
+   "refs": [
+    "DM-114"
+   ],
+   "target": "Approval Result 조회조건 콤보 항목",
+   "condition": "",
+   "expected": "Approval Result 콤보가 ALL/Approved/Requesting/Reject 4개 항목을 런타임 언어 하나로 표시한다(언어 혼용 0)",
+   "why": "확인 대상이 콤보 항목 구성과 표기라서 메시지나 데이터 항목과 종류가 다르다."
+  },
+  {
+   "refs": [
+    "GAP-494"
+   ],
+   "target": "FE 안내 문구 하드코딩 여부(Version 팝업 등)",
+   "condition": "화면 언어 EN 전환 후 Version 팝업에서 아무것도 고르지 않고 OK",
+   "expected": "안내 문구(MSG00701/AS-IS MSG00279 '버전은 1개만 선택해 주세요.'/'Please select only one version.')를 고정 문자열로 넣지 않고 MSG 코드로 다국어 조회해 사용자 언어로 표시한다",
+   "why": "코드 등록 누락이 아니라 고정 문자열을 쓴 문제를 확인하는 항목이라 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-1"
+   ],
+   "target": "수정사항 없음 알림 메시지",
+   "condition": "변경 없이 저장",
+   "expected": "수정사항이 없다는 알림이 사용자 언어로 표시된다(KO 사용자에게 KO 메시지)",
+   "why": "특정 저장 시나리오의 메시지만 보는 항목이라, 확신 없이 묶지 않고 따로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-8"
+   ],
+   "target": "Lot Size<Increment 검증 메시지",
+   "condition": "Lot Size 값을 Increment보다 작게 입력하고 저장",
+   "expected": "Lot Size<Increment 검증 메시지가 사용자 언어로 표시된다(KO 사용자에게 KO 메시지)",
+   "why": "Lot Size/Increment 입력 검증이라는 특정 동작에서만 나오는 메시지라서 따로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-5"
+   ],
+   "target": "조회 결과 총/건 건수 표기",
+   "condition": "언어=KO/EN/CN 각각 조회",
+   "expected": "조회 결과 건수 표기(총 N건)가 KO/EN/CN 언어 리소스로 런타임 언어에 맞게 표시된다",
+   "why": "확인 대상이 결과 건수 라벨이라 다른 항목과 종류가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:01",
+ "cost": 0.0822492
+}

@@ -1,0 +1,61 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-19T11:37:45.105Z",
+ "producer": "check.js",
+ "id": "SCP0028",
+ "final": false,
+ "page": "nscm-fe/features/shipping/src/pages/shipment-lot-size",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 3,
+  "warn": 43
+ },
+ "issues": [
+  {
+   "id": "F06",
+   "class": "BLOCK",
+   "msg": "자체 행상태 필드 금지 — CRUD_TYPE(GridAction/EditTracker) 전용",
+   "where": "components/modals/ShipmentLotSizeBatchModal.tsx:142",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js F06"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "F06",
+   "class": "BLOCK",
+   "msg": "자체 행상태 필드 금지 — CRUD_TYPE(GridAction/EditTracker) 전용",
+   "where": "components/modals/ShipmentLotSizeBatchModal.tsx:173",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js F06"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "Validation 마커 누락 3/3: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined)",
+   "where": "hooks/useShipmentLotSizeValidation.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

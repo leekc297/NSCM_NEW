@@ -1,0 +1,134 @@
+{
+  "id": "20261120005403_INC",
+  "at": "2026-11-20T00:54:03+09:00",
+  "ms": 1795103643980,
+  "source": "incident",
+  "status": "applied",
+  "sig": "vs code 종료 dispose 로 멈춘 실행도 감시기에 중지로 알려 rn rn rn 사건을 만들지 않는다",
+  "title": "VS Code 종료(dispose)로 멈춘 실행도 감시기에 중지로 알려 R1, R2, R11 사건을 만들지 않는다",
+  "evidence": "job.json J20261120_003352 note 'VS Code 종료로 중단됨' · job-runner.js:219 dispose() 에 user.stop 없음 · orch-watch.js:125 userStopped, :132, :139, :143 · events.jsonl 285~294행 두 화면 00:47:34 동시 exit 1 · 사건 20261120_004734_R1_SSP0005, 20261120_004734_R1_SCP0005, 20261120_004820_R2_SSP0005, 20261120_004820_R2_SCP0005_2 · 개선안 20261120003909_INC 는 stop() 만 다룸",
+  "targets": [
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "job-runner.js dispose(): 변경 전 runner 마다 r.stop() 만 호출함. 변경 후 r.stop() 앞에서 실행 중 화면마다 evt('user.stop', { wb: `${h.job.id}:${sid}`, screen: sid, job: h.job.id, why: 'vscode.dispose', ms: Date.now() }) 를 남김(20261120003909_INC 의 stop() 변경과 같은 함수 사용). orch-watch.js step.end, proc.end: 변경 전 userStopped 일 때 return 만 함. 변경 후 같음, 다만 step.end 의 why 가 중지 뒤 로그 끝 [FAIL] 줄일 때 사건을 만들지 않으므로 R2 반복 횟수에도 들어가지 않음. t_orch_watch.js 에 user.stop(why vscode.dispose) 뒤 두 화면 step.end FAIL, chain.end 를 보내 R1, R2, R11 0건을 기대하는 시험 추가",
+  "verify": "node --check tools/VibeManager/job-runner.js tools/VibeManager/orch-watch.js · node tools/VibeManager/test/t_orch_watch.js · node tools/VibeManager/test/run_all.js",
+  "rollback": "job-runner.js, orch-watch.js, t_orch_watch.js 를 반영 전 VMO 백업으로 되돌림",
+  "incident": "20261120_004820_R2_SSP0005",
+  "screen": "SSP0005",
+  "history": [
+    {
+      "at": "2026-11-20T06:17:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T06:19:34+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 28/28개 파일 통과(PASS 353, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0617"
+    },
+    {
+      "at": "2026-11-20T06:19:46+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T06:24:41+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 22개 파일 통과, 시험 28/28개 파일 통과(PASS 354, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T06:24:41+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node --check job-runner.js, orch-watch.js = CHECK_OK · node test/t_orch_watch.js = PASS 28, ALL PASS, 종료코드 0, 추가 시험 'VS Code 종료(dispose) 뒤 두 화면 FAIL = R1, R2, R11 0건 · 반복 이력 0건' PASS(2026-11-20 06:20:36) · node test/run_all.js = ALL OK 파일 28/28, PASS 354, FAIL 0, 110.4초, 건너뜀 t_orch_agent_real.js, t_ · 변경 53개 파일 · 대상 목록 밖 변경 50개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_snap__snap_조회조건_팝업_정적_aria_0.json, Doc/verify/SCP0005/calls/_snap__snap_화면샷_패널_헤더_띠_1920_1366_0.json, Doc/verify/SCP0005/calls/_trace_A10_조회_전_그리드_K4_버튼_구성_X-REOPEN_닫기_재오픈_0.json, Doc/verify/SCP0005/calls/_trace_C1_C4_상위_조회조건_변경_하위_후보_재조회_선택_초기화_그리드_상태_0.json, Doc/verify/SCP0005/calls/_trace_G6_조회조건_초기값_AS-IS_로드_문장_0.json",
+      "log": ".vibe\\logs\\2026-11-20T06-19-46_claude_orch.log",
+      "sec": 175,
+      "costUsd": 0.7773847,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_snap__snap_조회조건_팝업_정적_aria_0.json",
+        "Doc/verify/SCP0005/calls/_snap__snap_화면샷_패널_헤더_띠_1920_1366_0.json",
+        "Doc/verify/SCP0005/calls/_trace_A10_조회_전_그리드_K4_버튼_구성_X-REOPEN_닫기_재오픈_0.json",
+        "Doc/verify/SCP0005/calls/_trace_C1_C4_상위_조회조건_변경_하위_후보_재조회_선택_초기화_그리드_상태_0.json",
+        "Doc/verify/SCP0005/calls/_trace_G6_조회조건_초기값_AS-IS_로드_문장_0.json",
+        "Doc/verify/SCP0005/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json",
+        "Doc/verify/SCP0005/calls/_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json",
+        "Doc/verify/SCP0005/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json",
+        "Doc/verify/SCP0005/dyn_facts.json",
+        "Doc/verify/SCP0005/e2e/shots/index_trace.json",
+        "Doc/verify/SCP0005/e2e/shots/trace_W4_E4_업무_검증_메시지_AS_IS_저장_차단.png",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/snap/_review.md",
+        "Doc/verify/SCP0005/snap/results.json",
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/calls/_trace_D3_조건부_잠금_AS-IS_조건_만족_계정_Division__0.json",
+        "Doc/verify/SCP0028/calls/_trace_H2_조건부_배경색_AS-IS_행_조건_color_rules__0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4c_정밀_판정_판정필요_해소_0.json",
+        "Doc/verify/SCP0028/calls/_trace_W4d_잔여_판정필요_실측_0.json",
+        "Doc/verify/SCP0028/calls/_verify_그리드_컬럼_프로브_표시_A5_기존행_신규행_편집_D1_입력_후_재편집_콤보_후보_B1_B2_숫자_E1_날짜_0.json",
+        "Doc/verify/SCP0028/dyn_facts.json",
+        "Doc/verify/SCP0028/e2e/shots/index_trace.json",
+        "Doc/verify/SCP0028/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0028/e2e/shots/trace_W4c_정밀_판정_판정필요_해소.png",
+        "Doc/verify/SCP0028/e2e/shots/verify_그리드_컬럼_프로브_표시_A5_기존행_신규행_편집_D1_입력_후_재편집_콤보_후보_B1_B2_숫자_E1_날짜.png",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SSP0005/_test_timing.jsonl",
+        "Doc/verify/SSP0005/calls/_trace_A6_조회_결과_행_순서_AS-IS_ORDER_BY_0.json",
+        "Doc/verify/SSP0005/calls/_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json",
+        "Doc/verify/SSP0005/dyn_facts.json",
+        "Doc/verify/SSP0005/e2e/shots/index_trace.json",
+        "Doc/verify/SSP0005/e2e/shots/trace_A6_조회_결과_행_순서_AS_IS_ORDER_BY.png",
+        "Doc/verify/SSP0005/e2e_results.json",
+        "Doc/verify/SSP0014/_test_timing.jsonl",
+        "Doc/verify/SSP0014/calls/_trace_A6_조회_결과_행_순서_AS-IS_ORDER_BY_0.json",
+        "Doc/verify/SSP0014/calls/_trace_D3_조건부_잠금_AS-IS_조건_만족_계정_Division__0.json",
+        "Doc/verify/SSP0014/calls/_trace_D6_Insert_위치_상태_AS-IS_0.json",
+        "Doc/verify/SSP0014/calls/_trace_G4_조회조건_팝업_버튼_BTN_AS-IS_버튼_TO-BE_칸_버튼_0.json",
+        "Doc/verify/SSP0014/calls/_trace_W4_M4_팝업_선택값_반영_AS-IS_0.json",
+        "Doc/verify/SSP0014/calls/_trace_W4b_H3_F5_F3_M3_J1_H4_0.json",
+        "Doc/verify/SSP0014/calls/_trace_W4c_정밀_판정_판정필요_해소_0.json",
+        "Doc/verify/SSP0014/calls/_trace_W4d_잔여_판정필요_실측_0.json",
+        "Doc/verify/SSP0014/dyn_facts.json",
+        "Doc/verify/SSP0014/e2e_results.json",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/touched_rows.json",
+        "Doc/verify/SSP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SSP0014/e2e_test_kind.jsonl"
+      ]
+    }
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795123051397,
+  "autoFp": "65838782a9",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 22개 파일 통과, 시험 28/28개 파일 통과(PASS 354, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0617",
+  "needsReload": true,
+  "appliedMs": 1795123481919,
+  "synced": [
+    "job-runner.js",
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_watch.js"
+    ],
+    "verify_result": "node --check job-runner.js, orch-watch.js = CHECK_OK · node test/t_orch_watch.js = PASS 28, ALL PASS, 종료코드 0, 추가 시험 'VS Code 종료(dispose) 뒤 두 화면 FAIL = R1, R2, R11 0건 · 반복 이력 0건' PASS(2026-11-20 06:20:36) · node test/run_all.js = ALL OK 파일 28/28, PASS 354, FAIL 0, 110.4초, 건너뜀 t_orch_agent_real.js, t_orch_agent_diag.js(2026-11-20 06:20:39)",
+    "note": "job-runner.js dispose() 는 반영 전에 user.stop(by 'VS Code 종료')을 이미 남기고 있었음. job, why 'vscode.dispose', ms 를 더해 stop() 과 같은 틀로 맞춤. orch-watch.js 는 판정 로직 변경 없음, 설명 주석 2줄만 추가함. userStopped 이면 failure() 를 부르지 않아 R1, R2 반복 이력에 안 들어가는 것을 추가 시험의 반복 이력 0건으로 확인함. .bak, 설치 폴더, CHANGELOG.md 는 건드리지 않음. 작업 모드, hook 의 차단 없음."
+  },
+  "snap": "prop_20261120005403_INC"
+}

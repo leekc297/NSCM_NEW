@@ -1,0 +1,18 @@
+{
+ "rule_id": "A4",
+ "hash": "c638b2642d232006",
+ "groups": [
+  {
+   "refs": [
+    "DM-8"
+   ],
+   "target": "ERP EDI Master Validation 2·3번 Sheet",
+   "condition": "재조회",
+   "expected": "재조회 시 2·3번 Sheet 모두 초기화",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:39:09"
+}

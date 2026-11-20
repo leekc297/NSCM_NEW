@@ -1,0 +1,102 @@
+﻿check,layer,subject,impl,runner,method,checker,how
+A1,GEN,SP,Y,static,E2E+DB,tools/DbConn/golden.py(AS-IS SP ↔ TO-BE PROC 같은 파라미터 동시 실행 — 행수·키 집합) → Doc/golden/_summary.csv,같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교
+A5,DESIGN,ELEM,Y,smoke|verify|trace,E2E+META,_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별),표시 컬럼 구성 = 메타·AS-IS(Div·개인화·필수)
+A8,GEN,SCREEN,Y,smoke,E2E,smoke dynamic,기간 동적 컬럼 = Period 전 구간
+A10,GEN,SCREEN,Y,trace,E2E,_trace.spec(@trace) 조회 전 그리드,조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS
+B1,COMBO,ELEM,Y,verify,E2E,_verify.spec(@verify),콤보 후보 빈 행 없음
+B2,COMBO,ELEM,Y,verify,E2E,_verify.spec(@verify),콤보 후보 중복 없음
+B3,COMBO,ELEM,Y,verify,E2E,combo_oracle order_check — AS-IS ORDER BY 키(사내 값 재검사)·CODE 정렬·고정 목록 순서 대조(변이 B3_MUTATE),콤보 후보 정렬 = AS-IS
+B4,COMBO,ELEM,Y,verify,E2E+DB,combo_oracle.py(W1),콤보 후보 집합 = AS-IS 원천+필터(같은 데이터에 AS-IS 논리 적용)
+B6,COMBO,ELEM,Y,verify,STATIC+E2E,_verify.spec(@verify),ALL 옵션·다중선택 사양
+C1,CASCADE,ELEM,Y,trace,E2E,_trace.spec(@trace) 상위 변경→하위 후보,상위 조회조건 변경 → 하위 후보 재조회·선택 초기화
+C2,CASCADE,ELEM,Y,verify|trace,E2E,_verify.spec(@verify) · _trace.spec(@trace) W5,그리드 셀 cascade 후보
+C3,CASCADE,ELEM,Y,verify|trace,E2E,_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천),연쇄 자동 채움
+C4,CASCADE,ELEM,Y,trace,E2E,_trace.spec(@trace) 조건 변경→그리드 상태,조회조건 변경 시 그리드 상태(초기화·유지) = AS-IS
+C6,CASCADE,ELEM,Y,verify|trace,E2E,_verify.spec(@verify) · _trace.spec(@trace) W5,무변경 편집 종료 시 연쇄 미발동
+D1,EDIT,ELEM,Y,verify|trace,E2E+META,_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect),컬럼 편집 가능 여부(신규행·기존행)
+D3,EDIT,ELEM,Y,trace,E2E,_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산,행 값 기반 조건부 잠금
+D4,EDIT,ELEM,Y,verify|trace,E2E,_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴),신규행 기본값·자동세팅·Insert 전제
+D5,EDIT,ELEM,Y,verify|trace,E2E+META,_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장),셀 에디터 유형
+D6,EDIT,SCREEN,Y,trace,E2E,_trace.spec(@trace) Insert 위치,Insert 위치·상태 유지
+E1,EDIT,ELEM,Y,verify|trace,E2E,_verify.spec(@verify) · _trace.spec(@trace) W5(cell_rules),숫자 소수자리·정수·부호·범위
+E2,EDIT,ELEM,Y,verify,E2E,_verify.spec(@verify),날짜 형식·유효성
+E3,EDIT,ELEM,Y,verify|trace,E2E,"_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)",필수 입력 검증
+E4,EDIT,ELEM,Y,trace,E2E,_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정,업무 검증·메시지 발생 조건(조건부 필수·중복·관계)
+E5,EDIT,ELEM,Y,verify,E2E,_verify.spec(@verify),콤보 셀 후보 외 값 차단
+F1,CRUD,SCREEN,Y,verify|crud,E2E+DB,_verify.spec(@verify) 실저장·crud spec,저장 후 DB 반영(마커 행)
+F2,CRUD,SCREEN,Y,verify,E2E,_verify.spec(@verify),1회 저장(변경 감지)
+F3,CRUD,SCREEN,Y,trace,E2E,_trace.spec(@trace) W4b 붙여넣기 — Ctrl+C/Ctrl+V 로 셀 값 복사 후 값·연쇄,붙여넣기 경로 → 값·검증·연쇄·저장
+F4,DB,SP,Y,smoke|verify|trace,E2E,smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP),저장·조회 SQL 오류 0(BE 로그 DB 오류 0)
+F5,CRUD,SCREEN,Y,trace,E2E,_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시,CRUD Status 표시 정합
+F6,CRUD,SCREEN,Y,verify,E2E+DB,_verify.spec(@verify),저장 후 값 보존
+G1,GEN,ELEM,Y,smoke|verify,E2E,smoke 조회조건 동작·_verify,조회조건 값 변경 → 조회 인자·결과 반영
+G3,COMMON,SCREEN,Y,smoke,E2E,smoke 공통 기능(Condition·Reset),조회조건 저장·복원
+G4,DESIGN,ELEM,Y,smoke|verify,STATIC+E2E,smoke 화면 열림(labels)·_verify,조회조건 표시·라벨·활성
+G5,POPUP,ELEM,Y,verify,STATIC+E2E,popup_args_check.py · _verify.spec(@verify),팝업 조건 연동(인자)
+G6,GEN,ELEM,Y,trace,E2E,_trace.spec(@trace) 초기값,조회조건 초기 기본값 = AS-IS Form_Load
+H2,DESIGN,ELEM,Y,verify|trace,E2E,_verify.spec(@verify) · _trace.spec(@trace) W5,배경·글자색 규칙
+H3,DESIGN,ELEM,Y,trace,E2E,_trace.spec(@trace) W4b 셀 병합 — 컬럼 allowMerging 실측 ↔ AS-IS SmartColMerge 대상,셀 병합 = AS-IS
+H4,DESIGN,SCREEN,Y,trace,E2E,_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타),레이아웃·스크롤·크기
+H5,DESIGN,ELEM,Y,verify|trace,STATIC,_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective),라벨 명칭
+H6,POPUP,ELEM,Y,smoke|verify,STATIC+E2E,_verify.spec(@verify)·smoke popup,팝업 표준·열림
+H7,COMMON,SCREEN,Y,smoke,E2E,smoke 공통 기능(Excel),Excel 다운로드
+H10,DESIGN,SCREEN,Y,static,STATIC+E2E,mapping_trace 정적(FE 소스 메시지 API),메시지 표준(방식·코드 단일화)
+I1,DESIGN,SCREEN,Y,meta,META,judge(DB 조회)·하네스 I18N1,LBL/MSG 언어별 등록
+I2,DESIGN,SCREEN,Y,smoke|verify,E2E,smoke i18n,런타임 언어 일치('_' 노출 0)
+J2,AUTH,SCREEN,Y,auth,E2E+META,auth·authcrud spec,권한별 버튼·기능
+K1,COMMON,SCREEN,Y,smoke,E2E,smoke 공통 기능(Sort·Filter),Sort·Filter
+K2,COMMON,SCREEN,Y,smoke,E2E,smoke 공통 기능(Columns),컬럼·Measure 셋팅
+K4,COMMON,SCREEN,Y,trace,E2E,_trace.spec(@trace) 버튼 구성,버튼 구성·조건별 노출
+K-SA,COMMON,SCREEN,Y,smoke,E2E,smoke 공통 기능(Search Area),조회영역 토글
+M3,POPUP,ELEM,Y,trace,E2E+DB,_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류 · 셀 더블클릭 팝업) · popup_data_check.py(개인화 팝업 목록 = TO-BE 메타 PROC 를 Division 값별 실행 · 2026-10-30),팝업 내부 기능(조회·CRUD) · 팝업 목록 행수(조회조건 변경 후 포함)
+M4,POPUP,ELEM,Y,trace,E2E,_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움,팝업 선택값 반영
+SC1,DESIGN,SCREEN,Y,static|smoke,STATIC+E2E,check.js SC1·smoke 기준표 순서,조회조건 순서 = 기준표
+DB-SYN,DB,SP,Y,static,STATIC+E2E,syn_check.py·fixture dberr,BE 계정 시노님·권한·대상 객체
+G03-WIRE,GEN,SCREEN,Y,static,STATIC,check.js G03,AS-IS 이벤트가 TO-BE 대조표·핸들러로 전부 연결
+X-REASON,DESIGN,ROW,Y,static,STATIC,mapping_trace,제외·해당없음 사유·근거(룰·지시·원문·이동 위치) 존재 — 근거 없으면 사람 확인
+X-NOTIMPL,GEN,ROW,Y,static,STATIC,mapping_trace,대조표 상태 미구현 = 구현 대상(FAIL)
+X-REOPEN,GEN,SCREEN,Y,trace,E2E,_trace.spec(@trace) 닫기·재오픈,화면 닫기·재오픈 시 오류·잔존 상태 없음
+X-ROW,GEN,ENTRY,Y,static,E2E,mapping_trace 집계(진입점 문장의 모든 검사) · 검사 대상 동작 없는 진입점 = NA,대조표 행이 서술한 동작을 화면에서 재현
+A2,GEN,SCREEN,Y,verify,E2E+META,_verify.spec(@verify),코드 컬럼 표시값=Name — 그리드·Excel 셀 표시값이 코드가 아닌 Name 인지(dataMap 보유 컬럼 전수)
+A3,GEN,ELEM,Y,trace,E2E,_trace.spec(@trace) W4d 합계행 유무·값,합계·소계 행 값 — Sum 행 존재·공란 아님·구성 행 합과 일치
+A4,GEN,SCREEN,Y,trace,E2E,_trace.spec(@trace) W4d 재조회 전 시트 초기화(Division 전환 조회),재조회 시 전 시트 초기화 — 모든 결과 시트가 재조회 직전 비워지고 다시 채워지는지
+B5,COMBO,ELEM,Y,static,META+E2E,combo_oracle.py B4(필터 원천: combo_src filters DIVISION_ID/GROUP) — 허용 목록 = AS-IS 원천 집합(필터 적용) ↔ TO-BE 후보,Div·권한·조건별 허용 항목만 후보에 존재(B4 필터 원천 대조로 판정)
+D2,EDIT,ELEM,Y,verify,E2E,_verify.spec(@verify) D1 <DYNAMIC:…> COND(행 값 COL(MEASURE)/COL(SEQ_FLAG) × 동적 기간 컬럼 COL(SELF)) — facts_lockrules v2 규칙,Measure 행×기간 열 셀 편집 가능 매트릭스 = AS-IS 잠금 규칙(동적 컬럼 패밀리 COND)
+G2,GEN,ELEM,Y,verify,E2E,_verify.spec(@verify),ALL 재선택·다중선택·콤마 키인 — ALL→Y→ALL 재조회 정상 · 다중 선택/콤마 다중 입력 결과 반영
+H1,DESIGN,ELEM,Y,static,STATIC+META,tools/Harness/verify/align_check.py(AS-IS grid_columns_asis halign ↔ TO-BE SHEET_COLUMNS.HORIZONTAL_ALIGN_CODE · 화면 FE align 지정 우선),정렬(가로 정렬) — 컬럼 정렬 = AS-IS
+I3,DESIGN,SCREEN,Y,trace,E2E,_trace.spec(@trace) W4d 명칭 컬럼 언어,데이터 다국어 컬럼 — Team 등 명칭 데이터가 사용자 언어로 표시
+J1,AUTH,SCREEN,Y,trace,E2E+META,_trace.spec(@trace) W4b Division 후보 실측 ↔ 계정 권한 Division(user_group) — 기대 미확정 시 판정필요,권한 Division 노출 — 계정별 Division 후보·기본값 = 권한(단일 권한 자동 선택)
+J3,AUTH,ELEM,Y,verify,E2E+META,_verify.spec(@verify) J3 — D1 RULES 에 GROUP 이 있는 컬럼을 admin 아닌 계정(plan.accounts)으로 재로그인해 같은 규칙으로 평가·측정,권한별 편집 구간 — 다른 권한 그룹 계정에서도 AS-IS 기대와 편집 가능 여부 일치
+K3,COMMON,SCREEN,Y,verify,E2E,_verify.spec(@verify) 그리드 조작 — 비병합 열 Ctrl+클릭·헤더 클릭·Ctrl+C/우클릭 Copy·Hide Column·F5(hitTest 좌표·변이 K3_MUTATE),그리드 조작(Ctrl 다중·Copy·Hide·단축키) — Ctrl 다중선택·Copy→Excel·Hide Column·단축키 동작
+L1,GEN,SCREEN,Y,trace,E2E,_trace.spec(@trace) W4d 조회 응답시간,성능 — 조회·저장·삭제·키 이동 응답이 기준 이내
+M1,POPUP,ELEM,Y,trace,E2E+DB,_trace.spec(@trace) W4d Excel Upload 유무·헤더 검증,Excel Upload·Form — 양식 다운로드=AS-IS · 검증 메시지 사용자 문구 · 전 오류 표시 · DB 반영
+M2,POPUP,ELEM,Y,verify,E2E,_verify.spec(@verify) M2 — plan.buttons kind=subtitle-custom 버튼 클릭 → 5초 안 요청/팝업/다운로드/메시지 발생(무반응 FAIL),특수 기능 버튼 — 클릭 반응(요청·팝업·메시지) 실측 · 결과 데이터 동일성은 M3/F1 에서
+N1,GEN,ELEM,Y,trace,META,_trace.spec(@trace) W4d 공란 표기 혼재(그리드 전수),기준 데이터 정합 — 공란 표기 혼재('-'·NULL·Blank) 0 · 미사용 코드/메저 정리 · 마스터 누락 0
+A6,GEN,SP,Y,static|trace,STATIC+E2E,"sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측",결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 키 순서 동일 · 조회 결과가 그 키 순으로 정렬돼 있음
+A7,GEN,ELEM,Y,static,E2E,tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge A7,컬럼별 결과 값 일치(공란 컬럼) — 키가 같은 행의 컬럼 값 비교 · AS-IS 에 값 있는데 공란인 컬럼 0
+A9,GEN,ELEM,Y,verify,E2E,_verify.spec(@verify) A9 — 동적 컬럼 패밀리(dyn_columns) 헤더: 바인딩 수 = 헤더 수 · 헤더 비어있지 않음·중복 0 · 원천(CalendarMonth/Week) 형식(YYYY.MM·YYYY-MM·Wnn),조건값 기반 동적 헤더 — 헤더 존재·고유·형식
+B7,COMBO,ELEM,Y,verify,STATIC+E2E,b7_check.py(a 저장 대상∩콤보 원천·useInvalidateCombos) + _verify.spec(@verify) B7(b SPA 재진입·조회 시 admin/combo 재조회 · 변이 B7_MUTATE),기준 데이터 변경 후 후보 갱신 — 마스터 신규 저장·변경 후 조회조건·셀 콤보에 즉시 반영(선택값 유지)
+B8,COMBO,ELEM,Y,trace,META+E2E,_trace.spec(@trace) W4d Team·Sales Site 조건 원천,원천 표준(Team=SSPM DEPT_ID 등) — Team·명칭 원천이 표준 테이블(SSPM SITE_ITEM.DEPT_ID 등)
+C5,CASCADE,ELEM,Y,verify,E2E,_verify.spec(@verify) K6 확장 — 상단 행 선택/더블클릭 뒤 하단 조회 요청 본문에 상단 행 키 값 포함,그리드 간 연동(마스터-디테일) — 하단 조회 인자 = 상단 선택 행
+E6,EDIT,ELEM,Y,verify,E2E,_verify.spec(@verify) 셀 키 입력 — 선택 셀 CDP IME 조합(대조군 편집기 열림)·콤보 입력 중 자동완성(변이 E6_MUTATE),셀 키 입력 정합 — IME 한글 첫 글자·자동완성 정상
+F7,CRUD,ELEM,Y,static,E2E+DB,tools/Harness/verify/save_audit.py(CRUD 실제 저장 정리 백업 ↔ AS-IS 저장 SP MERGE/INSERT 대상),저장 연계·타 화면 동기화 — 저장 후 연계 테이블·연관 화면 데이터가 AS-IS 와 같게 갱신
+F8,CRUD,ELEM,Y,static,E2E+DB,tools/Harness/verify/save_audit.py(정리 백업 루트 행 감사 컬럼 = 저장 계정·시각),파생·감사 필드 갱신 — 재요청·수정 시 파생 필드 초기화 · Last Update By/Date 갱신
+G7,GEN,ELEM,Y,verify,E2E+DB,combo_oracle.py(W1) G7 — AS-IS 컨트롤 표시 열(CControl.setListBox·UsrCheckedList2 row[1]) vs TO-BE 후보 문구,조회조건 표시값 형식 — 조회조건 선택값이 Name·형식 일관(코드/설명 혼용 0)
+G8,GEN,ELEM,Y,verify,E2E,_verify.spec(@verify) 조회조건 텍스트 — 대소문자(G8)·콤마 다중(G9),텍스트 조건 대소문자 무시 — 대소문자 달라도 같은 결과(팝업 조회조건 포함)
+H8,DESIGN,ELEM,Y,verify,E2E,_trace.spec(@trace) H8 — 숫자 천단위·소수 + 날짜 yyyy-MM-dd/일시 yyyy-MM-dd HH:mm:ss 표시(SpreadInfo.cs:4105-4135 · 변이 H8_MUTATE),표시 포맷(숫자 천단위·날짜시간) — 숫자 천단위·소수·날짜/시간 표시 = AS-IS
+H9,DESIGN,ELEM,Y,trace,META+E2E,_trace.spec(@trace) W4c 컬럼 폭 = META COLUMN_WIDTH,컬럼 기본 폭 — 개인화 없을 때 컬럼 폭 = 기준
+I4,DESIGN,ELEM,Y,verify,META,judge meta_i4 — 화면 t() 코드의 같은 유형·KO·EN 문구 다른 MSG_ID(SCM_ADM_MSG_M) · 앞선 코드 두고 새 채번=FAIL,라벨·메시지 중복 채번 금지 — 같은 문구 다른 코드 중복 0
+J4,AUTH,ELEM,Y,trace,E2E+META,_trace.spec(@trace) W4d 메뉴 노출·라우트,메뉴·라우트 노출 = 권한·화면 존재 — 권한 메뉴만 노출 · 노출 메뉴 404 0 · 무권한 기본 화면
+K5,COMMON,ELEM,Y,verify,E2E,_verify.spec(@verify) K5 — 표준 셀 타입 밖 AS-IS 셀 타입(cell_rules) 컬럼에 표본 입력 → 값 확정·재표시 보존(ledger COLUMN K5 · 2026-10-30),특수 편집기 동작(리치텍스트 등) — 서식·입력 동작 정상
+L2,GEN,ELEM,Y,trace,E2E,_trace.spec(@trace) W4d 입력 중 그리드 재렌더 0,입력 중 불필요 재렌더·깜박임 0 — 조회조건·셀 입력 중 그리드 이동·깜박임 0
+X-LOC,GEN,ROW,Y,verify,STATIC,mapping_trace 정적(구현 위치 실존),대조표 상태 구현 행의 구현 위치(파일:라인)가 TO-BE 소스에 실존
+MS1,GEN,MSG,Y,static,STATIC,judge.py MS1(impl_engine.msg_mapper 문구 매핑 · FE 페이지 폴더(주석 제외)·TO-BE PKG(sort_check tobe_pkg_msgs.csv) 사용 ID · E4 실측 알림 문구),AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 사용 여부
+G9,GEN,ELEM,Y,verify,E2E,_verify.spec(@verify) 조회조건 텍스트 — 대소문자(G8)·콤마 다중(G9),텍스트 조건 콤마 다중값 입력 — 두 값 모두 조회·결과가 그 값들만(팝업 포함)
+E7,EDIT,ELEM,Y,verify,E2E,_verify.spec(@verify) 팝업 입력 컬럼 Key-in 검증(E7),팝업 셀 직접 입력 잘못된 값 → 되돌림/검증 메시지(저장 차단)
+F9,CRUD,ELEM,Y,verify,E2E+DB,_verify.spec(@verify) F9 — Bucket=Weekly 편집 가능 주 셀 +7 저장 → Daily 재조회 같은 행(rowKey) 그 주 일자 합계=입력 · 비0 일자 1개 = DEFAULT_BUCKET_DAY(tools/DbConn/bucket_day.py · 없으면 마지막 날) · Weekly 원복 저장,주/월 입력 수량 일자 배분 = AS-IS 규칙
+F10,DB,SP,Y,static,STATIC+DB,f10_check.py — 저장 PROC(PROC_M SAVE/INS/UPD/DEL)+1단계 하위 호출 본문(ALL_SOURCE) COMMIT·TRUNCATE·DDL·DBMS_STATS·AUTONOMOUS 0건,저장 SP 트랜잭션 원자성
+H11,DESIGN,SCREEN,Y,verify,E2E,_verify.spec(@verify) H11 — 조회 클릭 후 응답 전까지 progressbar/스피너 노출 · 응답 후 사라짐,서버 호출 중 로딩 표시
+H12,DESIGN,ELEM,Y,verify,META+E2E,_verify.spec(@verify) H12 — probe.frozenColumns ↔ SHEET_COLUMNS FIXED_FLAG=Y 컬럼 집합,좌측 고정 컬럼 = META FIXED_FLAG
+G10,GEN,ELEM,Y,verify,E2E,_verify.spec(@verify) G10 — 팝업 연결 텍스트 조회조건 입력칸에서 Enter → dialog 열림,팝업 연결 텍스트 조회조건 Enter → 팝업 열기
+H13,DESIGN,ELEM,Y,verify,E2E,_verify.spec(@verify) H13 — 음수 셀 글자색(probe.cellStyle · 정적 NUMBER 컬럼 + <DYNAMIC:> 패밀리),음수 글자색 빨강(NegativeRed 프레임워크 기본)
+K6,COMMON,SCREEN,Y,verify,E2E,_verify.spec(@verify) K6 — 상단 행 클릭/더블클릭 → 하단 조회 중 상단 그리드 재조회 요청·재렌더(행 수·DOM) 변화 없음(RULE_SCREEN K6 · 2026-10-29),상단·하단 그리드 연동 시 상단 안정(깜빡임 없음)

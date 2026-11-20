@@ -7,6 +7,7 @@ import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 import { ALL, COMBO, LBL, LOOKUP } from '../shipment-change-request-confirm.constants';
 import { useShipmentChangeRequestConfirmStore } from '../useShipmentChangeRequestConfirmStore';
@@ -166,6 +167,12 @@ export const ShipmentChangeRequestConfirmForm = ({ onSearch, onRequestorSearch, 
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.requestId,
+                      next => set({ requestId: next }),
+                    ),
+                  }}
                   onChange={e => set({ requestId: e.target.value })}
                 />
               )}
@@ -191,6 +198,12 @@ export const ShipmentChangeRequestConfirmForm = ({ onSearch, onRequestorSearch, 
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onItemSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}

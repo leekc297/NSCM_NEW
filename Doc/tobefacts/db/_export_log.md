@@ -2686,3 +2686,477 @@
 - btn_auth.csv 14823행
 - user_group_user.csv 13089행
 - user_group_menu.csv 2214행
+
+## 2026-11-19 20:24:00
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:24:00
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:25:58
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:26:07
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:26:44
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:26:55
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:28:03
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:28:29
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:31:40
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:32:10
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:33:08
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-19 20:34:28
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:34:20
+- proc_meta.csv 1530행
+- proc_params.csv 8719행
+- sheet_columns.csv 17273행
+- sheet_measures.csv 1763행
+- combo_sql.csv 747행
+- menu.csv 218행
+- msg_master.csv 5099행
+- btn_auth.csv 14823행
+- user_group.csv 23행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+- users.csv 8612행
+- division.csv 14행
+- unit_auth.csv 25062행
+- tables.csv 5773행
+- columns.csv 18289행
+- procs_catalog.csv 2055행
+
+## 2026-11-20 00:34:37
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:34:44
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:34:47
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:41:23
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:41:48
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:42:06
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:42:08
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:42:19
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:44:39
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 00:47:24
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:11:32
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:11:32
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:11:32
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:11:40
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:18:58
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:18:58
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:19:03
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:20:20
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:21:29
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:21:29
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:21:34
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:22:50
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:22:50
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:25:15
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:25:31
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 01:25:58
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:20:18
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:49:18
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:49:18
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:49:20
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:49:20
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:50:55
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:50:55
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:51:00
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:51:27
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:51:30
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:51:47
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:52:26
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:52:36
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:52:56
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:53:14
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:53:44
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 05:54:02
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:08:53
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:08:53
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:08:53
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:08:53
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:10:26
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:10:44
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:10:53
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:11:07
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:11:12
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:11:31
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:12:14
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:12:27
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:12:52
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:12:56
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:13:15
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 06:13:33
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:29:53
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:31:41
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:32:11
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:32:20
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:38:54
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:40:15
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:41:49
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 08:42:08
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 09:00:07
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 09:01:41
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 09:01:50
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 09:02:20
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 09:58:23
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 09:58:23
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 10:00:01
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 10:00:15
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 10:00:30
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 10:00:43
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 10:00:54
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행
+
+## 2026-11-20 10:01:23
+- btn_auth.csv 14823행
+- user_group_user.csv 13089행
+- user_group_menu.csv 2214행

@@ -1,8 +1,16 @@
 [
  {
-  "row_id": "EG-57ab9048",
-  "rule_id": "A1",
-  "target": "SSP0005 실전송 건수 calendar",
-  "same": []
+  "row_id": "T-57fe96b8",
+  "rule_id": "E4",
+  "target": "MSG00135",
+  "same": [
+   "T-db2a4710"
+  ]
+ },
+ {
+  "row_id": "T-db2a4710",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "T-57fe96b8"
  }
 ]

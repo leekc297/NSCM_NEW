@@ -7,8 +7,9 @@ import type { Nscm } from './nscm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { probe, parseCsv } from './probe';
-import { typeCell, recordTouched } from './saveprobe';
+import { typeCell, recordTouched, classifyNoCall, notePrecheck, precheckHints } from './saveprobe';
 import { fillPrereq } from './prereq';
+import { asisInsertNoop } from './newrow';
 
 export type CrudPlan = { keyColumns?: string[]; sample?: { div?: string } };
 export type CrudOutcome = {
@@ -37,6 +38,19 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   out.saveVisible = await nscm.subButtonVisible('Save');
   out.insertVisible = opt.mode === 'edit-save' ? false : await nscm.subButtonVisible('Insert');
   if (opt.mode === 'edit-save') out.notes.push('수정 저장 경로 강제(edit-save)');
+  // 2026-11-20 T431(SCP0028 ES-5b4cd8e1 'Insert 후 행 증가 없음' 저장 왕복 FAIL): AS-IS Insert 진입점에 실행 문장이 없는 화면(InsertRow 빈 본문)은
+  //   Insert 로 신규 행을 만드는 동작 자체가 AS-IS 에 없다. Insert 가 보여도 마커 행 경로를 고르지 않고 기존 행 수정 저장 경로로 잰다(근거 = asisInsertNoop · _trace D4 와 같은 규칙)
+  let insertNoop = false;  // insertVisible 은 권한 대조(authcrud)에 그대로 쓴다
+  if (out.insertVisible) {
+    const mid1 = ((plan as { menuId?: string }).menuId || process.env.VERIFY_ID || nscm.curMenu || '').toUpperCase();
+    const fd = path.join(__dirname, '..', '..', '..', 'Doc', 'asisfacts', 'screens', mid1);
+    const ep = path.join(fd, 'actions_entries.csv'), ap = path.join(fd, 'actions.csv');
+    if (mid1 && fs.existsSync(ep) && fs.existsSync(ap)) {
+      const ents = parseCsv(fs.readFileSync(ep, 'utf8').replace(/^﻿/, ''));
+      const nz = ents.some(z => /insert/i.test(z.entry || '')) ? asisInsertNoop(parseCsv(fs.readFileSync(ap, 'utf8').replace(/^﻿/, '')), ents) : { noop: false, ref: '' };
+      if (nz.noop) { insertNoop = true; out.notes.push(`AS-IS Insert 무동작(${nz.ref}) — Insert 마커 행 경로 대신 기존 행 수정 저장 경로`); }
+    }
+  }
   out.deleteVisible = await nscm.subButtonVisible('Delete');
   const callsBefore = nscm.calls.length;
   const countSave = () => { const c = nscm.calls.slice(callsBefore).filter(x => /SAVE|INS|UPD|DEL/i.test(x.btn)); out.saveCalls = c.length; return c; };
@@ -53,7 +67,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     countSave(); annotate(info, out); return out;
   }
 
-  if (!out.insertVisible) {
+  if (!out.insertVisible || insertNoop) {
     // 셀 편집 저장형 — 값 변경 → Save → 재조회 확인 → 원복 Save → 재조회 확인(2026-10-20 사용자 승인: 접속 DB 에 수정 저장 후 원복)
     out.mode = 'edit-save';
     if (rows === 0) { out.notes.push('조회 행 0 — 편집/저장 검증 불가'); countSave(); annotate(info, out); return out; }
@@ -113,7 +127,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       }
       let cand = nextValue(c.text);
       // T349: 팝업 입력 칸(FPModal·FPTextModal)은 등록 값만 저장된다 — 같은 칸 다른 행의 실제 값으로 바꾸고 원값으로 복원
-      { const metaP = await nscm.gridColumnsMeta(0).catch(() => null); const bP = metaP && metaP[mi(c)] ? metaP[mi(c)].binding : ''; if (bP && await probe.popupColumn(nscm.page, bP)) { const ov = await probe.otherColumnValue(nscm.page, bP, c.text); if (ov) { cand = { next: ov, restore: c.text }; out.notes.push(`팝업 입력 칸 ${bP}: 다른 행 실제 값 '${ov}' 로 시험`); } } }
+      { const metaP = await nscm.gridColumnsMeta(0).catch(() => null); const bP = metaP && metaP[mi(c)] ? metaP[mi(c)].binding : ''; if (bP && await probe.popupColumn(nscm.page, bP)) { const ov = await probe.otherColumnValue(nscm.page, bP, c.text, 5000, [...precheckHints.bad], [...precheckHints.ok]); if (ov) { cand = { next: ov, restore: c.text }; out.notes.push(`팝업 입력 칸 ${bP}: 다른 행 실제 값 '${ov}' 로 시험`); } } }
       // T74 · 2026-11-07 T143: 행 데이터(dataItem)를 입력 전후로 항상 읽어, 실제로 바뀐 binding 으로 편집 컬럼을 확정한다 — chain6b SCP0084 F1 은 MEMO 에 입력·저장(요청 memo:"1")했는데
       //   메타 순번으로 고른 이름이 PIC 이어서 '재조회 미반영' 허위 FAIL + 원복 입력 실패(PIC) → MEMO '1' 이 사내 DB 에 남았다(14:11 실측 UPDATE 093139)
       const kb = (await probe.rowItem(nscm.page, c.row).catch(() => null)) as Record<string, unknown> | null;
@@ -121,11 +135,23 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       // 2026-11-06 T74: 이 칸 입력이 같은 행의 저장 키를 바꾸면(연동 칸) 실저장하지 않는다 — 재조회로 입력을 버리고 다음 후보
       let bindHit = '';
       if (kb) { const ka = (await probe.rowItem(nscm.page, c.row).catch(() => null)) as Record<string, unknown> | null; const chAll = ka ? Object.keys(ka).filter(k => !/^(CRUD_TYPE|_SEL|ROW_STATUS|STATUS|_ROW_INDEX)$/i.test(k) && String(kb[k] ?? '') !== String(ka[k] ?? '')) : []; const ch = chAll.filter(k => exK.size && exK.has(k.toUpperCase())); if (ch.length) { out.notes.push(`저장 키 연동 칸 제외(${ch.join(',')})`); await nscm.search().catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); continue; } if (chAll.length === 1) bindHit = chAll[0]; }
-      const after = (await (await nscm.gridCell(c.row, c.col, 0)).innerText().catch(() => '')).trim();
+      let after = (await (await nscm.gridCell(c.row, c.col, 0)).innerText().catch(() => '')).trim();
+      // 2026-11-20 T432(SCP0028 V-4121e73d '저장 후 재조회에 수정값이 없음 — 허위 성공 의심'): 숫자 칸에 '12801' 을 쳤는데 글자가 빠져 '1'·'12'·'1280' 이 들어갔다(저장 요청 lotSize 실측).
+      //   종전엔 표시값이 원값과 다르기만 하면 입력 성공으로 보고 기대값 '12801' 로 재조회를 대조해 FAIL 로 적었다 → 숫자 칸은 표시값이 입력값과 같아야 채택.
+      //   다르면 typeCell(키보드 확인 + 편집기 주입)로 한 번 더 넣고, 그래도 다르면 재조회로 입력을 버리고 다음 후보(저장하지 않음)
+      const nrmN = (x: string) => x.replace(/,/g, '').trim();
+      if (after !== c.text && after !== '' && /^-?[\d,]+(\.\d+)?$/.test(cand.next) && nrmN(after) !== nrmN(cand.next)) {
+        const metaT = await nscm.gridColumnsMeta(0).catch(() => null); const bT = metaT && metaT[mi(c)] ? metaT[mi(c)].binding : '';
+        const vrT = await nscm.page.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); const g = el && el['$WJ-CTRL']; const vr = g && g.viewRange; return vr && vr.row > 0 ? vr.row : 0; })()`).catch(() => 0) as number;
+        const tc = bT ? await typeCell(nscm, vrT + c.row, bT, cand.next).catch(e => ({ ok: false, how: `예외 ${String(e).slice(0, 60)}` })) : { ok: false, how: '칸 이름 없음' };
+        const after2 = (await (await nscm.gridCell(c.row, c.col, 0)).innerText().catch(() => '')).trim();
+        if (!tc.ok || nrmN(after2) !== nrmN(cand.next)) { out.notes.push(`[입력 경로 실패] ${bT || 'col' + c.col} '${cand.next}' 입력 → 표시 '${after}'(글자 누락) · 재입력(${tc.how}) → '${after2}' — 입력 버리고 다음 후보(T432)`); await nscm.search().catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); continue; }
+        out.notes.push(`입력 글자 누락 '${after}' → 재입력(${tc.how}) '${after2}'(T432)`); after = after2;
+      }
       if (after !== c.text && after !== '') { S.col = c.col; S.colIdx = mi(c); S.row = c.row; S.orig = c.text; S.nv = cand; S.key = await nscm.rowKey(c.row); S.binding = bindHit; S.item0 = kb; break; }
       await nscm.page.keyboard.press('Escape').catch(() => undefined);
     }
-    const col = S.col, row = S.row, orig = S.orig, nv = S.nv, key = S.key;
+    const col = S.col, row = S.row, orig = S.orig, key = S.key; let nv = S.nv;
     out.editable = col >= 0;
     if (col < 0 || !nv) { out.notes.push(`편집 가능 셀 ${ordered.length}개 시도 — 값이 바뀌는 셀 없음`); countSave(); annotate(info, out); return out; }
     const colIdx = S.colIdx >= 0 ? S.colIdx : col;  // T131: 메타 조회는 실제 컬럼 인덱스로
@@ -146,7 +172,16 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       // 2026-11-09 T175(SSP0024 15:11 실저장 미기록): edit-save 실저장도 편집 전 행을 touched_rows 에 남긴다 — 종전엔 cellRoundTrip·realsave 만 기록해
       //   restore_touched 기준 시각이 첫 저장보다 늦어(15:12:10) 15:11 저장의 이력(_H) 2행을 못 찾았다
       if (S.item0) recordTouched(S.item0, new Date(Date.now() - 3_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 19));
-      T('수정 입력 완료'); const s1 = await nscm.save(); T('저장 응답 ' + (s1.calls.length ? s1.calls.map(c => c.btn + ':' + c.status + (c.req ? ' 요청=' + c.req.replace(/\s+/g, ' ').slice(0, 180) : '') + (c.res ? ' 응답=' + c.res.slice(0, 120) : '')).join(' | ') : 'call-proc 없음') + (s1.message ? ' 알림=' + s1.message.slice(0, 80) : ''));
+      T('수정 입력 완료'); let s1 = await nscm.save(); T('저장 응답 ' + (s1.calls.length ? s1.calls.map(c => c.btn + ':' + c.status + (c.req ? ' 요청=' + c.req.replace(/\s+/g, ' ').slice(0, 180) : '') + (c.res ? ' 응답=' + c.res.slice(0, 120) : '')).join(' | ') : 'call-proc 없음') + (s1.message ? ' 알림=' + s1.message.slice(0, 80) : ''));
+      // 2026-11-20 T372(SSP0014 ES-de56f621 'USER_ID → njlilian · 저장 응답 USER_CHECK:200 · SAVE call-proc 없음'): 팝업 입력 칸 시험 값이 저장 전 검증(SAVE 류 아닌 호출 + 업무 검증 알림)에 막히면
+      //   저장 경로를 잰 것이 아니다 → 검증 응답이 통과시킨 값으로 같은 행 값을 바꿔 최대 2번 다시 저장한다(행은 아직 편집 상태 · 재조회 없음)
+      for (let k = 0; k < 2 && nv && s1.preCheckOnly && classifyNoCall(s1.message || '') === 'VALIDATION' && await probe.popupColumn(nscm.page, colName); k++) {
+        notePrecheck(s1.calls, nv.next, s1.message || '', S.item0); const ov2 = await probe.otherColumnValue(nscm.page, colName, orig, 5000, [...precheckHints.bad, nv.next], [...precheckHints.ok]); if (!ov2) break;
+        T(`저장 전 검증 차단 '${nv.next}'(${(s1.message || '').slice(0, 60)}) → '${ov2}' 재시도`);
+        if (!(await typeCell(nscm, dataRow, colName, ov2)).ok) { T(`재시도 입력 실패 ${colName}`); break; }
+        nv = { next: ov2, restore: nv.restore }; s1 = await nscm.save(); T('저장 응답 ' + (s1.calls.length ? s1.calls.map(c => c.btn + ':' + c.status).join(' | ') : 'call-proc 없음') + (s1.message ? ' 알림=' + s1.message.slice(0, 80) : ''));
+      }
+      if (nv && s1.preCheckOnly && classifyNoCall(s1.message || '') === 'VALIDATION') { notePrecheck(s1.calls, nv.next, s1.message || '', S.item0); out.notes.push(`[업무 검증 차단] 저장 전 검증 호출(${s1.calls.map(c => c.btn).join(',')})에서 멈춤 — 저장 요청 없음 · 알림 '${(s1.message || '').slice(0, 80)}'`); }
       { const sc = saveOf(s1.calls); out.saved = !ERR.test(s1.message || '') && sc.every(c => c.status < 400) && sc.length > 0;
       if (!out.saved) out.saveErrors.push(`SAVE: ${s1.message || (sc.length ? sc.map(c => `${c.btn} HTTP ${c.status}`).join(',') : 'SAVE call-proc 없음')}`); }
       if (opt.onAfterSave) await opt.onAfterSave(out.saved);
@@ -295,7 +330,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
         if (ri < 0) { await nscm.search(); ri = await findMark(mark); }
         if (ri >= 0) {
           await rowsLoc().nth(ri).locator('.wj-cell').first().click();
-          await nscm.subButton('Delete').click(); await nscm.closeAlert('ok');
+          await (await nscm.toolbarButton('Delete')).click(); await nscm.closeAlert('ok');  // T430 화면 단추 'Delete' 아닌 툴바 Delete(F9)
           const d = await nscm.save(); if (ERR.test(d.message || '')) out.saveErrors.push(`DELETE: ${d.message}`);
           await nscm.search();
         }

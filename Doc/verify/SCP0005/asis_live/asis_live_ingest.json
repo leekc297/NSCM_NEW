@@ -1,14 +1,13 @@
 {
  "id": "SCP0005",
- "run_dir": "Doc/asislive/SCP0005/run_20261119_165522",
- "live_at": "2026-11-19 16:55:22.832",
+ "run_dir": "Doc/asislive/SCP0005/run_20261120_072708",
+ "live_at": "2026-11-20 07:27:08.960",
  "user": "jaeuk.shin",
  "find": {
-  "signaled": false,
-  "time_status": "",
-  "total": null,
-  "how": "no_signal",
-  "inflight_check": "ok"
+  "signaled": true,
+  "time_status": "DB : 1.05s, UI : 14.91s",
+  "total": "Total : 8,036",
+  "how": "status"
  },
  "mixed_risk": false,
  "live_calls": 16,

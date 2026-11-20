@@ -1,0 +1,11 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+,L198,기호,부터 · 전체           건 · 세션 수정,가운뎃점 나열 → 쉼표,          부터 · 전체           건 · 세션 수정           건
+,L294,기호,er/*.js · quick.json · steps.j,가운뎃점 나열 → 쉼표,"할 일: 항목마다 해당 소스(tools/VibeManager/*.js · quick.json · steps.json · .vibe/orch/vm_errors.jsonl · tools/VibeManager/CHANGELOG.md)를 읽어 원인을 확인하고, 고칠 가치가 있는 것만 개선안으로 최대                        건 올린다."
+,L299,기호,Manager · tools/Harness · tools/E,가운뎃점 나열 → 쉼표,"- 대상이 tools/VibeManager · tools/Harness · tools/E2E · tools/Docs 의 코드뿐인 개선안은 승인 없이 VMO 가 바로 반영한다(반영 전후 게이트, 새로 어긋나면 되돌림). 그러니 한 개선안은 게이트 한 번으로 확인되는 크기로 잡고, 동작이 바뀌면 targets 에 시험 파일(tools/VibeManager/test/t_*.js)을 넣어 시험도 함께 고치게 한다."
+,L300,기호,- 파일 삭제 · 설정 파일 · 룰 · hoo,가운뎃점 나열 → 쉼표,- 파일 삭제 · 설정 파일 · 룰 · hook · FE · BE · DB 객체가 대상인 개선안은 코드 수정 개선안과 섞지 말고 따로 올린다(사용자 승인 대상).
+,L300,기호,· hook · FE · BE · DB,가운뎃점 나열 → 쉼표,- 파일 삭제 · 설정 파일 · 룰 · hook · FE · BE · DB 객체가 대상인 개선안은 코드 수정 개선안과 섞지 말고 따로 올린다(사용자 승인 대상).
+,L363,기호,반영 완료 — 생성물 삭,줄표 삭제 — 문장을 나누거나 쉼표로,반영 완료 — 생성물 삭제                  개(되돌릴 수 없음). 기록 .vibe/orch/selfcheck/delete_log.jsonl
+,L364,기호,삭제 대기 —,줄표 삭제 — 문장을 나누거나 쉼표로,자동 삭제 대기 —                
+,L389,기호,"alse 이유 · verify_result · note),",가운뎃점 나열 → 쉼표,"입력 파일        을 읽는다. proposal = 실패한 안, result = 반영한 Claude 의 결과(verified false 이유 · verify_result · note), gate = 반영 뒤 게이트 결과(newBad = 새로 어긋난 항목), history = 경과."
+,L392,기호,"수정, 포트 · 부하 · 잠금, Cla",가운뎃점 나열 → 쉼표,"- retry: 안은 맞고 환경 문제(같은 시각 다른 작업의 파일 수정, 포트 · 부하 · 잠금, Claude 호출 오류). 같은 안을 다시 시도한다."
+,L394,기호,Manager · tools/Harness · tools/E,가운뎃점 나열 → 쉼표,근거 없는 추측을 쓰지 않는다. 대상은 tools/VibeManager · tools/Harness · tools/E2E · tools/Docs 의 코드만 쓴다.

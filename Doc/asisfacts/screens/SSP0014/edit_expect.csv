@@ -1,8 +1,8 @@
 ﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
-DIVISION_ID,Y,NONE,Y,,,,,,Shipment Model PIC
-OPERATION_GROUP,Y,NONE,Y,,,,,,Shipment Model PIC
-FROM_SITE,Y,NONE,Y,,,,,,Shipment Model PIC
-ITEM_ID,Y,NONE,Y,,,,,,Shipment Model PIC
+DIVISION_ID,Y,NONE,N,,잠금 (EditButton:274),,기존행 SSP0014_ShipmentModelPIC:274 LockColumn,,Shipment Model PIC
+OPERATION_GROUP,Y,NONE,N,,잠금 (EditButton:274),,기존행 SSP0014_ShipmentModelPIC:274 LockColumn,,Shipment Model PIC
+FROM_SITE,Y,NONE,N,,잠금 (EditButton:274),,기존행 SSP0014_ShipmentModelPIC:274 LockColumn,,Shipment Model PIC
+ITEM_ID,Y,NONE,N,,잠금 (EditButton:274),,기존행 SSP0014_ShipmentModelPIC:274 LockColumn,,Shipment Model PIC
 NICK_NAME,Y,NONE,N,,잠금 (EditButton:274),,기존행 SSP0014_ShipmentModelPIC:274 LockColumn,,Shipment Model PIC
 USER_ID,Y,NONE,Y,,,,,,Shipment Model PIC
 USER_NAME,Y,NONE,N,,잠금 (EditButton:275),,기존행 SSP0014_ShipmentModelPIC:275 LockColumn,,Shipment Model PIC
@@ -20,4 +20,3 @@ CREATED_BY,Y,NONE,N,,잠금 (EditButton:278),,기존행 SSP0014_ShipmentModelPIC
 CREATION_DATE,Y,NONE,N,,잠금 (EditButton:278),,기존행 SSP0014_ShipmentModelPIC:278 LockColumn,,Shipment Model PIC
 LAST_UPDATED_BY,Y,NONE,N,,잠금 (EditButton:278),,기존행 SSP0014_ShipmentModelPIC:278 LockColumn,,Shipment Model PIC
 LAST_UPDATE_DATE,Y,NONE,N,,잠금 (EditButton:278),,기존행 SSP0014_ShipmentModelPIC:278 LockColumn,,Shipment Model PIC
-DIVISION,,NONE,N,,잠금 (EditButton:274),,기존행 SSP0014_ShipmentModelPIC:274 LockColumn,,Shipment Model PIC

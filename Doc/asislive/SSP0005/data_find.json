@@ -1,0 +1,312 @@
+{
+ "sheets": {
+  "SCP0009_GET_SHEET_CALENDAR_3SPAN": {
+   "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "conds": [
+    {
+     "label": "기간 1개월 앞",
+     "rows": 435,
+     "ops": [
+      {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20261020"
+      },
+      {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20271014"
+      }
+     ],
+     "params": {
+      "p_start_yyyymmdd": "20261020",
+      "p_end_yyyymmdd": "20271014"
+     }
+    },
+    {
+     "label": "기간 3개월 앞",
+     "rows": 435,
+     "ops": [
+      {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20260820"
+      },
+      {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20270814"
+      }
+     ],
+     "params": {
+      "p_start_yyyymmdd": "20260820",
+      "p_end_yyyymmdd": "20270814"
+     }
+    },
+    {
+     "label": "기간 6개월 앞",
+     "rows": 434,
+     "ops": [
+      {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20260520"
+      },
+      {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20270514"
+      }
+     ],
+     "params": {
+      "p_start_yyyymmdd": "20260520",
+      "p_end_yyyymmdd": "20270514"
+     }
+    }
+   ],
+   "divs": [],
+   "tried": [
+    {
+     "cond": "기간 1개월 앞",
+     "rows": 435,
+     "err": "",
+     "at": "2026-11-20 05:00:48"
+    },
+    {
+     "cond": "기간 3개월 앞",
+     "rows": 435,
+     "err": "",
+     "at": "2026-11-20 05:00:48"
+    },
+    {
+     "cond": "기간 6개월 앞",
+     "rows": 434,
+     "err": "",
+     "at": "2026-11-20 05:00:48"
+    }
+   ],
+   "axes": [
+    "period"
+   ],
+   "at": "2026-11-20 05:00:53"
+  },
+  "SSP0005_GET_SHIPMENT_WORKING_DAY": {
+   "sp": "SSP0005_GET_SHIPMENT_WORKING_DAY",
+   "conds": [],
+   "divs": [],
+   "tried": [
+    {
+     "cond": "Division 81",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:48"
+    },
+    {
+     "cond": "Division 81(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:48"
+    },
+    {
+     "cond": "Division 40",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 40(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 82",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 82(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 81_UC",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 81_UC(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 81_HM",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 81_HM(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:49"
+    },
+    {
+     "cond": "Division 81_HD",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "Division 81_HD(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "Division 81_HG",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "Division 81_HG(딸린 인자 빈 값)",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:50"
+    },
+    {
+     "cond": "기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "Division 81 + 기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "Division 81 + 기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "Division 81 + 기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "Division 81 + 기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "Division 81 + 기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:51"
+    },
+    {
+     "cond": "Division 40 + 기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 40 + 기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 40 + 기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 40 + 기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 40 + 기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 82 + 기간 1개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 82 + 기간 3개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 82 + 기간 6개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 82 + 기간 12개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:52"
+    },
+    {
+     "cond": "Division 82 + 기간 24개월 앞",
+     "rows": 0,
+     "err": "",
+     "at": "2026-11-20 05:00:53"
+    }
+   ],
+   "axes": [
+    "division",
+    "period"
+   ],
+   "at": "2026-11-20 05:00:53"
+  }
+ },
+ "at": "2026-11-20 05:00:53",
+ "source": "AS-IS 조회 SP 재실행(팝업 행·Division·콤보·기간 후보 · .env.asis)"
+}

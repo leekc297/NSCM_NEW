@@ -34,6 +34,9 @@ interface Props {
 type GridRow = Record<string, unknown>;
 type FormRow = Record<string, unknown>;
 
+// 2줄로 접히는 leaf 헤더 라벨을 수용하는 맨 아래 헤더 행 높이(px). 자매 ConfirmDetailModal 과 동일.
+const LEAF_HEADER_HEIGHT = 34;
+
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
@@ -171,6 +174,22 @@ export const ShipmentPlanRequestModal = ({ open, modalClose, requestNo }: Props)
               headersVisibility={HeadersVisibility.Column}
               staticColumns={staticColumns}
               itemsSource={rows as never}
+              // 2단 헤더(Confirmed/Change) 아래 리프 라벨("Trans Mode"·"Shipment Date")이 두 줄로
+              //   접혀 둘째 줄이 잘린다. 공용 headerRowHeight(columnHeaders.rows.defaultSize)는 식별열이
+              //   두 행을 세로병합한 명시 높이(48/2=24)를 못 이겨 안 먹으므로, 자매 ConfirmDetailModal
+              //   선례대로 맨 아래(leaf) 헤더 행 높이를 직접 올린다. updatedLayout 재적용 + 동일값 guard
+              //   로 레이아웃 갱신에도 유지 & 루프 방지.
+              initialized={grid => {
+                const applyLeafHeaderHeight = () => {
+                  const headerRows = grid.columnHeaders?.rows;
+                  if (!headerRows || headerRows.length === 0) return;
+                  const leaf = headerRows[headerRows.length - 1];
+                  if (Math.round(leaf.height ?? 0) !== LEAF_HEADER_HEIGHT)
+                    leaf.height = LEAF_HEADER_HEIGHT;
+                };
+                applyLeafHeaderHeight();
+                grid.updatedLayout.addHandler(applyLeafHeaderHeight);
+              }}
             />
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

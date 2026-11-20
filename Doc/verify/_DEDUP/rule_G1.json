@@ -1,0 +1,112 @@
+{
+ "rule_id": "G1",
+ "hash": "eef69b7a16347357",
+ "groups": [
+  {
+   "refs": [
+    "DM-181",
+    "DM-201",
+    "SSP45-6"
+   ],
+   "target": "텍스트 조회조건 검색 방식(부분일치·대소문자·복수값)",
+   "condition": "텍스트 조회조건(예: Project(PROJECT), Model/Nickname(ITEM_ID/NICK_NAME), API Name, 팝업 User Name/EN)에 ①부분 문자열 ②a,b 콤마 복수값 ③소문자를 입력하고 조회",
+   "expected": "화면과 팝업의 모든 텍스트 조회조건은 부분일치(Like)로 검색되고, 콤마로 넣은 여러 값으로 조회되며, 대소문자를 구분하지 않는다. 검색 대상 컬럼(ID·명칭·영문명, 예: User Name/EN)도 모두 포함해야 한다.",
+   "why": "세 항목 모두 텍스트 조회조건에 값을 넣었을 때 어떤 방식으로 맞춰 찾는지를 확인하고, 기대 결과도 서로 겹치므로 합쳐도 빠지는 검사가 없다."
+  },
+  {
+   "refs": [
+    "DM-63"
+   ],
+   "target": "텍스트 조회조건 입력 중 화면 깜빡임·Grid 스크롤",
+   "condition": "Lookup 텍스트 조회조건에 소문자로 입력하는 중",
+   "expected": "텍스트를 입력하는 동안 화면이 깜빡이지 않고 상단 Grid 스크롤 위치가 유지된다. Lookup 텍스트 조회조건은 대소문자와 관계없이 조회된다.",
+   "why": "화면 깜빡임과 Grid 스크롤은 검색 방식과 다른 확인 대상이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-184"
+   ],
+   "target": "Active(ALL)·User Group 다중선택 조회조건",
+   "condition": "Active=ALL로 두거나 User Group을 2개 이상 선택",
+   "expected": "ALL 선택 조건과 다중선택 조건에서도 오류 없이 조회되고 결과가 조건대로 반영된다.",
+   "why": "ALL과 다중선택을 함께 확인하는 항목이라 ALL 제공 여부나 필수 메시지를 보는 항목과 확인 동작이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-199"
+   ],
+   "target": "콤보 조회조건(Schema)의 Select ALL 제공",
+   "condition": "",
+   "expected": "Schema 같은 콤보 조회조건에 Select ALL 항목이 있고, 그 항목을 골라도 정상 조회된다.",
+   "why": "ALL 항목이 있는지를 확인하는 것이라 다른 ALL 관련 항목과 확인 대상이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-2"
+   ],
+   "target": "From Site 조회조건 전체 선택 시 필수 메시지",
+   "condition": "From Site 조회조건을 전체 선택",
+   "expected": "From Site처럼 전체 선택한 조회조건에 필수 입력 메시지가 뜨지 않고 바로 조회된다.",
+   "why": "필수 메시지가 잘못 뜨는지 보는 항목이라 ALL 제공이나 다중선택 조회 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-85"
+   ],
+   "target": "Div 전환 시 Cust Group 조회조건 노출·Div 인자·그리드 헤더",
+   "condition": "Div 40으로 조회한 뒤 81로 전환",
+   "expected": "81에서는 Cust Group이 보이지 않고, 선택한 Div가 조회 인자로 전달되며, Div를 바꾸면 그리드 헤더가 다시 구성된다.",
+   "why": "Div 전환에 따른 조건 노출, 인자 전달, 헤더 재구성을 함께 보는 복합 항목이라 다른 항목과 맞는 것이 없다."
+  },
+  {
+   "refs": [
+    "DM-87"
+   ],
+   "target": "Owner 팝업 내부 User 검색 필터",
+   "condition": "Owner 팝업(PKG_COM0000 COM0004/0006)에서 User 검색어를 넣고 조회",
+   "expected": "팝업의 User 검색 결과가 입력한 사용자로 걸러진다.",
+   "why": "본 화면의 조회조건이 아니라 팝업 안의 검색 결과를 확인하므로 Owner 조회조건 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P53",
+    "DM-P62"
+   ],
+   "target": "Project·Model/Nickname·Owner 조회조건 결과 반영",
+   "condition": "Project, Model/Nickname, Owner 값을 각각 선택하거나 입력하고 조회",
+   "expected": "Project, Model/Nickname, Owner 조건을 주면 조회 결과에 그 값에 해당하는 행만 나온다.",
+   "why": "두 항목 모두 본 화면의 Owner 조건이 결과에 반영되는지 확인하고, DM-P62가 DM-P53을 포함하므로 합쳐도 빠지는 검사가 없다."
+  },
+  {
+   "refs": [
+    "DM-P27"
+   ],
+   "target": "Biz.Type 조회조건 인자 전달·결과 반영",
+   "condition": "Biz.Type 값을 선택하고 조회",
+   "expected": "선택한 Biz.Type이 조회 인자로 그대로 전달되고(SP가 NULL로 강제하지 않음) 해당 Type의 결과만 나온다.",
+   "why": "SP 인자를 NULL로 덮어쓰는지까지 보는 별도 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P56"
+   ],
+   "target": "Plant Site 조회조건 선택 시 SQL 오류·반영",
+   "condition": "Plant Site 값을 선택하고 조회",
+   "expected": "Plant Site를 골라 조회해도 SQL Error가 0건이고 조건이 결과에 반영된다.",
+   "why": "SQL 오류 발생 여부를 함께 보는 항목이라 단순 결과 반영 항목과 기대 결과가 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P61"
+   ],
+   "target": "조회조건 후보값과 그리드 컬럼값 출처 비교",
+   "condition": "Biz Type, Plant Site 조회조건의 후보 목록과 결과 그리드의 컬럼값을 비교",
+   "expected": "조회조건 후보(Biz Type, Plant Site)는 마스터 기준이고 그리드 값은 저장값 기준으로, AS-IS와 같으면 결함이 아니다.",
+   "why": "결함이 아니라고 판정된 비교 확인이라 다른 결함 항목과 섞지 않는다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:32",
+ "cost": 0.12053720000000001
+}

@@ -46,5 +46,7 @@ with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('[Content_Types].xml', ctypes); z.writestr('extension.vsixmanifest', manifest)
     for f in files:
         p = os.path.join(here, f)
-        if os.path.exists(p): z.write(p, 'extension/' + f)
+        # 2026-11-19 VMO 자가진단 Q4: 목록에 있는 파일이 없으면 멈춘다(종전에는 말없이 건너뛰어 빠진 채 묶였다)
+        if not os.path.exists(p): raise SystemExit('[ERROR] 묶을 파일 없음: ' + f)
+        z.write(p, 'extension/' + f)
 print(out, os.path.getsize(out), 'bytes')

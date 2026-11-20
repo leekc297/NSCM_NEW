@@ -1,6 +1,6 @@
 # SCP0005 · SCP0005_GET_COUNTRY_CITY ↔ PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY
 
-- 실행 2026-11-19 16:55:04 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-20 07:26:50 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 PASS** — 공통 1행 전 컬럼 일치 · 키 원천 db_resultsets.csv is_nullable=0 · 키 COUNTRY+CITY+CITY_NAME · golden 집합 판정 PASS
 - 호출 #8 sheet=route btn=SEARCH_CITY user=minyonglee1 FE 응답 행 2 · 원천 Doc\verify\SCP0005\calls\_verify_그리드_더블클릭_팝업_인자_G5_AS-IS_가_팝업에_넘기는_셀_값이_TO-BE_팝업_조회_요청에_들어가는지_0.json
 - TO-BE 인자(FE 본문): `{"country": "", "city": "AATES", "cityName": ""}`

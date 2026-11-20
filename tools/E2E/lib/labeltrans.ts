@@ -28,3 +28,13 @@ export function labelVariants(text: string): string[] {
   const k = canon(text); const s = BY_TEXT.get(k);
   return s ? [...s].filter(x => canon(x) !== k) : [];
 }
+
+/** 2026-11-20 T435(SCP0028 V-b45d4015 J4 탭 이름 '탭 SSP Lot Size ≠ 메뉴 등록 이름 Shipment Lot Size'): TO-BE 메뉴·탭 이름은 메뉴 메시지 코드(menu.csv mnu_msg_id)를
+ *  번역한 글자다. 번역 전 기본값 mnu_desc 만 기대값으로 쓰면 메시지 코드 글자가 다른 화면은 허위 FAIL. 이 코드의 전 언어 글자(use_yn Y)를 돌려준다. 원장이 없으면 [] */
+export function msgTexts(msgId: string): string[] {
+  if (!msgId) return [];
+  try {
+    const rows = parseCsv(fs.readFileSync(CSV, 'utf8').replace(/^﻿/, '')) as unknown as Record<string, string>[];
+    return [...new Set(rows.filter(r => (r.msg_id || '').toUpperCase() === msgId.toUpperCase() && (!r.use_yn || r.use_yn === 'Y') && r.msg_nm).map(r => r.msg_nm.trim()))];
+  } catch { return []; }
+}

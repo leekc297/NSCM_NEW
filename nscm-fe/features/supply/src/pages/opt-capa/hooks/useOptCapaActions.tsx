@@ -174,7 +174,7 @@ export const useOptCapaActions = ({
     if (failure) {
       void setAlert({
         type: 'alert',
-        content: t(failure.msgId, { defaultValue: 'Please check the Period.' }),
+        content: t(failure.msgId ?? '', { defaultValue: 'Please check the Period.' }),
       });
       return;
     }
@@ -382,7 +382,8 @@ export const useOptCapaActions = ({
           isWeekNoWork,
         });
         if (failure) {
-          const message = t(failure.msgId, { defaultValue: '' });
+          // 하드코딩 리터럴(등가 MSG 코드 부재 — Week Off Time 7초과)은 번역 없이 그대로 띄운다.
+          const message = failure.literal ?? t(failure.msgId ?? '', { defaultValue: '' });
           void setAlert({
             type: 'alert',
             // i18next 기본 보간자는 `{{ }}` 라 DB 메시지의 `{0}` 은 직접 치환한다.
@@ -434,8 +435,9 @@ export const useOptCapaActions = ({
   const handleWeekSelect = (weekName: string) => {
     const row = weekPopup?.row;
     if (!row || !weekName) return;
-    // 같은 Division·Plant·Line·Operation·Line Type 에 같은 Week 가 이미 있으면 막는다
-    //   (저장 검증 `findDuplicateKey` Week 분기와 같은 키). 삭제 표시 행은 대조하지 않는다.
+    // 같은 Division·Plant·Line·Operation·Line Type·Type 에 같은 Week 가 이미 있으면 막는다
+    //   (저장 검증 `findDuplicateKey` Week 분기와 같은 키 — E20260929-000580 Type 포함, 다른 Type 이면 허용).
+    //   삭제 표시 행은 대조하지 않는다.
     const nextKey = weekKeyOf(row, weekName);
     const source = (gridRefs[SHEETS.NO_WORK].current?.collectionView?.sourceCollection ??
       []) as unknown as GridRow[];

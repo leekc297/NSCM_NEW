@@ -1,0 +1,274 @@
+{
+ "rule_id": "H5",
+ "hash": "18fd7ca18dc02fc9",
+ "groups": [
+  {
+   "rows": [
+    "EG-09fc7473"
+   ],
+   "why": "UserInfoPopup 제목을 MAIL_USER3 셀에서 열었을 때 확인하는 행이라 다른 셀에서 연 팝업과 묶지 않음."
+  },
+  {
+   "rows": [
+    "EG-5426fab9"
+   ],
+   "why": "UserInfoPopup 제목을 MAIL_USER4 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "EG-6c9cb469"
+   ],
+   "why": "UserInfoPopup 제목을 MAIL_USER2 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "EG-78c2f489"
+   ],
+   "why": "UserInfoPopup 제목을 USER_ID 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "EG-a6a11402"
+   ],
+   "why": "UserInfoPopup 제목을 PART_LEADER 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "EG-abdab7e6"
+   ],
+   "why": "UserInfoPopup 제목을 MAIL_USER1 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "EG-f0ac7c95"
+   ],
+   "why": "UserInfoPopup 제목을 MAIL_USER5 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "EG-f47f41a8"
+   ],
+   "why": "Model 조회조건의 ItembyDivision 팝업 제목이 대상이라 조회조건 라벨(V-9431799a)과 요소가 다름."
+  },
+  {
+   "rows": [
+    "EG-f5116d02"
+   ],
+   "why": "UserInfoPopup 제목을 TEAM_LEADER 셀에서 열었을 때 확인하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "T-1c71af7a"
+   ],
+   "why": "MAIL_USER5 그리드 컬럼 헤더 라벨이 대상이라 같은 셀에서 연 팝업 제목(EG-f0ac7c95)과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-2147beaa"
+   ],
+   "why": "공통 UC-02 수정 중 재조회 확인창 문구라 라벨 명칭 요소와 성질이 다름."
+  },
+  {
+   "rows": [
+    "T-262b553b"
+   ],
+   "why": "MAIL_USER4 그리드 컬럼 헤더 라벨이 대상이라 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-27a072b5"
+   ],
+   "why": "spdMain 그리드 객체의 구현 위치를 추적하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "T-4c511792"
+   ],
+   "why": "TEAM_LEADER 그리드 컬럼 헤더 라벨이 대상이라 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-5b9fa69c"
+   ],
+   "why": "MAIL_USER1 그리드 컬럼 헤더 라벨이 대상이라 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-5d2d31c2"
+   ],
+   "why": "공통 UC-07 필터 유지 재조회 동작을 추적하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "T-5ebf4fff"
+   ],
+   "why": "InitSpread의 SmartColMerge 구현을 추적하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "T-821b379a"
+   ],
+   "why": "조회 후/TopChange 시점의 SmartColMerge 추적이라 InitSpread 시점(T-5ebf4fff)과 상태가 다름."
+  },
+  {
+   "rows": [
+    "T-822b848c"
+   ],
+   "why": "CreateSpread 진입점의 구현 위치를 추적하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "T-854f36ec"
+   ],
+   "why": "TopChange 스크롤 재병합 이벤트 추적이라 다른 병합 행과 대상 시점이 달라 단독."
+  },
+  {
+   "rows": [
+    "T-a9419ad8"
+   ],
+   "why": "OPERATION_GROUP 그리드 컬럼 헤더 라벨이 대상이라 조회조건 Operation group(V-88e865a5)과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-abc62cf4"
+   ],
+   "why": "USER_ID 그리드 컬럼 헤더('User ID*')가 대상이라 조회조건 User ID(Name)나 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-bb751fcc"
+   ],
+   "why": "MAIL_USER2 그리드 컬럼 헤더 라벨이 대상이라 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-bd13b97b"
+   ],
+   "why": "PART_LEADER 그리드 컬럼 헤더 라벨이 대상이라 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-d5d41232"
+   ],
+   "why": "DIVISION_ID 그리드 컬럼 헤더('Div')가 대상이라 조회조건 Div(V-018b7b70)와 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-d5e9ddb3"
+   ],
+   "why": "MAIL_USER3 그리드 컬럼 헤더 라벨이 대상이라 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "T-e493c4ca"
+   ],
+   "why": "spdMain_Sheet1 시트 객체의 구현 위치를 추적하는 행이라 단독."
+  },
+  {
+   "rows": [
+    "V-018b7b70"
+   ],
+   "why": "조회조건 Div 라벨이 대상이라 Div 그리드 컬럼과 요소가 다름."
+  },
+  {
+   "rows": [
+    "V-10082a58"
+   ],
+   "why": "다른 화면 Route 팝업 제목 결함을 일반화한 행이라 대응 요소가 특정되지 않아 단독."
+  },
+  {
+   "rows": [
+    "V-270eaa52"
+   ],
+   "why": "조회조건 명칭·순서와 대응 컬럼명을 함께 보는 전체 규칙이라 개별 조건 라벨과 기대가 다름."
+  },
+  {
+   "rows": [
+    "V-3178c665"
+   ],
+   "why": "조회조건 전체의 사용 여부와 라벨을 기준표와 대조하는 확정 규칙이라 개별 조건 행과 범위가 다름."
+  },
+  {
+   "rows": [
+    "V-3d21050d"
+   ],
+   "why": "Measure Version(A)/(B) 명칭 결함 유형이라 이 화면 요소와 대응하지 않아 단독."
+  },
+  {
+   "rows": [
+    "V-3e625193"
+   ],
+   "why": "Sum 행 표기와 체크박스 결함 유형이라 단독."
+  },
+  {
+   "rows": [
+    "V-88e865a5"
+   ],
+   "why": "조회조건 Operation group 라벨이 대상이라 그리드 컬럼과 요소가 다름."
+  },
+  {
+   "rows": [
+    "V-8d268b4f"
+   ],
+   "why": "조회조건 User ID(Name) 라벨이 대상이라 USER_ID 컬럼·팝업과 요소가 다름."
+  },
+  {
+   "rows": [
+    "V-9431799a"
+   ],
+   "why": "조회조건 Model/Nickname 라벨이 대상이라 Model 팝업 제목과 요소가 다름."
+  },
+  {
+   "rows": [
+    "V-b21a61a5"
+   ],
+   "why": "Valid→Active 일괄 변경 확정 규칙이라 컬럼과 조회조건을 함께 보는 범위가 개별 행과 다름."
+  },
+  {
+   "rows": [
+    "V-c728151c"
+   ],
+   "why": "조회조건 From Site 라벨이 대상이라 단독."
+  },
+  {
+   "rows": [
+    "V-d29903b9"
+   ],
+   "why": "Dept 컬럼과 Use Y/N 헤더 병합 결함 유형이라 단독."
+  },
+  {
+   "rows": [
+    "V-e645ba1e"
+   ],
+   "why": "Module 콤보, 팝업 타이틀 등 여러 요소가 섞인 결함 유형이라 단독."
+  },
+  {
+   "rows": [
+    "V-e79d9151"
+   ],
+   "why": "Version·Plan Type 조회조건 라벨 결함 유형이라 이 화면 조건과 대응이 불확실해 단독."
+  },
+  {
+   "rows": [
+    "V-eb4af48e"
+   ],
+   "why": "조회 단추 라벨 코드의 다국어 등록이 대상이라 버튼 요소로 단독."
+  },
+  {
+   "rows": [
+    "V-eb807612"
+   ],
+   "why": "Measure 명칭 MKT FCST[R+P] 결함 유형이라 단독."
+  },
+  {
+   "rows": [
+    "V-fe341136"
+   ],
+   "why": "조회조건 Active 라벨이 대상이라 단독."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:41:54",
+ "cost": 0.1619417
+}

@@ -207,6 +207,16 @@ export const TactTimeMainGrid = ({
       const itemCol = sender.columns.indexOf('ITEM_ID');
       const on = s(row?.EXCEPT_YN) === 'Y' && itemCol >= 0 && e.col >= itemCol;
       toggleClass(e.cell, 'tact-except-row', on);
+
+      // 편집가능(노란색 wj-cell-editable) 표시를 실제 편집판정과 일치시킨다.
+      //   공통 formatEditableColumns 는 INPUT_TP_CD 만 보고 칠해서 LINE_ID(메타 'M')는 값 있는
+      //   기존행도 노랗게 칠해지지만, LINE_ID 는 행 데이터(isNewRow 등)로 잠기므로 실제 편집가부
+      //   (isPlant/PackerCellEditable)로 재보정한다. 공통 핸들러 뒤에 실행돼 덮어쓴다.
+      const binding = sender.columns[e.col]?.binding ?? '';
+      const editable = isPlantRef.current
+        ? isPlantCellEditable(binding, row ?? {})
+        : isPackerCellEditable(binding, row ?? {});
+      toggleClass(e.cell, 'wj-cell-editable', !sender.isReadOnly && editable);
     };
     g.formatItem.addHandler(formatItemHandler);
 

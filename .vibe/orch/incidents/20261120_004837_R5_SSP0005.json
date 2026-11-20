@@ -1,0 +1,33 @@
+{
+  "id": "20261120_004837_R5_SSP0005",
+  "at": "2026-11-20T00:48:37+09:00",
+  "ms": 1795103317682,
+  "rule": "R5",
+  "ruleName": "진행 없음",
+  "title": "종료 기록 없이 사라진 실행. 체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SSP0005",
+  "sig": "R5|gone|chain|🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-19T20:25:49+09:00 · 주인 PID 3764 · 끝 사건 없음(중지, 창 다시 로드, 강제 종료)",
+  "evidence": {
+    "log": "",
+    "pid": null
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:59:42+09:00",
+      "by": "VMO",
+      "what": "시간당 에이전트 호출 상한 6회 도달. 자동 조치 보류(사건 탭의 에이전트 버튼으로 직접 실행)"
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드로 끊긴 실행). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "notice": true,
+  "reload": "cut",
+  "prevStatus": "open"
+}

@@ -7,6 +7,7 @@ import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 import { COMBO, LBL, LOOKUP } from '../inventory-raw.constants';
 import { useInventoryRawStore } from '../useInventoryRawStore';
@@ -152,6 +153,12 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onItemSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}

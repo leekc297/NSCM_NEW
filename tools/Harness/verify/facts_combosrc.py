@@ -26,7 +26,7 @@ from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP �
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 SRC = os.path.join(ROOT, 'GSCM')
 CLS = os.path.join(SRC, '01.Framework', 'GSCM.Windows.Forms', 'Class')
-COLS = ['target_kind', 'target', 'label', 'method', 'var', 'filters', 'wrapper', 'sp', 'code', 'args', 'unresolved', 'ref']
+COLS = ['target_kind', 'target', 'label', 'method', 'var', 'filters', 'wrapper', 'sp', 'code', 'args', 'unresolved', 'ref', 'added_rows']
 WRAP_SP = {'Data.Common': 'UP_FX_GetCommonDataList', 'Data.CallBizCommonData': 'UP_FX_GetCommonDataList',
            'Data_SCP.Common': 'UP_FX_GetCommonDataList_SCP', 'Data_SCP.CommonP6': 'UP_FX_GetCommonDataList_SCP',
            'Data_SCP.CommonAll': 'UP_FX_GetCommonDataList_SCP_ALL', 'Data_FP.Common': 'UP_FX_GetCommonDataList_FP'}
@@ -324,8 +324,10 @@ def main():
     CAT = cat = build_catalog()
     src_of, filt_of, binds, labels = {}, {}, [], {}
     texts = []
+    alltxt = []  # 2026-11-20 T438: 메서드 참조 세기용(Designer.cs 이벤트 연결 포함)
     for rel in files:
         raw = read_text(os.path.join(SRC, rel))
+        alltxt.append(strip_comments(raw))
         if rel.endswith('.Designer.cs'):
             labels.update(designer_labels(raw))
             continue
@@ -333,6 +335,18 @@ def main():
         scan_locals(t)
         texts.append((rel, t))
     inline = {}  # 바인딩 인자에 원천 호출을 바로 넣은 경우(SetCellTypeCombo(…, Data.Common(…))) → 가상 변수
+    _all = '\n'.join(alltxt)
+    _dead = {}
+
+    def dead_private(name):
+        """T438: private 로만 선언되고 선언 밖 참조(호출·이벤트 연결 += 이름)가 0 인 메서드면 True. override·public·internal·protected 는 밖에서 부를 수 있어 False"""
+        if not name or name.startswith('<'):
+            return False
+        if name not in _dead:
+            decl = re.findall(r'\b(private|public|protected|internal)\b[^;{()=]*?\b' + re.escape(name) + r'\s*\(', _all)
+            refs = len(re.findall(r'\b' + re.escape(name) + r'\b', _all))
+            _dead[name] = bool(decl) and all(d == 'private' for d in decl) and refs - len(decl) <= 0
+        return _dead[name]
 
     def as_var(expr, ref):
         m = re.match(r'((?:Data(?:_SCP|_FP)?|BLUtils|DataService)\.\w+|\w+)\s*\(', expr.strip())
@@ -385,7 +399,18 @@ def main():
         for m in re.finditer(r'\.setListBox\s*\(', t):
             args, _ = split_args(t[m.end():])
             if len(args) >= 2:
+                if dead_private(method_at(m.start())):
+                    continue  # T438: 어디서도 부르지 않는 private 메서드 안 바인딩(예 SCP0028 ClearUsrCheckedList cs:149~156) = 화면 동작 아님
                 binds.append(('SEARCH', args[1].replace('this.', ''), '', as_var(args[0], f'{base}:{line(m.start())}'), f'{base}:{line(m.start())}', method_at(m.start())))
+        # 2026-11-20 T438(SCP0028 FACT-78289eda): 컨트롤.DataBind(Data.Type.X, isALL[, p1…]) = Data.Common(X, isALL, p1…) 바인딩(UsrComboBox.cs:34~44).
+        #   종전엔 setListBox 만 읽어 cboValid.DataBind(Data.Type.YesOrNo, true)(SCP0028 cs:135) 같은 조회조건 콤보 원천이 빠졌다(GSCM 전체 약 80건)
+        for m in re.finditer(r'\b(\w+)\.DataBind\s*\(', t):
+            args, _ = split_args(t[m.end():])
+            if not args or not re.fullmatch(r'Data\.Type\.\w+', args[0].strip()) or dead_private(method_at(m.start())):
+                continue
+            key = f'<bind {m.group(1)} {args[0].strip()}>'
+            inline[key] = [('Data.Common', [a.strip() for a in args], f'{base}:{line(m.start())}')]
+            binds.append(('SEARCH', m.group(1).replace('this.', ''), '', key, f'{base}:{line(m.start())}', method_at(m.start())))
         for m in re.finditer(r'\.SetCellTypeCombo\s*\(', t):
             args, _ = split_args(t[m.end():])
             c = re.search(r'DefColumns\.(\w+)', ' '.join(args[:-1]))
@@ -402,6 +427,24 @@ def main():
             if len(args) >= 2:
                 binds.append(('PARAM', args[0].strip('"'), '', args[1], f'{base}:{line(m.start())}', method_at(m.start())))
 
+    # 2026-11-20 T391(SSP0014 FACT-b00010d1 · B4 '?Warranty'): 원천 DataTable 에 화면이 직접 넣은 행 — `r = dtX.NewRow(); r["CODE"] = "W"; r["NAME"] = "…"; dtX.Rows.Add(r)`
+    #   (InsertAt(r, n) 은 n 번째) 를 콤보 기대 후보에 합친다(SSP0014_ShipmentModelPIC.cs:183~187). 종전엔 원천 SP 결과만 기대 후보로 써 화면 하드코딩 항목이 빠졌다
+    added_of = {}
+    for rel, t in texts:
+        base = os.path.basename(rel)
+        for mn in re.finditer(r'(\w+)\s*=\s*(\w+)\.NewRow\s*\(\s*\)\s*;', t):
+            rv, dv = mn.group(1), mn.group(2)
+            nxt = re.search(r'\b' + re.escape(rv) + r'\s*=\s*\w+\.NewRow\s*\(', t[mn.end():])
+            seg = t[mn.end(): mn.end() + nxt.start()] if nxt else t[mn.end():]
+            ma = re.search(r'\b' + re.escape(dv) + r'\.Rows\.(Add|InsertAt)\s*\(\s*' + re.escape(rv) + r'\s*(?:,\s*(\d+)\s*)?\)', seg)
+            if not ma:
+                continue
+            vals = {k.upper(): v for k, v in re.findall(r'\b' + re.escape(rv) + r'\s*\[\s*"(\w+)"\s*\]\s*=\s*"((?:[^"\\]|\\.)*)"\s*;', seg[:ma.start()])}
+            if 'CODE' not in vals:
+                continue
+            added_of.setdefault(dv, []).append({'CODE': vals['CODE'], 'NAME': vals.get('NAME', vals['CODE']),
+                                                'pos': int(ma.group(2)) if ma.group(1) == 'InsertAt' and ma.group(2) else -1,
+                                                'ref': f'{base}:{t.count(chr(10), 0, mn.start()) + 1}'})
     for rel, t in texts:
         for m in re.finditer(r'(\w+)\.Rows\.Add\s*\(', t):
             STATIC_OF.setdefault(m.group(1), [])
@@ -455,7 +498,8 @@ def main():
                 fl = [f"{HELPERS[call]['filter']} @{HELPERS[call]['ref']}"] + fl
             rows.append({'target_kind': kind, 'target': target, 'label': label or labels.get(target, ''), 'method': meth, 'var': var,
                          'filters': ' ▸ '.join(fl), 'wrapper': w, 'sp': sp, 'code': code,
-                         'args': json.dumps([{'n': n, 'expr': e} for n, e in ps], ensure_ascii=False), 'unresolved': un, 'ref': f'{ref} ← {sref}'})
+                         'args': json.dumps([{'n': n, 'expr': e} for n, e in ps], ensure_ascii=False), 'unresolved': un, 'ref': f'{ref} ← {sref}',
+                         'added_rows': json.dumps(added_of[var], ensure_ascii=False) if added_of.get(var) and sp != 'STATIC' else ''})
     seen, uniq = set(), []
     for r in rows:
         k = tuple(r[c] for c in ('target_kind', 'target', 'method', 'var', 'sp', 'code', 'filters', 'args'))

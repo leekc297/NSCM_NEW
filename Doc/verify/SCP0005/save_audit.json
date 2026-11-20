@@ -1,12 +1,20 @@
 {
  "menu_id": "SCP0005",
- "generated": "2026-11-19 17:06:37",
+ "generated": "2026-11-20 07:35:41",
  "F8": {
-  "verdict": "NOT_RUN",
-  "note": "CRUD 실제 저장 정리 기록 없음(E2E 저장 미실행)"
+  "verdict": "PASS",
+  "note": "변경 행 2건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정) · 계정 minyonglee1 · 기준 시각 2026-11-20 06:38:06"
  },
  "F7": {
-  "verdict": "NOT_RUN",
-  "note": "CRUD 실제 저장 정리 기록 없음(E2E 저장 미실행)"
+  "verdict": "PASS",
+  "note": "AS-IS SCP0005_SAVE_DISTRIBUTION_ROUTE 대상 표 SCP_MST_DISTRIBUTION_ROUTE · TO-BE 저장이 쓴 표 SCP_MST_DISTRIBUTION_ROUTE · 대상 표 전부 기록"
+ },
+ "run": {
+  "cleanup_sql": "save_trace.json(restore_touched 키 없는 복원)",
+  "account": "minyonglee1",
+  "saved_at": "2026-11-20 06:38:06",
+  "tables": {
+   "SCP_MST_DISTRIBUTION_ROUTE": 2
+  }
  }
 }

@@ -1,0 +1,27 @@
+{
+  "id": "20261120_100901_R9_SSP0005_2",
+  "at": "2026-11-20T10:09:01+09:00",
+  "ms": 1795136941057,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.verify.SSP0005.lock (PID 7540 없음)",
+  "screen": "SSP0005",
+  "sig": "R9|_run.verify.SSP0005.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20T01:02:24.023Z · 인자 verify SSP0005",
+  "evidence": {
+    "file": "Doc/e2e/_run.verify.SSP0005.lock",
+    "pid": 7540
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T10:09:01+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.verify.SSP0005.lock (PID 7540 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+ "rule_id": "MS1",
+ "hash": "034cd9ca0da5a888",
+ "groups": [
+  {
+   "refs": [
+    "GAP-212",
+    "GAP-491"
+   ],
+   "target": "조회·저장 안내 메시지의 TO-BE MSG ID 대응",
+   "condition": "필수 조회조건(Division 등) 빈 값 Search, 시작일 > 종료일 Search, 변경 없이 Save, 정상 Save 처럼 안내 메시지가 뜨는 동작",
+   "expected": "Division 빈 값 안내(MSG00667 ← AS-IS MSG00097)를 비롯한 조회·저장 안내 문구가 AS-IS MSG ID를 그대로 쓰지 않는다. 같은 의미의 문구가 등록된 TO-BE MSG ID(MSG00667·MSG01135·MSG01169·MSG00672 등)를 사용해야 하며, 같은 ID가 TO-BE에서 다른 뜻이면 오류다.",
+   "why": "둘 다 조회·저장 안내 메시지가 AS-IS ID 대신 같은 의미의 TO-BE MSG ID에 대응되는지를 같은 기대 결과로 확인하고, MSG00667도 겹친다."
+  },
+  {
+   "refs": [
+    "GAP-488"
+   ],
+   "target": "FE 사용 MSG 코드의 SCM_ADM_MSG_M 등록 여부",
+   "condition": "변경 없이 Save(F7) 등 안내 메시지가 뜨는 동작을 로그인 언어 KO/EN/CN으로 수행",
+   "expected": "FE가 쓰는 모든 MSG 코드(MSG_NO_CHANGE 같은 임시 코드 포함)가 SCM_ADM_MSG_M에 KO/EN/CN으로 등록되어 있어야 한다. 미등록 코드 때문에 '_' 기본 문구가 화면에 보이면 결함이다.",
+   "why": "의미 대응이 아니라 코드가 등록되어 있는지와 '_' 기본 문구가 보이는지를 확인하므로 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "GAP-494"
+   ],
+   "target": "팝업 안내 문구의 다국어 MSG 코드 사용",
+   "condition": "화면 언어를 EN 등으로 바꾼 뒤 팝업에서 미선택 상태로 OK",
+   "expected": "Version 팝업 미선택 OK 안내 같은 FE 안내 문구가 고정 문자열이 아니어야 한다. MSG 코드(MSG00701 ← AS-IS MSG00279)로 다국어를 조회해 사용자 언어로 표시해야 한다.",
+   "why": "하드코딩된 문자열인지와 언어 전환 시 문구가 바뀌는지를 확인하는 항목이라 다른 묶음과 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "GAP-156"
+   ],
+   "target": "공용 업로드 창 저장 전 닫기 확인창",
+   "condition": "업로드 버튼이 있는 화면에서 Upload, 파일 검증 완료(Error 0) 후 OK 없이 Cancel 또는 X",
+   "expected": "공용 업로드 창(Upload)은 검증을 마치고 저장하기 전에 Cancel이나 X로 닫을 때 MSG00684 「취소하시겠습니까?」(AS-IS MSG00195) 확인창을 띄운다.",
+   "why": "업로드 창을 닫을 때 확인창이 뜨는지라는 고유한 동작을 확인하므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:46:36",
+ "cost": 0.06838920000000001
+}

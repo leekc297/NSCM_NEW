@@ -89,7 +89,7 @@
       },
       {
         "command": "vibeManager.openJobs",
-        "title": "업무 작업 — 업무 1개를 화면 여러 개에 실행",
+        "title": "VMW — 업무 1개를 화면 여러 개에 실행",
         "category": "Vibe_Manager",
         "icon": {
           "light": "media/tb-jobs-light.svg",
@@ -589,6 +589,17 @@
           "type": "boolean",
           "default": false,
           "description": "VS Code 를 닫거나 창을 다시 로드할 때 VM 이 띄운 BE·FE 서버를 종료합니다. 기본 false = 서버를 남기고 다시 열면 로그에 다시 붙습니다."
+        },
+        "vibeManager.orch.visionEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "VMO 큰 그림 점검 적용 여부. 적용(true) = visionEveryDays 일마다 VM, VMO 가 목적에 맞는지 점검하고 개선안을 올립니다(반영은 승인 뒤). 미적용(false) = 주기 점검을 하지 않습니다. Overview 의 큰 그림 점검 단추는 설정과 상관없이 실행됩니다."
+        },
+        "vibeManager.orch.visionEveryDays": {
+          "type": "number",
+          "default": 1,
+          "minimum": 1,
+          "description": "VMO 큰 그림 점검 주기(일). 기본 1 = 하루 1회. 마지막 점검 뒤 이 일수가 지나면 점검합니다."
         }
       }
     }

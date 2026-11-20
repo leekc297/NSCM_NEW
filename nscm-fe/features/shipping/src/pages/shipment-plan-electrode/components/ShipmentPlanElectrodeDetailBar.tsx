@@ -6,6 +6,7 @@ import { useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Stack } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 import { LBL, LOOKUP, SHEETS } from '../shipment-plan-electrode.constants';
 import styles from '../ShipmentPlanElectrode.module.scss';
@@ -110,6 +111,12 @@ export const ShipmentPlanElectrodeDetailBar = ({
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.detailItemId,
+                      next => set({ detailItemId: next }),
+                    ),
+                  }}
                   onChange={e => set({ detailItemId: e.target.value })}
                 />
               )}
@@ -149,6 +156,12 @@ export const ShipmentPlanElectrodeDetailBar = ({
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onModelSearch2}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.detailModelId,
+                      next => set({ detailModelId: next, detailNickName: '' }),
                     ),
                   }}
                   // 직접입력은 품번(detailModelId) 기준 — 이전 팝업에서 세팅된 detailNickName 보조조건을 지운다.

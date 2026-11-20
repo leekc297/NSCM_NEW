@@ -1,6 +1,6 @@
 // orch-watch.js 규칙 시험 — 임시 폴더에 사건을 주입해 R1·R2·R3·R4·R5·R7·R9·R10·R11 사건이 만들어지는지 본다(VS Code·Claude 불필요)
 const path = require('path'); const fs = require('fs'); const os = require('os');
-const dir = process.argv[2];
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'watch-')); const p = { root, vibeDir: path.join(root, '.vibe') };
 fs.mkdirSync(path.join(root, 'tools', 'Harness'), { recursive: true });
 fs.writeFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { waitMaxSec: 1, stallSec: 1, stepSlowMinSec: 1 } }));
@@ -52,6 +52,22 @@ const sleep = t => new Promise(r => setTimeout(r, t));
   const rs = got.map(x => x.rule);
   chk('R4 대기 지연', rs.includes('R4')); chk('R5 진행 없음', rs.includes('R5')); chk('R9 죽은 잠금', rs.includes('R9'), JSON.stringify(got.filter(x => x.rule === 'R9').map(x => x.screen)));
   const n1 = got.length; w.tick(); chk('같은 사건 다시 만들지 않음', got.length === n1, String(got.length - n1));
+  // R5: 로그 무출력 12분이어도 E2E 추적 파일이 30초 전에 바뀌었으면 사건 없음 · 추적 파일도 13분 전이면 사건 (개선안 20261119205920_INC)
+  {
+    const hj = path.join(root, 'tools', 'Harness', 'harness.json'); const cfg0 = fs.readFileSync(hj, 'utf8');
+    fs.writeFileSync(hj, JSON.stringify({ orch: { waitMaxSec: 1, stallSec: 600, stepSlowMinSec: 1 } }));
+    const at = (f, secAgo) => { const d = new Date(Date.now() - secAgo * 1000); fs.utimesSync(f, d, d); };
+    fs.writeFileSync(path.join(root, 'e2e.log'), 'x'); at(path.join(root, 'e2e.log'), 720);
+    const td = path.join(root, 'Doc', 'verify', 'TST0008', 'e2e', 'artifacts', '.playwright-artifacts-0', 'traces'); fs.mkdirSync(td, { recursive: true });
+    const tf = path.join(td, 'recording30.trace'); fs.writeFileSync(tf, 'x'); at(tf, 30);
+    st.apply({ ms: Date.now() - 900000, type: 'proc.start', src: 'vm', pid: me, wb: 1, screen: 'TST0008', label: 'S8.e2e', procId: 78, childPid: me, log: 'e2e.log' });
+    const r5 = () => got.filter(x => x.rule === 'R5' && x.screen === 'TST0008');
+    w.tick(); chk('R5 없음: 로그 무출력 12분 · 추적 파일 30초 전 수정', r5().length === 0, String(r5().length));
+    at(tf, 780); w.tick();
+    chk('R5 진행 없음: 로그 12분 · 추적 파일 13분 무변경', r5().length === 1 && r5()[0].evidence.quiet_sec >= 700 && r5()[0].evidence.quiet_sec < 760 && r5()[0].evidence.trace_quiet_sec >= 770, JSON.stringify(r5().map(x => x.evidence)));
+    E('proc.end', { wb: 1, screen: 'TST0008', label: 'S8.e2e', procId: 78, exit: 0 });
+    fs.writeFileSync(hj, cfg0);
+  }
   // 같은 죽은 잠금이 60분 안에 3회 = R9 2건(삭제만) + 묶음 사건 R2 1건 · 4회째는 같은 사건의 횟수만 (VMO 개선안 20261119193539_REVIEW_3)
   {
     const lf = path.join(root, 'Doc', 'e2e', '_run.dbwin.TST0007.lock'); const b0 = got.length;
@@ -75,6 +91,69 @@ const sleep = t => new Promise(r => setTimeout(r, t));
   const add = got.slice(n2).map(x => x.rule);
   chk('R10 CheckList 판정 정체', add.includes('R10'), add.join(','));
   chk('R11 CheckList Claude 0', add.includes('R11'));
+  // 작업 목록 중지(job-runner stop) = user.stop(wb '작업ID:화면') 뒤 step.end FAIL, CheckList chain.end 는 R1, R11 사건 없음 (개선안 20261120003742_INC)
+  {
+    const jwb = 'J20261120_003243:TST0001'; const n3 = got.length;
+    E('user.stop', { wb: jwb, screen: 'TST0001', job: 'J20261120_003243' });
+    E('step.end', { wb: jwb, screen: 'TST0001', runId: 'c3', chainLabel: '🔎 CheckList', no: 1, name: 'S8.checklistRun', task: 'S8.checklistRun', actor: 'script', status: 'FAIL', exit: 1, ms_run: 5000, why: 'killed', sig: 'S8.checklistRun | killed' });
+    res('2026-11-19 12:00:00');
+    E('chain.end', { wb: jwb, screen: 'TST0001', chain: 'checklist', chainLabel: '🔎 CheckList', runId: 'c3', ok: false, failNo: 1, claudeRan: 0, claudeSkipped: 1, scriptRan: 1 });
+    const add3 = got.slice(n3).map(x => x.rule);
+    chk('작업 목록 중지 뒤 R1, R11 0건', !add3.includes('R1') && !add3.includes('R11'), add3.join(',') || '0건');
+  }
+  // 작업 목록 중지(user.stop) 뒤 chain.end(ms_run 포함) = R11 0건 · 체인 시작보다 앞선 결과(started)로 chain.end = R11 0건 · 체인 시작 뒤 결과 = R11 (개선안 20261120003909_INC)
+  {
+    const two = n => String(n).padStart(2, '0'); const loc = t => { const d = new Date(t); return `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())} ${two(d.getHours())}:${two(d.getMinutes())}:${two(d.getSeconds())}`; };
+    const resN = (started, fail) => fs.writeFileSync(path.join(vd, 'run_verify.result.json'), JSON.stringify({ started, summary: { FAIL: fail, '판정필요': 0, '미검증': 1 }, issues: [{ id: `V-${started}`, class: 'D6' }] }));
+    const r11 = from => got.slice(from).filter(x => x.rule === 'R11').length;
+    const jwb4 = 'J20261120_003909:TST0001'; const n4 = got.length;
+    resN(loc(Date.now() - 10000), 3);
+    E('user.stop', { wb: jwb4, screen: 'TST0001', job: 'J20261120_003909', ms: Date.now() });
+    E('chain.end', { wb: jwb4, screen: 'TST0001', chain: 'checklist', chainLabel: '🔎 CheckList', runId: 'c4', ok: false, failNo: 1, claudeRan: 0, claudeSkipped: 1, scriptRan: 1, ms: Date.now(), ms_run: 60000 });
+    chk('user.stop 뒤 chain.end = R11 0건', r11(n4) === 0, String(r11(n4)));
+    // 개선안 20261120042738_INC: 체인 시작보다 이른 결과(ts) = R11 없음 · R10 없음 · checklist_prev 그대로(1단계 실패는 R1 이 맡음)
+    for (const x of got.filter(x => x.rule === 'R11')) w.update(x.id, { status: 'resolved' }, { by: 'test', what: '새 사건 확인용 종료' });
+    const prevF = path.join(p.vibeDir, 'orch', 'checklist_prev', 'TST0001.json'); const prev0 = fs.readFileSync(prevF, 'utf8'); const prevJ = JSON.parse(prev0);
+    fs.writeFileSync(path.join(vd, 'run_verify.result.json'), JSON.stringify({ started: '2026-11-19 16:00:00', ts: '2026-11-19T16:35:20', summary: { FAIL: 29, '판정필요': 0, '미검증': prevJ.unverified }, issues: prevJ.issues.map(s => { const [i, c] = s.split('|'); return { id: i, class: c }; }) }));
+    const n5 = got.length;
+    E('chain.end', { wb: 5, screen: 'TST0001', chain: 'checklist', chainLabel: '🔎 CheckList', runId: 'c5', ok: false, failNo: 1, claudeRan: 0, claudeSkipped: 1, scriptRan: 1, ms: Date.now(), ms_run: 60000 });
+    const add5 = got.slice(n5);
+    chk('체인 시작보다 이전 ts의 결과 파일이면 R11 없음 · R10 없음 · checklist_prev 그대로', r11(n5) === 0 && !add5.some(x => x.rule === 'R10') && fs.readFileSync(prevF, 'utf8') === prev0, add5.map(x => x.rule).join(',') || '0건');
+    for (const x of got.filter(x => x.rule === 'R11')) w.update(x.id, { status: 'resolved' }, { by: 'test', what: '새 사건 확인용 종료' }); // 같은 서명 열린 사건이 있으면 새로 만들지 않으므로 닫는다
+    const n6 = got.length;
+    resN(loc(Date.now() - 30000), 5);
+    E('chain.end', { wb: 6, screen: 'TST0001', chain: 'checklist', chainLabel: '🔎 CheckList', runId: 'c6', ok: true, claudeRan: 0, claudeSkipped: 1, scriptRan: 1, ms: Date.now(), ms_run: 60000 });
+    chk('체인 시작 뒤 결과로 chain.end = R11 1건', r11(n6) === 1, String(r11(n6)));
+  }
+  // VS Code 종료(dispose) = 두 화면 user.stop(why vscode.dispose) 뒤 step.end FAIL([FAIL] 줄), chain.end = R1, R2, R11 0건 · 반복 이력 0건 (개선안 20261120005403_INC)
+  {
+    const sigH = () => { try { return JSON.parse(fs.readFileSync(path.join(p.vibeDir, 'orch', 'sig_history.json'), 'utf8')); } catch { return {}; } };
+    const jid = 'J20261120_003352'; const nD = got.length;
+    for (const scr of ['TST0012', 'TST0013']) E('user.stop', { wb: `${jid}:${scr}`, screen: scr, job: jid, by: 'VS Code 종료', why: 'vscode.dispose', ms: Date.now() });
+    for (const scr of ['TST0012', 'TST0013']) {
+      const wbD = `${jid}:${scr}`;
+      E('step.end', { wb: wbD, screen: scr, runId: `d-${scr}`, chainLabel: '🔎 CheckList', no: 1, name: 'S8.checklistRun', task: 'S8.checklistRun', actor: 'script', status: 'FAIL', exit: 1, ms_run: 5000, why: '[FAIL] 중지됨', sig: 'S8.checklistRun | [FAIL] 중지됨' });
+      E('chain.end', { wb: wbD, screen: scr, chain: 'checklist', chainLabel: '🔎 CheckList', runId: `d-${scr}`, ok: false, failNo: 1, claudeRan: 0, claudeSkipped: 1, scriptRan: 1, ms: Date.now(), ms_run: 60000 });
+    }
+    const addD = got.slice(nD).map(x => x.rule);
+    chk('VS Code 종료(dispose) 뒤 두 화면 FAIL = R1, R2, R11 0건 · 반복 이력 0건', addD.length === 0 && !sigH()['S8.checklistRun | [FAIL] 중지됨'], addD.join(',') || '0건');
+  }
+  // 같은 runId·단계 step.end FAIL 2번 = R1 1건, R2 없음 · init 이전 ms 의 step.end FAIL = 사건 0건 · 끝난 VM pid 의 FAIL = 반복 집계 제외 (개선안 20261120005059_INC)
+  {
+    const sigH = () => { try { return JSON.parse(fs.readFileSync(path.join(p.vibeDir, 'orch', 'sig_history.json'), 'utf8')); } catch { return {}; } };
+    const n7 = got.length; const fd = { wb: 7, screen: 'TST0009', runId: 'rd1', chainLabel: '중복', no: 2, name: 'S8.dup', task: 'S8.dup', actor: 'script', status: 'FAIL', exit: 1, ms_run: 1000, why: 'dup', sig: 'S8.dup | dup' };
+    E('step.end', fd); E('step.end', fd);
+    const add7 = got.slice(n7).map(x => x.rule);
+    const inc7 = got.slice(n7).find(x => x.rule === 'R1');
+    chk('같은 runId step.end FAIL 2번 = R1 1건 · R2 없음', add7.join(',') === 'R1' && w.get(inc7.id).count === 1 && (sigH()['S8.dup | dup'] || []).length === 1, `${add7.join(',')} · count ${inc7 && w.get(inc7.id).count} · 이력 ${(sigH()['S8.dup | dup'] || []).length}`);
+    const n8 = got.length;
+    st.apply({ at: '', ms: w.health().initMs - 1000, type: 'step.end', src: 'vm', pid: me, wb: 8, screen: 'TST0010', runId: 'old1', chainLabel: '이전', no: 1, name: 'S8.old', task: 'S8.old', actor: 'script', status: 'FAIL', exit: 1, ms_run: 1000, why: 'old', sig: 'S8.old | old' });
+    chk('init 이전 ms 의 step.end FAIL = 사건 0건', got.length === n8 && !sigH()['S8.old | old'], String(got.length - n8));
+    const n9 = got.length;
+    for (const r of ['cut1', 'cut2']) E('step.end', { wb: 9, screen: 'TST0011', runId: r, chainLabel: '끊김', no: 1, name: 'S8.cut', task: 'S8.cut', actor: 'script', status: 'FAIL', exit: 1, ms_run: 1000, why: 'cut', sig: 'S8.cut | cut', pid: 999996 });
+    const add9 = got.slice(n9).map(x => x.rule);
+    chk('끝난 VM pid 의 FAIL 2건 = R2 없음 · 이력 0건', !add9.includes('R2') && !sigH()['S8.cut | cut'], `${add9.join(',')} · 이력 ${(sigH()['S8.cut | cut'] || []).length}`);
+  }
   // 저장·조회·상태 변경
   const all = w.list(); chk('사건 파일 저장', all.length === got.length, `${all.length}/${got.length}`);
   const u = w.update(got[0].id, { status: 'resolved' }, { by: 'test', what: '확인' }); chk('사건 상태 변경·조치 기록', u && u.status === 'resolved' && u.actions.length === 1);

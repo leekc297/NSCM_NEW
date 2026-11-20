@@ -1,0 +1,186 @@
+{
+ "rule_id": "M3",
+ "hash": "bc59a4c163affff9",
+ "groups": [
+  {
+   "rows": [
+    "V-180ef854",
+    "V-b2d03a00"
+   ],
+   "why": "Both ASIS rows check the same thing on the same popup (new SCM0002_ShipmentLotSizePopup): the list is the same as AS-IS and stays the same after the screen's search conditions change."
+  },
+  {
+   "rows": [
+    "V-308726a3",
+    "V-8a40ca28"
+   ],
+   "why": "Both rows target the same Exchange Rate popup under the same condition (first screen access, close after editing) and expect the same result (unsaved edits are discarded on Close and data is queried again on reopen); only the source differs (GENERAL vs CONFIRMED)."
+  },
+  {
+   "rows": [
+    "EG-01b36c8b"
+   ],
+   "why": "This is the ShipmentLotSizePopup state reached through the Delete button. The trigger button differs from the Input row, and the expectation (no error, data present) differs from the ASIS row (same as AS-IS), so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-273588ca"
+   ],
+   "why": "This is the ShipmentLotSizePopup state reached through the Input button. The trigger button differs from the Delete row, and the expectation differs from the ASIS row, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-78d744a4"
+   ],
+   "why": "This is the ItembyDivisionPopup opened from the Model search condition and expects only no error and data present. That differs from the ASIS row V-fcaf4a95, which expects the same list as AS-IS, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-fcaf4a95"
+   ],
+   "why": "This checks that ItembyDivisionPopup returns the same list as AS-IS, which is a different expectation from the data-present check in EG-78d744a4."
+  },
+  {
+   "rows": [
+    "V-091c9ffd"
+   ],
+   "why": "This checks which columns a popup text search condition searches and whether partial (Like) matching works, so its expectation is unique."
+  },
+  {
+   "rows": [
+    "V-0ac1fcdc"
+   ],
+   "why": "This checks the popup's Filter input box, an element no other row checks."
+  },
+  {
+   "rows": [
+    "V-111d6949"
+   ],
+   "why": "This checks main grid row order after the popup is applied, so both the element and the state are different."
+  },
+  {
+   "rows": [
+    "V-1f57490b"
+   ],
+   "why": "This checks month-column generation across the Period range, so its expectation is unique."
+  },
+  {
+   "rows": [
+    "V-49321e2a"
+   ],
+   "why": "This checks the candidate set for the User popup, so the target popup is different."
+  },
+  {
+   "rows": [
+    "V-49736eb8"
+   ],
+   "why": "This checks Exchange Rate popup save (SQL Error 0, multi-row paste), which is a different state and expectation from the Close/reopen rows."
+  },
+  {
+   "rows": [
+    "V-4c3d5c9d"
+   ],
+   "why": "This checks the Team popup's department scope, so the target and expectation are unique."
+  },
+  {
+   "rows": [
+    "V-53cea680"
+   ],
+   "why": "This checks query saving in the SQL popup, so the element is different."
+  },
+  {
+   "rows": [
+    "V-587a31c3"
+   ],
+   "why": "This checks Search in the Excel Form popup, so the target popup is different."
+  },
+  {
+   "rows": [
+    "V-628af3da"
+   ],
+   "why": "This checks condition passing for the Capa New Model popup, so the target is unique."
+  },
+  {
+   "rows": [
+    "V-716794fc"
+   ],
+   "why": "This checks result filtering after a popup search condition is entered, which is a different expectation from the Like/target-column check in V-091c9ffd. Since that is uncertain, it stays alone."
+  },
+  {
+   "rows": [
+    "V-83d1dfa0"
+   ],
+   "why": "This checks the sort order of the Version popup list, so the expectation is unique."
+  },
+  {
+   "rows": [
+    "V-922dca9e"
+   ],
+   "why": "This checks re-querying with ALL for the Sales Site condition in the Price Batch Input popup, so the condition is different."
+  },
+  {
+   "rows": [
+    "V-a2f14e5c"
+   ],
+   "why": "This checks Model condition input and End Customer cell merging in the Price Batch Input popup, so the element is different."
+  },
+  {
+   "rows": [
+    "V-ab827d4e"
+   ],
+   "why": "This checks the user scope of the Owner popup, so the target popup is different."
+  },
+  {
+   "rows": [
+    "V-adc5b1ad"
+   ],
+   "why": "This checks several popups and columns in the new-row state, so the state and elements are unique."
+  },
+  {
+   "rows": [
+    "V-af1fd283"
+   ],
+   "why": "This checks Search and multi-value search in the Project popup, so the target is unique."
+  },
+  {
+   "rows": [
+    "V-d0dd38c0"
+   ],
+   "why": "This checks Version Create in the BP Version popup, so the function is different."
+  },
+  {
+   "rows": [
+    "V-e1ad8291"
+   ],
+   "why": "This checks that MDM-stopped codes are excluded from the Model popup, so the expectation is unique."
+  },
+  {
+   "rows": [
+    "V-e3f125ff"
+   ],
+   "why": "This checks Monthly Bucket input, saved values, and popup opening as a combination, so the elements are unique."
+  },
+  {
+   "rows": [
+    "V-e725b381"
+   ],
+   "why": "This checks the default Period of the Replace button popup, so the target is unique."
+  },
+  {
+   "rows": [
+    "V-eb9a4807"
+   ],
+   "why": "This checks how the Price Batch Input popup's save result is judged (RESULT_CODE), so the expectation is unique."
+  },
+  {
+   "rows": [
+    "V-f7475689"
+   ],
+   "why": "This checks the Version list for the Version search condition, which is a different element and expectation from the Version popup sort-order row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:22:31",
+ "cost": 0.1061117
+}

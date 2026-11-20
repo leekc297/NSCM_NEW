@@ -1,0 +1,30 @@
+{
+  "id": "20261120_053449_R7_ALL",
+  "at": "2026-11-20T05:34:49+09:00",
+  "ms": 1795120489771,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
+  "screen": "",
+  "sig": "R7|응답 중 종료",
+  "count": 1,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-20T05-33-19_claude_orch.log",
+    "label": "개선안 반영 작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+    "source": "orch",
+    "cls": "응답 중 종료"
+  },
+  "status": "resolved",
+  "notice": true,
+  "actions": [
+    {
+      "at": "2026-11-20T05:34:56+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창이 닫히며 끝난 프로세스). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "reload": "shutdown",
+  "prevStatus": "open"
+}

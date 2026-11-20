@@ -1,0 +1,167 @@
+{
+ "rule_id": "H4",
+ "hash": "a6d7d10986b70f70",
+ "groups": [
+  {
+   "refs": [
+    "GAPPI-38",
+    "GAPPI-47",
+    "GAPSELF-34",
+    "GAPSELF-35",
+    "GAPSELF-36",
+    "GAPSELF-37",
+    "GAPSELF-38",
+    "GAPSELF-39",
+    "GAPSELF-40",
+    "GAPSELF-41",
+    "GAPSELF-42"
+   ],
+   "target": "조회조건 공통 컴포넌트(SearchCondition) 너비",
+   "condition": "화면 오픈 · 조회조건 영역 컴포넌트 너비·정렬 확인",
+   "expected": "조회조건 공통 컴포넌트(SearchCondition) 너비는 디자인 기준을 따르며 겹침·넘침이 없어야 한다.",
+   "why": "확인 대상(SearchCondition 너비), 확인 조건, 기대 결과가 모두 같고 원 화면만 다르다."
+  },
+  {
+   "refs": [
+    "GAPSELF-24",
+    "GAPSELF-33"
+   ],
+   "target": "Version 팝업(VERSION Modal) 레이아웃",
+   "condition": "Version 팝업 열기 → 레이아웃·그리드·버튼 배치 확인",
+   "expected": "Version 팝업(VERSION Modal)의 레이아웃·그리드·버튼 배치가 디자인 표준을 따른다.",
+   "why": "같은 Version 팝업 레이아웃을 같은 기대 결과로 확인하며 원 화면만 다르다."
+  },
+  {
+   "refs": [
+    "DM-204-8",
+    "DM-204-8S"
+   ],
+   "target": "좌/우 사용자 영역 높이",
+   "condition": "Insert / 하단 탭",
+   "expected": "Insert 또는 하단 탭 조작 뒤 좌/우 사용자 영역 높이가 같다.",
+   "why": "확인 대상, 조건, 기대 결과가 같고 원 화면(SYS0017/SCM0007)만 다르다."
+  },
+  {
+   "refs": [
+    "GAPPI-2",
+    "DM-235"
+   ],
+   "target": "Main Grid 헤더(Header) 높이",
+   "condition": "화면 오픈 · 조회 · Div 등 조회조건 변경 · 조작 반복",
+   "expected": "그리드 헤더 높이는 기준 높이로 고정되며 조회·Div 변경·조작 중에도 변하지 않는다.",
+   "why": "둘 다 그리드 헤더 높이가 조작 중 바뀌지 않는지 확인하며, Div 변경은 조작의 한 경우라서 조건에 넣어 함께 확인한다."
+  },
+  {
+   "refs": [
+    "DM-111"
+   ],
+   "target": "Dynamic Query(ESS KWh 판가 계산 등)",
+   "condition": "Role DM, ALL",
+   "expected": "레이아웃이 정상이고 조회에 성공하며 결과 건수가 AS-IS와 같다.",
+   "why": "Dynamic Query 조회 결과 건수를 확인하는 고유 항목이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-128"
+   ],
+   "target": "화면 축소 시 조회조건 크기·스크롤",
+   "condition": "브라우저 축소",
+   "expected": "브라우저 폭이 줄어도 조회조건은 최소 크기를 유지하고 화면 전체에 스크롤이 1개만 생긴다.",
+   "why": "조회조건 최소 크기와 단일 스크롤을 기대하는 점이 다른 축소 항목(겹침·드롭다운 잘림)과 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-166"
+   ],
+   "target": "팝업 조회조건·버튼 레이아웃",
+   "condition": "팝업 크기 축소",
+   "expected": "팝업을 축소해도 조회조건과 버튼이 서로 겹치지 않는다.",
+   "why": "확인 대상이 팝업 내부 축소 레이아웃이라 메인 화면 축소 항목과 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-175"
+   ],
+   "target": "Project/Model/Owner 조회조건 팝업 스크롤",
+   "condition": "",
+   "expected": "Project/Model/Owner 조회조건 팝업은 스크롤바 없이 버튼까지 한 화면에 보인다.",
+   "why": "특정 조회조건 팝업의 스크롤바 유무를 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-182"
+   ],
+   "target": "조회조건·버튼 배치 / 콤보 드롭다운",
+   "condition": "노트북 해상도(뷰포트 축소)",
+   "expected": "노트북 해상도에서 조회조건과 버튼이 겹치지 않고 콤보 드롭다운 항목이 잘리지 않는다.",
+   "why": "겹침과 드롭다운 잘림을 기대하는 점이 DM-128(최소 크기·단일 스크롤)과 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-205"
+   ],
+   "target": "Search 시 Loading.... 플로팅 메시지",
+   "condition": "조회",
+   "expected": "조회할 때 의미 없는 Loading.... 플로팅 메시지가 보이지 않는다.",
+   "why": "로딩 메시지 표시 여부를 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-236"
+   ],
+   "target": "Version 조회조건 돋보기 버튼 위치",
+   "condition": "",
+   "expected": "Version 조회조건의 돋보기 버튼이 입력창 안쪽에 있다.",
+   "why": "특정 조회조건 버튼의 위치를 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-63"
+   ],
+   "target": "Lookup 텍스트 조회조건·깜빡임·Grid 스크롤",
+   "condition": "소문자 입력 · 텍스트 입력 중",
+   "expected": "텍스트 조회조건은 대소문자와 상관없이 조회되고, 입력 중 화면 깜빡임이나 상단 Grid 스크롤 이상이 없다.",
+   "why": "대소문자 조회와 입력 중 깜빡임을 함께 확인하는 복합 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-89"
+   ],
+   "target": "Ver.Cutoff 팝업 Period·Description·Div/Type",
+   "condition": "",
+   "expected": "Ver.Cutoff 팝업의 Period가 메인 Period와 같고, Description이 상단에 있으며, Div·Type 조회조건이 넓게 표시된다.",
+   "why": "특정 팝업의 조회조건 값·배치·크기를 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-98"
+   ],
+   "target": "상/하 그리드 스크롤바",
+   "condition": "",
+   "expected": "상/하 그리드에 불필요한 스크롤바가 하나도 없다.",
+   "why": "그리드 스크롤바 수를 확인하는 고유 항목으로, 화면 전체 스크롤(DM-128)과는 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-C4"
+   ],
+   "target": "Main Grid 컬럼 기본 폭",
+   "condition": "화면 오픈 · 개인화 없음",
+   "expected": "개인화 폭이 없으면 Main Grid 컬럼 기본 폭은 META width를 따르고, 그 값은 헤더 문구 길이 이상이다.",
+   "why": "컬럼 폭 기준을 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "GAPPI-24"
+   ],
+   "target": "팝업(Modal) resize·drag 뷰포트 제한·CLOSE 버튼",
+   "condition": "팝업 오픈 → 메인보다 크게 리사이즈 · 화면 밖으로 드래그 · 가로만 조절",
+   "expected": "팝업은 리사이즈하거나 드래그해도 뷰포트 밖으로 나가지 않고 닫기(CLOSE) 버튼이 항상 보인다.",
+   "why": "팝업 리사이즈·드래그 제한을 확인하는 항목이라 팝업 스크롤(DM-175)이나 축소 레이아웃(DM-166)과 달라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:44:28",
+ "cost": 0.1229172
+}

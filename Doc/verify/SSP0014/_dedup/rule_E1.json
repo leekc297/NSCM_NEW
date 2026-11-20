@@ -1,0 +1,40 @@
+{
+ "rule_id": "E1",
+ "hash": "4d8d31d3f0d708ae",
+ "groups": [
+  {
+   "rows": [
+    "V-0417cbf6"
+   ],
+   "why": "음수 수량을 입력하거나 저장할 때 막히는지 보는 행이다. 범위(≥0) 검증이라 다른 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-0bf6c5ff"
+   ],
+   "why": "붙여넣은 뒤 저장할 때 정수부 15자리 연산 초과를 막는지와 SQL Error가 없는지를 보는 행이다. 상태(붙여넣기 후 저장)와 기대 결과가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-6ea7a3f5"
+   ],
+   "why": "Max 자릿수 저장과 계산값(RTF×Unit Price) 초과 시 지정 양식 메시지를 보는 행이다. 대상이 계산값이고 기대 결과가 메시지 양식이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-85e1fec8"
+   ],
+   "why": "MKT_FCST·AS_In_Request 정수 제어와 Unit_Price(LOC) 소수 3자리 제어를 함께 본다. V-f0b9aed0과는 MKT_FCST만 겹치고 대상 컬럼 묶음(Unit_Price·AS_In_Request vs Additional Lead Time)과 기대 결과가 달라서 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-f0b9aed0"
+   ],
+   "why": "MKT FCST와 Additional Lead Time에 소수점을 넣으면 거부되는지 보는 행이다. Additional Lead Time은 다른 행에 없는 대상이라, 묶으면 그 검사가 빠질 수 있어 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:13:12",
+ "cost": 0.0439111
+}

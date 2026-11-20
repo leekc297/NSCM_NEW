@@ -137,7 +137,7 @@ export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps
         </div>
       }
       customContentArea={
-        <div className={styles.modalContentWrapper}>
+        <div className={`${styles.modalContentWrapper} ${styles.searchModalGap}`}>
           {/* ⭐ 격차③ — 헤더 5필드 (O_RC2, 표시 전용): Project Code / YYYY-MM-DD / Model / Item Name / PR Header */}
           <SearchArea
             conditions={

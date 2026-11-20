@@ -8,6 +8,7 @@ import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useSessionStore } from '@shared/stores';
 
 import { ALL, BUCKET_TYPE, COMBO, LBL, MENU_ID, SHEETS } from '../shipment-plan-auto-ess.constants';
@@ -374,6 +375,12 @@ export const ShipmentPlanAutoEssForm = ({
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onItemSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}

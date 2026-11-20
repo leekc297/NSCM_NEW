@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0030,SQL,SSP0030_GET_LOGISTICS_SIMULATION_DETAIL,Doc\asisfacts\db\modules\dbo.SSP0030_GET_LOGISTICS_SIMULATION_DETAIL.sql,356,,,SET @mDqry1 = @mDqry1 + '	  ORDER BY   ' + char(10);,0,동적 SQL · 키 해석 실패(사람 확인)
+SSP0030,SQL,SSP0030_GET_LOGISTICS_SIMULATION_EXCEL,Doc\asisfacts\db\modules\dbo.SSP0030_GET_LOGISTICS_SIMULATION_EXCEL.sql,214,,,SET @mDqry1 = @mDqry1 + '	  ORDER BY   ' + char(10);,0,동적 SQL · 키 해석 실패(사람 확인)
+SSP0030,SQL,SSP0030_GET_LOGISTICS_SIMULATION,Doc\asisfacts\db\modules\dbo.SSP0030_GET_LOGISTICS_SIMULATION.sql,364,,"DIVISION_ID,COMPANY,TYPE,TRANSPORT_MODE","SET @mDqry1 = @mDqry1 + '	order by DIVISION_ID,COMPANY,TYPE,TRANSPORT_MODE    ' + char(10);",0,동적 SQL
+SSP0030,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0030,CODE,,06.UIL\GSCM.SSP.Plan.UIL\SSP0030_Logistics_Simulation.cs,232,,SORT_ORDER,"tmpDivision.DefaultView.Sort = ""SORT_ORDER Asc"";",0,화면 코드 정렬

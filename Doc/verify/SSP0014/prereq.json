@@ -1,7 +1,7 @@
 {
  "menu_id": "SSP0014",
  "asis_id": "SSP0014",
- "generated": "2026-11-19 17:18:19",
+ "generated": "2026-11-20 08:40:01",
  "rc": 0,
  "items": [
   {
@@ -23,14 +23,14 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "8.2시간 전 export(기준 12시간)"
+   "evidence": "8.1시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
    "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
-   "status": "DONE",
+   "status": "OK",
    "producer": "tools/TobeFacts/run.ps1",
-   "evidence": "FE 소스가 인덱스보다 최신 → 재추출 · rc=1 · 28s · 출 79건 해석 FE: 파일 2689, 페이지 145 (21.2s) BE: java 139, xml 13, 엔드포인트 53, SQL 53 완료 23.0s → C:\\Projects\\NSCM\\Doc\\tobefacts 2/3 독립 교차검증 (자체 렉서) files python=729 parser=729 live calls python=1774 parser=1774 commented python=206 parser=205 mismatches=1 features/supply/src/pages/integration-psi/IntegrationPsi.tsx commented 1 0 RESULT FAIL 교차검증 불일치 - C:\\Projects\\NSCM\\Doc\\tobefacts\\crosscheck_report.csv 확인"
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-model-pic · 인덱스 최신"
   },
   {
    "key": "mapping_md",
@@ -72,7 +72,7 @@
    "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
    "status": "DONE",
    "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
-   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 511s · 14.smoke.spec.ts:115:7 › SSP0014 ShipmentModelPIC 스모크 @smoke › 공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual # E2E 결과 — 2026-11-19 17:18 테스트 6 · PASS 2 · FAIL 4 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261119_170949_smoke.log"
+   "evidence": "smoke 3건 실행 · rc=0 · 74s · cts\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261120_083846_smoke.log FE 5173 / BE 8080 responding Playwright smoke SSP0014 running - output goes to the log file # E2E 결과 — 2026-11-20 08:40 테스트 6 · PASS 5 · FAIL 1 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261120_083846_smoke.log"
   }
  ]
 }

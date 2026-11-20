@@ -1,0 +1,65 @@
+{
+ "rule_id": "A2",
+ "hash": "91fbf1d42dcce1d4",
+ "groups": [
+  {
+   "refs": [
+    "DM-150"
+   ],
+   "target": "Excel Download 코드 컬럼 표시값·컬럼 구성",
+   "condition": "조회 후 Excel Download 실행",
+   "expected": "Excel 의 코드 컬럼(TEAM·FCST Type·Measure·Project 등)이 코드가 아닌 Name 으로 출력되고, 컬럼 구성이 화면 그리드와 같다",
+   "why": "그리드가 아니라 Excel 출력물의 Name 표시와 컬럼 구성을 확인하는 단독 항목이다."
+  },
+  {
+   "refs": [
+    "DM-204-2",
+    "DM-204-2S"
+   ],
+   "target": "Category 코드 컬럼(CATEGORY_ID) 숨김",
+   "condition": "Insert / 하단 탭",
+   "expected": "Category 코드 컬럼(CATEGORY_ID)은 화면에 보이지 않고 CATEGORY_DESC 만 표시된다",
+   "why": "두 항목은 확인 대상, 조건, 기대 결과가 똑같고 화면만 다르다."
+  },
+  {
+   "refs": [
+    "DM-216"
+   ],
+   "target": "Team(DEPT_ID) 셀 콤보 표시값",
+   "condition": "SSPM 에서 DEPT_ID 변경 후 재조회",
+   "expected": "DEPT_ID 를 바꾼 뒤에도 Team(DEPT_ID) 셀은 코드가 아닌 팀명(Name)으로 표시된다",
+   "why": "바뀐 DEPT 가 코드가 아닌 Name 으로 표시되는지 보는 항목이고, Team 값을 어디서 가져오는지 보는 DM-40 과는 기대 결과가 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-27"
+   ],
+   "target": "조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정",
+   "condition": "기간 조건을 지정해 조회",
+   "expected": "조회 건수가 AS-IS 와 같고, Team 컬럼은 Name 으로 표시되며, 컬럼팝업에 저장한 구성대로 조회된다",
+   "why": "건수, Team Name 표시, 컬럼팝업 설정을 함께 확인하는 복합 항목이라 다른 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-40"
+   ],
+   "target": "Team 컬럼 값의 출처(조회·신규행)",
+   "condition": "SSPM 에서 Team 변경 후 조회 / 신규행 Insert",
+   "expected": "조회 결과와 신규행의 Team 컬럼은 Owner 소속팀이 아니라 SSPM DEPT_ID 기준의 팀으로 표시·세팅된다",
+   "why": "Team 이 Name 으로 보이는지가 아니라 어느 DEPT 출처를 쓰는지 보는 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-57"
+   ],
+   "target": "코드 셀 편집기 진입 시 표시값(Cell Prod Site)",
+   "condition": "신규행 Insert 후 셀 클릭(편집기 진입)",
+   "expected": "편집기에 들어간 상태에서도 Cell Prod Site 등 코드 셀에 Description(Name)이 표시되고 코드(예: NJ00-A)는 노출되지 않는다",
+   "why": "조회 결과가 아니라 편집기에 들어간 상태의 표시값을 보는 항목이라 확인 동작이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:39:34",
+ "cost": 0.06433320000000001
+}

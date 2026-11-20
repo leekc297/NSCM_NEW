@@ -1,0 +1,92 @@
+{
+  "id": "20261119232524_SELF_3",
+  "at": "2026-11-19T23:25:24+09:00",
+  "ms": 1795098324032,
+  "source": "self",
+  "status": "superseded",
+  "sig": "sn smalln dash dot",
+  "title": "작은 모듈 6개 고정 문구에서 줄표와 가운뎃점 나열 제거(prompt-panel, orch-selfcheck, history, orchestra, flow-panel, chain-runner)",
+  "evidence": "입력 key S11|prompt-panel.js(기호 9), S11|orch-selfcheck.js(기호 7), S11|history.js(기호 5, 추측 1), S11|orchestra.js(기호 6), S11|flow-panel.js(기호 2), S11|chain-runner.js(기호 1). style.csv 위치: prompt-panel.js L15, L60, L72, L122, L140. orch-selfcheck.js L197, L293, L298, L299, L362, L363. history.js L99, L164. orchestra.js L13. flow-panel.js L189, L199. chain-runner.js L58. orchestra.js L13 과 prompt-panel.js L140 은 웹뷰 템플릿이라 주석 구간이 섞여 있음(본문 미확인, 반영 때 사용자에게 보이는 문자열만 대상).",
+  "targets": [
+    "tools/VibeManager/prompt-panel.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/history.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/flow-panel.js",
+    "tools/VibeManager/chain-runner.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_chain_runner.js"
+  ],
+  "before_after": "예 '실행 안 됨(작업 없음 · 작업 모드 차단 · 입력 취소)' → '실행 안 됨(작업 없음, 작업 모드 차단, 입력 취소)'. 예 '자동 삭제 대기 — ${cur.waitNote}' → '자동 삭제 대기. ${cur.waitNote}'. 예 '대상 없음 — 대조표/Doc/gen 미생성' → '대상 없음. 대조표/Doc/gen 미생성'. history.js L164 '섞일 수 있습니다' → '섞입니다'. 이모지(💬 ⚠), 주석, 정규식, 키 이름은 고치지 않음. 시험 2개는 고친 문구를 문자열로 맞춰 보는 줄만 같이 고침.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/prompt-panel.js tools/VibeManager/orch-selfcheck.js tools/VibeManager/history.js tools/VibeManager/flow-panel.js tools/VibeManager/chain-runner.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 기대: 5개 파일 출력에 줄표, 가운뎃점 종류 0(history.js 는 이모지 3건만 남음). orchestra.js 를 고쳤으면 node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager FAIL 0.",
+  "rollback": "VMO 가 만든 대상 8개 파일의 .bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T00:05:41+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T00:07:23+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0005"
+    },
+    {
+      "at": "2026-11-20T00:07:23+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T00:09:15+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 2026-11-20 00:08:50 python tools/Docs/doc_style.py (5개 파일) --out .vibe/orch/selfcheck/doc_style --quiet 실행. 결과: prompt-panel.js 기호 1(L164 JS 주석), orch-selfcheck.js 기호 1(L362), history.js 기호 3(이모지 L164 · 대상 파일 8개 복원 · 대상 밖 변경 tools/VibeManager/orch-state.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T00-07-23_claude_orch.log",
+      "sec": 107,
+      "costUsd": 1.2059235,
+      "files": [
+        "tools/VibeManager/chain-runner.js",
+        "tools/VibeManager/flow-panel.js",
+        "tools/VibeManager/history.js",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/prompt-panel.js",
+        "tools/VibeManager/orch-selfcheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-20T00:30:06+09:00",
+      "by": "Claude Code 세션",
+      "what": "00:19 자가진단이 이 안을 고쳐 20261120001936_SELF_3 로 다시 올림. 그 안으로 대체"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|prompt-panel.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795100740946,
+  "autoFp": "3edd6d0488",
+  "result": {
+    "applied": true,
+    "verified": false,
+    "changed_files": [
+      "tools/VibeManager/prompt-panel.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/history.js",
+      "tools/VibeManager/flow-panel.js",
+      "tools/VibeManager/chain-runner.js"
+    ],
+    "verify_result": "2026-11-20 00:08:50 python tools/Docs/doc_style.py (5개 파일) --out .vibe/orch/selfcheck/doc_style --quiet 실행. 결과: prompt-panel.js 기호 1(L164 JS 주석), orch-selfcheck.js 기호 1(L362), history.js 기호 3(이모지 L164, L167, L172), flow-panel.js 0, chain-runner.js 0. 기대값(줄표, 가운뎃점 0)과 2건 다름. 고친 5개 파일 node --check 통과. orchestra.js 는 고치지 않아 t_webview_syntax.js 미실행.",
+    "note": "고친 위치: prompt-panel.js L15, L60, L72, L122, L152, L153, L155(2곳). orch-selfcheck.js L197, L293, L298, L299, L363. history.js L99, L164(줄표와 추측 어미). flow-panel.js L189(툴팁 줄표 4곳, 가운뎃점 1곳), L199. chain-runner.js L58. 고치지 않은 것: orch-selfcheck.js L362 '반영 완료 — 생성물 삭제'는 test/t_orch_selfapply.js:90 정규식이 같은 문구를 맞춰 보는데 이 시험 파일이 targets 밖이라 그대로 둠. 고치려면 t_orch_selfapply.js 를 targets 에 넣은 개선안이 필요함. prompt-panel.js L164 는 웹뷰 스크립트 JS 주석이라 승인 범위대로 그대로 둠. orchestra.js L13 템플릿 걸림 7건은 CSS/JS 주석(L156, L168, L250, L448, L499)과 정규식(L449)이라 수정 없음. t_orch_selfcheck.js, t_chain_runner.js 는 바뀐 문구를 맞춰 보는 줄이 없어 수정 없음."
+  },
+  "supersededBy": "20261120001936_SELF_3"
+}

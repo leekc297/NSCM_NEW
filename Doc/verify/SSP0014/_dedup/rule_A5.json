@@ -1,0 +1,632 @@
+{
+ "rule_id": "A5",
+ "hash": "284df920bc3931cd",
+ "groups": [
+  {
+   "rows": [
+    "EG-080b70d3",
+    "EG-a57c6eef"
+   ],
+   "why": "둘 다 전체 Div에서 같은 Measure 버튼을 확인하고 기대도 'Measure 버튼'으로 같다. 규칙 코드(EG022/EG402)만 다르다."
+  },
+  {
+   "rows": [
+    "V-625df9f7",
+    "V-cfb44072"
+   ],
+   "why": "같은 컬럼셋팅 Company ID 요소를 보고, 필수 컬럼은 Invisible로 이동할 수 없고 선택한 컬럼은 반드시 표시된다는 기대도 글자까지 같다."
+  },
+  {
+   "rows": [
+    "V-bcdf1320",
+    "V-d85bbffd"
+   ],
+   "why": "Div 40에서 Div를 전환하고 컬럼셋팅 OK를 누르면 그리드가 즉시 재구성된다는 기대가 대상·조건까지 같다."
+  },
+  {
+   "rows": [
+    "V-6ee632c1",
+    "V-e29d105b"
+   ],
+   "why": "개인화가 없는 상태에서 Div를 전환할 때 그리드가 선택 Div의 UI Category Default 컬럼·Measure로 표시되는지 확인하며, 대상·조건·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-86eed071"
+   ],
+   "why": "그리드에 더해 컬럼셋팅 팝업 구성도 확인하므로 그리드만 보는 Default 행과 확인 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-9fd02582"
+   ],
+   "why": "조건이 Div 40·개인화 없음뿐이라 Div 전환 조건이 들어간 행들과 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-12db1b97"
+   ],
+   "why": "개인화가 있는 상태로 40에서 81로 전환할 때 Project Code·Plant Site만 확인하므로, End Customer까지 보는 A5-G05와 대상 컬럼이 다르다."
+  },
+  {
+   "rows": [
+    "V-a695f415"
+   ],
+   "why": "End Customer를 포함해 다른 Div의 필수 컬럼 전체가 자동 추가되는지 확인하므로 범위가 더 넓다."
+  },
+  {
+   "rows": [
+    "V-aabcb490"
+   ],
+   "why": "화면 전체의 종합 규칙(Default·필수·숨김·재구성)이라 하나의 개별 요소와 1:1로 대응하지 않는다."
+  },
+  {
+   "rows": [
+    "V-be134f28"
+   ],
+   "why": "Div 40의 그리드 컬럼 구성으로, 다른 Div와는 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-c865de19"
+   ],
+   "why": "Div 81의 그리드 컬럼 구성으로, 다른 Div와는 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-ffb39093"
+   ],
+   "why": "Div 82의 그리드 컬럼 구성으로, 다른 Div와는 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-f3ef6e73"
+   ],
+   "why": "컬럼 순서는 컬럼 구성과 다른 성질의 확인이다."
+  },
+  {
+   "rows": [
+    "EG-2b1a929b"
+   ],
+   "why": "조회 본문에 Division=40이 실리는지 보는 것으로, Div 81과는 조건이 다르다."
+  },
+  {
+   "rows": [
+    "EG-81cbf073"
+   ],
+   "why": "조회 본문에 Division=81이 실리는지 보는 것으로, Div 40과는 조건이 다르다."
+  },
+  {
+   "rows": [
+    "EG-83f8fc90"
+   ],
+   "why": "40→81→40 복귀 후 헤더가 처음과 같은지 확인하는 고유 시나리오다."
+  },
+  {
+   "rows": [
+    "EG-a0f87f72"
+   ],
+   "why": "Div별 DEFAULT 컬럼의 차이 자체를 보는 것으로, 단일 Div 구성 확인과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-884d0773"
+   ],
+   "why": "컬럼셋팅 팝업에서 필수 컬럼이 빨간색으로 보이고 해제할 때 메시지가 뜨는지 확인하므로 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-1670e402"
+   ],
+   "why": "Div별 표시 컬럼과 Measure 집합이 AS-IS와 같은지 보는 일반 결함 유형으로, 범위가 고유하다."
+  },
+  {
+   "rows": [
+    "V-9c763ef2"
+   ],
+   "why": "조회 그리드가 컬럼셋팅 설정값대로 그려지고 COL_LIST가 보이지 않는지 확인하는 고유 기대다."
+  },
+  {
+   "rows": [
+    "V-114faaf0"
+   ],
+   "why": "콤보 편집기·COL_LIST·Measure 위치를 함께 보는 복합 기대다."
+  },
+  {
+   "rows": [
+    "V-38f48678"
+   ],
+   "why": "Measure 항목 구성이 UI Category 기준인지 확인한다."
+  },
+  {
+   "rows": [
+    "V-3d2554d7"
+   ],
+   "why": "특정 Measure의 추가·제거를 확인하는 고유 기대다."
+  },
+  {
+   "rows": [
+    "V-cf8390f0"
+   ],
+   "why": "Measure 필수 컬럼이 항상 표시되는지 확인하는 별도 요소다."
+  },
+  {
+   "rows": [
+    "V-042aa5bb"
+   ],
+   "why": "Sub Module 컬럼이 없는지(삭제) 확인한다."
+  },
+  {
+   "rows": [
+    "V-75731b87"
+   ],
+   "why": "CATEGORY_ID가 숨겨지는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-39371a04"
+   ],
+   "why": "Div별 Project 계열 제외 컬럼이 보이지 않는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-73f9a06e"
+   ],
+   "why": "Plan Type별 제외 컬럼을 확인하는 것으로 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-8f03f8a8"
+   ],
+   "why": "Div 40에서 Report 컬럼 2개가 보이는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-48681dac"
+   ],
+   "why": "Biz Plan일 때 Version 컬럼이 표시되는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-7399dcdd"
+   ],
+   "why": "VERSION을 셋팅 목록에서 제거하고 AS FROM SITE를 숨기는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-48fa23a1"
+   ],
+   "why": "Cust Group 조회조건·Div 파라미터·헤더 재구성을 함께 보는 복합 기대다."
+  },
+  {
+   "rows": [
+    "V-9d778b95"
+   ],
+   "why": "신규행의 Div 기본값과 Div 변경 시 그리드 초기화를 확인하므로 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-9e93f458"
+   ],
+   "why": "하단 그리드의 CRUD Status 컬럼이 보이지 않는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-9fd7e3bf"
+   ],
+   "why": "CHK 컬럼 대신 행 머리 선택기가 있는지 확인하는 고유 판정이다."
+  },
+  {
+   "rows": [
+    "V-b4beb7d6"
+   ],
+   "why": "Column Setting 저장→재오픈 후 Default가 유지되는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-b5481afd"
+   ],
+   "why": "Email 컬럼이 보이지 않는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-86f6e1f1"
+   ],
+   "why": "ROUTE_PATH를 입력·저장할 수 있는지 확인한다."
+  },
+  {
+   "rows": [
+    "V-e9432c45"
+   ],
+   "why": "BPS I/F 버튼과 Last Update 컬럼을 확인한다."
+  },
+  {
+   "rows": [
+    "V-ee3b6163"
+   ],
+   "why": "Group 컬럼이 없는 것이 맞다는 확정 결정을 확인한다."
+  },
+  {
+   "rows": [
+    "T-0abc9b21"
+   ],
+   "why": "MAIL_USER1 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-1ac550f6"
+   ],
+   "why": "MAIL_USER2 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-c9ffad9c"
+   ],
+   "why": "MAIL_USER3 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-173cd344"
+   ],
+   "why": "MAIL_USER4 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-95224101"
+   ],
+   "why": "MAIL_USER5 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-38efaa3a"
+   ],
+   "why": "TEAM_LEADER 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-c1939cf1"
+   ],
+   "why": "PART_LEADER 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-ceeaf903"
+   ],
+   "why": "OPERATION_GROUP 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-d2c30b3a"
+   ],
+   "why": "DIVISION_ID 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-e220e06a"
+   ],
+   "why": "USER_ID 컬럼의 대조표 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-a11b5a19"
+   ],
+   "why": "CreateSpread 진입점의 AS-IS 컬럼 목록을 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-1fba34c5"
+   ],
+   "why": "InitSpread에서의 SmartColMerge 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-6895278f"
+   ],
+   "why": "조회 후/TopChange 시점의 SmartColMerge 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-a4f09b56"
+   ],
+   "why": "TopChange 때 스크롤 재병합 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-24b22484"
+   ],
+   "why": "UC-02 수정 중 재조회 confirm의 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-fd9416e1"
+   ],
+   "why": "UC-07 재조회 시 필터 유지의 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-7d716ef7"
+   ],
+   "why": "spdMain 그리드 컨트롤의 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-e9713b15"
+   ],
+   "why": "spdMain_Sheet1 시트의 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-a51f6d3e"
+   ],
+   "why": "usrConditionPanel1의 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "T-f2160003"
+   ],
+   "why": "btnItemId 레이아웃 셀의 구현 위치를 추적한다."
+  },
+  {
+   "rows": [
+    "AD-02913504"
+   ],
+   "why": "SEARCH 호출 #2(Div 40·기본 인자)의 결과 컬럼 집합으로, 호출 인자가 달라 단독이다."
+  },
+  {
+   "rows": [
+    "AD-e6fa68c9"
+   ],
+   "why": "SEARCH 호출 #6(Div 81)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-cf851c63"
+   ],
+   "why": "SEARCH 호출 #7(Div 81_HD)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-8acc9f35"
+   ],
+   "why": "SEARCH 호출 #8(operationGroup A)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-32989d9e"
+   ],
+   "why": "SEARCH 호출 #9(operationGroup E)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-d90ec5be"
+   ],
+   "why": "SEARCH 호출 #10(fromSite 단일)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-de8df197"
+   ],
+   "why": "SEARCH 호출 #11(fromSite 다중)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-49d82fe5"
+   ],
+   "why": "SEARCH 호출 #12(validYn Y)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-589f2292"
+   ],
+   "why": "SEARCH 호출 #13(validYn N)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-40c68570"
+   ],
+   "why": "SEARCH 호출 #19(Div 82)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-604a3809"
+   ],
+   "why": "SEARCH 호출 #20(Div 81_HG)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-ab66d15b"
+   ],
+   "why": "SEARCH 호출 #21(Div 81_HM)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-9394466f"
+   ],
+   "why": "SEARCH 호출 #22(Div 81_ST)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-bfe6d488"
+   ],
+   "why": "SEARCH 호출 #23(Div 81_UC)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-7c255a45"
+   ],
+   "why": "SEARCH 호출 #28(language CN)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-69a66ffa"
+   ],
+   "why": "SEARCH 호출 #31(language EN)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-13b079cd"
+   ],
+   "why": "SEARCH 호출 #52(itemId 대문자)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-282fc716"
+   ],
+   "why": "SEARCH 호출 #53(itemId 소문자)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-6f40e36c"
+   ],
+   "why": "SEARCH 호출 #54(itemId 부분값)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-9e11d3bf"
+   ],
+   "why": "SEARCH 호출 #55(itemId 다중)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-ec569099"
+   ],
+   "why": "SEARCH 호출 #56(userId 소문자)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-91d81f44"
+   ],
+   "why": "SEARCH 호출 #57(userId 대문자)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-a5cecb11"
+   ],
+   "why": "SEARCH 호출 #58(userId 부분값)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-82520ecd"
+   ],
+   "why": "SEARCH 호출 #59(userId 다중)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-5d3e1413"
+   ],
+   "why": "SEARCH 호출 #60(itemId E2E)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-efed1073"
+   ],
+   "why": "SEARCH 호출 #61(Div 81_HM·EN)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-78c33b8e"
+   ],
+   "why": "SEARCH 호출 #74(itemId AMDAU0348A)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-475cf91b"
+   ],
+   "why": "USER_CHECK 호출 #15(njlilian)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-0468492f"
+   ],
+   "why": "USER_CHECK 호출 #17(luping)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-61173a5c"
+   ],
+   "why": "USER_CHECK 호출 #18(junha.hwang)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-6620bfe0"
+   ],
+   "why": "USER_CHECK 호출 #26(잘못된 키)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-a73aa695"
+   ],
+   "why": "USER_CHECK 호출 #27(정상+잘못된 키)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-ea58cb56"
+   ],
+   "why": "USER_CHECK 호출 #35(3명)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-68e6096f"
+   ],
+   "why": "USER_CHECK 호출 #37(X 접미 포함 3명)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-b7d07496"
+   ],
+   "why": "USER_CHECK 호출 #39(shengqiongfen 포함)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-acf8bb34"
+   ],
+   "why": "USER_CHECK 호출 #41(zhouziqiang 포함)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-480d6af7"
+   ],
+   "why": "USER_CHECK 호출 #44(kwonl 포함)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-068b1c6d"
+   ],
+   "why": "USER_CHECK 호출 #46(pantaonj 포함)으로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-a8e7400e"
+   ],
+   "why": "USER_CHECK 호출 #48(guoxiaoliangX)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-b19a7389"
+   ],
+   "why": "USER_CHECK 호출 #49(2명)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-06bee4ed"
+   ],
+   "why": "USER_CHECK 호출 #51(5명)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-e8facb15"
+   ],
+   "why": "USER_CHECK 호출 #64(ZZ_E2E_BAD_KEY)로 인자가 다르다."
+  },
+  {
+   "rows": [
+    "AD-a4922c34"
+   ],
+   "why": "USER_CHECK 호출 #65(정상+BAD_KEY)로 인자가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:40:26",
+ "cost": 0.3939017
+}

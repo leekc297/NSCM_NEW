@@ -1,0 +1,95 @@
+﻿rule_id,family,name,oracle,method,expected_source,how
+A1,A,조회 건수 AS-IS 일치,O1,E2E,FE 실제 조회 인자→param_map→AS-IS SP 동시 실행(golden),같은 조건 조회 결과 행수·키 집합 비교(차이 행 목록 증거)
+A2,A,코드 컬럼 표시값=Name,O1,E2E+META,AS-IS 콤보·코드 컬럼 표시 규칙(CELL_COMBO_DATA_TYPE·dataMap),그리드·Excel 셀 표시값이 코드가 아닌 Name 인지(dataMap 보유 컬럼 전수)
+A3,A,합계·소계 행 값,O1,E2E,AS-IS Sum/Subtotal 표현식,Sum 행 존재·공란 아님·구성 행 합과 일치
+A4,A,재조회 시 전 시트 초기화,O1,E2E,AS-IS FindButton 의 시트별 Clear/Init,모든 결과 시트가 재조회 직전 비워지고 다시 채워지는지
+A5,A,표시 컬럼 구성(Div·개인화·필수),O1+O2,E2E+META,SHEET_COLUMNS Div별 DEFAULT/필수 + 컬럼셋팅,개인화 없음=Div Default · 필수 컬럼 항상 표시 · 숨김 컬럼 비노출 · Div 전환 시 재구성
+B1,B,콤보 후보 빈 행 없음,O2,E2E,공통 규칙,조회조건·그리드 셀 콤보 후보에 공백/NULL 표시 항목 0
+B2,B,콤보 후보 중복 없음,O2,E2E,공통 규칙,표시값 중복 0(코드 중복 포함)
+B3,B,콤보 후보 정렬,O1+O2,E2E,AS-IS 콤보 SQL ORDER BY·공통 정렬 규칙,후보 순서 = 원천 정렬
+B4,B,콤보 후보 집합=AS-IS 원천+필터,O1,E2E,AS-IS 콤보 원천 SQL/SP + filterExpression(Div·권한·상위값) 동시 실행,후보 집합 차이 0(추가·누락 항목 목록 증거)
+B5,B,허용 목록 룩업 기준(FCST Type·입력 Measure 등),O1+O2,META+E2E,LOOKUP(SALES_TYPE·GET_ADMIN_GROUP_MEASURE 등)·AS-IS 분기,Div·권한·조건별 허용 항목만 후보에 존재
+B6,B,조회조건 ALL 옵션·다중선택 사양,O1+O2,STATIC+E2E,AS-IS 컨트롤 타입·search_cond.csv·확정 요구,ALL 존재·다중선택 가능 여부가 기준과 일치
+C1,C,조회조건 cascade,O1,E2E,AS-IS SelectedIndexChanged→하위 재조회/Filter,상위 값 변경 시 하위 후보 재구성·선택값 초기화(ALL)
+C2,C,그리드 셀 cascade,O1,E2E,AS-IS ComboSelChange/Changed→SetCellTypeCombo·Filter,상위 셀 변경 시 하위 셀 후보 재구성·값 초기화
+C3,C,연쇄 자동 채움,O1,E2E,AS-IS SetValue/SetText 연쇄(Site→City·Sales Site→Team/End Customer 등),원천 셀 확정 시 대상 셀 값이 AS-IS 규칙대로 채워짐
+D1,D,컬럼 편집 가능 여부,O1+O2,E2E+META,INPUT_TP_CD + AS-IS LockColumn/LockRange(신규·기존행),셀 편집기 열림 여부 = 기대(신규행·기존행 각각)
+D2,D,Measure×기간 편집 구간,O1+O2,E2E,AS-IS 구간 잠금(실적/W+0/Bucket/버전/Cutoff) + 룩업(GET_ADMIN_GROUP_MEASURE),Measure 행×기간 열 셀 편집 가능 매트릭스 = 기대
+D3,D,행 값 기반 조건부 잠금,O1,E2E,AS-IS guard(VMI_YN·Site 유형·Item 유형 CA1 등)+LockRange,조건 행에서만 잠금/해제
+D4,D,신규행 기본값·자동세팅·Insert 전제,O1,E2E,AS-IS InsertButton(기본값·자동세팅·잠금·전제조건),Insert 직후 기본값·잠금 = 기대 / 조회 전 Insert 등 전제 위반 시 차단
+E1,E,숫자 소수자리·정수·자릿수·부호,O1+O2,E2E,AS-IS NumberCellType(소수·min·max)·DATA_SCALE_NUMBER·컬럼 Max,규칙 밖 값 입력 거부 또는 저장 차단+메시지
+E2,E,날짜 형식·유효성,O1,E2E,AS-IS DateTimeCellType·SP 날짜 검증,잘못된 날짜(2026-10-33 등) 입력 거부/저장 차단
+E3,E,필수 입력 검증,O1,E2E,AS-IS checkRequired*·VALIDATE·SP 필수 검증,필수 누락 저장 시 차단+해당 메시지
+E4,E,업무 검증(조건부 필수·중복·관계),O1,E2E,AS-IS VALIDATE·SP 검증 분기(VALIDATION 취합),조건 위반 데이터 저장 시 차단+AS-IS 동일 의미 메시지
+F1,F,저장 후 DB 반영,O3,E2E+DB,성공 판정(결과 커서 CODE)·사내 DB 원장,성공 메시지 후 DB 원장에 입력값 그대로 존재(마커 행)
+F2,F,1회 저장(변경 감지),O3,E2E,EditTracker·CRUD_TYPE,입력 후 Save 1회로 저장('수정한 내용 없음' 오탐 0)
+F3,F,붙여넣기 경로 저장,O1+O3,E2E,AS-IS ClipboardPasted 동일 cascade,붙여넣기 값이 cascade·저장·DB 반영까지 정상
+F4,F,저장·조회 SQL 오류 0,O3,E2E,결과 커서·HTTP,조회/저장/버킷 전환 반복 시 SQL Error 0 · 자릿수 Max 값 저장
+F5,F,CRUD Status 표시 정합,O1+O3,E2E,AS-IS 행 상태 플래그,삭제·병합행·취소 후 상태 표시가 실제 처리 대상과 일치
+F6,F,저장 후 값 보존,O1+O3,E2E+DB,입력값,저장·재조회 후 값 변형·중복(Double)·자동 재설정 없음
+G1,G,조회조건 결과 반영,O1+O3,E2E,조건 값,조건 변경 후 결과 행이 조건을 만족(키 컬럼 값 범위) · 무시되는 조건 0
+G2,G,ALL 재선택·다중선택·콤마 키인,O1+O2,E2E,확정 요구·AS-IS,ALL→Y→ALL 재조회 정상 · 다중 선택/콤마 다중 입력 결과 반영
+G3,G,조회조건 저장·복원,O2,E2E,공통 규칙(Period 저장 제외),F6 저장→새 탭 복원 값 일치 · Period 비저장 · ALL 복원
+G4,G,조회조건 표시·활성·크기,O1+O2,STATIC+E2E,search_cond.csv·AS-IS Visible/Enabled·Div 분기,Div별 표시/비활성 · 크기 · 위치가 기준과 일치
+G5,G,팝업 조건 연동,O1+O2,STATIC+E2E,AS-IS 팝업 호출 인자(텍스트·Period·Div·From/To),메인 입력값·기간이 팝업 조건으로 전달 · 고정 조건 수정 불가 · 결과가 인자로 필터됨
+H1,H,정렬(가로 정렬),O1,STATIC+META,AS-IS 컬럼 HAlign·HORIZONTAL_ALIGN_CODE,컬럼 정렬 = AS-IS
+H2,H,배경·글자색 규칙,O1+O2,E2E,AS-IS SetBGColor/SetFGColor + 표준 3색,입력불가=흰색·편집=노랑·구간색 규칙 일치
+H3,H,셀 병합,O1+O2,E2E,AS-IS FPMerge·확정 요구,병합 대상 컬럼·조건 일치 · 입력 중 병합 해제
+H4,H,레이아웃·스크롤·크기,O2,E2E,디자인 룰,불필요 스크롤바 0 · 최소 크기 유지 · 조회조건 높이 36px
+H5,H,라벨 명칭,O1+O2,STATIC,search_cond.csv·AS-IS 라벨·확정 요구,라벨 문구 = 기준
+H6,H,팝업 표준,O2,STATIC+E2E,디자인 룰(OK/CLOSE 순서·No 컬럼·건수·공통 그리드),팝업별 표준 준수
+H7,H,Excel 다운로드 양식,O1+O2,E2E,AS-IS 양식·공통 모듈,Name 표시·헤더 병합·틀고정·테두리 = 기준
+I1,I,LBL/MSG 언어별 등록,O2,META,SCM_ADM_MSG_M KO/EN/CN,FE 사용 코드 전부 3개 언어 등록 · '_' 폴백 노출 0
+I2,I,런타임 언어 일치,O2,E2E,사용자 언어 설정,KO/EN/CN 로그인 시 라벨·메시지·콤보 항목이 해당 언어(혼용 0)
+I3,I,데이터 다국어 컬럼,O2,E2E,다국어 명칭 컬럼 규칙,Team 등 명칭 데이터가 사용자 언어로 표시
+J1,J,권한 Division 노출,O1,E2E+META,사용자 그룹·Unit 권한,계정별 Division 후보·기본값 = 권한(단일 권한 자동 선택)
+J2,J,권한별 버튼·기능,O1,E2E+META,btn_auth·AS-IS 권한 분기,권한 없는 Insert/Save/Delete 불가 · 버튼 노출 일치
+J3,J,권한별 편집 구간,O1,E2E+META,룩업(GET_ADMIN_GROUP_MEASURE 등)·권한,권한·시간대별 Measure 편집 가능 여부 일치
+K1,K,Sort·Filter 적용·해제,O2+O3,E2E,공통 그리드 규칙,Sort/Filter 결과 반영 · 해제 시 전체 복원 · 필터 빈값 통합
+K2,K,컬럼·Measure 셋팅,O2+O3,E2E,공통 규칙,Default 복원 · 저장 후 새 탭 유지 · 필수 컬럼 강조 · 변경 없으면 재조회 안 함
+K3,K,그리드 조작(Ctrl 다중·Copy·Hide·단축키),O2,E2E,공통 규칙,Ctrl 다중선택·Copy→Excel·Hide Column·단축키 동작
+L1,L,성능,O1+O2,E2E,AS-IS 동일 인자 실행시간·기준 시간,조회·저장·삭제·키 이동 응답이 기준 이내
+M1,M,Excel Upload·Form,O1+O3,E2E+DB,AS-IS 업로드 양식·검증·반영,양식 다운로드=AS-IS · 검증 메시지 사용자 문구 · 전 오류 표시 · DB 반영
+M2,M,특수 기능 버튼(버전·Cutoff·Replace·I/F),O1+O3,E2E+DB,AS-IS 버튼 로직,실행 후 결과 데이터·메시지·기간 연동이 AS-IS 와 동일
+M3,M,팝업 내부 기능(조회·CRUD),O1+O3,E2E+DB,AS-IS 팝업 로직,팝업 조회·저장·기간 표시·건수 정상
+N1,N,기준 데이터 정합,O1+O2,META,기준정보 테이블·센티널 규칙,공란 표기 혼재('-'·NULL·Blank) 0 · 미사용 코드/메저 정리 · 마스터 누락 0
+A6,A,결과 행 정렬 순서,O1,E2E,AS-IS 조회 SP ORDER BY·화면 정렬,같은 조건 결과 행 순서 = AS-IS
+A7,A,컬럼별 결과 값 일치(공란 컬럼),O1,E2E,AS-IS 동일 인자 실행 결과,키가 같은 행의 컬럼 값 비교 · AS-IS 에 값 있는데 공란인 컬럼 0
+A8,A,기간 동적 컬럼 = Period 전 구간,O1+O2,E2E,조회 Period·AS-IS 타이틀 SP,데이터 유무와 무관하게 Period 전 구간 컬럼 생성
+A9,A,조건값 기반 동적 헤더·명칭,O1,E2E,AS-IS 헤더 변수 치환,선택 버전·조건값이 헤더/Measure 명칭에 반영
+A10,A,조회 전 그리드 초기 상태,O1+O2,E2E,AS-IS 초기화,조회 전 Sum 행·잔여 행·불필요 스크롤 없음
+B7,B,기준 데이터 변경 후 후보 갱신,O1+O3,E2E,콤보 캐시 무효화,마스터 신규 저장·변경 후 조회조건·셀 콤보에 즉시 반영(선택값 유지)
+B8,B,원천 표준(Team=SSPM DEPT_ID 등),O2,META+E2E,확정 원천 규칙,Team·명칭 원천이 표준 테이블(SSPM SITE_ITEM.DEPT_ID 등)
+C4,C,조회조건 변경 시 그리드 상태,O1+O2,E2E,AS-IS 조건 변경 처리,Div 등 상위 조건 변경 시 미저장 행·결과 처리가 기준대로
+C5,C,그리드 간 연동(마스터-디테일·이동),O1,E2E,AS-IS 그리드 이벤트,상세 더블클릭·좌우 이동이 AS-IS 와 같게 동작
+D5,D,셀 에디터 유형,O1+O2,E2E+META,AS-IS 셀 타입·CELL_CONTROL_OBJECT_TYPE_CODE,콤보/팝업/텍스트/숫자/날짜 에디터 종류 = 기준(Key-in 으로 바뀐 콤보 0)
+D6,D,Insert 위치·상태 유지,O2,E2E,확정 요구,선택 행 위 삽입 · Sort/Filter 상태에서 Insert 시 편집 가능·상태 유지
+E5,E,콤보 셀 후보 외 값 차단,O1+O2,E2E,콤보 원천,Key-in·붙여넣기로 후보 밖 값 입력 시 저장 차단
+E6,E,셀 키 입력 정합,O2,E2E,공통 그리드,IME 한글 첫 글자·자동완성 정상
+F7,F,저장 연계·타 화면 동기화,O1,E2E+DB,AS-IS 저장 SP 연계 테이블,저장 후 연계 테이블·연관 화면 데이터가 AS-IS 와 같게 갱신
+F8,F,파생·감사 필드 갱신,O1+O2,E2E+DB,AS-IS 저장 로직,재요청·수정 시 파생 필드 초기화 · Last Update By/Date 갱신
+G6,G,조회조건 초기 기본값,O1+O2,E2E,AS-IS InitControls·확정 요구,Div·연도·버전 등 초기값 = 기준
+G7,G,조회조건 표시값 형식,O1+O2,E2E,AS-IS 표시,조회조건 선택값이 Name·형식 일관(코드/설명 혼용 0)
+G8,G,텍스트 조건 대소문자 무시,O1+O2,E2E,AS-IS CI 콜레이션,대소문자 달라도 같은 결과
+H8,H,표시 포맷(숫자 천단위·날짜시간),O1,E2E,AS-IS 셀 포맷,숫자 천단위·소수·날짜/시간 표시 = AS-IS
+H9,H,컬럼 기본 폭,O2,META+E2E,META width·확정 요구,개인화 없을 때 컬럼 폭 = 기준
+H10,H,메시지 표준(방식·코드 단일화),O2,STATIC+E2E,메시지 규칙,같은 상황 같은 메시지 코드 · 토스트/알림 방식 표준 · 불필요 표시 0
+I4,I,라벨·메시지 중복 채번 금지,O2,META,SCM_ADM_MSG_M,같은 문구 다른 코드 중복 0
+J4,J,메뉴·라우트 노출 = 권한·화면 존재,O1+O2,E2E+META,메뉴 권한·라우트,권한 메뉴만 노출 · 노출 메뉴 404 0 · 무권한 기본 화면
+K4,K,버튼 구성·조건별 노출,O2,E2E,확정 요구,Div·Data Type 등 조건별 버튼 노출 = 기준
+K5,K,특수 편집기 동작(리치텍스트 등),O2,E2E,공통 컴포넌트,서식·입력 동작 정상
+L2,L,입력 중 불필요 재렌더·깜박임 0,O2,E2E,공통,조회조건·셀 입력 중 그리드 이동·깜박임 0
+M4,M,팝업 상태·선택값 반영,O1+O2,E2E,AS-IS 팝업 로직,팝업 선택값 즉시 셀 반영 · Close 후 재오픈 시 미저장 편집 초기화
+C6,C,무변경 편집 종료 시 연쇄 미발동,O1,E2E,AS-IS ComboSelChange·Changed 는 값 변경 때만 발동,원천 셀 편집기를 열었다 값 변경 없이 닫으면(Esc·Tab) 대상 셀 값이 그대로 — 초기화되면 결함
+MS1,M,메시지 의미 대조(AS-IS MSG_ID → 같은 뜻의 TO-BE MSG_ID),O1,STATIC,AS-IS TB_FX_MessageInfo 문구 ↔ TO-BE SCM_ADM_MSG_M 문구(msgmap) · TO-BE FE/PKG 사용 ID,AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 를 사용(ID 동일 여부 무관) · 같은 ID 가 TO-BE 에서 다른 뜻이면 오류
+DB-SYN,A,DB 객체·메타·시노님 오류(앱 계정 접근),O3,STATIC+E2E,syn_check.py(PROC·COMBO·META) · syn_fix.py · E2E fixture dberr,BE 계정(SCMP_APP)이 쓰는 PKG·테이블/뷰·시노님·권한이 있고 VALID 하며 메뉴·PROC_M·SHEET_COLUMNS 메타가 있어야 테스트가 돈다 — 없거나 오류면 차단(조치 필요 1번 + CheckList 재작성 요청)
+K6,K,상단·하단 그리드 연동(상단 클릭/더블클릭 → 하단 조회) 시 상단 안정,O3,E2E,사용자 지시 2026-10-29(SCP0020 상단 깜빡임),상단 행 클릭/더블클릭으로 하단을 조회할 때 상단 그리드가 재조회·재렌더(깜빡임)·행 비움 없이 유지
+G9,G,텍스트 조회조건 콤마 다중값 입력 조회,O1+O2,E2E,확정 요구(CR-040)·SSP45REQ-8/14 공통요건·AS-IS 복수 입력 처리,"텍스트 조건에 a,b 입력 → 두 값 모두 조회·결과가 그 값들만 · 팝업 조회조건도 같음(공통 컴포넌트)"
+E7,E,팝업 입력 컬럼 Key-in 값 검증,O1+O2,E2E,SSP45REQ-23 공통요건·AS-IS 팝업 셀 직접 입력 처리,팝업으로 고르는 셀에 직접 입력한 잘못된 값(후보 밖 코드)은 되돌리거나 검증 메시지로 차단 — 저장까지 흘러가지 않음
+F9,F,주/월 입력 수량의 일자(Bucket) 배분 규칙,O1,E2E+DB,AS-IS 배분 로직(요일 정보·DEFAULT_BUCKET_DAY·마지막 날 폴백) · GAP F-08,주/월 버킷에 입력한 수량이 AS-IS 규칙대로 일자에 배분·저장되는지(Daily 펼침 · 저장 YYYYMMDD 대조)
+F10,F,저장 트랜잭션 원자성(내부 COMMIT·자율 트랜잭션 0),O1+O3,STATIC+DB,AS-IS 저장 전체 1 거래 · 사내 DB USER_SOURCE,화면 저장 SP 와 하위 호출에 COMMIT·TRUNCATE·DDL·통계 수집 등 암묵 확정 0건 · 다건 저장 중 1행 오류면 앞 행 원장·이력 변경 0행
+H11,H,처리 중 로딩 표시(스피너),O2,E2E,공통 UI 규칙 · GAP 자체결함 3·7·16,조회·저장·배치 실행 등 서버 호출 중 스피너가 표시되고 완료·오류 시 사라짐 — 장기 실행 버튼 클릭 후 무반응 0
+H12,H,그리드 좌측 고정 컬럼 = META FIXED_FLAG,O1+O2,META+E2E,SHEET_COLUMNS FIXED_FLAG · AS-IS 고정 컬럼,FIXED_FLAG=Y 마지막 컬럼까지 좌측 고정 · 가로 스크롤 시 유지 · 컬럼 셋팅에 포함
+G10,G,팝업 연결 텍스트 조회조건 Enter → 팝업 열기,O1+O2,E2E,AS-IS 팝업 연결 입력칸 Enter 처리 · GAP DMF0072 F-09·DMF0074 F-07,팝업이 연결된 조회조건 입력칸에서 Enter(한글 조합 중 제외) 시 그 팝업이 열리고(아이콘 클릭과 같은 동작) 입력값은 팝업 조건으로 전달(G5) — Enter 무동작이면 FAIL
+H13,H,음수 글자색 빨강,O1,E2E,AS-IS NumberCellType.NegativeRed=true(SpreadInfo.cs:4369 프레임워크 기본) · cell_rules negative_red,숫자 컬럼(정적·동적 피벗)의 음수 값 셀 글자색이 빨강 — 표본 없으면 편집 가능 셀에 -1 입력해 측정 후 복원
+SC1,H,조회조건 구성(사용여부·EDIT 형태),O2,E2E,search_cond.csv 기준표(SCP_화면별 조회조건 정리 List 시트 · CR-071 · CR-098),"Excel 조회조건 정리 대조 = 사용여부(기준표 제외 조건 잔존 smoke gone · USE 조건 누락) + EDIT 형태까지만 — 조회조건 순서는 판정 대상 제외(NA · 실측 순서는 참고, CR-098 사용자 지시 2026-11-09 · 11-06 'Excel 순서와 다르면 FAIL' 폐기)"

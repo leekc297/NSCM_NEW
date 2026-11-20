@@ -61,9 +61,13 @@ function tail(maxBytes) {
   } catch { return []; }
 }
 
-/** 실패 원인 줄 → 반복 비교용 서명(숫자·시각·경로·화면 ID 를 지운다) */
+/** 실패 원인 줄 → 반복 비교용 서명(숫자·시각·경로·화면 ID 를 지운다)
+ *  2026-11-20 개선안 20261120094530_REVIEW_2: ':' 로 끝나는 머리 줄('… log tail:')과 '$ ' 로 시작하는 명령 줄은 건너뛰고
+ *  처음 나오는 원인 줄로 서명을 만든다. 건너뛸 줄밖에 없으면 종전대로 첫 줄. */
 function signature(label, why) {
-  const first = String(why || '').split(/\r?\n/).find(s => s.trim()) || '';
+  const rows = String(why || '').split(/\r?\n/).filter(s => s.trim());
+  const isHead = s => /:\s*$/.test(s) || /^\s*\$\s/.test(s);
+  const first = rows.find(s => !isHead(s)) || rows[0] || '';
   const norm = first
     .replace(/[A-Za-z]:[\\/][^\s'"|]+/g, '<path>')
     .replace(/\b(?:Doc|tools|nscm-fe|nscm-be|\.vibe)[\\/][^\s'"|]+/g, '<path>')

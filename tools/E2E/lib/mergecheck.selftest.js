@@ -16,6 +16,9 @@ const cases = [
   ['AS-IS Delete 빈 본문 + 알림(T341)', d({ b: 'PLAN_TYPE', cruds: ['', '', ''], outD: 0, posts: 0, alert: '신규 입력 (Insert) 한 행만 삭제할 수 있습니다.', asisNoDelete: 'X.cs:536 DeleteButton' }), 'NA'],
   ['AS-IS Delete 빈 본문 + 알림 없음(T341)', d({ b: 'PLAN_TYPE', cruds: ['', ''], outD: 0, posts: 0, asisNoDelete: 'X.cs:536 DeleteButton' }), 'ERROR'],
   ['AS-IS Delete 있음 + 알림(T341)', d({ b: 'PLAN_TYPE', cruds: ['', ''], outD: 0, posts: 0, alert: 'x' }), 'ERROR'],
+  ['AS-IS Delete 신규 행만 + 기존 병합 행(T440)', d({ b: 'DIVISION_ID', cruds: ['', '', ''], outD: 0, posts: 0, asisNewOnly: 'DeleteButton:213' }), 'NA'],
+  ['AS-IS Delete 신규 행만 + 서버 요청(T440)', d({ b: 'DIVISION_ID', cruds: ['', ''], outD: 0, posts: 1, asisNewOnly: 'DeleteButton:213' }), 'ERROR'],
+  ['AS-IS Delete 신규 행만 + 일부 D(T440)', d({ b: 'DIVISION_ID', cruds: ['D', ''], outD: 0, posts: 0, asisNewOnly: 'DeleteButton:213' }), 'FAIL'],
   ['빈 재정의 줄(T341)', { result: m.exports.emptyOverrideLine('a\nb\n  protected override void DeleteButton()\n  {\n\n  }\n', 'DeleteButton') === 3 ? 'PASS' : 'FAIL', why: '' }, 'PASS'],
   ['본문 있는 재정의(T341)', { result: m.exports.emptyOverrideLine('protected override void DeleteButton() { DeleteRow(); }', 'DeleteButton') === 0 ? 'PASS' : 'FAIL', why: '' }, 'PASS'],
 ];

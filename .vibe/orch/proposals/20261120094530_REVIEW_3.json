@@ -1,0 +1,101 @@
+{
+  "id": "20261120094530_REVIEW_3",
+  "at": "2026-11-20T09:45:30+09:00",
+  "ms": 1795135530726,
+  "source": "review",
+  "status": "applied",
+  "sig": "claude end hasresult lasttype",
+  "title": "측정 추가: 에이전트 Claude 호출 끝 기록에 결과 줄 수신 여부, 마지막 진행 종류, 중지 주체를 남긴다",
+  "evidence": "집계 claude calls 73, fail 7. incidents R7 '응답 중 종료' 10건(DMF0042), '미분류' 9건. 실패 로그 4개가 결과 줄 없이 '--- exit 1 ---' 로 끝나고 stderrTail 빈 값: .vibe/logs/2026-11-19T18-29-23_claude_orch.log(마지막 줄 Stop hook heartbeat 30초), 2026-11-19T23-04-31(시작 1.5초, init 줄 뒤 종료), 2026-11-20T01-06-35(9.7초, thinking_tokens 줄 뒤 종료), 2026-11-20T05-33-19(Bash 'Run all VM tests' heartbeat 30초 뒤 종료). 06:06:06 exit 1 은 06:06:04 user.stop(VS Code 종료)과 같은 시각이지만 fail 로 셈. orch-agent.js:220 은 시간 초과면 exit 를 0 으로 바꿔 기록하고 결과 줄 유무와 마지막 stream 종류를 남기지 않음. 끊긴 원인은 미확인",
+  "targets": [
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_agent.js"
+  ],
+  "before_after": "변경 전: claude.end { exit(시간 초과면 0), anyOutput, stderrTail } → 변경 후: exit 는 실제 코드 그대로, hasResult(결과 줄 수신), lastType(마지막 stream 줄 type과 tool_name, 예 'tool_progress:Bash'), stoppedBy('시간 초과'|'중지 요청'|'VS Code 종료'|'') 추가. orch-watch.js:186 분류에 '결과 줄 없이 끊김(마지막 <lastType>)' 추가, stoppedBy 가 있으면 R7 대상 아님. digest claude 에 timedOut, stopped 따로 셈",
+  "verify": "node tools/VibeManager/test/t_orch_agent.js 에 가짜 claude(결과 줄 없이 exit 1) 시험 추가 → claude.end hasResult=false, lastType 기록 확인. node tools/VibeManager/test/run_all.js 통과",
+  "rollback": "4개 파일을 반영 직전 .bak 로 되돌림. 새 필드는 종전 코드가 읽지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T10:21:28+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:23:38+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 23개 파일 통과, 시험 35/35개 파일 통과(PASS 443, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1021"
+    },
+    {
+      "at": "2026-11-20T10:23:40+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T10:30:02+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 24개 파일 통과, 시험 35/35개 파일 통과(PASS 446, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 5개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T10:30:02+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_agent.js (2026-11-20 10:25:12 실행) 15건 ALL PASS. 새 시험: 결과 줄 없이 exit 1 → claude.end {exit:1, hasResult:false, lastType:'tool_progress:Bash', stoppedBy:''} 기록 확인, R7 제목 '결과 줄 없이 끊김(마지막 tool_progress:Bash)', stoppedBy 있는 끝 기록은 R7 없음. node tools/VibeManager/test/run_all · 변경 10개 파일 · 대상 목록 밖 변경 6개: Doc/verify/_llm_usage.csv, tools/Harness/harness.json, tools/VibeManager/extension.js, tools/VibeManager/workbench.js, Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv",
+      "log": ".vibe\\logs\\2026-11-20T10-23-40_claude_orch.log",
+      "sec": 252,
+      "costUsd": 1.2651118000000003,
+      "files": [
+        "Doc/verify/_llm_usage.csv",
+        "tools/Harness/harness.json",
+        "tools/VibeManager/extension.js",
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_agent.js",
+        "tools/VibeManager/workbench.js",
+        "Doc/verify/SCP0028/llm_cache.json",
+        "Doc/verify/SCP0028/llm_usage.csv"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795137688883,
+  "autoFp": "1b2e5b5441",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 24개 파일 통과, 시험 35/35개 파일 통과(PASS 446, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1021",
+  "needsReload": true,
+  "appliedMs": 1795138202783,
+  "synced": [
+    "extension.js",
+    "orch-agent.js",
+    "orch-improve.js",
+    "orch-watch.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_agent.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_agent.js (2026-11-20 10:25:12 실행) 15건 ALL PASS. 새 시험: 결과 줄 없이 exit 1 → claude.end {exit:1, hasResult:false, lastType:'tool_progress:Bash', stoppedBy:''} 기록 확인, R7 제목 '결과 줄 없이 끊김(마지막 tool_progress:Bash)', stoppedBy 있는 끝 기록은 R7 없음. node tools/VibeManager/test/run_all.js (2026-11-20T01:25:24Z = 10:25:24 KST 완료) ALL OK 파일 35/35 PASS 446 FAIL 0 (t_orch_agent_real.js, t_orch_agent_diag.js 는 run_all 이 건너뜀)",
+    "note": "claude.end exit 는 실제 코드 그대로 기록함. hasResult, lastType(stream 줄 type 에 tool_name 또는 subtype 을 붙임), stoppedBy('시간 초과', '중지 요청'=Workbench 중지 단추 stop(), 'VS Code 종료'=dispose) 추가. orch-watch R7 은 stoppedBy 있으면 제외(SRC_OF R7 도 같음). 분류 '결과 줄 없이 끊김(마지막 <lastType>)' 추가, 사건 서명은 'R7|결과 줄 없이 끊김'으로 묶음. digest claude 에 timedOut, stopped, noResult 추가. stoppedBy 없는 지난 기록은 같은 src와 pid 의 'VS Code 종료' user.stop 뒤 15초 안이면 stopped 로 셈(06:06:06 exit 1 은 PID 42120 orch 호출이 dispose 로 끊긴 것을 events.jsonl 에서 확인). 범위 밖 미수정: orch-state.js:161 실행 흐름 표시는 exit 값으로 실패 색을 정하므로 시간 초과 호출이 실패 색으로 나옴. 작업 모드 DB_ONLY 이나 대상이 tools/VibeManager 라 hook 차단 없음"
+  },
+  "snap": "prop_20261120094530_REVIEW_3"
+}

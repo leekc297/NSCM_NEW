@@ -1,0 +1,136 @@
+{
+ "rule_id": "N1",
+ "hash": "317ea15aca99ac1a",
+ "groups": [
+  {
+   "rows": [
+    "EG-58ec94c4"
+   ],
+   "why": "SCM_MST_CITY 기준표의 키가 있는지 보는 행이다. 다른 기준표를 보는 행과는 대상이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "EG-692ad333"
+   ],
+   "why": "SCM_ADM_LOOKUP_MASTER_DETAIL 기준표의 키가 있는지 보는 행이다. SCM_MST_CITY 행과는 대상 표가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6fc96040"
+   ],
+   "why": "PKG_SCP0005 소스와 메타를 정적으로 점검하는(TB_FX 참조, ATTRIBUTE9) 행이다. 같은 성질을 확인하는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-0d8c985a"
+   ],
+   "why": "MKT_FCST와 판가의 조건부 필수 저장 차단, Plant Site ID 정합을 보는 고유한 행이다."
+  },
+  {
+   "rows": [
+    "V-1dae57fb"
+   ],
+   "why": "조회 결과의 기간 칸 이상값을 보는 행이다. Exchange Rate 팝업을 보는 행과는 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-201683a0"
+   ],
+   "why": "오타 Measure 'Cutomer FCST'의 후보와 데이터를 정비하는 행으로, 대상과 기대가 고유하다."
+  },
+  {
+   "rows": [
+    "V-28ad7f96"
+   ],
+   "why": "Company 컬럼 한 곳만 보는 행이다. AS From Site까지 함께 보는 G01 묶음 행과는 대상 범위가 달라 묶으면 검사가 빠진다."
+  },
+  {
+   "rows": [
+    "V-2ca073e5"
+   ],
+   "why": "빈 값 센티널 '/'가 화면에 보이지 않는지 보는 행이다. 기대가 공란 통일이나 후보 기호 검사와 다르다."
+  },
+  {
+   "rows": [
+    "V-36f55bc1"
+   ],
+   "why": "Div별 UI Category 기준으로 Measure를 거르는지 보는 행이다. 다른 Measure 구성 행과는 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-3d0d105a"
+   ],
+   "why": "Div 40 Sales Site 조건 하나의 표시값을 보는 행이다. 조회조건 콤보 전체의 기호 일색을 보는 행과는 대상 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-4756674a"
+   ],
+   "why": "AS From Site 컬럼 한 곳만 보는 행이다. Company까지 함께 보는 G01 묶음 행과는 대상 범위가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-5d01c318"
+   ],
+   "why": "Div별 컬럼과 Measure 구성이 AS-IS와 같은지 보는 행이다. 다른 Measure 행과는 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-64c16dda"
+   ],
+   "why": "BOM Explosion의 Plant Assign 정합을 보는 고유한 행이다."
+  },
+  {
+   "rows": [
+    "V-68055995"
+   ],
+   "why": "AS From Site와 Company 두 컬럼을 함께 보는 묶음 행이다. 단일 컬럼 행 하나와 묶으면 나머지 컬럼 검사가 빠진다."
+  },
+  {
+   "rows": [
+    "V-6a20c364"
+   ],
+   "why": "LBL/MSG/MENU 코드 사전에 중복 채번이 없는지 보는 행으로, 대상 성질이 고유하다."
+  },
+  {
+   "rows": [
+    "V-7241bea5"
+   ],
+   "why": "미사용 Measure 제거, VMI 추가, MKT FCST AMT 제거를 보는 행으로, 기대가 고유하다."
+  },
+  {
+   "rows": [
+    "V-867e8a99"
+   ],
+   "why": "Sales Plant 셀 콤보에 Active Flag가 Y인 Plant만 나오는지 보는 고유한 행이다."
+  },
+  {
+   "rows": [
+    "V-ab2a284a"
+   ],
+   "why": "컬럼 셋팅의 VERSION과 AS FROM SITE 노출 여부를 보는 행으로, 대상이 고유하다."
+  },
+  {
+   "rows": [
+    "V-b0177fb1"
+   ],
+   "why": "조회조건 콤보 후보 전체가 기호 일색이 아닌지 보는 행이다. Sales Site 단일 조건 행과는 대상 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-bf30bff5"
+   ],
+   "why": "ROLLING 뒤 Customer FCST Master 기준정보가 생기는지 보는 행으로, 상태와 대상이 고유하다."
+  },
+  {
+   "rows": [
+    "V-fd455ffc"
+   ],
+   "why": "Exchange Rate 팝업의 YYYYMM 컬럼과 이상 데이터를 보는 행이다. 조회 결과 기간 칸을 보는 행과는 대상 요소가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:45:44",
+ "cost": 0.0942499
+}

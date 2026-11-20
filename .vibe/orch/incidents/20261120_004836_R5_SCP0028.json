@@ -1,0 +1,75 @@
+{
+  "id": "20261120_004836_R5_SCP0028",
+  "at": "2026-11-20T00:48:36+09:00",
+  "ms": 1795103316560,
+  "rule": "R5",
+  "ruleName": "진행 없음",
+  "title": "종료 기록 없이 사라진 실행. 프로세스 CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+  "screen": "SCP0028",
+  "sig": "R5|gone|proc|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20T00:33:54+09:00 · 주인 PID 23528 · 끝 사건 없음(중지, 창 다시 로드, 강제 종료)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-20T00-33-54_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log",
+    "pid": 26528
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:55:32+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T00:58:19+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 개선안 올림 · 원인 env: 사용자가 VM 창을 다시 로드해 VM 주인 프로세스 PID 23528 이 00:47:34(events.jsonl 마지막 사건)와 00:48:05(새 VM PID 28312 첫 사건, events.jsonl:296) 사이에 없어졌고, 자식 checklist_run.py SCP0028(PID 26528, events.jsonl:265)이 proc.end 없이 끝남. 그때 SCP0028 은 E2E auth 시험 중이었고 auth 로그 마지막 기록 00:47:00, 2건 '주소 진입 뒤 Home 에 남음' 실패. 같은 초에 시작한 SCP0 · 개선안 등록 20261120005819_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T00-55-37_claude_orch.log",
+      "sec": 152,
+      "turns": 29,
+      "costUsd": 1.142276,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드로 끊긴 실행). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "agent": {
+    "cause_class": "env",
+    "cause": "사용자가 VM 창을 다시 로드해 VM 주인 프로세스 PID 23528 이 00:47:34(events.jsonl 마지막 사건)와 00:48:05(새 VM PID 28312 첫 사건, events.jsonl:296) 사이에 없어졌고, 자식 checklist_run.py SCP0028(PID 26528, events.jsonl:265)이 proc.end 없이 끝남. 그때 SCP0028 은 E2E auth 시험 중이었고 auth 로그 마지막 기록 00:47:00, 2건 '주소 진입 뒤 Home 에 남음' 실패. 같은 초에 시작한 SCP0005·SCP0014·SCP0028 이 로그 1개를 공유함(workbench.js:437 이름 = 초 단위 시각 + 라벨)",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "events.jsonl 239~317행, 작업 로그, Doc/e2e/logs/SCP0028 3건, 설치 폴더 수정 시각 조회. tasklist 로 PID 26528·23528 생존 확인",
+        "result": "두 PID 없음(2026-11-20 00:56:08). SCP0028 남은 실행 없음. 작업 로그 103행이 다른 화면 출력과 겹쳐 잘림"
+      },
+      {
+        "grade": "A",
+        "what": "사용자 질의 DMF0042 대기 확인. digest.json dbwin 집계, events.jsonl 6·11·25행, tasklist",
+        "result": "11-19 run_verify.py DMF0042 대기 시작 3건(PID 28056·34920·7936)이 끝 기록 없이 남은 지난 기록. 3 PID 없음(00:56:55), 실제 대기 0"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 수정한 파일이 없고 CheckList 재수행은 사용자가 함. 확인 명령 tasklist /FI \"PID eq 26528\" 결과 'No tasks' (2026-11-20 00:56:08)",
+    "status": "proposal",
+    "next_for_user": "SCP0028 CheckList 를 다시 실행. 이전 실행에서 auth 시험이 jooyong026 계정으로 SCP0028 진입에 실패했으므로(Home 에 남음) 해당 계정의 SCP0028 메뉴 권한을 먼저 확인. 실행 중에는 VM 창 다시 로드를 피함",
+    "proposal": {
+      "title": "VM 작업 로그 이름에 화면 ID와 procId를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함",
+      "evidence": "events.jsonl:263~265 SCP0005·SCP0014·SCP0028 proc.start 3건의 log 값이 같음(.vibe/logs/2026-11-20T00-33-54_CheckList...log). 그 로그 103행 '120_004430 - log ...SCP0028...' 앞부분이 잘림. 원인 workbench.js:437 logF = 초 단위 시각 + label 의 \\w 외 문자 치환(한글 제거), 화면 ID·id 없음",
+      "targets": [
+        "tools/VibeManager/workbench.js"
+      ],
+      "before_after": "437행 변경 전 `${ts}_${label 치환}.log` → 변경 후 `${ts}_${opts.screen || ''}_${id}_${label 치환}.log`(id = 436행 ++seq). 동작 시험 tools/VibeManager/test/t_*.js 에 같은 초 3건 spawnStream 로그 이름 서로 다름 확인 추가",
+      "verify": "node --check tools/VibeManager/workbench.js, node tools/VibeManager/test/run_all.js 통과. 작업 목록에서 3화면 동시 CheckList 시작 뒤 events.jsonl proc.start 의 log 값 3개가 서로 다른지 확인",
+      "rollback": "workbench.js 437행을 원래 줄로 되돌리고 설치 폴더에 다시 복사"
+    }
+  },
+  "proposal": "20261120005819_INC",
+  "notice": true,
+  "reload": "cut",
+  "prevStatus": "need-user"
+}

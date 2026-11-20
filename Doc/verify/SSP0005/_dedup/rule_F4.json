@@ -1,0 +1,187 @@
+{
+ "rule_id": "F4",
+ "hash": "81012c0d8d4aa4f2",
+ "groups": [
+  {
+   "rows": [
+    "EG-0fe4873e",
+    "EG-6330192c"
+   ],
+   "why": "Both run the same static check on PKG_SSP0005 combo SQL and expect the same thing: zero TB_FX_* references and ATTRIBUTE9 set to an existing SQL_ID."
+  },
+  {
+   "rows": [
+    "EG-37acae97",
+    "EG-d80be6d7"
+   ],
+   "why": "Both run the same static check on PKG_COM0000 combo SQL and expect the same thing: zero TB_FX_* references and ATTRIBUTE9 set to an existing SQL_ID."
+  },
+  {
+   "rows": [
+    "T-a9bbcb00",
+    "T-50365a11"
+   ],
+   "why": "API_ID P_SSP0005_GET maps directly to PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY, so both rows check the same query procedure call and both expect zero SQL errors in the BE log."
+  },
+  {
+   "rows": [
+    "EG-22ccd287"
+   ],
+   "why": "This row expects zero session errors (401/403) while switching through the nine Division options, so its expected result differs from the others."
+  },
+  {
+   "rows": [
+    "T-16740de1"
+   ],
+   "why": "This row traces the SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW save procedure, which no other row covers."
+  },
+  {
+   "rows": [
+    "T-43fb34dd"
+   ],
+   "why": "This row checks the SaveData_Main save flow (U02), which is a different element from the specific procedures and is kept alone."
+  },
+  {
+   "rows": [
+    "T-4faa3a7c"
+   ],
+   "why": "This row checks the WEEK_WORK_TIME common lookup (B03), which is a different element."
+  },
+  {
+   "rows": [
+    "T-5bdd95b9"
+   ],
+   "why": "This row checks the FindData_Main search flow (U01); it is not certain to be the same as the procedure-level rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-686bcc89"
+   ],
+   "why": "This row checks the calendar procedure P_SCP0009_GET_SHEET_CALENDAR_3SPAN, which is a different element."
+  },
+  {
+   "rows": [
+    "T-cbcf7784"
+   ],
+   "why": "This row checks the period procedure P_SCM0001_GET_SCP_PERIOD, which is a different element."
+  },
+  {
+   "rows": [
+    "V-15176ab8"
+   ],
+   "why": "This row covers saving pasted multi-row data in a popup, which is a different condition and expected result."
+  },
+  {
+   "rows": [
+    "V-163214e4"
+   ],
+   "why": "This row covers a plain edit-and-save with DB persistence, and its conditions differ from the other save rows."
+  },
+  {
+   "rows": [
+    "V-1fa265bb"
+   ],
+   "why": "This row covers the SQL View button in Insert state, which is a different element."
+  },
+  {
+   "rows": [
+    "V-325417df"
+   ],
+   "why": "This row expects the Dynamic Query result count to match AS-IS, which is a different expected result."
+  },
+  {
+   "rows": [
+    "V-3fc46615"
+   ],
+   "why": "This row expects digit-limit violations on paste-then-save to be blocked by a validation message, which is a different expected result."
+  },
+  {
+   "rows": [
+    "V-4699dc2a"
+   ],
+   "why": "This row covers the Plant Site search condition, which is a different element."
+  },
+  {
+   "rows": [
+    "V-489602aa"
+   ],
+   "why": "This row expects zero HTTP/ORA errors when searching each Division value, which differs from the session-error rows."
+  },
+  {
+   "rows": [
+    "V-4c48f85e"
+   ],
+   "why": "This row covers saving after switching Bucket, which is a different condition."
+  },
+  {
+   "rows": [
+    "V-5f3d1aad"
+   ],
+   "why": "This row covers saving the AS-IS maximum value, then re-querying and restoring it, which is a different method and expected result."
+  },
+  {
+   "rows": [
+    "V-6972d976"
+   ],
+   "why": "This row covers Insert/Delete validation messages and the CRUD Status flag, which is a different expected result."
+  },
+  {
+   "rows": [
+    "V-860976f4"
+   ],
+   "why": "This is a broad rule covering repeated search/save/Bucket switching plus max-digit saving; its scope doesn't match any one row, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-985bf2ea"
+   ],
+   "why": "This row covers Excel Upload OK and field validation, which is a different element."
+  },
+  {
+   "rows": [
+    "V-9e724114"
+   ],
+   "why": "This row covers Monthly Bucket input and opening a popup on double-click, which is a different element and expected result."
+  },
+  {
+   "rows": [
+    "V-ac633029"
+   ],
+   "why": "This row expects saving an invalid Period date to be blocked, which is a different element and expected result."
+  },
+  {
+   "rows": [
+    "V-baba6b4e"
+   ],
+   "why": "This row expects a specific message format when a calculated value exceeds the limit, which is a different expected result."
+  },
+  {
+   "rows": [
+    "V-c5dc9a01"
+   ],
+   "why": "This row expects a search to finish within the standard time limit, which is a different expected result."
+  },
+  {
+   "rows": [
+    "V-d35551a0"
+   ],
+   "why": "This row covers the Active=ALL and User Group multi-select search conditions, which are different elements."
+  },
+  {
+   "rows": [
+    "V-f267dbfa"
+   ],
+   "why": "This row covers the CRUD Status shown after Delete and bulk saving, which is a different condition and expected result."
+  },
+  {
+   "rows": [
+    "V-faf6f5d8"
+   ],
+   "why": "This row expects no 401 on an existing session right after a BE deploy, which is a different state from switching Divisions."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:35",
+ "cost": 0.1123496
+}

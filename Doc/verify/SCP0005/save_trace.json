@@ -1,0 +1,35 @@
+{
+ "mode": "keyset",
+ "at": "2026-11-20 09:25:58",
+ "account": "minyonglee1",
+ "tables_scanned": [
+  "SCP_MST_DISTRIBUTION_ROUTE"
+ ],
+ "changed": {
+  "SCP_MST_DISTRIBUTION_ROUTE": 4
+ },
+ "created": {},
+ "audit": [
+  {
+   "target": "SCP_MST_DISTRIBUTION_ROUTE|9917",
+   "result": "PASS",
+   "why": "SCP_MST_DISTRIBUTION_ROUTE 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_MST_DISTRIBUTION_ROUTE|5942",
+   "result": "PASS",
+   "why": "SCP_MST_DISTRIBUTION_ROUTE 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_MST_DISTRIBUTION_ROUTE|7305",
+   "result": "PASS",
+   "why": "SCP_MST_DISTRIBUTION_ROUTE 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SCP_MST_DISTRIBUTION_ROUTE|7303",
+   "result": "PASS",
+   "why": "SCP_MST_DISTRIBUTION_ROUTE 생성 칸 불변 · 수정 칸 정상"
+  }
+ ],
+ "generated": "2026-11-20 10:04:45"
+}

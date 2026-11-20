@@ -311,6 +311,14 @@
       }
     }
 
+    // 편집가능 콤보 셀은 평소에도 드롭다운 삼각형을 보인다 — 콤보인지 텍스트인지 구분용(사용자 지시 2026-11-19).
+    //   wijmo 는 dataMap 컬럼의 모든 셀(편집불가 포함)에 버튼을 그리므로 편집가능(wj-cell-editable,
+    //   formatEditableColumns 가 isEditableCell 로 부여) 셀에만 노출한다 — 열 수 없는 셀엔 삼각형이 없다.
+    //   흐린 기본 opacity(위 0.4)와 hover 강조는 그대로 둔다.
+    &.wj-cell-editable .wj-btn.wj-btn-glyph.wj-elem-dropdown {
+      display: inline-block;
+    }
+
     // 편집모드 진입시 보이도록 - 강민재 추가
     &:has(.wj-grid-editor) {
       .wj-btn.wj-btn-glyph.wj-elem-dropdown {

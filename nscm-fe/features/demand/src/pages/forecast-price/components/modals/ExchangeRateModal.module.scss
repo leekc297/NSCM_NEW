@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  // 모듈(검색조건 / 결과그리드 / 버튼) 사이 간격 12px.
+  gap: 12px;
   // 진행 스피너(ProgressIndicator placement='parent')가 이 영역을 기준으로 덮는다.
   //   position 이 없으면 absolute 기준이 위로 올라가 모달 밖까지 덮는다.
   position: relative;
@@ -24,7 +26,6 @@
   display: flex;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: 5px;
 }
 
 // Period 범위(YYYY-MM ~ YYYY-MM) — InputField 2개 + 구분자, 36px 통일.

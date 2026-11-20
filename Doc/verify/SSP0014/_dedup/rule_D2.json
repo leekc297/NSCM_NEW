@@ -1,0 +1,58 @@
+{
+ "rule_id": "D2",
+ "hash": "5bbca06742eddd6a",
+ "groups": [
+  {
+   "rows": [
+    "V-083eff00"
+   ],
+   "why": "MKT_FCST·SCM_FCST 편집 권한을 GET_ADMIN_GROUP_MEASURE 룩업의 Div·권한·시간대 기준으로 확인하는 행이다. V-5209f4c4는 AS_In_Req·VMI_In_Req·AS From Site 콤보까지 함께 기대하므로 기대 결과가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-0f239ea6"
+   ],
+   "why": "실적 구간 셀의 배경색(표시 스타일)을 확인하는 행으로, 편집 가능 여부를 보는 다른 행과 확인 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-31c835ea"
+   ],
+   "why": "RTF[R+P]가 Sales Plan Cutoff·SCP Final 상태에 따라 편집·저장이 차단되는지 확인하는 행으로, 대상 Measure와 조건이 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-5209f4c4"
+   ],
+   "why": "Current 버전 입력 Measure 5종과 AS From Site 콤보의 Div·권한·VMI 조건을 함께 확인하는 행이라 대상 범위와 기대 결과가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-66a13cd3"
+   ],
+   "why": "Div 40 Biz Plan 조건에서 Business Plan·Unit Price(LOC)만 실적/계획 구간 모두 편집되는지 확인하는 행으로, 조건과 대상 Measure가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-7260feb6"
+   ],
+   "why": "Daily/Weekly/Monthly Bucket을 바꿀 때 Measure별 편집 시작 구간을 확인하는 행이다. V-afd2f521은 저장 값과 팝업까지 기대하므로 기대 결과가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-afd2f521"
+   ],
+   "why": "Monthly 행 추가 후 입력값이 그대로 저장되는지, 버전 대소문자, 더블클릭 팝업이 열리는지를 확인하는 행으로, 상태(행 추가 후)와 기대 결과가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-cd1fb3c6"
+   ],
+   "why": "Partial 주차의 M-1·M 편집 구간과 실적 구분선 위치를 확인하는 행으로, 조건(Partial 주차)과 기대 결과가 다른 행과 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:12:38",
+ "cost": 0.059678300000000004
+}

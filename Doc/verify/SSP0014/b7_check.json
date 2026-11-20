@@ -1,26 +1,34 @@
 {
  "menu_id": "SSP0014",
  "asis_id": "SSP0014",
- "generated": "2026-11-19 13:54:46",
+ "generated": "2026-11-20 08:43:11",
  "a": {
-  "verdict": "판정필요",
-  "note": "저장 SP SSP0014_GET_SHIPMENT_MODEL_PIC 대상  와 콤보 원천 8종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 2종: cboDivision, cboOperationGroup",
-  "save_tables": [],
+  "verdict": "NA",
+  "note": "저장 SP SSP0014_SAVE_SHIPMENT_MODEL_PIC 대상 SSP_MST_MODEL_USER 와 콤보 원천 8종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SSP_MST_MODEL_USER"
+  ],
   "targets": [
    {
     "kind": "SEARCH",
     "target": "cboDivision",
     "label": "Division*",
-    "src": "원천 SP 없음/BigFilter",
-    "tables": null,
+    "src": "SSP_BIGFILTER MyDivisionCMM = BigFilter.xml list_line_ssp 결과셋 25 → UP_FX_GetCommonDataList @Code=MyDivision 분기",
+    "tables": [
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
     "overlap": []
    },
    {
     "kind": "SEARCH",
     "target": "cboOperationGroup",
     "label": "Operation Group",
-    "src": "원천 SP 없음/BigFilter",
-    "tables": null,
+    "src": "SSP_BIGFILTER OPERATION_GROUP = BigFilter.xml list_line_ssp 결과셋 26 → UP_FX_GetCommonDataList @Code=LookupCommon 분기 (@Param1=OPERATION_GROUP)",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
     "overlap": []
    },
    {

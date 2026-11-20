@@ -1,0 +1,56 @@
+{
+ "rule_id": "D3",
+ "hash": "8ff4937b5fd6af7e",
+ "groups": [
+  {
+   "refs": [
+    "DM-135",
+    "DM-37"
+   ],
+   "target": "신규 행 Measure 콤보 후보(입력 가능 Measure)",
+   "condition": "신규 행 추가, Sales Site 유형별(VMI=Y/비축용/고객향)",
+   "expected": "Measure 콤보에 입력 가능한 Measure(MKT_FCST·VMI_In_Request·AS_In_Request)만 후보로 나온다. VMI_In_Request 는 VMI=Y Sales Site 에서만, AS_In_Request 는 비축용 Site 에서만, 고객향 Site 는 MKT_FCST 만 나온다.",
+   "why": "둘 다 신규 행에서 Sales Site 유형에 따라 Measure 콤보 후보가 입력 가능한 Measure로만 제한되는지 확인하는 같은 동작과 같은 기대 결과다."
+  },
+  {
+   "refs": [
+    "DM-45"
+   ],
+   "target": "FCST Type 콤보 권한별 노출·Measure 입력 제한",
+   "condition": "DM Planner 권한(W/S)별, Sales Site 유형별",
+   "expected": "FCST Type 콤보에는 권한별로 허용된 FCST Type 만 나오고, Measure 입력은 Sales Site 유형에 따라 제한된다.",
+   "why": "Measure 제한 외에 권한별 FCST Type 콤보 노출이라는 다른 확인 대상이 섞여 있어 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-139"
+   ],
+   "target": "Current 버전 입력 Measure 권한 통제·AS From Site 콤보",
+   "condition": "Current 버전, Div별, DM Planner 권한(W/S), Sales Site VMI=Y·고객향, FCST Type=AS",
+   "expected": "MKT_FCST·SCM_FCST 입력은 GET_ADMIN_GROUP_MEASURE 로 통제된다. AS_In_Req 는 해당 Div W/S 권한일 때만, VMI_In_Req 는 해당 Div VMI=Y Site 일 때만 입력된다. Unit Price 도 같은 규칙으로 통제되고, AS From Site 콤보에는 해당 Div 목록만 나온다.",
+   "why": "버전 조건, 관리그룹 Measure 통제, AS From Site 콤보 목록이 함께 들어 있어 다른 항목과 기대 결과가 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-153"
+   ],
+   "target": "AS From Site 활성 여부·Measure 후보",
+   "condition": "DM Planner 권한(W/S), Sales Site 비축향/고객향/미입력",
+   "expected": "Sales Site 가 비축향이면 AS From Site 가 비활성이고, 고객향이면 활성되어 콤보가 동작한다. Measure 후보는 Sales Site 유형별로 제한되고 SCM_FCST 는 나오지 않는다.",
+   "why": "Sales Site 유형에 따른 AS From Site 활성·비활성 전환이 핵심이라 DM-139 의 콤보 목록 확인과는 확인 동작이 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-11"
+   ],
+   "target": "그리드 행 색상(편집 불가 표시)",
+   "condition": "편집 불가 조건 행(예: CA1 아이템) 선택·더블클릭",
+   "expected": "편집 불가 조건(CA1 등) 행은 모든 컬럼이 흰색(편집 불가)으로 표시되고 편집되지 않는다.",
+   "why": "Measure 콤보가 아니라 행 값에 따른 그리드 색상과 편집 잠금을 확인하는 항목이라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:29",
+ "cost": 0.0653172
+}

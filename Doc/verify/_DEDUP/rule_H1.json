@@ -1,0 +1,18 @@
+{
+ "rule_id": "H1",
+ "hash": "21ad4f16d2a11bb3",
+ "groups": [
+  {
+   "refs": [
+    "DM-1"
+   ],
+   "target": "Contribution Version Valid_YN 컬럼",
+   "condition": "Div 40",
+   "expected": "Valid_YN 가운데 정렬",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:43:34"
+}

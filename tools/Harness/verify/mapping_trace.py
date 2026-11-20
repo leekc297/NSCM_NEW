@@ -233,6 +233,33 @@ def sp_tokens(text):
     return list(dict.fromkeys(out))
 
 
+_ASIS_SRC_TXT = None
+
+
+def _asis_calls_sp(name):
+    """2026-11-20 T491: AS-IS 화면 소스(files.csv 현행) + 화면이 'new XxxPopup(' 으로 여는 팝업 소스에 이 SP 이름(패키지·'P_' 접두 뺀 꼬리)이 있는가.
+    소스를 못 읽으면 True(판단 근거 없음 = 종전 동작)"""
+    global _ASIS_SRC_TXT
+    if _ASIS_SRC_TXT is None:
+        txt = ''
+        try:
+            d = os.path.join(DOC, 'asisfacts', 'screens', asis_id())
+            for r in rdcsv(os.path.join(d, 'files.csv')):
+                if not is_main(r, d): continue
+                p = next((q for q in (os.path.join(ROOT, 'GSCM', r.get('file', '')), os.path.join(ROOT, 'GSCM_20260512', r.get('file', ''))) if os.path.isfile(q)), '')
+                if p: txt += open(p, encoding='utf-8', errors='ignore').read()
+            for pc in sorted(set(re.findall(r'new\s+(\w*Popup\w*)\s*\(', txt))):
+                g = glob.glob(os.path.join(ROOT, 'GSCM', '06.UIL', '**', pc + '.cs'), recursive=True)
+                if g: txt += open(g[0], encoding='utf-8', errors='ignore').read()
+        except Exception:
+            txt = ''
+        _ASIS_SRC_TXT = txt
+    if not _ASIS_SRC_TXT:
+        return True
+    t = re.sub(r'^P_', '', (name or '').split('.')[-1].upper())
+    return not t or t in _ASIS_SRC_TXT.upper()
+
+
 def asis_id():
     if a.asis: return a.asis.upper()
     for r in rdcsv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')):
@@ -320,9 +347,13 @@ def parse_mapping(page):
     p = os.path.join(page, '__asis-mapping__.md'); rows = []
     if not os.path.exists(p): return rows, None
     sec, head = '', None
+    h2 = ''  # 2026-11-20 T401: 상위 제목(## …) — '위 번호표의 서술본' 부록 아래 표(### A·B·C)는 본표 행을 다시 적은 것
     for ln, line in enumerate(open(p, encoding='utf-8'), 1):
         s = line.rstrip('\n')
-        if s.startswith('#'): sec = s.lstrip('#').strip(); head = None; continue
+        if s.startswith('#'):
+            sec = s.lstrip('#').strip(); head = None
+            if len(s) - len(s.lstrip('#')) <= 2: h2 = sec
+            continue
         if not s.startswith('|'): head = None if not s.strip() else head; continue
         cells = [c.strip() for c in s.strip().strip('|').split('|')]
         if all(re.fullmatch(r':?-{2,}:?', c or '--') for c in cells): continue
@@ -333,7 +364,19 @@ def parse_mapping(page):
         why_i = next((i for i, h in enumerate(head) if '사유' in h), None)
         status = cells[st_i] if st_i is not None and st_i < len(cells) else next((c for c in cells if re.match(r'^(구현|미구현|제외|해당없음|부분|완료|OK|N/A)', c)), '')
         rows.append({'line': ln, 'section': sec, 'id': cells[0][:60], 'text': ' '.join(cells), 'status': status, 'label': (cells[1] if len(cells) > 1 else '')[:160],
-                     'loc': cells[loc_i] if loc_i is not None and loc_i < len(cells) else '', 'has_loc': loc_i is not None, 'why': cells[why_i] if why_i is not None and why_i < len(cells) else '', 'src': 'FE 대조표'})
+                     'loc': cells[loc_i] if loc_i is not None and loc_i < len(cells) else '', 'has_loc': loc_i is not None, 'why': cells[why_i] if why_i is not None and why_i < len(cells) else '', 'src': 'FE 대조표',
+                     'restate': bool(re.search(r'서술본', f'{sec} {h2}')),
+                     'asis_basis': next((cells[i] for i, h in enumerate(head) if re.search(r'AS-IS\s*근거', h) and i < len(cells)), None)})
+    # 2026-11-20 T400(SSP0014 T-59a6ad00 X-LOC '2 · SwitchLock'): 부록 표마다 번호가 1부터 다시 시작해 같은 행 ID('1'·'2'·'13-14')가 여러 표에 있었다 →
+    #   행 사전(rmap)이 마지막 표 행으로 덮여 A표 2행(btnItemId, 상태 매핑)의 X-LOC 를 C표 2행(SwitchLock) 글로 판정했다. 겹치는 ID 는 표 제목 머리(A·B·C 또는 줄 번호)를 붙여 가른다
+    cnt = collections.Counter(r['id'] for r in rows)
+    for r in rows:
+        if cnt[r['id']] > 1:
+            m = re.match(r'^([A-Z]|\d+)\.\s', r['section'])
+            r['id'] = f"{m.group(1) if m else 'L' + str(r['line'])}#{r['id']}"[:60]
+    cnt2 = collections.Counter(r['id'] for r in rows)
+    for r in rows:
+        if cnt2[r['id']] > 1: r['id'] = f"L{r['line']}#{r['id']}"[:60]  # 같은 표 안에서도 겹치면(부록 B 의 '+' 3행) 줄 번호로
     return rows, p
 
 
@@ -531,6 +574,22 @@ class Elems:
             if cls != self.main_cls or not any(r['kind'] == 'POPUP' for r in rs): continue
             for r in rs:
                 for m in re.finditer(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*Def[A-Z]\w*\.([A-Z0-9_]+)', r['guard'] + ' ' + r['raw']): self.trigger_cols.add(m.group(1))
+        # 2026-11-20 T403(SSP0014 T-a5fcd2ff H6 · T-049a5854 M4): 팝업을 여는 메서드 안에서 값만 읽혀 팝업 인자로 넘어가는 조회조건(clbFromSite.ControlValues → Form_Load 인자)은
+        #   팝업을 열지도, 팝업 선택값을 받지도 않는다 → H6(팝업 표준)·M4(선택값 반영) 대상이 아니다. 그 팝업을 여는 컨트롤(이벤트 등록 대상)로 대상을 옮긴다. G5(인자)는 그대로
+        self.popup_arg_only = {}
+        _ev_h = collections.defaultdict(set)
+        for ev in rdcsv(os.path.join(sd, 'events.csv')):
+            if (ev.get('op') or '+=') == '+=' and ev.get('handler'): _ev_h[(ev.get('handler') or '').strip()].add((ev.get('target') or '').replace('this.', '').split('.')[0])
+        for (cls, meth), rs in acts.items():
+            if not any(r['kind'] == 'POPUP' for r in rs): continue
+            trig = {t for t in _ev_h.get(meth, set()) if t}
+            recv = {(r.get('target') or '').replace('this.', '').split('.')[0] for r in rs if r['kind'] == 'VALUE_SET'}
+            refs = {m.group(0) for r in rs for m in RX_COND.finditer(r.get('raw') or '') if m.group(0) in self.conds}
+            for cnd in refs - trig - recv:
+                if trig: self.popup_arg_only.setdefault(cnd, set()).update(trig)
+        for (cls, meth), rs in acts.items():  # 다른 팝업 메서드에서 트리거·수신 컨트롤이면 인자 전용 아님
+            if not any(r['kind'] == 'POPUP' for r in rs): continue
+            for t in _ev_h.get(meth, set()) | {(r.get('target') or '').replace('this.', '').split('.')[0] for r in rs if r['kind'] == 'VALUE_SET'}: self.popup_arg_only.pop(t, None)
         # 콤보 SQL ID(plan.json comboId) → 조회조건 컨트롤 — FE 대조표 행이 SQL_ID 만 적은 경우 조건 요소로 잇는다
         self.combo_of = {}
         if os.path.exists(pf):
@@ -687,6 +746,60 @@ def _asis_empty_btns():
     return out
 
 
+def restate_main(r, rmap):
+    """T401: 부록 서술본 행(r['restate']) → 같은 AS-IS 요소를 적은 본표 행 ID 목록. 요소 이름(6자 이상 식별자)과 cs 줄 번호(3자리 이상)가 둘 다 맞는 행만. 없으면 []"""
+    if not r.get('restate'): return []
+    names = set(re.findall(r'[A-Za-z_][A-Za-z0-9_]{5,}', r.get('label') or ''))
+    nums = set(re.findall(r'(?<!\d)(\d{3,5})(?!\d)', re.sub(r'^\S+', '', r['text'])))
+    if not names or not nums: return []
+    return [k for k, x in rmap.items() if x.get('src') == 'FE 대조표' and not x.get('restate') and k != r['id']
+            and any(re.search(r'(?<![A-Za-z0-9_])' + re.escape(n) + r'(?![A-Za-z0-9_])', x['text']) for n in names)
+            and any(re.search(r'(?<!\d)' + n + r'(?!\d)', x['text']) for n in nums)]
+
+
+def _asis_unplaced(names):
+    """T404: AS-IS Designer.cs 에서 생성(this.X = new …)만 되고 화면에 배치되지 않은 컨트롤 — Controls.Add(this.X) · 레이아웃 항목 .Control = this.X 가 Designer·본문 어디에도 없음.
+    names 중 미배치로 확인된 이름과 근거 파일:줄 목록"""
+    out = []
+    try:
+        for f in sorted(main_files(os.path.join(DOC, 'asisfacts', 'screens', asis_id())) or []):
+            rel = f.replace(chr(92), '/')
+            if not rel.lower().endswith('.cs') or rel.lower().endswith('.designer.cs'): continue
+            base = next((q for q in (os.path.join(ROOT, 'GSCM', rel), os.path.join(ROOT, 'GSCM_20260512', rel)) if os.path.exists(q)), '')
+            dz = base[:-3] + '.Designer.cs' if base else ''
+            if not dz or not os.path.exists(dz): continue
+            dsrc = open(dz, encoding='utf-8-sig', errors='ignore').read(); msrc = open(base, encoding='utf-8-sig', errors='ignore').read()
+            for n in names:
+                mnew = re.search(r'this\.' + re.escape(n) + r'\s*=\s*new\b', dsrc)
+                if not mnew: continue
+                placed = re.search(r'(?:Controls\.Add|Controls\.AddRange)\([^)]*\b' + re.escape(n) + r'\b|\.Control\s*=\s*this\.' + re.escape(n) + r'\b', dsrc + '\n' + msrc)
+                if not placed: out.append(f"{n}({os.path.basename(dz)}:{dsrc[:mnew.start()].count(chr(10)) + 1} 생성 · Controls.Add·레이아웃 배치 0)")
+    except Exception:
+        return []
+    return out
+
+
+def loc_reason(r, srcs):
+    """T402(SSP0014 T-5700543e·T-c2147bc2): 해당없음·제외 행의 구현 위치 칸이 '공용 컴포넌트가 맡음'을 가리키면 그 파일에서 AS-IS 동작 이름의 낱말(SmartColMerge → Merge)을 찾아 확인.
+    확인되면 근거 문자열(파일:줄) · 못 하면 ''. 대조표 줄 번호가 실제와 다르면 근거에 함께 적는다(대조표 갱신 대상)"""
+    loc = r.get('loc') or ''
+    files = re.findall(r'([A-Za-z0-9_.\-/@]+\.(?:tsx?|scss))(?::(\d+)(?:\s*[-~]\s*(\d+))?)?', loc)
+    if not files: return ''
+    STOP = {'Smart', 'Set', 'Get', 'Col', 'Column', 'Cell', 'Spread', 'Init', 'Button', 'Data', 'Main', 'Find', 'Sheet'}
+    words = [w for nm in re.findall(r'[A-Z][A-Za-z0-9]{5,}', r.get('label') or '') for w in re.findall(r'[A-Z][a-z0-9]+', nm) if w not in STOP and len(w) >= 4]
+    for f, l1, l2 in files:
+        body = file_text(f, srcs)
+        if body is None: continue
+        lines = body.split(chr(10))
+        for w in words:
+            stem = w.lower()[:-1] if w.lower().endswith('e') else w.lower()
+            hit = [i + 1 for i, s in enumerate(lines) if stem in s.lower() and not s.strip().startswith(('//', '*', '/*', 'import ', 'export {', '} from'))]
+            if hit:
+                stale = f" · 대조표 줄 {l1}~{l2 or l1} 는 실제 {hit[0]}줄과 다름(대조표 갱신 대상)" if l1 and not (int(l1) <= hit[0] <= int(l2 or l1)) else ''
+                return f"구현 위치 {os.path.basename(f)}:{hit[0]} '{lines[hit[0] - 1].strip()[:60]}'(AS-IS {w} 동작){stale}"
+    return ''
+
+
 def reason_fact(rid, why):
     """2026-11-19 미검증 해소(SCP0096 X-REASON T-af133d05·T-15cf757f): 제외·해당없음 사유가 키워드(RX_REASON)에 안 걸려도 주장 자체를 AS-IS 사실로 확인되면 근거.
     ① 팝업 없음(MODAL 행) = AS-IS 팝업 파일 0 · 화면이 여는 폼은 프레임워크 폼뿐 ② 신규행 Insert 없음 = AS-IS InsertButton 재정의 본문 없음. 확인 못 하면 ''"""
@@ -699,12 +812,45 @@ def reason_fact(rid, why):
             e = _asis_empty_btns()
             if 'C' in e:
                 return f"AS-IS {e['C']} 본문 없음(신규행 추가 동작 없음)"
+        if re.search(r'미배치|렌더\s*안\s*함|배치(?:되지)?\s*않|not placed', why, re.I):
+            # 2026-11-20 T404(SSP0014 T-7274bbb1 usrButton1): '미배치 컨트롤' 주장 = Designer.cs 생성만 있고 Controls.Add·레이아웃 배치 없음을 원문에서 확인
+            un = _asis_unplaced(sorted(set(re.findall(r'\b[a-z][a-z]*[A-Z][A-Za-z0-9]*\b', why))))
+            if un:
+                return 'AS-IS 미배치 컨트롤 ' + ', '.join(un)[:200]
     except Exception:
         return ''
     return ''
 
 
 RX_REASON = re.compile(r'대체|이동|공통|룰|rule|hook|#\d+|지시|결정|AS-IS (?:미사용|주석|dead)|미사용|주석|디자이너|레이아웃|컨테이너|리소스|서버측|프레임워크|동일 사유|위와 동일|대응 요소 없|구조로|흡수|불필요|조회 전용|dead|개념 자체가 없|단일 뷰|단일 그리드|탭 자체|시트 1개|무의미|읽기 ?전용|read-?only|Enabled\s*=\s*false|disabled|기준표|search_cond|SC1|SC2|BUTTON_AREA|IN_CALENDAR|COLUMN_PERSONAL|COMMON_BUTTON', re.I)
+
+# 2026-11-20 T470(SSP0005 X-REASON 17행 · AI 검토 검사기오판): '사유' 머리글이 없는 표(# | AS-IS | 근거 | TO-BE | 상태)는 사유가 TO-BE 칸에 있다.
+#   ① AS-IS 원문 줄 인용(cs:N · dsn:N)과 함께 적힌 미이식 근거 주장(사문·도달 불가·빈 본문·여백·인프라 대응물 없음·결함 재현 금지·축 치환) = AS-IS 원문 근거
+#   ② 다른 행 참조('E03 동일 근거' · 'E04 미이식에 포함' · '(E03 사문)') 또는 TO-BE 칸이 '동일'로 시작 = 참조 행(없으면 같은 표 바로 앞 행)의 근거를 상속. 참조 행도 근거가 없으면 상속하지 않는다
+RX_ASIS_CITE = re.compile(r'(?<![A-Za-z0-9_])(?:cs|dsn)\s*:\s*\d+')
+RX_CLAIM = re.compile(r'사문|도달\s*불가|빈\s*본문|본문(?:이)?\s*(?:비어|공란)|실효\s*로직\s*0|(?:이후|한\s*번도)\s*(?:한\s*번도\s*)?쓰이지\s*않|여백|인프라|대응물\s*없|결함\s*재현\s*금지|복제\s*금지|축\s*(?:치환|폐기)')
+RX_ROWREF = re.compile(r'(?<![A-Za-z0-9_])([A-Z]{1,2}\d{2})(?![A-Za-z0-9_])\s*(?:\(|와|과|의)?\s*(?:동일|미이식에\s*포함|에\s*포함|사문|본문\s*공란)')
+
+
+def reason_claim(r, rmap, depth=0):
+    """T470 — 근거 문자열 또는 ''(근거 없음). r = 대조표 행(parse_mapping), rmap = 행 사전"""
+    if depth > 4 or not r: return ''
+    txt = f"{r.get('why', '')} {r.get('loc', '')} {r.get('text', '')}"
+    if RX_ASIS_CITE.search(txt):
+        m = RX_CLAIM.search(f"{r.get('why', '')} {r.get('loc', '')}") or RX_CLAIM.search(r.get('text', ''))
+        if m: return f"AS-IS 원문 근거 '{m.group(0)}' · {RX_ASIS_CITE.search(txt).group(0)}"
+    if depth == 0 and RX_REASON.search(f"{r.get('why', '')} {r.get('text', '')}") and len(norm(r.get('why') or r.get('text'))) >= 8: return ''  # 종전 경로가 판정
+    ref = None
+    for m in RX_ROWREF.finditer(f"{r.get('why', '')} {r.get('loc', '')}"):
+        if m.group(1) != r.get('id') and m.group(1) in rmap: ref = rmap[m.group(1)]; break
+    if ref is None and re.match(r'^\s*동일(?:$|[.\s(—-])', (r.get('loc') or r.get('why') or '').strip()):
+        prev = [x for x in rmap.values() if x.get('section') == r.get('section') and x.get('line', 0) < r.get('line', 0)]
+        ref = max(prev, key=lambda x: x.get('line', 0)) if prev else None
+    if ref is None: return ''
+    sub = reason_claim(ref, rmap, depth + 1)
+    if not sub and RX_REASON.search(f"{ref.get('why', '')} {ref.get('text', '')}"): sub = f"사유 '{(ref.get('why') or ref.get('loc') or '')[:60]}'"
+    return f"{ref.get('id')} 근거 상속 — {sub}" if sub else ''
+
 
 
 
@@ -811,6 +957,14 @@ def main():
                 ok = [(et, n) for et, n in ok if et not in ('COL', 'PCOL')]  # 신규행 기본값은 InsertButton 의 SetValue 만 — 다른 진입점의 SetValue 는 연쇄(C3)·팝업 반영(M4)
             if c in ('G5', 'H6') and r['src'] == 'AS-IS 액션':
                 ok = [(et, n) for et, n in ok if et != 'COL' or n in E.trigger_cols]  # 팝업 검사는 팝업을 여는 셀에만 — 인자로 넘기는 컬럼 전체에 붙이지 않는다
+            if c in ('H6', 'M4') and ok and any(et == 'COND' and n in E.popup_arg_only for et, n in ok):
+                # T403: 팝업 인자로만 읽힌 조회조건 → 그 팝업을 여는 컨트롤로(대상이 이미 있으면 중복 없음). 옮길 대상이 없으면 이 검사를 붙이지 않는다(인자 판정은 G5)
+                ok2 = []
+                for et, n in ok:
+                    if et == 'COND' and n in E.popup_arg_only: ok2 += [(et2, n2) for t in sorted(E.popup_arg_only[n]) for et2, n2 in E.of(t) if n2 == t and c in ELEM_OK.get(et2, set())]
+                    else: ok2.append((et, n))
+                ok = list(dict.fromkeys(ok2))
+                if not ok: continue
             if ok:
                 for et, n in ok: own.append(add_inst(f'{c}|{et}:{n}', c, et, n, r, ' / '.join(dict.fromkeys(E.aliases(et, n)))[:80]))
             elif c in inherited:
@@ -845,10 +999,31 @@ def main():
         if et in ('BTN', 'POPUP', 'MSG'): return x['source'] == 'ASIS' and d['name'] in f"{x['target']} {x['condition']} {x['asis_ref']}"
         return False
 
+    # 2026-11-20 T495(SCP0028 M4 T-ba663c76·T-c5782dcb · H6 T-a239a7e1 '검증 엔진이 실행됐으나 판정하지 못함'): 팝업 전용 검사기(eg_popup)가 원장에 남긴 실측
+    #   ('<ID> 팝업 <팝업 클래스> COND:<라벨>|BTN:<글자> <항목>')을 추적 요소에 잇지 않았다. 조회조건 = 라벨 별칭 일치 · 버튼 = AS-IS 클릭 처리 메서드가 'new <팝업>(' 으로 여는 팝업 클래스 일치
+    _egp = []
+    for x in led:
+        m_ = re.match(r'^\S+ 팝업 (\S+) (COND|BTN):(.+) ([A-Z][A-Z0-9_]*)$', (x.get('target') or '').strip()) if x.get('source') == 'RULE_SCREEN' and (x.get('row_id') or '').startswith('EG-') else None
+        if m_: _egp.append((x['rule_id'], m_.group(1), m_.group(2), m_.group(3).strip(), m_.group(4), x))
+    _btn_pop = {}
+    if _egp:
+        _sd = os.path.join(DOC, 'asisfacts', 'screens', asis_id())
+        _h2c = {}
+        for e_ in rdcsv(os.path.join(_sd, 'events.csv')):
+            if is_cur(e_) and e_.get('handler'): _h2c.setdefault(e_['handler'], set()).add(re.sub(r'^this\.', '', e_.get('target') or ''))
+        for a_ in rdcsv(os.path.join(_sd, 'actions.csv')):
+            for pc in re.findall(r'new\s+(\w+)\s*\(', a_.get('raw') or ''):
+                for c_ in _h2c.get(a_.get('method') or '', ()): _btn_pop.setdefault(c_, set()).add(pc)
+
     for d in inst.values():
         if d['et'] == 'LEDGER': continue
         for x in led:
             if lmatch(x, d): d['hits'].append((RES.get(x['result'], x['result']), f"원장 {x['row_id']} {x['source']}"))
+        if _egp and d['et'] in ('COND', 'BTN'):
+            for rule_, pcls, tk, tn, item, x in _egp:
+                if rule_ != d['check']: continue
+                if (d['et'] == 'COND' and tk == 'COND' and any(norm(al) == norm(tn) for al in E.aliases('COND', d['name']))) or (d['et'] == 'BTN' and pcls in _btn_pop.get(d['name'], ())):
+                    d['hits'].append((RES.get(x['result'], x['result']), f"원장 {x['row_id']} 팝업 실측 {pcls} {tk}:{tn} {item}"))
         for chk, sj, name, res, src, note in e2e:
             if chk != d['check']: continue
             if sj == 'SCREEN' and d['et'] == 'SCREEN': d['hits'].append((res, src))
@@ -877,7 +1052,21 @@ def main():
                     note = (' — 저장 SP 는 골든(조회 결과 비교) 대상 아님: DB 반영은 CRUD 실저장(F1)·BE 오류(F4)로 판정' if (v == 'SKIP' and g.get('kind') == 'SAVE') else ' — TO-BE 만 0건(조회 불가)' if zero else ' — AS-IS 만 0건, TO-BE 는 조회됨: 데이터 차이로 보고 판정필요(TO-BE 룰 CR-101)' if zs_ == 'ASIS' else ' — 같은 조건 건수 차이(AS-IS dev DB ≠ TO-BE DB) 해석 필요' if v in ('ROWS', 'DIFF') else ' — 컬럼 집합 차이' if v == 'COLS' else ' — 실행 오류' if v == 'ERR' else ' — 파라미터 미정' if v == 'SKIP' else '')
                     if g.get('common_rows'): note += f" · 데이터 기준: 공통 {g['common_rows']}행 / AS-IS 전용 {g.get('asis_only', '')} / TO-BE 전용 {g.get('tobe_only', '')} (환경 데이터 차이 — 같은 행의 값은 A7, 순서는 A6 에서 대조)"
                     d['hits'].append((res, f"golden {v} AS-IS {ar}행 ↔ TO-BE {tr_}행: Doc/golden/{MENU}/{g.get('asis_sp', '')}.md{note}"))
-        if d['check'] == 'A1' and d['et'] == 'SP' and not d['hits']:
+        if d['check'] == 'G5' and d['et'] == 'COND':
+            # 2026-11-20 T406(SSP0014 T-3a730d4a): 조회조건이 AS-IS 팝업 호출 인자로 넘어가는 경우의 G5 는 정적 팝업 인자 대조(popup_args.csv AS-IS 축 · 인자 출처에 이 조건)가 판정 재료.
+            #   종전엔 COND 대상 G5 를 실행하는 경로가 없어 NOPATH. 사람 확인(W7) 표시 행은 REVIEW 로 둔다(판정을 낮추지 않음)
+            for x in rdcsv(os.path.join(DOC, 'verify', MENU, 'popup_args.csv')):
+                if x.get('side') != 'ASIS' or not re.search(r'(?<![A-Za-z0-9_])' + re.escape(d['name']) + r'(?![A-Za-z0-9_])', x.get('asis_source') or ''): continue
+                v = (x.get('verdict') or '').upper(); nt = x.get('note') or ''
+                res = v if v in ('PASS', 'FAIL', 'ERROR') else ('REVIEW' if v == 'NA' and '사람 확인' in nt else 'NA' if v == 'NA' else 'REVIEW')
+                d['hits'].append((res, f"정적 팝업 인자 대조 {x.get('asis_ref', '')[:60]} {x.get('asis_param', '')}: {nt[:200]}"))
+        if d['check'] == 'A1' and d['et'] == 'SP' and not d['hits'] and not _asis_calls_sp(d['name']):
+            # 2026-11-20 T491(SCP0028 T-18793b28 A1 P_SCM0002_GET_MATERIAL_BY_DIVISION '골든 비교 케이스 없음'): AS-IS 화면·화면이 여는 팝업 소스 어디에도 없는 SP(TO-BE 에서만 부름)는
+            #   같은 결과를 낼 AS-IS SP 가 없어 결과 비교 대상이 아니다. 같은 대조표 행에 AS-IS 가 부르는 SP 의 A1 요소가 있으면 차이는 그 행이 판정 → NA. 없으면 종전대로 REVIEW
+            _sib = [x['name'] for x in inst.values() if x is not d and x['check'] == 'A1' and x['et'] == 'SP' and set(x['rows']) & set(d['rows']) and _asis_calls_sp(x['name'])]
+            if _sib:
+                d['static'] = ('NA', f"TO-BE 에서만 부르는 SP — AS-IS 화면·팝업 소스에 {d['name'].split('.')[-1]} 호출 없음 · 같은 대조표 행의 AS-IS SP {', '.join(sorted(set(_sib)))[:120]} 요소가 결과 차이를 판정")
+        if d['check'] == 'A1' and d['et'] == 'SP' and not d['hits'] and not d.get('static'):
             d['static'] = ('REVIEW', f"골든 비교 케이스 없음({d['name']} — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요)")
         if d['check'] == 'A6' and d['et'] == 'SP':
             for s in rdcsv(os.path.join(DOC, 'verify', MENU, 'sort_check.csv')):
@@ -953,6 +1142,8 @@ def main():
                         if w and not re.search(r'위와\s*동일|동일\s*사유', w): inh = (k, w); break
             if inh: d['static'] = ('PASS', f"사유 상속({inh[0]}): {inh[1][:120]}")
             elif reason_fact(r['id'], why): d['static'] = ('PASS', f"사유 주장 AS-IS 사실 확인: {reason_fact(r['id'], why)} · 사유 {(r.get('why') or '')[:60]}")
+            elif loc_reason(r, srcs): d['static'] = ('PASS', f"사유 주장 TO-BE 확인: {loc_reason(r, srcs)} · 사유 {(r.get('why') or '')[:60]}")  # T402 구현 위치 칸 읽기
+            elif reason_claim(r, rmap): d['static'] = ('PASS', f"사유 근거(T470): {reason_claim(r, rmap)[:160]}")
             # 2026-11-19 사용자('사람 확인으로 넘길 항목 중 일반 항목은 권장안으로 처리 · 필요할 때만 판정필요 · 미검증으로 남으면 안 됨'):
             #   근거 없는 제외·해당없음 = AS-IS 동작(대조표 요소)을 근거 없이 뺀 것 → 조치 대상(FAIL)으로 추출. 권장 조치 = AS-IS 동작 구현, 미이식이 맞으면 대조표 사유에 근거(룰·지시·이동 위치) 보강
             else: d['static'] = ('PASS', f"사유 있음: {r.get('why', '')[:60]}") if RX_REASON.search(why) and len(norm(r.get('why') or r['text'])) >= 8 else ('FAIL', f"[대조표 근거 없음] 요소 '{(r.get('label') or r['text'] or '')[:60]}' 제외 사유 '{(r.get('why') or '')[:80]}' 에 룰·지시·AS-IS 원문·이동 위치 근거 없음 · 권장 조치: AS-IS 동작 구현, 미이식이 맞으면 대조표 사유에 근거 보강")
@@ -962,8 +1153,15 @@ def main():
             # 2026-11-17 사용자(SCP0111 미검증 250 → 0): 파일 참조가 없어도 행에 적힌 코드 식별자(handleSave · isDuplicateInsertRow · INSERT_KEY_COLS ·
             #   P_SCP0111_SAVE_PSI_ADMIN 등)를 화면 소스·TO-BE 프로시저 목록에서 실제로 찾아 구현 위치를 확인한다(SCP0111 X-LOC 20행이 '기입 필요' 미검증이던 것)
             idf = loc_by_identifier(r['text'] + ' ' + (r.get('loc') or ''), srcs) if not files else None
+            rmain = restate_main(r, rmap) if not files else []
             if not files and idf and idf[0]:
                 d['static'] = ('PASS', f"구현 식별자 확인 {len(idf[0])}/{len(idf[0]) + len(idf[1])}: " + ', '.join(idf[0])[:150] + (f" · 못 찾음 {', '.join(idf[1])[:60]}" if idf[1] else ''))
+            elif rmain:
+                # 2026-11-20 T401(SSP0014 T-add9b00e·T-f989ac6c): 부록 '위 번호표의 서술본' 표 행 = 본표 행을 다시 적은 것. 구현 위치·사유 판정은 본표 행이 한다(같은 AS-IS 요소 이름·cs 줄 번호로 짝 확인)
+                d['static'] = ('NA', f"부록 서술본 행 — 본표 {', '.join(rmain)[:80]} 가 같은 AS-IS 요소(이름·cs 줄 일치)의 구현 위치·사유를 판정 · 섹션 '{r.get('section', '')[:50]}'")
+            elif not files and r.get('asis_basis') is not None and re.fullmatch(r'[\s—–\-]*', r.get('asis_basis') or '') and re.search(r'AS-IS\s*(?:무관|없음|대응\s*없음)', r['text']):
+                # 2026-11-20 T401(SSP0014 T-cb6154c3 'B-1~B-7 해당없음(AS-IS 무관)'): AS-IS 근거 칸 '—' + 'AS-IS 무관' 표기 행 = AS-IS 요소가 없는 TO-BE 보강 이력 → AS-IS 요소 구현 위치 검사 대상 아님
+                d['static'] = ('NA', f"AS-IS 요소 없음 — 행의 AS-IS 근거 칸 '{(r.get('asis_basis') or '')[:10]}' · 'AS-IS 무관' 표기(TO-BE 보강 이력) · AS-IS 요소의 구현 위치 검사 대상 아님")
             elif not files:
                 d['static'] = ('NA', '대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정') if r.get('has_loc') else                               ('REVIEW', '이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요' + (f" (행의 식별자 {', '.join(idf[1])[:80]} 를 화면 소스·프로시저 목록에서 못 찾음)" if idf and idf[1] else ''))
             else:
@@ -1550,6 +1748,24 @@ def selftest():
               ('T297 둘 다 0행 = 해당 없음', golden_zero_side(0, 0) == ''),
               ('T297 행 수 미상(-1) = 해당 없음', golden_zero_side(-1, 0) == ''),
               ('T297 둘 다 행 있음 = 해당 없음', golden_zero_side(3, 5) == '')]
+    # 2026-11-20 T401: 부록 서술본 행 ↔ 본표 행(요소 이름 + cs 줄 번호 둘 다 일치)
+    _rm = {'D00-3-001': {'src': 'FE 대조표', 'text': 'D00-3-001 §3 SmartColMerge / 223 (InitSpread 초기병합)', 'restate': False},
+           'D00-3-014': {'src': 'FE 대조표', 'text': 'D00-3-014 §3 SmartColMerge / 622 (TopChange 재병합)', 'restate': False},
+           'D00-3-002': {'src': 'FE 대조표', 'text': 'D00-3-002 §3 SwitchLock / 272', 'restate': False}}
+    cases += [('T401 서술본 행 = 이름·줄 같은 본표 행', restate_main({'id': 'C#1', 'restate': True, 'label': 'SmartColMerge(InitSpread)', 'text': '1 SmartColMerge(InitSpread) 223 공용 DataGrid 병합'}, _rm) == ['D00-3-001']),
+              ('T401 줄 번호 다르면 짝 아님', restate_main({'id': 'C#9', 'restate': True, 'label': 'SmartColMerge(X)', 'text': '9 SmartColMerge(X) 999 병합'}, _rm) == []),
+              ('T401 서술본 아닌 표 = 짝 찾지 않음', restate_main({'id': 'X', 'restate': False, 'label': 'SmartColMerge(InitSpread)', 'text': '1 SmartColMerge(InitSpread) 223'}, _rm) == [])]
+    _x = lambda i, ln, loc, txt: {'id': i, 'section': '1. controls', 'line': ln, 'why': '', 'loc': loc, 'text': f'{i} {txt} {loc}'}
+    _r5 = {'E03': _x('E03', 1, '미이식 — 사문 확정. cs:253 이 D_ 아닌 행 건너뜀', '`SpdMain_CellDoubleClick` cs:834'), 'P08': _x('P08', 2, '미이식(E03 사문)', '`SpdMain_CellDoubleClick` cs:834'),
+           'C10': _x('C10', 3, '여백 전용 — 대응물 없음', '`emptySpaceItem1` dsn:420-426'), 'C11': _x('C11', 4, '동일', '`emptySpaceItem2` dsn:348'),
+           'Z01': _x('Z01', 5, '미이식', '`foo` cs:12'), 'Z02': _x('Z02', 6, '사문', '`foo`'), 'Z03': _x('Z03', 7, 'Z01 동일', '`bar` cs:9')}
+    cases += [('T470 AS-IS 줄 인용 + 사문 주장 = 근거', reason_claim(_r5['E03'], _r5).startswith('AS-IS 원문 근거')),
+              ('T470 다른 행 참조(E03 사문) = 상속', reason_claim(_r5['P08'], _r5) != ''),
+              ('T470 여백 + dsn 인용 = 근거', reason_claim(_r5['C10'], _r5) != ''),
+              ('T470 TO-BE 칸 동일 = 앞 행 상속', reason_claim(_r5['C11'], _r5).startswith('C10 근거 상속')),
+              ('T470 주장 없는 미이식 = 근거 없음', reason_claim(_r5['Z01'], _r5) == ''),
+              ('T470 AS-IS 줄 인용 없는 주장 = 근거 없음', reason_claim(_r5['Z02'], _r5) == ''),
+              ('T470 근거 없는 행 참조 = 상속 안 함', reason_claim(_r5['Z03'], _r5) == '')]
     bad = 0
     for n, ok in cases:
         print(('PASS ' if ok else 'FAIL ') + 'T261 ' + n)

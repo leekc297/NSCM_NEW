@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SSP0005",
  "asis_id": "SSP0005",
- "generated": "2026-11-19T13:54:03",
+ "generated": "2026-11-20T10:02:23",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-working-day\\__asis-mapping__.md",
  "rows": 477,
  "fe_rows": 118,
@@ -12,19 +12,19 @@
  "verdict": {
   "검증완료": 155,
   "미검증": 287,
-  "FAIL": 20,
-  "해당없음": 15
+  "해당없음": 33,
+  "FAIL": 2
  },
  "instances": 429,
  "instance_result": {
-  "PASS": 122,
+  "PASS": 140,
   "NA": 101,
   "ERROR": 85,
   "NOT_RUN": 63,
   "WARN": 16,
   "REVIEW": 20,
-  "FAIL": 20,
-  "NOPATH": 2
+  "NOPATH": 2,
+  "FAIL": 2
  },
  "by_layer": {
   "동적 생성·조회": {
@@ -39,13 +39,13 @@
    "PASS": 3
   },
   "정적 디자인": {
-   "PASS": 21,
+   "PASS": 39,
    "NOT_RUN": 7,
    "NA": 11,
    "WARN": 1,
-   "FAIL": 20,
    "NOPATH": 1,
-   "ERROR": 16
+   "ERROR": 16,
+   "FAIL": 2
   },
   "편집·검증": {
    "ERROR": 40,
@@ -262,8 +262,8 @@
    "REVIEW": 2
   },
   "X-REASON": {
-   "FAIL": 20,
-   "PASS": 6
+   "PASS": 24,
+   "FAIL": 2
   },
   "X-REOPEN": {
    "NOT_RUN": 1

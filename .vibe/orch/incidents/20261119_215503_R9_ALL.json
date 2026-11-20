@@ -1,0 +1,26 @@
+{
+  "id": "20261119_215503_R9_ALL",
+  "at": "2026-11-19T21:55:03+09:00",
+  "ms": 1795092903855,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금 — _run.admit.lock (PID 41328 없음)",
+  "screen": "",
+  "sig": "R9|_run.admit.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-19T11:39:22.667Z · 인자 SCP0028",
+  "evidence": {
+    "file": "Doc/e2e/_run.admit.lock",
+    "pid": 41328
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-19T21:55:12+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.admit.lock (PID 41328 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

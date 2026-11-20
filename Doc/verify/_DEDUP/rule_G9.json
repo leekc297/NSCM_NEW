@@ -1,0 +1,20 @@
+{
+ "rule_id": "G9",
+ "hash": "023f1b785dbd7c9c",
+ "groups": [
+  {
+   "refs": [
+    "GAP-387",
+    "SSP45-6"
+   ],
+   "target": "텍스트 조회조건 Project·Model/Nickname 다중값·대소문자 조회",
+   "condition": "Project(PROJECT_CODE) 또는 Model/Nickname(ITEM_ID/NICK_NAME)에 ① a,b 쉼표로 여러 값 ② 소문자 값 ③ 부분 문자열을 넣고 Search(팝업 조회조건 포함)",
+   "expected": "Project(PROJECT_CODE)·Model/Nickname(ITEM_ID/NICK_NAME)·Owner 텍스트 조건은 쉼표로 넣은 값을 모두 조회하고, 결과에는 그 값들만 나온다(CR-040). 대소문자는 무시한다(양쪽 UPPER, R10·CR-055). 부분일치(like)로 조회한다(CR-050).",
+   "why": "두 항목 모두 같은 Project·Model/Nickname 텍스트 조회조건에 쉼표 다중값과 소문자를 넣어 조회 결과를 보는 동작이고 기대 결과도 같으며, SSP45-6의 부분일치 확인은 expected에 함께 넣어 검사가 빠지지 않게 했다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:49",
+ "cost": 0.0465092
+}

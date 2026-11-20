@@ -83,9 +83,11 @@ const pickRows = (data: unknown): ComboResponse[] =>
   ((data as { o_rc1?: ComboResponse[] } | undefined)?.o_rc1 ?? []);
 
 // AS-IS SCP0100_Global_PSI_Report.cs 조회조건 패널 — design 02 §5.1 SearchArea 매핑.
-//   16조건(>6) → nscm-patterns §6 "접기"(Hook #52). 배치는 AS-IS 좌표 좌→우·상→하(design 01_layout §52) 순.
-//   항상 표시 2줄(2026-10-14 사용자 지시): 1행 = AS-IS 순서 1~4(Division*/From Site/Cell Group/Search Mode),
-//   2행 = 나머지 필수값(Plan Date*/Period* From~To). 그 뒤 나머지 10조건은 extraConditions(접기)에 AS-IS 순서로.
+//   16조건(>6) → nscm-patterns §6 "접기"(Hook #52).
+//   배치 = 사용자 지정 순서(요청자 명시, 2026-11-19 — 정렬 규칙이 아니라 지정 순서 그대로):
+//   Div / Cell Group / PJT / Model·Nick Name / From Site / To Site / Search Mode / Search Level /
+//   Period / Bucket / Plan Date / Plan Type / Scale / Cell Qty·A/S. 앞 12개(=3줄)는 항상 표시,
+//   나머지(Scale / Cell Qty·A/S)만 extraConditions(접기).
 export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSearch }: Props) => {
   const { t } = useTranslation();
 
@@ -244,17 +246,18 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
     if (firstPlanDate && !hasPlanDate) set({ planStartYyyymmdd: firstPlanDate });
   }, [firstPlanDate, hasPlanDate, set]);
 
-  // Plan Type 기본값 — Division+Plan Date 로 좁힌 planTypeOptions 의 첫 항목(자매 global-psi 규약). parent-ready
-  //   게이트: Plan Date 확정 후에만 세팅(아직 안 좁혀진 전체 union 의 첫 항목으로 굳는 것 방지). 현재값이 목록에
-  //   없을 때만 교정 → 무한루프 방지 + F10 리셋(planType='')에서 재도출. AS-IS 는 마지막 항목이나 global-psi 와
-  //   동일하게 첫 항목 기본(사용자 지시). PLAN_TYPE 이 더 이상 FN 고정 아님.
-  const firstPlanType = planTypeOptions[0]?.value ?? '';
+  // Plan Type 기본값 — Division+Plan Date 로 좁힌 planTypeOptions 의 마지막 항목. parent-ready 게이트:
+  //   Plan Date 확정 후에만 세팅(아직 안 좁혀진 전체 union 의 항목으로 굳는 것 방지). 현재값이 목록에
+  //   없을 때만 교정 → 무한루프 방지 + F10 리셋(planType='')에서 재도출. AS-IS RefreshPlanType(cs:608~609)
+  //   cboPlanType.SelectedIndex = Rows.Count-1 = 마지막 항목 기본에 맞춤(사용자 지시 2026-11-19).
+  //   정렬은 PLAN_TYPE_ORDER 오름차순 유지 → 마지막 = order 최대. PLAN_TYPE 이 더 이상 FN 고정 아님.
+  const defaultPlanType = planTypeOptions[planTypeOptions.length - 1]?.value ?? '';
   const hasPlanType = planTypeOptions.some(o => o.value === sc.planType);
   useEffect(() => {
     if (!sc.planStartYyyymmdd) return; // parent-ready: Plan Date 확정 후
-    if (firstPlanType && !hasPlanType) set({ planType: firstPlanType });
+    if (defaultPlanType && !hasPlanType) set({ planType: defaultPlanType });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstPlanType, hasPlanType, sc.planStartYyyymmdd]);
+  }, [defaultPlanType, hasPlanType, sc.planStartYyyymmdd]);
 
   // 조회기간(Period) 기본값 — AS-IS SetCalendar()→GetDayRange() MONTH 분기(cs:600,1317~1320,1409~1422):
   //   시작일 = Plan Date 월 1일(plan_YYYYMM + "01"), 종료일 = GetPlanEndDate()(PLAN_END_DATE_REPORT 콤보
@@ -436,9 +439,10 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
       onSearch={handleSearch}
       conditions={
         <>
-          {/* 항상 표시 2줄(한 줄 4개, 2026-10-14 사용자 지시) — 1행: Division* / From Site / Cell Group / Search Mode,
-              2행: Project / Bucket / Period* / Plan Date*. 그 뒤 나머지 8조건은 extraConditions(접기). */}
-          {/* --- 1행: Division / From Site / Cell Group / Search Mode --- */}
+          {/* 조회조건 순서 — 사용자 지정 순서(2026-11-19, 요청자 명시). 정렬 규칙이 아니라 지정 순서 그대로:
+              Div / Cell Group / PJT / Model·Nick Name / From Site / To Site / Search Mode / Search Level /
+              Period / Bucket / Plan Date / Plan Type / Scale / Cell Qty·A/S. 앞 12개(=3줄) 항상 표시,
+              나머지(Scale / Cell Qty·A/S)는 extraConditions(접기). */}
           {/* Division* — AS-IS clbDivision = CheckedList 다중(설계 02 §2.1·체크리스트 §1 #16). 단일 콤보에서
               다중 체크콤보로 전환(2026-10-15, SCP0100.md 조회조건 #1 유형 '선택/다중'). 값 = 선택 코드 CSV
               (allOption 'ALL' 센티널은 normalizeDivision 이 ''=전체로 정규화). 메인 SP P_DIVISION_ID 는
@@ -457,47 +461,58 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             },
             true
           )}
-          {multi(
-            t(LBL.FROM_SITE, 'From Site'),
-            sc.fromSite,
-            fromSiteOptions,
-            v => set({ fromSite: v })
-          )}
           {textField(
             t(LBL.CELL_GROUP, 'Cell Group'),
             sc.cellGroup,
             v => set({ cellGroup: v })
           )}
-          {/* rgrpSearchLevel(design 01 R1~R4) — SEARCH(idx0)/DETAIL(idx1). AS-IS 라디오그룹 원형 재현.
-              'Search Mode' 라벨 재표시(사용자 지시 2026-10-23). 라디오 2개는 RadioGroup nowrap+gap 로 가로 한 줄 유지. LBL 미등록이라 리터럴. */}
-          {radio(
-            t('', 'Search Mode'),
-            searchMode,
-            SEARCH_MODE_OPTIONS as unknown as Option[],
-            v => setSearchMode((v || SEARCH_MODE.SEARCH) as typeof searchMode)
-          )}
-          {/* --- 2행: Project / Bucket / Period* / Plan Date* (2026-10-14 사용자 지시 순서) — 항상 표시 --- */}
           {popupField(
             t(LBL.PROJECT, 'Project'),
             sc.project,
             v => set({ project: v }),
             onProjectSearch
           )}
+          {/* AS-IS layModel 라벨 = 'Model / Nick Name'(txtItemId + btnItemId → SCM0002_ItembyDivisionPopup).
+              txtNickName 컨트롤 없음 — 별도 plain Nick Name 필드 미노출. LBL 미등록(기존 LBL00021 'Material' 오배선)이라 리터럴. */}
+          {popupField(
+            t('', 'Model / Nick Name'),
+            sc.itemId,
+            v => set({ itemId: v }),
+            onItemSearch
+          )}
+          {multi(
+            t(LBL.FROM_SITE, 'From Site'),
+            sc.fromSite,
+            fromSiteOptions,
+            v => set({ fromSite: v })
+          )}
+          {multi(
+            t(LBL.TO_SITE, 'To Site'),
+            sc.toSite,
+            toSiteOptions,
+            v => set({ toSite: v })
+          )}
+          {/* rgrpSearchLevel(design 01 R1~R4) — SEARCH(idx0)/DETAIL(idx1). AS-IS 라디오그룹 원형 재현.
+              'Search Mode'(조회구분) 라벨 재표시(사용자 지시 2026-10-23). 라디오 2개는 RadioGroup nowrap+gap 로 가로 한 줄 유지. LBL 미등록이라 리터럴. */}
+          {radio(
+            t('', 'Search Mode'),
+            searchMode,
+            SEARCH_MODE_OPTIONS as unknown as Option[],
+            v => setSearchMode((v || SEARCH_MODE.SEARCH) as typeof searchMode)
+          )}
           {single(
-            t(LBL.BUCKET, 'Bucket'),
-            sc.bucket,
-            bucketOptions,
-            // Bucket 변경 = AS-IS CboBucketType_SelectedIndexChanged(cs:1798~1813) → SetSpreadColumn + FindData
-            //   즉시 재조회. 값만 바꾸면 M_/W_ 컬럼 가시성은 토글되나(buildPivotColumns) 데이터 SP
-            //   (dispatcher MONTHLY→_MM_DATAONLY / WEEKLY→_WW_DATAONLY, P_BUCKET)는 재호출되지 않아
-            //   전환한 bucket 의 pivot 값이 비어 보인다(2026-10-15 사용자 신고 "재조회는 되는듯한데 파라미터 미반영").
-            //   값 설정은 동기(zustand)라 직후 onSearch 의 setFilter 가 새 bucket 을 P_BUCKET 으로 싣는다.
-            //   AS-IS 는 화면 오픈 시 자동조회로 _SI 가 세팅돼 있어 조회 전에도 Bucket 변경이 즉시 재조회된다
-            //   (cs:1800 `if(_SI != null)` 가 항상 통과) → TO-BE 도 무조건 재조회로 맞춘다.
+            t(LBL.SEARCH_LEVEL, 'Search Level'),
+            sc.searchLevel,
+            searchLevelOptions,
+            // Search Level = 활성 그리드 시트 결정(design 01 R1~R3). AS-IS CboSearchLevel_SelectedIndexChanged
+            //   (cs:1859 if(isLoadFinish) FindData())처럼 변경 즉시 재조회 — Bucket 과 동일 패턴.
             v => {
-              set({ bucket: v });
+              set({ searchLevel: v });
               handleSearch();
-            }
+            },
+            false,
+            // R4 — Detail 모드에서는 REPORT 시트 고정이라 Search Level 선택을 잠근다(design 01).
+            searchMode === SEARCH_MODE.DETAIL
           )}
           {/* Period*(조회기간 From~To) — AS-IS dCalendar(UsrDateRangePicker3) → 공용 PeriodRangePicker.
               값 계약 YYYYMMDD(sc.fromYyyymmdd/toYyyymmdd 그대로). allowTextInput 으로 AS-IS txtStart/txtEnd
@@ -514,6 +529,22 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             />
           </Grid>
           {single(
+            t(LBL.BUCKET, 'Bucket'),
+            sc.bucket,
+            bucketOptions,
+            // Bucket 변경 = AS-IS CboBucketType_SelectedIndexChanged(cs:1798~1813) → SetSpreadColumn + FindData
+            //   즉시 재조회. 값만 바꾸면 M_/W_ 컬럼 가시성은 토글되나(buildPivotColumns) 데이터 SP
+            //   (dispatcher MONTHLY→_MM_DATAONLY / WEEKLY→_WW_DATAONLY, P_BUCKET)는 재호출되지 않아
+            //   전환한 bucket 의 pivot 값이 비어 보인다(2026-10-15 사용자 신고 "재조회는 되는듯한데 파라미터 미반영").
+            //   값 설정은 동기(zustand)라 직후 onSearch 의 setFilter 가 새 bucket 을 P_BUCKET 으로 싣는다.
+            //   AS-IS 는 화면 오픈 시 자동조회로 _SI 가 세팅돼 있어 조회 전에도 Bucket 변경이 즉시 재조회된다
+            //   (cs:1800 `if(_SI != null)` 가 항상 통과) → TO-BE 도 무조건 재조회로 맞춘다.
+            v => {
+              set({ bucket: v });
+              handleSearch();
+            }
+          )}
+          {single(
             t(LBL.PLAN_DATE, 'Plan Date'),
             sc.planStartYyyymmdd,
             planDateOptions,
@@ -525,32 +556,18 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             },
             true
           )}
-        </>
-      }
-      extraConditions={
-        <>
-          {/* 그 뒤 나머지(접기). 배치: To Site / Model·Nick Name / Plan Type / Scale / Search Level / Cell Qty·A/S
-              (Search Level ↔ Cell Qty·A/S 자리 교체 2026-10-23). Display 는 숨김(아래 주석). */}
-          {multi(
-            t(LBL.TO_SITE, 'To Site'),
-            sc.toSite,
-            toSiteOptions,
-            v => set({ toSite: v })
-          )}
-          {/* AS-IS layModel 라벨 = 'Model / Nick Name'(txtItemId + btnItemId → SCM0002_ItembyDivisionPopup).
-              txtNickName 컨트롤 없음 — 별도 plain Nick Name 필드 미노출. LBL 미등록(기존 LBL00021 'Material' 오배선)이라 리터럴. */}
-          {popupField(
-            t('', 'Model / Nick Name'),
-            sc.itemId,
-            v => set({ itemId: v }),
-            onItemSearch
-          )}
           {single(
             t(LBL.PLAN_TYPE, 'Plan Type'),
             sc.planType,
             planTypeOptions,
             v => set({ planType: v })
           )}
+        </>
+      }
+      extraConditions={
+        <>
+          {/* 접기 — 사용자 지정 순서(2026-11-19)의 13·14·15번: Scale / Cell Qty / A/S. 앞 12개(3줄)만 항상 표시.
+              Display 는 숨김(아래 주석). */}
           {single(
             t(LBL.SCALE, 'Scale'),
             String(unitScaleIndex),
@@ -558,21 +575,7 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             // Unit(Qty) = 로컬 표시배율(§2.5) — 서버 재조회 없이 그리드 클라 나눗셈. index 저장만.
             v => setUnitScaleIndex(Number(v) || 0)
           )}
-          {single(
-            t(LBL.SEARCH_LEVEL, 'Search Level'),
-            sc.searchLevel,
-            searchLevelOptions,
-            // Search Level = 활성 그리드 시트 결정(design 01 R1~R3). AS-IS CboSearchLevel_SelectedIndexChanged
-            //   (cs:1859 if(isLoadFinish) FindData())처럼 변경 즉시 재조회 — Bucket 과 동일 패턴.
-            v => {
-              set({ searchLevel: v });
-              handleSearch();
-            },
-            false,
-            // R4 — Detail 모드에서는 REPORT 시트 고정이라 Search Level 선택을 잠근다(design 01).
-            searchMode === SEARCH_MODE.DETAIL
-          )}
-          {/* Cell Qty + A/S — 두 체크박스를 한 셀에 나란히 배치. Search Level 과 자리 교체 + 좌측 패딩 제거(2026-10-23).
+          {/* Cell Qty + A/S — 두 체크박스를 한 셀에 나란히 배치(표시옵션, 지정 순서 맨 끝).
               각 체크박스 labelText 로 'Cell Qty ☐  A/S ☐' 묶음(customCheckbox = flex gap:4px).
               A/S 라벨 DB 신규 LBL01167, 미싱크 시 fallback 'A/S'. */}
           <Grid size={3} className={commonStyles.customGrid}>

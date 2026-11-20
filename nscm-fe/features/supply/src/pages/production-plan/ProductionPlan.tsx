@@ -8,7 +8,7 @@ import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
-import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useProcMutation, useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Checkbox } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -16,6 +16,8 @@ import { useMessageStore, useSessionStore } from '@shared/stores';
 import { ProductionPlanForm } from './components/ProductionPlanForm';
 import { ProductionPlanGrid } from './components/ProductionPlanGrid';
 import {
+  COMBO,
+  CONDITION_NOT_SAVED,
   LBL,
   LINE_FIXED_COLUMNS,
   MAX_PERIOD_YEARS,
@@ -60,6 +62,11 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setFilter = useProductionPlanStore(s => s.setFilter);
   const setSearchCondition = useProductionPlanStore(s => s.setSearchCondition);
   const restoreSearchConditions = useProductionPlanStore(s => s.restoreSearchConditions);
+  // F6 저장 payload — Plan Date/Type/Seq 는 저장하지 않는다(AS-IS ConditionNotUseList). 다시 열면 최신 계획으로 시작.
+  const savedParam = useMemo(() => {
+    const notSaved = new Set<string>(CONDITION_NOT_SAVED);
+    return Object.fromEntries(Object.entries(sc).filter(([key]) => !notSaved.has(key)));
+  }, [sc]);
   const setLineFilter = useProductionPlanStore(s => s.setLineFilter);
   const openSearchArea = useProductionPlanStore(s => s.openSearchArea);
   const setOpenSearchArea = useProductionPlanStore(s => s.setOpenSearchArea);
@@ -181,10 +188,18 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     return { isEditable: str(r.IS_EDITABLE), editStartDate: str(r.EDIT_START_DATE) };
   }, [editInfoData]);
 
-  // 편집판정 컨텍스트 — LINE 조회결과에서 최종 PlanType/FN 존재 파생 + canEdit (design 01 R2).
-  const lineEditContext = useMemo(() => deriveEditContext(lineRowsRaw, canEdit), [lineRowsRaw, canEdit]);
+  // 편집판정 컨텍스트 — LINE 조회 당시의 사업부 + Plan Date 로 거른 Plan Type 목록에서 마지막 CODE/FN 존재를
+  //   파생한다(AS-IS dtPlanType, SCP0011.cs L1092·L693-709). 폼과 같은 전량 콤보라 캐시를 공유한다.
+  const [planTypeCombo] = useTabComboQueries({ filters: [COMBO.PLAN_TYPE] });
+  const lineEditContext = useMemo(() => {
+    const lf = filters[SHEETS.LINE] as { divisionId?: string; planStartYyyymmdd?: string | null } | undefined;
+    const codes = (planTypeCombo ?? [])
+      .filter(r => str(r.DIVISION_ID) === (lf?.divisionId ?? '') && str(r.PLANDATE) === (lf?.planStartYyyymmdd ?? ''))
+      .map(r => str(r.CODE));
+    return deriveEditContext(codes, canEdit);
+  }, [planTypeCombo, filters, canEdit]);
   // MODEL 그리드는 전건 읽기전용 — 편집 컨텍스트 무의미(canEdit=false 고정).
-  const readonlyContext = useMemo(() => deriveEditContext(modelRowsRaw, false), [modelRowsRaw]);
+  const readonlyContext = useMemo(() => deriveEditContext([], false), []);
 
   // F6(Condition) 저장 조회조건 복원 — 마운트 1회(스토어 initialized 가드). Condition(F6) 저장↔복원 왕복 완성.
   //   폼의 기본값 effect(division 첫행·planDate 최신 등)는 전부 length===0/!hasDivision 가드라 복원값을 덮지 않는다.
@@ -368,7 +383,7 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='ProductionPlan'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        searchParam={sc}
+        searchParam={savedParam}
         customButtons={[
           // btnCal "Calculate"(Amend) — AS-IS Designer Text='Calculate'. 다국어 LBL.AMEND(LBL01058='Calculate') 적용. design 01 R1.
           { label: t(LBL.AMEND, '_Calculate'), action: () => void handleAmend() },
@@ -465,7 +480,9 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
           // AS-IS Form_Load(_division, _operationGroup) — 선택 Operation Group 전달.
           operationGroup: sc.operationGroupId,
           scpModuleType: MENU_ID,
-          itemId: sc.itemId,
+          // 팝업 Material 검색어 = 연 필드의 현재 입력값(AS-IS sItemId = txtItemId.Text). Model/Nickname 에서 열면
+          //   nickName 을 넘긴다 — 팝업 SP 가 P_ITEM_ID 를 ITEM_ID/ITEM_NAME/NICK_NAME 모두 LIKE 매칭.
+          itemId: itemTargetRef.current === 'material' ? sc.itemId : sc.nickName,
         }}
       />
 

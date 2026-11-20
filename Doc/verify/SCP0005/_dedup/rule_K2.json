@@ -1,0 +1,123 @@
+{
+ "rule_id": "K2",
+ "hash": "8d1341fee0f34288",
+ "groups": [
+  {
+   "rows": [
+    "V-0836bd94",
+    "V-bd23ef44"
+   ],
+   "why": "Both rows check the same thing on the column/measure setting popup: pressing Save/OK with no changes must not trigger a re-query."
+  },
+  {
+   "rows": [
+    "V-17e12bb0",
+    "V-333a384c",
+    "V-5eb0188a",
+    "V-dd040950"
+   ],
+   "why": "All four rows check the same expectation: the measure setting order is saved and query-result measures appear in that saved order."
+  },
+  {
+   "rows": [
+    "V-1a749f8a",
+    "V-85018803"
+   ],
+   "why": "Both rows cover a user with no saved personalization switching Div, where columns and measures must use that Div's UI Category Default."
+  },
+  {
+   "rows": [
+    "EG-878c8f36"
+   ],
+   "why": "This is a separate screen rule (EG395, Column button after save), so it stays alone."
+  },
+  {
+   "rows": [
+    "V-006c2d58"
+   ],
+   "why": "This row mixes four expectations into one, so it does not match any single other row and stays alone."
+  },
+  {
+   "rows": [
+    "V-1899429c"
+   ],
+   "why": "This checks something no other row covers: re-querying setting candidates by the auto-selected Division before Search."
+  },
+  {
+   "rows": [
+    "V-1f9c8619"
+   ],
+   "why": "Its condition is the Div 40→81→40 switch, unlike V-db407b00, and that row's expected result has an extra item (selected columns must appear in results), so they stay apart."
+  },
+  {
+   "rows": [
+    "V-db407b00"
+   ],
+   "why": "Besides the required-column restriction, it also expects user-selected columns to always appear in query results, so its expected result differs."
+  },
+  {
+   "rows": [
+    "V-248a2e54"
+   ],
+   "why": "This checks only that the Measure Setting button is removed (shown 0 times), which no other row covers."
+  },
+  {
+   "rows": [
+    "V-65db0f26"
+   ],
+   "why": "This targets different elements (the VERSION and AS FROM SITE columns) from every other row."
+  },
+  {
+   "rows": [
+    "V-812e5e3b"
+   ],
+   "why": "This checks staying on the new tab after save and the Default basis after a save→Close→reopen sequence, a different state and expectation from the Default button restore in V-fd5f67d5."
+  },
+  {
+   "rows": [
+    "V-8c6cc73e"
+   ],
+   "why": "This checks the MKT FCST[R+P] measure name, a different element."
+  },
+  {
+   "rows": [
+    "V-9c5f328a"
+   ],
+   "why": "This checks that required columns are kept and added back on a Div switch after saving personalization, a different state from the other rows."
+  },
+  {
+   "rows": [
+    "V-e31ffb30"
+   ],
+   "why": "This checks which measures are added or removed for each Div, a different element and expectation."
+  },
+  {
+   "rows": [
+    "V-e67788c8"
+   ],
+   "why": "This checks that the query grid is built from the column settings and hides internal columns, a different expectation."
+  },
+  {
+   "rows": [
+    "V-eac99ac3"
+   ],
+   "why": "This checks that the grid is rebuilt right away when column settings OK is pressed, which differs from the no-change, no-re-query rows."
+  },
+  {
+   "rows": [
+    "V-f6c6ab8b"
+   ],
+   "why": "This combines a row count, Team Name display, and the saved column layout for one specific period, so it differs from every other row."
+  },
+  {
+   "rows": [
+    "V-fd5f67d5"
+   ],
+   "why": "This checks only that clicking the Column Setting popup's Default button restores the base column layout, so it stays alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:44:47",
+ "cost": 0.08489449999999998
+}

@@ -1,0 +1,96 @@
+{
+ "rule_id": "I2",
+ "hash": "5cc016a5ca11f0e6",
+ "groups": [
+  {
+   "rows": [
+    "V-57de85be",
+    "V-5cd57369"
+   ],
+   "why": "Both rows check the result total/count label (총 N건) with language CN and expect it shown in CN."
+  },
+  {
+   "rows": [
+    "V-80ba1ceb",
+    "V-cf695c38"
+   ],
+   "why": "Both rows switch languages and check that popup and notice MSG/LBL codes such as MSG00445 are registered and shown in every language, so one measurement covers both."
+  },
+  {
+   "rows": [
+    "EG-251309cf"
+   ],
+   "why": "The target is EN data; it is unclear whether this is the same as plain EN (labels), so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-393dff7e"
+   ],
+   "why": "This checks labels, buttons and headers in EN; it stays apart from the EN-data row because the targets may differ."
+  },
+  {
+   "rows": [
+    "EG-b66c4da7"
+   ],
+   "why": "The target is CN data; it is unclear whether this is the same as plain CN, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-bd49cfa8"
+   ],
+   "why": "This checks labels, buttons and headers in CN, a different language from the other rows."
+  },
+  {
+   "rows": [
+    "EG-874e9a91"
+   ],
+   "why": "This checks labels, buttons and headers in KO, a different language from the other rows."
+  },
+  {
+   "rows": [
+    "EG-2af92b82"
+   ],
+   "why": "The target is the Search button, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-37fbce46"
+   ],
+   "why": "This checks the no-selection OK notice in the Version popup, a separate popup and message code (MSG00701)."
+  },
+  {
+   "rows": [
+    "V-3b1ea7fd"
+   ],
+   "why": "This checks the 4 items in the Approval Result combo, a separate search-condition element."
+  },
+  {
+   "rows": [
+    "V-3cdd969b"
+   ],
+   "why": "This checks the KO message shown when saving with no changes, a separate state and message."
+  },
+  {
+   "rows": [
+    "V-6bca7466"
+   ],
+   "why": "This checks the KO validation message when Lot Size<Increment, a separate condition and message."
+  },
+  {
+   "rows": [
+    "V-73d3e07c"
+   ],
+   "why": "This checks Team names in the search condition and result column in English, a separate element."
+  },
+  {
+   "rows": [
+    "V-ea70216c"
+   ],
+   "why": "This is a whole-screen check across KO/EN/CN, broader than any single element, so it stays alone to keep the check."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:21:12",
+ "cost": 0.0658615
+}

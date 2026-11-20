@@ -1,0 +1,86 @@
+{
+  "id": "20261119232524_SELF_2",
+  "at": "2026-11-19T23:25:24+09:00",
+  "ms": 1795098324018,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn extension dash n",
+  "title": "extension.js 알림과 트리 문구에서 줄표 제거(18건), '모두' 1건 삭제",
+  "evidence": ".vibe/orch/selfcheck/doc_style/extension.js.style.csv 51행 중 사용자에게 보이는 문자열의 줄표 = L50, L51, L227, L229, L230, L261, L272, L305, L321, L324, L328(pipeline.js 설명), L331, L333, L595, L616, L713, L720, L771 18건, 수식어 = L296 '(모두 PASS)' 1건. 나머지는 주석 구간(L348, L382, L388, L416, L438, L507, L555, 개선안 docstyle-js-comment-skip 대상)과 상태 기호, 정규식 속 기호임.",
+  "targets": [
+    "tools/VibeManager/extension.js"
+  ],
+  "before_after": "예 'Vibe_Manager ! ${title} — 경고 있음 (터미널 확인)' → 'Vibe_Manager ! ${title}. 경고 있음 (터미널 확인)'. 예 '없음 — pack 먼저' → '없음. pack 먼저'. '실행할 화면이 없습니다 (모두 PASS).' → '실행할 화면이 없습니다 (PASS).'. 낱말은 그대로 두고 줄표만 마침표나 쉼표로 바꿈. 주석, 정규식, 상태 기호(✗ ★ ❌), 명령 ID 는 고치지 않음.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/extension.js --out .vibe/orch/selfcheck/doc_style --quiet 실행 뒤 extension.js.style.csv 에 L50, L51, L227, L229, L230, L261, L272, L296, L321, L324, L333, L595, L616, L713, L720, L771 위치의 줄표, 수식어 행 0건.",
+  "rollback": "VMO 가 만든 extension.js.bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T00:00:41+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T00:02:23+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0000"
+    },
+    {
+      "at": "2026-11-20T00:02:23+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T00:04:58+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T00:04:58+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. python tools/Docs/doc_style.py tools/VibeManager/extension.js --out .vibe/orch/selfcheck/doc_style --quiet (2026-11-20 00:03:02 실행, exit 1). 출력 '문장 145 | 위반 32 | 수식어 1 번역투 1 기호 29 추상어 1'. extension.js.style.csv 의 L50, L51, L227, L229, L230, L261, L272, L296, L321, L324, L333, L595, L616, L713, L720, · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-20T00-02-23_claude_orch.log",
+      "sec": 53,
+      "costUsd": 0.5966818,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/extension.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|extension.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795100440967,
+  "autoFp": "0ad737474a",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0000",
+  "needsReload": true,
+  "appliedMs": 1795100698969,
+  "synced": [
+    "extension.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/extension.js"
+    ],
+    "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/extension.js --out .vibe/orch/selfcheck/doc_style --quiet (2026-11-20 00:03:02 실행, exit 1). 출력 '문장 145 | 위반 32 | 수식어 1 번역투 1 기호 29 추상어 1'. extension.js.style.csv 의 L50, L51, L227, L229, L230, L261, L272, L296, L321, L324, L333, L595, L616, L713, L720, L771 위치에 줄표 행과 수식어 행 0건. L305 줄표 행도 0건. L328 과 L331 에는 ★, ❌ 기호 행만 남음(고치지 않는 상태 기호).",
+    "note": "줄표 18곳을 마침표나 쉼표로 바꾸고 '(모두 PASS)' 를 '(PASS)' 로 바꿈. 남은 32행 = 주석 구간(L348, L382, L416, L438, L507, L555), 화살표(L322, L323, L329), 정규식 속 기호(L457, L458, L493), ★/❌ 기호(L328, L331), 대시보드 HTML 문구 L628 의 '모두' 1건과 줄표 1건, L738 추상어 1건. L628 과 L738 은 이번 근거 목록에 없어서 고치지 않음. 작업 모드와 저장소 hook 차단 없음."
+  },
+  "snap": "prop_20261119232524_SELF_2"
+}

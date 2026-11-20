@@ -1,0 +1,85 @@
+{
+  "id": "20261119215147_SELF_4",
+  "at": "2026-11-19T21:51:47+09:00",
+  "ms": 1795092707521,
+  "source": "self",
+  "status": "applied",
+  "sig": "doc style orch modules symbols",
+  "title": "VMO 3개 모듈 고정 문구에서 줄표와 가운뎃점 나열 제거(62건)",
+  "evidence": "입력 key S11|orch-agent.js(기호 23), S11|orch-improve.js(기호 23), S11|orch-watch.js(기호 16). .vibe/orch/selfcheck/doc_style/orch-agent.js.style.csv 23행 = 줄표 18건(L94, L113, L118, L120, L122, L126, L128, L130 2건, L147, L196, L229, L231, L244 2건, L308, L316, L326 2건 중 해당분)과 가운뎃점 나열(L168, L326). 사용자에게 보이는 Console 문구이고 CLAUDE.md 1절 10항이 생성기 고정 문장을 문장 규칙 대상으로 정함. orch-improve.js, orch-watch.js 의 csv 는 열지 않았고 유형은 입력 detail 기준임. workbench.js 333건과 extension.js 51건은 화면 문구 전면 수정이라 이 안에서 제외함.",
+  "targets": [
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-watch.js"
+  ],
+  "before_after": "예 '서버 서비스 없음 — 조치 못 함' → '서버 서비스 없음. 조치 못 함'. 예 'VMO 켬 — 감시 · 자동 조치 · 자동 분석 다시 시작' → 'VMO 켬. 감시, 자동 조치, 자동 분석 다시 시작'. 낱말은 그대로 두고 줄표는 마침표나 쉼표로, 가운뎃점 나열은 쉼표로 바꿈. 주석과 정규식, 시험이 문자열로 맞춰 보는 문구는 반영 때 test/t_orch_*.js 를 검색해 같이 고침",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-watch.js --out .vibe/orch/selfcheck/doc_style --quiet 실행 결과 exit 0(위반 0건)",
+  "rollback": "VMO 백업본으로 3개 파일 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T22:08:54+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:10:32+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2208"
+    },
+    {
+      "at": "2026-11-19T22:10:32+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:15:00+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T22:15:00+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과 — python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-watch.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 출력 orch-agent.js 문장 64 위반 0, orch-improve.js 문장 71 위반 0, orch-watch.js 문장 44 위반 0, exit 0. 수정 전 같은 명령은 위반 23, 23, 16 에 exi · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-19T22-10-32_claude_orch.log",
+      "sec": 170,
+      "costUsd": 2.7147984000000003,
+      "files": [
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-watch.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|orch-agent.js",
+  "auto": true,
+  "autoTried": true,
+  "autoMs": 1795093734307,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261119_self2208",
+  "needsReload": true,
+  "appliedMs": 1795094100331,
+  "synced": [
+    "orch-agent.js",
+    "orch-improve.js",
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-watch.js"
+    ],
+    "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-watch.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 출력 orch-agent.js 문장 64 위반 0, orch-improve.js 문장 71 위반 0, orch-watch.js 문장 44 위반 0, exit 0. 수정 전 같은 명령은 위반 23, 23, 16 에 exit 1. 확인 시각 2026-11-19 22:13:09",
+    "note": "검사기가 짚은 62건만 고침. 줄표는 마침표로(orch-watch.js L183 은 쉼표), 가운뎃점 나열은 쉼표로 바꿈. test/t_orch_*.js 에 고친 문구의 줄표나 가운뎃점을 문자열로 맞춰 보는 시험 없음, 시험 파일 수정 없음. 검사기가 짚지 않은 줄표 5곳(orch-agent.js L235, L262, orch-improve.js L246, orch-watch.js L77, L139)은 범위 밖이라 그대로 둠. orchestra.js L230, workbench.js L2736 의 종전 문구 '감시 · 자동 조치' 는 대상 밖이라 그대로 둠. 구문 검사와 test/run_all.js 는 미실행(VMO 게이트 몫). 작업 모드 DB_ONLY, hook 차단 없음."
+  },
+  "snap": "prop_20261119215147_SELF_4"
+}

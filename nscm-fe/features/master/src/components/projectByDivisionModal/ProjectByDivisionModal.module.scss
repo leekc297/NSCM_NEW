@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  // 모듈(검색조건 / 결과그리드 / 버튼) 사이 간격 12px.
+  gap: 12px;
 
   // 조회조건 필드의 폭 팽창 차단(사용자 신고: Project 팝업 Team 값이 길면 그 필드가
   //   늘어나 옆 조건 End Customer/Sales Site/Project 를 침범).
@@ -38,5 +40,4 @@
   display: flex;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: 5px;
 }

@@ -1,0 +1,262 @@
+{
+ "rule_id": "X-LOC",
+ "hash": "9ce57c15d830f36b",
+ "groups": [
+  {
+   "rows": [
+    "T-06bbe96f"
+   ],
+   "why": "Checks that the implementation location for the toolbar Insert no-op row exists in the source; it is a separate trace-table row."
+  },
+  {
+   "rows": [
+    "T-1335b242"
+   ],
+   "why": "Checks the implementation location of the btnInput bulk-input popup's custom button; no other row covers this element."
+  },
+  {
+   "rows": [
+    "T-141a550b"
+   ],
+   "why": "Checks the implementation location of the popup search area and Find button."
+  },
+  {
+   "rows": [
+    "T-20fe4cc5"
+   ],
+   "why": "Checks the implementation location for the popup's on-entry auto-search branch ('D' only)."
+  },
+  {
+   "rows": [
+    "T-21d6758b"
+   ],
+   "why": "Checks the implementation location of the Division select search condition."
+  },
+  {
+   "rows": [
+    "T-399ff952"
+   ],
+   "why": "Checks the implementation location of the main query's o_rc1 binding."
+  },
+  {
+   "rows": [
+    "T-3c32f391"
+   ],
+   "why": "Checks the implementation location of the GET_SHIPMENT_LOT_SIZE SP call, which takes 7 parameters."
+  },
+  {
+   "rows": [
+    "T-3cd43354"
+   ],
+   "why": "Checks the implementation location of the btnDelete bulk-delete popup; this is a different button from Input."
+  },
+  {
+   "rows": [
+    "T-49b20086"
+   ],
+   "why": "Checks the implementation location of the sync that sets INCREMENT from LOT_SIZE."
+  },
+  {
+   "rows": [
+    "T-4ce594f9"
+   ],
+   "why": "Checks the implementation location of the guard that makes From Site required in the popup's Find."
+  },
+  {
+   "rows": [
+    "T-564b0123"
+   ],
+   "why": "Checks the implementation location of the required-field check on save."
+  },
+  {
+   "rows": [
+    "T-5d78321e"
+   ],
+   "why": "Checks the implementation location of the cell-merge manager."
+  },
+  {
+   "rows": [
+    "T-5ec9293a"
+   ],
+   "why": "Checks the implementation location of the From Site multi-select condition; To Site is a different condition."
+  },
+  {
+   "rows": [
+    "T-65caaa7d"
+   ],
+   "why": "Checks the implementation location of the code that fixes the SAVE activeFlag to 'M'."
+  },
+  {
+   "rows": [
+    "T-6d5cd853"
+   ],
+   "why": "Checks the implementation location of the popup query SP (SCM0002), a different SP from the other SPs."
+  },
+  {
+   "rows": [
+    "T-72c515c7"
+   ],
+   "why": "Checks the implementation location of the Trans Mode multi-select condition."
+  },
+  {
+   "rows": [
+    "T-742041d3"
+   ],
+   "why": "Checks the implementation location of the cascade that re-queries the Sites when Division changes."
+  },
+  {
+   "rows": [
+    "T-771d8cb0"
+   ],
+   "why": "Checks the implementation location of the SAVE SP call, which takes 13 parameters."
+  },
+  {
+   "rows": [
+    "T-79b53d80"
+   ],
+   "why": "Checks the implementation location of the Operation Group select condition."
+  },
+  {
+   "rows": [
+    "T-7da0ef0f"
+   ],
+   "why": "Checks the implementation location of the To Site multi-select condition; From Site is a different condition."
+  },
+  {
+   "rows": [
+    "T-84b1d6a9"
+   ],
+   "why": "Checks the implementation location of the gridSignals#4 SwitchLock row. EditButton SwitchLock is a separate trace row whose code location may differ, so I kept it separate rather than risk grouping it wrongly."
+  },
+  {
+   "rows": [
+    "T-85395aa3"
+   ],
+   "why": "Checks the implementation location of the GET_INPUT SP call."
+  },
+  {
+   "rows": [
+    "T-881df043"
+   ],
+   "why": "Checks the implementation location of the code that wires the Save button to handleSave."
+  },
+  {
+   "rows": [
+    "T-88a1d73e"
+   ],
+   "why": "Checks the implementation location of the popup's From/To Site dropdowns; the main-screen Site conditions are a different element."
+  },
+  {
+   "rows": [
+    "T-8fef1496"
+   ],
+   "why": "Checks the implementation location of the EditButton SwitchLock row (cs:229~236). It is a separate trace row from T-84b1d6a9, so I kept it separate."
+  },
+  {
+   "rows": [
+    "T-a6446d2f"
+   ],
+   "why": "Checks the implementation location of the beginningEdit cancel that replaces the column lock."
+  },
+  {
+   "rows": [
+    "T-b8855e20"
+   ],
+   "why": "Checks the implementation location of the hasButton gate that controls whether the two custom buttons are shown."
+  },
+  {
+   "rows": [
+    "T-bb8f4eb3"
+   ],
+   "why": "Checks the implementation location of the toolbar Delete no-op. The 'see §3' row T-e6beb577 has a different summary, so I kept them separate."
+  },
+  {
+   "rows": [
+    "T-c1906600"
+   ],
+   "why": "Checks the implementation location of the Valid select condition."
+  },
+  {
+   "rows": [
+    "T-c437511a"
+   ],
+   "why": "Checks the implementation location of the popup OK handleConfirm message branches."
+  },
+  {
+   "rows": [
+    "T-ce035cc8"
+   ],
+   "why": "Checks the implementation location of the Model/Nickname text field and ModelByDivisionPopup. It points to a different component (ModelByDivisionPopup) than the Item popup row (ItemByDivisionModal), so I kept it separate."
+  },
+  {
+   "rows": [
+    "T-d1c96f96"
+   ],
+   "why": "Checks the implementation location of ItemByDivisionModal."
+  },
+  {
+   "rows": [
+    "T-dcec2e4a"
+   ],
+   "why": "Checks the implementation location of the noAuth disable and the Division-required guard."
+  },
+  {
+   "rows": [
+    "T-dec03b33"
+   ],
+   "why": "Checks the implementation location of the LOT/INC size validation hook."
+  },
+  {
+   "rows": [
+    "T-e28c0b5b"
+   ],
+   "why": "Checks the implementation location of the LOT_SIZE/INCREMENT numeric cell-type metadata."
+  },
+  {
+   "rows": [
+    "T-e6beb577"
+   ],
+   "why": "Checks the implementation location of the Delete()-new-rows-only row (pointing to §3). Its summary differs from the toolbar Delete row, so I kept it separate."
+  },
+  {
+   "rows": [
+    "T-e94841ec"
+   ],
+   "why": "Checks the implementation location of the INPUT_TP_CD setting and gating for the 4 editable columns."
+  },
+  {
+   "rows": [
+    "T-f19c8a3e"
+   ],
+   "why": "Checks the implementation location of the rule that only edited rows are saved (EditTracker)."
+  },
+  {
+   "rows": [
+    "T-f9ee7892"
+   ],
+   "why": "Checks the implementation location of isDefaultRevertRow, which excludes rows reverted to default values."
+  },
+  {
+   "rows": [
+    "T-fa6c8841"
+   ],
+   "why": "Checks the implementation location of the code that wires the Find button to handleSearch."
+  },
+  {
+   "rows": [
+    "T-fb1cc0b3"
+   ],
+   "why": "Checks the implementation location of the TRANS_MODE_CODE 'X' literal on deleted rows."
+  },
+  {
+   "rows": [
+    "T-fe0c0d8a"
+   ],
+   "why": "Checks the implementation location of the FindInput 5-CSV positional join."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:22:54",
+ "cost": 0.17155299999999998
+}

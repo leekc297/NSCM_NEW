@@ -1,0 +1,311 @@
+{
+ "rule_id": "A6",
+ "hash": "dba0b4376a7bf262",
+ "groups": [
+  {
+   "rows": [
+    "V-2d3318b4",
+    "T-2c58e352"
+   ],
+   "why": "Both rows check the same SP (SSP0014_GET_SHIPMENT_MODEL_PIC) with the same AS-IS sort keys [DIVISION_ID, OPERATION_GROUP, FROM_SITE, ITEM_ID…] and expect the results in that key order. The TRACE row checks the sort order itself, not whether the implementation exists in the source."
+  },
+  {
+   "rows": [
+    "V-22c6d5f6"
+   ],
+   "why": "This is a confirmed rule covering every grid lookup SP. It expects a missing ORDER BY to FAIL and has exception (NA) rules, so its scope and expectation differ from the single-SP sort-key check."
+  },
+  {
+   "rows": [
+    "EG-b255a2c0"
+   ],
+   "why": "It checks how character keys are collated (case-insensitive, NULLs first), which is a different property from the order of the sort keys."
+  },
+  {
+   "rows": [
+    "EG-74b52c7e"
+   ],
+   "why": "It is about preparing an account pair that has or lacks TITLESET_USER, not about sort order."
+  },
+  {
+   "rows": [
+    "V-9a580acd"
+   ],
+   "why": "It has a different state: the order of grid rows after a popup selection is applied with Div=81_HG."
+  },
+  {
+   "rows": [
+    "T-d1bd8978"
+   ],
+   "why": "Its target is a different SP (the item popup SP PKG_SCM0002) and it has no sort keys."
+  },
+  {
+   "rows": [
+    "T-ee384c11"
+   ],
+   "why": "Its target is a different element (the ProgressForm row trace)."
+  },
+  {
+   "rows": [
+    "AD-6ecb42f1"
+   ],
+   "why": "SEARCH call #2 (Div 40, KO): no other row uses the same search arguments."
+  },
+  {
+   "rows": [
+    "AD-33f4bf55"
+   ],
+   "why": "SEARCH call #6 (Div 81): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-1c54dac6"
+   ],
+   "why": "SEARCH call #7 (Div 81_HD): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-885a2b72"
+   ],
+   "why": "SEARCH call #8 (operationGroup A): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-e71aef68"
+   ],
+   "why": "SEARCH call #9 (operationGroup E): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-01c50b01"
+   ],
+   "why": "SEARCH call #10 (fromSite AZ00-E): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-effc047b"
+   ],
+   "why": "SEARCH call #11 (multiple fromSite values): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-798731e5"
+   ],
+   "why": "SEARCH call #12 (validYn Y): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-a1c0209f"
+   ],
+   "why": "SEARCH call #13 (validYn N): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-bbb9a397"
+   ],
+   "why": "SEARCH call #19 (Div 82): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-d98a5b8f"
+   ],
+   "why": "SEARCH call #20 (Div 81_HG): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-2a3611d6"
+   ],
+   "why": "SEARCH call #21 (Div 81_HM, KO): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-e4fd77c8"
+   ],
+   "why": "SEARCH call #22 (Div 81_ST): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-75def704"
+   ],
+   "why": "SEARCH call #23 (Div 81_UC): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-5f97808a"
+   ],
+   "why": "SEARCH call #28 (language CN): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-8b4c8225"
+   ],
+   "why": "SEARCH call #31 (Div 40, EN): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-7b5786c0"
+   ],
+   "why": "SEARCH call #52 (itemId MAMM9314U0A1-016): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-a454fc08"
+   ],
+   "why": "SEARCH call #53 (lowercase itemId): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-fa9b2f03"
+   ],
+   "why": "SEARCH call #54 (partial itemId): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-102aa2fd"
+   ],
+   "why": "SEARCH call #55 (two itemIds): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-6a4dae4f"
+   ],
+   "why": "SEARCH call #56 (userId junha.hwang): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-a401ad43"
+   ],
+   "why": "SEARCH call #57 (uppercase userId): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-3867cb61"
+   ],
+   "why": "SEARCH call #58 (userId unha.hwan): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-66b20626"
+   ],
+   "why": "SEARCH call #59 (two userIds): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-fb2b4d20"
+   ],
+   "why": "SEARCH call #60 (itemId E2E): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-24cc1bda"
+   ],
+   "why": "SEARCH call #61 (Div 81_HM, EN): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-ebfbbb5b"
+   ],
+   "why": "SEARCH call #74 (itemId AMDAU0348A): unique search arguments."
+  },
+  {
+   "rows": [
+    "AD-174c2ddd"
+   ],
+   "why": "USER_CHECK call #15 (njlilian): no other row uses the same input."
+  },
+  {
+   "rows": [
+    "AD-9121416d"
+   ],
+   "why": "USER_CHECK call #17 (luping): unique input."
+  },
+  {
+   "rows": [
+    "AD-bd7200cb"
+   ],
+   "why": "USER_CHECK call #18 (junha.hwang): unique input."
+  },
+  {
+   "rows": [
+    "AD-fd399794"
+   ],
+   "why": "USER_CHECK call #26 (ZZ_E2E_BAD_POPUP_KEY): unique input."
+  },
+  {
+   "rows": [
+    "AD-c18899c2"
+   ],
+   "why": "USER_CHECK call #27 (valid ID ^ bad key): unique input."
+  },
+  {
+   "rows": [
+    "AD-d3913cab"
+   ],
+   "why": "USER_CHECK call #35 (three IDs): unique input."
+  },
+  {
+   "rows": [
+    "AD-20759787"
+   ],
+   "why": "USER_CHECK call #37 (combination with njzhoumengweiX): unique input."
+  },
+  {
+   "rows": [
+    "AD-274e091c"
+   ],
+   "why": "USER_CHECK call #39 (combination with shengqiongfen): unique input."
+  },
+  {
+   "rows": [
+    "AD-8987bf2d"
+   ],
+   "why": "USER_CHECK call #41 (combination with zhouziqiang): unique input."
+  },
+  {
+   "rows": [
+    "AD-e7365161"
+   ],
+   "why": "USER_CHECK call #44 (njzhoumengwei^kwonl): unique input."
+  },
+  {
+   "rows": [
+    "AD-e6110ca4"
+   ],
+   "why": "USER_CHECK call #46 (njzhoumengwei^pantaonj): unique input."
+  },
+  {
+   "rows": [
+    "AD-b6885fbe"
+   ],
+   "why": "USER_CHECK call #48 (guoxiaoliangX): unique input."
+  },
+  {
+   "rows": [
+    "AD-66f97ca2"
+   ],
+   "why": "USER_CHECK call #49 (njzhoumengwei^guoxiaoliang): unique input."
+  },
+  {
+   "rows": [
+    "AD-00315f44"
+   ],
+   "why": "USER_CHECK call #51 (five IDs): unique input."
+  },
+  {
+   "rows": [
+    "AD-9eb1e574"
+   ],
+   "why": "USER_CHECK call #64 (ZZ_E2E_BAD_KEY): unique input."
+  },
+  {
+   "rows": [
+    "AD-e9df257c"
+   ],
+   "why": "USER_CHECK call #65 (secretshushu^bad key): unique input."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:39:51",
+ "cost": 0.2049453
+}

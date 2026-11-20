@@ -1,3 +1,4 @@
 ﻿시트,위치,규칙,걸린 표현,고치는 법,문장
-,L13,수식어,EN·CN 모두 'SCP0,삭제 — 범위는 수량·조건으로(예: 3건 모두 일치 → 3건 일치 · 정확히 일치 → 일치),| EG-7a7637ba | I2 | 검사기공백(엔진) | lang_texts.json KO·EN·CN 모두 'SCP0096 E2E 동시 실행 — 전환 생략(T200)'. 16:34 실행 로그 '[langlock] SCP0111 I2: 다른 화면 E2E 실행 중(SCP0096)' 뒤 6.1분 대기 후 생략 | run_verify.py lang_retry: 본 E2E 뒤 다른 화면 E2E 종료를 최대 45분 기다려 I2 시험만 다시 실행(대기 표식으로 교착 방지) |
-,L19,기호,"tPeriod · pickSplitMonth 신설, periodShiftEnd · periodR",가운뎃점 나열 → 쉼표,"| V-a30ef64b | G1 | 미분류(엔진) | _trace.spec.ts G1 기간 칸이 periodShiftEnd 사용. 범위 달력(_popup_ · monthPanel)만 다뤄 분리형 월 칸(_periodSplit_ · 달력 버튼 2개 · MUI 월 팝오버)에서 '달력이 열리지 않음' | smoke-extra.ts isSplitPeriod · pickSplitMonth 신설, periodShiftEnd · periodReverseTry 분리형 경로. 디버그 실측: 끝 202703 → 202702, 역전 시작 202704 > 끝 202703 |"
+,L185,기호,"가이드 | —, `fil",줄표 삭제 — 문장을 나누거나 쉼표로,"| T-9c47fb04 | TRACE | X-LOC | 대조표사유 | 가이드 | —, `filterCalls` | 결정 | DB MODE. 대조표 구현 위치 보강은 가이드 대상 | 결정 목록 D-02 |"
+,L253,기호,P 노출을 **버튼 권한 축으로 게이트**(gap-r,굵은 글씨 표시 삭제,"| T-119be376 | TRACE | D3 | 집계 | 집계 | Δ10, 툴바 `Insert`/`Delete` NO-OP 노출을 **버튼 권한 축으로 게이트**(gap-r | 집계 | 하위 행 판정을 따름 | - |"
+,L274,기호,빈값 조회 **차단** | 집계,굵은 글씨 표시 삭제,"| T-0ed1bf5b | TRACE | G1 | 집계 | 집계 | Δ1, `Period*` 빈값 조회 **차단** | 집계 | 하위 행 판정을 따름 | - |"

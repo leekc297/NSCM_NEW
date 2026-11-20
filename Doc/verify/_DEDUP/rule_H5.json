@@ -1,0 +1,92 @@
+{
+ "rule_id": "H5",
+ "hash": "ebd5867bab416051",
+ "groups": [
+  {
+   "refs": [
+    "DM-164",
+    "DM-226"
+   ],
+   "target": "Version·Plan Type 조회조건 라벨 명칭",
+   "condition": "",
+   "expected": "조회조건 라벨이 Ver. 대신 Version으로 표시되고, Waterfall Type 라벨이 있으면 Plan Type으로 표시된다",
+   "why": "두 항목 모두 조회조건 라벨 Ver.가 Version으로 표시되는지 확인한다. DM-164의 Waterfall Type→Plan Type 확인은 expected에 함께 넣어 빠지지 않게 했다."
+  },
+  {
+   "refs": [
+    "DM-118"
+   ],
+   "target": "Version(A)/Version(B) Measure 명칭",
+   "condition": "버전 비교 조회",
+   "expected": "Version(A)/Version(B) Measure 명이 선택한 버전명으로 표시된다",
+   "why": "선택 버전명이 Measure 명에 동적으로 반영되는지 확인하는 항목이다. 고정 Measure 명칭을 확인하는 다른 항목과 대상이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-186"
+   ],
+   "target": "Measure 명칭 MKT FCST[R+P] 표시",
+   "condition": "",
+   "expected": "메저 셋팅 기준으로 조회되고 Measure 명칭이 MKT FCST[R+P]로 표시된다",
+   "why": "메저 셋팅 기준의 고정 Measure 명칭을 확인하는 항목이다. 버전명 동적 표시(DM-118)와 확인 동작이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-189"
+   ],
+   "target": "Dept 컬럼·Use Y/N·Active 헤더",
+   "condition": "User 선택 후 신규 사용자 저장",
+   "expected": "Dept는 입력할 수 없고, User를 선택하면 SSO DEPT가 자동 세팅되며, 저장 후 DEPT ID/Name이 표시되고 Use Y/N 헤더가 병합된다",
+   "why": "사용자 관리에서 Dept 자동 세팅과 헤더 병합을 함께 확인하는 복합 항목이라 다른 항목과 확인 동작이 같지 않다."
+  },
+  {
+   "refs": [
+    "DM-202"
+   ],
+   "target": "Module·Sub Module 조회조건·Notice 팝업",
+   "condition": "Insert",
+   "expected": "Module은 ALL/Common/DM/SCP/FP/SSP 다중선택(Insert는 단일)이고, Sub Module은 삭제되며, 라벨은 제목으로, Active 기본값은 Y이고, Notice Content 서식이 동작하며, 팝업 섹션 타이틀은 테두리 밖에 있다",
+   "why": "공지 관리 화면 전용의 여러 확인이 묶인 복합 항목이라 다른 항목과 대상이 겹치지 않는다."
+  },
+  {
+   "refs": [
+    "DM-242"
+   ],
+   "target": "Sum 행 라벨·Sum/Qty≠0 체크박스",
+   "condition": "",
+   "expected": "Sum 행 라벨이 Sum으로 표시되고 Sum/Qty≠0 체크박스는 노출되지 않는다",
+   "why": "합계 행 표기와 체크박스 노출 여부를 확인하는 고유 대상이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "GAP-182"
+   ],
+   "target": "조회 단추 라벨(LBL00112 'Search(F5)')",
+   "condition": "언어를 KO와 CN으로 각각 바꿔 진입한 뒤 조회조건 영역의 조회 단추 이름 확인",
+   "expected": "조회 단추 라벨 LBL00112가 SCM_ADM_MSG_M에 KO/EN/CN으로 등록되어 언어별 'Search(F5)' 문구로 표시되고, 기본값 'Search'나 '_' 폴백은 노출되지 않는다",
+   "why": "조회 단추 라벨 코드의 다국어 등록을 확인하는 항목이다. 팝업 제목(SCPSSP-16)과는 확인 대상이 달라 묶지 않았다."
+  },
+  {
+   "refs": [
+    "SCPSSP-15"
+   ],
+   "target": "조회조건 명칭·순서와 대응 그리드 컬럼명",
+   "condition": "",
+   "expected": "조회조건 명칭과 순서가 표준표(search_cond)와 일치하고, 명칭이 바뀐 조회조건은 대응 그리드 컬럼명도 똑같이 바뀌어 있다(Model/Nickname 제외)",
+   "why": "표준표 대비 전체 조회조건의 명칭·순서와 컬럼명 연동을 확인하는 항목이라, 개별 라벨 교체 항목과 확인 범위가 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-16"
+   ],
+   "target": "검색 팝업 제목(Route 등)",
+   "condition": "검색 팝업 열기",
+   "expected": "Route 등 검색 팝업 제목에 등록된 팝업명 문구가 표시되고 '_'가 노출되지 않는다",
+   "why": "팝업 제목의 등록 문구를 확인하는 항목이다. 조회 단추 라벨(GAP-182)과는 확인 대상이 달라 묶지 않았다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:44:27",
+ "cost": 0.08187720000000001
+}

@@ -1,0 +1,214 @@
+{
+ "rule_id": "N1",
+ "hash": "620b0296567ee632",
+ "groups": [
+  {
+   "rows": [
+    "EG-102ca09c"
+   ],
+   "why": "SCM_ADM_LOOKUP_MASTER_DETAIL 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-2d8daf5d"
+   ],
+   "why": "SCM_MST_SITE_ITEM 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-2e0dd42e"
+   ],
+   "why": "SCM_MST_SSO_DEPT_INFO 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-349f9964"
+   ],
+   "why": "SCM_MST_PLAN 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-3c9eaa30"
+   ],
+   "why": "SCM_MST_SITE_CUSTOMER 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-42133689"
+   ],
+   "why": "SCM_MST_SLOC 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-481a0343"
+   ],
+   "why": "SCM_MST_DIVISION 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-53a1b063"
+   ],
+   "why": "SCM_ADM_LOOKUP_MASTER 기준표만 확인하는 행이라 DETAIL 등 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-7cce21d1"
+   ],
+   "why": "SCM_MST_PLAN_DETAIL 기준표만 확인하는 행이라 SCM_MST_PLAN 등 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-8ddcc7b4"
+   ],
+   "why": "SCM_MST_SITE 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-a5745fdb"
+   ],
+   "why": "SCM_MST_CUSTOMER 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-a7ea3f45"
+   ],
+   "why": "SCM_MST_CITY 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-b79eb086"
+   ],
+   "why": "SCM_MST_LINE_OSP 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-c3eac3b3"
+   ],
+   "why": "SCM_MST_SSO_USER_INFO 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-ce16e6e1"
+   ],
+   "why": "SCM_MST_COUNTRY 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-de6ec4d2"
+   ],
+   "why": "SCM_MST_PROJECT 기준표만 확인하는 행이라 다른 기준표 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-0417fab6"
+   ],
+   "why": "Sales Site 조회조건 하나의 명칭 표시를 보는 행이라 조회조건 콤보 전체의 기호 일색을 보는 V-3100cb6a와 범위가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-3019a617"
+   ],
+   "why": "LBL/MSG/MENU 코드 사전의 중복 채번을 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-3100cb6a"
+   ],
+   "why": "조회조건 콤보 후보 전체가 기호 일색인지 보는 행이라 특정 조건 하나를 보는 행과 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-32fdf034"
+   ],
+   "why": "Div별 Measure 추가·제거 목록(VMI, MKT FCST AMT)을 보는 행으로, 다른 Measure 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-57a379d1"
+   ],
+   "why": "컬럼셋팅의 VERSION 컬럼과 AS FROM SITE 노출을 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-61f4bd79"
+   ],
+   "why": "Exchange Rate 팝업의 기간 컬럼을 보는 행이라 조회 결과 기간 칸을 보는 V-70c10de0과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-70c10de0"
+   ],
+   "why": "조회 결과 기간 칸의 이상값을 보는 행이라 팝업을 보는 V-61f4bd79와 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-75e8993b"
+   ],
+   "why": "Div별 컬럼·Measure 구성이 AS-IS와 같은지 보는 행으로, 다른 Measure 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-7e5f8bf4"
+   ],
+   "why": "AS From Site와 Company 두 컬럼을 함께 묶어 보는 행이라 컬럼 하나씩만 보는 V-9a045231·V-ad197a3a와 범위가 달라, 검사가 빠지지 않도록 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-828c9efc"
+   ],
+   "why": "BOM Explosion Plant Assign 정합을 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-90b95e3a"
+   ],
+   "why": "UI Category 기준 Measure 표시를 보는 행으로, 다른 Measure 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-967b2fef"
+   ],
+   "why": "판가 미입력 시 저장 차단과 Plant Site ID 정합을 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-9a045231"
+   ],
+   "why": "AS From Site 컬럼의 공란 표기만 보는 행이라 Company 컬럼 행과 대상 컬럼이 다르다."
+  },
+  {
+   "rows": [
+    "V-9ff10b11"
+   ],
+   "why": "Measure 콤보의 오타 후보 \"Cutomer FCST\" 정비를 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-ad197a3a"
+   ],
+   "why": "Company 컬럼의 필터 Blanks 항목을 보는 행이라 AS From Site 컬럼 행과 대상 컬럼이 다르다."
+  },
+  {
+   "rows": [
+    "V-b2cf061d"
+   ],
+   "why": "센티널 '/'가 화면에 보이지 않는지 보는 행이라 공란 표기 통일을 보는 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-cf49747d"
+   ],
+   "why": "ROLLING 이후 Customer FCST Master 기준정보가 생성되는지 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-ec5a7861"
+   ],
+   "why": "Sales Plant 셀 콤보의 Active Plant 후보를 보는 행으로, 같은 요소를 보는 다른 행이 없다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:10:48",
+ "cost": 0.1339271
+}

@@ -1,0 +1,107 @@
+{
+  "id": "20261120005532_INC",
+  "at": "2026-11-20T00:55:32+09:00",
+  "ms": 1795103732705,
+  "source": "incident",
+  "status": "applied",
+  "sig": "vm 다시 시작 때 지난 실행을 사라진 실행 rn 으로 늦게 올리지 않기 실행 시작 기록에 화면 id 채우기",
+  "title": "VM 다시 시작 때 지난 실행을 '사라진 실행(R5)'으로 늦게 올리지 않기, 실행 시작 기록에 화면 ID 채우기",
+  "evidence": "events.jsonl:49 proc.start screen \"\" (명령에 SSP0005 있음). 실행 주인 PID 3764 마지막 사건 21:47:45(events.jsonl:67). 사건 20261120_004835_R5_ALL 은 3시간 뒤 00:48:35 에 올라왔고, 그 사이 SSP0005 는 00:34:21 다시 실행됨(events.jsonl:275). 같은 묶음 SCP0028 사건(20261120_004836_R5_SCP0028)도 따로 생김. 감시 코드 orch-watch.js:189-191, orch-state.js:30·51",
+  "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-state.js"
+  ],
+  "before_after": "변경 전: 지난 기록을 다시 읽어 찾은 주인 없는 실행을 전부 R5 사건으로 올림. 실행 시작 기록에 화면 ID 가 비어 있으면 사건 화면도 비어 서명이 화면 구분 없이 묶임. 변경 후: (1) orch-state.js:30 proc.start 에서 ev.screen 이 비어 있으면 명령 끝의 화면 ID(예: checklist_run.py SSP0005)를 넣음. (2) orch-watch.js:189 sweep 결과 중 이번 VM 시작 전에 시작됐고 같은 화면·같은 label 의 더 늦은 proc.start 가 있는 실행은 사건 대신 proc.gone 측정 사건만 남김",
+  "verify": "tools/VibeManager/test/t_orch_watch_gone.js 신설: events 3줄(주인 PID 없는 proc.start SSP0005 20:25, 같은 화면 proc.start 00:34, proc.end 00:47)을 다시 읽혀 R5 사건 0건, proc.gone 1건, screen 'SSP0005' 확인. node tools/VibeManager/test/run_all.js 통과",
+  "rollback": "두 파일을 .bak 본으로 되돌리고 설치 폴더에 다시 복사",
+  "incident": "20261120_004835_R5_ALL",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T06:25:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T06:27:28+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 28/28개 파일 통과(PASS 354, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0625"
+    },
+    {
+      "at": "2026-11-20T06:27:34+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T06:32:43+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 22개 파일 통과, 시험 29/29개 파일 통과(PASS 359, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T06:32:43+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node test/t_orch_watch_gone.js . → PASS 5, ALL PASS (명령 끝 화면 ID 추출, R5 사건 0건, proc.gone 1건, screen SSP0005, 더 늦은 실행 없으면 종전 알림 1건). node test/run_all.js . → ALL OK 파일 29/29 PASS 359 FAIL 0 110.2s. 확인 시각 2026-11-20 06:30:32 · 변경 27개 파일 · 대상 목록 밖 변경 25개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/a1_live.json, Doc/verify/SCP0028/calls/_grid_main.json, Doc/verify/SCP0028/calls/_verify_Division_컬럼_A5__0.json, Doc/verify/SCP0028/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json, Doc/verify/SCP0028/calls/_verify_실전송_건수_A1__0.json",
+      "log": ".vibe\\logs\\2026-11-20T06-27-34_claude_orch.log",
+      "sec": 189,
+      "costUsd": 0.9429885,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/a1_live.json",
+        "Doc/verify/SCP0028/calls/_grid_main.json",
+        "Doc/verify/SCP0028/calls/_verify_Division_컬럼_A5__0.json",
+        "Doc/verify/SCP0028/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json",
+        "Doc/verify/SCP0028/calls/_verify_실전송_건수_A1__0.json",
+        "Doc/verify/SCP0028/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json",
+        "Doc/verify/SCP0028/calls/_verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기__0.json",
+        "Doc/verify/SCP0028/calls/_verify_합계_값_A3__0.json",
+        "Doc/verify/SCP0028/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0028/e2e/shots/verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보.png",
+        "Doc/verify/SCP0028/e2e/shots/verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기.png",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SSP0014/_test_timing.jsonl",
+        "Doc/verify/SSP0014/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json",
+        "Doc/verify/SSP0014/calls/_verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기__0.json",
+        "Doc/verify/SSP0014/calls/_verify_저장_세부_F1_F6_컬럼별_왕복_0_값_저장_0.json",
+        "Doc/verify/SSP0014/e2e/shots/index_verify.json",
+        "Doc/verify/SSP0014/e2e_results.json",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/orch-watch.js",
+        "Doc/e2e/_run.langacct.bindy122678.lock",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SSP0014/e2e/shots/verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기.png",
+        "Doc/verify/SSP0014/e2e_test_kind.jsonl",
+        "tools/VibeManager/test/t_orch_watch_gone.js"
+      ]
+    }
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795123531341,
+  "autoFp": "164e07c151",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 22개 파일 통과, 시험 29/29개 파일 통과(PASS 359, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0625",
+  "needsReload": true,
+  "appliedMs": 1795123963244,
+  "synced": [
+    "orch-state.js",
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-state.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_watch_gone.js"
+    ],
+    "verify_result": "node test/t_orch_watch_gone.js . → PASS 5, ALL PASS (명령 끝 화면 ID 추출, R5 사건 0건, proc.gone 1건, screen SSP0005, 더 늦은 실행 없으면 종전 알림 1건). node test/run_all.js . → ALL OK 파일 29/29 PASS 359 FAIL 0 110.2s. 확인 시각 2026-11-20 06:30:32",
+    "note": "orch-state.js: proc.start screen 빈 값이면 cmd 끝 화면 ID(screenFromCmd) 사용, 화면·label별 마지막 proc.start 시각 기록(laterStart, export 추가). orch-watch.js tick: sweep 결과 중 proc 이고 initMs 이전 시작이고 같은 화면·label 의 더 늦은 proc.start 가 있으면 R5 사건과 창 로드 알림 대신 proc.gone 기록(screen, label, owner, childPid, start_ms, later_ms, log)만 남김. 작업 모드 DB_ONLY 이나 대상이 FE·BE 아님, hook 차단 없음. .bak, 설치 폴더, CHANGELOG.md 손대지 않음"
+  },
+  "snap": "prop_20261120005532_INC"
+}

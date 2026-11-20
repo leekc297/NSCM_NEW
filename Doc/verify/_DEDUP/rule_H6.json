@@ -1,0 +1,158 @@
+{
+ "rule_id": "H6",
+ "hash": "2d40cc29f813d4f8",
+ "groups": [
+  {
+   "refs": [
+    "GAPPI-30",
+    "GAPPI-34"
+   ],
+   "target": "팝업 상단 영역 선(border/LINE)",
+   "condition": "팝업 호출 버튼 클릭 → 팝업 상단 영역 확인",
+   "expected": "모든 팝업 상단에 디자인 표준에 없는 선(border/LINE)이 없어야 한다.",
+   "why": "두 항목 모두 팝업을 열고 상단에 표준 외 선이 있는지 확인하며, 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "GAPSELF-24",
+    "GAPSELF-33",
+    "DM-90",
+    "DM-112"
+   ],
+   "target": "팝업 레이아웃 디자인 표준 준수",
+   "condition": "팝업 열기 → 레이아웃·그리드·버튼 배치 확인",
+   "expected": "모든 팝업(Version 팝업, Reject 팝업 포함)의 레이아웃·그리드·버튼 배치가 디자인 가이드(팝업 표준)를 따른다.",
+   "why": "어떤 팝업이든 열어서 팝업 표준 디자인을 지키는지 보는 같은 확인이고, 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-179"
+   ],
+   "target": "팝업 그리드 No. 컬럼 개수·폭",
+   "condition": "",
+   "expected": "모든 팝업 그리드(Model/Owner/Project/Version 팝업 등)는 No. 컬럼을 1개만(공통 코너 헤더) 적정 폭으로 표시한다.",
+   "why": "No. 컬럼 중복 여부와 폭을 보는 항목이다. DM-C8의 건수·단축키·Sort 확인과 범위가 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-C8"
+   ],
+   "target": "팝업 그리드 공통 그리드 기능(No.·건수·Sort)",
+   "condition": "필터 적용 시",
+   "expected": "모든 팝업 그리드는 공통 그리드를 사용해 No. 컬럼과 조회·필터 건수를 표시하고, 단축키·Sort 동작이 메인 그리드와 같다.",
+   "why": "건수 표시·필터·단축키·Sort까지 보는 공통 그리드 확인이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-166"
+   ],
+   "target": "팝업 축소 시 조회조건·버튼 레이아웃",
+   "condition": "팝업 크기 축소",
+   "expected": "팝업을 줄여도 조회조건과 버튼이 서로 겹치지 않는다.",
+   "why": "크기를 줄였을 때 요소끼리 겹치는지 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-175"
+   ],
+   "target": "조회조건 팝업 초기 표시 영역",
+   "condition": "팝업 열기",
+   "expected": "Project/Model/Owner 등 조회조건 팝업이 스크롤바 없이 버튼까지 한 화면에 보인다.",
+   "why": "처음 열었을 때의 크기를 보는 확인이다. 리사이즈·드래그 제한(GAPPI-24)과는 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "GAPPI-24"
+   ],
+   "target": "팝업 resize·draggable 뷰포트 제한",
+   "condition": "팝업 오픈 → 메인화면보다 크게 리사이즈 · 화면 밖으로 드래그 · 가로만 조절",
+   "expected": "모든 팝업은 리사이즈·드래그해도 뷰포트 밖으로 나가지 않아 닫기(CLOSE) 버튼이 항상 보인다.",
+   "why": "리사이즈·드래그 조작 중의 뷰포트 제한을 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-C6"
+   ],
+   "target": "팝업 확인/닫기 버튼 순서",
+   "condition": "",
+   "expected": "모든 팝업의 버튼 순서가 OK → CLOSE로 통일되어 있다.",
+   "why": "버튼 순서만 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "GAPPI-27"
+   ],
+   "target": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드",
+   "condition": "그리드 Model 셀 팝업 열기 → Ctrl/Shift로 2행 이상 선택 시도 → OK",
+   "expected": "그리드 셀에서 여는 Model 팝업은 단일 선택만 허용한다.",
+   "why": "선택 모드를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-177"
+   ],
+   "target": "Team 팝업 조회조건 구성",
+   "condition": "",
+   "expected": "Team 팝업은 Team 단일 조건 하나로 Team ID와 Team Name을 모두 검색한다.",
+   "why": "Team 팝업의 조회조건 통합 여부를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-212"
+   ],
+   "target": "Project 팝업 검색 기능",
+   "condition": "",
+   "expected": "Project 팝업에 Search 버튼이 있고, DB를 즉시 조회하며, Like 검색과 콤마 다중 검색을 지원한다.",
+   "why": "팝업 검색 방식을 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-31"
+   ],
+   "target": "Version 조회조건 크기·Version 팝업 Description 폭",
+   "condition": "",
+   "expected": "Main Version 조회조건이 적정 크기로 줄어 있고, Version 팝업 Description 컬럼 폭이 넓게 표시된다.",
+   "why": "Version 조회조건 폭과 팝업 컬럼 폭이라는 특정 대상을 보는 확인이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-89"
+   ],
+   "target": "Cutoff 팝업 Period·Description·Div/Type 조회조건",
+   "condition": "",
+   "expected": "팝업 Period가 메인 Period와 같고, Description이 상단에 있으며, Div·Type 조회조건 크기가 넓다.",
+   "why": "Period 연동과 조회조건 배치를 보는 복합 확인이라 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-202"
+   ],
+   "target": "공지 팝업 Module/Sub Module/Active/타이틀",
+   "condition": "Insert",
+   "expected": "Module은 ALL/Common/DM/SCP/FP/SSP 다중선택(Insert는 단일)이고, Sub Module은 없으며, 라벨 제목이 표시되고, Active 기본값은 Y이며, Notice Content 서식이 동작하고, 팝업 섹션 타이틀은 테두리 밖에 있다.",
+   "why": "여러 대상을 함께 보는 고유한 복합 확인이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-16"
+   ],
+   "target": "검색 팝업 제목 표시",
+   "condition": "",
+   "expected": "팝업 제목에 등록된 팝업명 문구가 표시된다('_' 0건).",
+   "why": "팝업 제목 문구를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "SCPSSP-4"
+   ],
+   "target": "조회조건 팝업 호출 버튼 클릭 영역",
+   "condition": "버튼 끝(테두리) 클릭",
+   "expected": "모든 조회조건 팝업 호출 버튼(From City 등)은 테두리를 포함한 표시 영역 어디를 눌러도 팝업을 호출한다.",
+   "why": "호출 버튼의 클릭 영역을 보는 고유한 확인이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:44:43",
+ "cost": 0.1086812
+}

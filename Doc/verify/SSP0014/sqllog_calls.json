@@ -1,23 +1,23 @@
 {
  "menu_id": "SSP0014",
- "at": "2026-11-19 16:07:05",
+ "at": "2026-11-20 09:34:56",
  "windows": [
   [
-   6641138,
-   6671420,
-   "2026-11-19 12:28",
-   "2026-11-19 14:43"
+   6815968,
+   6847514,
+   "2026-11-20 07:13",
+   "2026-11-20 09:38"
   ]
  ],
- "rows_scanned": 30283,
+ "rows_scanned": 31547,
  "pkgs": [
   "PKG_SSP0014"
  ],
  "user": "",
  "calls": [
   {
-   "seq": 6649149,
-   "at": "2026-11-19 13:50:16",
+   "seq": 6823660,
+   "at": "2026-11-20 08:39:04",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -38,8 +38,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649226,
-   "at": "2026-11-19 13:50:24",
+   "seq": 6823751,
+   "at": "2026-11-20 08:39:12",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -60,8 +60,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649241,
-   "at": "2026-11-19 13:50:27",
+   "seq": 6823769,
+   "at": "2026-11-20 08:39:16",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -82,8 +82,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649248,
-   "at": "2026-11-19 13:50:30",
+   "seq": 6823779,
+   "at": "2026-11-20 08:39:19",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -104,8 +104,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649332,
-   "at": "2026-11-19 13:50:33",
+   "seq": 6823798,
+   "at": "2026-11-20 08:39:22",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -126,8 +126,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649728,
-   "at": "2026-11-19 13:50:36",
+   "seq": 6823835,
+   "at": "2026-11-20 08:39:25",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -148,8 +148,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649763,
-   "at": "2026-11-19 13:50:41",
+   "seq": 6823854,
+   "at": "2026-11-20 08:39:30",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -170,8 +170,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649806,
-   "at": "2026-11-19 13:50:43",
+   "seq": 6823859,
+   "at": "2026-11-20 08:39:33",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -192,8 +192,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649916,
-   "at": "2026-11-19 13:50:53",
+   "seq": 6823923,
+   "at": "2026-11-20 08:39:43",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -214,8 +214,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649930,
-   "at": "2026-11-19 13:50:56",
+   "seq": 6823960,
+   "at": "2026-11-20 08:39:45",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -236,8 +236,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650736,
-   "at": "2026-11-19 13:51:29",
+   "seq": 6824468,
+   "at": "2026-11-20 08:40:24",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -258,8 +258,69 @@
    "params_parsed": true
   },
   {
-   "seq": 6651723,
-   "at": "2026-11-19 13:52:41",
+   "seq": 6824490,
+   "at": "2026-11-20 08:40:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njlilian"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824785,
+   "at": "2026-11-20 08:41:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824789,
+   "at": "2026-11-20 08:41:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC",
+   "kind": "SAVE",
+   "fe": {
+    "mailUser4": "",
+    "mailUser5": "",
+    "mailUser2": "",
+    "mailUser3": "",
+    "partLeader": "",
+    "teamLeader": "",
+    "userId": "luping",
+    "itemId": "MCMM9314U0A1-018",
+    "createId": "minyonglee1",
+    "validYn": "Y",
+    "divisionId": "40",
+    "mailUser1": "",
+    "fromSite": "AZ00-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824793,
+   "at": "2026-11-20 08:41:30",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -280,8 +341,119 @@
    "params_parsed": true
   },
   {
-   "seq": 6653137,
-   "at": "2026-11-19 13:54:03",
+   "seq": 6824798,
+   "at": "2026-11-20 08:41:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824814,
+   "at": "2026-11-20 08:41:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824818,
+   "at": "2026-11-20 08:41:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC",
+   "kind": "SAVE",
+   "fe": {
+    "mailUser4": "",
+    "mailUser5": "",
+    "mailUser2": "",
+    "mailUser3": "",
+    "partLeader": "",
+    "teamLeader": "",
+    "userId": "junha.hwang",
+    "itemId": "MCMM9314U0A1-018",
+    "createId": "minyonglee1",
+    "validYn": "Y",
+    "divisionId": "40",
+    "mailUser1": "",
+    "fromSite": "AZ00-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824822,
+   "at": "2026-11-20 08:41:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6824827,
+   "at": "2026-11-20 08:41:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825124,
+   "at": "2026-11-20 08:41:58",
    "by": "kijung03.kim",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -302,8 +474,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6653809,
-   "at": "2026-11-19 13:54:22",
+   "seq": 6825532,
+   "at": "2026-11-20 08:42:17",
    "by": "kijung03.kim",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -324,8 +496,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6655911,
-   "at": "2026-11-19 13:58:48",
+   "seq": 6826167,
+   "at": "2026-11-20 08:43:48",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -346,8 +518,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656088,
-   "at": "2026-11-19 13:59:04",
+   "seq": 6826349,
+   "at": "2026-11-20 08:44:04",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -368,8 +540,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656218,
-   "at": "2026-11-19 13:59:16",
+   "seq": 6826444,
+   "at": "2026-11-20 08:44:16",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -390,8 +562,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656847,
-   "at": "2026-11-19 14:00:22",
+   "seq": 6826853,
+   "at": "2026-11-20 08:45:23",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -412,8 +584,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656957,
-   "at": "2026-11-19 14:00:35",
+   "seq": 6827001,
+   "at": "2026-11-20 08:45:36",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -434,8 +606,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657068,
-   "at": "2026-11-19 14:00:49",
+   "seq": 6827083,
+   "at": "2026-11-20 08:45:51",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -456,8 +628,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657164,
-   "at": "2026-11-19 14:00:58",
+   "seq": 6827137,
+   "at": "2026-11-20 08:46:01",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -478,8 +650,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657309,
-   "at": "2026-11-19 14:01:09",
+   "seq": 6827196,
+   "at": "2026-11-20 08:46:10",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -500,8 +672,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657462,
-   "at": "2026-11-19 14:01:28",
+   "seq": 6827279,
+   "at": "2026-11-20 08:46:31",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -522,8 +694,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657578,
-   "at": "2026-11-19 14:01:39",
+   "seq": 6827355,
+   "at": "2026-11-20 08:46:41",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -544,8 +716,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657648,
-   "at": "2026-11-19 14:01:49",
+   "seq": 6827440,
+   "at": "2026-11-20 08:46:52",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -566,8 +738,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657762,
-   "at": "2026-11-19 14:01:59",
+   "seq": 6827529,
+   "at": "2026-11-20 08:47:02",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -588,8 +760,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657868,
-   "at": "2026-11-19 14:02:08",
+   "seq": 6827620,
+   "at": "2026-11-20 08:47:11",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -610,8 +782,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657889,
-   "at": "2026-11-19 14:02:10",
+   "seq": 6827625,
+   "at": "2026-11-20 08:47:14",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -632,8 +804,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657955,
-   "at": "2026-11-19 14:02:13",
+   "seq": 6827638,
+   "at": "2026-11-20 08:47:17",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -654,8 +826,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658016,
-   "at": "2026-11-19 14:02:17",
+   "seq": 6827651,
+   "at": "2026-11-20 08:47:21",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -676,8 +848,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658124,
-   "at": "2026-11-19 14:02:26",
+   "seq": 6827697,
+   "at": "2026-11-20 08:47:29",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -698,8 +870,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658165,
-   "at": "2026-11-19 14:02:28",
+   "seq": 6827717,
+   "at": "2026-11-20 08:47:32",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -720,8 +892,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658170,
-   "at": "2026-11-19 14:02:31",
+   "seq": 6827730,
+   "at": "2026-11-20 08:47:35",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -742,8 +914,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658191,
-   "at": "2026-11-19 14:02:35",
+   "seq": 6827735,
+   "at": "2026-11-20 08:47:39",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -764,8 +936,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658266,
-   "at": "2026-11-19 14:02:43",
+   "seq": 6827772,
+   "at": "2026-11-20 08:47:48",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -786,8 +958,52 @@
    "params_parsed": true
   },
   {
-   "seq": 6658305,
-   "at": "2026-11-19 14:02:51",
+   "seq": 6827777,
+   "at": "2026-11-20 08:47:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": "AZ00-E"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6827782,
+   "at": "2026-11-20 08:48:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": "AC00-A,AT00-A,AZ00-A,AZ00-E,CN00732500_40-P,TW00177500_40-P,KR03346900_40-P,KR00995200_40-P,CN02072800_40-P,IN00142000_40-P,KR01297200_40-P,KR40408500_40-P,KR04179400_40-E,HQ10-A,HQ10-P,PL01279700_40-P,KR04595000_40-P,KR02265100_40_KR-P,KR02265100_40-P,NJ01-P,NJ01-A,NJ01-E,HQ06-A,HQ06-E,HQ05_40-W,CN00254300_40-P,HQ10-E,KR00797800_40-P,KR00781800_40-P,VN00188600_40-P,KR02149300_40-A,KR00496300_40-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6827826,
+   "at": "2026-11-20 08:48:11",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -808,8 +1024,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658310,
-   "at": "2026-11-19 14:02:53",
+   "seq": 6827831,
+   "at": "2026-11-20 08:48:13",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -830,8 +1046,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658315,
-   "at": "2026-11-19 14:02:56",
+   "seq": 6827841,
+   "at": "2026-11-20 08:48:16",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -852,8 +1068,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658320,
-   "at": "2026-11-19 14:03:00",
+   "seq": 6827849,
+   "at": "2026-11-20 08:48:20",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -874,8 +1090,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658485,
-   "at": "2026-11-19 14:03:19",
+   "seq": 6827997,
+   "at": "2026-11-20 08:48:39",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -896,8 +1112,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658621,
-   "at": "2026-11-19 14:03:30",
+   "seq": 6828101,
+   "at": "2026-11-20 08:48:51",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -918,8 +1134,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658663,
-   "at": "2026-11-19 14:03:33",
+   "seq": 6828111,
+   "at": "2026-11-20 08:48:55",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -940,8 +1156,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659017,
-   "at": "2026-11-19 14:03:56",
+   "seq": 6828302,
+   "at": "2026-11-20 08:49:17",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -962,8 +1178,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659166,
-   "at": "2026-11-19 14:04:13",
+   "seq": 6828414,
+   "at": "2026-11-20 08:49:36",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -984,8 +1200,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659236,
-   "at": "2026-11-19 14:04:32",
+   "seq": 6828435,
+   "at": "2026-11-20 08:49:56",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
    "kind": "GET",
@@ -1000,8 +1216,120 @@
    "params_parsed": true
   },
   {
-   "seq": 6659469,
-   "at": "2026-11-19 14:05:13",
+   "seq": 6828452,
+   "at": "2026-11-20 08:50:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828460,
+   "at": "2026-11-20 08:50:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828469,
+   "at": "2026-11-20 08:50:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828473,
+   "at": "2026-11-20 08:50:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828487,
+   "at": "2026-11-20 08:50:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828502,
+   "at": "2026-11-20 08:50:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828553,
+   "at": "2026-11-20 08:50:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang^ZZ_E2E_BAD_POPUP_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6828664,
+   "at": "2026-11-20 08:50:39",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1022,8 +1350,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659677,
-   "at": "2026-11-19 14:06:19",
+   "seq": 6829246,
+   "at": "2026-11-20 08:51:46",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1044,8 +1372,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659714,
-   "at": "2026-11-19 14:06:23",
+   "seq": 6829332,
+   "at": "2026-11-20 08:51:51",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1066,8 +1394,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659751,
-   "at": "2026-11-19 14:06:30",
+   "seq": 6829378,
+   "at": "2026-11-20 08:51:57",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1088,8 +1416,69 @@
    "params_parsed": true
   },
   {
-   "seq": 6660029,
-   "at": "2026-11-19 14:07:38",
+   "seq": 6829427,
+   "at": "2026-11-20 08:52:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njlilian"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829714,
+   "at": "2026-11-20 08:53:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829718,
+   "at": "2026-11-20 08:53:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC",
+   "kind": "SAVE",
+   "fe": {
+    "mailUser4": "",
+    "mailUser5": "",
+    "mailUser2": "",
+    "mailUser3": "",
+    "partLeader": "",
+    "teamLeader": "",
+    "userId": "luping",
+    "itemId": "MCMM9314U0A1-018",
+    "createId": "minyonglee1",
+    "validYn": "Y",
+    "divisionId": "40",
+    "mailUser1": "",
+    "fromSite": "AZ00-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829722,
+   "at": "2026-11-20 08:53:04",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1110,8 +1499,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660170,
-   "at": "2026-11-19 14:08:19",
+   "seq": 6829732,
+   "at": "2026-11-20 08:53:05",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1132,8 +1521,53 @@
    "params_parsed": true
   },
   {
-   "seq": 6660286,
-   "at": "2026-11-19 14:08:39",
+   "seq": 6829748,
+   "at": "2026-11-20 08:53:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "junha.hwang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829752,
+   "at": "2026-11-20 08:53:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC",
+   "kind": "SAVE",
+   "fe": {
+    "mailUser4": "",
+    "mailUser5": "",
+    "mailUser2": "",
+    "mailUser3": "",
+    "partLeader": "",
+    "teamLeader": "",
+    "userId": "junha.hwang",
+    "itemId": "MCMM9314U0A1-018",
+    "createId": "minyonglee1",
+    "validYn": "Y",
+    "divisionId": "40",
+    "mailUser1": "",
+    "fromSite": "AZ00-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829760,
+   "at": "2026-11-20 08:53:10",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1154,8 +1588,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660402,
-   "at": "2026-11-19 14:08:57",
+   "seq": 6829770,
+   "at": "2026-11-20 08:53:12",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1176,8 +1610,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660630,
-   "at": "2026-11-19 14:09:12",
+   "seq": 6829874,
+   "at": "2026-11-20 08:53:21",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1198,8 +1632,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660635,
-   "at": "2026-11-19 14:09:13",
+   "seq": 6829897,
+   "at": "2026-11-20 08:54:10",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1220,8 +1654,24 @@
    "params_parsed": true
   },
   {
-   "seq": 6660753,
-   "at": "2026-11-19 14:09:21",
+   "seq": 6829918,
+   "at": "2026-11-20 08:54:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping^njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829923,
+   "at": "2026-11-20 08:54:41",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1242,8 +1692,24 @@
    "params_parsed": true
   },
   {
-   "seq": 6660940,
-   "at": "2026-11-19 14:09:54",
+   "seq": 6829947,
+   "at": "2026-11-20 08:54:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengwei^shengqiongfen^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830051,
+   "at": "2026-11-20 08:55:12",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1264,8 +1730,24 @@
    "params_parsed": true
   },
   {
-   "seq": 6661012,
-   "at": "2026-11-19 14:10:12",
+   "seq": 6830072,
+   "at": "2026-11-20 08:55:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengwei^zhouziqiang^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830181,
+   "at": "2026-11-20 08:55:43",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1286,8 +1768,24 @@
    "params_parsed": true
   },
   {
-   "seq": 6661025,
-   "at": "2026-11-19 14:10:13",
+   "seq": 6830205,
+   "at": "2026-11-20 08:55:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengwei^kwonl"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830355,
+   "at": "2026-11-20 08:56:14",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1308,8 +1806,24 @@
    "params_parsed": true
   },
   {
-   "seq": 6661119,
-   "at": "2026-11-19 14:10:23",
+   "seq": 6830384,
+   "at": "2026-11-20 08:56:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengwei^pantaonj"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830403,
+   "at": "2026-11-20 08:56:44",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1330,8 +1844,24 @@
    "params_parsed": true
   },
   {
-   "seq": 6661198,
-   "at": "2026-11-19 14:10:31",
+   "seq": 6830423,
+   "at": "2026-11-20 08:56:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengwei^guoxiaoliangX"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830428,
+   "at": "2026-11-20 08:57:14",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1352,8 +1882,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661289,
-   "at": "2026-11-19 14:10:39",
+   "seq": 6830455,
+   "at": "2026-11-20 08:57:45",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1374,8 +1904,692 @@
    "params_parsed": true
   },
   {
-   "seq": 6661342,
-   "at": "2026-11-19 14:10:42",
+   "seq": 6830503,
+   "at": "2026-11-20 08:58:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830580,
+   "at": "2026-11-20 08:58:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830593,
+   "at": "2026-11-20 08:59:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830634,
+   "at": "2026-11-20 08:59:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830640,
+   "at": "2026-11-20 08:59:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830924,
+   "at": "2026-11-20 09:00:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6830941,
+   "at": "2026-11-20 09:00:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831018,
+   "at": "2026-11-20 09:00:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping^njzhoumengwei^guoxiaoliang^lgsilee^kwonl"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831078,
+   "at": "2026-11-20 09:00:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831160,
+   "at": "2026-11-20 09:01:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831322,
+   "at": "2026-11-20 09:01:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831348,
+   "at": "2026-11-20 09:01:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping^njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831928,
+   "at": "2026-11-20 09:01:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6831975,
+   "at": "2026-11-20 09:01:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping^njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832370,
+   "at": "2026-11-20 09:02:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832394,
+   "at": "2026-11-20 09:02:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping^njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832462,
+   "at": "2026-11-20 09:02:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832467,
+   "at": "2026-11-20 09:02:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832472,
+   "at": "2026-11-20 09:02:46",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832492,
+   "at": "2026-11-20 09:02:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "luping^njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832507,
+   "at": "2026-11-20 09:02:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832523,
+   "at": "2026-11-20 09:03:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "njzhoumengweiX^njzhoumengwei^guoxiaoliang"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832612,
+   "at": "2026-11-20 09:03:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832617,
+   "at": "2026-11-20 09:03:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832673,
+   "at": "2026-11-20 09:03:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832678,
+   "at": "2026-11-20 09:03:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832732,
+   "at": "2026-11-20 09:03:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832810,
+   "at": "2026-11-20 09:04:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832841,
+   "at": "2026-11-20 09:04:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832846,
+   "at": "2026-11-20 09:04:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832912,
+   "at": "2026-11-20 09:04:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6832991,
+   "at": "2026-11-20 09:04:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6833051,
+   "at": "2026-11-20 09:04:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6833064,
+   "at": "2026-11-20 09:05:00",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1396,8 +2610,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661458,
-   "at": "2026-11-19 14:10:45",
+   "seq": 6833077,
+   "at": "2026-11-20 09:05:02",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1418,8 +2632,74 @@
    "params_parsed": true
   },
   {
-   "seq": 6664121,
-   "at": "2026-11-19 14:17:29",
+   "seq": 6833331,
+   "at": "2026-11-20 09:05:44",
+   "by": "bindy122678",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6833352,
+   "at": "2026-11-20 09:05:48",
+   "by": "bindy122678",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "EN",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6833373,
+   "at": "2026-11-20 09:05:52",
+   "by": "bindy122678",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "CN",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6833485,
+   "at": "2026-11-20 09:06:07",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1440,8 +2720,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664196,
-   "at": "2026-11-19 14:17:35",
+   "seq": 6833536,
+   "at": "2026-11-20 09:06:13",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1462,8 +2742,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664255,
-   "at": "2026-11-19 14:17:39",
+   "seq": 6833575,
+   "at": "2026-11-20 09:06:17",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1484,8 +2764,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664301,
-   "at": "2026-11-19 14:17:43",
+   "seq": 6833614,
+   "at": "2026-11-20 09:06:21",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1506,8 +2786,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664357,
-   "at": "2026-11-19 14:17:47",
+   "seq": 6833651,
+   "at": "2026-11-20 09:06:25",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1528,8 +2808,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664447,
-   "at": "2026-11-19 14:17:55",
+   "seq": 6833742,
+   "at": "2026-11-20 09:06:34",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1550,8 +2830,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664540,
-   "at": "2026-11-19 14:18:04",
+   "seq": 6833842,
+   "at": "2026-11-20 09:06:44",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1572,8 +2852,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664691,
-   "at": "2026-11-19 14:18:18",
+   "seq": 6833944,
+   "at": "2026-11-20 09:06:59",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1594,8 +2874,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664861,
-   "at": "2026-11-19 14:18:24",
+   "seq": 6833989,
+   "at": "2026-11-20 09:07:07",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1616,8 +2896,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664989,
-   "at": "2026-11-19 14:18:33",
+   "seq": 6834104,
+   "at": "2026-11-20 09:07:15",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1638,8 +2918,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664994,
-   "at": "2026-11-19 14:18:34",
+   "seq": 6834109,
+   "at": "2026-11-20 09:07:17",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1660,8 +2940,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665010,
-   "at": "2026-11-19 14:18:35",
+   "seq": 6834119,
+   "at": "2026-11-20 09:07:19",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1682,8 +2962,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665454,
-   "at": "2026-11-19 14:20:07",
+   "seq": 6834410,
+   "at": "2026-11-20 09:08:50",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1704,8 +2984,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665609,
-   "at": "2026-11-19 14:20:28",
+   "seq": 6834513,
+   "at": "2026-11-20 09:09:12",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1726,8 +3006,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665758,
-   "at": "2026-11-19 14:20:36",
+   "seq": 6834610,
+   "at": "2026-11-20 09:09:20",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1748,8 +3028,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665869,
-   "at": "2026-11-19 14:20:45",
+   "seq": 6834678,
+   "at": "2026-11-20 09:09:31",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1770,8 +3050,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666095,
-   "at": "2026-11-19 14:21:05",
+   "seq": 6834849,
+   "at": "2026-11-20 09:09:54",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1792,8 +3072,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666132,
-   "at": "2026-11-19 14:21:07",
+   "seq": 6834868,
+   "at": "2026-11-20 09:09:57",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1814,8 +3094,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666150,
-   "at": "2026-11-19 14:21:10",
+   "seq": 6834899,
+   "at": "2026-11-20 09:09:59",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1836,8 +3116,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666198,
-   "at": "2026-11-19 14:21:12",
+   "seq": 6834912,
+   "at": "2026-11-20 09:10:02",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1858,8 +3138,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666218,
-   "at": "2026-11-19 14:21:14",
+   "seq": 6834930,
+   "at": "2026-11-20 09:10:04",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1880,8 +3160,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666263,
-   "at": "2026-11-19 14:21:17",
+   "seq": 6834943,
+   "at": "2026-11-20 09:10:07",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1902,8 +3182,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666285,
-   "at": "2026-11-19 14:21:19",
+   "seq": 6834956,
+   "at": "2026-11-20 09:10:09",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1924,8 +3204,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666301,
-   "at": "2026-11-19 14:21:21",
+   "seq": 6835030,
+   "at": "2026-11-20 09:10:11",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1946,8 +3226,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666346,
-   "at": "2026-11-19 14:21:24",
+   "seq": 6835082,
+   "at": "2026-11-20 09:10:14",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1968,8 +3248,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666475,
-   "at": "2026-11-19 14:21:32",
+   "seq": 6835198,
+   "at": "2026-11-20 09:10:23",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -1990,8 +3270,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666675,
-   "at": "2026-11-19 14:21:40",
+   "seq": 6835262,
+   "at": "2026-11-20 09:10:31",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2012,8 +3292,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666736,
-   "at": "2026-11-19 14:21:47",
+   "seq": 6835350,
+   "at": "2026-11-20 09:10:40",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2034,8 +3314,52 @@
    "params_parsed": true
   },
   {
-   "seq": 6669443,
-   "at": "2026-11-19 14:30:38",
+   "seq": 6835791,
+   "at": "2026-11-20 09:11:17",
+   "by": "bindy122678",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6836505,
+   "at": "2026-11-20 09:12:40",
+   "by": "bindy122678",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "CN",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6836658,
+   "at": "2026-11-20 09:12:51",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2056,8 +3380,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669679,
-   "at": "2026-11-19 14:30:57",
+   "seq": 6836840,
+   "at": "2026-11-20 09:13:09",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2078,8 +3402,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669764,
-   "at": "2026-11-19 14:31:09",
+   "seq": 6836958,
+   "at": "2026-11-20 09:13:22",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2100,8 +3424,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669815,
-   "at": "2026-11-19 14:31:13",
+   "seq": 6837027,
+   "at": "2026-11-20 09:13:26",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2122,8 +3446,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669858,
-   "at": "2026-11-19 14:31:17",
+   "seq": 6837071,
+   "at": "2026-11-20 09:13:29",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2144,8 +3468,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669918,
-   "at": "2026-11-19 14:31:26",
+   "seq": 6837178,
+   "at": "2026-11-20 09:13:39",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2166,8 +3490,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670116,
-   "at": "2026-11-19 14:31:41",
+   "seq": 6837325,
+   "at": "2026-11-20 09:13:53",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2188,8 +3512,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670164,
-   "at": "2026-11-19 14:31:45",
+   "seq": 6837396,
+   "at": "2026-11-20 09:13:57",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2210,8 +3534,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670217,
-   "at": "2026-11-19 14:31:49",
+   "seq": 6837433,
+   "at": "2026-11-20 09:14:02",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2232,8 +3556,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670260,
-   "at": "2026-11-19 14:31:54",
+   "seq": 6837470,
+   "at": "2026-11-20 09:14:07",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2254,8 +3578,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670270,
-   "at": "2026-11-19 14:31:56",
+   "seq": 6837475,
+   "at": "2026-11-20 09:14:09",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2276,8 +3600,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670294,
-   "at": "2026-11-19 14:32:10",
+   "seq": 6837569,
+   "at": "2026-11-20 09:14:24",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2298,8 +3622,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670376,
-   "at": "2026-11-19 14:32:27",
+   "seq": 6837638,
+   "at": "2026-11-20 09:14:42",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2320,8 +3644,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670422,
-   "at": "2026-11-19 14:32:31",
+   "seq": 6837695,
+   "at": "2026-11-20 09:14:46",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2342,8 +3666,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670517,
-   "at": "2026-11-19 14:32:39",
+   "seq": 6837765,
+   "at": "2026-11-20 09:14:54",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2364,8 +3688,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670580,
-   "at": "2026-11-19 14:32:49",
+   "seq": 6837904,
+   "at": "2026-11-20 09:15:08",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2386,8 +3710,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670592,
-   "at": "2026-11-19 14:32:52",
+   "seq": 6837913,
+   "at": "2026-11-20 09:15:12",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2408,8 +3732,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6670646,
-   "at": "2026-11-19 14:33:02",
+   "seq": 6838032,
+   "at": "2026-11-20 09:15:24",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",
@@ -2430,8 +3754,1412 @@
    "params_parsed": true
   },
   {
-   "seq": 6670740,
-   "at": "2026-11-19 14:33:20",
+   "seq": 6838173,
+   "at": "2026-11-20 09:15:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838298,
+   "at": "2026-11-20 09:15:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838380,
+   "at": "2026-11-20 09:16:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838385,
+   "at": "2026-11-20 09:16:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838491,
+   "at": "2026-11-20 09:16:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838650,
+   "at": "2026-11-20 09:16:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838839,
+   "at": "2026-11-20 09:16:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839025,
+   "at": "2026-11-20 09:16:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839070,
+   "at": "2026-11-20 09:17:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839143,
+   "at": "2026-11-20 09:17:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839270,
+   "at": "2026-11-20 09:17:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839275,
+   "at": "2026-11-20 09:17:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "MAMM9314U0A1-016",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839281,
+   "at": "2026-11-20 09:17:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "mamm9314u0a1-016",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839317,
+   "at": "2026-11-20 09:17:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "AMM9314U0A1-01",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839322,
+   "at": "2026-11-20 09:17:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "MAMM9314U0A1-016,MAMM9314U0A1-018",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839332,
+   "at": "2026-11-20 09:17:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839337,
+   "at": "2026-11-20 09:17:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "junha.hwang",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839342,
+   "at": "2026-11-20 09:17:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "JUNHA.HWANG",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839355,
+   "at": "2026-11-20 09:17:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "unha.hwan",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839363,
+   "at": "2026-11-20 09:17:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "junha.hwang,njzhoumengwei",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839642,
+   "at": "2026-11-20 09:18:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839938,
+   "at": "2026-11-20 09:18:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840179,
+   "at": "2026-11-20 09:19:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840356,
+   "at": "2026-11-20 09:19:43",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840426,
+   "at": "2026-11-20 09:19:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840596,
+   "at": "2026-11-20 09:19:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840863,
+   "at": "2026-11-20 09:20:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841042,
+   "at": "2026-11-20 09:20:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841076,
+   "at": "2026-11-20 09:20:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841274,
+   "at": "2026-11-20 09:21:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841619,
+   "at": "2026-11-20 09:21:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841802,
+   "at": "2026-11-20 09:22:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841827,
+   "at": "2026-11-20 09:22:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841928,
+   "at": "2026-11-20 09:22:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842169,
+   "at": "2026-11-20 09:22:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842463,
+   "at": "2026-11-20 09:23:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842470,
+   "at": "2026-11-20 09:23:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842535,
+   "at": "2026-11-20 09:23:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842696,
+   "at": "2026-11-20 09:24:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842911,
+   "at": "2026-11-20 09:24:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843032,
+   "at": "2026-11-20 09:24:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843117,
+   "at": "2026-11-20 09:24:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843438,
+   "at": "2026-11-20 09:25:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843774,
+   "at": "2026-11-20 09:25:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843789,
+   "at": "2026-11-20 09:25:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843910,
+   "at": "2026-11-20 09:25:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844526,
+   "at": "2026-11-20 09:26:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844676,
+   "at": "2026-11-20 09:26:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844689,
+   "at": "2026-11-20 09:26:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844857,
+   "at": "2026-11-20 09:27:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845271,
+   "at": "2026-11-20 09:27:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845408,
+   "at": "2026-11-20 09:27:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845417,
+   "at": "2026-11-20 09:28:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+   "kind": "GET",
+   "fe": {
+    "userId": "secretshushu^ZZ_E2E_BAD_KEY"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845838,
+   "at": "2026-11-20 09:29:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "AMDAU0348A",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845976,
+   "at": "2026-11-20 09:30:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845981,
+   "at": "2026-11-20 09:30:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "MAMM9314U0A1-016",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846276,
+   "at": "2026-11-20 09:31:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846297,
+   "at": "2026-11-20 09:31:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846310,
+   "at": "2026-11-20 09:31:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846394,
+   "at": "2026-11-20 09:31:34",
+   "by": "jinhuannj",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "EN",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "jinhuannj"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846524,
+   "at": "2026-11-20 09:31:48",
+   "by": "kijung03.kim",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "kijung03.kim"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846633,
+   "at": "2026-11-20 09:32:01",
+   "by": "iqromoh",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "EN",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "81_HM",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "iqromoh"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846730,
+   "at": "2026-11-20 09:32:15",
+   "by": "caizedan",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "EN",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "caizedan"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6846830,
+   "at": "2026-11-20 09:32:32",
+   "by": "hoseoknam",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "82",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "hoseoknam"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6847093,
+   "at": "2026-11-20 09:33:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6847219,
+   "at": "2026-11-20 09:33:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
+   "kind": "GET",
+   "fe": {
+    "language": "KO",
+    "userId": "",
+    "itemId": "",
+    "validYn": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6847299,
+   "at": "2026-11-20 09:33:37",
    "by": "minyonglee1",
    "proc": "PKG_SSP0014.P_SSP0014_GET_MODEL_PIC",
    "kind": "GET",

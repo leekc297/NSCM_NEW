@@ -1,0 +1,18 @@
+{
+ "rule_id": "H9",
+ "hash": "8ab1936bf5b7705f",
+ "groups": [
+  {
+   "refs": [
+    "DM-C4"
+   ],
+   "target": "Main Grid 컬럼 폭",
+   "condition": "화면 오픈 · 개인화 없음",
+   "expected": "개인화 폭이 없을 때 모든 Main Grid 컬럼 기본 폭은 기준정보(META) width 로 하며 그 값은 헤더 문구 길이 이상이어야 한다.",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:44:28"
+}

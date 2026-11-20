@@ -46,7 +46,7 @@ class ChainRunner {
   }
   /** 이 항목을 창 없이 돌릴 수 있는가 — 체인 · 작업(task) · flow 가 있는 Claude 메뉴 */
   static supports(item) { return !!item && (item.kind === 'chain' || item.kind === 'task' || (item.kind === 'claude' && Array.isArray(item.flow) && item.flow.length > 0)); }
-  async run(item) {
+  async run(item, opts) {
     const workbench = require('./workbench'); const p = this.api.paths(); const wb = this.wb; const t0 = Date.now();
     if (!this.id) return { ok: false, status: 'BLOCKED', summary: '화면 ID 없음', sec: 0 };
     if (!ChainRunner.supports(item)) return { ok: false, status: 'UNSUPPORTED', summary: `창 없이 실행할 수 없는 종류: ${item && item.kind}`, sec: 0 };
@@ -55,14 +55,14 @@ class ChainRunner {
       if (item.kind === 'task') {
         const code = await wb.runTaskStreaming(p, item.task, this.id, { noConfirm: true, inFlow: true });
         const sec = Math.round((Date.now() - t0) / 1000);
-        if (code == null) return { ok: false, status: this.stopped ? 'CANCEL' : 'BLOCKED', code: null, sec, summary: this.stopped ? '중지' : '실행 안 됨(작업 없음 · 작업 모드 차단 · 입력 취소)' };
+        if (code == null) return { ok: false, status: this.stopped ? 'CANCEL' : 'BLOCKED', code: null, sec, summary: this.stopped ? '중지' : '실행 안 됨(작업 없음, 작업 모드 차단, 입력 취소)' };
         const okCodes = Array.isArray(item.okCodes) ? item.okCodes : [];
         const ok = code === 0 || okCodes.includes(code); const fw = ok ? null : wb.takeFail(code);
         return { ok, status: ok ? (code === 0 ? 'OK' : 'WARN') : (this.stopped ? 'CANCEL' : 'FAIL'), code, sec, summary: ok ? `완료 (exit ${code})` : `실패 (exit ${code})${fw ? ` — ${String(fw.why).split('\n')[0]}` : ''}`, fail: ok ? null : { no: 1, name: item.label, status: 'FAIL', why: fw ? fw.why : '' }, log: fw ? fw.log : '' };
       }
       const chain = item.kind === 'chain' ? item : { label: item.label, chainId: item.flowId || 'menuFlow', steps: item.flow };
       wb.lastRun = null; wb.lastBlock = '';
-      await wb.runChain(p, chain, this.id, workbench.effectiveHarness(undefined, null, item, this.id));
+      await wb.runChain(p, chain, this.id, workbench.effectiveHarness(undefined, null, item, this.id), opts && opts.resume ? { resume: opts.resume } : undefined); // 2026-11-20 작업 재개
       const lr = wb.lastRun; const sec = Math.round((Date.now() - t0) / 1000);
       if (!lr) return { ok: false, status: this.stopped ? 'CANCEL' : 'BLOCKED', sec, summary: this.stopped ? '중지' : (wb.lastBlock || '체인이 시작되지 않음(단계 없음 · 작업 모드 차단)') };
       const status = lr.fail ? (this.stopped ? 'CANCEL' : lr.fail.status) : lr.hold ? 'HOLD' : lr.warn ? 'WARN' : 'OK';

@@ -1,0 +1,29 @@
+{
+  "id": "20261120_112617_R12_ALL_2",
+  "at": "2026-11-20T11:26:17+09:00",
+  "ms": 1795141577169,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_job_par.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_job_par.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 15 · FAIL 1 · FAIL 서버 이상 사건 → 작업 일시 중지 요청 pausing VMO 일시 중지: R6 서버 응답 없음 — BE 포트 8080 / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_job_par.js",
+    "file": "t_job_par.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T11:33:23+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

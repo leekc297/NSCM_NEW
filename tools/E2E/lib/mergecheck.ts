@@ -27,7 +27,7 @@ export function emptyOverrideLine(src: string, method: string): number {
   return m ? String(src).slice(0, m.index).split('\n').length : 0;
 }
 
-export function judgeMergeDelete(s: { b: string; cruds: string[]; outD: number; posts: number; toggled?: number; keys?: string[]; alert?: string; asisNoDelete?: string; why?: string }): J {
+export function judgeMergeDelete(s: { b: string; cruds: string[]; outD: number; posts: number; toggled?: number; keys?: string[]; alert?: string; asisNoDelete?: string; asisNewOnly?: string; why?: string }): J {
   if (s.why) return { result: 'ERROR', why: `[측정 경로 없음] ${s.why}` };
   const d = s.cruds.filter(c => c === 'D').length, n = s.cruds.length;
   if (s.posts) return { result: 'ERROR', why: `[확인 대상] Delete 클릭만으로 서버 요청 ${s.posts}건 — 시험이 차단함(즉시 삭제 화면인지 확인)` };
@@ -36,6 +36,9 @@ export function judgeMergeDelete(s: { b: string; cruds: string[]; outD: number; 
   // 2026-11-19 T341(SCP0111 V-23d0a714): AS-IS Delete 버튼 본문이 비어 있으면(기존 행 삭제 기능 없음) TO-BE 가 기존 행 Delete 를 알림으로 막는 것은
   //   AS-IS 와 같은 동작이다 — 병합 범위 D 표시 판정 대상 아님(원문 근거 NA). 알림 없이 무반응이면 그대로 확인 대상
   if (!d && s.asisNoDelete && s.alert) return { result: 'NA', why: `${s.b} 병합 ${n}행 Delete 뒤 D 표시 0 · 알림 '${s.alert}' · AS-IS 기존 행 삭제 기능 없음(${s.asisNoDelete} 본문 없음) — 병합 범위 D 표시 대상 아님` };
+  // 2026-11-20 T440(SCP0028 V-564a1ac4): AS-IS Delete 가 신규(I) 행만 지우는 화면(asisDeleteNewOnly · 예 SCP0028 cs:211~227)은 조회한 기존 병합 행에 Delete 를 눌러도
+  //   AS-IS 에서 아무 행도 지워지지 않는다 → 기존 행 병합 범위 D 표시 판정 대상 아님(원문 근거 NA). 서버 요청이 나갔거나 일부만 D 이면 위·아래 판정 그대로
+  if (!d && s.asisNewOnly) return { result: 'NA', why: `${s.b} 병합 ${n}행(기존 행) Delete 뒤 D 표시 0${s.alert ? ` · 알림 '${s.alert}'` : ''} · AS-IS Delete 는 신규(I) 행만 지움(${s.asisNewOnly}) — 기존 병합 행 D 표시 대상 아님` };
   if (!d) return { result: 'ERROR', why: `[확인 대상] ${s.b} 병합 ${n}행 Delete 뒤 D 표시 0${s.alert ? ` · 알림 '${s.alert}'` : ''} — 토글형·차단 여부 확인` };
   if (d < n) return { result: 'FAIL', why: `${s.b} 병합 ${n}행 중 D 표시 ${d}행 — 병합 전체 행이 D 여야 함` };
   if (s.outD) return { result: 'FAIL', why: `${s.b} 병합 범위 밖 ${s.outD}행까지 D 표시` };

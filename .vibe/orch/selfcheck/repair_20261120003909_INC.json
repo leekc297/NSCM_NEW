@@ -1,0 +1,26 @@
+{
+ "proposal": {
+  "id": "20261120003909_INC",
+  "title": "작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+  "evidence": "job.json J20261120_003243 note '사용자 중지' · events.jsonl 241~251행 user.stop 없음 · workbench.js:2643 user.stop 생성처 1곳 · orch-watch.js:120 R11 조건 · orch-watch.js:107~111 checklistSnap · run_verify.result.json:7 started 2026-11-19 13:48:58 · 사건 20261120_003346_R1_SCP0005, 20261120_003346_R11_SCP0005",
+  "targets": [
+   "tools/VibeManager/job-runner.js",
+   "tools/VibeManager/orch-watch.js",
+   "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "job-runner.js stop(): 변경 전 runner 마다 r.stop() 만 호출함. 변경 후 r.stop() 앞에서 evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms: Date.now() }) 를 남김. orch-watch.js:120: 변경 전 `if (ev.claudeRan === 0 && (cur.fail > 0 || cur.unverified > 0))`. 변경 후 `if (ev.claudeRan === 0 && !userStopped(ev.wb) && resultAfterChainStart(cur, ev) && (cur.fail > 0 || cur.unverified > 0))`. resultAfterChainStart 는 cur.started 를 시각으로 바꿔 ev.ms - ev.ms_run 이상일 때만 참을 돌려줌. t_orch_watch.js 에 user.stop 뒤 chain.end 를 보내는 시험과 started 가 체인 시작보다 앞선 결과로 chain.end 를 보내는 시험을 추가하고, 두 시험 모두 R11 0건을 기대값으로 둠.",
+  "verify": "node --check tools/VibeManager/job-runner.js tools/VibeManager/orch-watch.js · node tools/VibeManager/test/t_orch_watch.js · node tools/VibeManager/test/run_all.js",
+  "sig": "작업 목록 중지를 감시기에 알리고 rn 판정에서 사용자 중지와 이전 실행 결과를 뺀다"
+ },
+ "result": null,
+ "gate": null,
+ "history": [
+  "05:31:16 VMO 자동(게이트 통과 조건): 승인",
+  "05:33:14 VMO: 반영 전 게이트: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 341, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0531",
+  "05:33:19 VMO: 반영 시작",
+  "05:34:50 VMO: 반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120003909_INC"
+}

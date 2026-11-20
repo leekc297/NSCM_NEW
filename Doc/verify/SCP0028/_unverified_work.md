@@ -38,3 +38,60 @@
 - 백업 `*.bak_20261119_scp28u`(_verify.spec, eg_popup.spec, nscm, smoke-extra, facts_lockrules, judge, unverified_classes)
 - 시험 데이터: TO-BE 저장 없음. 사내 오라클 조회 1회(SCM_ADM_MSG_M LBL00872, LBL00007). Doc/asisfacts/screens/SCP0028 edit_expect.csv, lock_rules.csv, color_rules.csv 재생성(facts_lockrules)
 - FE 가이드: 없음(이번 라운드 화면 결함 확정 0건)
+
+## 2026-11-20 라운드 (07:5x ~ 08:3x · CheckList 07:38 원장 · 일괄 보완)
+
+- 입력: 원장 `verify_ledger.csv`(07:38), 분류 `unverified_triage.*`(07:48:27). 처리 대상 111행(엔진 81, 판단 30), 집계 113행
+- 행별 조치 표 `_unverified_plan.md`(111행, 처리 대상과 같음, 23묶음). 결정 목록 `_unverified_decisions.md`(D1~D11, 22행). 생성 `_unverified_plan_gen.py`. 지난 라운드 표는 `*.r1_20261119` 로 남김
+- 재측정: run_verify, 개별 검사기 재실행 안 함. 확인은 단위 함수 시험, 시험 스크립트, 사실 파일 재생성 diff, engine_selfcheck
+- 지난 라운드와 같은 시도 없음. 지난 라운드 결정 D1(저장 표본)은 이번 원장 실행 기록으로 원인(숫자 칸 글자 누락)을 확인해 C 묶음으로 고침
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|---|
+| A Delete 단추 | 7 | SubTitle.tsx:397~468 화면 단추 'Delete'(일괄삭제 팝업)가 툴바 'Delete(F9)' 앞. eg_auth.spec.ts `/^Delete/`, subButton('Delete').first() 가 화면 단추를 잡음 | tools/E2E/lib/nscm.ts:724~733, authprobe.ts:67~78, Doc/e2e/specs/eg_auth.spec.ts:167·317·332~336, crud.ts:307 (T430) | tsc 0 |
+| B crud insert | 1 | AS-IS Insert 빈 본문(asisInsertNoop 실행 문장 0). crud.ts 가 Insert 단추만 보고 마커 행 경로 | tools/E2E/lib/crud.ts:41~53·70 (T431) | asisInsertNoop SCP0028 사실 noop=true(node 08:1x) |
+| C 숫자 칸 글자 누락 | 1 | e2e/results.json crud 기록 '12801' → 요청 lotSize '1'·'12'·'1280' | tools/E2E/lib/crud.ts:139~150 (T432) | tsc 0 |
+| D 정렬 NULL | 1 | sort_ci_check nullable 이 같은 이름 칸 전체를 봄. PKG_SCP0028 본문 키 5개 원본 SCP_MST_SHIPMENT_LOT_SIZE NOT NULL(사내 오라클 08:0x) | tools/Harness/verify/sort_ci_check.py stmt_before·key_source·nullable (T433) | --selftest 21/21 · 본 조회 SP 키 5개 원본 표 추적 읽기 전용 확인 |
+| E Model 라벨·입력 | 6 | 기준표 'Model' → 'Model/Nickname' 75/78행. G8·G9 가 그리드 머리글 'Model' 을 라벨로 잡음(조회 1940행, 본문에 입력값 없음) | judge.py H5(T434), labelalias.ts stdAlias, smoke-extra.ts:117, _verify.spec.ts findSearchBox·G8/G9 (T434, T442) | 판정 논리 재현 75/78 PASS · Material 3행 미적용 |
+| F 탭 이름 | 1 | MNU00091 KO·EN·CN 'SSP Lot Size'(msg_master.csv) | labeltrans.ts msgTexts, _verify.spec.ts 탭 이름 (T435) | tsc 0 |
+| G 권한 동기화 | 1 | menu_auth_sync FAIL 2건 · SCP0104 V-24ff60ab 사용자판정 | confirmed_requirements.csv CR-116, judge.py J4 (T436) | tobe_rule_registry --build, --check rc 0 |
+| H G6 팝업 알림 | 1 | 일괄입력 팝업 Find 필수 알림이 화면 기록에 섞임 | nscm.ts:503~504·555~562 (T437) | tsc 0 |
+| I 콤보 원천 추출 | 14 | DataBind(Data.Type.YesOrNo, true)(cs:135) 미추출 · ClearUsrCheckedList(cs:149, 호출 0) 오추출 → b7 '원천 미확인 control' | facts_combosrc.py DataBind·dead_private (T438) | combo_src.csv 재생성 diff: control 행 삭제 1, cboValid 행 추가 1 |
+| J 신규 행 결함 유형 | 3 | _no_insert 가 Insert 빈 본문 화면을 보지 않음 | judge.py _no_insert (T439) | py_compile 0 |
+| K 병합 셀 Delete | 1 | 화면 단추 'Delete' 를 누름(알림 = 팝업 제목) · AS-IS Delete 신규 행만(DeleteButton:223) | _verify.spec.ts 병합 셀 Delete, mergecheck.ts asisNewOnly (T440) | mergecheck.selftest 35/35 · asisDeleteNewOnly SCP0028 newOnly=true |
+| L 조회 전 Delete | 1 | 조회 전 프로브 Insert 만 | _verify.spec.ts D4 (T441) | tsc 0 |
+| M 팝업 호출 기록 | 3 | eg_chain(CL_SELFTEST_BASE) 실행이 calls/*.json 미기록(calls 폴더 eg_* 0) | fixtures/test.ts:90, eg_chain.py:56 (T443) | tsc 0 · py_compile 0 |
+| N 시나리오 라벨 | 2 | btn 'Input'(KO '입력'), iscombo 'Division'(TO-BE 'Div.') | _verify.spec.ts 시나리오 btn·iscombo (T444) | tsc 0 |
+| O 신규 행 시나리오 | 3 | 시나리오 문구가 insert_noop_na 문구표에 없음 | judge.py NEWROW_MISS_RE·NEWROW_STEP_RE (T445) | 단위 시험: 대상 2행 NA, 편집 중 Input 행 미검증 유지 |
+| P 원값 복원 | 1 | 편집기 주입만 써서 LOT_SIZE 안 바뀜 | _verify.spec.ts 원값 복원 (T446) | tsc 0 |
+| Q 골든 인자 | 1 | @p_to_site 선언 기본값 '' 을 빈 값으로 셈(SKIP) | tools/DbConn/golden.py (T447) | py_compile 0 |
+| R SwitchLock | 1 | EditButton SwitchLock 문장 판정 경로 없음 | judge.py CR-093 블록 (T448) | py_compile 0 |
+| S 이어받기 집계 | 8 | 팝업 EG 행 이어받기 문구가 미분류 | unverified_classes.csv 11행 | classify 시험 2건 집계 |
+| T 공용 권한 SP | 1 | PR_GET_MNU_BTN_AUTH 를 PROC_M 배선으로만 찾음 | judge.py F4 (T449) | py_compile 0 |
+
+### 고치지 않은 행
+
+- U 이번 라운드 미보완 35행: K3 팝업 그리드 6, 팝업 실행 경로(H6·G5·M4) 18, 팝업 Delete 5, 입력용 SP 2(F4, A7), C2 연쇄 결함 유형 5(결정 D9 겹침). 엔진 확장이 필요해 다음 라운드 대상
+- V 동시 실행 2행(V-ca2072cf, V-1f64fec6): 시나리오 지정 계정 dana.robot, 같은 시각 다른 화면 E2E 3개로 언어 전환 생략(T200 보호). 다른 화면 E2E 가 없을 때 실측
+- W 1행(V-dd4f9db4): SSP0014 세션 T385(_trace.spec.ts:1491, 07:54)와 같은 증상
+- 결정 목록 D1~D11 22행
+
+### 다음 CheckList 에서 바뀔 판정(검사기 판정 경로 기준, 미측정)
+
+- 미검증 → 해당없음: J 3행, K 1행(서버 요청·일부 D 면 FAIL), O 3행, R 1행
+- 미검증 → 통과 경로: D 1행, E 의 H5 1행, F 1행, G 1행, T 1행(EG374·EG411 실측 따라 FAIL 가능)
+- 미검증 → 실측(통과 또는 오류): A 7행, B 1행(행 이름이 edit-save 로 바뀜), C 1행, E 5행, H 1행, I 14행, L 1행, M 3행, N 2행, P 1행, Q 1행
+- 집계로 분류: S 8행(하위 행 따라감)
+- 다른 화면: Delete·Save·Insert 화면 단추가 있는 SubTitle 화면의 EG369·EG374·EG411·authcrud, DataBind(Data.Type.X) 콤보를 쓰는 AS-IS 화면(GSCM 약 80건), 기준표 행 0 화면의 'Model' 류 조회조건, 선언 기본값 '' 인자를 가진 골든 대상 SP, 공용 권한 SP F4 행
+
+### 점검
+
+- engine_selfcheck PASS(08:23:18, PY_COMPILE 0, TSC 0, CTRL_CHARS 0, selftest JS 32, PY 59). T449 뒤 judge.py py_compile 0
+- tsc(tools/E2E · 스펙 포함) 오류 0
+- 백업 `*.bak_20261120_scp28u2*`(nscm.ts, authprobe.ts, crud.ts, eg_auth.spec.ts, _verify.spec.ts, sort_ci_check.py, judge.py, confirmed_requirements.csv, facts_combosrc.py, labeltrans.ts, labelalias.ts, smoke-extra.ts, mergecheck.ts·selftest, unverified_classes.csv, fixtures/test.ts, eg_chain.py, golden.py)
+- 줄바꿈: 셸 편집이 nscm.ts·crud.ts·authprobe.ts·eg_auth.spec.ts 를 LF 로 바꿔 백업 기준 CRLF 로 되돌림(08:0x). 제어 문자 0
+- 다른 세션 겹침: judge.py 를 SSP0014 세션이 같은 시각에 고침(T405·T38x). 수정 직전 다시 읽고 필요한 부분만 고침. 내 표식 T430~T449 21종 남아 있음 확인
+- 시험 데이터: TO-BE 저장 없음. 사내 오라클 조회(ALL_SOURCE PKG_SCP0028, ALL_TAB_COLUMNS 2표). Doc/asisfacts/screens/SCP0028/combo_src.csv 재생성(facts_combosrc)
+- FE 가이드: FE_GUIDE_20261120_0817.md 1건(대조표 17행 Model 팝업). doc_style 위반 0

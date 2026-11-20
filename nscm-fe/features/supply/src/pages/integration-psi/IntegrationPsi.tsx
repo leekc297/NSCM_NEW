@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
 import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
+import { useMutation } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction, GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
@@ -14,7 +15,12 @@ import {
   useTabLookupQueries,
   useTabProcQuery,
 } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import {
+  confirmIfDirtyKey,
+  tabDirtyKey,
+  useMessageStore,
+  useSessionStore,
+} from '@shared/stores';
 
 import { IntegrationPsiForm } from './components/IntegrationPsiForm';
 import { IntegrationPsiGrid } from './components/IntegrationPsiGrid';
@@ -202,13 +208,26 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
   //     추가 허용한다. 관리컬럼 노출·ADMIN 저장·Insert V1 은 isAdmin 전용이다(AS-IS SetVisibleSheetColumns 가
   //     ADMIN 분기 cs:594 에서만 호출 / 저장·Insert 분기도 nowGroupID=='ADMIN' 단독 — hasEditAuth=isAdmin).
   const sessionGroups = useSessionStore(s => s.session.groups);
+  // System Admin 권한 "보유" 여부 — 관리자편집 진입 자격. ADMIN 저장(P_SCP0111_SAVE_PSI_ADMIN)·관리컬럼은
+  //   AS-IS NowGroupID=='ADMIN'(=USER_GR_NM 'System Administrator') 전용이라 이 세션 그룹에 묶인다.
+  //   버튼 "노출"은 표준대로 hasButton('EDIT')가 게이트하고(아래 SubTitle, AUTH-01), 이 플래그는 토글이 실제
+  //   관리자편집으로 전환되는지를 결정한다 — EDIT 권한은 ADMIN 그룹에만 부여되어 둘은 같은 그룹으로 정렬되나,
+  //   안전을 위해 모드 활성(adminMode)도 이 자격과 AND 한다(오등록 시에도 잘못된 ADMIN 저장 방지).
+  //   배경: AS-IS EditButton(편집모드 토글)을 TO-BE 가 제거하고 "권한=자동 관리자편집"으로 바꿨으나(이 파일 상단
+  //   주석), 사용자 요청(2026-11-19)으로 admin 전용 편집모드 토글을 되살린다 — admin 도 기본은 일반편집.
+  const isSystemAdmin = (sessionGroups ?? []).includes(ADMIN_GROUP_NAME);
+  // Admin Edit 모드 활성 상태(기본 OFF). isSystemAdmin 이 아니면 토글이 노출되지 않아 항상 false 로 남는다.
+  const [adminMode, setAdminMode] = useState(false);
   const auth = useMemo<AuthContext>(
     () => ({
-      isAdmin: (sessionGroups ?? []).includes(ADMIN_GROUP_NAME),
+      // auth.isAdmin = "지금 관리자편집 중"의 유효 플래그 — 권한 보유(isSystemAdmin) && 모드 활성(adminMode).
+      //   editLock/Grid/handleSave/handleInsert 는 전부 이 플래그로 분기하므로, 둘을 AND 하면 기본 일반편집 /
+      //   토글 시 관리자편집으로 하위 로직 전체가 자동 전환된다(하위 모듈 무수정).
+      isAdmin: isSystemAdmin && adminMode,
       isPiAdmin: (sessionGroups ?? []).includes(PI_ADMIN_GROUP_NAME),
       isPlanner: (sessionGroups ?? []).includes(PLANNER_GROUP_NAME),
     }),
-    [sessionGroups]
+    [sessionGroups, isSystemAdmin, adminMode]
   );
 
   // MULTI_CHILD_ITEM lookup NAME 목록(design 03 §1-L / L7 모듈 반제품 편집 예외).
@@ -279,6 +298,19 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!sc.planStartYyyymmdd && !!sc.divisionId,
   });
   const horizonEndYyyymmdd = sVal(planPeriodRows?.[0]?.HORIZON_END_DATE);
+
+  // 저장 SP 호출을 useMutation 으로 감싼다 — callSaveIntegrationPsi 는 '^'delim bulk payload 때문에
+  //   raw apiClient.post 로 react-query 밖에서 호출되는데, 그러면 MDIContainer 의 useIsBusy([activeTabId])
+  //   (=useIsMutating/useIsFetching) 공통 로딩 스피너(프로그래스)가 저장 중 뜨지 않는다. mutationKey 를
+  //   [tabId,...] 로 두어 저장 트랜잭션 동안 전역 프로그래스가 표시되게 한다(ShipmentPlanFg/SCP0134 선례).
+  //   성패 분기(토스트/알럿)는 호출부(handleSave)에서 SaveResult 로 종전과 동일하게 처리하므로 payload 계약·
+  //   false-success 차단(integrationPsiApi) 은 불변이다. 저장은 비멱등이라 재시도 금지(retry:0).
+  const { mutateAsync: saveIntegrationPsiAsync } = useMutation({
+    mutationKey: [tabId, SHEETS.MAIN, 'SAVE'],
+    retry: 0,
+    mutationFn: (args: { mode: SaveMode; payload: Record<string, string> }) =>
+      callSaveIntegrationPsi(args.mode, args.payload),
+  });
 
   // 저장 — 변경셀(수정 M / 신규 I) unfold → 19키 '^'delim payload → call-proc 직접 호출.
   //   권한(ADMIN)이면 ADMIN 저장(+p_boh_qty), 아니면 일반 저장. 검증: OPERATION_GROUP lookup 부재
@@ -355,7 +387,7 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   resolve 하고 그 외(401/404/연결오류 등)는 reject 한다. try/catch 가 없으면 이 reject 가 통째로
     //   삼켜져 **성공·실패 어떤 피드백도 안 뜬다**(사용자 신고 2026-10-19: Confirm 후 네트워크는 가는데 화면 무반응).
     try {
-      const res = await callSaveIntegrationPsi(mode, payload);
+      const res = await saveIntegrationPsiAsync({ mode, payload });
       if (res.ok) {
         setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_Saved.') });
         setFilter(); // 저장 후 FindData_Main 재조회 (design 03 §4 — filters 재생성으로 refetch)
@@ -452,6 +484,18 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   와도 일치한다(사용자 지시 2026-11-16 — 2026-10-19 의 별칭 저장 우회 철회). 재진입 시 PlanDate·Period 는
   //   Form 의 기본선택 effect 가 다시 도출한다. 자매 Capa/OptCapa 도 raw searchParams 를 그대로 넘긴다(표준 파리티).
 
+  // Admin mode 토글 — System Admin 전용. 관리자편집(ADMIN 저장=절대값·관리컬럼 노출·Insert V1·BOH 전행편집)과
+  //   일반편집은 저장 payload 계약이 비대칭(ADMIN 절대값 vs 일반 가감값 — handleSave 주석)이라 모드를 섞으면
+  //   수량이 깨진다. 그래서 전환 전 미저장 변경이 있으면 조회 가드와 동일하게 confirm(MSG00704) 후 **버리고**,
+  //   새 모드 기준으로 재조회해 그리드를 깨끗이 재구성한다(관리컬럼 가시성·신규행 V1/V2 규칙이 모드에 따라 다름).
+  //   confirmIfDirtyKey 는 dirty 아니면 즉시 true, 확인 시 등록된 변경을 되돌려(discard) 재진입 시 부활도 막는다.
+  const handleToggleAdminMode = async () => {
+    const ok = await confirmIfDirtyKey(tabDirtyKey(tabId), 'search');
+    if (!ok) return;
+    setAdminMode(prev => !prev);
+    setFilter(); // 새 모드 기준 재조회 — 그리드를 재구성한다(FindData_Main refetch).
+  };
+
   const hotkeyConfig: HotkeyConfig = {
     // 조회는 무해하므로 항상 허용(design 01 R13).
     search: handleSearch,
@@ -490,6 +534,22 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        // Admin mode 토글 — 표준 버튼 게이팅(AUTH-01): customButtons 는 hasButton(BTN_CD)로 판정한다.
+        //   'EDIT' 는 AS-IS EditButton 대응으로 05_register.sql 에 이미 등록된 버튼 코드이고, System Administrator
+        //   그룹(USER_GR_ID='ADMIN')에만 권한을 남겨(SCP Planner EDIT 는 USE_YN='N' 회수) System Admin 만 노출된다.
+        //   활성 시 contained 로 강조해 현재 관리자편집 중임을 색으로 구분한다(비활성=outlined).
+        //   라벨은 다국어 처리하지 않고 영문 'Admin mode' 고정(사용자 지시 2026-11-19) — t()/LBL 미사용.
+        customButtons={
+          hasButton('EDIT')
+            ? [
+                {
+                  label: 'Admin mode',
+                  appearance: adminMode ? 'contained' : 'outlined',
+                  action: handleToggleAdminMode,
+                },
+              ]
+            : undefined
+        }
       />
 
       {/* 영역3 그리드 — 고정 24열(admin 메타) + 서버측 동적 YYYYMM PIVOT + 편집잠금 L1~L23 + 조건색 C1/C2 +

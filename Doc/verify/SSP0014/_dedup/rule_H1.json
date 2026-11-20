@@ -1,0 +1,143 @@
+{
+ "rule_id": "H1",
+ "hash": "1aeecb59e6f5549c",
+ "groups": [
+  {
+   "rows": [
+    "V-61024206",
+    "V-bdb6a926"
+   ],
+   "why": "둘 다 Shipment Model PIC 그리드의 VALID_YN 컬럼을 확인하고 기대도 같다(AS-IS C = 가운데 정렬). GENERAL 행은 DMF0043 결함 유형을 이 화면의 같은 컬럼으로 옮겨 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-13bfb8ac"
+   ],
+   "why": "특정 컬럼을 재는 행이 아니다. 모든 컬럼의 정렬 차이를 판정하는 확정 규칙(Center→Left는 PASS)이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-02a459ae"
+   ],
+   "why": "NICK_NAME 컬럼만 대상이라 다른 컬럼 행과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-25e31e85"
+   ],
+   "why": "PART_LEADER 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-2603359d"
+   ],
+   "why": "CREATED_BY 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-27cffbc8"
+   ],
+   "why": "MAIL_USER5 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-54fd5ebf"
+   ],
+   "why": "MAIL_USER3 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-5a3d2090"
+   ],
+   "why": "FROM_SITE 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-5b59772d"
+   ],
+   "why": "TEAM_LEADER 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-684a39a1"
+   ],
+   "why": "MAIL_USER4 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-94534372"
+   ],
+   "why": "MAIL_USER2 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-b4f1f9c3"
+   ],
+   "why": "PART_LEADER_NAME 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-b9ab2673"
+   ],
+   "why": "USER_ID 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-c13dc4fc"
+   ],
+   "why": "MAIL_USER1 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-c3514855"
+   ],
+   "why": "TEAM_LEADER_NAME 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-cdcb2b71"
+   ],
+   "why": "ITEM_ID 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-d1f7ee09"
+   ],
+   "why": "LAST_UPDATED_BY 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-dad44c4b"
+   ],
+   "why": "OPERATION_GROUP 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-e6aee3f0"
+   ],
+   "why": "LAST_UPDATE_DATE 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-f9748a71"
+   ],
+   "why": "CREATION_DATE 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-fa1e2a07"
+   ],
+   "why": "DIVISION_ID 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-fa32450f"
+   ],
+   "why": "USER_NAME 컬럼만 대상이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:15:23",
+ "cost": 0.069171
+}

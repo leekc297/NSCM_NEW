@@ -244,18 +244,18 @@ export const ElecMaterialPopup = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel='OK'
-              onClick={handleSubmit}
-            />
-            <Button
               appearance='outlined'
               priority='normal'
               size='medium'
               buttonLabel='Close'
               onClick={onClose}
+            />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel='OK'
+              onClick={handleSubmit}
             />
           </div>
         </div>

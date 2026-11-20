@@ -1,0 +1,48 @@
+{
+ "rule_id": "B2",
+ "hash": "2c29eb536465a5d3",
+ "groups": [
+  {
+   "refs": [
+    "DM-16",
+    "DM-19",
+    "DM-6"
+   ],
+   "target": "그리드 End Customer 콤보 후보 목록",
+   "condition": "신규행 Insert 후 End Customer 셀 콤보 펼침",
+   "expected": "End Customer 후보에 빈 행 0건, 중복 0건, 정렬된 순서로 표시",
+   "why": "세 항목 모두 신규행 Insert 뒤 그리드 End Customer 콤보 후보의 빈 행·중복·정렬을 확인하고 기대 결과도 같다. 다른 것은 화면과 Div 조건, 원인 메모(부서 파라미터)뿐이다."
+  },
+  {
+   "refs": [
+    "DM-P8"
+   ],
+   "target": "그리드 모든 셀 콤보 후보(End Customer·Sold-to Customer 등)",
+   "condition": "신규행 Insert 후 각 콤보 셀 펼침",
+   "expected": "모든 그리드 셀 콤보(End Customer, Sold-to Customer 포함) 후보가 비어 있지 않고, 중복이 없고, 원천 정렬 순서로 표시",
+   "why": "End Customer 하나가 아니라 모든 그리드 콤보를 확인하고 기대도 '원천 정렬 순서·후보 비어 있지 않음'이라 확인 범위가 달라서 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-21"
+   ],
+   "target": "조회조건 Team 콤보와 그리드 Team/End Customer/Sales Site 콤보",
+   "condition": "조회조건 Div 선택, 신규행 Insert",
+   "expected": "Team 후보가 선택한 Div의 SSPM DEPT 기준과 일치하고, End Customer/Sales Site 후보 중복 0건",
+   "why": "Div에 따라 Team 후보가 SSPM DEPT 기준과 맞는지까지 확인하므로 확인 동작과 기대가 다른 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-P12"
+   ],
+   "target": "그리드 Cust Group→End Customer→Sales Site 연쇄 콤보",
+   "condition": "Cust Group/End Customer 선택과 변경",
+   "expected": "Cust Group 선택 시 해당 End Customer만 표시, End Customer 선택 시 해당 Sales Site만 표시(cascade), 상위 값 변경 시 하위 값 초기화, 후보 중복 0건",
+   "why": "상하위 콤보의 연쇄 필터와 초기화 동작을 확인하는 항목이라 단순 중복 확인과 확인 동작이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:39:48",
+ "cost": 0.0542092
+}

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 12px;
 }
 
 .gridWrapper {
@@ -16,5 +17,4 @@
   display: flex;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: 5px;
 }

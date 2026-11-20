@@ -1,0 +1,29 @@
+{
+  "id": "20261120_065648_R12_ALL",
+  "at": "2026-11-20T06:56:48+09:00",
+  "ms": 1795125408126,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_chain_abort.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_chain_abort.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 2 · FAIL 5 · FAIL chain.end aborted 1건 [] / FAIL why = VM 창 종료로 중단  / FAIL chain.end 앞에 user.stop(같은 wb)  / FAIL 실행 중 체인 목록 비움 1 / FAIL 상태에서 체인 빠짐(R5 gone 대상 0건) ",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_chain_abort.js",
+    "file": "t_chain_abort.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T07:47:50+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

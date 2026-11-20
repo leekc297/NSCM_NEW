@@ -11,6 +11,7 @@ import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import { BUCKET_TYPE, DIVISION, MENU_ID } from '../shipment-request.constants';
@@ -260,6 +261,7 @@ export const ShipmentRequestForm = ({
             disabled={div40}
             multiCheckbox
             labelCode='LBL00012'
+            pasteMultiline
           />
           {/* Model/Nickname — SSP0014 정합(사용자 지시 2026-10-23): 공용 MaterialByDivisionModal
               (COM0013, SCM0002_MaterialByDivisionPopup)로 교체(종전 ItemField/ItemByDivisionModal).
@@ -284,6 +286,20 @@ export const ShipmentRequestForm = ({
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={() => setOpenItem(true)}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => itemText,
+                      next => {
+                        setItemText(next);
+                        set({
+                          itemIds: next
+                            .split(',')
+                            .map(s => s.trim())
+                            .filter(Boolean),
+                        });
+                      },
                     ),
                   }}
                   onFocus={() => {

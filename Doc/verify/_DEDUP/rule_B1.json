@@ -1,0 +1,30 @@
+{
+ "rule_id": "B1",
+ "hash": "730bd3d7bebcce8c",
+ "groups": [
+  {
+   "refs": [
+    "DM-16",
+    "DM-19",
+    "DM-6"
+   ],
+   "target": "그리드 End Customer 콤보 후보 목록",
+   "condition": "신규행 Insert 후 End Customer 콤보 펼침",
+   "expected": "End Customer 콤보 후보에 빈 행 0건, 중복 0건, 정렬 상태로 표시(조회 파라미터 정상 전달)",
+   "why": "세 항목 모두 신규행에서 그리드 End Customer 콤보 후보의 빈 행·중복·정렬을 확인하며, Div나 부서 파라미터 차이는 원래 결함이 난 조건일 뿐이라 확인 동작은 같다."
+  },
+  {
+   "refs": [
+    "DM-200"
+   ],
+   "target": "API Type 조회조건 표시 형태",
+   "condition": "",
+   "expected": "API Type 조회조건이 콤보 리스트로 표시되고, 선택한 값으로 조회된다",
+   "why": "콤보 후보의 빈 행을 보는 항목이 아니라 조회조건이 콤보 형태인지와 선택 조회가 되는지를 보는 항목이라 확인 대상이 달라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:39:36",
+ "cost": 0.0386212
+}

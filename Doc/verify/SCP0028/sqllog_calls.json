@@ -1,23 +1,199 @@
 {
  "menu_id": "SCP0028",
- "at": "2026-11-19 16:26:45",
+ "at": "2026-11-20 09:29:18",
  "windows": [
   [
-   6640803,
-   6678512,
-   "2026-11-19 12:26",
-   "2026-11-19 15:37"
+   6813798,
+   6845734,
+   "2026-11-20 07:04",
+   "2026-11-20 09:33"
   ]
  ],
- "rows_scanned": 37710,
+ "rows_scanned": 31937,
  "pkgs": [
   "PKG_SCP0028"
  ],
  "user": "",
  "calls": [
   {
-   "seq": 6649925,
-   "at": "2026-11-19 13:50:54",
+   "seq": 6813928,
+   "at": "2026-11-20 07:04:54",
+   "by": "jsh96",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jsh96"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814054,
+   "at": "2026-11-20 07:05:04",
+   "by": "popiel",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "popiel"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814154,
+   "at": "2026-11-20 07:05:13",
+   "by": "wangyucnb",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "wangyucnb"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814263,
+   "at": "2026-11-20 07:05:23",
+   "by": "kang_huichan",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "82",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "kang_huichan"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814438,
+   "at": "2026-11-20 07:05:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814533,
+   "at": "2026-11-20 07:05:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814668,
+   "at": "2026-11-20 07:06:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6814755,
+   "at": "2026-11-20 07:06:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6820426,
+   "at": "2026-11-20 08:30:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -38,8 +214,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650236,
-   "at": "2026-11-19 13:51:02",
+   "seq": 6820482,
+   "at": "2026-11-20 08:30:15",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -60,8 +236,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650274,
-   "at": "2026-11-19 13:51:05",
+   "seq": 6820487,
+   "at": "2026-11-20 08:30:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -82,8 +258,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650296,
-   "at": "2026-11-19 13:51:08",
+   "seq": 6820496,
+   "at": "2026-11-20 08:30:21",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -104,8 +280,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650335,
-   "at": "2026-11-19 13:51:11",
+   "seq": 6820567,
+   "at": "2026-11-20 08:30:47",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -126,8 +302,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650431,
-   "at": "2026-11-19 13:51:14",
+   "seq": 6820605,
+   "at": "2026-11-20 08:30:50",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -148,8 +324,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650619,
-   "at": "2026-11-19 13:51:18",
+   "seq": 6820619,
+   "at": "2026-11-20 08:30:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -170,8 +346,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650657,
-   "at": "2026-11-19 13:51:21",
+   "seq": 6820624,
+   "at": "2026-11-20 08:30:57",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -192,8 +368,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650832,
-   "at": "2026-11-19 13:51:34",
+   "seq": 6820680,
+   "at": "2026-11-20 08:31:06",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -214,140 +390,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6650837,
-   "at": "2026-11-19 13:51:37",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "Y",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6650846,
-   "at": "2026-11-19 13:51:40",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "81",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6650851,
-   "at": "2026-11-19 13:51:44",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "81",
-    "operationGroup": "P",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6650856,
-   "at": "2026-11-19 13:51:47",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "81",
-    "operationGroup": "P",
-    "fromSite": "AU000062_81-P"
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6650870,
-   "at": "2026-11-19 13:51:50",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "AIR",
-    "divisionId": "81",
-    "operationGroup": "P",
-    "fromSite": "AU000062_81-P"
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6650884,
-   "at": "2026-11-19 13:51:53",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "EG00",
-    "transMode": "AIR",
-    "divisionId": "81",
-    "operationGroup": "P",
-    "fromSite": "AU000062_81-P"
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6650998,
-   "at": "2026-11-19 13:52:05",
+   "seq": 6820685,
+   "at": "2026-11-20 08:31:09",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -368,8 +412,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6651003,
-   "at": "2026-11-19 13:52:08",
+   "seq": 6821040,
+   "at": "2026-11-20 08:31:50",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -390,8 +434,36 @@
    "params_parsed": true
   },
   {
-   "seq": 6651741,
-   "at": "2026-11-19 13:52:42",
+   "seq": 6821044,
+   "at": "2026-11-20 08:31:52",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "2",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "MCCM346010A2",
+    "toSite": "Ather Energy_IN_BLR",
+    "transportMode": "AIR",
+    "validYn": "N",
+    "divisionId": "40",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ06-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821048,
+   "at": "2026-11-20 08:31:52",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -412,8 +484,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6652031,
-   "at": "2026-11-19 13:53:00",
+   "seq": 6821053,
+   "at": "2026-11-20 08:31:54",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -434,8 +506,36 @@
    "params_parsed": true
   },
   {
-   "seq": 6652136,
-   "at": "2026-11-19 13:53:11",
+   "seq": 6821057,
+   "at": "2026-11-20 08:31:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "1",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "MCCM346010A2",
+    "toSite": "Ather Energy_IN_BLR",
+    "transportMode": "AIR",
+    "validYn": "N",
+    "divisionId": "40",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ06-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821061,
+   "at": "2026-11-20 08:31:57",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -456,8 +556,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6652474,
-   "at": "2026-11-19 13:53:29",
+   "seq": 6821066,
+   "at": "2026-11-20 08:31:58",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -478,8 +578,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6652922,
-   "at": "2026-11-19 13:53:50",
+   "seq": 6821612,
+   "at": "2026-11-20 08:32:29",
    "by": "jooyong026",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -500,8 +600,152 @@
    "params_parsed": true
   },
   {
-   "seq": 6653079,
-   "at": "2026-11-19 13:53:58",
+   "seq": 6821616,
+   "at": "2026-11-20 08:32:31",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "2",
+    "increment": "1",
+    "userId": "jooyong026",
+    "itemId": "MCCM346010A2",
+    "toSite": "Ather Energy_IN_BLR",
+    "transportMode": "AIR",
+    "validYn": "N",
+    "divisionId": "40",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ06-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821620,
+   "at": "2026-11-20 08:32:31",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821625,
+   "at": "2026-11-20 08:32:32",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821629,
+   "at": "2026-11-20 08:32:35",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "1",
+    "increment": "1",
+    "userId": "jooyong026",
+    "itemId": "MCCM346010A2",
+    "toSite": "Ather Energy_IN_BLR",
+    "transportMode": "AIR",
+    "validYn": "N",
+    "divisionId": "40",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ06-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821633,
+   "at": "2026-11-20 08:32:35",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821638,
+   "at": "2026-11-20 08:32:37",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6821690,
+   "at": "2026-11-20 08:32:46",
    "by": "zhangjiali",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -522,162 +766,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6653273,
-   "at": "2026-11-19 13:54:07",
-   "by": "zhangjiali",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "EN",
-    "sesUserId": "zhangjiali"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6653907,
-   "at": "2026-11-19 13:54:28",
-   "by": "jooyong026",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "jooyong026"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6654001,
-   "at": "2026-11-19 13:54:46",
-   "by": "jooyong026",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "jooyong026"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6654066,
-   "at": "2026-11-19 13:54:58",
-   "by": "jooyong026",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "jooyong026"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6654071,
-   "at": "2026-11-19 13:55:16",
-   "by": "jooyong026",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "jooyong026"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6654123,
-   "at": "2026-11-19 13:55:33",
-   "by": "zhangjiali",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "EN",
-    "sesUserId": "zhangjiali"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6654175,
-   "at": "2026-11-19 13:55:46",
-   "by": "zhangjiali",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "40",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "EN",
-    "sesUserId": "zhangjiali"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6654755,
-   "at": "2026-11-19 13:56:29",
+   "seq": 6821838,
+   "at": "2026-11-20 08:34:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -698,8 +788,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6655026,
-   "at": "2026-11-19 13:56:43",
+   "seq": 6821942,
+   "at": "2026-11-20 08:35:00",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -720,8 +810,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6655112,
-   "at": "2026-11-19 13:56:54",
+   "seq": 6822003,
+   "at": "2026-11-20 08:35:12",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -742,8 +832,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6655699,
-   "at": "2026-11-19 13:58:25",
+   "seq": 6822398,
+   "at": "2026-11-20 08:36:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -764,8 +854,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6655895,
-   "at": "2026-11-19 13:58:45",
+   "seq": 6822483,
+   "at": "2026-11-20 08:37:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -786,8 +876,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656020,
-   "at": "2026-11-19 13:58:55",
+   "seq": 6822603,
+   "at": "2026-11-20 08:37:15",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -808,8 +898,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656208,
-   "at": "2026-11-19 13:59:14",
+   "seq": 6822835,
+   "at": "2026-11-20 08:37:34",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -830,8 +920,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656347,
-   "at": "2026-11-19 13:59:25",
+   "seq": 6822966,
+   "at": "2026-11-20 08:37:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -852,8 +942,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656412,
-   "at": "2026-11-19 13:59:34",
+   "seq": 6823015,
+   "at": "2026-11-20 08:37:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
    "kind": "GET",
@@ -873,8 +963,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656504,
-   "at": "2026-11-19 13:59:45",
+   "seq": 6823067,
+   "at": "2026-11-20 08:38:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -895,8 +985,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656691,
-   "at": "2026-11-19 14:00:02",
+   "seq": 6823119,
+   "at": "2026-11-20 08:38:21",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -917,8 +1007,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656763,
-   "at": "2026-11-19 14:00:11",
+   "seq": 6823156,
+   "at": "2026-11-20 08:38:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -939,8 +1029,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656821,
-   "at": "2026-11-19 14:00:17",
+   "seq": 6823172,
+   "at": "2026-11-20 08:38:33",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -961,8 +1051,52 @@
    "params_parsed": true
   },
   {
-   "seq": 6656839,
-   "at": "2026-11-19 14:00:19",
+   "seq": 6823206,
+   "at": "2026-11-20 08:38:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "Y",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6823231,
+   "at": "2026-11-20 08:38:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "N",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6823320,
+   "at": "2026-11-20 08:38:48",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -983,8 +1117,30 @@
    "params_parsed": true
   },
   {
-   "seq": 6656853,
-   "at": "2026-11-19 14:00:22",
+   "seq": 6823488,
+   "at": "2026-11-20 08:38:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6823565,
+   "at": "2026-11-20 08:38:54",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1005,8 +1161,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656870,
-   "at": "2026-11-19 14:00:26",
+   "seq": 6823581,
+   "at": "2026-11-20 08:38:58",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1027,8 +1183,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657004,
-   "at": "2026-11-19 14:00:40",
+   "seq": 6823746,
+   "at": "2026-11-20 08:39:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1049,8 +1205,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657020,
-   "at": "2026-11-19 14:00:42",
+   "seq": 6823756,
+   "at": "2026-11-20 08:39:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1071,8 +1227,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657063,
-   "at": "2026-11-19 14:00:45",
+   "seq": 6823774,
+   "at": "2026-11-20 08:39:17",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1093,8 +1249,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657073,
-   "at": "2026-11-19 14:00:49",
+   "seq": 6823784,
+   "at": "2026-11-20 08:39:21",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1115,8 +1271,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657159,
-   "at": "2026-11-19 14:00:57",
+   "seq": 6823849,
+   "at": "2026-11-20 08:39:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1137,8 +1293,52 @@
    "params_parsed": true
   },
   {
-   "seq": 6657290,
-   "at": "2026-11-19 14:01:05",
+   "seq": 6823864,
+   "at": "2026-11-20 08:39:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6823918,
+   "at": "2026-11-20 08:39:40",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6823974,
+   "at": "2026-11-20 08:39:48",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1159,8 +1359,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657295,
-   "at": "2026-11-19 14:01:07",
+   "seq": 6823981,
+   "at": "2026-11-20 08:39:51",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1181,8 +1381,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657323,
-   "at": "2026-11-19 14:01:11",
+   "seq": 6824022,
+   "at": "2026-11-20 08:39:54",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1203,8 +1403,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657376,
-   "at": "2026-11-19 14:01:19",
+   "seq": 6824066,
+   "at": "2026-11-20 08:40:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1225,8 +1425,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657390,
-   "at": "2026-11-19 14:01:21",
+   "seq": 6824071,
+   "at": "2026-11-20 08:40:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1247,8 +1447,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657435,
-   "at": "2026-11-19 14:01:25",
+   "seq": 6824147,
+   "at": "2026-11-20 08:40:09",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1269,8 +1469,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657525,
-   "at": "2026-11-19 14:01:33",
+   "seq": 6824358,
+   "at": "2026-11-20 08:40:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1291,8 +1491,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657598,
-   "at": "2026-11-19 14:01:43",
+   "seq": 6824482,
+   "at": "2026-11-20 08:40:27",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1313,8 +1513,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657710,
-   "at": "2026-11-19 14:01:54",
+   "seq": 6824495,
+   "at": "2026-11-20 08:40:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1335,8 +1535,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657858,
-   "at": "2026-11-19 14:02:06",
+   "seq": 6824562,
+   "at": "2026-11-20 08:40:50",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1357,8 +1557,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658099,
-   "at": "2026-11-19 14:02:22",
+   "seq": 6824666,
+   "at": "2026-11-20 08:41:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1379,8 +1579,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658228,
-   "at": "2026-11-19 14:02:38",
+   "seq": 6824765,
+   "at": "2026-11-20 08:41:24",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1401,8 +1601,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658490,
-   "at": "2026-11-19 14:03:21",
+   "seq": 6825432,
+   "at": "2026-11-20 08:42:10",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1423,8 +1623,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658576,
-   "at": "2026-11-19 14:03:26",
+   "seq": 6825518,
+   "at": "2026-11-20 08:42:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1445,8 +1645,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658661,
-   "at": "2026-11-19 14:03:33",
+   "seq": 6825569,
+   "at": "2026-11-20 08:42:22",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1467,8 +1667,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658765,
-   "at": "2026-11-19 14:03:41",
+   "seq": 6825606,
+   "at": "2026-11-20 08:42:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1489,8 +1689,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658893,
-   "at": "2026-11-19 14:03:49",
+   "seq": 6825643,
+   "at": "2026-11-20 08:42:35",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1511,8 +1711,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659018,
-   "at": "2026-11-19 14:03:56",
+   "seq": 6825680,
+   "at": "2026-11-20 08:42:42",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1533,59 +1733,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6659936,
-   "at": "2026-11-19 14:07:08",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "81",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6660041,
-   "at": "2026-11-19 14:07:52",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
-   "kind": "GET",
-   "fe": {
-    "valid": "",
-    "itemId": "",
-    "toSite": "",
-    "transMode": "",
-    "divisionId": "81",
-    "operationGroup": "",
-    "fromSite": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6660047,
-   "at": "2026-11-19 14:07:55",
+   "seq": 6825693,
+   "at": "2026-11-20 08:42:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12801",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -1605,8 +1761,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660051,
-   "at": "2026-11-19 14:07:56",
+   "seq": 6825697,
+   "at": "2026-11-20 08:42:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1627,8 +1783,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660067,
-   "at": "2026-11-19 14:07:57",
+   "seq": 6825702,
+   "at": "2026-11-20 08:42:48",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1649,15 +1805,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6660094,
-   "at": "2026-11-19 14:08:01",
+   "seq": 6825706,
+   "at": "2026-11-20 08:42:51",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -1677,8 +1833,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660098,
-   "at": "2026-11-19 14:08:01",
+   "seq": 6825710,
+   "at": "2026-11-20 08:42:52",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1699,8 +1855,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660103,
-   "at": "2026-11-19 14:08:02",
+   "seq": 6825715,
+   "at": "2026-11-20 08:42:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1721,8 +1877,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660284,
-   "at": "2026-11-19 14:08:39",
+   "seq": 6825784,
+   "at": "2026-11-20 08:43:00",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1743,15 +1899,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6660295,
-   "at": "2026-11-19 14:08:41",
+   "seq": 6825788,
+   "at": "2026-11-20 08:43:03",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
-    "lotSize": "12800",
-    "increment": "12799",
+    "lotSize": "12801",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -1771,8 +1927,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660299,
-   "at": "2026-11-19 14:08:42",
+   "seq": 6825792,
+   "at": "2026-11-20 08:43:03",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1793,8 +1949,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660304,
-   "at": "2026-11-19 14:08:43",
+   "seq": 6825797,
+   "at": "2026-11-20 08:43:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1815,15 +1971,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6660308,
-   "at": "2026-11-19 14:08:46",
+   "seq": 6825801,
+   "at": "2026-11-20 08:43:08",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -1843,8 +1999,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660319,
-   "at": "2026-11-19 14:08:46",
+   "seq": 6825805,
+   "at": "2026-11-20 08:43:08",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1865,8 +2021,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660328,
-   "at": "2026-11-19 14:08:47",
+   "seq": 6825810,
+   "at": "2026-11-20 08:43:09",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1887,15 +2043,845 @@
    "params_parsed": true
   },
   {
-   "seq": 6660362,
-   "at": "2026-11-19 14:08:50",
+   "seq": 6825879,
+   "at": "2026-11-20 08:43:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825883,
+   "at": "2026-11-20 08:43:20",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "2",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825887,
+   "at": "2026-11-20 08:43:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825892,
+   "at": "2026-11-20 08:43:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825896,
+   "at": "2026-11-20 08:43:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825900,
+   "at": "2026-11-20 08:43:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825905,
+   "at": "2026-11-20 08:43:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825974,
+   "at": "2026-11-20 08:43:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825989,
+   "at": "2026-11-20 08:43:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "2",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6825993,
+   "at": "2026-11-20 08:43:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826035,
+   "at": "2026-11-20 08:43:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826040,
+   "at": "2026-11-20 08:43:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826044,
+   "at": "2026-11-20 08:43:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826056,
+   "at": "2026-11-20 08:43:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826179,
+   "at": "2026-11-20 08:43:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826225,
+   "at": "2026-11-20 08:43:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12801",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826229,
+   "at": "2026-11-20 08:43:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826234,
+   "at": "2026-11-20 08:43:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826243,
+   "at": "2026-11-20 08:43:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826247,
+   "at": "2026-11-20 08:43:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826260,
+   "at": "2026-11-20 08:43:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826397,
+   "at": "2026-11-20 08:44:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826715,
+   "at": "2026-11-20 08:45:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826719,
+   "at": "2026-11-20 08:45:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12801",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826723,
+   "at": "2026-11-20 08:45:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826728,
+   "at": "2026-11-20 08:45:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826766,
+   "at": "2026-11-20 08:45:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826770,
+   "at": "2026-11-20 08:45:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826775,
+   "at": "2026-11-20 08:45:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826780,
+   "at": "2026-11-20 08:45:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "2",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826800,
+   "at": "2026-11-20 08:45:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826829,
+   "at": "2026-11-20 08:45:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826844,
+   "at": "2026-11-20 08:45:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "1",
+    "userId": "minyonglee1",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "Club Car_US_AGS",
+    "transportMode": "SEA",
+    "validYn": "Y",
+    "divisionId": "81",
+    "operationGroup": "A",
+    "debugMode": "N",
+    "fromSite": "HQ07-A",
+    "activeFlag": "M"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826851,
+   "at": "2026-11-20 08:45:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826870,
+   "at": "2026-11-20 08:45:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6826903,
+   "at": "2026-11-20 08:45:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+   "kind": "SAVE",
+   "fe": {
+    "splitYn": "N",
+    "lotSize": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -1915,8 +2901,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660367,
-   "at": "2026-11-19 14:08:50",
+   "seq": 6826907,
+   "at": "2026-11-20 08:45:27",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1937,8 +2923,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660373,
-   "at": "2026-11-19 14:08:51",
+   "seq": 6826912,
+   "at": "2026-11-20 08:45:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -1959,15 +2945,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6660377,
-   "at": "2026-11-19 14:08:53",
+   "seq": 6826936,
+   "at": "2026-11-20 08:45:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -1987,8 +2973,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660381,
-   "at": "2026-11-19 14:08:53",
+   "seq": 6826945,
+   "at": "2026-11-20 08:45:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2009,8 +2995,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660394,
-   "at": "2026-11-19 14:08:55",
+   "seq": 6826983,
+   "at": "2026-11-20 08:45:32",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2031,15 +3017,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6660403,
-   "at": "2026-11-19 14:08:57",
+   "seq": 6826987,
+   "at": "2026-11-20 08:45:34",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "Y",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -2059,8 +3045,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660409,
-   "at": "2026-11-19 14:08:57",
+   "seq": 6826991,
+   "at": "2026-11-20 08:45:34",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2081,8 +3067,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660440,
-   "at": "2026-11-19 14:08:58",
+   "seq": 6826996,
+   "at": "2026-11-20 08:45:36",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2103,15 +3089,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6660455,
-   "at": "2026-11-19 14:09:00",
+   "seq": 6827005,
+   "at": "2026-11-20 08:45:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -2131,8 +3117,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660459,
-   "at": "2026-11-19 14:09:01",
+   "seq": 6827009,
+   "at": "2026-11-20 08:45:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2153,8 +3139,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660468,
-   "at": "2026-11-19 14:09:02",
+   "seq": 6827018,
+   "at": "2026-11-20 08:45:40",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2175,8 +3161,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660804,
-   "at": "2026-11-19 14:09:38",
+   "seq": 6827191,
+   "at": "2026-11-20 08:46:09",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2197,8 +3183,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661028,
-   "at": "2026-11-19 14:10:13",
+   "seq": 6827342,
+   "at": "2026-11-20 08:46:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2219,15 +3205,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6661043,
-   "at": "2026-11-19 14:10:16",
+   "seq": 6827346,
+   "at": "2026-11-20 08:46:41",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "9999999999",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -2247,8 +3233,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661047,
-   "at": "2026-11-19 14:10:16",
+   "seq": 6827350,
+   "at": "2026-11-20 08:46:41",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2269,8 +3255,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661052,
-   "at": "2026-11-19 14:10:17",
+   "seq": 6827360,
+   "at": "2026-11-20 08:46:42",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2291,15 +3277,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6661105,
-   "at": "2026-11-19 14:10:20",
+   "seq": 6827383,
+   "at": "2026-11-20 08:46:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N",
     "lotSize": "12800",
-    "increment": "12800",
+    "increment": "1",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1",
     "toSite": "Club Car_US_AGS",
@@ -2319,8 +3305,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661109,
-   "at": "2026-11-19 14:10:21",
+   "seq": 6827387,
+   "at": "2026-11-20 08:46:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2341,8 +3327,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661114,
-   "at": "2026-11-19 14:10:22",
+   "seq": 6827430,
+   "at": "2026-11-20 08:46:47",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2363,8 +3349,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661124,
-   "at": "2026-11-19 14:10:24",
+   "seq": 6827435,
+   "at": "2026-11-20 08:46:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2385,15 +3371,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6661144,
-   "at": "2026-11-19 14:10:28",
+   "seq": 6827444,
+   "at": "2026-11-20 08:46:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N^N",
     "lotSize": "12801^5761",
-    "increment": "12800^288",
+    "increment": "1^288",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1^ACEN1053I-A1",
     "toSite": "Club Car_US_AGS^CS Enertech_KR_OSN",
@@ -2413,8 +3399,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661177,
-   "at": "2026-11-19 14:10:28",
+   "seq": 6827448,
+   "at": "2026-11-20 08:46:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2435,8 +3421,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661184,
-   "at": "2026-11-19 14:10:29",
+   "seq": 6827460,
+   "at": "2026-11-20 08:46:55",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2457,15 +3443,15 @@
    "params_parsed": true
   },
   {
-   "seq": 6661229,
-   "at": "2026-11-19 14:10:34",
+   "seq": 6827515,
+   "at": "2026-11-20 08:47:00",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
    "kind": "SAVE",
    "fe": {
     "splitYn": "N^N",
     "lotSize": "12800^5760",
-    "increment": "12800^288",
+    "increment": "1^288",
     "userId": "minyonglee1",
     "itemId": "ACEP2065I-B1^ACEN1053I-A1",
     "toSite": "Club Car_US_AGS^CS Enertech_KR_OSN",
@@ -2485,8 +3471,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661234,
-   "at": "2026-11-19 14:10:34",
+   "seq": 6827519,
+   "at": "2026-11-20 08:47:00",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2507,8 +3493,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661276,
-   "at": "2026-11-19 14:10:35",
+   "seq": 6827524,
+   "at": "2026-11-20 08:47:01",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2529,8 +3515,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661362,
-   "at": "2026-11-19 14:10:44",
+   "seq": 6827615,
+   "at": "2026-11-20 08:47:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2551,8 +3537,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661747,
-   "at": "2026-11-19 14:11:29",
+   "seq": 6827787,
+   "at": "2026-11-20 08:48:06",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2573,8 +3559,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661831,
-   "at": "2026-11-19 14:11:46",
+   "seq": 6827836,
+   "at": "2026-11-20 08:48:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2595,8 +3581,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661894,
-   "at": "2026-11-19 14:11:50",
+   "seq": 6827848,
+   "at": "2026-11-20 08:48:20",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2617,8 +3603,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661899,
-   "at": "2026-11-19 14:11:51",
+   "seq": 6827855,
+   "at": "2026-11-20 08:48:21",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2639,8 +3625,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661906,
-   "at": "2026-11-19 14:11:54",
+   "seq": 6827871,
+   "at": "2026-11-20 08:48:24",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2661,8 +3647,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661911,
-   "at": "2026-11-19 14:11:55",
+   "seq": 6827899,
+   "at": "2026-11-20 08:48:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2683,8 +3669,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661915,
-   "at": "2026-11-19 14:11:58",
+   "seq": 6827903,
+   "at": "2026-11-20 08:48:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2705,8 +3691,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661920,
-   "at": "2026-11-19 14:12:00",
+   "seq": 6827942,
+   "at": "2026-11-20 08:48:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2727,8 +3713,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661928,
-   "at": "2026-11-19 14:12:03",
+   "seq": 6827946,
+   "at": "2026-11-20 08:48:34",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2749,8 +3735,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661933,
-   "at": "2026-11-19 14:12:05",
+   "seq": 6827985,
+   "at": "2026-11-20 08:48:35",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2771,8 +3757,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661938,
-   "at": "2026-11-19 14:12:06",
+   "seq": 6827990,
+   "at": "2026-11-20 08:48:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2793,8 +3779,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662020,
-   "at": "2026-11-19 14:12:14",
+   "seq": 6828094,
+   "at": "2026-11-20 08:48:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2815,8 +3801,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662025,
-   "at": "2026-11-19 14:12:21",
+   "seq": 6828106,
+   "at": "2026-11-20 08:48:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2837,8 +3823,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662077,
-   "at": "2026-11-19 14:12:29",
+   "seq": 6828185,
+   "at": "2026-11-20 08:49:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2859,8 +3845,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662091,
-   "at": "2026-11-19 14:12:38",
+   "seq": 6828292,
+   "at": "2026-11-20 08:49:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2881,8 +3867,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662096,
-   "at": "2026-11-19 14:12:39",
+   "seq": 6828297,
+   "at": "2026-11-20 08:49:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2903,8 +3889,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662139,
-   "at": "2026-11-19 14:12:49",
+   "seq": 6828355,
+   "at": "2026-11-20 08:49:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2925,8 +3911,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662147,
-   "at": "2026-11-19 14:12:50",
+   "seq": 6828371,
+   "at": "2026-11-20 08:49:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2947,8 +3933,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662221,
-   "at": "2026-11-19 14:13:05",
+   "seq": 6828423,
+   "at": "2026-11-20 08:49:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2969,8 +3955,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662240,
-   "at": "2026-11-19 14:13:21",
+   "seq": 6828440,
+   "at": "2026-11-20 08:49:56",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -2991,8 +3977,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662258,
-   "at": "2026-11-19 14:13:32",
+   "seq": 6828465,
+   "at": "2026-11-20 08:50:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3013,8 +3999,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662394,
-   "at": "2026-11-19 14:13:49",
+   "seq": 6828478,
+   "at": "2026-11-20 08:50:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3035,8 +4021,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662424,
-   "at": "2026-11-19 14:13:50",
+   "seq": 6828483,
+   "at": "2026-11-20 08:50:19",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3057,8 +4043,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662545,
-   "at": "2026-11-19 14:14:00",
+   "seq": 6828558,
+   "at": "2026-11-20 08:50:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3079,8 +4065,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662649,
-   "at": "2026-11-19 14:14:08",
+   "seq": 6828659,
+   "at": "2026-11-20 08:50:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3101,8 +4087,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662709,
-   "at": "2026-11-19 14:14:15",
+   "seq": 6828737,
+   "at": "2026-11-20 08:50:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3123,8 +4109,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662724,
-   "at": "2026-11-19 14:14:19",
+   "seq": 6828750,
+   "at": "2026-11-20 08:50:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3145,8 +4131,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662780,
-   "at": "2026-11-19 14:14:22",
+   "seq": 6828767,
+   "at": "2026-11-20 08:50:52",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3167,8 +4153,74 @@
    "params_parsed": true
   },
   {
-   "seq": 6666090,
-   "at": "2026-11-19 14:21:04",
+   "seq": 6829043,
+   "at": "2026-11-20 08:51:32",
+   "by": "bindy122678",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829074,
+   "at": "2026-11-20 08:51:36",
+   "by": "bindy122678",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829101,
+   "at": "2026-11-20 08:51:40",
+   "by": "bindy122678",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6829341,
+   "at": "2026-11-20 08:51:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3189,8 +4241,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666145,
-   "at": "2026-11-19 14:21:09",
+   "seq": 6829432,
+   "at": "2026-11-20 08:52:03",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3211,8 +4263,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666205,
-   "at": "2026-11-19 14:21:13",
+   "seq": 6829469,
+   "at": "2026-11-20 08:52:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3233,8 +4285,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666268,
-   "at": "2026-11-19 14:21:17",
+   "seq": 6829506,
+   "at": "2026-11-20 08:52:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3255,8 +4307,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666351,
-   "at": "2026-11-19 14:21:25",
+   "seq": 6829543,
+   "at": "2026-11-20 08:52:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3277,8 +4329,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666668,
-   "at": "2026-11-19 14:21:40",
+   "seq": 6829595,
+   "at": "2026-11-20 08:52:33",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3299,8 +4351,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666838,
-   "at": "2026-11-19 14:21:55",
+   "seq": 6829647,
+   "at": "2026-11-20 08:52:48",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3321,8 +4373,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667041,
-   "at": "2026-11-19 14:22:11",
+   "seq": 6829727,
+   "at": "2026-11-20 08:53:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3343,8 +4395,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667058,
-   "at": "2026-11-19 14:22:18",
+   "seq": 6829765,
+   "at": "2026-11-20 08:53:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3365,8 +4417,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667145,
-   "at": "2026-11-19 14:22:25",
+   "seq": 6829869,
+   "at": "2026-11-20 08:53:20",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3387,8 +4439,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667154,
-   "at": "2026-11-19 14:22:27",
+   "seq": 6829879,
+   "at": "2026-11-20 08:53:21",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3409,8 +4461,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667159,
-   "at": "2026-11-19 14:22:28",
+   "seq": 6829884,
+   "at": "2026-11-20 08:53:23",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3431,8 +4483,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667399,
-   "at": "2026-11-19 14:24:00",
+   "seq": 6829952,
+   "at": "2026-11-20 08:54:55",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3453,8 +4505,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667582,
-   "at": "2026-11-19 14:24:18",
+   "seq": 6830064,
+   "at": "2026-11-20 08:55:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3475,8 +4527,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667663,
-   "at": "2026-11-19 14:24:25",
+   "seq": 6830124,
+   "at": "2026-11-20 08:55:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3497,8 +4549,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667798,
-   "at": "2026-11-19 14:24:40",
+   "seq": 6830176,
+   "at": "2026-11-20 08:55:42",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3519,8 +4571,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668020,
-   "at": "2026-11-19 14:25:01",
+   "seq": 6830336,
+   "at": "2026-11-20 08:56:08",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3541,8 +4593,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668025,
-   "at": "2026-11-19 14:25:03",
+   "seq": 6830341,
+   "at": "2026-11-20 08:56:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3563,8 +4615,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668034,
-   "at": "2026-11-19 14:25:05",
+   "seq": 6830350,
+   "at": "2026-11-20 08:56:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3585,8 +4637,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668043,
-   "at": "2026-11-19 14:25:08",
+   "seq": 6830372,
+   "at": "2026-11-20 08:56:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3607,8 +4659,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668052,
-   "at": "2026-11-19 14:25:10",
+   "seq": 6830389,
+   "at": "2026-11-20 08:56:19",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3629,8 +4681,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668067,
-   "at": "2026-11-19 14:25:13",
+   "seq": 6830398,
+   "at": "2026-11-20 08:56:22",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3651,8 +4703,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668390,
-   "at": "2026-11-19 14:26:15",
+   "seq": 6830441,
+   "at": "2026-11-20 08:57:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3673,8 +4725,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668399,
-   "at": "2026-11-19 14:26:18",
+   "seq": 6830450,
+   "at": "2026-11-20 08:57:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3695,8 +4747,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668659,
-   "at": "2026-11-19 14:27:20",
+   "seq": 6830516,
+   "at": "2026-11-20 08:58:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3717,8 +4769,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669190,
-   "at": "2026-11-19 14:30:12",
+   "seq": 6831285,
+   "at": "2026-11-20 09:01:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3739,8 +4791,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669227,
-   "at": "2026-11-19 14:30:15",
+   "seq": 6831338,
+   "at": "2026-11-20 09:01:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3761,8 +4813,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6669329,
-   "at": "2026-11-19 14:30:27",
+   "seq": 6831645,
+   "at": "2026-11-20 09:01:42",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3783,8 +4835,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676204,
-   "at": "2026-11-19 15:27:37",
+   "seq": 6835829,
+   "at": "2026-11-20 09:11:20",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3805,8 +4857,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676388,
-   "at": "2026-11-19 15:28:00",
+   "seq": 6835891,
+   "at": "2026-11-20 09:11:27",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3827,8 +4879,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676432,
-   "at": "2026-11-19 15:28:04",
+   "seq": 6835981,
+   "at": "2026-11-20 09:11:36",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3849,8 +4901,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676476,
-   "at": "2026-11-19 15:28:08",
+   "seq": 6836060,
+   "at": "2026-11-20 09:11:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3871,8 +4923,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676608,
-   "at": "2026-11-19 15:28:25",
+   "seq": 6836135,
+   "at": "2026-11-20 09:11:56",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3893,8 +4945,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676778,
-   "at": "2026-11-19 15:28:41",
+   "seq": 6836198,
+   "at": "2026-11-20 09:12:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3915,8 +4967,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676838,
-   "at": "2026-11-19 15:28:45",
+   "seq": 6836240,
+   "at": "2026-11-20 09:12:17",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3937,8 +4989,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6676883,
-   "at": "2026-11-19 15:28:50",
+   "seq": 6836277,
+   "at": "2026-11-20 09:12:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3959,8 +5011,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677007,
-   "at": "2026-11-19 15:29:04",
+   "seq": 6836484,
+   "at": "2026-11-20 09:12:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -3981,8 +5033,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677067,
-   "at": "2026-11-19 15:29:09",
+   "seq": 6836619,
+   "at": "2026-11-20 09:12:47",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4003,8 +5055,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677128,
-   "at": "2026-11-19 15:29:15",
+   "seq": 6836727,
+   "at": "2026-11-20 09:12:57",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4025,8 +5077,404 @@
    "params_parsed": true
   },
   {
-   "seq": 6677148,
-   "at": "2026-11-19 15:29:19",
+   "seq": 6836835,
+   "at": "2026-11-20 09:13:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6836919,
+   "at": "2026-11-20 09:13:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6837066,
+   "at": "2026-11-20 09:13:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6837155,
+   "at": "2026-11-20 09:13:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6837196,
+   "at": "2026-11-20 09:13:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6837278,
+   "at": "2026-11-20 09:13:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6837802,
+   "at": "2026-11-20 09:14:58",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838037,
+   "at": "2026-11-20 09:15:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838261,
+   "at": "2026-11-20 09:15:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838303,
+   "at": "2026-11-20 09:15:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838340,
+   "at": "2026-11-20 09:15:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838489,
+   "at": "2026-11-20 09:16:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838648,
+   "at": "2026-11-20 09:16:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838711,
+   "at": "2026-11-20 09:16:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838759,
+   "at": "2026-11-20 09:16:41",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6838909,
+   "at": "2026-11-20 09:16:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839064,
+   "at": "2026-11-20 09:17:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839138,
+   "at": "2026-11-20 09:17:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6839148,
+   "at": "2026-11-20 09:17:09",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4047,8 +5495,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677208,
-   "at": "2026-11-19 15:29:36",
+   "seq": 6839330,
+   "at": "2026-11-20 09:17:27",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4069,8 +5517,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677260,
-   "at": "2026-11-19 15:29:44",
+   "seq": 6839429,
+   "at": "2026-11-20 09:17:36",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4091,8 +5539,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677312,
-   "at": "2026-11-19 15:29:53",
+   "seq": 6839487,
+   "at": "2026-11-20 09:17:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4113,8 +5561,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677317,
-   "at": "2026-11-19 15:29:56",
+   "seq": 6839509,
+   "at": "2026-11-20 09:17:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4135,8 +5583,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677370,
-   "at": "2026-11-19 15:30:05",
+   "seq": 6839570,
+   "at": "2026-11-20 09:17:58",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4157,8 +5605,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677444,
-   "at": "2026-11-19 15:30:24",
+   "seq": 6839737,
+   "at": "2026-11-20 09:18:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4179,8 +5627,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677496,
-   "at": "2026-11-19 15:30:31",
+   "seq": 6839789,
+   "at": "2026-11-20 09:18:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4201,8 +5649,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677534,
-   "at": "2026-11-19 15:30:43",
+   "seq": 6839827,
+   "at": "2026-11-20 09:18:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4223,8 +5671,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677539,
-   "at": "2026-11-19 15:30:44",
+   "seq": 6839832,
+   "at": "2026-11-20 09:18:40",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4245,8 +5693,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677591,
-   "at": "2026-11-19 15:30:52",
+   "seq": 6839933,
+   "at": "2026-11-20 09:18:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4267,8 +5715,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677643,
-   "at": "2026-11-19 15:31:08",
+   "seq": 6840007,
+   "at": "2026-11-20 09:19:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4289,8 +5737,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677755,
-   "at": "2026-11-19 15:31:31",
+   "seq": 6840215,
+   "at": "2026-11-20 09:19:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4311,8 +5759,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677792,
-   "at": "2026-11-19 15:31:36",
+   "seq": 6840273,
+   "at": "2026-11-20 09:19:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4333,8 +5781,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677797,
-   "at": "2026-11-19 15:31:38",
+   "seq": 6840319,
+   "at": "2026-11-20 09:19:39",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4355,8 +5803,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677834,
-   "at": "2026-11-19 15:31:43",
+   "seq": 6840373,
+   "at": "2026-11-20 09:19:44",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4377,8 +5825,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677871,
-   "at": "2026-11-19 15:31:47",
+   "seq": 6840431,
+   "at": "2026-11-20 09:19:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4399,8 +5847,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677908,
-   "at": "2026-11-19 15:31:51",
+   "seq": 6840589,
+   "at": "2026-11-20 09:19:56",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4421,8 +5869,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6677945,
-   "at": "2026-11-19 15:32:05",
+   "seq": 6840670,
+   "at": "2026-11-20 09:20:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4443,8 +5891,96 @@
    "params_parsed": true
   },
   {
-   "seq": 6677997,
-   "at": "2026-11-19 15:32:14",
+   "seq": 6840679,
+   "at": "2026-11-20 09:20:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840705,
+   "at": "2026-11-20 09:20:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "acep2065i-b1",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840710,
+   "at": "2026-11-20 09:20:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "CEP2065I-B",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840717,
+   "at": "2026-11-20 09:20:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "ACEP2065I-B1,ACEN1053I-A1",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6840790,
+   "at": "2026-11-20 09:20:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4465,8 +6001,324 @@
    "params_parsed": true
   },
   {
-   "seq": 6678002,
-   "at": "2026-11-19 15:32:15",
+   "seq": 6841068,
+   "at": "2026-11-20 09:20:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841268,
+   "at": "2026-11-20 09:21:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841286,
+   "at": "2026-11-20 09:21:08",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "APVCC517H-A4",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841302,
+   "at": "2026-11-20 09:21:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "PVCC517H-A",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841323,
+   "at": "2026-11-20 09:21:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "apvcc517h-a4",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841329,
+   "at": "2026-11-20 09:21:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "APVCC517H-A4,APBMW12V0-A1-D01",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841338,
+   "at": "2026-11-20 09:21:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841361,
+   "at": "2026-11-20 09:21:19",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841378,
+   "at": "2026-11-20 09:21:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841415,
+   "at": "2026-11-20 09:21:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841432,
+   "at": "2026-11-20 09:21:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "EG00",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841457,
+   "at": "2026-11-20 09:21:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "EG00,AC00-A,AU000062_81-P,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00-A,MI00-E,MI00-P,MI00_81-W,MI02-A,MI02-E,MI03-P,MI03_81-W,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00-A,WA00-E,WA00-P,WA00_81-W,ANDURIL_US_CZM,ANODE_US_YFA,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,AW_DE_LEJ,Aeonus_KR_GUN,Alte_AB_TES,Alte_AE_AAN,Alte_AE_ABU,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,Arpiem_RO_OTP,Audi CKD_DE_ING,Audi_AJ_TES,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,BAE_US_ENC,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_CZ_MOS,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Banglilai_CN_SZX,CMC_TW_TYN,COENSYS_KR_HWS,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,DBH_DE_MUC,DIS_DE_VBS,DSMT_KR_KMH,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,E-Works Mobility GmbH_DE_IMG,EDISON MOTORS_KR_TJN,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,ESST_CA_WND,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,EVT_CA_SEU,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrification_IN_BLR,Epiroc_CA_PIM,Epiroc_IN_BLR,Evyon_NO_OSL,FAW VW_CN_CGQ,FAW VW_CN_DLC,FBPS(OTS)_US_IGX,FBPS(OTS)_US_ILD,FCA AS_CA_BRP,FCA AS_CA_WND,FCA AS_CN_NKG,FCA AS_GB_ABG,FCA AS_IT_AVG,FCA AS_IT_MEI,FCA AS_IT_TRN,FCA AS_JP_ZAE,FCA AS_MX_CUJ,FCA AS_PL_WRO,FCA AS_US_MNC,FCA AS_US_SEH,FCA AS_US_WAM,FCA_CA_WND,FCA_CN_NKG,FCA_IT_MEI,FCA_IT_MOD,FCA_IT_TRN,FCA_KR_ASA,FCA_KR_JCH,FCA_KR_UWN,FCA_MX_TLC,FCA_PL_WRO,FCA_US_ABH,FCA_US_CMH,FCA_US_ETA,FCA_US_HLM,FCA_US_IGX,FCA_US_LFC,FCA_US_PHL,FCA_US_SEH,FCA_US_TOL,FCA_US_WAM,FLASH_IT_SIZ,Ford AS_CA_BRP,Ford AS_DE_CGN,Ford AS_DE_QKL,Ford AS_MX_TPZ,Ford AS_US_DEO,Ford AS_US_HLM,Ford AS_US_NKY,Ford AS_US_RDF,Ford(MX-VMI)_TR_KCO,Ford_BE_ANR,Ford_BE_LML,Ford_CN_NJG,Ford_CN_NKG,Ford_DE_QKL,Ford_ES_VLC,Ford_GB_BAS,Ford_GB_ESX,Ford_GB_LAI,Ford_HU_BUD,Ford_MX_CTN,Ford_MX_MOT,Ford_MX_TPZ,Ford_PL_WRO,Ford_RO_CRV,Ford_TR_DOG,Ford_TR_GOK,Ford_TR_KCO,Ford_US_DEO,Ford_US_IGX,Ford_US_RDF,Ford_US_URI,Forsee_CN_ZSN,GCV_CN_HGH,GEELY_CN_NGB,GLOVIS_KR_SEL,GLOVIS_KR_USN,GM AS_US_BQN,GM AS_US_HZP,GM_CA_OSH,GM_CN_SHA,GM_KR_INC,GM_US_ABH,GM_US_BQN,GM_US_LRP,GM_US_MOI,GM_US_OMQ,GM_US_QBU,GM_US_WAM,GM_US_YPS,GM_WA_CA_OSH,GM_WA_DE_MIH,Guangdonglihua_CN_DGG,HKI_KR_WJU,HKMC AS_KR_UWN,HKMC_CZ_NVS,HKMC_KR_ASA,HKMC_KR_GMG,HKMC_KR_HWS,HKMC_KR_JNJ,HKMC_KR_OCH,HKMC_KR_SEL,HKMC_KR_TJN,HKMC_KR_USN,HKMC_KR_UWN,HKMC_US_GG3,HKMC_WA_CZ_NVS,HKMC_WA_SK_TEP,HLGP AS_KR_CHU,HLGP_KR_CHU,HQ05-81-AS,Hanwha Aero_KR_CHW,Hanwha Aero_KR_SGM,Hengyuan EU_CN_JHA,Hengyuan_CN_JHA,Honda Motor_JP_HG9,Honda Motor_KR_OCH,Honda Motor_KR_TJN,Honda Motor_US_OHB,Humanhorizons_CN_YCG,Hyperstrong_CN_BJS,ICPT(OTS)_PL_WAW,IM_US_SPK,Irizar EM_ES_ADU,Irizar_ES_ADU,JIANGSU_CN_SZH,JJ Solstice_KR_YNG,JLR AS_GB_GAY,JLR(OTS)_GB_CVT,JLR_GB_CVT,JLR_GB_GAY,JOBYAR_US_SQL,JOBY_US_SQL,JSLH_CN_NKG,KAIST_KR_TJN,KGM Cheonan_KR_CHO,KIA_CZ_NVS,KIA_KR_GMG,KIA_KR_HWS,KIA_KR_KWJ,KIA_KR_SEL,KIA_SK_TEP,KRAKEN_DE_RSK,KTC_CN_SZX,Karma(OTS)_US_IVN,LGCDJ_KR_TJN,LGCEG_DE_FRA,LGCGC_KR_GCN,LGCNA_CN_NKG,LGCOC2_KR_OCH,LGCOC_KR_OCH,LGCPI_US_TYM,LGCWA_PL_WRO,LGESMI_US_HZP,LGESMI_US_IGX,LGESMI_US_LLO,LGESOC_KR_OCH,LGESOC_PL_WRO,LGESWA_PL_BYW,LGESWA_PL_INO,LGESWA_PL_WRO,LGE_KR_INC,LGE_US_HZP,LGE_US_LRP,LGE_US_QGB,Lamborghini_IT_SBN,Landsuccess_CN_SZX,Lion Bus_CA_SJE,London Taxi_GB_CVT,MBAG_DE_STR,MBAG_KR_CHU,MI00-81-AS,MI03-81-AS,MITSUBISHI_JP_TBM,MOBIS_AS_KR_CHU,MOBIS_AS_KR_PTK,MOBIS_CZ_NVS,MOBIS_KR_CHU,MOBIS_SK_GBY,MOBIS_US_MGM,MOBIS_US_SAV,Magna BMW_AT_GRZ,Magna_AT_GRZ,Magna_Renault_AT_GRZ,Magtec_GB_RTH,Mahindra_IN_PNE,Mahindra_IN_PNQ,Mahindra_KR_PYK,Man Truck & Bus_DE_AGB,Man Truck & Bus_DE_EFG,Man Truck & Bus_DE_KAS,Man Truck & Bus_DE_MUC,Man Truck & Bus_DE_SCR,Man Truck & Bus_DE_STR,Man Truck & Bus_PL_STE,Maserati_DE_VBS,Maserati_IT_MOD,Maserati_IT_TRN,Maserati_US_CMH,Maxion_BR_CZI,Misum Systech_KR_ANY,Mitsui_FR_HSP,Monarch_US_ZE2,NANO IN TECH_KR_WJU,NANO IN TECH_WA_KR_WJU,Nissan_GB_SUN,Nissan_JP_FUK,Nissan_JP_YOK,Nivalis(OTS)_US_WIX,Nordresa_CA_LAV,Nysa Motor_PL_WRO,Octave_BE_ECH,PSA AS_FR_VEL,PSA_DE_EIS,PSA_DE_RUM,PSA_FR_CSP,PSA_FR_JKI,PSA_FR_MHS,PSA_FR_PAL,PSA_FR_POI,PSA_FR_RNS,PSA_FR_SHX,PSA_FR_SVD,PSA_FR_VEL,PSA_FR_VER,PSA_FR_VSL,PSA_KR_TJN,PSA_PL_GWC,PSA_PL_WRO,PSA_SK_TNA,Peopleworks_KR_SEL,Piston_US_NKY,Piston_US_RDF,Porsche AS_DE_KAS,Porsche AS_DE_SSN,Porsche AS_HQ_DE_SSN,Porsche AS_WA_DE_SSN,Porsche_CN_BJS,Porsche_CN_NJG,Porsche_CZ_OSR,Porsche_DE_AAH,Porsche_DE_BBI,Porsche_DE_DTN,Porsche_DE_SHM,Porsche_DE_STR,Porsche_DE_VBS,Porsche_DE_WDB,Porsche_DE_WSC,Porsche_SK_BTS,Porsche_SK_DNV,Porsche_SK_HST,Porsche_SK_KNM,QEV_ES_ABE,RVA_DE_NDH,Raymond_US_EEG,Rempus_KR_HWS,Renault AS HQ_FR_FNS,Renault AS HQ_FR_RHE,Renault AS_FR_FNS,Renault AS_FR_HRB,Renault AS_FR_RHE,Renault AS_KR_HAN,Renault AS_KR_PUS,Renault_ES_VLL,Renault_FR_BAT,Renault_FR_CLE,Renault_FR_DOI,Renault_FR_HRB,Renault_FR_SNV,Renault_GB_ABO,Renault_KR_PUS,Renault_SI_NMO,SAIC_CN_SHA,SEMIROAD_KR_HWS,SGM AS_CN_PDG,SGM_CN_PDG,SKODA_CZ_MBV,STB_DE_MUC,STRIX_US_MKC,SYMC_KR_INC,SYMC_KR_PYK,SYMC_KR_TAE,Samsung SDI_AT_GRZ,Samsung SDI_CN_BJS,Shanghai Feixiang_CN_SHA,Shinden Hihhtex_JP_SMZ,Shinden Hihhtex_KR_WJU,Siemens_NO_TRD,Sime Darby_MY_KKH,Skysource_CH_BE1,Skysource_CN_NKG,Skyworth_CN_XUZ,Solaris_PL_OWA,Spear Power Systems_US_GVW,Sungwoo Hightech_KR_PUS,Suzhou Anjin_CN_SZH,TW sys_KR_TJN,TY_JP_7KA,TY_JP_FUK,TY_US_IGX,TY_US_VDH,Taiga_CA_MTR,Taiga_CA_QUE,Temsa bus & Coach_TR_ABK,VALEO_KR_SEJ,VAL_DE_222,VAL_DE_FFO,VAL_DE_KRD,VIA(OTS)_US_OEU,VW AS_BE_BRU,VW AS_DE_KAS,VW AS_DE_RSE,VW_CZ_MBV,VW_DE_74D,VW_DE_BDB,VW_DE_BWE,VW_DE_FAB,VW_DE_KAS,VW_DE_NEM,VW_DE_WOB,VW_DE_WVN,Valmet_DE_FRA,Valmet_DE_HAM,Valmet_DE_KRD,Vanderhall_US_PVU,Volta PS_US_HLM,Volvo AS_AU_SYD,Volvo AS_CN_SZH,Volvo AS_FR_HRB,Volvo AS_IL_TLV,Volvo AS_IN_MUB,Volvo AS_JP_NGO,Volvo AS_MY_KUL,Volvo AS_SE_GO5,Volvo AS_SE_GOT,Volvo AS_TH_BKK,Volvo AS_US_ONT,Volvo AS_WA_SE_GOT,Volvo_AU_SYD,Volvo_BE_GBU,Volvo_BE_GNE,Volvo_CN_SHA,Volvo_IL_TLV,Volvo_JP_NGO,Volvo_KR_SEL,Volvo_MY_KUL,Volvo_MY_SHA,Volvo_SE_ALO,Volvo_SE_GOT,Volvo_TH_BKK,Volvo_TW_TYN,Volvo_US_CHS,Volvo_US_HLM,Vremt AS_CN_SZH,Vremt_CN_SUZ,WA00-81-AS,WATTPACK_CN_BJS,WRSE_DE_ZCH,XL_US_BOS,Yuntong_CN_NGB,ZEEBUS_GB_BEF,ZeroEV(OTS)_US_TPE,Zhongjia_CN_CTU,Zhongjia_CN_DQG,Zhongjia_CN_SHA,Zhongjia_CN_TIZ,audi as_BE_BRU,dianchibao_CN_SHA,dianchibao_HK_MUN,equipmake(OTS)_GB_NRW,jemado_GB_LON,kokam_KR_NSN",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841466,
+   "at": "2026-11-20 09:21:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "EG00,AC00-A,AU000062_81-P,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00-A,MI00-E,MI00-P,MI00_81-W,MI02-A,MI02-E,MI03-P,MI03_81-W,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00-A,WA00-E,WA00-P,WA00_81-W,ANDURIL_US_CZM,ANODE_US_YFA,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,AW_DE_LEJ,Aeonus_KR_GUN,Alte_AB_TES,Alte_AE_AAN,Alte_AE_ABU,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,Arpiem_RO_OTP,Audi CKD_DE_ING,Audi_AJ_TES,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,BAE_US_ENC,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_CZ_MOS,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Banglilai_CN_SZX,CMC_TW_TYN,COENSYS_KR_HWS,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,DBH_DE_MUC,DIS_DE_VBS,DSMT_KR_KMH,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,E-Works Mobility GmbH_DE_IMG,EDISON MOTORS_KR_TJN,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,ESST_CA_WND,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,EVT_CA_SEU,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrification_IN_BLR,Epiroc_CA_PIM,Epiroc_IN_BLR,Evyon_NO_OSL,FAW VW_CN_CGQ,FAW VW_CN_DLC,FBPS(OTS)_US_IGX,FBPS(OTS)_US_ILD,FCA AS_CA_BRP,FCA AS_CA_WND,FCA AS_CN_NKG,FCA AS_GB_ABG,FCA AS_IT_AVG,FCA AS_IT_MEI,FCA AS_IT_TRN,FCA AS_JP_ZAE,FCA AS_MX_CUJ,FCA AS_PL_WRO,FCA AS_US_MNC,FCA AS_US_SEH,FCA AS_US_WAM,FCA_CA_WND,FCA_CN_NKG,FCA_IT_MEI,FCA_IT_MOD,FCA_IT_TRN,FCA_KR_ASA,FCA_KR_JCH,FCA_KR_UWN,FCA_MX_TLC,FCA_PL_WRO,FCA_US_ABH,FCA_US_CMH,FCA_US_ETA,FCA_US_HLM,FCA_US_IGX,FCA_US_LFC,FCA_US_PHL,FCA_US_SEH,FCA_US_TOL,FCA_US_WAM,FLASH_IT_SIZ,Ford AS_CA_BRP,Ford AS_DE_CGN,Ford AS_DE_QKL,Ford AS_MX_TPZ,Ford AS_US_DEO,Ford AS_US_HLM,Ford AS_US_NKY,Ford AS_US_RDF,Ford(MX-VMI)_TR_KCO,Ford_BE_ANR,Ford_BE_LML,Ford_CN_NJG,Ford_CN_NKG,Ford_DE_QKL,Ford_ES_VLC,Ford_GB_BAS,Ford_GB_ESX,Ford_GB_LAI,Ford_HU_BUD,Ford_MX_CTN,Ford_MX_MOT,Ford_MX_TPZ,Ford_PL_WRO,Ford_RO_CRV,Ford_TR_DOG,Ford_TR_GOK,Ford_TR_KCO,Ford_US_DEO,Ford_US_IGX,Ford_US_RDF,Ford_US_URI,Forsee_CN_ZSN,GCV_CN_HGH,GEELY_CN_NGB,GLOVIS_KR_SEL,GLOVIS_KR_USN,GM AS_US_BQN,GM AS_US_HZP,GM_CA_OSH,GM_CN_SHA,GM_KR_INC,GM_US_ABH,GM_US_BQN,GM_US_LRP,GM_US_MOI,GM_US_OMQ,GM_US_QBU,GM_US_WAM,GM_US_YPS,GM_WA_CA_OSH,GM_WA_DE_MIH,Guangdonglihua_CN_DGG,HKI_KR_WJU,HKMC AS_KR_UWN,HKMC_CZ_NVS,HKMC_KR_ASA,HKMC_KR_GMG,HKMC_KR_HWS,HKMC_KR_JNJ,HKMC_KR_OCH,HKMC_KR_SEL,HKMC_KR_TJN,HKMC_KR_USN,HKMC_KR_UWN,HKMC_US_GG3,HKMC_WA_CZ_NVS,HKMC_WA_SK_TEP,HLGP AS_KR_CHU,HLGP_KR_CHU,HQ05-81-AS,Hanwha Aero_KR_CHW,Hanwha Aero_KR_SGM,Hengyuan EU_CN_JHA,Hengyuan_CN_JHA,Honda Motor_JP_HG9,Honda Motor_KR_OCH,Honda Motor_KR_TJN,Honda Motor_US_OHB,Humanhorizons_CN_YCG,Hyperstrong_CN_BJS,ICPT(OTS)_PL_WAW,IM_US_SPK,Irizar EM_ES_ADU,Irizar_ES_ADU,JIANGSU_CN_SZH,JJ Solstice_KR_YNG,JLR AS_GB_GAY,JLR(OTS)_GB_CVT,JLR_GB_CVT,JLR_GB_GAY,JOBYAR_US_SQL,JOBY_US_SQL,JSLH_CN_NKG,KAIST_KR_TJN,KGM Cheonan_KR_CHO,KIA_CZ_NVS,KIA_KR_GMG,KIA_KR_HWS,KIA_KR_KWJ,KIA_KR_SEL,KIA_SK_TEP,KRAKEN_DE_RSK,KTC_CN_SZX,Karma(OTS)_US_IVN,LGCDJ_KR_TJN,LGCEG_DE_FRA,LGCGC_KR_GCN,LGCNA_CN_NKG,LGCOC2_KR_OCH,LGCOC_KR_OCH,LGCPI_US_TYM,LGCWA_PL_WRO,LGESMI_US_HZP,LGESMI_US_IGX,LGESMI_US_LLO,LGESOC_KR_OCH,LGESOC_PL_WRO,LGESWA_PL_BYW,LGESWA_PL_INO,LGESWA_PL_WRO,LGE_KR_INC,LGE_US_HZP,LGE_US_LRP,LGE_US_QGB,Lamborghini_IT_SBN,Landsuccess_CN_SZX,Lion Bus_CA_SJE,London Taxi_GB_CVT,MBAG_DE_STR,MBAG_KR_CHU,MI00-81-AS,MI03-81-AS,MITSUBISHI_JP_TBM,MOBIS_AS_KR_CHU,MOBIS_AS_KR_PTK,MOBIS_CZ_NVS,MOBIS_KR_CHU,MOBIS_SK_GBY,MOBIS_US_MGM,MOBIS_US_SAV,Magna BMW_AT_GRZ,Magna_AT_GRZ,Magna_Renault_AT_GRZ,Magtec_GB_RTH,Mahindra_IN_PNE,Mahindra_IN_PNQ,Mahindra_KR_PYK,Man Truck & Bus_DE_AGB,Man Truck & Bus_DE_EFG,Man Truck & Bus_DE_KAS,Man Truck & Bus_DE_MUC,Man Truck & Bus_DE_SCR,Man Truck & Bus_DE_STR,Man Truck & Bus_PL_STE,Maserati_DE_VBS,Maserati_IT_MOD,Maserati_IT_TRN,Maserati_US_CMH,Maxion_BR_CZI,Misum Systech_KR_ANY,Mitsui_FR_HSP,Monarch_US_ZE2,NANO IN TECH_KR_WJU,NANO IN TECH_WA_KR_WJU,Nissan_GB_SUN,Nissan_JP_FUK,Nissan_JP_YOK,Nivalis(OTS)_US_WIX,Nordresa_CA_LAV,Nysa Motor_PL_WRO,Octave_BE_ECH,PSA AS_FR_VEL,PSA_DE_EIS,PSA_DE_RUM,PSA_FR_CSP,PSA_FR_JKI,PSA_FR_MHS,PSA_FR_PAL,PSA_FR_POI,PSA_FR_RNS,PSA_FR_SHX,PSA_FR_SVD,PSA_FR_VEL,PSA_FR_VER,PSA_FR_VSL,PSA_KR_TJN,PSA_PL_GWC,PSA_PL_WRO,PSA_SK_TNA,Peopleworks_KR_SEL,Piston_US_NKY,Piston_US_RDF,Porsche AS_DE_KAS,Porsche AS_DE_SSN,Porsche AS_HQ_DE_SSN,Porsche AS_WA_DE_SSN,Porsche_CN_BJS,Porsche_CN_NJG,Porsche_CZ_OSR,Porsche_DE_AAH,Porsche_DE_BBI,Porsche_DE_DTN,Porsche_DE_SHM,Porsche_DE_STR,Porsche_DE_VBS,Porsche_DE_WDB,Porsche_DE_WSC,Porsche_SK_BTS,Porsche_SK_DNV,Porsche_SK_HST,Porsche_SK_KNM,QEV_ES_ABE,RVA_DE_NDH,Raymond_US_EEG,Rempus_KR_HWS,Renault AS HQ_FR_FNS,Renault AS HQ_FR_RHE,Renault AS_FR_FNS,Renault AS_FR_HRB,Renault AS_FR_RHE,Renault AS_KR_HAN,Renault AS_KR_PUS,Renault_ES_VLL,Renault_FR_BAT,Renault_FR_CLE,Renault_FR_DOI,Renault_FR_HRB,Renault_FR_SNV,Renault_GB_ABO,Renault_KR_PUS,Renault_SI_NMO,SAIC_CN_SHA,SEMIROAD_KR_HWS,SGM AS_CN_PDG,SGM_CN_PDG,SKODA_CZ_MBV,STB_DE_MUC,STRIX_US_MKC,SYMC_KR_INC,SYMC_KR_PYK,SYMC_KR_TAE,Samsung SDI_AT_GRZ,Samsung SDI_CN_BJS,Shanghai Feixiang_CN_SHA,Shinden Hihhtex_JP_SMZ,Shinden Hihhtex_KR_WJU,Siemens_NO_TRD,Sime Darby_MY_KKH,Skysource_CH_BE1,Skysource_CN_NKG,Skyworth_CN_XUZ,Solaris_PL_OWA,Spear Power Systems_US_GVW,Sungwoo Hightech_KR_PUS,Suzhou Anjin_CN_SZH,TW sys_KR_TJN,TY_JP_7KA,TY_JP_FUK,TY_US_IGX,TY_US_VDH,Taiga_CA_MTR,Taiga_CA_QUE,Temsa bus & Coach_TR_ABK,VALEO_KR_SEJ,VAL_DE_222,VAL_DE_FFO,VAL_DE_KRD,VIA(OTS)_US_OEU,VW AS_BE_BRU,VW AS_DE_KAS,VW AS_DE_RSE,VW_CZ_MBV,VW_DE_74D,VW_DE_BDB,VW_DE_BWE,VW_DE_FAB,VW_DE_KAS,VW_DE_NEM,VW_DE_WOB,VW_DE_WVN,Valmet_DE_FRA,Valmet_DE_HAM,Valmet_DE_KRD,Vanderhall_US_PVU,Volta PS_US_HLM,Volvo AS_AU_SYD,Volvo AS_CN_SZH,Volvo AS_FR_HRB,Volvo AS_IL_TLV,Volvo AS_IN_MUB,Volvo AS_JP_NGO,Volvo AS_MY_KUL,Volvo AS_SE_GO5,Volvo AS_SE_GOT,Volvo AS_TH_BKK,Volvo AS_US_ONT,Volvo AS_WA_SE_GOT,Volvo_AU_SYD,Volvo_BE_GBU,Volvo_BE_GNE,Volvo_CN_SHA,Volvo_IL_TLV,Volvo_JP_NGO,Volvo_KR_SEL,Volvo_MY_KUL,Volvo_MY_SHA,Volvo_SE_ALO,Volvo_SE_GOT,Volvo_TH_BKK,Volvo_TW_TYN,Volvo_US_CHS,Volvo_US_HLM,Vremt AS_CN_SZH,Vremt_CN_SUZ,WA00-81-AS,WATTPACK_CN_BJS,WRSE_DE_ZCH,XL_US_BOS,Yuntong_CN_NGB,ZEEBUS_GB_BEF,ZeroEV(OTS)_US_TPE,Zhongjia_CN_CTU,Zhongjia_CN_DQG,Zhongjia_CN_SHA,Zhongjia_CN_TIZ,audi as_BE_BRU,dianchibao_CN_SHA,dianchibao_HK_MUN,equipmake(OTS)_GB_NRW,jemado_GB_LON,kokam_KR_NSN",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "P",
+    "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6841482,
+   "at": "2026-11-20 09:21:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP",
+   "kind": "GET",
+   "fe": {
+    "itemId": "",
+    "toSite": "EG00,AC00-A,AU000062_81-P,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00-A,MI00-E,MI00-P,MI00_81-W,MI02-A,MI02-E,MI03-P,MI03_81-W,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00-A,WA00-E,WA00-P,WA00_81-W,ANDURIL_US_CZM,ANODE_US_YFA,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,AW_DE_LEJ,Aeonus_KR_GUN,Alte_AB_TES,Alte_AE_AAN,Alte_AE_ABU,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,Arpiem_RO_OTP,Audi CKD_DE_ING,Audi_AJ_TES,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,BAE_US_ENC,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_CZ_MOS,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Banglilai_CN_SZX,CMC_TW_TYN,COENSYS_KR_HWS,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,DBH_DE_MUC,DIS_DE_VBS,DSMT_KR_KMH,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,E-Works Mobility GmbH_DE_IMG,EDISON MOTORS_KR_TJN,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,ESST_CA_WND,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,EVT_CA_SEU,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrification_IN_BLR,Epiroc_CA_PIM,Epiroc_IN_BLR,Evyon_NO_OSL,FAW VW_CN_CGQ,FAW VW_CN_DLC,FBPS(OTS)_US_IGX,FBPS(OTS)_US_ILD,FCA AS_CA_BRP,FCA AS_CA_WND,FCA AS_CN_NKG,FCA AS_GB_ABG,FCA AS_IT_AVG,FCA AS_IT_MEI,FCA AS_IT_TRN,FCA AS_JP_ZAE,FCA AS_MX_CUJ,FCA AS_PL_WRO,FCA AS_US_MNC,FCA AS_US_SEH,FCA AS_US_WAM,FCA_CA_WND,FCA_CN_NKG,FCA_IT_MEI,FCA_IT_MOD,FCA_IT_TRN,FCA_KR_ASA,FCA_KR_JCH,FCA_KR_UWN,FCA_MX_TLC,FCA_PL_WRO,FCA_US_ABH,FCA_US_CMH,FCA_US_ETA,FCA_US_HLM,FCA_US_IGX,FCA_US_LFC,FCA_US_PHL,FCA_US_SEH,FCA_US_TOL,FCA_US_WAM,FLASH_IT_SIZ,Ford AS_CA_BRP,Ford AS_DE_CGN,Ford AS_DE_QKL,Ford AS_MX_TPZ,Ford AS_US_DEO,Ford AS_US_HLM,Ford AS_US_NKY,Ford AS_US_RDF,Ford(MX-VMI)_TR_KCO,Ford_BE_ANR,Ford_BE_LML,Ford_CN_NJG,Ford_CN_NKG,Ford_DE_QKL,Ford_ES_VLC,Ford_GB_BAS,Ford_GB_ESX,Ford_GB_LAI,Ford_HU_BUD,Ford_MX_CTN,Ford_MX_MOT,Ford_MX_TPZ,Ford_PL_WRO,Ford_RO_CRV,Ford_TR_DOG,Ford_TR_GOK,Ford_TR_KCO,Ford_US_DEO,Ford_US_IGX,Ford_US_RDF,Ford_US_URI,Forsee_CN_ZSN,GCV_CN_HGH,GEELY_CN_NGB,GLOVIS_KR_SEL,GLOVIS_KR_USN,GM AS_US_BQN,GM AS_US_HZP,GM_CA_OSH,GM_CN_SHA,GM_KR_INC,GM_US_ABH,GM_US_BQN,GM_US_LRP,GM_US_MOI,GM_US_OMQ,GM_US_QBU,GM_US_WAM,GM_US_YPS,GM_WA_CA_OSH,GM_WA_DE_MIH,Guangdonglihua_CN_DGG,HKI_KR_WJU,HKMC AS_KR_UWN,HKMC_CZ_NVS,HKMC_KR_ASA,HKMC_KR_GMG,HKMC_KR_HWS,HKMC_KR_JNJ,HKMC_KR_OCH,HKMC_KR_SEL,HKMC_KR_TJN,HKMC_KR_USN,HKMC_KR_UWN,HKMC_US_GG3,HKMC_WA_CZ_NVS,HKMC_WA_SK_TEP,HLGP AS_KR_CHU,HLGP_KR_CHU,HQ05-81-AS,Hanwha Aero_KR_CHW,Hanwha Aero_KR_SGM,Hengyuan EU_CN_JHA,Hengyuan_CN_JHA,Honda Motor_JP_HG9,Honda Motor_KR_OCH,Honda Motor_KR_TJN,Honda Motor_US_OHB,Humanhorizons_CN_YCG,Hyperstrong_CN_BJS,ICPT(OTS)_PL_WAW,IM_US_SPK,Irizar EM_ES_ADU,Irizar_ES_ADU,JIANGSU_CN_SZH,JJ Solstice_KR_YNG,JLR AS_GB_GAY,JLR(OTS)_GB_CVT,JLR_GB_CVT,JLR_GB_GAY,JOBYAR_US_SQL,JOBY_US_SQL,JSLH_CN_NKG,KAIST_KR_TJN,KGM Cheonan_KR_CHO,KIA_CZ_NVS,KIA_KR_GMG,KIA_KR_HWS,KIA_KR_KWJ,KIA_KR_SEL,KIA_SK_TEP,KRAKEN_DE_RSK,KTC_CN_SZX,Karma(OTS)_US_IVN,LGCDJ_KR_TJN,LGCEG_DE_FRA,LGCGC_KR_GCN,LGCNA_CN_NKG,LGCOC2_KR_OCH,LGCOC_KR_OCH,LGCPI_US_TYM,LGCWA_PL_WRO,LGESMI_US_HZP,LGESMI_US_IGX,LGESMI_US_LLO,LGESOC_KR_OCH,LGESOC_PL_WRO,LGESWA_PL_BYW,LGESWA_PL_INO,LGESWA_PL_WRO,LGE_KR_INC,LGE_US_HZP,LGE_US_LRP,LGE_US_QGB,Lamborghini_IT_SBN,Landsuccess_CN_SZX,Lion Bus_CA_SJE,London Taxi_GB_CVT,MBAG_DE_STR,MBAG_KR_CHU,MI00-81-AS,MI03-81-AS,MITSUBISHI_JP_TBM,MOBIS_AS_KR_CHU,MOBIS_AS_KR_PTK,MOBIS_CZ_NVS,MOBIS_KR_CHU,MOBIS_SK_GBY,MOBIS_US_MGM,MOBIS_US_SAV,Magna BMW_AT_GRZ,Magna_AT_GRZ,Magna_Renault_AT_GRZ,Magtec_GB_RTH,Mahindra_IN_PNE,Mahindra_IN_PNQ,Mahindra_KR_PYK,Man Truck & Bus_DE_AGB,Man Truck & Bus_DE_EFG,Man Truck & Bus_DE_KAS,Man Truck & Bus_DE_MUC,Man Truck & Bus_DE_SCR,Man Truck & Bus_DE_STR,Man Truck & Bus_PL_STE,Maserati_DE_VBS,Maserati_IT_MOD,Maserati_IT_TRN,Maserati_US_CMH,Maxion_BR_CZI,Misum Systech_KR_ANY,Mitsui_FR_HSP,Monarch_US_ZE2,NANO IN TECH_KR_WJU,NANO IN TECH_WA_KR_WJU,Nissan_GB_SUN,Nissan_JP_FUK,Nissan_JP_YOK,Nivalis(OTS)_US_WIX,Nordresa_CA_LAV,Nysa Motor_PL_WRO,Octave_BE_ECH,PSA AS_FR_VEL,PSA_DE_EIS,PSA_DE_RUM,PSA_FR_CSP,PSA_FR_JKI,PSA_FR_MHS,PSA_FR_PAL,PSA_FR_POI,PSA_FR_RNS,PSA_FR_SHX,PSA_FR_SVD,PSA_FR_VEL,PSA_FR_VER,PSA_FR_VSL,PSA_KR_TJN,PSA_PL_GWC,PSA_PL_WRO,PSA_SK_TNA,Peopleworks_KR_SEL,Piston_US_NKY,Piston_US_RDF,Porsche AS_DE_KAS,Porsche AS_DE_SSN,Porsche AS_HQ_DE_SSN,Porsche AS_WA_DE_SSN,Porsche_CN_BJS,Porsche_CN_NJG,Porsche_CZ_OSR,Porsche_DE_AAH,Porsche_DE_BBI,Porsche_DE_DTN,Porsche_DE_SHM,Porsche_DE_STR,Porsche_DE_VBS,Porsche_DE_WDB,Porsche_DE_WSC,Porsche_SK_BTS,Porsche_SK_DNV,Porsche_SK_HST,Porsche_SK_KNM,QEV_ES_ABE,RVA_DE_NDH,Raymond_US_EEG,Rempus_KR_HWS,Renault AS HQ_FR_FNS,Renault AS HQ_FR_RHE,Renault AS_FR_FNS,Renault AS_FR_HRB,Renault AS_FR_RHE,Renault AS_KR_HAN,Renault AS_KR_PUS,Renault_ES_VLL,Renault_FR_BAT,Renault_FR_CLE,Renault_FR_DOI,Renault_FR_HRB,Renault_FR_SNV,Renault_GB_ABO,Renault_KR_PUS,Renault_SI_NMO,SAIC_CN_SHA,SEMIROAD_KR_HWS,SGM AS_CN_PDG,SGM_CN_PDG,SKODA_CZ_MBV,STB_DE_MUC,STRIX_US_MKC,SYMC_KR_INC,SYMC_KR_PYK,SYMC_KR_TAE,Samsung SDI_AT_GRZ,Samsung SDI_CN_BJS,Shanghai Feixiang_CN_SHA,Shinden Hihhtex_JP_SMZ,Shinden Hihhtex_KR_WJU,Siemens_NO_TRD,Sime Darby_MY_KKH,Skysource_CH_BE1,Skysource_CN_NKG,Skyworth_CN_XUZ,Solaris_PL_OWA,Spear Power Systems_US_GVW,Sungwoo Hightech_KR_PUS,Suzhou Anjin_CN_SZH,TW sys_KR_TJN,TY_JP_7KA,TY_JP_FUK,TY_US_IGX,TY_US_VDH,Taiga_CA_MTR,Taiga_CA_QUE,Temsa bus & Coach_TR_ABK,VALEO_KR_SEJ,VAL_DE_222,VAL_DE_FFO,VAL_DE_KRD,VIA(OTS)_US_OEU,VW AS_BE_BRU,VW AS_DE_KAS,VW AS_DE_RSE,VW_CZ_MBV,VW_DE_74D,VW_DE_BDB,VW_DE_BWE,VW_DE_FAB,VW_DE_KAS,VW_DE_NEM,VW_DE_WOB,VW_DE_WVN,Valmet_DE_FRA,Valmet_DE_HAM,Valmet_DE_KRD,Vanderhall_US_PVU,Volta PS_US_HLM,Volvo AS_AU_SYD,Volvo AS_CN_SZH,Volvo AS_FR_HRB,Volvo AS_IL_TLV,Volvo AS_IN_MUB,Volvo AS_JP_NGO,Volvo AS_MY_KUL,Volvo AS_SE_GO5,Volvo AS_SE_GOT,Volvo AS_TH_BKK,Volvo AS_US_ONT,Volvo AS_WA_SE_GOT,Volvo_AU_SYD,Volvo_BE_GBU,Volvo_BE_GNE,Volvo_CN_SHA,Volvo_IL_TLV,Volvo_JP_NGO,Volvo_KR_SEL,Volvo_MY_KUL,Volvo_MY_SHA,Volvo_SE_ALO,Volvo_SE_GOT,Volvo_TH_BKK,Volvo_TW_TYN,Volvo_US_CHS,Volvo_US_HLM,Vremt AS_CN_SZH,Vremt_CN_SUZ,WA00-81-AS,WATTPACK_CN_BJS,WRSE_DE_ZCH,XL_US_BOS,Yuntong_CN_NGB,ZEEBUS_GB_BEF,ZeroEV(OTS)_US_TPE,Zhongjia_CN_CTU,Zhongjia_CN_DQG,Zhongjia_CN_SHA,Zhongjia_CN_TIZ,audi as_BE_BRU,dianchibao_CN_SHA,dianchibao_HK_MUN,equipmake(OTS)_GB_NRW,jemado_GB_LON,kokam_KR_NSN",
+    "actionFlag": "D",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P"
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6842530,
+   "at": "2026-11-20 09:23:24",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "AAEF1001I-A1-000",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843039,
+   "at": "2026-11-20 09:24:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4487,8 +6339,30 @@
    "params_parsed": true
   },
   {
-   "seq": 6678007,
-   "at": "2026-11-19 15:32:16",
+   "seq": 6843044,
+   "at": "2026-11-20 09:24:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "ACEP2065I-B1",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843751,
+   "at": "2026-11-20 09:25:26",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4509,8 +6383,30 @@
    "params_parsed": true
   },
   {
-   "seq": 6678023,
-   "at": "2026-11-19 15:32:17",
+   "seq": 6843760,
+   "at": "2026-11-20 09:25:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6843769,
+   "at": "2026-11-20 09:25:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4531,8 +6427,206 @@
    "params_parsed": true
   },
   {
-   "seq": 6678028,
-   "at": "2026-11-19 15:32:18",
+   "seq": 6843908,
+   "at": "2026-11-20 09:25:44",
+   "by": "dana.robot",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "dana.robot"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844045,
+   "at": "2026-11-20 09:25:56",
+   "by": "lucky-alex",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "lucky-alex"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844206,
+   "at": "2026-11-20 09:26:08",
+   "by": "zhangjiali",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "40",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "zhangjiali"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844358,
+   "at": "2026-11-20 09:26:20",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844540,
+   "at": "2026-11-20 09:26:32",
+   "by": "jinseon_ahn",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jinseon_ahn"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844671,
+   "at": "2026-11-20 09:26:43",
+   "by": "jsh96",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jsh96"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844773,
+   "at": "2026-11-20 09:26:55",
+   "by": "popiel",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "popiel"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6844907,
+   "at": "2026-11-20 09:27:06",
+   "by": "wangyucnb",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "wangyucnb"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845039,
+   "at": "2026-11-20 09:27:16",
+   "by": "kang_huichan",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "82",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "kang_huichan"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845261,
+   "at": "2026-11-20 09:27:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",
@@ -4553,8 +6647,52 @@
    "params_parsed": true
   },
   {
-   "seq": 6678118,
-   "at": "2026-11-19 15:32:25",
+   "seq": 6845391,
+   "at": "2026-11-20 09:27:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845601,
+   "at": "2026-11-20 09:28:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "kind": "GET",
+   "fe": {
+    "valid": "",
+    "itemId": "",
+    "toSite": "",
+    "transMode": "",
+    "divisionId": "81",
+    "operationGroup": "",
+    "fromSite": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6845689,
+   "at": "2026-11-20 09:28:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
    "kind": "GET",

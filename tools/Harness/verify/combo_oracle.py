@@ -747,8 +747,11 @@ def load_display(asis_id):
             a = [s.strip().strip('"') for s in r['value'].strip('()').split(',')]
             if len(a) >= 2:
                 calls.setdefault(a[1], (a, f"{os.path.basename(r['file'])}:{r['line']}"))
+    # 2026-11-20 T492(SCP0028 V-00ec53f0 G7 'cboValid: 컨트롤 유형 UsrComboBox · 바인딩 없음'): UsrComboBox.DataBind(Data.Type.X, …) 바인딩(combo_src '<bind …>' · facts_combosrc T438)
+    #   은 DataBind(dt) 에서 DisplayMember = NAME(01.Framework UsrComboBox.cs:47~55) — setListBox 호출이 없어 표시 열을 못 읽었다
+    dbind = {r['target']: r.get('ref', '') for r in read_csv(os.path.join(d, 'combo_src.csv')) if (r.get('var') or '').startswith('<bind ')}
     _DISP.clear()
-    _DISP.update({'types': types, 'calls': calls})
+    _DISP.update({'types': types, 'calls': calls, 'databind': dbind})
 
 
 def asis_display(ctl):
@@ -763,6 +766,8 @@ def asis_display(ctl):
         if len(a) >= 5:
             return a[4].upper(), f"{t} DisplayMember={a[4]} @{ref}"
         return ('CODE' if len(a) == 3 else 'NAME'), f"{t} setListBox {len(a)}인자 @{ref}"
+    if not a and ctl in _DISP.get('databind', {}):
+        return 'NAME', f"{t or '콤보'} DataBind(Data.Type) → DataBind(dt) DisplayMember=NAME(UsrComboBox.cs:47~55) @{_DISP['databind'][ctl].split(' ')[0]}"
     return '', f'컨트롤 유형 {t or "미상"} · 바인딩 {"있음" if a else "없음"}'
 
 
@@ -839,6 +844,19 @@ def main():
             by_var.setdefault(r['var'], []).append(r)
 
         def run_source(r, ctx):
+            """T391(2026-11-20 SSP0014 B4 '?Warranty'): 원천 결과 + 화면이 DataTable 에 직접 넣은 행(combo_src.added_rows · NewRow → Rows.Add/InsertAt)"""
+            rows, meta = _run_source0(r, ctx)
+            add = json.loads(r.get('added_rows') or '[]')
+            if add and rows is not None:
+                rows = list(rows)
+                for a in add:
+                    item = {'CODE': str(a.get('CODE', '')), 'NAME': str(a.get('NAME', ''))}
+                    pos = int(a.get('pos', -1))
+                    rows.insert(pos, item) if 0 <= pos <= len(rows) else rows.append(item)
+                meta = {**meta, 'added': [f"{a.get('CODE')}:{a.get('NAME')} @{a.get('ref', '')}" for a in add]}
+            return rows, meta
+
+        def _run_source0(r, ctx):
             if r['unresolved']:
                 raise KeyError(r['unresolved'])
             ps = json.loads(r['args'] or '[]')
@@ -980,7 +998,7 @@ def main():
                 noexp = {k: v for k, v in ex.items() if not v.startswith(('데이터 차이', '조건 차이'))}
                 rec['explain'] = dict(list(ex.items())[:40])
                 if unk:
-                    rec['b4'] = '판정필요'; rec['why'] = f'TO-BE 표시값 {len(unk)}건을 AS-IS 코드로 환산 못 함(표현 {rep_name}) 예: {unk[:5]}'
+                    rec['b4'] = '판정필요'; rec['why'] = f'TO-BE 표시값 {len(unk)}건을 AS-IS 코드로 환산 못 함(표현 {rep_name}) 예: {unk[:5]}' + (f" · AS-IS만 {a_only[:5]} · AS-IS 화면 하드코딩 항목 {meta['added']}" if meta.get('added') else '')
                 elif noexp and not cond:
                     rec['b4'] = '판정필요'
                     rec['why'] = f'AS-IS {len(a_keys)}건 vs TO-BE {len(t_keys)}건 · 차이 {len(noexp)}건 설명 불가: ' + '; '.join(f'{k}: {v}' for k, v in list(noexp.items())[:6])

@@ -1,0 +1,49 @@
+{
+ "rule_id": "B3",
+ "hash": "0a35b1d1b527954d",
+ "groups": [
+  {
+   "refs": [
+    "DM-16",
+    "DM-19",
+    "DM-6",
+    "DM-P8"
+   ],
+   "target": "그리드 셀 콤보(End Customer·Sold-to Customer) 후보",
+   "condition": "신규행 Insert 후 콤보 열기",
+   "expected": "End Customer·Sold-to Customer 등 그리드 셀 콤보 후보에 빈 행 0건·중복 0건이고, 원천 정렬 순서대로 표시된다.",
+   "why": "넷 다 신규행 Insert 때 그리드 셀 콤보(End Customer 포함) 후보를 열어 빈 행·중복이 없고 정렬이 맞는지 보는 같은 확인이다. Div나 부서 파라미터 차이는 원래 결함의 조건이라 무시했다."
+  },
+  {
+   "refs": [
+    "GAP-354"
+   ],
+   "target": "조회조건 콤보 후보 정렬",
+   "condition": "Team(DEPT_ID)·End Customer(END_CUSTOMER)·Sales Site(SCM_SITE_ID)·Plant Site 목록 열기",
+   "expected": "조회조건 콤보(Team·End Customer·Sales Site·Plant Site) 후보가 표시명 순(숫자-영문-한글)으로 정렬된다.",
+   "why": "그리드 셀이 아니라 조회조건 콤보가 대상이고, 기대 정렬 규칙도 원천 순서가 아닌 표시명 순(숫자-영문-한글)이어서 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-213"
+   ],
+   "target": "Lookup 기반 정보 표시 순서(SYSTEM_ADM 등)",
+   "condition": "",
+   "expected": "SYSTEM_ADM 같은 Lookup 값이 Lookup Display Seq 순서대로 표시된다.",
+   "why": "콤보가 아니라 Lookup 표시 영역이 대상이고, 기준이 Display Seq여서 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-94"
+   ],
+   "target": "버전 팝업 Version 목록 정렬",
+   "condition": "버전 팝업 열기",
+   "expected": "Version 팝업 목록이 Version명 DESC(내림차순)로 정렬된다.",
+   "why": "대상이 팝업 목록이고 기대 결과가 내림차순 정렬이라 다른 항목과 확인 동작이 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:39:52",
+ "cost": 0.0543652
+}

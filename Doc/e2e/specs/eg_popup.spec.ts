@@ -831,13 +831,18 @@ async function runCell(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
     let bodyHasBad = false; let saveNote = ''; let serverRejected = false;
     if (after === bad && await nscm.subButtonVisible('Save').catch(() => false)) {
       const m1 = net.mark(); await nscm.subButton('Save').click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
+      // 2026-11-20 T375(SSP0014 E7 8행 'Save 요청 0건 · 알림 ''): 확인 버튼을 먼저 눌러 저장 전 검증 알림(USER_CHECK → MSG01261)을 읽기 전에 닫았다 → 누르기 전에 보이는 알림을 읽는다
+      const alertBefore = (await nscm.alertText().catch(() => '')) || '';
       const yes = p.getByRole('button', { name: /^(확인|OK|Yes|예|Confirm)$/i }).last(); if (await yes.isVisible().catch(() => false)) await yes.click({ timeout: 2_000 }).catch(() => undefined);
       await settle(p, net, m1, 15_000); const sv = net.since(m1).filter(r => /SAVE|INS|UPD/i.test(r.btn + r.url)); bodyHasBad = sv.some(r => r.body.includes(bad));
-      const alertAfter = (await nscm.alertText().catch(() => '')) || '';
+      // T375: Save 뒤 저장 요청 없이 검증 호출(SAVE·조회 류가 아닌 call-proc)만 나가고 알림이 뜨면 = 저장 전 서버 검증 거부(잘못된 값이 저장되지 않음)
+      const preCalls = net.since(m1).filter(r => /call-proc/.test(r.url) && !/SAVE|INS|UPD|DEL/i.test(r.btn + r.url) && !/SEARCH|COMBO|INIT|LIST/i.test(r.btn));
+      const alertAfter = (await nscm.alertText().catch(() => '')) || alertBefore;
+      const preRejected = !sv.length && preCalls.length > 0 && !!alertAfter && !/(저장(이|되|을)|success|완료|saved)/i.test(alertAfter);
       // 서버(SP) 검증으로 거부된 저장 — 요청은 갔지만 오류 응답/오류 알림이 있고 성공 알림이 아니면 '잘못된 값이 저장되지 않음'(AS-IS 는 FE 사전검증 MSG00458 · 2026-11-06 SCP0127 E7 보완 = PKG SAVE 품목 검증)
-      serverRejected = bodyHasBad && (sv.some(r => r.status >= 400) || (!!alertAfter && !/(저장(이|되|을)|success|완료|saved)/i.test(alertAfter)));
+      serverRejected = preRejected || (bodyHasBad && (sv.some(r => r.status >= 400) || (!!alertAfter && !/(저장(이|되|을)|success|완료|saved)/i.test(alertAfter))));
       // 2026-11-07 T147: 어떤 요청을 저장 요청으로 셌는지(btn/url) 증거에 남긴다 — SCP0131 'Save 요청 1건(응답 200)' 인데 BE·SCM_COM_SQL_LOG 에 SAVE 호출 0건(11:21~11:28 실측)이라 포착 대상 확인 불가였다
-      saveNote = ` · Save 요청 ${sv.length}건(응답 ${sv.map(r => r.status).join(',') || '-'} · ${sv.map(r => (r.btn ? `${r.sheet}/${r.btn}` : r.url).slice(0, 60)).join(' | ') || '-'}) · 잘못된 값 포함 ${bodyHasBad} · 알림 '${alertAfter.slice(0, 80)}'${serverRejected ? ' · 서버 검증 거부(저장 안 됨)' : ''}`; await nscm.clearDialogs().catch(() => undefined);
+      saveNote = ` · Save 요청 ${sv.length}건(응답 ${sv.map(r => r.status).join(',') || '-'} · ${sv.map(r => (r.btn ? `${r.sheet}/${r.btn}` : r.url).slice(0, 60)).join(' | ') || '-'}) · 잘못된 값 포함 ${bodyHasBad} · 알림 '${alertAfter.slice(0, 80)}'${preRejected ? ` · 저장 전 검증 호출 ${preCalls.map(r => r.btn || r.url.slice(-40)).join(',')} 뒤 저장 요청 없음` : ''}${serverRejected ? ' · 서버 검증 거부(저장 안 됨)' : ''}`; await nscm.clearDialogs().catch(() => undefined);
     }
     // 2026-11-07 T147: eg 실행은 VERIFY_NO_SAVE=1(fixtures/test.ts:77 — 저장 call-proc 를 픽스처가 가로채 200) → 서버(PKG) 검증 거부는 이 경로에서 관측 불가.
     //   가짜 저장을 '잘못된 값이 저장됨' FAIL 로 보던 결함(SCP0131 v7 EG-8044996f · BE·SCM_COM_SQL_LOG 에 SAVE 0건 실측) → FE 사전검증 없음은 사실로 남기되 판정필요(사용자 결정) · 서버 검증은 실저장 경로에서

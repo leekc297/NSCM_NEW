@@ -1,0 +1,29 @@
+{
+  "id": "20261120_112617_R12_ALL",
+  "at": "2026-11-20T11:26:17+09:00",
+  "ms": 1795141577133,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_job_mirror.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_job_mirror.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 12 · FAIL 2 · FAIL 같은 화면 창: 머리 줄 + 작업 출력  / FAIL 나중에 연 창: 쌓아 둔 내용 전달 19건 / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_job_mirror.js",
+    "file": "t_job_mirror.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T11:33:23+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -425,7 +425,7 @@ export const MeasureSelectModal = ({
             onRowDoubleClickRight={moveOneToBase}
           />
 
-          {/* 버튼바 — Default·Cancel=outlined, OK=contained+ConfirmIcon. 순서는 OK 다음 Cancel. */}
+          {/* 버튼바 — Default·Cancel=outlined, OK=contained+ConfirmIcon. 순서는 Cancel 다음 OK. */}
           <div className={styles.actionBar}>
             <Button
               appearance='outlined'
@@ -435,6 +435,13 @@ export const MeasureSelectModal = ({
               onClick={handleDefault}
             />
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Cancel'
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -442,13 +449,6 @@ export const MeasureSelectModal = ({
               iconComponent={<ControlConfirmIcon size='small' />}
               iconPosition='leading'
               onClick={handleOk}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Cancel'
-              onClick={modalClose}
             />
           </div>
         </div>

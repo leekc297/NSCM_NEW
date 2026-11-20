@@ -1,0 +1,70 @@
+{
+ "rule_id": "DB-SYN",
+ "hash": "ce37e3887afc16be",
+ "groups": [
+  {
+   "rows": [
+    "EG-41cab32e"
+   ],
+   "why": "PKG_SCP0005의 TB_FX_* 참조와 ATTRIBUTE9 콤보 SQL_ID 실존을 정적으로 점검하는 행으로, 대상 패키지와 기대가 같은 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-42c71c59"
+   ],
+   "why": "FindDataMain 파라미터 6종의 'ALL'→'' 변환(store setFilter/orEmpty)을 추적하는 행으로, 다른 행과 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-4f9139c7"
+   ],
+   "why": "P_SCP0005_GET_COUNTRY_CITY 프로시저만 확인하는 추적 행이고, 같은 SP를 다루는 행이 없다."
+  },
+  {
+   "rows": [
+    "T-74b664fb"
+   ],
+   "why": "팝업에서 쓰는 SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID 객체 하나만 대상으로 하는 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-80e558e7"
+   ],
+   "why": "P_SCP0005_GET_DISTRIBUTION_ROUTE 프로시저 추적 행으로, 대상 객체가 다른 SP와 다르다."
+  },
+  {
+   "rows": [
+    "T-9374e9e4"
+   ],
+   "why": "SCP0005_GET_DISTRIBUTION_ROUTEID(팝업 아님) 추적 행이며, HISTORY_ROUTEID 팝업 SP와는 객체도 상태도 다르다."
+  },
+  {
+   "rows": [
+    "T-e3d3d7ca"
+   ],
+   "why": "저장 SP인 SCP0005_SAVE_DISTRIBUTION_ROUTE의 추적 행으로, 조회 SP들과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-9dc07e60"
+   ],
+   "why": "V-dbf10e0d와 대상은 겹친다. 하지만 이 행은 CheckList 실행 시 오류를 결함이 아니라 'DB 객체/메타 오류'로 표시하는 동작까지 기대하므로, 확신이 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-a8d1a848"
+   ],
+   "why": "DMF 계열 PKG 6종의 TB_FX_USER 등 사용자 테이블 참조를 보는 행이어서, PKG_SCP0005를 보는 EG-41cab32e와 대상 객체가 다르다."
+  },
+  {
+   "rows": [
+    "V-dbf10e0d"
+   ],
+   "why": "BE 계정 객체·메타가 있고 VALID한지 보고, 없으면 차단(조치 필요 1번 + CheckList 재작성 요청)하는 선행 조건 규칙이다. V-9dc07e60과 기대 표현이 일부 달라서 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:39:42",
+ "cost": 0.07361489999999998
+}

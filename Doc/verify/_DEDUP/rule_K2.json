@@ -1,0 +1,151 @@
+{
+ "rule_id": "K2",
+ "hash": "dd269fadabec1b67",
+ "groups": [
+  {
+   "refs": [
+    "DM-132",
+    "DM-138"
+   ],
+   "target": "조회 그리드 컬럼 구성",
+   "condition": "Division별 조회",
+   "expected": "조회 그리드 컬럼이 컬럼셋팅 설정값대로 그려지고, 설정에 없는 내부 컬럼(COL_LIST 등)은 보이지 않는다",
+   "why": "두 항목 모두 조회 그리드의 컬럼 구성이 컬럼셋팅 설정과 같은지 보는 확인이다."
+  },
+  {
+   "refs": [
+    "DM-152"
+   ],
+   "target": "컬럼셋팅 OK 시 그리드 즉시 재구성",
+   "condition": "Div 전환 후 컬럼셋팅 변경 → OK",
+   "expected": "컬럼셋팅에서 OK를 누르면 팝업이 닫히고 그리드 컬럼이 바로 다시 구성된다",
+   "why": "OK를 누른 직후 바로 반영되는지 보는 확인이라 단순 구성 일치와 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-158"
+   ],
+   "target": "컬럼·메저 셋팅 무변경 Save/OK",
+   "condition": "아무것도 바꾸지 않고 Save/OK",
+   "expected": "컬럼·메저 셋팅 팝업에서 바꾼 것 없이 Save/OK를 누르면 재조회하지 않는다",
+   "why": "재조회를 하지 않아야 하는지 보는 확인으로 다른 항목에는 없다."
+  },
+  {
+   "refs": [
+    "DM-185",
+    "DM-P60"
+   ],
+   "target": "컬럼셋팅 팝업 필수 컬럼 조작 제한",
+   "condition": "필수 컬럼(USER_SELECTED_FLAG=N, 예: Company ID·End Customer) 해제·Invisible 이동 시도",
+   "expected": "필수 컬럼은 빨간색으로 보이고 해제하거나 Invisible 영역으로 옮길 수 없으며, 시도하면 다국어 메시지가 뜬다. 사용자가 고른 컬럼은 조회 결과에 반드시 나온다",
+   "why": "둘 다 컬럼셋팅 팝업에서 필수 컬럼을 빼거나 옮기려 할 때 막히는지 보는 확인이다."
+  },
+  {
+   "refs": [
+    "DM-61",
+    "GAPPI-18"
+   ],
+   "target": "Div 전환 시 필수 컬럼 유지",
+   "condition": "한 Div에서 필수 컬럼을 뺀 채 개인화 저장 → 다른 Div로 바꿔 조회",
+   "expected": "개인화 저장이 다른 Div의 필수 컬럼(Project Code·Plant Site·END_CUSTOMER_ID 등)을 지우지 않고, Div를 바꾸면 그 Div의 필수 컬럼이 자동으로 들어가 항상 보인다",
+   "why": "둘 다 개인화가 있어도 Div를 바꾸면 그 Div의 필수 컬럼이 보이는지 보는 같은 확인이다."
+  },
+  {
+   "refs": [
+    "DM-186"
+   ],
+   "target": "Measure 명칭 MKT FCST[R+P]",
+   "condition": "",
+   "expected": "메저셋팅 기준으로 조회되고 Measure 명칭이 MKT FCST[R+P]로 나온다",
+   "why": "특정 Measure 명칭을 보는 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-195",
+    "DM-210",
+    "DM-244"
+   ],
+   "target": "조회 결과 Measure 표시 순서",
+   "condition": "메저셋팅 버튼이 있는 화면",
+   "expected": "메저셋팅 순서가 저장되고, 조회 결과 Measure가 저장된 개인화 메저셋팅 순서대로 나온다",
+   "why": "세 항목 모두 Measure 표시 순서가 메저셋팅 순서와 같은지 보는 확인이다."
+  },
+  {
+   "refs": [
+    "DM-26",
+    "DM-C1"
+   ],
+   "target": "개인화 없을 때 Default 컬럼·Measure",
+   "condition": "개인화를 저장하지 않은 사용자, Div 전환",
+   "expected": "개인화 정보가 없으면 컬럼셋팅 팝업·그리드와 Measure가 선택한 Div의 UI Category Default 구성으로 나오고, Div를 바꾸면 다시 구성된다",
+   "why": "둘 다 개인화가 없는 사용자에게 Div Default 구성이 나오는지 보는 확인이다."
+  },
+  {
+   "refs": [
+    "DM-27"
+   ],
+   "target": "조회 건수·Team 컬럼·컬럼팝업 저장 구성",
+   "condition": "",
+   "expected": "조회 건수가 AS-IS와 같고, Team은 Name으로 나오며, 컬럼팝업에 저장한 구성대로 조회된다",
+   "why": "건수·표시값·구성처럼 서로 다른 대상이 섞여 있어 확신이 없으므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-47"
+   ],
+   "target": "컬럼셋팅 VERSION·AS FROM SITE 컬럼",
+   "condition": "Div 40",
+   "expected": "VERSION은 셋팅 목록에서 빠지고 항상 보이며, 40 Div에서는 AS FROM SITE가 보이지 않는다",
+   "why": "특정 컬럼을 목록에서 빼거나 숨기는지 보는 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-62"
+   ],
+   "target": "Measure 셋팅 후보 구성",
+   "condition": "Div 40 / 81·81_JV",
+   "expected": "쓰지 않는 Measure는 빠지고, 40에는 VMI In Request/Plan/Inv가 있으며, 81·81_JV에는 MKT FCST AMT(KRW/LOC)가 없다",
+   "why": "Div별로 특정 Measure 후보가 있는지 없는지 보는 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P34"
+   ],
+   "target": "Column Setting 팝업 Default 버튼",
+   "condition": "",
+   "expected": "Default를 누르면 기본 컬럼 구성으로 돌아간다",
+   "why": "Default 버튼만 보는 확인으로, 저장 후 다시 여는 흐름까지 보는 DM-P54와는 동작이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P54"
+   ],
+   "target": "Column Setting 저장 유지·Default 기준",
+   "condition": "저장 → Close → 다시 열기",
+   "expected": "저장한 구성(새 탭)이 다시 열어도 남아 있고, Default는 처음 Default 기준으로 돌아간다",
+   "why": "저장 후 다시 열었을 때 남아 있는지 보는 동작이 들어 있어 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P58"
+   ],
+   "target": "Measure Setting 버튼 노출",
+   "condition": "",
+   "expected": "Measure Setting 버튼이 없다(노출 0)",
+   "why": "버튼이 없는지 보는 확인으로 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "GAP-203"
+   ],
+   "target": "Measure·Column 설정 후보 Division 기준 재조회",
+   "condition": "화면에 들어온 직후 Division 자동 선택(Search 전) → 설정 팝업 열기 → 후보 수 확인",
+   "expected": "칸·Measure 설정 목록이 Division 값이 정해질 때마다(자동 선택 포함) 그 Division 기준으로 다시 조회된다",
+   "why": "팝업 후보 목록이 Division 기준으로 다시 조회되는지 보는 확인이라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:46:00",
+ "cost": 0.1204812
+}

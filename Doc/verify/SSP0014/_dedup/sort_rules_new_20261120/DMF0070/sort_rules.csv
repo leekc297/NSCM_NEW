@@ -1,0 +1,18 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+DMF0070,SQL,DMF0070_GET_REQUEST_AUTO_LIST,Doc\asisfacts\db\modules\dbo.DMF0070_GET_REQUEST_AUTO_LIST.sql,93,,MAIL_INFO_DATE DESC,ORDER BY A.MAIL_INFO_DATE DESC,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,65,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,78,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,101,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,134,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,181,,"SORT_ORDER,CODE","ORDER BY SORT_ORDER, CODE",0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,232,,"SORT_ORDER,CODE","ORDER BY SORT_ORDER, CODE",0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,245,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,254,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,284,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,295,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,418,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,564,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0070,SQL,DMF0000_GET_COMMON_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0000_GET_COMMON_SPREAD_TITLE.sql,90,,"SEQ,SORT_ORDER_NO","ORDER BY SEQ, SORT_ORDER_NO",0,정적
+DMF0070,SQL,DMF0000_GET_COMMON_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0000_GET_COMMON_SPREAD_TITLE.sql,126,,"SEQ,SORT_ORDER_NO","ORDER BY SEQ, SORT_ORDER_NO",0,정적
+DMF0070,SQL,DMF0000_GET_COMMON_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0000_GET_COMMON_SPREAD_TITLE.sql,204,,"SEQ,SORT_ORDER_NO","ORDER BY SEQ, SORT_ORDER_NO",0,정적
+DMF0070,SQL,DMF0070_SAVE_REQUEST_AUTO_LIST,Doc\asisfacts\db\modules\dbo.DMF0070_SAVE_REQUEST_AUTO_LIST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

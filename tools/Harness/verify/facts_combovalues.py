@@ -71,6 +71,15 @@ def main():
                 ci = next((i for i, c in enumerate(cols) if c.upper() == 'CODE'), 0)
                 ni = next((i for i, c in enumerate(cols) if c.upper() == 'NAME'), 1 if len(cols) > 1 else 0)
                 ent['rows'] = done[key] = [{'CODE': str(x[ci]), 'NAME': str(x[ni])} for x in data]
+                # 2026-11-20 T391: 화면이 원천 DataTable 에 직접 넣은 행(combo_src.added_rows) 을 후보에 합친다(원천 결과 캐시 done 은 그대로)
+                add = json.loads(r.get('added_rows') or '[]')
+                if add:
+                    lst = list(ent['rows'])
+                    for x in add:
+                        it = {'CODE': str(x.get('CODE', '')), 'NAME': str(x.get('NAME', ''))}
+                        pos = int(x.get('pos', -1))
+                        lst.insert(pos, it) if 0 <= pos <= len(lst) else lst.append(it)
+                    ent['rows'] = lst; ent['added'] = [x.get('ref', '') for x in add]
             except Exception as ex:  # 실행 실패 = 사실 없음(추측 금지)
                 ent['unresolved'] = f'AS-IS 실행 실패: {str(ex)[:160]}'
     res = {'screen': sid, 'generated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'vars': out}

@@ -1,6 +1,6 @@
 # SSP0005 · SSP0005_GET_SHIPMENT_WORKING_DAY ↔ PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY
 
-- 실행: 2026-11-19 13:53:55
+- 실행: 2026-11-20 10:02:17
 - 파라미터: `{"p_from_yyyymmdd": "20260101", "p_to_yyyymmdd": "20261231", "p_division_id": "40", "p_company_id": "", "debug_mode": "F"}`
 - 종류: GET
 

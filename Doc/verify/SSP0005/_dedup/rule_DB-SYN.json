@@ -1,0 +1,83 @@
+{
+ "rule_id": "DB-SYN",
+ "hash": "b0434f9082dd686b",
+ "groups": [
+  {
+   "rows": [
+    "EG-12429e7e"
+   ],
+   "why": "Static check of PKG_SSP0005 for TB_FX_* references and ATTRIBUTE9 combo SQL_IDs; it targets a different package from PKG_COM0000, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-a240ad40"
+   ],
+   "why": "Static check of PKG_COM0000 for TB_FX_* references and ATTRIBUTE9; it targets a different package from PKG_SSP0005, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-06f72a8f"
+   ],
+   "why": "Traces the procedure PKG_COM0000.P_SCM0001_GET_SCP_PERIOD to row 3 of the mapping table; it checks a different property (the object exists) and no other row has this target."
+  },
+  {
+   "rows": [
+    "T-3444931c"
+   ],
+   "why": "Traces the U02 save-path ProgressForm (SaveData_Main, cs:438) to where it is implemented in the source, which is a different kind of check."
+  },
+  {
+   "rows": [
+    "T-478f9e93"
+   ],
+   "why": "Traces the U01 lookup-path ProgressForm (FindData_Main, cs:372) to where it is implemented in the source; it is a different element from U02."
+  },
+  {
+   "rows": [
+    "T-68dc3d78"
+   ],
+   "why": "Traces the procedure PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN to row 7 of the mapping table; no other row has this target."
+  },
+  {
+   "rows": [
+    "T-6f1c508f"
+   ],
+   "why": "Traces the save procedure SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW to row 2 of the mapping table; no other row has this target."
+  },
+  {
+   "rows": [
+    "T-a7f4d7bd"
+   ],
+   "why": "Traces the lookup procedure PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY to row 6 of the mapping table; no other row has this target."
+  },
+  {
+   "rows": [
+    "T-bee0587c"
+   ],
+   "why": "Traces the B03 combo (LookupCommon WEEK_WORK_TIME, cs:47) to where it is implemented in the source; no other row has this target."
+  },
+  {
+   "rows": [
+    "T-df72c12c"
+   ],
+   "why": "Traces P_SSP0005_GET to row 1 of the mapping table; the name is not the same as the other procedures, so it stays alone rather than being assumed identical."
+  },
+  {
+   "rows": [
+    "V-409b24ba"
+   ],
+   "why": "Checks the PKG_DMF* packages, which belong to other screens, for AS-IS user-table references; the target objects differ from this screen's packages."
+  },
+  {
+   "rows": [
+    "V-b59868b5",
+    "V-c1cc68f7"
+   ],
+   "why": "Both check that the DB objects (PKG, tables/views, synonyms, privileges) and metadata (menu, PROC_M, SHEET_COLUMNS) used by SCMP_APP exist and are VALID, and both expect the run to be blocked with the error listed as item 1 under 'action needed' (조치 필요) if anything is missing or broken, so one measu"
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:06:48",
+ "cost": 0.0805417
+}

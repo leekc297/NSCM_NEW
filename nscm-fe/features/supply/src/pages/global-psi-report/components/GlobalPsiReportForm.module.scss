@@ -1,7 +1,12 @@
 // Search Mode 라디오 2개 가로 한 줄 고정 — 라벨 숨김으로 폭을 확보해도 컨테이너가 좁으면 wrap(세로)되므로
 //   nowrap 으로 강제하고 라벨 줄바꿈도 막는다(사용자 지시 2026-10-23).
+// 세로 정렬 — 라디오 그룹 기본 높이(20px)는 같은 행의 콤보·입력(36px)보다 짧아, FormItem 이 그 높이에
+//   맞춰 셀이 위로 떠 보인다(사용자 신고 2026-11-19). min-height 를 콤보·입력과 같은 36px 로 맞추고
+//   내부도 세로 중앙정렬해, 다른 조건과 세로 중심을 동일하게 한다.
 .searchModeRadios {
   flex-wrap: nowrap;
   white-space: nowrap;
   gap: 16px;
+  align-items: center;
+  min-height: 36px;
 }

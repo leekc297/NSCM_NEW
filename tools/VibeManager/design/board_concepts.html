@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VMO 상황판 시안</title>
+<style>
+:root{--bg:#1b1d21;--bg2:#202329;--fg:#d7dae0;--mut:#8b93a1;--line:#2f343c;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--acc:#4c9aff;--cl:#a371f7;--sc:#56b6c2;--card:#23272e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 "Segoe UI","Malgun Gothic",sans-serif}
+.pick{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;padding:10px 16px;background:#14161a;border-bottom:1px solid var(--line)}
+.pick b{margin-right:8px}.pick button{background:#2a2f37;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit}
+.pick button.on{background:var(--acc);border-color:var(--acc);color:#fff}.pick .note{margin-left:auto;color:var(--mut);font-size:12px}
+.concept{display:none;padding:14px 16px 28px}.concept.on{display:block}
+.desc{color:var(--mut);margin:0 0 12px;max-width:980px}.desc b{color:var(--fg)}
+.vtabs{display:flex;gap:2px;align-items:center;height:34px;border-bottom:1px solid var(--line);margin-bottom:12px;font-size:12.5px}
+.vtabs span{padding:7px 12px;color:var(--mut)}.vtabs span.on{color:var(--fg);border-bottom:2px solid var(--acc)}.vtabs i{font-style:normal;margin-right:10px;font-weight:700}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;vertical-align:middle}.dot.w{background:var(--warn)}.dot.b{background:var(--bad)}.dot.m{background:#555}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:0 7px;font-size:11px;color:var(--mut)}
+.cl{color:var(--cl)}.sc{color:var(--sc)}.ok{color:var(--ok)}.wa{color:var(--warn)}.ba{color:var(--bad)}.mu{color:var(--mut)}
+.n{font-variant-numeric:tabular-nums}
+/* ── A 관제 ── */
+.A-top{display:grid;grid-template-columns:repeat(3,1fr) 1.4fr;gap:10px;margin-bottom:10px}
+.A-srv{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.A-srv .big{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok);font-weight:700}
+.A-srv .t{font-weight:700}.A-srv .s{color:var(--mut);font-size:11.5px}
+.A-ai{background:linear-gradient(135deg,color-mix(in srgb,var(--cl) 22%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--cl) 40%,var(--line));border-radius:10px;padding:10px 12px}
+.A-ai .h{font-weight:700;margin-bottom:4px}.A-ai .row{display:flex;gap:14px}.A-ai .row div{display:flex;flex-direction:column}.A-ai .row b{font-size:20px}
+.A-grid{display:grid;grid-template-columns:2.2fr 1fr;gap:10px}
+.A-box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.A-box h3{margin:0 0 8px;font-size:12.5px;display:flex;gap:8px;align-items:baseline}.A-box h3 small{color:var(--mut);font-weight:400}
+.A-run{border-left:3px solid var(--acc);background:var(--bg2);border-radius:6px;padding:8px 10px;margin-bottom:8px}
+.A-run .l1{display:flex;gap:8px;align-items:baseline}.A-run .l1 b{font-size:13.5px}.A-run .l1 .sp{margin-left:auto}
+.steps{display:flex;gap:3px;margin:7px 0 4px}.steps i{flex:1;height:7px;border-radius:3px;background:#3a3f48}.steps i.d{background:var(--ok)}.steps i.r{background:var(--cl)}.steps i.rs{background:var(--sc)}
+.A-run .l3{color:var(--mut);font-size:11.5px}
+.ring{display:flex;gap:10px;justify-content:space-around}
+.ring div{text-align:center}.ring svg{display:block;margin:0 auto 4px}.ring b{font-size:12px}.ring small{display:block;color:var(--mut);font-size:11px}
+.tl{list-style:none;margin:0;padding:0}.tl li{display:grid;grid-template-columns:44px 14px 1fr;gap:6px;padding:4px 0;border-bottom:1px dashed var(--line);font-size:12px}
+.tl li:last-child{border-bottom:none}.tl .tm{color:var(--mut)}.tl .ic{font-size:11px}
+/* ── B 흐름 ── */
+.B-bar{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:10px;flex-wrap:wrap}
+.B-bar .g{display:flex;align-items:center;gap:6px}.B-bar .mini{width:70px;height:6px;background:#3a3f48;border-radius:3px;overflow:hidden}.B-bar .mini i{display:block;height:100%;background:var(--ok)}
+.B-bar .sep{width:1px;height:18px;background:var(--line)}
+.B-tl{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px 6px}
+.B-axis{display:grid;grid-template-columns:150px 1fr;font-size:11px;color:var(--mut);margin-bottom:4px}.B-axis .ticks{display:flex;justify-content:space-between}
+.B-lane{display:grid;grid-template-columns:150px 1fr;align-items:center;min-height:44px;padding:4px 0;border-top:1px solid var(--line)}
+.B-lane .nm{font-size:12px}.B-lane .nm small{display:block;color:var(--mut);font-size:11px}
+.B-track{position:relative;height:22px;background:repeating-linear-gradient(90deg,transparent 0 calc(16.66% - 1px),#2a2e35 calc(16.66% - 1px) 16.66%)}
+.seg{position:absolute;top:3px;height:16px;border-radius:4px;font-size:10.5px;line-height:16px;padding:0 5px;color:#0d1117;white-space:nowrap;overflow:hidden}
+.seg.s{background:var(--sc)}.seg.c{background:var(--cl);color:#fff}.seg.w{background:repeating-linear-gradient(45deg,#5a4a1d 0 5px,#3d331a 5px 10px);color:#f0d38a;border:1px solid var(--warn)}
+.seg.f{background:var(--bad);color:#fff}.seg.now{outline:2px solid #fff;outline-offset:1px}
+.B-now{position:absolute;top:-4px;bottom:-4px;width:2px;background:#fff;opacity:.6}
+.B-leg{display:flex;gap:14px;font-size:11.5px;color:var(--mut);margin:8px 0 2px}.B-leg span i{display:inline-block;width:14px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.B-low{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.B-low .A-box table{width:100%;border-collapse:collapse}.B-low td,.B-low th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}.B-low th{color:var(--mut);font-weight:600}
+.waitbar{height:6px;background:#3a3f48;border-radius:3px;position:relative;margin-top:3px}.waitbar i{position:absolute;left:0;top:0;bottom:0;background:var(--warn);border-radius:3px}
+/* ── C 요약 ── */
+.C-head{display:flex;gap:14px;align-items:center;padding:16px 18px;border-radius:12px;background:linear-gradient(120deg,color-mix(in srgb,var(--ok) 16%,var(--card)),var(--card) 60%);border:1px solid var(--line);margin-bottom:12px}
+.C-head .big{font-size:22px;font-weight:700}.C-head .sub{color:var(--mut)}.C-head .badge{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--ok) 25%,transparent);color:var(--ok);font-size:22px}
+.C-nums{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
+.C-nums div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}.C-nums b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.C-nums small{color:var(--mut)}
+.C-nums .hl{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.C-two{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+.C-sec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.C-sec h3{margin:0 0 8px;font-size:13px;display:flex;gap:8px;align-items:baseline}.C-sec h3 small{color:var(--mut);font-weight:400}
+.C-item{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line)}.C-item:last-child{border:none}
+.C-item .ic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:13px;flex:none}
+.C-item .ic.c{background:color-mix(in srgb,var(--cl) 25%,transparent);color:var(--cl)}.C-item .ic.w{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}.C-item .ic.o{background:color-mix(in srgb,var(--ok) 22%,transparent);color:var(--ok)}.C-item .ic.b{background:color-mix(in srgb,var(--bad) 22%,transparent);color:var(--bad)}
+.C-item .tx b{display:block}.C-item .tx span{color:var(--mut);font-size:12px}.C-item .rt{margin-left:auto;color:var(--mut);font-size:12px;white-space:nowrap}
+.C-quiet{color:var(--mut);display:flex;gap:16px;flex-wrap:wrap;font-size:12px}
+.C-quiet span{border:1px dashed var(--line);border-radius:8px;padding:4px 10px}
+.ex{color:var(--warn);font-size:11px;margin-left:6px}
+@media (max-width:900px){.A-top,.A-grid,.B-low,.C-two{grid-template-columns:1fr}.C-nums{grid-template-columns:repeat(3,1fr)}}
+</style></head><body>
+<div class="pick"><b>VMO 상황판 시안</b>
+  <button data-c="A" class="on">A 관제실</button><button data-c="B">B 시간 흐름</button><button data-c="C">C 한눈 요약</button>
+  <span class="note">서버, 부하 값 = 2026-11-20 00:02 실측 · 실행 중, 대기, 사건 = 시안용 예시 값</span></div>
+
+<!-- ───────────── A 관제실 ───────────── -->
+<section class="concept on" id="A">
+  <p class="desc"><b>A 관제실.</b> 위 줄에 서버 3개와 VMO 활동(오늘 자동 보완, 되돌림, 열린 사건)을 고정합니다. 가운데는 실행 중인 체인을 카드 1장씩, 단계 막대로 보여 줍니다(청록 = 스크립트, 보라 = Claude). 오른쪽은 부하 원형 계기와 오늘의 사건 흐름입니다. 지금 표 4개를 카드와 시간 순 목록으로 바꾼 형태입니다.</p>
+  <div class="vtabs"><i>VMO</i><span class="on">상황판</span><span>기능</span><span>사건</span><span>개선안</span><span>자가진단</span><span>이력</span><span>에이전트</span><span>Log</span></div>
+  <div class="A-top">
+    <div class="A-srv"><div class="big">BE</div><div><div class="t"><span class="dot"></span>응답 있음 · 8080</div><div class="s">VM 이 띄움 · 18:09 부터</div></div></div>
+    <div class="A-srv"><div class="big">FE</div><div><div class="t"><span class="dot"></span>응답 있음 · 5173</div><div class="s">VM 이 띄움 · 18:10 부터</div></div></div>
+    <div class="A-srv"><div class="big" style="font-size:11px">IIS</div><div><div class="t"><span class="dot"></span>응답 있음 · 8086</div><div class="s">AS-IS 런처</div></div></div>
+    <div class="A-ai"><div class="h"><span class="cl">●</span> VMO 오늘<span class="ex">예시</span></div><div class="row"><div><b class="ok">7</b><small class="mu">자동 보완</small></div><div><b class="wa">2</b><small class="mu">되돌림</small></div><div><b>4</b><small class="mu">열린 사건</small></div><div><b>0</b><small class="mu">승인 필요</small></div></div></div>
+  </div>
+  <div class="A-grid">
+    <div>
+      <div class="A-box"><h3>지금 실행 중<small>3건</small><span class="ex">예시</span></h3>
+        <div class="A-run"><div class="l1"><b>SCP0111</b><span>CheckList</span><span class="chip">VM#2</span><span class="sp n">경과 14분 32초</span></div>
+          <div class="steps"><i class="d"></i><i class="r"></i><i></i></div>
+          <div class="l3"><span class="cl">● Claude</span> 2/3 미검증 해소 · 6분 12초째 · 앞 단계 CheckList 수행 8분 20초 통과</div></div>
+        <div class="A-run" style="border-left-color:var(--sc)"><div class="l1"><b>SSP0005</b><span>run_verify</span><span class="chip">업무 작업</span><span class="sp n">경과 4분 05초</span></div>
+          <div class="steps"><i class="rs"></i></div>
+          <div class="l3"><span class="sc">● 스크립트</span> PID 30112 · 로그 .vibe/logs/S8.verify_SSP0005.log · 마지막 출력 3초 전</div></div>
+        <div class="A-run" style="border-left-color:var(--warn)"><div class="l1"><b>업무 작업</b><span>문서 생성 3화면</span><span class="sp n">1/3 완료</span></div>
+          <div class="steps"><i class="d"></i><i class="r"></i><i></i></div>
+          <div class="l3">DMF0042 완료 · DMF0044 진행 · DMF0049 대기</div></div>
+      </div>
+      <div class="A-box" style="margin-top:10px"><h3>대기와 잠금<small>2건</small><span class="ex">예시</span></h3>
+        <ul class="tl"><li><span class="tm n">2:10</span><span class="ic wa">◔</span><span><b>SSP0014</b> 부하 입장 대기 · CPU 기준 80% · 입장 간격 120초</span></li>
+        <li><span class="tm n">0:40</span><span class="ic wa">◔</span><span><b>DMF0042</b> 시험 데이터 구간 · 앞 실행 PID 28056 · _run.dbwin.DMF0042.lock</span></li></ul></div>
+    </div>
+    <div>
+      <div class="A-box"><h3>부하<small>입장 기준</small></h3>
+        <div class="ring">
+          <div><svg width="78" height="78" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="#3a3f48" stroke-width="3.2"/><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ok)" stroke-width="3.2" stroke-dasharray="10 90" transform="rotate(-90 18 18)" stroke-linecap="round"/><text x="18" y="21" text-anchor="middle" fill="#d7dae0" font-size="8" font-weight="700">10%</text></svg><b>CPU</b><small>기준 &lt; 80%</small></div>
+          <div><svg width="78" height="78" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="#3a3f48" stroke-width="3.2"/><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--ok)" stroke-width="3.2" stroke-dasharray="72 28" transform="rotate(-90 18 18)" stroke-linecap="round"/><text x="18" y="21" text-anchor="middle" fill="#d7dae0" font-size="6.2" font-weight="700">9,023</text></svg><b>여유 메모리 MB</b><small>기준 ≥ 3,072</small></div>
+          <div><svg width="78" height="78" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="#3a3f48" stroke-width="3.2" stroke-dasharray="2 2"/><text x="18" y="21" text-anchor="middle" fill="#8b93a1" font-size="5.5">미측정</text></svg><b>TCP 연결</b><small>경고 12,000</small></div>
+        </div></div>
+      <div class="A-box" style="margin-top:10px"><h3>오늘 흐름<small>최근 8건</small><span class="ex">예시</span></h3>
+        <ul class="tl">
+          <li><span class="tm">23:59</span><span class="ic cl">✦</span><span>자동 보완 반영 · workbench.js 웹뷰 구문 시험</span></li>
+          <li><span class="tm">23:55</span><span class="ic wa">↺</span><span>자동 보완 되돌림 · doc_style.py 검증 기대값 불일치</span></li>
+          <li><span class="tm">23:53</span><span class="ic ba">!</span><span>R12 시험 실패 · t_server_service.js</span></li>
+          <li><span class="tm">23:52</span><span class="ic ok">✓</span><span>설치 폴더 동기화 1개 파일</span></li>
+          <li><span class="tm">23:49</span><span class="ic mu">⟳</span><span>VS Code 창 다시 로드</span></li>
+          <li><span class="tm">23:25</span><span class="ic cl">✦</span><span>자가진단 개선안 5건 등록</span></li>
+          <li><span class="tm">22:50</span><span class="ic ba">!</span><span>R12 S2 시험 실패</span></li>
+          <li><span class="tm">22:45</span><span class="ic ok">✓</span><span>자동 보완 반영 · EPERM 재시도</span></li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── B 시간 흐름 ───────────── -->
+<section class="concept" id="B">
+  <p class="desc"><b>B 시간 흐름.</b> 최근 60분을 가로축으로 두고 화면마다 한 줄씩 무엇이 언제 돌았는지 그립니다. 스크립트(청록), Claude(보라), 대기(빗금 노랑), 실패(빨강)가 길이로 보여서 <b>어디서 시간을 쓰고 기다렸는지</b>가 바로 보입니다. 서버와 부하는 맨 위 한 줄로 줄였습니다. 대기 분석을 앞에 두는 안입니다.</p>
+  <div class="vtabs"><i>VMO</i><span class="on">상황판</span><span>기능</span><span>사건</span><span>개선안</span><span>자가진단</span><span>이력</span><span>에이전트</span><span>Log</span></div>
+  <div class="B-bar">
+    <span class="g"><span class="dot"></span>BE 8080</span><span class="g"><span class="dot"></span>FE 5173</span><span class="g"><span class="dot"></span>IIS 8086</span><span class="sep"></span>
+    <span class="g">CPU <span class="mini"><i style="width:10%"></i></span><b class="n">10%</b></span>
+    <span class="g">여유 메모리 <span class="mini"><i style="width:72%"></i></span><b class="n">9,023 MB</b></span>
+    <span class="g mu">TCP 미측정</span><span class="sep"></span>
+    <span class="g"><span class="cl">✦</span> 자동 보완 오늘 7 · 되돌림 2<span class="ex">예시</span></span><span class="g"><span class="ba">!</span> 열린 사건 4</span>
+  </div>
+  <div class="B-tl">
+    <div class="B-axis"><span></span><div class="ticks"><span>23:05</span><span>23:15</span><span>23:25</span><span>23:35</span><span>23:45</span><span>23:55</span><span>지금</span></div></div>
+    <div class="B-lane"><div class="nm"><b>SCP0111</b><small>CheckList · VM#2</small></div><div class="B-track">
+      <div class="seg s" style="left:58%;width:14%">CheckList 수행 8:20</div><div class="seg c now" style="left:72.5%;width:10%">미검증 해소 6:12</div><div class="B-now" style="left:83%"></div></div></div>
+    <div class="B-lane"><div class="nm"><b>SSP0005</b><small>run_verify · 업무 작업</small></div><div class="B-track">
+      <div class="seg w" style="left:66%;width:10%">입장 대기 5:40</div><div class="seg s now" style="left:76.5%;width:6.5%">검증 4:05</div><div class="B-now" style="left:83%"></div></div></div>
+    <div class="B-lane"><div class="nm"><b>SSP0014</b><small>run_verify · 업무 작업</small></div><div class="B-track">
+      <div class="seg w now" style="left:79.5%;width:3.5%">대기 2:10</div><div class="B-now" style="left:83%"></div></div></div>
+    <div class="B-lane"><div class="nm"><b>DMF0042</b><small>문서 생성 · 업무 작업</small></div><div class="B-track">
+      <div class="seg s" style="left:20%;width:9%">설계서 5:30</div><div class="seg c" style="left:29.5%;width:12%">분석서 7:10</div><div class="seg w" style="left:42%;width:4%">dbwin</div><div class="seg f" style="left:46.5%;width:3%">실패</div><div class="seg s" style="left:50%;width:6%">재시도 3:20</div></div></div>
+    <div class="B-lane"><div class="nm"><b>VMO</b><small>자가진단 · 자동 보완</small></div><div class="B-track">
+      <div class="seg c" style="left:33%;width:6%">진단 3:30</div><div class="seg s" style="left:79%;width:2.5%">게이트</div><div class="seg c" style="left:81.6%;width:1.4%"></div><div class="B-now" style="left:83%"></div></div></div>
+    <div class="B-leg"><span><i style="background:var(--sc)"></i>스크립트</span><span><i style="background:var(--cl)"></i>Claude</span><span><i style="background:repeating-linear-gradient(45deg,#5a4a1d 0 3px,#3d331a 3px 6px);border:1px solid var(--warn)"></i>대기</span><span><i style="background:var(--bad)"></i>실패</span><span><i style="background:#fff;opacity:.6"></i>지금</span><span class="ex">줄과 막대 = 예시</span></div>
+  </div>
+  <div class="B-low">
+    <div class="A-box"><h3>최근 60분 대기 합계<small>종류별</small><span class="ex">예시</span></h3>
+      <table><tr><th>종류</th><th>건수</th><th>합계</th><th style="width:40%"></th></tr>
+      <tr><td>부하 입장</td><td class="n">3</td><td class="n">11:20</td><td><div class="waitbar"><i style="width:80%"></i></div></td></tr>
+      <tr><td>시험 데이터 구간</td><td class="n">2</td><td class="n">2:40</td><td><div class="waitbar"><i style="width:19%"></i></div></td></tr>
+      <tr><td>Claude 세션 대기</td><td class="n">1</td><td class="n">0:50</td><td><div class="waitbar"><i style="width:6%"></i></div></td></tr></table></div>
+    <div class="A-box"><h3>지금 쥐고 있는 잠금<small>Doc/e2e</small><span class="ex">예시</span></h3>
+      <table><tr><th>파일</th><th>주인</th><th>띄운 쪽</th><th>경과</th></tr>
+      <tr><td>_run.verify.SCP0111.lock</td><td class="ok">실행 중</td><td>VM#2</td><td class="n">14:32</td></tr>
+      <tr><td>_run.dbwin.DMF0042.lock</td><td class="ok">실행 중</td><td>python.exe</td><td class="n">0:40</td></tr></table></div>
+  </div>
+</section>
+
+<!-- ───────────── C 한눈 요약 ───────────── -->
+<section class="concept" id="C">
+  <p class="desc"><b>C 한눈 요약.</b> 맨 위 한 문장이 지금 상태를 말합니다. 그 아래 숫자 6개, 그리고 <b>사람이 볼 것만</b> 목록으로 보입니다(멈춘 것, 오래 기다리는 것, VMO 가 고친 것과 되돌린 것). 아무 일 없는 칸은 접어서 아래 회색 줄에 "없음"으로만 남깁니다. 평소엔 조용하고 일이 생길 때만 눈에 띄는 안입니다.</p>
+  <div class="vtabs"><i>VMO</i><span class="on">상황판</span><span>기능</span><span>사건</span><span>개선안</span><span>자가진단</span><span>이력</span><span>에이전트</span><span>Log</span></div>
+  <div class="C-head"><div class="badge">✓</div><div><div class="big">서버 3개 정상 · 실행 3건 · 대기 2건</div><div class="sub">VMO 가 오늘 7건을 스스로 고쳤고 2건은 되돌렸습니다. 사람이 승인할 안은 없습니다.<span class="ex">예시</span></div></div></div>
+  <div class="C-nums">
+    <div><b class="ok">3/3</b><small>서버 응답</small></div><div><b>3</b><small>실행 중</small></div><div class="hl"><b class="wa">2</b><small>대기</small></div>
+    <div><b class="n">10%</b><small>CPU</small></div><div><b class="n">9.0<small style="font-size:12px"> GB</small></b><small>여유 메모리</small></div><div><b>4</b><small>열린 사건</small></div></div>
+  <div class="C-two">
+    <div>
+      <div class="C-sec"><h3>볼 것<small>3건</small><span class="ex">예시</span></h3>
+        <div class="C-item"><div class="ic w">◔</div><div class="tx"><b>SSP0014 부하 입장 대기 2분 10초</b><span>CPU 기준 80% 초과 대기 · 앞 실행 SSP0005 가 끝나면 입장</span></div><div class="rt">2:10</div></div>
+        <div class="C-item"><div class="ic c">✦</div><div class="tx"><b>SCP0111 미검증 해소 Claude 6분째</b><span>CheckList 2/3 단계 · VM#2 창</span></div><div class="rt">6:12</div></div>
+        <div class="C-item"><div class="ic b">!</div><div class="tx"><b>열린 사건 4건</b><span>R12 시험 실패 1 · R5 진행 없음 1 · R7 Claude 비정상 종료 2</span></div><div class="rt">사건 탭</div></div></div>
+      <div class="C-sec"><h3>지금 실행 중<small>3건</small><span class="ex">예시</span></h3>
+        <div class="C-item"><div class="ic c">2/3</div><div class="tx"><b>SCP0111 CheckList</b><span>미검증 해소 · Claude</span></div><div class="rt">14:32</div></div>
+        <div class="C-item"><div class="ic o">▶</div><div class="tx"><b>SSP0005 run_verify</b><span>스크립트 · 마지막 출력 3초 전</span></div><div class="rt">4:05</div></div>
+        <div class="C-item"><div class="ic o">1/3</div><div class="tx"><b>업무 작업 문서 생성 3화면</b><span>DMF0044 진행 · DMF0049 대기</span></div><div class="rt">12:10</div></div></div>
+    </div>
+    <div>
+      <div class="C-sec"><h3>VMO 가 한 일<small>오늘</small><span class="ex">예시</span></h3>
+        <div class="C-item"><div class="ic c">✦</div><div class="tx"><b>workbench.js 웹뷰 구문 시험 추가</b><span>게이트 통과 · 창 다시 로드 대기</span></div><div class="rt">23:59</div></div>
+        <div class="C-item"><div class="ic w">↺</div><div class="tx"><b>doc_style.py 주석 구간 제외</b><span>검증 기대값 불일치로 되돌림 · 다음 진단에서 다시</span></div><div class="rt">23:55</div></div>
+        <div class="C-item"><div class="ic c">✦</div><div class="tx"><b>EPERM 재시도 적용</b><span>시험 4건 추가 · 게이트 통과</span></div><div class="rt">22:30</div></div>
+        <div class="C-item"><div class="ic o">✓</div><div class="tx"><b>설치 폴더 동기화</b><span>CHANGELOG.md 1개</span></div><div class="rt">23:52</div></div></div>
+      <div class="C-quiet"><span>잠금 문제 없음</span><span>TCP 미측정</span><span>승인 필요 0</span><span>VM 실행 오류 0</span></div>
+    </div>
+  </div>
+</section>
+<script>
+document.querySelectorAll('.pick button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.pick button').forEach(function(x){x.classList.toggle('on',x===b)});document.querySelectorAll('.concept').forEach(function(s){s.classList.toggle('on',s.id===b.dataset.c)});};});
+</script>
+</body></html>

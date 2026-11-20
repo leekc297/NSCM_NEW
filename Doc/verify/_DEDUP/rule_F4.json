@@ -1,0 +1,155 @@
+{
+ "rule_id": "F4",
+ "hash": "bb0968625f4281e8",
+ "groups": [
+  {
+   "refs": [
+    "DM-204-3",
+    "DM-204-3S"
+   ],
+   "target": "SQL View 버튼(VIEW) 클릭",
+   "condition": "Insert 상태 / 하단 탭 전 항목",
+   "expected": "모든 항목에서 SQL View(VIEW)를 누르면 SQL Error 없이(0건) 열림",
+   "why": "확인 대상(SQL View 버튼)과 기대 결과(전 항목 SQL Error 0)가 같고, 화면만 다르다."
+  },
+  {
+   "refs": [
+    "DM-180"
+   ],
+   "target": "데이터 수정 후 저장",
+   "condition": "",
+   "expected": "수정 저장 시 SQL Error 0건, DB에 반영됨",
+   "why": "일반 수정 저장 확인이다. 다른 저장 항목은 Bucket·팝업·붙여넣기 같은 전제 조작이 달라 묶지 않았다."
+  },
+  {
+   "refs": [
+    "DM-145"
+   ],
+   "target": "Bucket 전환 후 저장",
+   "condition": "Bucket 반복 전환, Monthly/Weekly 각각 저장",
+   "expected": "Bucket(Monthly/Weekly)을 전환한 뒤 저장하면 SQL Error 0건",
+   "why": "Bucket 전환이라는 전제 조작이 고유해 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-55"
+   ],
+   "target": "Exchange Rate 팝업 저장",
+   "condition": "수정 후 저장, 여러 행 복사/붙여넣기",
+   "expected": "Exchange Rate 팝업 저장 시 SQL Error 0건, 붙여넣은 여러 행이 모두 저장됨",
+   "why": "대상이 팝업 저장이고 여러 행 저장 결과까지 확인해야 해서 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-50"
+   ],
+   "target": "CRUD Status 표시 · 대량 저장",
+   "condition": "입력 후 Delete / 대량 행 저장",
+   "expected": "입력 후 Delete하면 CRUD Status가 D(또는 취소)로 표시되고, 대량 저장 시 SQL Error 0건",
+   "why": "CRUD Status 표시와 대량 저장을 함께 확인하는 복합 항목이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-222"
+   ],
+   "target": "Insert 저장 검증 / Delete CRUD Status",
+   "condition": "Insert 시 필수값 누락, Delete",
+   "expected": "필수값이 빠지면 검증 메시지가 나오고, 실패 시 성공 toast 0건, Delete 시 D Flag가 표시되지 않음",
+   "why": "기대 결과가 DM-50(D 표시)과 반대여서 묶으면 검사가 틀어지므로 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-72"
+   ],
+   "target": "붙여넣기 후 저장 · 자릿수 초과",
+   "condition": "붙여넣기, 정수부 15자리 연산 초과",
+   "expected": "붙여넣기 후 저장 시 SQL Error 0건, 자릿수 초과는 검증 메시지로 막힘",
+   "why": "붙여넣기 저장에서 자릿수 초과를 막는지 보는 항목으로, DM-73과 기대 결과가 달라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-73"
+   ],
+   "target": "저장 자릿수 · 계산값(RTF×Unit Price) 초과",
+   "condition": "양수/음수, Max 자릿수 입력",
+   "expected": "Max 자릿수까지는 정상 저장되고, 계산값(RTF×Unit Price)이 넘치면 지정 양식 메시지(36자리 이내, Model/Measure/기간/부서/입력값)가 표시됨",
+   "why": "계산값 초과 메시지의 양식까지 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-102"
+   ],
+   "target": "Excel Upload OK · 필수항목 검증",
+   "condition": "업로드 후 OK",
+   "expected": "업로드 성공 후 OK 시 SQL Error 0건, DB에 반영되고, Customs Handbook/Project/Model 모두 미입력 시 Validation Error가 표시됨",
+   "why": "Excel Upload 동작과 필수항목 검증이 고유해 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-25"
+   ],
+   "target": "Monthly Bucket 입력·저장 값·코드 팝업",
+   "condition": "Bucket=Monthly, 행 추가 후 셀 더블클릭",
+   "expected": "Monthly 입력 가능(당월은 비활성), 입력값이 그대로 저장되고 소수 자리도 유지됨, Current 버전은 대소문자 구분 없음, Project Code/Model 셀을 더블클릭하면 팝업이 열림",
+   "why": "입력값 보존과 팝업 열림을 함께 보는 복합 항목이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "SCPSSP-23"
+   ],
+   "target": "Period 날짜 유효성 저장",
+   "condition": "잘못된 날짜로 수정 후 저장",
+   "expected": "존재하지 않는 날짜(예: 2026-10-33)는 저장이 막히고, 조회 시 SQL Error 0건",
+   "why": "날짜 유효성 검증이 대상이라 저장 SQL 오류 항목과 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-P56"
+   ],
+   "target": "Plant Site 조회조건 조회",
+   "condition": "Plant Site 선택",
+   "expected": "Plant Site 조건으로 조회 시 SQL Error 0건, 조건이 결과에 반영됨",
+   "why": "특정 조회조건(Plant Site)이 대상이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-184"
+   ],
+   "target": "Active(ALL)·User Group 다중선택 조회",
+   "condition": "Active=ALL / User Group 2개 이상 선택",
+   "expected": "Active=ALL과 User Group 다중선택 조건에서 오류 없이 조회됨",
+   "why": "ALL·다중선택 조회조건이 대상이라 다른 조회조건 항목과 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-111"
+   ],
+   "target": "Dynamic Query 조회 결과",
+   "condition": "Role별(ALL 포함) 실행",
+   "expected": "Dynamic Query 레이아웃이 정상이고 조회에 성공하며, 결과 건수가 AS-IS와 같음",
+   "why": "결과 건수를 AS-IS와 비교하는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-86"
+   ],
+   "target": "조회 응답 시간",
+   "condition": "기본 조회조건",
+   "expected": "조회가 기준 시간 안에 정상 완료됨",
+   "why": "성능(기준 시간)을 보는 항목이라 다른 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-163"
+   ],
+   "target": "BE 배포 직후 조회조건 전환",
+   "condition": "배포 전부터 유지한 세션에서 Div 등 조회조건 전환",
+   "expected": "조건을 전환해도 401 Error 0건(세션 유지)",
+   "why": "세션 유지(401)를 보는 항목으로 SQL 오류 확인과 대상이 달라 따로 두었다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:42:46",
+ "cost": 0.0941852
+}

@@ -25,7 +25,37 @@ def rid(mid, *parts):
     return 'AD-' + hashlib.md5('|'.join([mid] + [str(x) for x in parts]).encode('utf-8')).hexdigest()[:8]
 
 
+# 2026-11-20 T471(SSP0005 차등짝 12행 · AI 검토 검사기오판): E2E 위반 입력 시험(기간 역전 등) 중 포착된 호출은 FE 가 'Invalid Date' 를 보내
+#   diff_verify 가 SKIP(대조 대상 아님)으로 둔다. 같은 TO-BE 프로시저를 정상 인자로 판정(PASS·DIFF·ROWS_ONLY·COLS)한 호출이 있으면 이 호출은 원장 행을 만들지 않는다.
+#   정상 인자 판정 호출이 없으면 종전대로 행을 만든다(ERROR · 측정 공백을 숨기지 않음)
+INPUT_TEST_MARK = 'E2E 입력 시험 중 포착된 호출'
+
+
+def judged_procs(summ):
+    return {(s.get('tobe_proc') or '').upper() for s in summ if s.get('verdict') in ('PASS', 'DIFF', 'ROWS_ONLY', 'COLS') and s.get('tobe_proc')}
+
+
+def is_input_test_dup(s, judged):
+    return s.get('verdict') == 'SKIP' and INPUT_TEST_MARK in str(s.get('note') or '') and (s.get('tobe_proc') or '').upper() in judged
+
+
+def selftest():
+    sm = [{'tobe_proc': 'PKG_A.P_GET', 'verdict': 'PASS'}, {'tobe_proc': 'PKG_A.P_GET', 'verdict': 'SKIP', 'note': f"인자 미해결(UNRESOLVED): d='Invalid Date'({INPUT_TEST_MARK} — 대조 대상 아님)"},
+          {'tobe_proc': 'PKG_B.P_GET', 'verdict': 'SKIP', 'note': f"인자 미해결(UNRESOLVED): d='Invalid Date'({INPUT_TEST_MARK} — 대조 대상 아님)"},
+          {'tobe_proc': 'PKG_A.P_GET', 'verdict': 'SKIP', 'note': '인자 미해결(UNRESOLVED): x — param_map.csv 에 값/대응 지정'}]
+    j = judged_procs(sm)
+    cases = [('T471 정상 인자 판정 호출이 있는 입력 시험 호출 = 행 없음', is_input_test_dup(sm[1], j) is True),
+             ('T471 정상 인자 판정 호출이 없으면 행 유지', is_input_test_dup(sm[2], j) is False),
+             ('T471 입력 시험 아닌 미해결 인자 = 행 유지', is_input_test_dup(sm[3], j) is False),
+             ('T471 판정 호출 = 행 유지', is_input_test_dup(sm[0], j) is False)]
+    bad = sum(1 for _, ok in cases if not ok)
+    for n, ok in cases: print(('PASS ' if ok else 'FAIL ') + n)
+    print(f'selftest {len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
+
+
 def main():
+    if '--selftest' in sys.argv: return selftest()
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     if not args:
         print(__doc__); return 2
@@ -38,9 +68,12 @@ def main():
     with open(lp, encoding='utf-8-sig', newline='') as f:
         r_ = csv.DictReader(f); fields = r_.fieldnames; rows = [r for r in r_ if not r['row_id'].startswith('AD-')]
     out = []
+    judged = judged_procs(summ)
     for s in summ:
         if not s.get('asis_sp') and s.get('verdict') == 'SKIP' and not s.get('tobe_proc'):
             continue  # 배선·포착 자체가 없는 호출은 원장 행을 만들지 않는다(미검증 사유는 diff_summary 에 남음)
+        if is_input_test_dup(s, judged):
+            continue  # T471 — 같은 TO-BE 프로시저를 정상 인자로 판정한 호출이 있다(그 호출 행이 판정)
         sp, proc, v = s.get('asis_sp') or '(짝 없음)', s.get('tobe_proc') or '', s.get('verdict') or 'ERR'
         base_ev = (f"[차등 검증 #{s.get('call_no')}] {s.get('sheet')}/{s.get('btn')} AS-IS {sp} ↔ TO-BE {proc} · 판정 {v} · {s.get('note', '')} · 키({s.get('key_source', '')}) {s.get('keys', '')} · "
                    f"AS-IS {s.get('asis_rows', '')}행 ↔ TO-BE {s.get('tobe_rows', '')}행 · 공통 {s.get('common', '')} · 단독 AS-IS {s.get('asis_only', '')} / TO-BE {s.get('tobe_only', '')} · 불일치 셀 {s.get('diff_cells', '')} · 순서 {s.get('order', '')}"

@@ -1,4 +1,4 @@
-import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { AllowMerging, CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MaterialByDivisionModal } from 'features/master/src/components';
 import { type MutableRefObject, useEffect, useRef, useState } from 'react';
@@ -46,6 +46,13 @@ const QTY_COLUMNS = [
   'SUN_SIPM_MAX_QTY',
 ] as const;
 const QTY_MAX_DIGITS = 18;
+
+// 세로 셀병합(design 03 §3 #12 SmartColMerge·§5 #9, __asis-mapping__ gridSignal#929) — AS-IS SpdMain_TopChange
+//   가 Div/Plan Group/Item Group 3컬럼의 인접 동일값을 계층 병합한다(사용자 AS-IS 확인). 좌측 누적 머지키라
+//   DIVISION_ID(전행 동일) -> OPMZ_PLAN_GR_ID -> MDL_GR_NM 순으로 상위가 하위를 감싸는 계층 병합이 된다.
+//   그 외 컬럼은 값이 우연히 겹쳐도 병합하지 않도록 allowMerging=false 로 명시(AS-IS 대상 3컬럼 한정).
+//   신규행(CRUD_TYPE='I') 제외는 공용 CustomMergeManager 기본 가드가 처리.
+const MERGE_COLUMNS = new Set(['DIVISION_ID', 'OPMZ_PLAN_GR_ID', 'MDL_GR_NM']);
 const isQtyColumn = (binding: string): boolean =>
   (QTY_COLUMNS as readonly string[]).includes(binding);
 const digitCount = (v: string): number => (v.match(/\d/g) ?? []).length;
@@ -180,6 +187,13 @@ export const ConstraintOfShipmentQtyGrid = ({
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
+    // 세로 병합 대상 컬럼만 allowMerging=true 로 좁힌다 — 공용 DataGrid 는 allowMerging={All} 이면 전 컬럼을
+    //   true 로 깔므로(Item/Stage/From·To Site 가 우연히 같은 값이면 병합될 수 있다) AS-IS 3컬럼 한정으로 되돌린다.
+    for (const col of g.columns) {
+      col.allowMerging = MERGE_COLUMNS.has(col.binding ?? '');
+    }
+    g.invalidate(true);
+
     return () => {
       try {
         g.updatedView?.removeHandler(updatedViewHandler);
@@ -204,6 +218,7 @@ export const ConstraintOfShipmentQtyGrid = ({
         editTrackerRef={editTrackerRef}
         itemsSource={rows as unknown as WijmoRowItem[]}
         staticColumns={adminColumns ?? []}
+        allowMerging={AllowMerging.All}
         gotFocus={onFocus}
       />
       {/* 그리드 셀 Item 팝업 — MaterialByDivisionModal, 조회영역과 동일 팝업 재사용(design 03 §1 #4). */}

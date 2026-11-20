@@ -1,0 +1,29 @@
+{
+  "id": "20261120_105716_R12_ALL",
+  "at": "2026-11-20T10:57:16+09:00",
+  "ms": 1795139836103,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_job_par.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_job_par.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 1 · FAIL 0 · Node.js v24.22.2",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_job_par.js",
+    "file": "t_job_par.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T11:02:31+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+ "rule_id": "B5",
+ "hash": "e81d98e63a5e52c9",
+ "groups": [
+  {
+   "refs": [
+    "DM-135",
+    "DM-37"
+   ],
+   "target": "신규 행 Measure 콤보 후보(입력 가능 Measure)",
+   "condition": "Div 선택, 신규 행, Sales Site 유형(VMI=Y/비축용/고객향)별",
+   "expected": "Div·Sales Site 유형에 허용된 입력 가능 Measure(MKT_FCST·AS_In_Request·VMI_In_Request 등)만 후보에 나온다. VMI_In_Request는 VMI=Y Site에서만 나온다.",
+   "why": "두 항목 모두 신규 행 Measure 콤보에 Div·Sales Site 유형에 허용된 Measure만 나오는지 보는 같은 확인이다."
+  },
+  {
+   "refs": [
+    "DM-137",
+    "DM-140"
+   ],
+   "target": "FCST Type 콤보 후보",
+   "condition": "Div별, 권한그룹(ADMIN/DM ADMIN/DM Planner(W/S))별, 신규 행",
+   "expected": "FCST Type 후보는 SALES_TYPE_CODE 기준으로 Div·권한에 허용된 항목만 나온다. 허용되지 않은 WS(Free)/WS(Chargeable)·W/S·AS 전용 항목은 나오지 않고, 권한별 후보 수가 기준과 같다.",
+   "why": "두 항목 모두 FCST Type 콤보 후보를 Div·권한 허용 목록과 대조하는 같은 확인이다."
+  },
+  {
+   "refs": [
+    "DM-45"
+   ],
+   "target": "FCST Type 콤보·입력 가능 Measure 동시 제한",
+   "condition": "Div 선택, DM Planner(W/S) 권한, Sales Site 유형별",
+   "expected": "권한별로 허용된 FCST Type만 나오고, Sales Site 유형별로 입력 가능한 Measure가 제한된다.",
+   "why": "FCST Type과 Measure 두 대상을 함께 확인하는 복합 항목이라 단일 대상 묶음에 넣으면 한쪽 검사가 빠질 수 있어 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-139"
+   ],
+   "target": "Current 버전 입력 Measure·AS From Site 콤보",
+   "condition": "Current 버전, Div 40/81/81_JV/82, DM Planner(W/S), Sales Site VMI=Y·고객향, FCST Type=AS",
+   "expected": "MKT_FCST/SCM_FCST는 GET_ADMIN_GROUP_MEASURE로 통제된다. AS_In_Req는 81/81_JV/82의 W/S 권한에서만, VMI_In_Req는 40/82의 VMI=Y에서만 입력할 수 있다. AS From Site 콤보에는 해당 Div 목록만 나온다.",
+   "why": "편집 통제·Measure 후보·AS From Site 콤보가 섞인 복합 항목이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-153"
+   ],
+   "target": "AS From Site 활성 여부·콤보, Measure 후보",
+   "condition": "Div 선택, DM Planner(W/S), Sales Site 비축향/고객향/미입력",
+   "expected": "비축향이면 AS From Site가 비활성이다. 고객향이면 활성이고 콤보가 동작한다. Measure 후보는 Sales Site 유형별로 제한되고 SCM_FCST는 나오지 않는다.",
+   "why": "셀 활성 여부와 Measure 후보를 함께 보는 복합 항목이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-64"
+   ],
+   "target": "SCM_FCST·MKT_FCST 편집 가능 구간",
+   "condition": "Div별, 권한(ADMIN/SCP PLANNER/DM PLANNER)별, SCP 편집 가능 시간대",
+   "expected": "GET_ADMIN_GROUP_MEASURE 룩업대로 Div·권한·시간대별로 Measure를 편집할 수 있다. DM PLANNER는 SCP 시간대에 MKT_FCST를 편집할 수 없다.",
+   "why": "콤보 후보가 아니라 셀 편집 가능 여부를 시간대까지 포함해 보는 확인이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-154"
+   ],
+   "target": "End Customer 셀 콤보 후보",
+   "condition": "Div 선택, 신규 행",
+   "expected": "END_CUSTOMER 룩업 기준으로 선택한 Div의 목록만 후보에 나온다.",
+   "why": "End Customer 콤보만 확인하는 항목이라 대상 종류가 다른 항목과 겹치지 않는다."
+  },
+  {
+   "refs": [
+    "DM-151"
+   ],
+   "target": "신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "condition": "신규 행",
+   "expected": "Sales Site 입력이 동작하고 Project 팝업을 열면 자동 조회된다. Model 후보는 SALES_PLAN_ITEM_ID 룩업 기준이고, Team은 SSPM 기준 팝업으로 입력된다.",
+   "why": "여러 컬럼의 입력 동작을 함께 보는 복합 항목이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-227"
+   ],
+   "target": "권한 신청 가능 Group 목록",
+   "condition": "Lookup REQ_NO_DISPLAY에 등록된 Group이 있을 때",
+   "expected": "REQ_NO_DISPLAY에 등록된 Group은 신청 가능 목록에 나오지 않는다.",
+   "why": "권한 신청 Group 목록 필터는 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-7"
+   ],
+   "target": "Measure 콤보 후보 명칭 오타",
+   "condition": "Div 선택, LOOKUP CUST_FCST_MEASURE 기반 콤보",
+   "expected": "오타 Measure(\"Cutomer FCST\")는 후보와 데이터에 0건이고, Customer FCST로 정비되어 있다.",
+   "why": "후보 범위가 아니라 후보 명칭과 데이터의 오타를 보는 확인이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-P38"
+   ],
+   "target": "Measure 항목(행·컬럼) 구성",
+   "condition": "Div별",
+   "expected": "Div별 UI Category 기준으로 Measure가 표시되고, 다른 Div의 Measure는 섞이지 않는다.",
+   "why": "입력 콤보 후보가 아니라 화면에 표시되는 Measure 구성을 보는 확인이라 따로 두었다."
+  },
+  {
+   "refs": [
+    "GAP-203"
+   ],
+   "target": "Measure Setting·Column 설정 팝업 후보 재조회",
+   "condition": "화면 진입 직후 Division이 자동 선택된 상태(Search 전) → Measure 설정 팝업 열기 → 후보 수 확인 → Cancel",
+   "expected": "Measure·Column 설정 후보는 Division 값이 정해질 때마다(자동 선택 포함) 그 Division 기준으로 다시 조회된다.",
+   "why": "설정 팝업 후보가 Division에 따라 다시 조회되는 시점을 보는 확인이라 다른 항목과 대상이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:40:20",
+ "cost": 0.10488520000000001
+}

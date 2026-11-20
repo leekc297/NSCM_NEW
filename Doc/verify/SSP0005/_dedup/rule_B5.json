@@ -1,0 +1,82 @@
+{
+ "rule_id": "B5",
+ "hash": "afaf124a76e033b3",
+ "groups": [
+  {
+   "rows": [
+    "V-1310bb37"
+   ],
+   "why": "Checks the AS From Site active/inactive state and Measure candidates by Sales Site type for Div 81. The expected results include AS From Site activity, which no other row checks, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-1b636630"
+   ],
+   "why": "Checks whether SCM_FCST and MKT_FCST can be edited by Div, permission and SCP editing time window. This is an edit-permission check during a time window, not a candidate list, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-1cacf2b9"
+   ],
+   "why": "Checks the FCST Type combo and the input Measure limit by Site type together for Div 82. Its target and condition (Div 82, two elements) differ from V-c86a9779, which checks only the FCST Type candidates, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-55a17e93"
+   ],
+   "why": "Checks that the Measure Setting popup candidates are re-queried by Division right after screen entry, before Search. Both the target (popup) and the state (before Search) are unique."
+  },
+  {
+   "rows": [
+    "V-7054e971"
+   ],
+   "why": "Checks the input Measure controls (including AS_In_Req permission and VMI_In_Req VMI=Y) and the AS From Site combo for the Current version. Its target and expected results cover more than V-c4caff15, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-86a7a93c"
+   ],
+   "why": "Checks only that the typo Measure \"Cutomer FCST\" is removed from the candidates and the data. No other row has this expected result."
+  },
+  {
+   "rows": [
+    "V-b126e27d"
+   ],
+   "why": "Checks how the new-row Sales Site, Project popup, Model candidates and Team column behave. The target elements differ from every other row."
+  },
+  {
+   "rows": [
+    "V-bc405838"
+   ],
+   "why": "Checks the Measure display makeup by Div UI Category. It differs from the new-row Measure combo candidates (V-c4caff15) in both state and criteria, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-c4c8c10c"
+   ],
+   "why": "Checks that Groups registered in REQ_NO_DISPLAY are hidden from the permission request Group list. The target element is entirely separate."
+  },
+  {
+   "rows": [
+    "V-c4caff15"
+   ],
+   "why": "Checks the new-row Measure combo candidates by Div and Sales Site type. The other Measure rows differ in their conditions (Current version, permission, AS From Site), so it stays alone."
+  },
+  {
+   "rows": [
+    "V-c86a9779"
+   ],
+   "why": "Checks the new-row FCST Type candidates and candidate count by Div and permission group, based on SALES_TYPE_CODE. V-1cacf2b9 has a different Div and also covers Measure, so this stays alone."
+  },
+  {
+   "rows": [
+    "V-f3f37927"
+   ],
+   "why": "Checks that the End Customer combo candidates on a Div 81 new row come only from the END_CUSTOMER lookup. No other row targets the same column."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:34",
+ "cost": 0.07007469999999999
+}

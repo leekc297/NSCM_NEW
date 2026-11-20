@@ -1,0 +1,117 @@
+{
+ "rule_id": "K1",
+ "hash": "7a3e436dc248d206",
+ "groups": [
+  {
+   "refs": [
+    "GAPPI-39",
+    "GAPSELF-25",
+    "GAPSELF-26",
+    "GAPSELF-27",
+    "GAPSELF-28",
+    "GAPSELF-29",
+    "GAPSELF-30",
+    "GAPSELF-31",
+    "GAPSELF-32"
+   ],
+   "target": "그리드 컬럼 필터(Filter) 유지 · 건수(Count) 표시",
+   "condition": "컬럼 필터 적용 → 조회조건 변경 후 재조회 → 필터 상태·건수 확인 → 필터 해제",
+   "expected": "필터(Filter, 예: MEASURE Filter)를 유지한 채 재조회하면 결과에 필터가 다시 적용되고 건수(Count) 표시가 실제 행 수와 일치해야 한다.",
+   "why": "모두 같은 순서(필터 적용 → 재조회 → 필터 재적용과 건수 일치 확인)로 확인하고 기대 결과도 같다. 화면, 필터 컬럼(Measure), 바꾼 조건(Division)만 다르다."
+  },
+  {
+   "refs": [
+    "DM-194"
+   ],
+   "target": "그리드 컬럼 필터 후보값 목록",
+   "condition": "조회조건 다중선택 후 조회 → 컬럼 필터 열기",
+   "expected": "필터 후보(예: Message ID 컬럼)는 조회 결과의 고유값을 모두 보여야 하며 개수 상한 때문에 잘리면 안 된다.",
+   "why": "필터 후보값이 빠짐없이 나오는지 보는 확인으로, 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-32"
+   ],
+   "target": "필터·Sort 적용 상태에서 Insert 행 추가",
+   "condition": "필터/Sort 적용 상태에서 Insert",
+   "expected": "필터·Sort 적용 여부와 관계없이 Insert 행은 선택 행 위에 추가되어야 한다. Sort/Filter 상태는 유지되고 신규 행(예: Project 컬럼)은 편집할 수 있어야 한다.",
+   "why": "Insert와 정렬·필터가 함께 동작하는지 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-C8"
+   ],
+   "target": "팝업 그리드 No. 컬럼·건수·Sort 동작",
+   "condition": "팝업 그리드에서 필터 적용",
+   "expected": "팝업 그리드(예: Contribution Sales Version 팝업)는 공통 그리드처럼 No. 컬럼과 조회·필터 건수를 보여야 한다. 단축키와 Sort도 메인 그리드와 같게 동작해야 한다.",
+   "why": "팝업 그리드가 공통 그리드와 같은지 보는 확인으로, 대상이 팝업에 한정된다."
+  },
+  {
+   "refs": [
+    "DM-P12"
+   ],
+   "target": "그리드 상·하위 컬럼 cascade 후보값",
+   "condition": "상위 컬럼 값 선택·변경",
+   "expected": "Cust Group을 선택하면 그 그룹의 End Customer만 후보로 나와야 하고, End Customer와 Sales Site도 같은 방식으로 이어져야 한다. 상위 값이 바뀌면 하위 값은 초기화되고 후보에 중복이 없어야 한다.",
+   "why": "Sort·Filter가 아닌 cascade 후보를 보는 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P26"
+   ],
+   "target": "동적 Bucket 컬럼 Sort/Filter/Hide",
+   "condition": "동적 컬럼(예: 주차 W37-0817)이 있는 그리드",
+   "expected": "고정 컬럼과 동적 Bucket 컬럼을 포함한 그리드 전체에서 Sort/Filter/Hide가 똑같이 동작해야 한다.",
+   "why": "동적 컬럼에서 세 기능이 고정 컬럼과 같게 동작하는지 보는 확인으로, 3단 토글을 보는 DM-P31과는 기대 결과가 달라 묶지 않았다."
+  },
+  {
+   "refs": [
+    "DM-P31"
+   ],
+   "target": "그리드 Sort 3단 토글",
+   "condition": "동적 컬럼 포함 헤더 반복 클릭",
+   "expected": "그리드 Sort는 오름차순 → 내림차순 → 해제(원래 순서 복원)의 3단 토글로 동작해야 하고 동적 컬럼에도 똑같이 적용되어야 한다.",
+   "why": "Sort 토글 순서와 원래 순서 복원을 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-P28"
+   ],
+   "target": "정렬 후 그리드 Copy·Hide Column",
+   "condition": "내림차순 정렬 이후",
+   "expected": "정렬한 뒤에도 Copy한 내용을 Excel에 붙여넣을 수 있어야 하고, Header Hide Column 결과가 그리드에 반영되어야 한다(예: Exchange Rate 그리드).",
+   "why": "정렬 뒤 Copy·Hide 동작을 보는 확인으로, 다른 항목과 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P5"
+   ],
+   "target": "필터 Blanks 항목 표시",
+   "condition": "공란 데이터가 있는 컬럼에 필터 적용",
+   "expected": "공란 데이터(예: Company 컬럼)는 하나의 값으로 통일되어 필터의 Blanks 항목이 하나만 나와야 한다.",
+   "why": "공란 표기가 하나로 통일되었는지 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-P6"
+   ],
+   "target": "그리드 필터(F4) 해제 동작",
+   "condition": "필터 적용 후 해제",
+   "expected": "필터(F4)를 해제하면 필터 조건이 초기화되고 전체 행이 다시 보여야 한다.",
+   "why": "필터 해제와 전체 행 복원을 보는 확인이다. 재조회 때 필터가 유지되는지를 보는 묶음과는 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P64"
+   ],
+   "target": "팝업 Filter 텍스트 입력창",
+   "condition": "",
+   "expected": "팝업의 Filter 입력창에 값을 입력할 수 있고, 입력한 값이 필터에 반영되어야 한다.",
+   "why": "팝업 텍스트 필터 입력을 보는 확인으로, 그리드 컬럼 필터와 대상이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:35",
+ "cost": 0.0960492
+}

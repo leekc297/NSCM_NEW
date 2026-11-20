@@ -29,10 +29,20 @@ function loadAsis(p) {
   });
 }
 
+// 2026-11-20 사용자 지시: 화면 선택에 '최근 선택'. 작업을 시작할 때 업무와 화면 목록을 .vibe/jobs/recent_sel.json 에 남긴다(최근 10개 · 같은 조합은 맨 앞으로)
+function recentSel(p) { try { const a = JSON.parse(fs.readFileSync(path.join(p.vibeDir, 'jobs', 'recent_sel.json'), 'utf8')); return Array.isArray(a) ? a.slice(0, 10) : []; } catch { return []; } }
+function addRecentSel(p, itemLabel, screens) {
+  const key = `${itemLabel}|${screens.join(',')}`; const now = new Date(); const two = n => String(n).padStart(2, '0');
+  const list = recentSel(p).filter(x => `${x.itemLabel}|${(x.screens || []).join(',')}` !== key);
+  list.unshift({ at: `${now.getFullYear()}-${two(now.getMonth() + 1)}-${two(now.getDate())} ${two(now.getHours())}:${two(now.getMinutes())}`, itemLabel, screens: screens.slice(0, 500) });
+  try { fs.mkdirSync(path.join(p.vibeDir, 'jobs'), { recursive: true }); fs.writeFileSync(path.join(p.vibeDir, 'jobs', 'recent_sel.json'), JSON.stringify(list.slice(0, 10), null, 1), 'utf8'); } catch (e) { try { require('./orch-errlog').note('jobs', 'addRecentSel', e); } catch { } }
+  return list.slice(0, 10);
+}
+
 function open(api) {
   jr.init(api);
   const p0 = api.paths(); const ko = p0.language === 'ko';
-  const panel = vscode.window.createWebviewPanel('vibeManager.jobs', ko ? 'VM 업무 작업' : 'VM Jobs', vscode.ViewColumn.Active, { enableScripts: true, retainContextWhenHidden: true });
+  const panel = vscode.window.createWebviewPanel('vibeManager.jobs', 'VMW', vscode.ViewColumn.Active, { enableScripts: true, retainContextWhenHidden: true });
   try { panel.iconPath = { light: vscode.Uri.file(path.join(api.ctx.extensionPath, 'media', 'vibe.svg')), dark: vscode.Uri.file(path.join(api.ctx.extensionPath, 'media', 'vibe-color.svg')) }; } catch { }
   const st = { panel, cur: '' }; panels.add(st);
   const post = m => { try { panel.webview.postMessage(m); } catch { } };
@@ -47,10 +57,12 @@ function open(api) {
     const p = api.paths();
     try {
       switch (m.type) {
+        case 'vmerr': require('./orch-errlog').fromWebview('jobs', m); break;
         case 'ready': {
           let mode = ''; try { mode = require('./workbench').workMode(p).db ? 'DB Mode' : 'UI&DB Mode'; } catch { }
           const jc = jr.loadCfg();
-          post({ type: 'init', items: jr.batchItems(), screens: screenList(p), jobs: jr.list(30), mode, cfg: { maxPar: jc.jobMaxPar, maxClaude: jc.jobMaxClaude, cpuMax: jc.cpuMax, memMin: jc.memMin, rampSec: jc.rampSec } });
+          post({ type: 'init', items: jr.batchItems(), screens: screenList(p), jobs: jr.list(30), recentSel: recentSel(p), mode, cfg: { maxPar: jc.jobMaxPar, maxClaude: jc.jobMaxClaude, cpuMax: jc.cpuMax, memMin: jc.memMin, rampSec: jc.rampSec } });
+          if (!st.cur) { const cut = jr.list(30).find(x => x.status === 'interrupted' && (jr.get(x.id) || {}).resumable); if (cut) st.cur = cut.id; } // 2026-11-20 작업 재개: 열 때 가장 최근 재개 가능 작업을 고름
           if (st.cur) { const j = jr.get(st.cur); if (j) post({ type: 'job', job: j }); }
           break;
         }
@@ -58,12 +70,21 @@ function open(api) {
         case 'create': {
           let job; try { job = jr.create({ itemLabel: m.itemLabel, screens: m.screens, onFail: m.onFail, autoAnswer: !!m.autoAnswer, mode: m.mode === 'par' ? 'par' : 'seq', maxPar: m.maxPar }); } catch (e) { post({ type: 'note', text: `작업을 만들 수 없음: ${e.message}`, bad: true }); break; }
           st.cur = job.id; jr.start(job.id); post({ type: 'job', job: jr.get(job.id) }); post({ type: 'jobs', items: jr.list(30) });
+          post({ type: 'recentSel', items: addRecentSel(p, String(m.itemLabel || ''), (m.screens || []).map(String)) });
           break;
         }
         case 'openJob': { const j = jr.get(m.id); if (j) { st.cur = j.id; post({ type: 'job', job: j }); } break; }
         case 'start': if (!jr.start(m.id)) post({ type: 'note', text: '실행할 화면이 없거나 이미 실행 중입니다' }); break;
         case 'retry': if (!jr.retryFailed(m.id)) post({ type: 'note', text: '실패·중지한 화면이 없거나 실행 중입니다' }); break;
         case 'pause': jr.pause(m.id); break;
+        case 'del': { // 2026-11-20 작업 삭제 = 중지 후 삭제(확인 뒤)
+          const j = jr.get(m.id); if (!j) break; const running = /^(running|pausing)$/.test(j.status);
+          const a = await vscode.window.showWarningMessage(`VMW 작업 ${m.id}(${j.itemLabel}, 화면 ${j.screens.length}개)을 삭제합니다.${running ? ' 실행 중인 화면을 먼저 중지합니다.' : ''} 목록, 화면 로그, 재개 기록이 지워지고 되돌릴 수 없습니다.`, { modal: true }, '삭제');
+          if (a !== '삭제') break; post({ type: 'note', text: running ? '중지 중 … 끝나면 삭제' : '삭제 중 …' });
+          const r = await jr.remove(m.id); if (!r.ok) { post({ type: 'note', text: `삭제 안 함: ${r.why}`, bad: true }); break; }
+          if (st.cur === m.id) { st.cur = ''; post({ type: 'job', job: null }); } post({ type: 'jobs', items: jr.list(30) }); post({ type: 'note', text: `삭제함: ${m.id}${r.progress ? ` · 재개 기록 ${r.progress}건` : ''}` });
+          break;
+        }
         case 'stop': { const a = await vscode.window.showWarningMessage(ko ? '실행 중인 화면도 중지합니다. 그 화면의 진행분은 없어집니다.' : 'Stop running screens too?', { modal: true }, ko ? '중지' : 'Stop'); if (a) jr.stop(m.id); break; }
         case 'log': post({ type: 'log', screen: m.screen, text: jr.logOf(m.id, m.screen) || readLogFile(p, m.id, m.screen), append: false }); break;
         case 'openWb': {
@@ -83,88 +104,116 @@ function html(p) {
   const ko = !p || p.language !== 'en'; const T = (k, e) => (ko ? k : e);
   return `<!DOCTYPE html><html lang="${ko ? 'ko' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-:root{--b:var(--vscode-panel-border,rgba(128,128,128,.35));--mut:var(--vscode-descriptionForeground);--ok:var(--vscode-testing-iconPassed,#3fb950);--warn:var(--vscode-editorWarning-foreground,#d29922);--bad:var(--vscode-errorForeground,#f85149)}
+:root{--b:var(--vscode-panel-border,rgba(128,128,128,.35));--mut:var(--vscode-descriptionForeground);--ok:var(--vscode-testing-iconPassed,#3fb950);--warn:var(--vscode-editorWarning-foreground,#d29922);--bad:var(--vscode-errorForeground,#f85149);--acc:var(--vscode-focusBorder,#4c9aff);--run:var(--vscode-charts-blue,#58a6ff);--cl:var(--vscode-charts-purple,#a371f7);--card:var(--vscode-editorWidget-background,rgba(128,128,128,.08));--side:var(--vscode-sideBar-background,rgba(128,128,128,.05));--sel:var(--vscode-list-activeSelectionBackground,rgba(76,154,255,.22))}
 *{box-sizing:border-box}
+/* 2026-11-20 사용자 선택 'B 스튜디오'(design/jobs_concepts.html): 왼쪽 설정 패널 · 오른쪽 화면 카드 격자 · 아래 로그. 기능은 그대로, 글은 상태와 수치만(나머지는 아이콘과 설명 풍선) */
 body{margin:0;font-family:var(--vscode-font-family);font-size:12px;color:var(--vscode-foreground);background:var(--vscode-editor-background);height:100vh;display:flex;flex-direction:column}
-.top{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--b);flex-wrap:wrap}
-.top h1{font-size:13px;margin:0 6px 0 0}
 .sp{flex:1}
-.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--b);border-radius:10px;padding:1px 8px;font-size:11px;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--b);border-radius:999px;padding:2px 10px;font-size:11.5px;white-space:nowrap}
 .main{flex:1;min-height:0;display:flex}
-.left{width:42%;min-width:300px;max-width:560px;border-right:1px solid var(--b);display:flex;flex-direction:column;min-height:0}
+.side{width:300px;min-width:260px;border-right:1px solid var(--b);display:flex;flex-direction:column;min-height:0;background:var(--side)}
 .right{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
-.sec{padding:8px 10px;border-bottom:1px solid var(--b);display:flex;flex-direction:column;gap:6px}
-.sec h2{font-size:12px;margin:0;display:flex;gap:8px;align-items:baseline}
-.sec h2 small{font-weight:400;color:var(--mut)}
-select,input[type=text],textarea{background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,var(--b));border-radius:4px;padding:4px 6px;font-family:inherit;font-size:12px;min-width:0}
-button{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground);border:none;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:12px}
+.sec{padding:10px 12px;border-bottom:1px solid var(--b);display:flex;flex-direction:column;gap:7px}
+.sec h4{margin:0;font-size:10.5px;letter-spacing:.07em;font-weight:600;color:var(--mut);display:flex;align-items:center;gap:6px;text-transform:uppercase}
+.sec h4 small{text-transform:none;letter-spacing:0;font-weight:400}
+select,input[type=text]{background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,var(--b));border-radius:6px;padding:5px 8px;font-family:inherit;font-size:12px;min-width:0}
+button{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground);border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px}
 button:hover{background:var(--vscode-button-secondaryHoverBackground)}
-button.pri{background:var(--vscode-button-background);color:var(--vscode-button-foreground)}
+button.pri{background:var(--vscode-button-background);color:var(--vscode-button-foreground);font-weight:600;padding:6px 16px}
 button.pri:hover{background:var(--vscode-button-hoverBackground)}
-button:disabled{opacity:.45;cursor:default}
+button:disabled{opacity:.4;cursor:default}
+.ico{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--b);background:transparent;color:inherit;border-radius:7px;font-size:13px}
+.ico:hover:not(:disabled){border-color:var(--acc);background:transparent}
 .row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--b);border-radius:7px;overflow:hidden}
+.seg label{display:flex;align-items:center;padding:4px 10px;font-size:12px;cursor:pointer;border-right:1px solid var(--b);user-select:none}
+.seg label:last-child{border-right:none}
+.seg input{display:none}
+.seg label:has(input:checked){background:var(--sel);color:var(--vscode-list-activeSelectionForeground,inherit)}
+.mini{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--b);border-radius:999px;padding:1px 4px 1px 9px;font-size:11.5px}
+.mini input{width:30px;border:none;background:transparent;text-align:center;padding:2px}
+.togg{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--b);border-radius:999px;padding:3px 9px;font-size:11.5px;cursor:pointer}
+.togg:has(input:checked){border-color:var(--acc);background:var(--sel)}
+.togg input{margin:0}
+.hint{color:var(--mut);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.warn{color:var(--warn);font-size:11.5px}
 .doms{display:flex;gap:4px;flex-wrap:wrap}
-.doms button{padding:1px 8px;border-radius:10px;border:1px solid var(--b);background:transparent;color:inherit}
-.doms button.on{background:var(--vscode-list-activeSelectionBackground,rgba(128,128,128,.25));color:var(--vscode-list-activeSelectionForeground,inherit);font-weight:700}
-.list{flex:1;min-height:80px;overflow:auto}
-.it{display:flex;gap:6px;align-items:center;padding:2px 10px;cursor:pointer}
+.doms button{padding:2px 9px;border-radius:999px;border:1px solid var(--b);background:transparent;color:inherit;font-size:11px}
+.doms button.on{border-color:var(--acc);background:var(--sel);font-weight:600}
+.list{flex:1;min-height:80px;overflow:auto;padding:4px 6px}
+.it{display:flex;gap:7px;align-items:center;padding:4px 6px;border-radius:6px;cursor:pointer}
 .it:hover{background:var(--vscode-list-hoverBackground)}
-.it b{font-weight:600;min-width:74px}
+.it:has(input:checked){background:var(--sel)}
+.it b{font-weight:600;min-width:66px}
 .it .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mut)}
-.it .f{font-size:10px;border:1px solid var(--b);border-radius:6px;padding:0 4px;color:var(--mut);white-space:nowrap}
-.it .f.y{color:var(--ok);border-color:var(--ok)}
-.tblw{flex:1;min-height:60px;overflow:auto}
-table{border-collapse:collapse;width:100%}
-th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--b);font-size:11.5px;vertical-align:top}
-th{color:var(--mut);font-weight:600;white-space:nowrap;position:sticky;top:0;background:var(--vscode-editor-background)}
-td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-tr.sel{background:var(--vscode-list-inactiveSelectionBackground,rgba(128,128,128,.15))}
-tr.r{cursor:pointer}
-.s-done{color:var(--ok)}.s-fail{color:var(--bad)}.s-warn,.s-hold,.s-cancel,.s-busy{color:var(--warn)}.s-run{font-weight:700}
-.actor{border:1px solid var(--b);border-radius:8px;padding:0 6px;font-size:10.5px;white-space:nowrap}
-.actor.claude{border-color:var(--vscode-charts-purple,#a371f7);color:var(--vscode-charts-purple,#a371f7)}
-.log{height:34%;min-height:90px;overflow:auto;border-top:1px solid var(--b);font-family:var(--vscode-editor-font-family,monospace);font-size:11.5px;white-space:pre-wrap;word-break:break-all;padding:6px 10px;line-height:1.4}
-.empty{color:var(--mut);padding:8px 10px}
-.note{color:var(--warn)}.note.bad{color:var(--bad)}
+.it .f{width:7px;height:7px;border-radius:50%;background:var(--b)}
+.it .f.y{background:var(--ok)}
+.go{padding:10px 12px;border-top:1px solid var(--b);display:flex;flex-direction:column;gap:8px}
+.head{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--b);flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--b);flex:none}
+.d-run{background:var(--run);box-shadow:0 0 0 3px rgba(88,166,255,.2)}.d-done{background:var(--ok)}.d-fail{background:var(--bad)}.d-warn,.d-hold,.d-cancel,.d-busy,.d-admit,.d-pausing,.d-paused,.d-interrupted,.d-stopped{background:var(--warn)}
+.note{color:var(--warn);font-size:11.5px}.note.bad{color:var(--bad)}
+.grid{flex:1;min-height:60px;overflow:auto;padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;align-content:start}
+.card{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:11px 12px;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card:hover{border-color:var(--acc)}.card.sel{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.card .top{display:flex;align-items:center;gap:8px}
+.card .id{font-weight:700;font-size:13.5px}
+.card .st{font-size:11px;color:var(--mut)}
+.ring{--p:0;width:42px;height:42px;border-radius:50%;background:conic-gradient(var(--run) calc(var(--p)*1%),var(--b) 0);display:grid;place-items:center;margin-left:auto;flex:none}
+.ring.done{background:conic-gradient(var(--ok) 100%,var(--b) 0)}.ring.fail{background:conic-gradient(var(--bad) calc(var(--p)*1%),var(--b) 0)}
+.ring b{width:32px;height:32px;border-radius:50%;background:var(--vscode-editor-background);display:grid;place-items:center;font-size:10.5px;font-weight:600}
+.card .stage{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .prog{font-size:11px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .why{font-size:11px;color:var(--bad);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .why.ok{color:var(--mut)}
+.card .meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut)}
+.card .meta .lk{opacity:.75}.card .meta .lk:hover{opacity:1}
+.actor.claude{color:var(--cl)}
 a.lk{color:var(--vscode-textLink-foreground);cursor:pointer;text-decoration:none}
-@media (max-width:760px){.main{flex-direction:column}.left{width:auto;max-width:none;border-right:none;border-bottom:1px solid var(--b);max-height:55%}}
-</style></head><body>
-<div class="top"><h1>${T('VM 업무 작업', 'VM Jobs')}</h1><span style="color:var(--mut)">${T('업무 1개를 화면 여러 개에 실행', 'Run one job on many screens')}</span><span class="sp"></span><span class="note" id="note"></span><span class="chip" id="mode"></span>
-  <select id="recent" title="${T('최근 작업 열기', 'Open a recent job')}"><option value="">${T('최근 작업', 'Recent jobs')}</option></select></div>
+.empty{color:var(--mut);padding:14px}
+.log{height:30%;min-height:90px;overflow:auto;border-top:1px solid var(--b);font-family:var(--vscode-editor-font-family,monospace);font-size:11.5px;white-space:pre-wrap;word-break:break-all;padding:8px 14px;line-height:1.45}
+.logh{display:flex;align-items:center;gap:8px;padding:4px 14px;border-top:1px solid var(--b);font-size:11px;color:var(--mut)}
+@media (max-width:760px){.main{flex-direction:column}.side{width:auto;border-right:none;border-bottom:1px solid var(--b);max-height:55%}}
+.ico.hot:not(:disabled){background:var(--vscode-button-background);color:var(--vscode-button-foreground);border-color:transparent}</style></head><body>
 <div class="main">
- <div class="left">
-  <div class="sec"><h2>${T('1. 업무', '1. Job')}</h2>
+ <div class="side">
+  <div class="sec"><h4>${T('업무', 'Job')}<span class="sp"></span><span class="chip" id="mode" title="${T('작업 모드', 'Work mode')}"></span></h4>
     <select id="item"></select>
-    <div class="row" style="color:var(--mut)" id="itemInfo"></div>
-    <div class="row"><span>${T('실패한 화면', 'On failure')}</span><label><input type="radio" name="of" value="continue" checked> ${T('표시하고 다음 화면 계속', 'continue')}</label><label><input type="radio" name="of" value="stop"> ${T('첫 실패에서 중단', 'stop')}</label></div>
-    <div class="row" id="askRow" style="display:none"><label><input type="checkbox" id="ask"> <span id="askTxt"></span></label></div>
-    <div class="row"><span>${T('실행 방식', 'Mode')}</span><label><input type="radio" name="md" value="seq" checked> ${T('순차(화면 1개씩)', 'sequential')}</label><label><input type="radio" name="md" value="par"> ${T('부하가 허용하면 동시', 'parallel if load allows')}</label><label>${T('최대', 'max')} <input type="text" id="mp" value="2" style="width:34px;text-align:center"> ${T('화면', 'screens')}</label></div>
-    <div class="row" style="color:var(--mut)" id="parInfo"></div>
-    <div class="row" id="itemWarn" style="color:var(--warn);display:none"></div>
+    <div class="hint" id="itemInfo"></div>
+    <div class="warn" id="itemWarn" style="display:none"></div>
+    <div class="row" id="askRow" style="display:none"><label class="togg" title=""><input type="checkbox" id="ask"> 🤖 <span id="askTxt" class="hint" style="max-width:220px"></span></label></div>
   </div>
-  <div class="sec"><h2>${T('2. 화면', '2. Screens')}<small id="cnt"></small></h2>
-    <div class="row"><input type="text" id="q" placeholder="${T('화면 ID · 이름 검색', 'Search id or name')}" style="flex:1"><select id="flt"><option value="">${T('전체', 'All')}</option><option value="pack">${T('분석 자료 있음', 'Has fact pack')}</option><option value="nopack">${T('분석 자료 없음', 'No fact pack')}</option><option value="page">${T('화면 생성됨', 'Page generated')}</option><option value="nopage">${T('화면 미생성', 'No page')}</option><option value="chk">${T('CheckList 결과 있음', 'Has CheckList')}</option><option value="nochk">${T('CheckList 결과 없음', 'No CheckList')}</option><option value="sel">${T('선택한 것만', 'Selected only')}</option></select></div>
+  <div class="sec"><h4>${T('실행', 'Run')}</h4>
+    <div class="row"><span class="seg"><label title="${T('부하가 허용하면 동시', 'Parallel if load allows')}"><input type="radio" name="md" value="par" checked>⇉ ${T('동시', 'Parallel')}</label><label title="${T('순차(화면 1개씩)', 'Sequential')}"><input type="radio" name="md" value="seq">→ ${T('순차', 'Serial')}</label></span>
+      <span class="mini" title="${T('동시에 돌릴 최대 화면 수', 'Max screens at once')}">${T('최대', 'max')}<input type="text" id="mp" value="3"></span></div>
+    <div class="row"><span class="seg"><label title="${T('실패한 화면은 표시하고 다음 화면 계속', 'Continue after a failure')}"><input type="radio" name="of" value="continue" checked>⏭ ${T('계속', 'Continue')}</label><label title="${T('첫 실패에서 중단', 'Stop at first failure')}"><input type="radio" name="of" value="stop">⏹ ${T('중단', 'Stop')}</label></span></div>
+    <div class="hint" id="parInfo"></div>
+  </div>
+  <div class="sec" style="border-bottom:none;padding-bottom:6px"><h4>${T('화면', 'Screens')} <small id="cnt"></small></h4>
+    <div class="row"><input type="text" id="q" placeholder="🔍 ${T('ID · 이름', 'id · name')}" style="flex:1">
+      <select id="flt" title="${T('필터', 'Filter')}" style="width:76px"><option value="">${T('전체', 'All')}</option><option value="sel">${T('선택한 것', 'Selected')}</option><option value="pack">${T('분석 자료 있음', 'Has fact pack')}</option><option value="nopack">${T('분석 자료 없음', 'No fact pack')}</option><option value="page">${T('화면 생성됨', 'Page generated')}</option><option value="nopage">${T('화면 없음', 'No page')}</option><option value="chk">${T('CheckList 있음', 'Has CheckList')}</option><option value="nochk">${T('CheckList 없음', 'No CheckList')}</option></select></div>
     <div class="doms" id="doms"></div>
-    <div class="row"><button id="all">${T('보이는 것 전체 선택', 'Select shown')}</button><button id="none">${T('보이는 것 해제', 'Clear shown')}</button><button id="clr">${T('전체 해제', 'Clear all')}</button><span class="sp"></span><button id="asis" title="${T('AS-IS DB(.env.asis)의 사용 중 프로그램 목록을 더함', 'Add programs from the AS-IS DB')}">${T('AS-IS DB 목록 더하기', 'Add AS-IS list')}</button></div>
+    <div class="row"><button class="ico" id="all" title="${T('보이는 것 전체 선택', 'Select shown')}">☑</button><button class="ico" id="none" title="${T('보이는 것 해제', 'Clear shown')}">☐</button><button class="ico" id="clr" title="${T('전체 해제', 'Clear all')}">✕</button><button class="ico" id="asis" title="${T('AS-IS DB(.env.asis)의 사용 중 프로그램 목록을 더함', 'Add programs from the AS-IS DB')}">＋</button>
+      <select id="rsel" title="${T('최근에 시작한 업무와 화면 선택을 다시 불러옴', 'Recall a recent selection')}" style="flex:1"><option value="">${T('최근 선택', 'Recent selection')}</option></select></div>
   </div>
   <div class="list" id="list"><div class="empty">${T('화면 목록을 읽는 중', 'Loading')}</div></div>
-  <div class="sec" style="border-top:1px solid var(--b);border-bottom:none">
-    <div class="row"><input type="text" id="paste" placeholder="${T('화면 ID 붙여넣기 (예: SCP0111 SSP0014, DMF0042)', 'Paste screen ids')}" style="flex:1"><button id="add">${T('더하기', 'Add')}</button></div>
-    <div class="row"><span id="selTxt" style="flex:1;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="pri" id="go" disabled>${T('시작', 'Start')}</button></div>
+  <div class="go">
+    <div class="row"><input type="text" id="paste" placeholder="${T('화면 ID 붙여넣기', 'Paste screen ids')}" style="flex:1" title="${T('예: SCP0111 SSP0014, DMF0042', 'e.g. SCP0111 SSP0014')}"><button class="ico" id="add" title="${T('더하기', 'Add')}">↵</button></div>
+    <div class="row"><span id="selTxt" class="hint" style="flex:1"></span><button class="pri" id="go" disabled>▶ ${T('시작', 'Start')}</button></div>
   </div>
  </div>
  <div class="right">
-  <div class="sec"><h2 id="jt">${T('진행', 'Progress')}<small id="jm"></small></h2>
-    <div class="row"><span class="chip" id="jst">${T('작업 없음', 'No job')}</span><span id="jc" style="color:var(--mut)"></span><span class="sp"></span>
-      <button id="bResume" disabled>${T('이어서 실행', 'Resume')}</button><button id="bRetry" disabled>${T('실패분만 다시', 'Retry failed')}</button><button id="bPause" disabled>${T('일시 중지', 'Pause')}</button><button id="bStop" disabled>${T('중지', 'Stop')}</button><button id="bSum" disabled>${T('요약 열기', 'Summary')}</button></div>
-    <div id="jn" style="color:var(--warn)"></div>
-  </div>
-  <div class="tblw"><table id="tbl"><tr><th>#</th><th>${T('화면', 'Screen')}</th><th>${T('상태', 'Status')}</th><th>${T('현재 단계', 'Step')}</th><th>${T('주체', 'Actor')}</th><th>${T('소요', 'Time')}</th><th>${T('요약 · 실패 원인', 'Summary')}</th><th></th></tr></table><div class="empty" id="noJob">${T('왼쪽에서 업무와 화면을 고르고 시작을 누릅니다. 창을 닫아도 작업은 계속 돕니다.', 'Pick a job and screens, then Start. Jobs keep running if this window is closed.')}</div></div>
+  <div class="head"><span class="chip"><span class="dot" id="jdot"></span><span id="jst">${T('작업 없음', 'No job')}</span></span><span id="jc" class="hint"></span><span id="jt" class="hint" style="max-width:40%"><small id="jm"></small></span><span class="sp"></span><span class="note" id="note"></span>
+    <button class="ico" id="bPause" disabled title="${T('일시 중지(실행 중 화면은 끝까지)', 'Pause')}">⏸</button><button class="ico" id="bStop" disabled title="${T('중지', 'Stop')}">⏹</button><button class="ico" id="bRetry" disabled title="${T('실패분만 다시', 'Retry failed')}">↻</button><button class="ico" id="bResume" disabled title="${T('작업 재개: 창 다시 로드로 끊긴 화면은 끊긴 단계부터, 시작 전 화면은 처음부터', 'Resume: interrupted screens from the cut step')}">⏵</button><button class="ico" id="bSum" disabled title="${T('요약 열기', 'Summary')}">📄</button><button class="ico" id="bDel" disabled title="${T('작업 삭제: 실행 중이면 중지한 뒤 삭제. 목록과 재개 기록에서 지워져 재개할 수 없음', 'Delete job (stops first). Cannot be resumed')}">🗑</button>
+    <select id="recent" title="${T('최근 작업 열기', 'Open a recent job')}" style="width:120px"><option value="">🕘 ${T('최근 작업', 'Recent jobs')}</option></select></div>
+  <div id="jn" class="note" style="padding:0 14px"></div>
+  <div class="grid" id="grid"><div class="empty" id="noJob">${T('왼쪽에서 업무와 화면을 고르고 시작', 'Pick a job and screens, then start')}</div></div>
+  <div class="logh"><span>≡ ${T('로그', 'Log')}</span><b id="logWho"></b></div>
   <div class="log" id="log"></div>
  </div>
 </div>
 <script>
-const vscode = acquireVsCodeApi(); const $ = id => document.getElementById(id); const KO = ${ko ? 'true' : 'false'};
+const vscode = acquireVsCodeApi(); ${require('./orch-errlog').webviewSnippet('vscode')} const $ = id => document.getElementById(id); const KO = ${ko ? 'true' : 'false'};
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let items=[], screens=[], sel=new Set(), dom='', job=null, logScreen='';
 const SK = {wait:'대기',busy:'다른 곳에서 실행 중',admit:'입장 대기',run:'실행',done:'완료',warn:'완료(경고)',hold:'사람 확인 필요',fail:'실패',cancel:'중지',skip:'건너뜀'};
@@ -174,48 +223,64 @@ function note(t,bad){ const n=$('note'); n.textContent=t||''; n.className='note'
 function shown(){ const q=$('q').value.trim().toUpperCase(); const f=$('flt').value;
   return screens.filter(s=>(!dom||s.dom===dom)&&(!q||s.id.includes(q)||String(s.title).toUpperCase().includes(q))&&(f===''||(f==='pack'&&s.pack)||(f==='nopack'&&!s.pack)||(f==='page'&&s.page)||(f==='nopage'&&!s.page)||(f==='chk'&&s.chk)||(f==='nochk'&&!s.chk)||(f==='sel'&&sel.has(s.id)))); }
 function paintList(){ const rows=shown(); $('cnt').textContent=(KO?'보이는 ':'shown ')+rows.length+' / '+screens.length+(KO?' · 선택 ':' · selected ')+sel.size;
-  $('list').innerHTML = rows.length ? rows.slice(0,600).map(s=>'<label class="it"><input type="checkbox" data-id="'+s.id+'"'+(sel.has(s.id)?' checked':'')+'><b>'+esc(s.id)+'</b><span class="t" title="'+esc(s.title)+'">'+esc(s.title)+'</span><span class="f'+(s.pack?' y':'')+'" title="'+(KO?'AS-IS 분석 자료':'fact pack')+'">'+(KO?'분석':'pack')+'</span><span class="f'+(s.page?' y':'')+'" title="'+(KO?'TO-BE 화면 생성':'page')+'">'+(KO?'화면':'page')+'</span><span class="f'+(s.chk?' y':'')+'" title="CheckList">'+(KO?'점검':'chk')+'</span></label>').join('')+(rows.length>600?'<div class="empty">'+(KO?'600개까지 표시 — 검색으로 좁히세요':'Showing 600')+'</div>':'') : '<div class="empty">'+(KO?'없음':'None')+'</div>';
+  $('list').innerHTML = rows.length ? rows.slice(0,600).map(s=>'<label class="it"><input type="checkbox" data-id="'+s.id+'"'+(sel.has(s.id)?' checked':'')+'><b>'+esc(s.id)+'</b><span class="t" title="'+esc(s.title)+'">'+esc(s.title)+'</span><span class="f'+(s.pack?' y':'')+'" title="'+(KO?'AS-IS 분석 자료':'fact pack')+'"></span><span class="f'+(s.page?' y':'')+'" title="'+(KO?'TO-BE 화면 생성':'page')+'"></span><span class="f'+(s.chk?' y':'')+'" title="CheckList"></span></label>').join('')+(rows.length>600?'<div class="empty">'+(KO?'600개까지 표시 — 검색으로 좁히세요':'Showing 600')+'</div>':'') : '<div class="empty">'+(KO?'없음':'None')+'</div>';
   $('list').querySelectorAll('input[data-id]').forEach(c=>c.onchange=()=>{ if(c.checked) sel.add(c.dataset.id); else sel.delete(c.dataset.id); paintSel(); });
   paintSel(); }
 function paintSel(){ const a=[...sel]; $('selTxt').textContent=a.length?(KO?'선택 '+a.length+'개: ':'Selected '+a.length+': ')+a.join(', '):(KO?'선택한 화면 없음':'No screens selected'); { const itx=items.find(x=>x.label===$('item').value); $('go').disabled=!a.length||!$('item').value||!!(itx&&itx.disabled); } $('cnt').textContent=(KO?'보이는 ':'shown ')+shown().length+' / '+screens.length+(KO?' · 선택 ':' · selected ')+sel.size; }
 function paintDoms(){ const ds=[...new Set(screens.map(s=>s.dom))].sort(); $('doms').innerHTML='<button data-d=""'+(dom===''?' class="on"':'')+'>'+(KO?'전체':'All')+'</button>'+ds.map(d=>'<button data-d="'+d+'"'+(dom===d?' class="on"':'')+'>'+d+' '+screens.filter(s=>s.dom===d).length+'</button>').join(''); $('doms').querySelectorAll('button').forEach(b=>b.onclick=()=>{dom=b.dataset.d;paintDoms();paintList();}); }
-let CFG={maxPar:3,maxClaude:2,cpuMax:80,memMin:3072,rampSec:120};
-function paintPar(){ const it=items.find(x=>x.label===$('item').value); const par=document.querySelector('input[name=md]:checked').value==='par'; let n=Math.max(1,Math.min(CFG.maxPar,parseInt($('mp').value,10)||2)); $('mp').disabled=!par;
+let CFG={maxPar:5,maxClaude:2,cpuMax:80,memMin:3072,rampSec:120};
+function paintPar(){ const it=items.find(x=>x.label===$('item').value); const par=document.querySelector('input[name=md]:checked').value==='par'; let n=Math.max(1,Math.min(CFG.maxPar,parseInt($('mp').value,10)||3)); $('mp').disabled=!par;
   $('parInfo').textContent=par?((KO?'동시 '+n+'화면까지(상한 '+CFG.maxPar+'). ':'Up to '+n+'. ')+(it&&it.selfAdmit?(KO?'CheckList 는 실행 스크립트가 부하를 재서 스스로 입장을 기다림. ':'CheckList admits itself. '):(KO?'두 번째 화면부터 CPU < '+CFG.cpuMax+'% · 여유 메모리 ≥ '+CFG.memMin+'MB · 입장 간격 '+CFG.rampSec+'초일 때만 시작, 아니면 순차. ':'2nd+ screen only when load allows. '))+(it&&it.claudeSteps?(KO?'Claude 는 동시에 '+CFG.maxClaude+'개까지.':'Claude sessions up to '+CFG.maxClaude+'.'):'')):(KO?'같은 화면이 다른 창에서 실행 중이면 뒤로 미룸':'Screens busy elsewhere are deferred'); }
-function paintItem(){ { const it0=items.find(x=>x.label===$('item').value); const w=$('itemWarn'); const msg=it0&&it0.disabled?it0.why:(it0&&it0.newScreen?(KO?'이미 생성된 화면은 건너뜁니다(일괄 작업은 기존 화면을 지우지 않음)':'Screens that already exist are skipped'):''); w.style.display=msg?'':'none'; w.textContent=msg; paintPar(); }
+function paintItem0(){ { const it0=items.find(x=>x.label===$('item').value); const w=$('itemWarn'); const msg=it0&&it0.disabled?it0.why:(it0&&it0.newScreen?(KO?'이미 생성된 화면은 건너뜁니다(일괄 작업은 기존 화면을 지우지 않음)':'Screens that already exist are skipped'):''); w.style.display=msg?'':'none'; w.textContent=msg; paintPar(); }
   const it=items.find(x=>x.label===$('item').value); $('itemInfo').textContent=it?((KO?'단계 ':'steps ')+(it.steps||1)+(it.claudeSteps?(KO?' · Claude 단계 ':' · Claude steps ')+it.claudeSteps:(KO?' · 스크립트만':' · script only'))+(it.hint?' · '+it.hint:'')):''; $('askRow').style.display=it&&it.hasAsk?'':'none'; if(it&&it.hasAsk) $('askTxt').textContent=(KO?'승인이 필요한 단계도 전 화면에 실행: ':'Also run steps that need approval: ')+String(it.askText||'').replace(/\\$\\{id\\}/g,KO?'화면':'screen').slice(0,120); paintSel(); }
-function paintJob(){ const j=job; const has=!!j; $('noJob').style.display=has?'none':''; const tb=$('tbl'); while(tb.rows.length>1) tb.deleteRow(1);
-  if(!has){ $('jst').textContent=KO?'작업 없음':'No job'; $('jc').textContent=''; $('jn').textContent=''; $('jm').textContent=''; for(const b of ['bResume','bRetry','bPause','bStop','bSum']) $(b).disabled=true; return; }
+// 2026-11-20 B 스튜디오: 화면별 카드(상태 점 · 진행 원 · 지금 단계 · 세부 진행 · 주체 · 소요 · 실패 원인 · 링크)
+function pctOf(s){ if(s.status==='done'||s.status==='warn') return 100; const t=String(s.prog||''); let p=0; const st=/단계 (\\d+)\\/(\\d+)/.exec(t); if(st){ const i=+st[1], n=+st[2]||1; let f=0; const sub=/(?:시험|세부|AI 묶음) (\\d+)\\/(\\d+)/.exec(t); if(sub&&+sub[2]) f=Math.min(1,+sub[1]/+sub[2]); p=Math.round(((i-1)+f)/n*100); } return Math.max(0,Math.min(99,p)); }
+function paintItem(){ paintItem0(); $('itemInfo').title=$('itemInfo').textContent; $('askTxt').parentNode.title=$('askTxt').textContent; $('parInfo').title=$('parInfo').textContent; }
+function paintJob(){ const j=job; const has=!!j; const g=$('grid'); g.querySelectorAll('.card').forEach(c=>c.remove()); $('noJob').style.display=has?'none':'';
+  if(!has){ $('jst').textContent=KO?'작업 없음':'No job'; $('jdot').className='dot'; $('jc').textContent=''; $('jn').textContent=''; $('jm').textContent=''; for(const b of ['bResume','bRetry','bPause','bStop','bSum','bDel']) $(b).disabled=true; return; }
   const c={}; for(const s of j.screens) c[s.status]=(c[s.status]||0)+1; const fin=j.screens.filter(s=>['done','warn','hold','fail','cancel','skip'].includes(s.status)).length;
-  $('jm').textContent=j.id+' · '+j.itemLabel; $('jst').textContent=KO?(JK[j.status]||j.status):j.status; $('jc').textContent=fin+'/'+j.screens.length+' · '+Object.entries(c).map(([k,v])=>(KO?(SK[k]||k):k)+' '+v).join(' · '); $('jn').textContent=j.note||'';
+  $('jm').textContent=j.id+' · '+j.itemLabel; $('jm').title=j.itemLabel; $('jst').textContent=KO?(JK[j.status]||j.status):j.status; $('jdot').className='dot d-'+(j.status==='running'?'run':j.status==='done'?'done':j.status); $('jc').textContent=fin+'/'+j.screens.length+' · '+Object.entries(c).map(([k,v])=>(KO?(SK[k]||k):k)+' '+v).join(' · '); $('jn').textContent=(j.note||'')+(j.resumable?(KO?' · 재개 가능 '+j.resumable+'화면. ⏵ 작업 재개로 끊긴 단계부터 다시 실행':' · resumable '+j.resumable):''); $('bResume').classList.toggle('hot',!!j.resumable);
   const run=j.status==='running'||j.status==='pausing'; const left=j.screens.some(s=>s.status==='wait'||s.status==='busy'); const failed=j.screens.some(s=>s.status==='fail'||s.status==='cancel');
-  $('bResume').disabled=run||!left; $('bRetry').disabled=run||!failed; $('bPause').disabled=j.status!=='running'; $('bStop').disabled=!run; $('bSum').disabled=false;
-  j.screens.forEach((s,i)=>{ const r=tb.insertRow(-1); r.className='r'+(s.id===logScreen?' sel':''); r.dataset.s=s.id;
-    r.innerHTML='<td class="n">'+(i+1)+'</td><td><b>'+esc(s.id)+'</b></td><td class="s-'+s.status+'">'+esc(KO?(SK[s.status]||s.status):s.status)+'</td><td>'+esc(s.step||'')+'</td><td>'+(s.actor?'<span class="actor '+(s.actor==='claude'?'claude':'')+'">'+(s.actor==='claude'?'Claude':(KO?'스크립트':'script'))+'</span>':'')+'</td><td class="n">'+(s.sec?sec(s.sec):'')+'</td><td>'+esc(s.why||s.summary||'')+(s.actorNote?'<div style="color:var(--mut)">'+esc(s.actorNote)+'</div>':'')+'</td><td style="white-space:nowrap"><a class="lk" data-wb="'+s.id+'" title="'+(KO?'이 화면의 Workbench 열기':'Open Workbench')+'">Workbench</a>'+(s.md?' · <a class="lk" data-f="'+esc(s.md)+'">'+(KO?'실행 기록':'run')+'</a>':'')+(s.log?' · <a class="lk" data-f="'+esc(s.log)+'">'+(KO?'로그':'log')+'</a>':'')+'</td>';
-    r.onclick=e=>{ const a=e.target.closest('a.lk'); if(a){ if(a.dataset.wb) vscode.postMessage({type:'openWb',screen:a.dataset.wb}); else vscode.postMessage({type:'openFile',path:a.dataset.f}); return; } logScreen=s.id; $('log').textContent=''; vscode.postMessage({type:'log',id:j.id,screen:s.id}); paintJob(); }; });
-  const runS=j.screens.find(s=>s.status==='run'); if(runS&&(!logScreen||!j.screens.some(s=>s.id===logScreen&&s.status==='run'))&&logScreen!==runS.id&&j.status==='running'&&!window._pin){ logScreen=runS.id; $('log').textContent=''; vscode.postMessage({type:'log',id:j.id,screen:runS.id}); } }
+  $('bResume').disabled=run||!left; $('bRetry').disabled=run||!failed; $('bPause').disabled=j.status!=='running'; $('bStop').disabled=!run; $('bSum').disabled=false; $('bDel').disabled=false;
+  j.screens.forEach((s)=>{ const d=document.createElement('div'); d.className='card'+(s.id===logScreen?' sel':''); d.dataset.s=s.id; const p=pctOf(s); const bad=s.status==='fail'||s.status==='cancel';
+    const stage=String(s.step||'').replace(/^\\[\\d+\\]\\s*/,''); const why=s.why||s.summary||'';
+    d.innerHTML='<div class="top"><span class="dot d-'+esc(s.status)+'"></span><span class="id">'+esc(s.id)+'</span><span class="st">'+esc(KO?(SK[s.status]||s.status):s.status)+'</span><div class="ring'+(s.status==='done'||s.status==='warn'?' done':bad?' fail':'')+'" style="--p:'+p+'"><b>'+(s.status==='done'||s.status==='warn'?'✓':bad?'!':s.status==='run'?p+'%':'·')+'</b></div></div>'
+      +(s.resume?'<div class="why ok" title="'+esc((KO?'창 다시 로드로 끊긴 체인 ':'interrupted chain ')+(s.resume.label||''))+'">↻ '+(KO?'재개 가능 · '+s.resume.from+'/'+s.resume.of+' 단계부터 · '+esc(s.resume.at):'resumable from step '+s.resume.from+'/'+s.resume.of)+'</div>':'')
+      +(stage?'<div class="stage" title="'+esc(s.step)+'">'+esc(stage)+'</div>':'')+(s.prog?'<div class="prog" title="'+esc(s.prog)+'">'+esc(s.prog)+'</div>':'')
+      +(why&&s.status!=='run'?'<div class="why'+(bad?'':' ok')+'" title="'+esc(why)+'">'+esc(why)+'</div>':'')+(s.actorNote?'<div class="prog" title="'+esc(s.actorNote)+'">'+esc(s.actorNote)+'</div>':'')
+      +'<div class="meta">'+(s.actor?'<span class="actor '+(s.actor==='claude'?'claude':'')+'">'+(s.actor==='claude'?'Claude':(KO?'스크립트':'script'))+'</span>':'')+'<span class="sp"></span>'+(s.sec?'<span>'+sec(s.sec)+'</span>':'')
+      +' <a class="lk" data-wb="'+esc(s.id)+'" title="'+(KO?'이 화면의 Workbench 열기':'Open Workbench')+'">↗</a>'+(s.md?' <a class="lk" data-f="'+esc(s.md)+'" title="'+(KO?'실행 기록':'Run record')+'">📄</a>':'')+(s.log?' <a class="lk" data-f="'+esc(s.log)+'" title="'+(KO?'로그 파일':'Log file')+'">≡</a>':'')+'</div>';
+    d.onclick=e=>{ const a=e.target.closest('a.lk'); if(a){ if(a.dataset.wb) vscode.postMessage({type:'openWb',screen:a.dataset.wb}); else vscode.postMessage({type:'openFile',path:a.dataset.f}); return; } logScreen=s.id; window._pin=true; $('log').textContent=''; vscode.postMessage({type:'log',id:j.id,screen:s.id}); paintJob(); };
+    g.appendChild(d); });
+  $('logWho').textContent=logScreen||'';
+  const runS=j.screens.find(s=>s.status==='run'); if(runS&&(!logScreen||!j.screens.some(s=>s.id===logScreen&&s.status==='run'))&&logScreen!==runS.id&&j.status==='running'&&!window._pin){ logScreen=runS.id; $('logWho').textContent=logScreen; $('log').textContent=''; vscode.postMessage({type:'log',id:j.id,screen:runS.id}); } }
 function addLog(text, append){ const b=$('log'); const stick=b.scrollHeight-b.scrollTop-b.clientHeight<60; if(!append) b.textContent=''; b.appendChild(document.createTextNode(text)); if(b.childNodes.length>3000) b.removeChild(b.firstChild); if(stick||!append) b.scrollTop=b.scrollHeight; }
+let recentSel=[];
+function paintRecentSel(){ $('rsel').innerHTML='<option value="">'+(KO?'최근 선택':'Recent selection')+(recentSel.length?' ('+recentSel.length+')':'')+'</option>'+recentSel.map(function(r,i){ return '<option value="'+i+'">'+esc(r.at.slice(5)+' · '+String(r.itemLabel).slice(0,24)+' · '+r.screens.length+(KO?'화면: ':' screens: ')+r.screens.slice(0,4).join(', ')+(r.screens.length>4?(KO?' 외':' …'):''))+'</option>'; }).join(''); $('rsel').disabled=!recentSel.length; }
+function applyRecentSel(r){ if(!r) return; if(items.some(function(x){ return x.label===r.itemLabel; })){ $('item').value=r.itemLabel; paintItem(); } const have=new Set(screens.map(function(s){ return s.id; })); sel.clear(); let added=0; for(const id of r.screens){ if(!have.has(id)){ screens.push({id:id,title:'',status:KO?'최근 선택':'recent',dom:(/^[A-Z]+/.exec(id)||[''])[0],pack:false,page:false,chk:false}); added++; } sel.add(id); } if(added) screens.sort(function(a,b){ return a.id.localeCompare(b.id); }); paintDoms(); paintList(); note((KO?'최근 선택 불러옴: ':'Recalled: ')+r.screens.length+(KO?'화면':' screens')+(items.some(function(x){ return x.label===r.itemLabel; })?'':(KO?' · 업무는 지금 목록에 없어 그대로 둠':' · job kept'))); }
 function paintRecent(list){ $('recent').innerHTML='<option value="">'+(KO?'최근 작업':'Recent jobs')+'</option>'+list.map(j=>{ const c=j.counts||{}; return '<option value="'+j.id+'">'+esc(String(j.createdAt||'').replace('T',' ').slice(5,16)+' · '+(KO?(JK[j.status]||j.status):j.status)+' · '+j.total+(KO?'화면 · ':' screens · ')+j.itemLabel.slice(0,40))+'</option>'; }).join(''); }
 window.addEventListener('message', e=>{ const m=e.data||{};
-  if(m.type==='init'){ items=m.items||[]; screens=m.screens||[]; if(m.cfg) CFG=m.cfg; $('mode').textContent=m.mode||''; $('item').innerHTML=items.length?items.map(it=>'<option value="'+esc(it.label)+'">'+esc((KO?it.label:(it.label_en||it.label))+(it.disabled?(KO?'  (DB MODE 에서 실행 안 함)':'  (not in DB mode)'):''))+'</option>').join(''):'<option value="">'+(KO?'일괄 실행할 업무 없음(quick.json batch)':'No batch items')+'</option>'; paintItem(); paintDoms(); paintList(); paintRecent(m.jobs||[]); }
+  if(m.type==='init'){ items=m.items||[]; screens=m.screens||[]; if(m.cfg) CFG=m.cfg; $('mode').textContent=m.mode||''; $('item').innerHTML=items.length?items.map(it=>'<option value="'+esc(it.label)+'">'+esc((KO?it.label:(it.label_en||it.label))+(it.disabled?(KO?'  (DB MODE 에서 실행 안 함)':'  (not in DB mode)'):''))+'</option>').join(''):'<option value="">'+(KO?'일괄 실행할 업무 없음(quick.json batch)':'No batch items')+'</option>'; paintItem(); paintDoms(); paintList(); paintRecent(m.jobs||[]); recentSel=m.recentSel||[]; paintRecentSel(); }
   else if(m.type==='asis'){ if(!m.ok){ note((KO?'AS-IS DB 목록 실패: ':'AS-IS list failed: ')+m.reason,true); return; } let n=0; const have=new Set(screens.map(s=>s.id)); for(const x of m.items){ if(!x.id) continue; if(have.has(x.id)){ const s=screens.find(y=>y.id===x.id); if(s&&!s.title) s.title=x.title; } else { screens.push({id:x.id,title:x.title,status:'AS-IS',dom:(/^[A-Z]+/.exec(x.id)||[''])[0],pack:false,page:false,chk:false}); n++; } } screens.sort((a,b)=>a.id.localeCompare(b.id)); paintDoms(); paintList(); note((KO?'AS-IS DB 목록 ':'AS-IS list ')+m.items.length+(KO?'건 · 새로 더한 화면 ':' · added ')+n); }
   else if(m.type==='job'){ job=m.job; paintJob(); }
   else if(m.type==='log'){ if(m.screen===logScreen) addLog(m.text||'', !!m.append); }
   else if(m.type==='jobs'){ paintRecent(m.items||[]); }
+  else if(m.type==='recentSel'){ recentSel=m.items||[]; paintRecentSel(); }
   else if(m.type==='note'){ note(m.text, m.bad); }
 });
-document.querySelectorAll('input[name=md]').forEach(r=>r.onchange=paintPar); $('mp').oninput=paintPar;
+document.querySelectorAll('input[name=md]').forEach(r=>r.onchange=()=>{ paintPar(); $('parInfo').title=$('parInfo').textContent; }); $('mp').oninput=()=>{ paintPar(); $('parInfo').title=$('parInfo').textContent; };
 $('item').onchange=paintItem; $('q').oninput=paintList; $('flt').onchange=paintList;
 $('all').onclick=()=>{ for(const s of shown()) sel.add(s.id); paintList(); }; $('none').onclick=()=>{ for(const s of shown()) sel.delete(s.id); paintList(); }; $('clr').onclick=()=>{ sel.clear(); paintList(); };
 $('asis').onclick=()=>{ note(KO?'AS-IS DB 목록 조회 중':'Loading AS-IS list'); vscode.postMessage({type:'loadAsis'}); };
 function addPaste(){ const ids=[...new Set((String($('paste').value).toUpperCase().match(/\\b[A-Z]{2,4}\\d{4}[A-Z]?\\b/g)||[]))]; if(!ids.length){ note(KO?'화면 ID 형식이 아님':'No screen ids',true); return; } const have=new Set(screens.map(s=>s.id)); for(const id of ids){ if(!have.has(id)) screens.push({id,title:'',status:KO?'직접 입력':'manual',dom:(/^[A-Z]+/.exec(id)||[''])[0],pack:false,page:false,chk:false}); sel.add(id); } screens.sort((a,b)=>a.id.localeCompare(b.id)); $('paste').value=''; paintDoms(); paintList(); }
 $('add').onclick=addPaste; $('paste').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addPaste(); } });
-$('go').onclick=()=>{ const order=screens.filter(s=>sel.has(s.id)).map(s=>s.id); logScreen=''; $('log').textContent=''; vscode.postMessage({type:'create',itemLabel:$('item').value,screens:order,onFail:document.querySelector('input[name=of]:checked').value,mode:document.querySelector('input[name=md]:checked').value,maxPar:Math.max(1,Math.min(CFG.maxPar,parseInt($('mp').value,10)||2)),autoAnswer:$('ask').checked&&$('askRow').style.display!=='none'}); };
+$('go').onclick=()=>{ const order=screens.filter(s=>sel.has(s.id)).map(s=>s.id); logScreen=''; $('log').textContent=''; vscode.postMessage({type:'create',itemLabel:$('item').value,screens:order,onFail:document.querySelector('input[name=of]:checked').value,mode:document.querySelector('input[name=md]:checked').value,maxPar:Math.max(1,Math.min(CFG.maxPar,parseInt($('mp').value,10)||3)),autoAnswer:$('ask').checked&&$('askRow').style.display!=='none'}); };
 $('bResume').onclick=()=>job&&vscode.postMessage({type:'start',id:job.id}); $('bRetry').onclick=()=>job&&vscode.postMessage({type:'retry',id:job.id}); $('bPause').onclick=()=>job&&vscode.postMessage({type:'pause',id:job.id}); $('bStop').onclick=()=>job&&vscode.postMessage({type:'stop',id:job.id});
-$('bSum').onclick=()=>job&&vscode.postMessage({type:'openFile',path:'.vibe/jobs/'+job.id+'/SUMMARY.md'});
+$('bDel').onclick=()=>job&&vscode.postMessage({type:'del',id:job.id}); $('bSum').onclick=()=>job&&vscode.postMessage({type:'openFile',path:'.vibe/jobs/'+job.id+'/SUMMARY.md'});
+$('rsel').onchange=()=>{ const v=$('rsel').value; if(v!==''){ applyRecentSel(recentSel[Number(v)]); $('rsel').value=''; } };
 $('recent').onchange=()=>{ const v=$('recent').value; if(v){ logScreen=''; $('log').textContent=''; vscode.postMessage({type:'openJob',id:v}); $('recent').value=''; } };
 vscode.postMessage({type:'ready'});
 </script></body></html>`;
 }
 
-module.exports = { open, html, screenList };
+module.exports = { open, html, screenList, recentSel, addRecentSel };

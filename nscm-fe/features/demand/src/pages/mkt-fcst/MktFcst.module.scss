@@ -64,6 +64,12 @@
   min-height: 0;
 }
 
+// 검색 팝업(PrModal·PrHistoryModal)만 모듈 사이 간격 12px.
+//   공유 modalContentWrapper(SspSync 등 비대상 모달과 공유)엔 영향 주지 않도록 override 클래스로 분리.
+.searchModalGap {
+  gap: 12px;
+}
+
 .modalGridWrapper {
   display: flex;
   flex-direction: column;

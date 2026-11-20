@@ -1,0 +1,42 @@
+{
+  "id": "20261120_041507_R2_SCP0028",
+  "at": "2026-11-20T04:15:07+09:00",
+  "ms": 1795115707425,
+  "rule": "R2",
+  "ruleName": "같은 오류 반복",
+  "title": "같은 오류 반복 전 화면 9회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0028",
+  "sig": "S8.checklistRun | [FAIL] Playwright exit code N - log tail:",
+  "count": 1,
+  "repeat": {
+    "same": 1,
+    "all": 9,
+    "screens": [
+      "SSP0005",
+      "SCP0005",
+      "SCP0028"
+    ]
+  },
+  "detail": "[FAIL] Playwright exit code 1 - log tail:\n[ERROR] nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx:395 ShipmentLotSizeBatchModal : [확인 대상] AS-IS 고정 플래그 _action_flag=D 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n[ERROR] nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx:395 ShipmentLotSizeBatchModal : [확인 대상] AS-IS 고정 플래그 _action_flag=I 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n[FAIL] nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx:372 MaterialByDivisionModal preSearchParams.operationGroup: 연동 누락: Operation Group(operationGroup='') — 화면 조회조건 Operation Group(searchCondition.operationGroup)…\n[db_ref] SCP0028: TB_FX PKG_SCP0028 PASS / JSON_SHORT PKG_SCP0028 PASS / SELECT_INTO PKG_SCP0028 ERROR [확인 대상] PKG_SCP0028 빈 결과 처리 없는 단건 SELECT INTO 1곳: 줄264:V_TOKEN_TAB — 기준 데이터 없으면 ORA-01403 / EMPTY_EQ PKG_SCP0028 PASS / LIKE_NULL PKG_SCP…",
+  "evidence": {
+    "runId": "SCP0028_1795104646266",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "closed",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T04:15:25+09:00",
+      "by": "VMO",
+      "what": "같은 서명으로 2회 조치한 뒤 다시 발생. 자동 조치 중단, 사용자 확인 필요"
+    },
+    {
+      "at": "2026-11-20T04:28:01+09:00",
+      "by": "사용자",
+      "what": "닫음"
+    }
+  ]
+}

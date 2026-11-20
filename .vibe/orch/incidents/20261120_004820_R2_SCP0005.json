@@ -1,0 +1,84 @@
+{
+  "id": "20261120_004820_R2_SCP0005",
+  "at": "2026-11-20T00:48:20+09:00",
+  "ms": 1795103300643,
+  "rule": "R2",
+  "ruleName": "같은 오류 반복",
+  "title": "같은 오류 반복 SCP0005 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0005",
+  "sig": "S8.checklistRun | $ <path> <path> <ID> --asis <ID>",
+  "count": 3,
+  "repeat": {
+    "same": 2,
+    "all": 2,
+    "screens": [
+      "SCP0005"
+    ]
+  },
+  "detail": "$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\prereq.py SCP0005 --asis SCP0005\n== UI CheckList 사전 작업 점검 SCP0005 (AS-IS SCP0005)\n$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\DbConn\\probe.py",
+  "evidence": {
+    "runId": "SCP0005_1795102363038",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:48:21+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T00:50:59+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 개선안 올림 · 원인 engine: 같은 실패를 VM 감시기가 여러 번 세었다. sig_history.json 의 'S8.checklistRun | $ <path> <path> <ID> --asis <ID>' SCP0005 기록 4건 중 3건(00:48:20, 00:48:29, 00:48:33)이 events.jsonl 에 1줄만 있는 00:33:46 step.end(runId SCP0005_1795102363038)를 VS Code 재기동 뒤 다시 센 것이다. orch-watch.js:75 noteSig 는 runId 중복을 거르지 않는다. 다시 읽은 경로(orch · 개선안 등록 20261120005059_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T00-48-29_claude_orch.log",
+      "sec": 145,
+      "turns": 26,
+      "costUsd": 1.3171802,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드 뒤 지난 기록을 다시 읽어 올린 중복). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_004820_R2_SCP0005.json",
+  "lastAt": "2026-11-20T00:48:33+09:00",
+  "lastMs": 1795103313946,
+  "agent": {
+    "cause_class": "engine",
+    "cause": "같은 실패를 VM 감시기가 여러 번 세었다. sig_history.json 의 'S8.checklistRun | $ <path> <path> <ID> --asis <ID>' SCP0005 기록 4건 중 3건(00:48:20, 00:48:29, 00:48:33)이 events.jsonl 에 1줄만 있는 00:33:46 step.end(runId SCP0005_1795102363038)를 VS Code 재기동 뒤 다시 센 것이다. orch-watch.js:75 noteSig 는 runId 중복을 거르지 않는다. 다시 읽은 경로(orch-state.js:64 또는 126)는 미확인이다. 두 실행의 원인은 서로 다르다. 1회차는 사용자 중지(job J20261120_003243), 2회차는 VS Code 종료 중단이다(job J20261120_003352 job.json status interrupted, note 'VS Code 종료로 중단됨'). 2회차 사유 '[FAIL] Playwright exit code 1' 은 앞서 끝난 crud 시험의 문구다(로그 78행, 96행에서 '[OK] crud ... 판정 반입'으로 넘어감).",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "events.jsonl 241~319행, 실행 로그 2026-11-20T00-33-54_…log, jobs/J20261120_003352/job.json, sig_history.json, orch-watch.js:64~154, orch-state.js:60~129 확인",
+        "result": "R2 는 같은 실패 2건을 재기동 뒤 3번씩 더 센 결과임. 두 실행 모두 외부 중단임"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 파일을 고치지 않았다. C 등급 대상이고 CheckList 재수행은 금지 대상이다. 확인 시각 2026-11-20 00:50:23",
+    "status": "proposal",
+    "next_for_user": "SCP0005 화면 결함은 없다. 중단된 CheckList 는 사용자가 다시 실행한다. 함께 올라온 R2_SCP0005_2, R2_SSP0005 사건도 같은 중복 집계에서 생겼다. 개선안을 반영한 뒤 닫는다. R2_SCP0014 는 prereq 의 'nscm-fe 에서 SCP0014 를 쓰는 화면 폴더를 찾지 못함'(exit 6)이 원인이다. TO-BE 화면이 아직 없어서 생기므로 CheckList 대상에서 뺄지 사용자가 판단한다.",
+    "proposal": {
+      "title": "R2 반복 집계에서 같은 실행의 실패를 한 번만 세고, VS Code 종료로 끊긴 실행은 반복 집계에서 뺀다",
+      "evidence": "sig_history.json: '$ <path> <path> <ID> --asis <ID>' SCP0005 4건(00:33:46, 00:48:20, 00:48:29, 00:48:33), 'Playwright exit code N' SCP0005·SSP0005 각 4건(00:47:34 뒤 3건이 재기동 뒤 기록). events.jsonl 에서 ms 1795102426090 step.end 는 1줄. orch-watch.js:66~77 noteSig 와 failure 에 runId 중복 확인이 없음. orch-watch.js:125·139 는 user.stop 만 중단으로 봄. jobs/J20261120_003352/job.json note 'VS Code 종료로 중단됨'",
+      "targets": [
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ],
+      "before_after": "변경 전: noteSig(sig, screen) 가 부를 때마다 기록을 1건 더함. 감시기가 시작하기 전 사건도 다시 읽으면 R1, R2 판정에 들어감. 변경 후: (1) noteSig 기록에 key(runId|단계 no, 없으면 ev.ms|ev.pid)를 넣고 같은 key 가 있으면 더하지 않고 기존 횟수를 돌려줌. (2) orch-watch.js onEvent 에서 ev.ms 가 감시기 init 시각보다 이르면 R1, R2, R7, R11 판정을 건너뜀(상태 반영만 함). (3) step.end 나 proc.end 를 보낸 VM pid 가 처리 시점에 살아 있지 않으면 중단 실행으로 보고 반복 집계에서 뺌",
+      "verify": "node tools/VibeManager/test/t_orch_watch.js 에 시험 2건 추가: 같은 runId step.end FAIL 을 2번 넣으면 R1 1건만 생기고 R2 가 없음, init 이전 ms 의 step.end FAIL 은 사건 0건. node tools/VibeManager/test/run_all.js 통과 확인",
+      "rollback": "orch-watch.js, orch-state.js 를 .bak_20261120_orch 로 되돌리고 .vibe/orch/sig_history.json 의 key 필드는 그대로 둔다(종전 코드는 이 필드를 읽지 않음)"
+    }
+  },
+  "proposal": "20261120005059_INC",
+  "notice": true,
+  "reload": "replay",
+  "prevStatus": "need-user"
+}

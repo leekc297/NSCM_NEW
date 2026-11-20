@@ -3,7 +3,7 @@ const Module = require('module'); const path = require('path');
 const stub = new Proxy(function () { }, { get: (t, k) => (k === 'then' ? undefined : stub), apply: () => stub, construct: () => stub });
 const orig = Module._load;
 Module._load = function (req, ...rest) { return req === 'vscode' ? stub : orig.call(this, req, ...rest); };
-const dir = process.argv[2];
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 for (const f of ['orch-events.js', 'workbench.js', 'extension.js']) {
   try { const m = require(path.join(dir, f)); console.log('LOAD_OK', f, Object.keys(m).slice(0, 12).join(',')); }
   catch (e) { console.log('LOAD_FAIL', f, e.message); process.exitCode = 1; }

@@ -1,0 +1,134 @@
+{
+  "id": "20261120094531_REVIEW",
+  "at": "2026-11-20T09:45:31+09:00",
+  "ms": 1795135531085,
+  "source": "review",
+  "status": "applied",
+  "sig": "rn skip after user stop",
+  "title": "중지 직후 남은 잠금은 사건 없이 지우고 처리 기록만 남긴다",
+  "evidence": "incidents byRule R9 28. 2026-11-20 06:06:42~06:06:44 R9 사건 9건(_ALL 1, SCP0005 2, SCP0028 2, SSP0005 2, SSP0014 2)은 06:06:04~05 user.stop 4건(by 'VS Code 종료') 뒤 38~40초 안에 올라옴. 05:15:30 R9_ALL 1건은 05:14:14 job.end status interrupted 뒤 76초. 예: incidents/20261120_060642_R9_SCP0005.json 은 잠금 _run.dbwin.SCP0005.lock 의 PID 5080, 시작 05:48:44(같은 체인 실행), 조치 A 등급 삭제만. orch-watch.js:283~292 는 user.stop 여부를 보지 않음",
+  "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_lock_repeat.js"
+  ],
+  "before_after": "변경 전: 주인 PID 가 없는 잠금마다 R9 사건 1건 → 변경 후: 잠금의 화면(또는 인자 화면 ID)에 최근 10분 안 user.stop 이나 job.end interrupted/stopped 가 있으면 잠금을 지우고 errlog 와 activations 에 '중지 뒤 잠금 정리' 1줄만 남김. 그 밖은 종전대로 R9, 3회부터 R2 묶음",
+  "verify": "node tools/VibeManager/test/t_orch_lock_repeat.js 에 시험 2건 추가(user.stop 뒤 죽은 잠금 → 사건 0건, 잠금 파일 삭제. user.stop 없는 죽은 잠금 → R9 1건). node tools/VibeManager/test/run_all.js 통과",
+  "rollback": "orch-watch.js, t_orch_lock_repeat.js 를 반영 직전 .bak 로 되돌림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T10:37:29+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:39:36+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 37/37개 파일 통과(PASS 468, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1037"
+    },
+    {
+      "at": "2026-11-20T10:39:40+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T10:42:40+09:00",
+      "by": "VMO",
+      "what": "반영 실패. Claude exit 1 · 대상 파일 2개 복원 · 대상 밖 변경 tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T10-39-40_claude_orch.log",
+      "sec": 177,
+      "costUsd": null,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_lock_repeat.js"
+      ]
+    },
+    {
+      "at": "2026-11-20T10:46:07+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 반영 Claude(childPid 15704)가 10:42:37 exit 1 로 끝남. timedOut false, stderr 없음(events.jsonl:781). 대상 시험 t_orch_lock_repeat.js 는 추가 2건 통과, ALL PASS 까지 끝났고 run_all.js 실행 60초째에 끊김(.vibe/logs/2026-11-20T10-39-40_claude_orch.log 끝부분). 10:42:53, 10:42:56 에 VM 새 기동 기록 2건(activations.jsonl:16~17, pid 11196 → 14900, 32592). VS Code 창 다시 시작과 같은 시각에 Claude 가 끝남. 다시 시작한 주체는 미확인이고 VM 코드의 창 다시 로드는 extension.js:724 의 사용자 단추뿐임"
+    },
+    {
+      "at": "2026-11-20T10:46:54+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:48:55+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 37/37개 파일 통과(PASS 468, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1046"
+    },
+    {
+      "at": "2026-11-20T10:48:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T10:55:22+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 38/38개 파일 통과(PASS 475, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T10:55:22+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_lock_repeat.js: PASS 11, FAIL 0, ALL PASS. 추가 시험 4건은 user.stop 뒤 죽은 잠금 2개(_run.dbwin.TST0051.lock, 인자 화면 _run.admit.lock) 사건 0건 잠금 삭제, activations 2줄 ms·pid 없음, errlog 기록, user.stop 없는 _run.dbwin.TST0052.lock R9 1건. 2026-11-20 10:50:48 실행. node tools/VibeManager/te · 변경 7개 파일 · 대상 목록 밖 변경 5개: tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/orchestra.js, tools/VibeManager/design/health_concepts.html, tools/VibeManager/test/t_job_tidy.js",
+      "log": ".vibe\\logs\\2026-11-20T10-48-58_claude_orch.log",
+      "sec": 257,
+      "costUsd": 1.2378843,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/test/t_orch_lock_repeat.js",
+        "tools/VibeManager/design/health_concepts.html",
+        "tools/VibeManager/test/t_job_tidy.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795139214089,
+  "autoFp": "994e3e6081",
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_lock_repeat.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_lock_repeat.js: PASS 11, FAIL 0, ALL PASS. 추가 시험 4건은 user.stop 뒤 죽은 잠금 2개(_run.dbwin.TST0051.lock, 인자 화면 _run.admit.lock) 사건 0건 잠금 삭제, activations 2줄 ms·pid 없음, errlog 기록, user.stop 없는 _run.dbwin.TST0052.lock R9 1건. 2026-11-20 10:50:48 실행. node tools/VibeManager/test/run_all.js: 파일 38/38, PASS 475, FAIL 0, 124.6초, 2026-11-20 10:52:59 종료",
+    "note": "중지 판정은 사건 기록 끝 2MB 에서 잠금 화면의 10분 안 user.stop 이나 job.end interrupted/stopped 를 찾음. 잠금 화면은 파일 이름 먼저, 없으면 인자에서 찾음. job.end 화면은 .vibe/jobs/<job>/job.json screens 로 맞추고, screens 가 없으면 전 화면을 대상으로 봄. activations.jsonl 줄은 kind lock.stopclean 이고 ms·pid 를 넣지 않음(reloadCause·자가진단 S6 이 ms·pid 로 창 로드를 셈). errlog 는 같은 서명을 60초에 1건만 남겨 여러 화면 같은 종류 잠금은 1건과 skipped 수로 남음. errlog 의 새 서명을 자가진단 S5 가 1회 표시할지는 미확인. 설치 폴더, CHANGELOG, .bak 은 건드리지 않음"
+  },
+  "repair": {
+    "at": "2026-11-20T10:46:07+09:00",
+    "decision": "retry",
+    "cause": "반영 Claude(childPid 15704)가 10:42:37 exit 1 로 끝남. timedOut false, stderr 없음(events.jsonl:781). 대상 시험 t_orch_lock_repeat.js 는 추가 2건 통과, ALL PASS 까지 끝났고 run_all.js 실행 60초째에 끊김(.vibe/logs/2026-11-20T10-39-40_claude_orch.log 끝부분). 10:42:53, 10:42:56 에 VM 새 기동 기록 2건(activations.jsonl:16~17, pid 11196 → 14900, 32592). VS Code 창 다시 시작과 같은 시각에 Claude 가 끝남. 다시 시작한 주체는 미확인이고 VM 코드의 창 다시 로드는 extension.js:724 의 사용자 단추뿐임",
+    "reason": "개선안 내용과 검증 시험은 통과했습니다. 반영 도중 VS Code 창이 다시 시작되어 끊긴 것이라 같은 안을 다시 반영합니다.",
+    "log": ".vibe\\logs\\2026-11-20T10-44-54_claude_orch.log",
+    "costUsd": 0.8946874999999999,
+    "sec": 74
+  },
+  "retryN": 1,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 38/38개 파일 통과(PASS 475, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1046",
+  "needsReload": true,
+  "appliedMs": 1795139722936,
+  "synced": [
+    "orch-watch.js"
+  ],
+  "snap": "prop_20261120094531_REVIEW"
+}

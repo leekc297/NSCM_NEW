@@ -297,8 +297,12 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!grid) return;
     if (!canEdit) return; // 편집권한 없음 — 버튼도 안 뜨지만 단축키 경로까지 막는다.
     if (!confirmedDivision) {
-      // 조회 전/division 미확정 삽입 차단 — AS-IS InsertRow(IsLock==false 필요) + SSP0024 가드 등가.
-      void setAlert({ type: 'alert', content: msg(MSG.REQUIRE_DIVISION, '_Please select Division.') });
+      // 조회 전 삽입 차단 — AS-IS InsertRow(IsLock==false=편집모드) 등가. 미조회 상태라 막는 것이므로
+      //   안내는 "Division 선택"(MSG00097)이 아니라 "조회 후 편집모드 진입"(MSG00662)이 정확(사용자 지시 2026-11-18).
+      void setAlert({
+        type: 'alert',
+        content: msg(MSG.INSERT_AFTER_SEARCH, '_Edit mode is available after search.'),
+      });
       return;
     }
     GridAction.addRow(grid, {

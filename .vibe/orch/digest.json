@@ -1,11 +1,79 @@
 {
-  "at": "2026-11-19T19:58:43+09:00",
+  "at": "2026-11-20T11:18:48+09:00",
   "days": 7,
-  "events": 33,
+  "events": 823,
   "firstEventAt": "2026-11-19T17:10:46+09:00",
-  "lastEventAt": "2026-11-19T19:35:39+09:00",
-  "steps": [],
+  "lastEventAt": "2026-11-20T11:18:09+09:00",
+  "steps": [
+    {
+      "key": "S8.checklistRun",
+      "actor": "script",
+      "n": 15,
+      "fail": 3,
+      "stopped": 8,
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 5767.2,
+      "p90Sec": 14608.3,
+      "totalSec": 89152.6
+    },
+    {
+      "key": "S8.checklistRecheck",
+      "actor": "script",
+      "n": 5,
+      "fail": 0,
+      "stopped": 0,
+      "warn": 3,
+      "repairs": 0,
+      "medianSec": 3473.2,
+      "p90Sec": 4721.3,
+      "totalSec": 13967.2
+    },
+    {
+      "key": "2. 검증 보완 (미검증 처리 대상 전체 목록 → 검사엔진 일괄 신설·보완 · 처리 대상이 있을 때만)",
+      "actor": "claude",
+      "n": 4,
+      "fail": 0,
+      "stopped": 0,
+      "warn": 1,
+      "repairs": 0,
+      "medianSec": 2263.5,
+      "p90Sec": 3279.7,
+      "totalSec": 8680.1
+    },
+    {
+      "key": "2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)",
+      "actor": "claude",
+      "n": 2,
+      "fail": 0,
+      "stopped": 0,
+      "warn": 2,
+      "repairs": 0,
+      "medianSec": 607.9,
+      "p90Sec": 642.1,
+      "totalSec": 1215.7
+    }
+  ],
   "waits": [
+    {
+      "kind": "admit",
+      "started": 8,
+      "unfinished": 0,
+      "unfinishedLive": 0,
+      "unfinishedScreens": [],
+      "gone": 0,
+      "goneSec": 0,
+      "n": 8,
+      "totalSec": 1140,
+      "maxSec": 270,
+      "gaveUp": 0,
+      "topScreens": [
+        "SCP0028 360s",
+        "SCP0005 360s",
+        "SSP0005 270s",
+        "SSP0014 150s"
+      ]
+    },
     {
       "kind": "dbwin",
       "started": 4,
@@ -14,8 +82,8 @@
       "unfinishedScreens": [
         "DMF0042"
       ],
-      "gone": 0,
-      "goneSec": 0,
+      "gone": 3,
+      "goneSec": 70097,
       "n": 1,
       "totalSec": 30,
       "maxSec": 30,
@@ -25,23 +93,254 @@
       ]
     }
   ],
-  "chains": [],
+  "chains": [
+    {
+      "chain": "checklist",
+      "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+      "n": 11,
+      "ok": 0,
+      "stopped": 8,
+      "medianSec": 1054.9,
+      "claudeRan": 0,
+      "claudeSkipped": 33,
+      "runsWithoutClaude": 11
+    }
+  ],
   "claude": {
-    "started": 6,
-    "unfinished": 1,
-    "runningNow": 0,
-    "calls": 5,
-    "fail": 1,
-    "totalSec": 611.5,
-    "costUsd": 4.394,
-    "costCounted": 4,
+    "started": 98,
+    "unfinished": 4,
+    "runningNow": 1,
+    "calls": 94,
+    "fail": 7,
+    "timedOut": 0,
+    "stopped": 4,
+    "noResult": 0,
+    "totalSec": 22852.3,
+    "costUsd": 268.405,
+    "costCounted": 89,
     "sessionRetry": 0,
-    "waitedSec": 0
+    "waitedSec": 520.7
   },
-  "procFails": [],
+  "procFails": [
+    {
+      "label": "CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+      "n": 15,
+      "fail": 3,
+      "stopped": 8,
+      "exits": {
+        "1": 2,
+        "6": 1
+      }
+    },
+    {
+      "label": "CheckList 재수행 — 미검증 행만 가능하면 그 규칙만(--only), 아니면 처음부터 → 재분류 · 🔎 CheckList 체인 3단계",
+      "n": 5,
+      "fail": 0,
+      "stopped": 3,
+      "exits": {}
+    }
+  ],
   "incidents": {
-    "total": 0,
-    "byRule": {},
-    "topRepeats": []
+    "total": 120,
+    "byRule": {
+      "R12": 45,
+      "R7": 20,
+      "R9": 36,
+      "R5": 13,
+      "R3": 1,
+      "R2": 15,
+      "R11": 16,
+      "R1": 5,
+      "R4": 1
+    },
+    "topRepeats": [
+      {
+        "rule": "R7",
+        "n": 11,
+        "screens": [
+          "DMF0042"
+        ],
+        "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
+        "statuses": {
+          "need-user": 1,
+          "resolved": 5,
+          "closed": 1
+        },
+        "sig": "R7|응답 중 종료"
+      },
+      {
+        "rule": "R2",
+        "n": 11,
+        "screens": [
+          "SSP0005",
+          "SCP0005",
+          "SCP0028"
+        ],
+        "title": "같은 오류 반복 SSP0005 5회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "statuses": {
+          "closed": 3,
+          "resolved": 4
+        },
+        "sig": "S8.checklistRun | [FAIL] Playwright exit code N - log tail:"
+      },
+      {
+        "rule": "R11",
+        "n": 9,
+        "screens": [
+          "SCP0005"
+        ],
+        "title": "Claude 없이 끝난 체인. SCP0005 FAIL 27 · 미검증 392 남음",
+        "statuses": {
+          "closed": 2
+        },
+        "sig": "R11|SCP0005|checklist"
+      },
+      {
+        "rule": "R7",
+        "n": 9,
+        "screens": [],
+        "title": "Claude 비정상 종료 (exit 1). 미분류",
+        "statuses": {
+          "resolved": 2,
+          "closed": 1
+        },
+        "sig": "R7|미분류"
+      },
+      {
+        "rule": "R12",
+        "n": 8,
+        "screens": [],
+        "title": "VM 자가진단 S3 설치본 차이: CHANGELOG.md 내용 다름",
+        "statuses": {
+          "resolved": 8
+        },
+        "sig": "R12|S3|CHANGELOG.md"
+      },
+      {
+        "rule": "R9",
+        "n": 8,
+        "screens": [
+          "DMF0042"
+        ],
+        "title": "죽은 잠금 — _run.dbwin.DMF0042.lock (PID 34744 없음)",
+        "statuses": {
+          "resolved": 8
+        },
+        "sig": "R9|_run.dbwin.DMF0042.lock"
+      },
+      {
+        "rule": "R9",
+        "n": 7,
+        "screens": [],
+        "title": "죽은 잠금. _run.admit.lock (PID 7540 없음)",
+        "statuses": {
+          "resolved": 7
+        },
+        "sig": "R9|_run.admit.lock"
+      },
+      {
+        "rule": "R11",
+        "n": 5,
+        "screens": [
+          "SSP0005"
+        ],
+        "title": "Claude 없이 끝난 체인. SSP0005 FAIL 3 · 미검증 434 남음",
+        "statuses": {
+          "closed": 1,
+          "resolved": 1
+        },
+        "sig": "R11|SSP0005|checklist"
+      },
+      {
+        "rule": "R5",
+        "n": 5,
+        "screens": [
+          "SSP0014",
+          "SSP0005",
+          "SCP0028",
+          "SCP0005"
+        ],
+        "title": "종료 기록 없이 사라진 실행. 체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "statuses": {
+          "resolved": 4
+        },
+        "sig": "R5|gone|chain|🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)"
+      },
+      {
+        "rule": "R5",
+        "n": 5,
+        "screens": [
+          "SCP0028"
+        ],
+        "title": "종료 기록 없이 사라진 실행. 프로세스 CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+        "statuses": {
+          "resolved": 2
+        },
+        "sig": "R5|gone|proc|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계"
+      },
+      {
+        "rule": "R9",
+        "n": 4,
+        "screens": [
+          "SCP0005"
+        ],
+        "title": "죽은 잠금. _run.dbwin.SCP0005.lock (PID 42752 없음)",
+        "statuses": {
+          "resolved": 3,
+          "closed": 1
+        },
+        "sig": "R9|_run.dbwin.SCP0005.lock"
+      },
+      {
+        "rule": "R2",
+        "n": 4,
+        "screens": [
+          "SCP0014"
+        ],
+        "title": "같은 오류 반복 SCP0014 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 6) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "statuses": {
+          "resolved": 1,
+          "closed": 1
+        },
+        "sig": "S8.checklistRun | [FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 <ID> 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님"
+      },
+      {
+        "rule": "R2",
+        "n": 4,
+        "screens": [
+          "SCP0005"
+        ],
+        "title": "같은 오류 반복 SCP0005 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "statuses": {
+          "resolved": 1,
+          "closed": 1
+        },
+        "sig": "S8.checklistRun | $ <path> <path> <ID> --asis <ID>"
+      },
+      {
+        "rule": "R9",
+        "n": 3,
+        "screens": [
+          "SSP0005"
+        ],
+        "title": "죽은 잠금. _run.verify.SSP0005.lock (PID 7540 없음)",
+        "statuses": {
+          "resolved": 3
+        },
+        "sig": "R9|_run.verify.SSP0005.lock"
+      },
+      {
+        "rule": "R9",
+        "n": 3,
+        "screens": [
+          "SSP0005"
+        ],
+        "title": "죽은 잠금. _run.dbwin.SSP0005.lock (PID 7540 없음)",
+        "statuses": {
+          "resolved": 3
+        },
+        "sig": "R9|_run.dbwin.SSP0005.lock"
+      }
+    ]
   }
 }

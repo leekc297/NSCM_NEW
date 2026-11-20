@@ -1,0 +1,9 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0008,SQL,SSP0008_GET_PRODUCTION_PLAN_LINEBY,Doc\asisfacts\db\modules\dbo.SSP0008_GET_PRODUCTION_PLAN_LINEBY.sql,412,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SSP0008,SQL,SSP0008_GET_PRODUCTION_PLAN_LINEBY,Doc\asisfacts\db\modules\dbo.SSP0008_GET_PRODUCTION_PLAN_LINEBY.sql,444,IF @debug_mode ='T',"DIVISION_ID,OPERATION_GROUP,SCM_SITE_ID,LINE_ID,OPERATION_ID,SORT_ORDER_NO,ITEM_ID","SET @mEXEC = @mEXEC+'		ORDER BY  division_id, operation_group, scm_site_id, line_id , operation_id , sort_order_no ASC,item_id  '+CHAR(10);",0,동적 SQL
+SSP0008,SQL,SSP0008_GET_PRODUCTION_PLAN_LINEBY,Doc\asisfacts\db\modules\dbo.SSP0008_GET_PRODUCTION_PLAN_LINEBY.sql,489,,"FIX_KEY,YYYYMMDD","ORDER BY fix_key,yyyymmdd",0,정적
+SSP0008,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SSP0008,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0008,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SSP0008,SQL,SSP0008_GET_PLAN_EDIT_INFO,Doc\asisfacts\db\modules\dbo.SSP0008_GET_PLAN_EDIT_INFO.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0008,SQL,SCP0024_SAVE_PRODUCTION_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

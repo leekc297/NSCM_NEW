@@ -6,7 +6,7 @@
       "test",
       "SSP0014",
       "--grep",
-      "@auth(?!crud)"
+      "@authcrud"
     ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -111,31 +111,43 @@
   },
   "suites": [
     {
-      "title": "SSP0014.auth.spec.ts",
-      "file": "SSP0014.auth.spec.ts",
+      "title": "SSP0014.authcrud.spec.ts",
+      "file": "SSP0014.authcrud.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "SSP0014 권한 @auth [kijung03.kim GUEST/SSP Viewer]",
-          "file": "SSP0014.auth.spec.ts",
-          "line": 12,
+          "title": "SSP0014 권한별 CRUD @authcrud [kijung03.kim GUEST/SSP Viewer]",
+          "file": "SSP0014.authcrud.spec.ts",
+          "line": 14,
           "column": 8,
           "specs": [
             {
-              "title": "메뉴 접근 · 버튼 노출 · Division 데이터 범위",
+              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
               "ok": true,
               "tags": [
-                "auth"
+                "authcrud"
               ],
               "tests": [
                 {
-                  "timeout": 240000,
+                  "timeout": 540000,
                   "annotations": [
                     {
-                      "type": "access",
-                      "description": "authorized=false notFound=false menuAccess=Y tobeGroups=GUEST|SSP Viewer roster=40:SSP Viewer (users.json)"
+                      "type": "authcrud",
+                      "description": "tobeGroups=GUEST|SSP Viewer menuAccess=Y expected=USER_CHECK|SEARCH dataset=SSP Viewer matrix=-"
+                    },
+                    {
+                      "type": "cascade",
+                      "description": "kijung03.kim div=40 선택=true 후보=[40] 권한=[40] 권한밖=0 대표포함=true 연동=-"
+                    },
+                    {
+                      "type": "crud",
+                      "description": "mode=no-save save=N insert=N delete=N editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Save 비노출 · 편집기 안 열림"
+                    },
+                    {
+                      "type": "authcrud",
+                      "description": "kijung03.kim div=40 mode=no-save save=false insert=false delete=false editable=false saved=false found=false cleaned=true restored=true"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -146,20 +158,28 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 67600,
+                      "duration": 6560,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[openScreen] SSP0014: 주소 진입 뒤 Home 에 남음(http://127.0.0.1:5173/view/home) — 화면 진입 실패로 처리\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T08:21:15.629Z",
+                      "startTime": "2026-11-19T23:42:09.695Z",
                       "annotations": [
                         {
-                          "type": "access",
-                          "description": "authorized=false notFound=false menuAccess=Y tobeGroups=GUEST|SSP Viewer roster=40:SSP Viewer (users.json)"
+                          "type": "authcrud",
+                          "description": "tobeGroups=GUEST|SSP Viewer menuAccess=Y expected=USER_CHECK|SEARCH dataset=SSP Viewer matrix=-"
+                        },
+                        {
+                          "type": "cascade",
+                          "description": "kijung03.kim div=40 선택=true 후보=[40] 권한=[40] 권한밖=0 대표포함=true 연동=-"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=no-save save=N insert=N delete=N editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Save 비노출 · 편집기 안 열림"
+                        },
+                        {
+                          "type": "authcrud",
+                          "description": "kijung03.kim div=40 mode=no-save save=false insert=false delete=false editable=false saved=false found=false cleaned=true restored=true"
                         }
                       ],
                       "attachments": []
@@ -168,9 +188,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "d97bb3573858ecb2cdc0-1a5d3d8e57114554f7be",
-              "file": "SSP0014.auth.spec.ts",
-              "line": 14,
+              "id": "e0d938223a297c94764f-7d4c0ea416cfc8d08208",
+              "file": "SSP0014.authcrud.spec.ts",
+              "line": 17,
               "column": 9
             }
           ]
@@ -180,8 +200,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T08:21:15.174Z",
-    "duration": 70942.427,
+    "startTime": "2026-11-19T23:42:09.255Z",
+    "duration": 9847.156,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

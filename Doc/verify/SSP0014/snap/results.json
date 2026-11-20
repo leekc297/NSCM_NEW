@@ -3,13 +3,13 @@
   "key": "조회조건_Div_40",
   "kind": "조회조건",
   "scope": "Div 40",
-  "status": "NEW",
-  "golden": "",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0014\\snap\\golden\\조회조건_Div_40.aria.yml",
   "received": "Doc\\verify\\SSP0014\\snap\\received\\조회조건_Div_40.aria.yml",
   "diff": "",
-  "lines": 19,
-  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0014\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(20줄 · formItem 공통 조상) · 시각 순서 6칸",
-  "at": "2026-11-19T04:58:41.245Z"
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SSP0014\\snap\\golden\\조회조건_Div_40.aria.yml 와 일치 · 조회영역 aria(20줄 · formItem 공통 조상) · 시각 순서 6칸",
+  "at": "2026-11-19T23:43:41.331Z"
  },
  {
   "key": "버튼_Div_40",
@@ -20,55 +20,55 @@
   "received": "Doc\\verify\\SSP0014\\snap\\received\\버튼_Div_40.aria.yml",
   "diff": "",
   "lines": 8,
-  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0014\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(9줄) · 보이는 버튼 KOR,이 이민용,Home,Shipment Model PIC,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
-  "at": "2026-11-19T04:58:41.323Z"
+  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0014\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(9줄) · 보이는 버튼 KOR,이 이민용,Home,SSP Model PIC,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
+  "at": "2026-11-19T23:43:41.408Z"
  },
  {
   "key": "헤더_Shipment_Model_PIC",
   "kind": "헤더",
   "scope": "Shipment Model PIC",
-  "status": "NEW",
-  "golden": "",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0014\\snap\\golden\\헤더_Shipment_Model_PIC.txt",
   "received": "Doc\\verify\\SSP0014\\snap\\received\\헤더_Shipment_Model_PIC.txt",
   "diff": "",
-  "lines": 1,
-  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0014\\snap\\received\\헤더_Shipment_Model_PIC.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 1행 · 칸 21",
-  "at": "2026-11-19T04:58:48.961Z"
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SSP0014\\snap\\golden\\헤더_Shipment_Model_PIC.txt 와 일치 · 헤더 1행 · 칸 21",
+  "at": "2026-11-19T23:43:49.191Z"
  },
  {
   "key": "팝업_Model_Nickname",
   "kind": "팝업",
   "scope": "Model/Nickname",
-  "status": "NEW",
-  "golden": "",
+  "status": "MATCH",
+  "golden": "Doc\\verify\\SSP0014\\snap\\golden\\팝업_Model_Nickname.aria.yml",
   "received": "Doc\\verify\\SSP0014\\snap\\received\\팝업_Model_Nickname.aria.yml",
   "diff": "",
-  "lines": 27,
-  "detail": "골든 없음 — 수신본 Doc\\verify\\SSP0014\\snap\\received\\팝업_Model_Nickname.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 팝업 aria(28줄)",
-  "at": "2026-11-19T04:58:56.925Z"
+  "lines": 0,
+  "detail": "골든 Doc\\verify\\SSP0014\\snap\\golden\\팝업_Model_Nickname.aria.yml 와 일치 · 팝업 aria(28줄)",
+  "at": "2026-11-19T23:43:56.940Z"
  },
  {
   "key": "화면샷_1920",
   "kind": "화면샷",
   "scope": "1920",
-  "status": "NEW",
+  "status": "MATCH",
   "golden": "Doc\\verify\\SSP0014\\snap\\golden\\화면샷_1920.png",
   "received": "",
   "diff": "",
   "lines": 0,
-  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
   "at": ""
  },
  {
   "key": "화면샷_1366",
   "kind": "화면샷",
   "scope": "1366",
-  "status": "NEW",
+  "status": "MATCH",
   "golden": "Doc\\verify\\SSP0014\\snap\\golden\\화면샷_1366.png",
   "received": "",
   "diff": "",
   "lines": 0,
-  "detail": "골든 없음(승인 전) — 자동 생성 골든 후보 png 와 일치(maxDiffPixelRatio 0.002) · snap_approve.py 승인 전에는 판정필요",
+  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
   "at": ""
  }
 ]

@@ -126,12 +126,18 @@ const getEditor = (
       return new InputDateTime(document.createElement('div'), {
         format: 'yyyy-MM-dd HH:mm:ss',
         isReadOnly: false,
+        // isRequired 기본값(true)이면 빈 셀 편집 시 null 대입이 거부돼 공유 편집기 인스턴스가 직전
+        //   행의 날짜를 유지한다 — 입력 없이 Tab 해도 그 날짜가 새어든다(신규행 날짜 누수). 빈 날짜를
+        //   허용해야 누수가 없다(위 InputNumber 와 동일 처방, 필수 검증은 저장 시점이 담당).
+        isRequired: false,
       });
     case CELL_CONTROL_TYPE.DATE:
     case CELL_CONTROL_TYPE.DATE_MONTH:
       return new InputDate(document.createElement('div'), {
         format: 'yyyy-MM-dd',
         isReadOnly: false,
+        // 위 InputDateTime 과 동일 — isRequired 기본값(true)은 빈 셀 편집기에 직전 날짜를 남겨 누수시킨다.
+        isRequired: false,
       });
     // DATE_TEXT(FPDateText) 는 달력 피커가 아니라 마스크 텍스트 입력(AS-IS ####-##-##)이다.
     //   편집기를 주지 않고(기본 텍스트 편집) getMask 로 '0000-00-00' 마스크만 건다.

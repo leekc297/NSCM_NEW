@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VMO 사건 탭 시안</title>
+<style>
+:root{--bg:#1b1d21;--bg2:#202329;--card:#23272e;--fg:#d7dae0;--mut:#8b93a1;--line:#2f343c;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--acc:#4c9aff;--cl:#a371f7;--run:#58a6ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 "Segoe UI","Malgun Gothic",sans-serif}
+button,select,input{font:inherit;color:var(--fg)}
+.pick{position:sticky;top:0;z-index:9;display:flex;gap:8px;align-items:center;padding:10px 16px;background:#14161a;border-bottom:1px solid var(--line)}
+.pick b{margin-right:6px}.pick button{background:#2a2f37;border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+.pick button.on{background:var(--acc);border-color:var(--acc);color:#fff}.pick .n{margin-left:auto;color:var(--mut);font-size:12px}
+.c{display:none;padding:14px 16px 24px}.c.on{display:block}
+.desc{color:var(--mut);margin:0 0 12px;max-width:1000px}.desc b{color:var(--fg)}
+.frame{border:1px solid var(--line);border-radius:10px;background:var(--bg2);overflow:hidden;height:620px;display:flex;flex-direction:column}
+.ico{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;border-radius:7px;border:1px solid var(--line);background:#262a31;cursor:pointer;font-size:12px;gap:5px}
+.ico:hover{border-color:var(--acc)}
+.pri{background:var(--acc);border:none;color:#fff;border-radius:7px;padding:5px 12px;cursor:pointer;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);font-size:11.5px;white-space:nowrap;cursor:pointer}
+.chip.on{border-color:var(--acc);background:#1f3350;color:#cfe3ff}
+.chip b{font-weight:700}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.s-open{background:var(--bad)}.s-need{background:var(--warn)}.s-act{background:var(--run);box-shadow:0 0 0 3px rgba(88,166,255,.2)}.s-res{background:var(--ok)}.s-close{background:#5b6270}
+.rule{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;background:#2b313a;color:#c5ccd6;white-space:nowrap}
+.r-R12{background:#2a2550;color:#c6b8ff}.r-R9{background:#24343a;color:#9fd3dd}.r-R7{background:#3a2a2a;color:#ffb4ae}.r-R11{background:#3a3424;color:#f0d38a}.r-R13{background:#3a2530;color:#ffadc8}
+.mut{color:var(--mut)}.sm{font-size:11.5px}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);background:#1e2126;flex-wrap:wrap}
+.acts{border-left:2px solid var(--line);margin:8px 0 0 4px;padding-left:12px}
+.acts div{position:relative;font-size:12px;padding:3px 0}.acts div:before{content:'';position:absolute;left:-17px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--line)}
+.acts div.vmo:before{background:var(--ok)}.acts div.ag:before{background:var(--cl)}
+/* A */
+.A{display:flex;flex:1;min-height:0}
+.A-list{width:44%;border-right:1px solid var(--line);overflow:auto}
+.A-it{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:start;padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+.A-it:hover{background:#252a31}.A-it.sel{background:#1f2d40}
+.A-it .t{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.A-it .m{display:flex;gap:6px;align-items:center;margin-top:3px;font-size:11px;color:var(--mut)}
+.A-it .r{font-size:11px;color:var(--mut);text-align:right;white-space:nowrap}
+.cnt{font-size:10.5px;padding:0 6px;border-radius:999px;background:#3a2f1c;color:#f0d38a}
+.A-det{flex:1;overflow:auto;padding:16px 18px}
+.A-det h3{margin:6px 0 4px;font-size:15px}
+.kv{display:grid;grid-template-columns:70px 1fr;gap:4px 10px;font-size:12px;margin:10px 0}
+.kv span:nth-child(odd){color:var(--mut)}
+.pre{background:#1a1d21;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:Consolas,monospace;font-size:11.5px;white-space:pre-wrap;color:#aeb6c2}
+/* B */
+.B{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px;min-height:0}
+.col{background:#1e2126;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;min-height:0}
+.col h5{margin:0;padding:9px 12px;font-size:12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line)}
+.col .body{padding:8px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.kc{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 10px;cursor:pointer}
+.kc:hover{border-color:#3a4a62}
+.kc .t{font-size:12px;margin:5px 0}.kc .f{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut)}
+.kc .btns{display:flex;gap:5px;margin-top:6px}
+/* C */
+.C{flex:1;display:flex;min-height:0}
+.C-main{flex:1;overflow:auto;padding:10px 16px}
+.C-hour{display:flex;align-items:center;gap:8px;margin:14px 0 6px;color:var(--mut);font-size:11.5px}.C-hour:after{content:'';flex:1;height:1px;background:var(--line)}
+.C-ev{display:grid;grid-template-columns:52px 16px 1fr auto;gap:10px;align-items:start;padding:8px 10px;border-radius:8px;cursor:pointer}
+.C-ev:hover{background:#252a31}
+.C-ev .tm{font-family:Consolas,monospace;font-size:11.5px;color:var(--mut);padding-top:1px}
+.flow{display:flex;align-items:center;gap:4px;margin-top:4px;font-size:11px;color:var(--mut)}.flow i{font-style:normal;padding:0 6px;border-radius:4px;background:#2b313a}.flow i.ok{background:#1f3a26;color:#8fd19e}.flow i.ag{background:#2c2450;color:#c6b8ff}.flow i.wait{background:#3a3424;color:#f0d38a}
+.C-side{width:230px;border-left:1px solid var(--line);padding:12px;overflow:auto}
+.C-side h5{margin:0 0 8px;font-size:11px;color:var(--mut);letter-spacing:.06em}
+.hb{display:grid;grid-template-columns:44px 1fr 22px;gap:6px;align-items:center;font-size:11.5px;margin-bottom:5px}.hb i{height:8px;border-radius:4px;background:var(--acc);display:block}
+.map{margin-top:14px;max-width:1000px}.map table{border-collapse:collapse;width:100%;font-size:12px}.map td,.map th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}.map th{color:var(--mut);font-weight:600}
+</style></head><body>
+<div class="pick"><b>VMO 사건 탭 시안</b><button data-c="A" class="on">A 받은편지함</button><button data-c="B">B 칸반</button><button data-c="C">C 타임라인</button><span class="n">표본 = 2026-11-20 실제 사건 일부</span></div>
+
+<!-- A -->
+<section class="c on" id="A">
+<p class="desc"><b>A 받은편지함</b> · 왼쪽 목록은 한 줄 제목과 상태 점, 규칙 배지, 화면, 반복 횟수만 보입니다. 누르면 오른쪽에 내용, 근거, 조치 이력(감지 → VMO → 에이전트), 단추가 나옵니다. 위 칩으로 상태와 규칙을 거릅니다.</p>
+<div class="frame">
+ <div class="bar"><span class="chip on"><span class="dot s-open"></span>열림 <b>1</b></span><span class="chip"><span class="dot s-need"></span>사람 확인 <b>0</b></span><span class="chip"><span class="dot s-act"></span>조치 중 <b>0</b></span><span class="chip"><span class="dot s-res"></span>해결 <b>81</b></span><span class="mut sm" style="margin:0 4px">|</span><span class="chip">R12 34</span><span class="chip">R9 28</span><span class="chip">R7 9</span><span class="chip">R5 8</span><span class="chip">R2 7</span>
+  <span style="margin-left:auto;display:flex;gap:6px"><span class="ico" title="고른 사건 한꺼번에 닫기">☑ 닫기</span></span></div>
+ <div class="A">
+  <div class="A-list">
+   <div class="A-it sel"><span class="dot s-open" style="margin-top:6px"></span><div><div class="t">감시기 tick 멈춤</div><div class="m"><span class="rule r-R12">R12 자가진단</span><span>S7</span></div></div><div class="r">09:28</div></div>
+   <div class="A-it"><span class="dot s-res" style="margin-top:6px"></span><div><div class="t">죽은 잠금 _run.admit.lock</div><div class="m"><span class="rule r-R9">R9 잠금</span></div></div><div class="r">08:24</div></div>
+   <div class="A-it"><span class="dot s-res" style="margin-top:6px"></span><div><div class="t">S2 시험 t_chain_abort.js 실패</div><div class="m"><span class="rule r-R12">R12 자가진단</span></div></div><div class="r">06:56</div></div>
+   <div class="A-it"><span class="dot s-res" style="margin-top:6px"></span><div><div class="t">S3 설치본 차이 workbench.js</div><div class="m"><span class="rule r-R12">R12 자가진단</span></div></div><div class="r">06:56</div></div>
+   <div class="A-it"><span class="dot s-res" style="margin-top:6px"></span><div><div class="t">죽은 잠금 _run.verify.SSP0014.lock</div><div class="m"><span class="rule r-R9">R9 잠금</span><span>SSP0014</span></div></div><div class="r">06:06</div></div>
+   <div class="A-it"><span class="dot s-close" style="margin-top:6px"></span><div><div class="t">Claude 없이 끝난 체인 SSP0014</div><div class="m"><span class="rule r-R11">R11 체인</span><span>SSP0014</span><span class="cnt">×2</span></div></div><div class="r">04:15</div></div>
+  </div>
+  <div class="A-det">
+   <div style="display:flex;gap:8px;align-items:center"><span class="dot s-open"></span><span class="rule r-R12">R12 VM 자가진단</span><span class="mut sm">열림 · 09:28</span><span style="margin-left:auto;display:flex;gap:6px"><span class="ico" title="에이전트가 지금 조치">🤖 에이전트</span><span class="ico" title="원문(JSON) 열기">{ }</span><span class="ico" title="닫기">✕</span></span></div>
+   <h3>감시기 tick 멈춤</h3>
+   <div class="kv"><span>항목</span><span>S7 VMO 자기 상태</span><span>근거</span><span>마지막 tick 09:18:40 · 주기 30초</span><span>파일</span><span class="mut">.vibe/orch/selfcheck/result.json</span></div>
+   <div class="acts"><div>09:28 감지 · 10분 점검</div><div class="vmo mut">조치 기록 없음</div></div>
+  </div>
+ </div>
+</div>
+</section>
+
+<!-- B -->
+<section class="c" id="B">
+<p class="desc"><b>B 칸반</b> · 상태별 4칸(열림 → 조치 중 → 사람 확인 → 해결)에 사건 카드를 놓습니다. 어떤 사건이 사람을 기다리는지 한눈에 보이고, 카드 안 단추로 바로 조치합니다. 카드를 누르면 아래로 펼쳐 내용과 조치 이력이 나옵니다.</p>
+<div class="frame">
+ <div class="bar"><span class="chip on">전체 규칙</span><span class="chip">R12</span><span class="chip">R9</span><span class="chip">R7</span><span class="chip">R11</span><span class="chip">R13</span><span style="margin-left:auto" class="ico" title="해결·닫은 사건 보이기">해결 포함</span></div>
+ <div class="B">
+  <div class="col"><h5><span class="dot s-open"></span>열림 <span class="mut">1</span></h5><div class="body">
+   <div class="kc"><div class="f"><span class="rule r-R12">R12</span><span>S7</span><span style="margin-left:auto">09:28</span></div><div class="t">감시기 tick 멈춤</div><div class="f">마지막 tick 09:18:40</div><div class="btns"><span class="ico">🤖</span><span class="ico">{ }</span><span class="ico">✕</span></div></div>
+  </div></div>
+  <div class="col"><h5><span class="dot s-act"></span>조치 중 <span class="mut">0</span></h5><div class="body"><div class="mut sm" style="padding:8px">없음</div></div></div>
+  <div class="col"><h5><span class="dot s-need"></span>사람 확인 <span class="mut">0</span></h5><div class="body"><div class="mut sm" style="padding:8px">없음</div></div></div>
+  <div class="col"><h5><span class="dot s-res"></span>해결 <span class="mut">81</span></h5><div class="body">
+   <div class="kc"><div class="f"><span class="rule r-R9">R9</span><span style="margin-left:auto">08:24</span></div><div class="t">죽은 잠금 _run.admit.lock</div><div class="f" style="color:#8fd19e">VMO 삭제</div></div>
+   <div class="kc"><div class="f"><span class="rule r-R12">R12</span><span>S2</span><span style="margin-left:auto">06:56</span></div><div class="t">t_chain_abort.js 실패</div><div class="f" style="color:#8fd19e">다시 점검 통과 07:47</div></div>
+   <div class="kc"><div class="f"><span class="rule r-R9">R9</span><span>SSP0014</span><span style="margin-left:auto">06:06</span></div><div class="t">죽은 잠금 _run.verify.SSP0014.lock</div><div class="f" style="color:#8fd19e">VMO 삭제</div></div>
+   <div class="kc"><div class="f"><span class="rule r-R12">R12</span><span>S3</span><span style="margin-left:auto">06:56</span></div><div class="t">설치본 차이 workbench.js</div><div class="f" style="color:#8fd19e">자동 동기화 07:51</div></div>
+  </div></div>
+ </div>
+</div>
+</section>
+
+<!-- C -->
+<section class="c" id="C">
+<p class="desc"><b>C 타임라인</b> · 시간 순 흐름으로 보여 줍니다. 사건마다 감지 → 조치 → 결과를 작은 단계 표시로 잇습니다. 오른쪽은 규칙별 건수 막대와 열린 사건 요약입니다. 창 다시 로드나 CheckList 실행 때 사건이 몰린 시간대가 바로 보입니다.</p>
+<div class="frame">
+ <div class="bar"><span class="chip on">오늘</span><span class="chip">최근 7일</span><span class="chip">열린 것만</span><input placeholder="🔍 제목 · 화면" style="background:#1a1d21;border:1px solid var(--line);border-radius:7px;padding:4px 8px;width:200px"><span style="margin-left:auto" class="ico" title="고른 사건 한꺼번에 닫기">☑ 닫기</span></div>
+ <div class="C">
+  <div class="C-main">
+   <div class="C-hour">09시</div>
+   <div class="C-ev"><span class="tm">09:28</span><span class="dot s-open" style="margin-top:4px"></span><div><b>감시기 tick 멈춤</b> <span class="rule r-R12">R12</span><div class="flow"><i>감지</i>›<i class="wait">조치 대기</i></div></div><span style="display:flex;gap:5px"><span class="ico">🤖</span><span class="ico">{ }</span><span class="ico">✕</span></span></div>
+   <div class="C-hour">08시</div>
+   <div class="C-ev"><span class="tm">08:24</span><span class="dot s-res" style="margin-top:4px"></span><div>죽은 잠금 _run.admit.lock <span class="rule r-R9">R9</span><div class="flow"><i>감지</i>›<i class="ok">VMO 삭제</i>›<i class="ok">해결</i></div></div><span class="ico">{ }</span></div>
+   <div class="C-hour">06시</div>
+   <div class="C-ev"><span class="tm">06:56</span><span class="dot s-res" style="margin-top:4px"></span><div>S2 시험 t_chain_abort.js 실패 <span class="rule r-R12">R12</span><div class="flow"><i>감지</i>›<i class="ag">자동 반영</i>›<i class="ok">07:47 통과</i></div></div><span class="ico">{ }</span></div>
+   <div class="C-ev"><span class="tm">06:06</span><span class="dot s-res" style="margin-top:4px"></span><div>죽은 잠금 7건 <span class="mut sm">SCP0005 · SCP0028 · SSP0005 · SSP0014</span> <span class="rule r-R9">R9</span><div class="flow"><i>감지</i>›<i class="ok">VMO 삭제 7</i>›<i class="ok">해결</i></div></div><span class="ico" title="7건 펼치기">▾ 7</span></div>
+   <div class="C-ev"><span class="tm">06:06</span><span class="dot s-close" style="margin-top:4px"></span><div>창 다시 로드로 끊긴 Claude 실행 <span class="rule r-R7">R7</span><div class="flow"><i>감지</i>›<i class="ok">알림 처리</i></div></div><span class="ico">{ }</span></div>
+  </div>
+  <div class="C-side">
+   <h5>오늘 규칙별</h5>
+   <div class="hb"><span>R12</span><i style="width:100%"></i><span>34</span></div><div class="hb"><span>R9</span><i style="width:82%"></i><span>28</span></div><div class="hb"><span>R7</span><i style="width:26%"></i><span>9</span></div><div class="hb"><span>R5</span><i style="width:24%"></i><span>8</span></div><div class="hb"><span>R2</span><i style="width:21%"></i><span>7</span></div><div class="hb"><span>R11</span><i style="width:18%"></i><span>6</span></div><div class="hb"><span>R1</span><i style="width:15%"></i><span>5</span></div>
+   <h5 style="margin-top:16px">상태</h5>
+   <div class="sm"><span class="dot s-open"></span> 열림 1 · <span class="dot s-res"></span> 해결 81 · <span class="dot s-close"></span> 닫음 16</div>
+  </div>
+ </div>
+</div>
+</section>
+
+<div class="map" style="padding:0 16px 24px"><table>
+<tr><th>지금 기능</th><th>A 받은편지함</th><th>B 칸반</th><th>C 타임라인</th></tr>
+<tr><td>사건 목록(시각, 규칙, 화면, 내용, 횟수, 상태)</td><td>왼쪽 한 줄 목록</td><td>상태별 칸의 카드</td><td>시간대별 흐름</td></tr>
+<tr><td>내용 · 근거 · 조치 이력</td><td>오른쪽 상세 + 이력 선</td><td>카드 펼침</td><td>감지 › 조치 › 결과 단계 표시, 누르면 상세</td></tr>
+<tr><td>에이전트 · 되돌리기 · 원문 · 닫기</td><td>상세 머리 아이콘</td><td>카드 아이콘</td><td>줄 끝 아이콘</td></tr>
+<tr><td>닫은 사건 포함 · 고른 사건 한꺼번에 닫기</td><td>상태 칩 · ☑ 닫기</td><td>해결 포함 · 칸에서 고르기</td><td>열린 것만 칩 · ☑ 닫기</td></tr>
+<tr><td>열린 사건 수(탭 배지)</td><td colspan="3">그대로</td></tr>
+</table></div>
+<script>
+document.querySelectorAll('.pick button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.pick button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.c').forEach(c=>c.classList.toggle('on',c.id===b.dataset.c));});
+</script>
+</body></html>

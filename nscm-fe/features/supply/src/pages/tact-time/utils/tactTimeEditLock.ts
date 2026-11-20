@@ -111,9 +111,11 @@ export const isPackerCellEditable = (binding: string, row: Row): boolean => {
   // cs:694-712 UnLockOnlyOSP — OSP_YN != 'Y' 행은 전체 잠금.
   if (s(row.OSP_YN) !== 'Y') return false;
   if (!PACKER_BASE_EDITABLE.has(binding)) return false;
-  // LINE_ID 는 신규행일 때만 편집 (사용자 확정 2026-09-14) — 기존행(조회건)은 잠금.
-  //   AS-IS(cs:621)는 INPUT_STATUS='M' 만 잠갔으나, 조회건 INPUT_STATUS 가 'M' 이 아닌 값이면
-  //   편집 가능해지는 문제 → 신규행 화이트리스트(isNewRow)로 반전.
+  // LINE_ID 는 insert-only(= INPUT_TP_CD 'IM' 의미) — 신규/placeholder 행(Line 빈 행)만 편집,
+  //   기존 등록행(Line 값 보유)은 잠금 (사용자 확정 2026-11-19: "Line 값 없을 때만 편집, 값 있으면
+  //   편집 불가"). 공통 isEditableCell 의 'IM' 은 CRUD_TYPE='I' 만 보지만, 이 화면의 조회 placeholder
+  //   행은 CRUD 마킹이 없고 GET SP 의 INPUT_STATUS='I' 로만 식별되므로 메타 'IM' 이 아닌 isNewRow
+  //   (CRUD_TYPE='I' or INPUT_STATUS='I')로 판정해야 한다('IM' 메타면 공통경로가 placeholder 를 잠금).
   if (binding === 'LINE_ID' && !isNewRow(row)) return false;
   return true;
 };

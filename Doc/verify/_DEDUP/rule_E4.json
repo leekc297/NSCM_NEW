@@ -1,0 +1,176 @@
+{
+ "rule_id": "E4",
+ "hash": "57264b8ee1f549f2",
+ "groups": [
+  {
+   "refs": [
+    "DM-105",
+    "DM-108"
+   ],
+   "target": "Excel Upload Validation 메시지(행·항목별)",
+   "condition": "여러 행·항목에 오류가 있는 파일 업로드",
+   "expected": "Excel Upload 검증 오류는 행·항목별(Sales Site/Project/Model 등) 실제 원인 메시지를 모두 표시하고 무관한 메시지로 바꾸지 않는다. Key 영역·Period From/To 컬럼이 있으면 정상으로 업로드·반영된다",
+   "why": "두 항목 모두 Excel 업로드 오류에서 행별 Validation 메시지가 실제 원인과 맞는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-134",
+    "DM-147"
+   ],
+   "target": "판가(Unit Price) 미입력 Validation 오탐",
+   "condition": "신규 행·키에 수량과 판가를 입력하고 저장",
+   "expected": "판가가 있거나 입력된 주차·행에서는 판가 미입력 Validation이 잘못 뜨지 않고 저장·DB 반영된다(Unit Price(LOC) 52주 포함)",
+   "why": "두 항목 모두 판가가 입력돼 있는데 미입력 검증이 잘못 발생하는지 확인하며 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-59",
+    "DM-143"
+   ],
+   "target": "수량 입력 시 Unit Price 조건부 필수",
+   "condition": "MKT_FCST 수량은 입력하고 판가는 비운 채 저장(제외 대상 FCST Type·Measure·수량 0은 빼고)",
+   "expected": "단가가 없는 MKT FCST 수량은 저장이 차단되고 메시지가 표시된다. Plant Site ID 값 기준으로 MSSQL↔Oracle 결과가 같다",
+   "why": "두 항목 모두 MKT_FCST 수량↔Unit Price 조건부 필수 검증으로 저장이 막히는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-192",
+    "SCPSSP-9"
+   ],
+   "target": "키 중복 저장 시 오류 메시지",
+   "condition": "기존 행과 같은 키를 복사하거나 다시 입력한 뒤 저장",
+   "expected": "중복 키 저장은 차단되고, 중복이라는 뜻이 분명한 메시지(AS-IS와 같은 의미)가 표시된다(Division 시트, Route ID 등)",
+   "why": "두 항목 모두 같은 키를 다시 넣고 저장했을 때 나오는 중복 메시지의 의미가 AS-IS와 같은지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-173"
+   ],
+   "target": "RTF 저장 판가 검증·Sales Plan Waterfall 동기화",
+   "condition": "RTF 수정 후 저장",
+   "expected": "판가가 있으면 판가 미입력 검증이 뜨지 않고 저장에 성공하며, 이후 Sales Plan Waterfall에 RTF 값이 반영된다",
+   "why": "판가 오탐 확인 외에 Waterfall 동기화 확인이 추가로 있어서 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-148"
+   ],
+   "target": "RTF[R+P] 편집 가능 조건(Cutoff 상태)",
+   "condition": "Sales Plan Cutoff·SCP Final 상태별",
+   "expected": "Cutoff가 끝나지 않았으면 편집·저장이 차단되고 수정불가 팝업이 뜬다. GET_ADMIN_GROUP_MEASURE와 1·2차 Cutoff 상태를 기준으로 판단한다",
+   "why": "Cutoff 상태에 따른 편집 제어라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-149"
+   ],
+   "target": "Text 필수 Validation·ETC 수정 저장",
+   "condition": "RTF 수정 / ETC 행 수정",
+   "expected": "Text 필수는 FCST Type=ETC 신규이거나 ETC 테이블이 바뀔 때만 적용된다. ETC 수정 저장은 기존 행을 갱신한다(신규 행 생성 0)",
+   "why": "조건부 Text 필수와 ETC 갱신 동작이라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-214"
+   ],
+   "target": "Sold to/Ship to 구코드 조합 저장 검증",
+   "condition": "구코드 조합 입력 후 저장",
+   "expected": "NERP_CONV_MASTER 기준 구코드 조합은 저장이 차단된다",
+   "why": "코드 변환 마스터 기준의 관계 검증이라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-215"
+   ],
+   "target": "Project 컬럼 필수 검증",
+   "condition": "Project 입력 후 저장",
+   "expected": "Project 값이 입력돼 있으면 필수 검증이 발생하지 않는다",
+   "why": "특정 컬럼의 필수 검증 오탐이며, 판가 검증과는 대상이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-58"
+   ],
+   "target": "Biz Type 미존재 검증 팝업 메시지 문구",
+   "condition": "신규 입력 후 저장",
+   "expected": "Biz Type 미존재 메시지가 최신 AS-IS SP 문구 그대로 표시된다",
+   "why": "특정 검증 메시지의 문구 일치라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "SCPSSP-8"
+   ],
+   "target": "Lot Size<Increment 검증 메시지 언어",
+   "condition": "언어=KO, Lot Size<Increment로 저장",
+   "expected": "Lot Size<Increment 검증 메시지가 KO로 표시된다",
+   "why": "메시지 다국어 표시라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-70"
+   ],
+   "target": "콤보 셀 Key-in 후보 외 값 차단",
+   "condition": "신규 행에서 콤보 선택 후 Key-in(Sales Company·Sales Plant)",
+   "expected": "콤보 셀에 Key-in으로 넣은 후보 외 값은 저장되지 않도록 차단되거나 검증된다",
+   "why": "콤보 셀 입력값 검증이라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-73"
+   ],
+   "target": "저장 자릿수·계산값(RTF×Unit Price) 초과 메시지",
+   "condition": "양수/음수·Max 자릿수 입력",
+   "expected": "Max 자릿수는 정상으로 저장된다. 계산값이 초과하면 지정 양식 메시지(36자리 이내·Model/Measure/기간/부서/입력값)가 표시된다",
+   "why": "자릿수·계산값 초과 검증이라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-75"
+   ],
+   "target": "Cell Prod Site 무효값 검증·저장 후 조회",
+   "condition": "Report Type Sales/Biz Plan·Data Type ETC Data",
+   "expected": "Cell Prod Site 무효값(77)은 저장이 차단된다. 저장 후 Application Gr·Country Name이 조회되고 저장은 3초 안에 끝난다",
+   "why": "특정 컬럼 무효값 검증과 저장 후 조회를 함께 보는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-82"
+   ],
+   "target": "하단 Grid Owner 다건 등록·상단 더블클릭 연동",
+   "condition": "",
+   "expected": "하단 Owner를 2명 이상 등록할 수 있고, 상단 더블클릭 시 하단 표시 여부가 AS-IS와 같다",
+   "why": "Owner 다건 허용과 그리드 연동이라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-84"
+   ],
+   "target": "Currency 고정·중복 Keyset 메시지·Insert 위치·Delete 버튼",
+   "condition": "신규 행 Insert",
+   "expected": "Currency=KRW로 고정되고 편집할 수 없다. 중복 Keyset이면 \"중복된 데이터가 있습니다\"가 표시되고, 행은 선택 위치 위에 추가되며, Delete 버튼이 있다",
+   "why": "중복 메시지 외에 Currency·Insert 위치·버튼 확인이 섞여 있어, 다른 항목과 묶으면 검사가 빠질 수 있으므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-93"
+   ],
+   "target": "Version 팝업 Version Create 사전 Validation",
+   "condition": "Version Cutoff 직후 신규 버전",
+   "expected": "신규 컷오프 버전으로 Version Create를 하면 사전 Validation을 거쳐 버전이 생성되고 DB에 반영된다",
+   "why": "버전 생성 검증이라는 고유한 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-P13"
+   ],
+   "target": "Cust Group-End Customer-Sales Site 관계·Active",
+   "condition": "저장",
+   "expected": "관계가 맞지 않는 데이터는 저장이 차단된다. Active N으로 저장하면 N이 유지되고, End Customer→Sales Site cascade가 적용된다",
+   "why": "마스터 간 관계 검증과 cascade라는 고유한 확인 대상이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:42:15",
+ "cost": 0.12969319999999998
+}

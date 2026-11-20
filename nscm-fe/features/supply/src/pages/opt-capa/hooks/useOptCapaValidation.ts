@@ -4,6 +4,7 @@ import { stripRequiredMark } from '@foundation/utils';
 import {
   DATE_VALIDATE_COLUMNS,
   DECIMAL_SCALE_COLUMNS,
+  EE_DIVISION_TOKEN,
   INTEGER_COLUMNS,
   MAX_DECIMAL_SCALE,
   MSG,
@@ -13,6 +14,8 @@ import {
   PRE_KEY_COLUMNS,
   SHEETS,
   COLUMN,
+  WEEK_OFF_TIME_EXCEEDS_LITERAL,
+  WEEK_OFF_TIME_LIMIT,
   type GridSheet,
 } from '../opt-capa.constants';
 import type { GridRow } from '../opt-capa.types';
@@ -54,10 +57,15 @@ import {
  */
 
 export interface ValidationFailure {
-  /** i18n 코드(`MSG#####`). */
-  msgId: string;
+  /** i18n 코드(`MSG#####`). 하드코딩 리터럴을 쓸 때는 생략하고 {@link literal} 을 채운다. */
+  msgId?: string;
   /** `{0}` 치환값. i18next 기본 보간자는 `{{ }}` 라 DB 메시지의 `{0}` 은 직접 replace 한다. */
   arg?: string;
+  /**
+   * MSG 코드 없이 그대로 띄우는 문구 — AS-IS 하드코딩 알럿의 TO-BE 등가(등가 MSG 코드가 DB 에
+   * 없을 때만). 있으면 `msgId` 보다 우선한다. 예: Week Off Time 7 초과(`WEEK_OFF_TIME_EXCEEDS_LITERAL`).
+   */
+  literal?: string;
 }
 
 interface ValidateArgs {
@@ -356,12 +364,50 @@ export const useOptCapaValidation = () => {
   };
 
   /**
+   * No Work **Week** — 라인·주 단위 Off Time 합계 7 초과 차단 (AS-IS `Save_NoWork_Week` cs:1719~1753).
+   *
+   * Week 모드에서만 돈다(`isWeekNoWork`). 그룹키는 AS-IS 와 동일하게 전극(`EE*`)이면 `LINE_TYPE` 포함,
+   * 아니면 제외(cs:1723·1728). 합계 대상은 삭제행을 뺀 저장행의 `OFF_TIME`(일 단위 — GET 이 초/86400 로
+   * 환산해 내려준 값). AS-IS 처럼 한 그룹이라도 7 을 넘는 순간 즉시 차단한다(cs:1748 `Any(x=>x.Value>7)`).
+   *
+   * MSG 코드가 아니라 리터럴을 돌려준다 — 등가 코드가 `SCM_ADM_MSG_M` 에 없음을 실측 확인(2026-11-17).
+   */
+  const findWeekOffTimeExceed = ({
+    dirtyRows,
+    isWeekNoWork,
+  }: Pick<ValidateArgs, 'dirtyRows' | 'isWeekNoWork'>): ValidationFailure | undefined => {
+    if (!isWeekNoWork) return undefined;
+    const sums = new Map<string, number>();
+    for (const row of dirtyRows) {
+      if (isDelete(row)) continue;
+      const division = str(row[COLUMN.DIVISION_ID]);
+      const group = [
+        division,
+        str(row[COLUMN.PLANT_ID]),
+        str(row[COLUMN.LINE_ID]),
+        str(row[COLUMN.OPERATION_ID]),
+      ];
+      // AS-IS cs:1723·1728 — 전극(EE*)만 line_type 를 그룹키에 포함한다.
+      if (division.startsWith(EE_DIVISION_TOKEN)) group.push(str(row[COLUMN.LINE_TYPE]));
+      group.push(str(row[COLUMN.WEEK_NAME]));
+      const key = group.join('^');
+      // AS-IS `decimal.TryParse` 실패분은 합산에서 제외 — parse 불가는 0 으로 둔다(숫자검증은 별도).
+      const offTime = parseNumber(row[COLUMN.OFF_TIME]) ?? 0;
+      const next = (sums.get(key) ?? 0) + offTime;
+      sums.set(key, next);
+      if (next > WEEK_OFF_TIME_LIMIT) return { literal: WEEK_OFF_TIME_EXCEEDS_LITERAL };
+    }
+    return undefined;
+  };
+
+  /**
    * 저장 전 전체 검증 — 첫 실패 1건만 돌려준다(AS-IS 도 첫 오류에서 중단한다).
-   * 순서 = 필수 → 키중복·키변경 → 기간 → 값. AS-IS `Save_DailyCapa` 도 필수를 가장 먼저 본다
-   * (cs:1573 이 1603 이후의 숫자·자릿수 검사보다 앞이다).
+   * 순서 = 필수 → (Week)Off Time 7초과 → 키중복·키변경 → 기간 → 값. AS-IS `Save_NoWork_Week` 도
+   * 7초과(cs:1748)를 중복·필수보다 앞서 본다. `Save_DailyCapa` 는 필수를 가장 먼저 본다(cs:1573).
    */
   const validateSave = (args: ValidateArgs): ValidationFailure | undefined =>
     findMissingRequired(args) ??
+    findWeekOffTimeExceed(args) ??
     findDuplicateKey(args) ??
     findPeriodProblem(args) ??
     findValueProblem(args);

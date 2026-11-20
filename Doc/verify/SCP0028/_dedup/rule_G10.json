@@ -1,0 +1,22 @@
+{
+ "rule_id": "G10",
+ "hash": "ad652481b97fb52a",
+ "groups": [
+  {
+   "rows": [
+    "V-80b5fe83"
+   ],
+   "why": "Project·Model/Nickname 칸 Enter로 팝업이 열리는지 보는 점은 같지만, 이 행은 두 계정(82 wonqthanq / 81 jiwon.park)의 Model 팝업 목록 품목 수까지 비교해 activeFlag 미전달(사용 중지 모델 포함) 여부도 확인하므로 확인 방법이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-96aba5a4"
+   ],
+   "why": "이 행은 bpark416, Div 81에서 Enter를 눌러 Project·Model/Nickname 팝업이 열리는지만 확인하고 Div 40 Project 제외 조건도 따로 있어서, 목록 품목 수를 비교하는 V-80b5fe83과 묶으면 검사가 빠질 수 있으므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:19:15",
+ "cost": 0.0394976
+}

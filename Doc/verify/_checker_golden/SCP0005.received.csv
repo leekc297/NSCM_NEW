@@ -1,4 +1,4 @@
 ﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
-V-4f20fdc6,H4,스냅샷 화면샷(패널·헤더 띠 1920/1366) 픽셀 차이,NA,직접 실측 없음 — 같은 규칙 H4 의 다른 대상 36행 PASS 는 이 결함의 근거가 아님 · 참고 [V-4768e1ea] SCP0005 화면,2026-11-19 17:08,,,received
-V-43ce0a24,G4,스냅샷 조회조건 공용 기간 칸 구조·아이콘,NA,규칙 G4 요소 판정에 FAIL 0 · 판정필요 0 · 미검증 11 있으나 이 결함 대상과 직접 일치하는 요소 없음 — 규칙 전반 상속으로 FA,2026-11-19 17:08,,,received
-V-5daefe3f,K4,SCP0005 스냅샷 버튼 Div 40,ERROR,[재실측 스냅샷 버튼] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\버튼_Div_4,2026-11-19 17:08,,,received
+V-4f20fdc6,H4,스냅샷 화면샷(패널·헤더 띠 1920/1366) 픽셀 차이,NA,직접 실측 없음 — 같은 규칙 H4 의 다른 대상 36행 PASS 는 이 결함의 근거가 아님 · 참고 [V-4768e1ea] SCP0005 화면,2026-11-20 08:24,,,received
+V-43ce0a24,G4,스냅샷 조회조건 공용 기간 칸 구조·아이콘,NA,규칙 G4 요소 판정에 FAIL 0 · 판정필요 0 · 미검증 10 있으나 이 결함 대상과 직접 일치하는 요소 없음 — 규칙 전반 상속으로 FA,2026-11-20 08:24,,,received
+V-5daefe3f,K4,SCP0005 스냅샷 버튼 Div 40,ERROR,[재실측 스냅샷 버튼] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\verify\SCP0005\snap\received\버튼_Div_4,2026-11-20 08:24,,,received

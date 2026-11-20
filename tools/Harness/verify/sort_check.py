@@ -303,7 +303,7 @@ def main():
             asis_has = any(r['keys'] and str(r.get('depth', '0')) == '0' for r in rs)
             for r in rs:
                 if r.get('depth') and str(r['depth']) != '0': continue  # 서브쿼리(TOP) 정렬은 결과 순서 규칙이 아니다
-                base = {**row, 'asis_file': r['file'], 'asis_line': r['line'], 'guard': r['guard'], 'asis_keys': r['keys'], 'tobe_last_ddl': ddl, 'tobe_order_by': ' '.join(ob.split())[:300]}
+                base = {**row, 'asis_file': r['file'], 'asis_line': r['line'], 'guard': r['guard'], 'asis_keys': r['keys'], 'tobe_last_ddl': ddl, 'tobe_order_by': ' '.join(ob.split())[:2000]}  # T384(2026-11-20 SSP0014 EG-b255a2c0): 300자에서 잘려 sort_ci_check 가 마지막 키를 'NULL 먼저 없음' 으로 오판 → 2000자
                 if not body: out.append({**base, 'tobe_keys': '', 'verdict': 'REVIEW', 'note': f'TO-BE 본문 없음(ALL_SOURCE {pkg}.{proc} 미발견)'}); continue
                 if body and not any(m_['proc'] == proc for m_ in pkg_msgs): pkg_msgs.append({'pkg': pkg, 'proc': proc, 'msg_ids': ','.join(sorted(set(re.findall(r'MSG\d{5}', body))))})
                 if not r['keys']:

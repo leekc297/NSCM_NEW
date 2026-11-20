@@ -1,0 +1,34 @@
+{
+ "rule_id": "C4",
+ "hash": "3a8fe4c14fe0ec5b",
+ "groups": [
+  {
+   "rows": [
+    "T-64e04f79"
+   ],
+   "why": "P07 is a separate trace-table item that cites a source location (cs:658), so it may be checking that the implementation exists in the source; with E01's purpose unclear, I kept it alone to be safe."
+  },
+  {
+   "rows": [
+    "T-670a2d2b"
+   ],
+   "why": "E01 is traced from a different trace-table item (E01, not P07) and has no source location, so I can't be sure it checks the same property as P07; I kept it alone to be safe."
+  },
+  {
+   "rows": [
+    "V-25f8ec63"
+   ],
+   "why": "This row covers the default Div value of a new row inserted before any search and clearing the grid when the Div condition changes; its state and expected result differ from the other rows."
+  },
+  {
+   "rows": [
+    "V-42daf14a"
+   ],
+   "why": "This row covers a different element, the Measure column filter, and checks that the filter is reapplied and the row count matches after the Division changes and the search runs again."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:58",
+ "cost": 0.042751199999999996
+}

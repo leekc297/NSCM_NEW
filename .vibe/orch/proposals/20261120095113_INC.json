@@ -1,0 +1,121 @@
+{
+  "id": "20261120095113_INC",
+  "at": "2026-11-20T09:51:13+09:00",
+  "ms": 1795135873100,
+  "source": "incident",
+  "status": "applied",
+  "sig": "하위 프로세스 소멸 뒤 n초 유예하고 그동안 proc.end 가 없을 때만 rn 사라진 실행 로 올린다",
+  "title": "하위 프로세스 소멸 뒤 10초 유예하고 그동안 proc.end 가 없을 때만 R5(사라진 실행)로 올린다",
+  "evidence": "events.jsonl:681 R5 사건 09:47:34.645, events.jsonl:682 proc.end exit 0 09:47:34.689(44ms 뒤), 683 step.end OK. orch-state.js:58 은 하위 PID 가 없으면 유예 없이 procs 에서 지워 gone 으로 넘김",
+  "targets": [
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/test/t_orch_proc_grace.js"
+  ],
+  "before_after": "변경 전 orch-state.js:58: v.pid && !pidAlive(v.pid) && Date.now()-v.t0>15000 이면 바로 gone. 변경 후: 처음 소멸을 본 시각을 v.deadAt 에 기록, Date.now()-v.deadAt>10000 일 때만 gone(그 사이 proc.end 가 오면 procs 에서 지워져 사건 없음). 주인 PID(v.owner) 소멸 조건은 그대로 둠",
+  "verify": "새 시험 t_orch_proc_grace.js 작성: proc.start → 하위 PID 없음 → sweep 1회 gone 0건 → proc.end 기록 → sweep gone 0건, proc.end 없이 10초 경과 → gone 1건. 이어서 node tools/VibeManager/test/run_all.js 실행",
+  "rollback": "tools/VibeManager/orch-state.js 를 반영 전 백업본으로 되돌리고 t_orch_proc_grace.js 삭제",
+  "incident": "20261120_094734_R5_SCP0028",
+  "screen": "SCP0028",
+  "history": [
+    {
+      "at": "2026-11-20T11:02:54+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T11:05:03+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 39/39개 파일 통과(PASS 480, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1102"
+    },
+    {
+      "at": "2026-11-20T11:05:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T11:08:48+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+    },
+    {
+      "at": "2026-11-20T11:12:48+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 반영 Claude 호출은 끝까지 실행됨(.vibe/logs/2026-11-20T11-05-06_claude_orch.log 55~56행 applied true, verified true, run_all PASS 488, 로그 끝 exit 0). 대상 파일 2개 수정 완료(orch-state.js 11:05:30 수정, 58~64행 deadAt 10초 유예 반영 · test/t_orch_proc_grace.js 11:05:42 생성). 11:08:48 VMO 창 다시 로드로 결과 수신 전에 VMO 가 다시 시작되어 result·gate 가 null 로 남음"
+    },
+    {
+      "at": "2026-11-20T11:15:56+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T11:18:07+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 40/40개 파일 통과(PASS 488, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1116"
+    },
+    {
+      "at": "2026-11-20T11:18:09+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T11:23:28+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 42/42개 파일 통과(PASS 506, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T11:23:28+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 11:18:39 node tools/VibeManager/test/t_orch_proc_grace.js → PASS 8, ALL PASS (child PID gone, first sweep gone 0 / after proc.end gone 0 / 5 s gone 0 / 10 s with no proc.end gone 1 / owner PID gone, first sweep gone 1). Then node tools/VibeManager/test/run_all.js (2026-11-20T02:18:41Z sta · 변경 5개 파일 · 대상 목록 밖 변경 5개: tools/VibeManager/flow-panel.js, tools/VibeManager/job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/workbench.js, tools/VibeManager/test/t_job_resume.js",
+      "log": ".vibe\\logs\\2026-11-20T11-18-09_claude_orch.log",
+      "sec": 177,
+      "costUsd": 0.3805808,
+      "files": [
+        "tools/VibeManager/flow-panel.js",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/jobs.js",
+        "tools/VibeManager/workbench.js",
+        "tools/VibeManager/test/t_job_resume.js"
+      ]
+    }
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795140956170,
+  "autoFp": "4ceb6c055e",
+  "interrupted": true,
+  "repair": {
+    "at": "2026-11-20T11:12:48+09:00",
+    "decision": "retry",
+    "cause": "반영 Claude 호출은 끝까지 실행됨(.vibe/logs/2026-11-20T11-05-06_claude_orch.log 55~56행 applied true, verified true, run_all PASS 488, 로그 끝 exit 0). 대상 파일 2개 수정 완료(orch-state.js 11:05:30 수정, 58~64행 deadAt 10초 유예 반영 · test/t_orch_proc_grace.js 11:05:42 생성). 11:08:48 VMO 창 다시 로드로 결과 수신 전에 VMO 가 다시 시작되어 result·gate 가 null 로 남음",
+    "reason": "안과 반영 결과는 맞고, 반영 도중 VMO 가 다시 시작되어 결과를 받지 못했다. 같은 안으로 다시 시도한다. 대상 파일은 이미 바뀐 상태라 반영 뒤 게이트(구문 검사, run_all.js, 정의 정합)를 다시 돌려 확인한다.",
+    "log": ".vibe\\logs\\2026-11-20T11-11-47_claude_orch.log",
+    "costUsd": 0.5836114,
+    "sec": 61
+  },
+  "retryN": 1,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 42/42개 파일 통과(PASS 506, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1116",
+  "needsReload": true,
+  "appliedMs": 1795141408664,
+  "synced": [
+    "job-runner.js",
+    "jobs.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-state.js",
+      "tools/VibeManager/test/t_orch_proc_grace.js"
+    ],
+    "verify_result": "2026-11-20 11:18:39 node tools/VibeManager/test/t_orch_proc_grace.js → PASS 8, ALL PASS (child PID gone, first sweep gone 0 / after proc.end gone 0 / 5 s gone 0 / 10 s with no proc.end gone 1 / owner PID gone, first sweep gone 1). Then node tools/VibeManager/test/run_all.js (2026-11-20T02:18:41Z start, 129.9 s) → files 40/41, PASS 497, FAIL 1. Failure: t_jobs_recent.js '기본 실행 방식 = 부하가 허용하면 동시 · 최대 5'. That test only loads jobs.js, which does not require orch-state.js. t_orch_proc_grace.js PASS 8 within run_all.",
+    "note": "Both targets already had the change in the working tree when this session started (orch-state.js:58-63 deadAt 10-second grace, owner PID condition unchanged; t_orch_proc_grace.js exists). No edits this session. The t_jobs_recent.js failure is in jobs.js, outside the targets, and was not fixed; its cause is unchecked. repairScope=DB_ONLY, but the targets are VibeManager files and no hook blocked anything."
+  },
+  "snap": "prop_20261120095113_INC"
+}

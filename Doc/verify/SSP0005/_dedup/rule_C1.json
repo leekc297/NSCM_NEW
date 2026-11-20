@@ -1,0 +1,106 @@
+{
+ "rule_id": "C1",
+ "hash": "a1b59006b4c3f956",
+ "groups": [
+  {
+   "rows": [
+    "T-270be947"
+   ],
+   "why": "대조표 E01 행(이벤트 CboDayWeek_SelectedIndexChanged)의 추적 확인이며, 같은 핸들러를 가리키는 P07(cs:658) 행과는 대조표 항목과 확인 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-32e05fd2"
+   ],
+   "why": "대조표 P07 행은 cs:658의 구현 위치를 추적하는 행이라 E01 행이나 cboDayWeek 동작 확인과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-619b8db9"
+   ],
+   "why": "cboDayWeek를 바꿨을 때 하위 cboInputValue가 다시 구성되는지 보는 행이며, 같은 대상과 기대를 가진 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-bc93c313"
+   ],
+   "why": "하위 조건 cboInputValue 자체의 대조표 행이라 상위 조건 행과 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-e35a08b8"
+   ],
+   "why": "cboCompany 조회조건의 대조표 행이며 Company를 대상으로 하는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-e92a5ea5"
+   ],
+   "why": "clbDivision의 대조표 추적 행(하위 조건 정보가 비어 있음)이라 Div 동작을 확인하는 SEARCH/CONFIRMED 행과 성질이 같은지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-21bd41bb"
+   ],
+   "why": "Div 변경 시 하위 후보를 다시 구성하고 선택값을 ALL로 되돌리는지 보는 행이다. 조회조건 초기화만 보는 V-bcba372e나 그리드 초기화까지 보는 V-9ec617c8과는 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-30429b83"
+   ],
+   "why": "Filter 콤보 6종의 Active 무관 전체 후보와 Div→Team→End Customer 좁힘을 실데이터 건수로 보는 행이라 대상과 기대가 고유하다."
+  },
+  {
+   "rows": [
+    "V-553ac556"
+   ],
+   "why": "그리드 콤보와 신규행 Insert 상태를 포함하고 SSPM DEPT 기준 Team 후보와 중복 0건을 기대하므로 다른 행과 상태와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-6e399cfe"
+   ],
+   "why": "Report Type을 바꾸면 Data Type이 초기화되는지 보는 행이라 다른 조건 쌍을 대상으로 한다."
+  },
+  {
+   "rows": [
+    "V-9ec617c8"
+   ],
+   "why": "Div 단일 선택 화면에서 Div를 바꾸면 하위 조건과 함께 모든 그리드도 초기화되는지 보는 행이라 기대 범위가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-ba4f259d"
+   ],
+   "why": "Div 변경 후 Version 기본값이 Current인지 보는 행이라 대상 요소(Version)와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-bcba372e"
+   ],
+   "why": "숫자·ITEM TYPE을 포함한 조회조건 전체의 초기화를 보는 행이라 Div 하위 후보 재구성을 보는 V-21bd41bb와 대상 범위와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-c71232f1"
+   ],
+   "why": "Div에 데이터가 없는 Team/End Customer/Sales Site 후보가 보이지 않는지 보는 행이라 후보 원천이나 초기화를 보는 행과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-ed9a9c76"
+   ],
+   "why": "모든 상위→하위 조회조건 cascade에 적용되는 포괄 규칙이라 특정 조건 하나를 보는 행과 대상 범위가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-f4348b42"
+   ],
+   "why": "Sales Site/End Customer/Sold to/Plant Site 후보가 AS-IS 원천인지, Team이 SSPM DEPT_ID 기준인지 보는 행이라 기대가 고유하다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:06:02",
+ "cost": 0.10214689999999998
+}

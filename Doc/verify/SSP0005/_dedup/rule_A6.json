@@ -1,0 +1,227 @@
+{
+ "rule_id": "A6",
+ "hash": "c8e0c2ea7fbebae1",
+ "groups": [
+  {
+   "rows": [
+    "AD-02d62fcb"
+   ],
+   "why": "WORKING_DAY 호출 #13이고 인자 조합(divisionId 81,40,82)이 다른 행과 겹치지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-24b40818"
+   ],
+   "why": "SCP_PERIOD 호출 #1은 다른 SP의 실측 순서 비교라서 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-2c45cc85"
+   ],
+   "why": "WORKING_DAY 호출 #16이고 divisionId 5개 조합이 다른 호출과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-40b1e318"
+   ],
+   "why": "WORKING_DAY 호출 #11이고 divisionId=40만 쓰는 조건이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-45e05e7f"
+   ],
+   "why": "WORKING_DAY 호출 #7이고 시작일 20211120 조건이 #3·#4와 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-53bf552f"
+   ],
+   "why": "WORKING_DAY 호출 #23이고 divisionId=81에 시작일 20241120인 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-5de99c73"
+   ],
+   "why": "calendar 호출 #5이고 시작일 20241120 조건이 다른 calendar 호출과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-63efb00e"
+   ],
+   "why": "WORKING_DAY 호출 #12이고 divisionId 40,81 순서 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-66131cd1"
+   ],
+   "why": "calendar 호출 #2이고 시작일 20261120 조건이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-77ea6c9f"
+   ],
+   "why": "WORKING_DAY 호출 #9이고 companyId=AC00 조건이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-7b274669"
+   ],
+   "why": "WORKING_DAY 호출 #15이고 divisionId 4개 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-802c59d9"
+   ],
+   "why": "WORKING_DAY 호출 #4이고 시작일 20241120 조건이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-844e3a14"
+   ],
+   "why": "WORKING_DAY 호출 #17이고 divisionId 6개 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-8cd5774a"
+   ],
+   "why": "WORKING_DAY 호출 #8이고 companyId=AB00 조건이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-911abf41"
+   ],
+   "why": "WORKING_DAY 호출 #21이고 시작일이 Invalid Date인 전체 division 조건이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-a83ba1f6"
+   ],
+   "why": "calendar 호출 #6이고 시작일 20211120 조건이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-ac1347e0"
+   ],
+   "why": "WORKING_DAY 호출 #3이고 기본 조건(20261120·전체 division·AA00)으로 다른 행과 겹치지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-c5e377e2"
+   ],
+   "why": "calendar 호출 #19이고 시작일이 Invalid Date라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-d7113be5"
+   ],
+   "why": "WORKING_DAY 호출 #22이고 divisionId=81에 시작일 20211120인 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-d9a9512e"
+   ],
+   "why": "WORKING_DAY 호출 #18이고 divisionId 7개 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-e2813bb5"
+   ],
+   "why": "WORKING_DAY 호출 #14이고 divisionId 81,40 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-ed037b68"
+   ],
+   "why": "WORKING_DAY 호출 #10이고 divisionId=81에 시작일 20261120인 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-f7788149"
+   ],
+   "why": "WORKING_DAY 호출 #20이고 divisionId=81_HG에 시작일 Invalid Date인 조합이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-c423d4bd"
+   ],
+   "why": "TITLESET_USER 계정쌍 확인은 정렬 순서와 성질이 다른 검사라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-ea6243f3"
+   ],
+   "why": "ORDER BY 키 순서가 아니라 문자 키 콜레이션(대소문자 무시·NULL 먼저)을 확인하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-09965270"
+   ],
+   "why": "API_ID 래퍼 P_SSP0005_GET의 대조표 추적 행이라 PKG 본체 정렬 검사와 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-267333fd"
+   ],
+   "why": "WORKING_DAY의 여러 정렬 분기를 한꺼번에 추적하는 행이라 분기별 SP 행 하나와 기대가 같지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-29626914",
+    "V-b97e26b3"
+   ],
+   "why": "같은 SP(SCP0009_GET_SHEET_CALENDAR_3SPAN)를 같은 정렬 키 SORT_ORDER_NO로 보고 기대도 '결과가 그 키 순으로 정렬'로 같다."
+  },
+  {
+   "rows": [
+    "T-36da53a5"
+   ],
+   "why": "U01 ProgressForm(cs:372)의 코드 위치를 추적하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-3b42e295"
+   ],
+   "why": "B03 LookupCommon(WEEK_WORK_TIME) 코드 위치를 추적하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-c7d508e6"
+   ],
+   "why": "SCP_PERIOD의 대조표 추적 행인데 기대 문구가 V-d8939952의 '임의 정렬 추가 금지'와 같다고 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-1b666fe8"
+   ],
+   "why": "WORKING_DAY의 ORDER BY [SORT_ORDER_NO] 분기를 보며, 키가 다른 V-4089d95c와 기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-2f4bb7ad"
+   ],
+   "why": "Div=81_HG에서 입력 팝업을 반영한 뒤의 행 정렬이라 상태가 다른 검사여서 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-4089d95c"
+   ],
+   "why": "WORKING_DAY의 ORDER BY [DIVISION_ID,COMPANY_ID] 분기를 보며, 키가 다른 V-1b666fe8과 기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-64e72690"
+   ],
+   "why": "모든 그리드 조회 SP에 결정적 순서를 요구하는 확정 규칙이라 대상 범위가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-d8939952"
+   ],
+   "why": "ORDER BY가 없는 SCP_PERIOD에 TO-BE가 임의 정렬을 추가하지 않았는지 보는, 기대가 다른 행이라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:05",
+ "cost": 0.1844003
+}

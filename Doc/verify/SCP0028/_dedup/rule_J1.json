@@ -1,0 +1,211 @@
+{
+ "rule_id": "J1",
+ "hash": "42a2faebd427a9d3",
+ "groups": [
+  {
+   "rows": [
+    "V-05b01b82",
+    "V-ad7fd72d"
+   ],
+   "why": "Both rows check the Division search-condition candidates against the same DM Planner(W/S) per-menu permission condition and expect the same result (only Divs from groups with that menu's permission); only the source differs."
+  },
+  {
+   "rows": [
+    "V-22fd5b73",
+    "V-45e56c4c"
+   ],
+   "why": "Both rows check the Division default value and menu tree (Admin-System) for the same SCP Planner single-permission account and expect the same result; only the source differs."
+  },
+  {
+   "rows": [
+    "V-847b4787",
+    "V-fd8c94a2"
+   ],
+   "why": "Both rows check the Division search condition on this screen with no condition and expect the same result: candidates limited to the account's permitted Divisions, auto-selected when there is a single permission."
+  },
+  {
+   "rows": [
+    "EG-1364e412"
+   ],
+   "why": "Division candidates for the SCP/82/SCM Viewer account only; the account (state) differs from the other rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-1d96fd4e"
+   ],
+   "why": "Checks the residue for the specific SCP Tester→SCM Viewer session transition, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-21f65557"
+   ],
+   "why": "Division candidates for the SCP/40/SCM PI Admin account; the candidate list is the same as some other accounts, but the login account differs, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-2ab2aa60"
+   ],
+   "why": "Auto-selection check for the SCP/40/SCP Tester account only, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-31cf990f"
+   ],
+   "why": "Division candidates for the SCP/81/SCP Planner account only, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-3be837eb"
+   ],
+   "why": "Single-permission auto-selection (82) for the SCP/82/SCM Viewer account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-4d76c830"
+   ],
+   "why": "Checks the residue for the specific SCM PI Admin(81)→SCM Viewer(82) transition, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-5abf0697"
+   ],
+   "why": "Auto-selection check for the SCP/81/SCP Planner account only, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-73a81a68"
+   ],
+   "why": "Single-permission auto-selection (40) for the SCP/40/SCM Viewer account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-7a670b8c"
+   ],
+   "why": "Division candidates for the SCP/40/SCP Tester account; the login account differs, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-8097adcc"
+   ],
+   "why": "Division candidates (81, 82) for the SCP/81/SCM PI Admin account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-84af5de7"
+   ],
+   "why": "Division candidates (81) for the SCP/81/SCM Viewer account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-8a2e9079"
+   ],
+   "why": "Division candidates for the SCP/40/ADMIN account; the login account differs, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-a6893d70"
+   ],
+   "why": "Auto-selection check for the SCP/81/SCM PI Admin account only, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-ae016a08"
+   ],
+   "why": "Auto-selection check for the SCP/40/ADMIN account; the expected value is the same as some other accounts, but the account differs, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-bf305d86"
+   ],
+   "why": "Single-permission auto-selection (81) for the SCP/81/SCM Viewer account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-c4a175c8"
+   ],
+   "why": "Auto-selection check (40, 82) for the SCP/40/SCP Planner account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-c637760a"
+   ],
+   "why": "Auto-selection check for the SCP/40/SCM PI Admin account; the account differs, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-ccd673aa"
+   ],
+   "why": "Division candidates (40) for the SCP/40/SCM Viewer account, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-e6b79fdc"
+   ],
+   "why": "Division candidates (40, 82) for the SCP/40/SCP Planner account, so it stays alone."
+  },
+  {
+   "rows": [
+    "ES-1ada70bb"
+   ],
+   "why": "Search result after selecting Division 40 with the multi-permission ADMIN account; the account differs from ES-b296d843, so it stays alone."
+  },
+  {
+   "rows": [
+    "ES-b296d843"
+   ],
+   "why": "Search result after selecting Division 40 with the single-permission SCM Viewer account, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-db1c456f"
+   ],
+   "why": "Trace row confirming that the implementation location (SetDivisionAuthCheck) exists in the source, which is a different kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-294f6991"
+   ],
+   "why": "Checks that permissions with usage flag N are excluded, which is a separate state and condition, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-57e51044"
+   ],
+   "why": "Checks screen, button and edit permission decisions using the union of permissions, which is a different element and expectation, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-a7df25c2"
+   ],
+   "why": "Checks residue in the specific admin→wonqthanq→admin session sequence, which differs from the EG365 transitions, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-afcbc305"
+   ],
+   "why": "Checks the FCST Type candidates, which is a different element, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-c27c0a9b"
+   ],
+   "why": "Checks the AS-IS code branch (dtMyDivision.Rows.Count==0) validation, which is a different kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-c9f42134"
+   ],
+   "why": "Checks the Team search-condition candidates, which is a different element, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-ec84e601"
+   ],
+   "why": "Also includes the Period input width check, so its targets and expected results do not fully match other rows, and it stays alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:21:37",
+ "cost": 0.119807
+}

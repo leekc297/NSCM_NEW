@@ -9,7 +9,7 @@ const vs = new Proxy({}, { get: (t, k) => {
   return function () { };
 } });
 const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
-const dir = process.argv[2] || path.join(__dirname, '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'job-')); const vibeDir = path.join(root, '.vibe');
 const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
 W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', llmReview: false }));
@@ -78,6 +78,26 @@ const reload = () => { for (const k of Object.keys(require.cache)) if (/job-runn
   const ev = R('.vibe/orch/events.jsonl').trim().split('\n').map(l => JSON.parse(l));
   chk('사건 기록 job.start·item·end', ev.filter(x => x.type === 'job.start').length >= 5 && ev.some(x => x.type === 'job.item.end' && x.status === 'fail' && x.screen === 'TST0002') && ev.filter(x => x.type === 'job.end').length >= 5 && ev.some(x => x.type === 'chain.start' && x.job === j1.id));
   let threw = false; try { jr2.create({ itemLabel: '없는 업무', screens: ['TST0001'] }); } catch { threw = true; } chk('없는 업무 = 오류', threw);
+  // 8) VMO 자가 복구 뒤 다시 실행(2026-11-20 requeueScreen): 실행 중 화면 = 멈추고 같은 작업에서 다시 · 실패로 끝난 화면 = 대기로 돌려 작업 재시작 · 2번 넘으면 안 함
+  { const waitEnd = async (id, ms = 40000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { const j = jr2.get(id); if (!/^(running|pausing)$/.test(j.status)) { await sleep(150); return jr2.get(id); } await sleep(100); } return jr2.get(id); }; /* 여기서는 jr2 기준(위 waitEnd 는 jr 를 읽어 파일에서 다시 읽으면 '중단됨'으로 바꾼다) */
+    W('slow.txt', 'TST0031'); W('fail.txt', ''); const j8 = jr2.create({ itemLabel: chain.label, screens: ['TST0031'], onFail: 'continue', autoAnswer: true }); jr2.start(j8.id);
+    const t1 = Date.now(); while (Date.now() - t1 < 10000 && jr2.get(j8.id).screens[0].status !== 'run') await sleep(50); await sleep(300);
+    W('slow.txt', ''); const rq = jr2.requeueScreen('TST0031', '시험 원인 해결'); const r8 = await waitEnd(j8.id);
+    const ev8 = R('.vibe/orch/events.jsonl').trim().split('\n').map(l => JSON.parse(l));
+    chk('실행 중 화면 다시 실행: 멈춤 → 같은 작업에서 다시 → 완료 · user.stop 기록(실패 사건 방지) · 다시 실행 1회', rq.how === 'stop-requeue' && r8.status === 'done' && r8.screens[0].status === 'done' && r8.screens[0].healed === 1 && ev8.some(x => x.type === 'user.stop' && x.wb === `${j8.id}:TST0031` && x.by === 'VMO') && ev8.some(x => x.type === 'job.item.requeue' && x.screen === 'TST0031'), JSON.stringify([rq, r8.status, r8.screens[0]]));
+    W('fail.txt', 'TST0032'); const j9 = jr2.create({ itemLabel: chain.label, screens: ['TST0032'], onFail: 'continue', autoAnswer: true }); jr2.start(j9.id); await waitEnd(j9.id);
+    W('fail.txt', ''); const rq2 = jr2.requeueScreen('TST0032', '시험 원인 해결'); const r9 = await waitEnd(j9.id);
+    chk('실패로 끝난 화면 다시 실행: 대기로 돌려 작업 재시작 → 완료', /^(restart|requeue)$/.test(rq2.how) && r9.status === 'done' && r9.screens[0].status === 'done', JSON.stringify([rq2, r9.status, st(r9)]));
+    { const x = jr2.get(j9.id); x.screens[0].healed = 2; } const rq3 = jr2.requeueScreen('TST0032', '세 번째');
+    chk('같은 작업에서 2번 넘게 다시 실행 안 함', !!rq3.none && /2번/.test(rq3.none), JSON.stringify(rq3));
+    // 9) 요청 파일로 화면 하나 중지(2026-11-20): 다른 화면은 계속 · 중지 화면 = cancel · user.stop 기록 · 결과 .done.json
+    W('slow.txt', 'TST0041 TST0042'); const j10 = jr2.create({ itemLabel: chain.label, screens: ['TST0041', 'TST0042'], onFail: 'continue', autoAnswer: true }); jr2.start(j10.id);
+    { const t1 = Date.now(); while (Date.now() - t1 < 10000 && jr2.get(j10.id).screens[0].status !== 'run') await sleep(30); } await sleep(150);
+    W('.vibe/orch/stop_requests/a1.json', JSON.stringify({ screen: 'tst0041', action: 'stop', by: '에이전트 대화', why: '사용자 지시' })); W('slow.txt', '');
+    chk('요청 파일 처리 1건', jr2.pollRequests() === 1 && !fs.existsSync(path.join(vibeDir, 'orch', 'stop_requests', 'a1.json')));
+    const r10 = await waitEnd(j10.id); const done = JSON.parse(R('.vibe/orch/stop_requests/a1.done.json')); const ev10 = R('.vibe/orch/events.jsonl').trim().split('\n').map(l => JSON.parse(l));
+    chk('요청 화면만 중지(cancel · 사유) · 다른 화면 완료 · user.stop · 결과 파일', r10.screens[0].status === 'cancel' && /에이전트 대화/.test(r10.screens[0].summary) && r10.screens[1].status === 'done' && done.job === j10.id && ev10.some(x => x.type === 'user.stop' && x.wb === `${j10.id}:TST0041`), JSON.stringify([st(r10), r10.screens[0].summary, done]));
+    W('.vibe/orch/stop_requests/a2.json', JSON.stringify({ screen: 'TST0099' })); jr2.pollRequests(); chk('실행 중 아닌 화면 = 안 함 사유', /실행 중인 VMW 작업 없음/.test(JSON.parse(R('.vibe/orch/stop_requests/a2.done.json')).none)); }
   await sleep(600); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

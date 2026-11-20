@@ -1,0 +1,48 @@
+# [Harness] SCP0028 shipment-lot-size — BLOCK 3 / WARN 43
+
+- BLOCK F06 자체 행상태 필드 금지 — CRUD_TYPE(GridAction/EditTracker) 전용 @components/modals/ShipmentLotSizeBatchModal.tsx:142
+- BLOCK F06 자체 행상태 필드 금지 — CRUD_TYPE(GridAction/EditTracker) 전용 @components/modals/ShipmentLotSizeBatchModal.tsx:173
+- WARN AC1 액션 대조표 미처리 149행: AC-a01cdcee(상태 빈칸 POPUP new SCM0002_ShipmentLotSizePop), AC-c4c972d1(상태 빈칸 POPUP popItem.Form_Load), AC-1b4a8c54(상태 빈칸 UI_PROP popItem.StartPosition), AC-c32131bc(상태 빈칸 UI_PROP popItem.Width), AC-a1974460(상태 빈칸 POPUP popItem.ShowDialog), AC-7ed7bd04(상태 빈칸 POPUP new SCM0002_ShipmentLotSizePop), AC-43a61b15(상태 빈칸 POPUP popItem.Form_Load), AC-799824c4(상태 빈칸 UI_PROP popItem.StartPosition) … @Doc/asisfacts/screens/SCP0028/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 6행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-f2b306c7(Convert.ToInt64 @SCP0028_Shipment_Lot_Size.cs:762), AC-32edff1d(Convert.ToInt64 @SCP0028_Shipment_Lot_Size.cs:762), AC-73495585(Convert.ToInt64 @SCP0028_Shipment_Lot_Size.cs:769), AC-38e6a6a4(Convert.ToInt64 @SCP0028_Shipment_Lot_Size.cs:769), AC-bdd9f67e(Convert.ToInt64 @SCP0028_Shipment_Lot_Size.cs:734), AC-2129ea7a(Convert.ToInt64 @SCP0028_Shipment_Lot_Size.cs:734) @Doc/asisfacts/screens/SCP0028/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0028_GET_SHIPMENT_LOT_SIZE (SCP0028_GET_SHIPMENT_LOT_SIZE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT (SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE (SCP0028_SAVE_SHIPMENT_LOT_SIZE) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnInput.Click → btnInput_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnDelete.Click → btnDelete_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → spdMain_Change 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 cboValid / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboOperationGroup / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbFromSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbTransMode / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnInput / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnDelete / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbToSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ShipmentLotSizeBatchModal.tsx
+- BLOCK V01 Validation 마커 누락 3/3: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined) @hooks/useShipmentLotSizeValidation.ts
+- WARN V01 As-is Expression 2건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @shipment-lot-size.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00031 — AS-IS '삭제 하였습니다.' / TO-BE MSG00031 = '삭제되었습니다.' → 문구로 찾은 TO-BE ID MSG01064 @shipment-lot-size.constants.ts
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 화면 열기(OPEN) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — "Division 값은 필수 입력 항목입니다."(필수 입력) vs AS-IS 권한 Division 없음 — 뜻 다름. 알림창 아닌 조 @components/ShipmentLotSizeForm.tsx:102
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 화면 열기(OPEN) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — "Division 값은 필수 입력 항목입니다."(필수 입력) vs AS-IS 권한 Division 없음 — 뜻 다름. 알림창 아닌 조 @shipment-lot-size.constants.ts:104
+- WARN LB1 라벨 리터럴 'Valid' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @components/ShipmentLotSizeForm.tsx:229
+- WARN LB1 라벨 리터럴 'Valid*' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @shipment-lot-size.constants.ts:177
+- WARN VC1 대조표 FAIL 168행 (Doc/verify/SCP0028/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 147행 — 검사 사유 REVIEW 35 · NOT_RUN 2 · NOPATH 13 · ERROR 123 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 145건 / 검사 인스턴스 393 — W3 10 · W5 8 · W6 3 · W7 29 · W9 95 · 구현 의심 1 (Doc/verify/SCP0028/work_ledger.md)
+- WARN R09 자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0) @components/modals/ShipmentLotSizeBatchModal.tsx:136
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentLotSizeGrid.tsx:144
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ShipmentLotSize.tsx:193
+- WARN R16 진입 Page 407 라인 > 400 — components/ 분리 (#9) @ShipmentLotSize.tsx
+- WARN B19 expressions.md 2행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0028/SCP0028_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0028/SCP0028_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP · 시트 'popup') — 누락 actionFlag — 현재 키: divisionId, operationGroup, fromSite, toSite, itemId · BE positional 매핑이라 값이 NULL 로 감

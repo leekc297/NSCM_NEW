@@ -1,0 +1,310 @@
+{
+ "rule_id": "J2",
+ "hash": "772c7d753106ec8d",
+ "groups": [
+  {
+   "rows": [
+    "EG-07b1f8d7"
+   ],
+   "why": "계정 그룹 SSP/81/SSP Viewer의 DELETE 버튼만 보는 행이며, 같은 버튼·계정·기대를 가진 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "EG-0a3c85ed"
+   ],
+   "why": "Div 81_ST의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-10c7f443"
+   ],
+   "why": "Div 81_HG의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-19259cda"
+   ],
+   "why": "Div·GROUP 분기 문장 전체를 보는 행이라 개별 버튼 노출 행과 확인 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-1c932d7a"
+   ],
+   "why": "계정 그룹 SSP/40/SSP Viewer의 SAVE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-208bf26c"
+   ],
+   "why": "Div 81_HM의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-23f4ce00"
+   ],
+   "why": "계정 그룹 SSP/82/SSP Planner의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-30140778"
+   ],
+   "why": "계정 그룹 SSP/40/SSP Viewer의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-395543b3"
+   ],
+   "why": "Div 81_HG의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-417d6d4f"
+   ],
+   "why": "Div 81의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-44b06d06"
+   ],
+   "why": "Div 81의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-45b620fb"
+   ],
+   "why": "Div 82의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-45d5574a"
+   ],
+   "why": "Div 81_ST의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-4a513bff"
+   ],
+   "why": "계정 그룹 SSP/81/SSP Viewer의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-4d5a8ff6"
+   ],
+   "why": "Div 81_HD의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-50a61578"
+   ],
+   "why": "계정 그룹 SSP/40/SSP Planner의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-5482117a"
+   ],
+   "why": "Div 82의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-54ecc61b"
+   ],
+   "why": "Div 81_HD의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-555ad505"
+   ],
+   "why": "Div 40의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-5a486e3d"
+   ],
+   "why": "Div 81_HM의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-5cf338b3"
+   ],
+   "why": "Div 81_UC의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-5d921e71"
+   ],
+   "why": "계정 그룹 SSP/81/SSP Planner의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-62c9763c"
+   ],
+   "why": "계정 그룹 SSP/82/SSP Planner의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-6439f1f4"
+   ],
+   "why": "버튼 노출이 아니라 Insert 차단 메시지와 GROUP 분기를 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "EG-65f2eaf5"
+   ],
+   "why": "계정 그룹 SSP/82/SSP Planner의 SAVE 버튼이 진입 직후 노출되는지는 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-65fe170b"
+   ],
+   "why": "계정 그룹 SSP/40/SSP Planner의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-6894df13"
+   ],
+   "why": "Div 81_HM의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-793bd5d1"
+   ],
+   "why": "Div 82의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-79b8dd6e"
+   ],
+   "why": "Div 40의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-80238ea1"
+   ],
+   "why": "계정 그룹 SSP/81/SSP Planner의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-924aa54c"
+   ],
+   "why": "Div 81의 DELETE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-9ef70e16"
+   ],
+   "why": "계정 그룹 SSP/81/SSP Viewer의 SAVE 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-a9740960"
+   ],
+   "why": "Div 81_ST의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-bdf83409"
+   ],
+   "why": "계정 그룹 SSP/81/SSP Planner의 SAVE 버튼이 진입 직후 노출되는지는 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-c87ba030"
+   ],
+   "why": "Div 81_HD의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-cea437f3"
+   ],
+   "why": "Div 81_HG의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-cfb88c09"
+   ],
+   "why": "계정 그룹 SSP/40/SSP Planner의 SAVE 버튼이 진입 직후 노출되는지는 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-de8f1213"
+   ],
+   "why": "Div 81_UC의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-e4ec0485"
+   ],
+   "why": "계정 그룹 SSP/40/SSP Viewer의 INSERT 버튼 비노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-e80d83c5"
+   ],
+   "why": "Div 81_UC의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "EG-f61fe569"
+   ],
+   "why": "Div 40의 SAVE 버튼 노출은 이 행만 확인한다."
+  },
+  {
+   "rows": [
+    "V-215a2aea"
+   ],
+   "why": "대상이 Price Batch Input 버튼이라 Insert·Save·Delete 행과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-254d72f0"
+   ],
+   "why": "Cutoff Data라는 데이터 유형 조건이 붙은 Delete 비노출이라 다른 행과 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-294c5373"
+   ],
+   "why": "그룹별 메뉴·버튼 권한 데이터가 운영과 동기화됐는지 보는 행이라 확인 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-54fe4a2a"
+   ],
+   "why": "버튼 노출이 조회 실행과 무관하게 OPEN 시점 Division으로 정해지는지 보는 행이라 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-6451302f"
+   ],
+   "why": "화면 전체 범위의 포괄 문장이라 어떤 개별 행과 같은지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-70b6694c"
+   ],
+   "why": "조회 후 계정별로 버튼 영역을 비교하는 행이라 조회 전 개별 Div 행과 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-8df7cbc3"
+   ],
+   "why": "기능 유무와 Division 변경 시 재조회(cascade)까지 포함한 확정 규칙이라 기대 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-b0f3023f"
+   ],
+   "why": "SCP Planner와 편집 가능 시간 조건에서 Insert·저장 불가를 보는 행이라 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-d7354688"
+   ],
+   "why": "대상이 Measure Setting 버튼 제거라 다른 행과 요소가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:17:20",
+ "cost": 0.157665
+}

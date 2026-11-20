@@ -125,13 +125,16 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
   //   PlanDate 클라 필터(division, DATE_WEEKLY1_SCP_ALL ORDER BY DESC → idx0=최신, DB 실측),
   //   PlanType(division+planDate, PlanType1_SCP_ALL ORDER BY PLAN_TYPE_ORDER → 마지막=최신),
   //   PlanSeq(+planType, PlanSeq1_SCP_ALL ORDER BY plan_seq DESC → idx0=최댓값). design 02 §2.6.
-  const planDateOptions = toOptions(
-    // division 이 비어 있을 때는 후보를 만들지 않는다(자동선택 차단). 리셋(reset→initState)으로 division 이
-    //   '' 가 되는 찰나에 `!divisionId` 로 전 division 날짜가 통과하면, 아래 자동선택 effect 가 첫 행(타 division
-    //   날짜)을 planStartYyyymmdd 에 박고 → division 이 확정되면 그 날짜가 해당 division 목록에 없어 Plan
-    //   Date/Type/Seq 가 빈칸으로 남는 레이스가 난다(planDates 가 이미 로드된 리셋 경로에서만 드러남).
-    (planDates ?? []).filter(r => !!sc.divisionId && str(r.DIVISION_ID) === sc.divisionId)
+  // division 이 비어 있을 때는 후보를 만들지 않는다(자동선택 차단). 리셋(reset→initState)으로 division 이
+  //   '' 가 되는 찰나에 `!divisionId` 로 전 division 날짜가 통과하면, 아래 자동선택 effect 가 첫 행(타 division
+  //   날짜)을 planStartYyyymmdd 에 박고 → division 이 확정되면 그 날짜가 해당 division 목록에 없어 Plan
+  //   Date/Type/Seq 가 빈칸으로 남는 레이스가 난다(planDates 가 이미 로드된 리셋 경로에서만 드러남).
+  //   over52WeekPreset 도 이 배열을 써야 한다 — Plan Date CODE 는 division 별 중복(OVER_52W_YN 상이)이라
+  //   raw planDates 를 CODE 만으로 매칭하면 타 division 행을 집어 W{n} 프리셋이 어긋난다.
+  const planDatesInDiv = (planDates ?? []).filter(
+    r => !!sc.divisionId && str(r.DIVISION_ID) === sc.divisionId
   );
+  const planDateOptions = toOptions(planDatesInDiv);
   const planTypeOptions = toOptions(
     (planTypes ?? []).filter(
       r =>
@@ -429,7 +432,7 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
               onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
               label={t(LBL.PERIOD, '_Period')}
               quickWeeks={[26, 52]}
-              lastWeeks={over52WeekPreset(planDates, sc.planStartYyyymmdd)}
+              lastWeeks={over52WeekPreset(planDatesInDiv, sc.planStartYyyymmdd)}
             />
           </Grid>
 

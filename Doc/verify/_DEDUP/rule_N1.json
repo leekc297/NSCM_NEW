@@ -1,0 +1,129 @@
+{
+ "rule_id": "N1",
+ "hash": "f6713399c7c134c3",
+ "groups": [
+  {
+   "refs": [
+    "DM-41",
+    "DM-P5"
+   ],
+   "target": "공란 데이터 표기(단일 센티널)",
+   "condition": "필터 적용 포함",
+   "expected": "AS From Site·Company 등 기준 데이터의 빈 값을 단일 센티널로 저장·표시해 Blank/NULL/'-' 혼재가 0건이고, 필터의 Blanks 항목이 하나로만 표시된다",
+   "why": "둘 다 컬럼의 공란 값이 하나의 센티널로 통일됐는지 확인하는 동작이고 기대 결과도 혼재 0으로 같다."
+  },
+  {
+   "refs": [
+    "DM-155",
+    "DM-167"
+   ],
+   "target": "Div별 컬럼·Measure 구성의 AS-IS 일치",
+   "condition": "Div별(40/81 등)",
+   "expected": "Div별 컬럼과 Measure(Project·Cust FCST·End Cust(Report)·Project(S Report) 등)가 AS-IS 구성과 같고(예: 81 컬럼 29개), AS-IS에 없는 SSPM 제외 컬럼은 노출되지 않는다",
+   "why": "둘 다 Div를 바꿔 가며 컬럼·Measure 구성을 AS-IS와 대조하는 같은 확인이고 기대 결과도 AS-IS 동일로 같다."
+  },
+  {
+   "refs": [
+    "DM-P38"
+   ],
+   "target": "Div별 Measure 항목 구성(UI Category 기준)",
+   "condition": "Div별",
+   "expected": "Div별 UI Category 기준 Measure만 표시된다(AS-IS 미필터가 아닌 확정 기준 적용)",
+   "why": "AS-IS와 같은지가 아니라 AS-IS와 달라진 UI Category 기준을 확인하는 항목이라 기대 결과가 달라서 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-62"
+   ],
+   "target": "Measure 셋팅 미사용·누락 Measure 정리",
+   "condition": "Div 40 / 81·81_JV",
+   "expected": "미사용 Measure는 제거되고, 40에는 VMI In Request/Plan/Inv 메저가 있고, 81·81_JV에는 MKT FCST AMT(KRW/LOC)가 없다",
+   "why": "Measure 셋팅 목록에 특정 메저를 추가·제거했는지 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-47"
+   ],
+   "target": "컬럼셋팅 목록의 VERSION·AS FROM SITE 컬럼",
+   "condition": "Div 40",
+   "expected": "VERSION은 컬럼셋팅 목록에서 빠지고 항상 표시되며, 40 Div에서는 AS FROM SITE가 노출되지 않는다",
+   "why": "컬럼셋팅 목록에서 특정 컬럼을 처리했는지 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-7"
+   ],
+   "target": "Measure 콤보·데이터의 오타 Measure",
+   "condition": "Div 81",
+   "expected": "LOOKUP CUST_FCST_MEASURE 후보와 DM_MST_CUSTOMER_FCST(_C/_H).MEASURE 데이터에 오타 \"Cutomer FCST\"가 0건이고 Customer FCST로 통일되어 있다",
+   "why": "코드값 오타가 정비됐는지 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-69"
+   ],
+   "target": "조회조건 콤보 후보의 표시값",
+   "condition": "Div 40",
+   "expected": "Sales Site 등 조회조건 후보가 실제 명칭으로 표시되고, \"-\"만 나오는 후보가 0건이다",
+   "why": "공란 센티널 통일이 아니라 후보 명칭이 제대로 표시되는지 보는 확인이라 공란 묶음과 섞지 않는다."
+  },
+  {
+   "refs": [
+    "DM-178"
+   ],
+   "target": "Plant 셀 콤보 후보 범위",
+   "condition": "",
+   "expected": "Sales Plant(3050 Plant 등) 콤보 후보에는 SCM_MST_PLANT Active Flag=Y인 Plant만 표시된다",
+   "why": "콤보 후보를 활성 플래그로 걸러 내는지 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-22"
+   ],
+   "target": "Exchange Rate 팝업의 기간 컬럼·데이터",
+   "condition": "Period 설정",
+   "expected": "팝업이 Period 기간만큼 YYYYMM 컬럼을 그려 DM_MST_EXCHANGE_RATE를 조회하고, 이상 데이터(20280001 등)가 0건이다",
+   "why": "기간에 따른 팝업 컬럼 생성과 이상 데이터를 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-68"
+   ],
+   "target": "Customer FCST Master 기준정보 생성",
+   "condition": "ROLLING 이후",
+   "expected": "ROLLING 이후 Customer FCST Master 기준정보가 생성되어 조회 결과가 있다",
+   "why": "배치 이후 마스터가 생성됐는지 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-143"
+   ],
+   "target": "MKT_FCST↔Unit Price(LOC) 조건부 필수",
+   "condition": "Div 40, 수량 입력·판가 미입력",
+   "expected": "판가를 넣지 않으면 저장이 막히고, Plant Site ID 값이 MSSQL과 Oracle에서 일치한다",
+   "why": "저장 검증과 DB 간 값 일치를 함께 보는 고유한 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-96"
+   ],
+   "target": "LBL/MSG/MENU 코드 사전 중복 채번",
+   "condition": "",
+   "expected": "KO/EN 문구가 같은 LBL/MSG/MNU 코드는 하나만 채번되어 있고 모든 화면이 그 코드를 재사용한다",
+   "why": "다국어 코드 사전의 중복 여부를 보는 공통 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-10"
+   ],
+   "target": "BOM Explosion Plant Assign 정보",
+   "condition": "Div=40",
+   "expected": "MCCH125020A1/MACH125020A1 등의 Plant Assign 정보가 AS-IS와 기준정보에 맞는다",
+   "why": "BOM 전개용 Plant Assign이 기준정보와 맞는지 보는 고유한 확인이라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:46:48",
+ "cost": 0.0942892
+}

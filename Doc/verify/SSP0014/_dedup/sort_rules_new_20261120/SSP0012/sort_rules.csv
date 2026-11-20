@@ -1,0 +1,4 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0012,SQL,SSP0012_GET_SHIPMENT_PLAN_CONFIRM_DETAIL,Doc\asisfacts\db\modules\dbo.SSP0012_GET_SHIPMENT_PLAN_CONFIRM_DETAIL.sql,219,,"DIVISION_ID,FROM_SITE,ITEM_ID,TO_SITE,YYYYMMDD,PROJECT_CODE","SET @mDQry = @mDQry + ' ORDER BY TT.DIVISION_ID, TT.FROM_SITE, TT.ITEM_ID, TT.TO_SITE, TT.YYYYMMDD, TT.PROJECT_CODE                                                                                                                             ",0,동적 SQL
+SSP0012,SQL,SSP0012_GET_SHIPMENT_PLAN_CONFIRM_DETAIL,Doc\asisfacts\db\modules\dbo.SSP0012_GET_SHIPMENT_PLAN_CONFIRM_DETAIL.sql,235,,"DIVISION_ID,FROM_SITE,ITEM_ID,TO_SITE,YYYYMMDD","order by division_id, from_site,item_id, to_site, yyyymmdd",0,정적
+SSP0012,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

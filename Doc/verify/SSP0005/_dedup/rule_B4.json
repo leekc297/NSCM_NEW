@@ -1,0 +1,300 @@
+{
+ "rule_id": "B4",
+ "hash": "580df2489b001b5e",
+ "groups": [
+  {
+   "rows": [
+    "V-1ab6f833",
+    "V-c5a5057d"
+   ],
+   "why": "Both rows check the same element, the Active-managed master search-condition combos (End Customer, Sold to, Sales Site, Model/Nickname), and expect the same result: all candidates shown regardless of Active Y/N."
+  },
+  {
+   "rows": [
+    "V-2ca77a75",
+    "V-7057dbd9"
+   ],
+   "why": "Both rows check the End Customer and Sold-to Customer grid cell combos on a newly inserted row, and expect the same result: candidates are present (not empty), have no duplicates and are sorted."
+  },
+  {
+   "rows": [
+    "V-1620c23b"
+   ],
+   "why": "Its expected result also covers grid cell combos showing only Active=Y entries, which goes beyond the search-condition-only rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-4a6860ab"
+   ],
+   "why": "It expects only the Team source (SSPM DEPT_ID); V-e62ad7de also covers Sales Site and other candidate sources, so the expected results differ and it stays alone."
+  },
+  {
+   "rows": [
+    "V-e62ad7de"
+   ],
+   "why": "Its expected result covers more than V-4a6860ab: AS-IS sources for Sales Site, End Customer, Sold to and Plant Site plus Team, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-0183f81d"
+   ],
+   "why": "Checks the GET_ADMIN_GROUP_MEASURE row, which no other row checks."
+  },
+  {
+   "rows": [
+    "EG-8fa997a6"
+   ],
+   "why": "Checks that the Company code exists in the TO-BE reference table and that inactive codes are excluded, which differs from what V-2cb6636e expects."
+  },
+  {
+   "rows": [
+    "V-2cb6636e"
+   ],
+   "why": "Checks for zero candidate-set differences in the Company column on a new row, which differs from what EG-8fa997a6 expects."
+  },
+  {
+   "rows": [
+    "T-1705c051"
+   ],
+   "why": "TRACE row that checks the GetDayRange entry point; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-3643ab8d"
+   ],
+   "why": "TRACE row that checks the GetDayOfWeek entry point; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-38c09127"
+   ],
+   "why": "TRACE row that checks the GetSpdTitle entry point; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-47ee589a"
+   ],
+   "why": "TRACE row that checks the WEEK_WORK_TIME lookup source code location (cs:47); no other row checks it."
+  },
+  {
+   "rows": [
+    "T-56c5681c"
+   ],
+   "why": "TRACE row that checks the drpPeriod search condition; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-85013eae"
+   ],
+   "why": "TRACE row that checks the cboDayWeek search condition; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-8dfb6772"
+   ],
+   "why": "TRACE row that checks the GC01 YesOrNo combo column definition; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-a1833ad5"
+   ],
+   "why": "TRACE row that checks the COLUMN_NAME column; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-b88ea9e6"
+   ],
+   "why": "TRACE row that checks the DAY_CODE column; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-bc504487"
+   ],
+   "why": "TRACE row that checks the YesOrNo lookup source code location (cs:48); no other row checks it."
+  },
+  {
+   "rows": [
+    "V-0579297f"
+   ],
+   "why": "Checks candidates after the Sales Site Company changes; no other row checks this element in this state."
+  },
+  {
+   "rows": [
+    "V-0937e633"
+   ],
+   "why": "Checks the Module combo and several other UI elements; no other row checks these."
+  },
+  {
+   "rows": [
+    "V-09ca250a"
+   ],
+   "why": "Checks the To Site search-condition source; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-0fe97cf2"
+   ],
+   "why": "Checks the Version search-condition list; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-104d0d6c"
+   ],
+   "why": "Also checks cascade narrowing across the Filter combos, so its expected result differs from the other rows and it stays alone."
+  },
+  {
+   "rows": [
+    "V-1973f0f7"
+   ],
+   "why": "Expects candidates with no data for the selected Div to be hidden; no other row has this expected result."
+  },
+  {
+   "rows": [
+    "V-1df9bc9a"
+   ],
+   "why": "Checks the display value of the Team cell combo after DEPT_ID changes; no other row checks this state."
+  },
+  {
+   "rows": [
+    "V-2074c10c"
+   ],
+   "why": "Checks the API Type search condition; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-2500dcef"
+   ],
+   "why": "Checks the Customs Handbook candidates for each Div; no other row checks them."
+  },
+  {
+   "rows": [
+    "V-3ebae6c3"
+   ],
+   "why": "Checks the display names of the Sales Site search-condition candidates; no other row checks this."
+  },
+  {
+   "rows": [
+    "V-3f42bfb2"
+   ],
+   "why": "Confirmed overall principle that all combos must match the AS-IS source; its scope is broader than any single element, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-425fec93"
+   ],
+   "why": "Checks the Active=Y filter on the Sales Plant cell combo; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-4626712c"
+   ],
+   "why": "Checks the FCST Type candidates on a Div 40 new row; no other row checks them."
+  },
+  {
+   "rows": [
+    "V-496652ff"
+   ],
+   "why": "Checks that a newly saved Sales Site appears in the search-condition combo right after saving; no other row checks this state."
+  },
+  {
+   "rows": [
+    "V-571c6a51"
+   ],
+   "why": "Checks the input method of the System column; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-6c5354ee"
+   ],
+   "why": "Checks that the grid combo reflects entries newly registered in LOOKUP; no other row checks this state."
+  },
+  {
+   "rows": [
+    "V-6ea58c58"
+   ],
+   "why": "Checks the four Approval Result items; no other row checks them."
+  },
+  {
+   "rows": [
+    "V-7956b2f9"
+   ],
+   "why": "Checks AS From Site activation and the Measure candidates; no other row has this combination of conditions."
+  },
+  {
+   "rows": [
+    "V-892342c7"
+   ],
+   "why": "Checks the candidate set of the Div search condition; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-8a70397d"
+   ],
+   "why": "Checks that the Team search condition is rebound after a save; no other row checks this state."
+  },
+  {
+   "rows": [
+    "V-a805765b"
+   ],
+   "why": "Checks the Team and Measure columns on an ETC new row; no other row checks them."
+  },
+  {
+   "rows": [
+    "V-b8fd90ce"
+   ],
+   "why": "Checks the user list in the Owner popup; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-c826a8ad"
+   ],
+   "why": "Checks Team, End Customer and Sales Site together under Div selection plus Insert; no other row has this combination."
+  },
+  {
+   "rows": [
+    "V-c851f50b"
+   ],
+   "why": "Checks the candidate set of the Plant Site search condition; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-d8827278"
+   ],
+   "why": "Checks how Biz Type/Plant Site condition candidates compare with result column values; no other row has this expected result."
+  },
+  {
+   "rows": [
+    "V-e708b813"
+   ],
+   "why": "Checks the To Site combo when inserting before a search; no other row checks this state."
+  },
+  {
+   "rows": [
+    "V-e76b5e89"
+   ],
+   "why": "Checks permission control of Current-version Measure input; no other row checks it."
+  },
+  {
+   "rows": [
+    "V-e80de721"
+   ],
+   "why": "Checks the End Customer cell combo on a Div 81 new row; no other row has this expected result."
+  },
+  {
+   "rows": [
+    "V-fb5bed5d"
+   ],
+   "why": "Checks the save result together with the Sales Site cell combo for each Div; no other row has this combination."
+  },
+  {
+   "rows": [
+    "V-ffa34ef8"
+   ],
+   "why": "Checks the Div 81 Team search-condition candidate count; no other row has this expected result."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:49",
+ "cost": 0.16098669999999998
+}

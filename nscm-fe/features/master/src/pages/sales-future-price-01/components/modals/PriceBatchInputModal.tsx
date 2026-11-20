@@ -134,7 +134,7 @@ const DISPLAY_MAP_BINDINGS = new Set([
 // 일괄입력 Price — modal 전용 (Sales Price 메타에 없음). 항상 고정컬럼 마지막에 append.
 const PRICE_ALL_COL: RawFlexGridColumnConfig = {
   colNm: 'PRICE_ALL',
-  colLblNm: 'Batch Price',
+  colLblNm: 'Price Bulk Input',
   colWth: 130,
   horzAlgnCd: 'R',
   fixed: false, // ⭐ 메인 그리드와 동일 — freeze 미사용(frozenColumns=0). 다단 헤더 48px 정규화 정상 동작 보장.

@@ -1,6 +1,6 @@
 # SCP0005 · SCP0005_GET_COUNTRY_CITY ↔ PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY
 
-- 실행: 2026-11-19 14:03:02
+- 실행: 2026-11-20 09:05:52
 - 파라미터: `{"p_country": "", "p_city": "", "p_city_name": "", "debug_mode": "F"}`
 - 종류: GET
 

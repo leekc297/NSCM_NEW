@@ -641,3 +641,73 @@
 | T364 | SCP0028 H5 조회조건 6행 · SC1 1행 미검증 | 조회조건 기준표(search_cond.csv)에 화면 행 0 이면 정적 판정이 행을 건드리지 않음 | judge.py: 기준표 행 0 화면은 AS-IS 라벨 ↔ TO-BE 라벨(정적 Form 라벨 + combo_runtime.json) 대조(div↔division · label_alias) · SC1 은 해당없음(기준표 행 0) | py_compile 0 · engine_selfcheck PASS |
 | T365 | SCP0028 C2 결함 유형 10행 '자동 실측 없음 … 직접 일치하는 실측 없음' | 대상 칸 판별(_absent_cols)이 '컬럼'·'셀' 표기 대상만 읽어 'End Customer→Sold-to Customer cascade' 같은 연쇄 표기를 못 읽음 | judge.py cascade_entities · _absent_ents(C2): 칸 이름이 그리드 컬럼·조회조건에 하나도 없으면 해당없음, 하나라도 겹치면 종전대로 | SCP0028 원장 모의 시험 6행 해당없음 · 4행 유지(AS From Site 등 이름 겹침) |
 | T366 | SCP0028 M3 EG-5ca14a48 'BTN:Input 비노출' | 측정 계정 언어 KO 라 버튼이 '입력'(LBL00872 KO). 버튼을 AS-IS 영문 글자로만 찾음 | 신규 tools/E2E/lib/labeltrans.ts(msg_master.csv 같은 라벨 코드의 다른 언어 글자) · eg_popup.spec.ts 버튼 이름 후보 | labelVariants('Input') = ['입력'] · tsc 0 |
+| T370 | SSP0014 저장 전 검증 알림 문구 유실(E7 8행 '알림 ''', crud '알림 없음') | nscm.ts alertText 가 숨은 대화상자까지 포함한 마지막 요소를 집어 보이는 알림이 있어도 '' | nscm.ts alertText: 보이는 대화상자만 | tsc 0 |
+| T371 | SSP0014 ES-de56f621 '저장 응답 USER_CHECK:200 · SAVE call-proc 없음' 60초 대기 · 알림 유실 | nscm.save 가 확인창 닫기 전에 검증 알림 문구를 읽지 않고, SAVE 류 아닌 검증 호출만 끝난 경우도 SAVE 응답을 60초 기다림 | nscm.ts save: 닫기 전 알림 읽기, 검증 호출 + 취소 없는 알림이면 대기 끝, preCheckOnly 반환 | tsc 0 |
+| T372 | SSP0014 F1·F6·F7·F8·L1·E4 21행 + V-9526999b 허위 FAIL 'Save 버튼이 저장 호출을 내지 않음' | 팝업 칸 시험 값('njlilian', 다른 행 최빈값)이 USER_CHECK 에 막힘. saveReload 가 검증 호출을 저장 요청으로 셈(값 불일치·DB 무변화 오기록) | nscm.ts 작은 검증 응답 기록(pre) · saveprobe.ts precheckValues·notePrecheck·saveReload precheck · cellRoundTrip 2회 재시도 · probe.ts otherColumnValue exclude·prefer · crud.ts 같은 행 2회 재시도·'[업무 검증 차단]' · _verify.spec.ts F 판정 | 단위 10/10 · tsc 0 |
+| T373 | SSP0014 V-5473aa5a 저장 실패 처리 | 저장 경로 시험이 검증 호출(USER_CHECK)에도 가짜 실패를 넣어 실패가 저장 요청에 닿지 않음 | _verify.spec.ts 저장 경로: 이름에 CHECK·VALID·VERIFY·CHK 인 검증 호출은 실제 서버로 · 검증 차단이면 0건으로 판정 · 1회 재시도 | 단위(judgeSaveFail) · tsc 0 |
+| T374 | SSP0014 V-7ac6b179 E3 'USER_ID 빈 값 Save — 저장 요청·안내 모두 없음' | 안내 읽기가 숨은 요소 포함 .first() · blockWrites 가 검증 호출까지 막아 '검증 불가' 실패 알림이 필수 안내를 가림 | _verify.spec.ts E3 보이는 요소 4초 재읽기 · probe.ts blockWrites 검증 호출 통과 · rowstate.ts 실패 알림은 필수 안내 아님(ERROR) | 단위 3/3 · tsc 0 |
+| T375 | SSP0014 E7 CELL_BADKEY 8행 'Save 요청 0건 · 알림 ''' | eg_popup.spec.ts 가 확인 버튼을 먼저 눌러 검증 알림을 닫고, SAVE 패턴 밖 검증 호출 거부를 몰랐음 | eg_popup.spec.ts: 누르기 전 알림 읽기 · 검증 호출 뒤 저장 요청 없음 + 알림 = 저장 전 서버 검증 거부 | tsc 0 |
+| T376 | SSP0014 EG-a6f6bebc J1 'EE 없음 판정필요' | 기대 후보 필터가 화면 원문 필터만 봄. SSP_BIGFILTER MyDivisionCMM 은 UP_FX_GetCommonDataList @Code='MyDivision' 분기 ATTRIBUTE3 <> 'EE' | 신규 combo_branch_filter.py(분기 원문 ATTRIBUTE3 필터) · eg_auth.spec.ts DIV_FILTER 대체 경로 | selftest 4/4 · SSP0014 cboDivision ATTRIBUTE3 <> 'EE'(sql:342) |
+| T380 | SSP0014 B7 6행 판정필요 '원천 미확인 cboDivision, cboOperationGroup' | b7_check.py src_tables 가 SSP_BIGFILTER 를 원천 없음으로 처리 | b7_check.py ssp_bigfilter_sets(list_line_ssp 결과셋 → SP @Code·@Param1) · src_tables 분기 원문 테이블 | --selftest 4/4 |
+| T381 | SSP0014 V-3809bf77 G9 허위 FAIL | AS-IS 단일 비교 판정이 plan key 'user' ↔ @p_user_id 대응 못 함 | judge.py _g9_stem | 단위 7건 |
+| T382 | SSP0014 V-f10c20d5 K3 허위 FAIL | _k3_cover Sort/Filter 항목이 팝업 그리드 K1 행(GRID_FILTER_COUNT)을 메인 그리드 근거로 씀 | judge.py _k3_popup_row | 단위 5건 |
+| T383 | SSP0014 V-22a8c711 K3 ERROR | 미포함 항목 연결 행이 전부 근거 있는 NA 여도 실측 없음 처리 | judge.py _k3_cover 연결 행 전부 NA = 대상 없음 | py_compile 0 |
+| T384 | SSP0014 EG-b255a2c0 A6 '대소문자 무시 없음 3, NULL 먼저 없음 1' | 동률 해소 키 별도 판정 · sort_check.csv ORDER BY 300자 잘림 | sort_check.py 2000자 · sort_ci_check.py 동률 해소 키 제외, 잘린 키 ERROR | --selftest 14/14 |
+| T385 | SSP0014 V-ccba28ce G1 '임의 후보 선택 → 0행' | 결과 칸 코드 ↔ 후보 이름 환산 없음 | _trace.spec.ts 멀티선택 콤보 응답 코드·이름 쌍으로 후보 찾기 | tsc 0 · 단위 3건 |
+| T400 | SSP0014 X-LOC T-59a6ad00 | 부록 표 번호가 표마다 1부터 다시 시작해 행 ID 가 겹치고 마지막 표 행으로 덮음 | mapping_trace.py parse_mapping 겹치는 ID 에 표 머리·줄 번호 | selftest 84/84 |
+| T401 | SSP0014 X-LOC T-add9b00e, T-f989ac6c, T-cb6154c3 | '위 번호표의 서술본' 부록 표, AS-IS 근거 '—' 이력 행을 구현 행으로 읽음 | mapping_trace.py restate_main · AS-IS 무관 이력 행 해당없음 | selftest 3건 추가 |
+| T402 | SSP0014 X-REASON T-5700543e, T-c2147bc2 | 해당없음 행의 구현 위치 칸을 근거로 읽지 않음 | mapping_trace.py loc_reason(구현 위치 파일에서 AS-IS 동작 낱말 확인 · 줄 차이 기록) | SSP0014 단독 실행 PASS |
+| T403 | SSP0014 H6 T-a5fcd2ff, M4 T-049a5854 | 팝업 메서드 안에서 인자로만 읽힌 조회조건에 팝업 검사를 붙임 | mapping_trace.py 인자 전용 조회조건 계산 · H6·M4 대상을 팝업 여는 컨트롤로 | 단독 실행 대상 2건 없어짐 |
+| T404 | SSP0014 X-REASON T-7274bbb1 | 미배치 컨트롤 사유를 AS-IS 사실로 확인 못 함 | mapping_trace.py _asis_unplaced | 단독 실행 PASS |
+| T405 | SSP0014 F4 T-247065c7 | 진입·조회 밖 SP 를 같은 실행 다른 시나리오 호출 기록으로 보지 않음 | judge.py f4_calllog | 단위 USER_CHECK 15건 PASS |
+| T406 | SSP0014 G5 T-3a730d4a | 공용 모달 인자 미전달을 사람 확인으로 남김, 조회조건 G5 판정 경로 없음 | popup_args_check.py CR-096 근거 · mapping_trace.py 조회조건 G5 | selftest 6/6 |
+
+## T430~T449 (2026-11-20 07:5x~08:2x · SCP0028 미검증 해소 · CheckList 07:38 원장)
+| ID | 증상(실측) | 원인 | 조치 |
+|---|---|---|---|
+| T430 | SCP0028 EG374·EG411 DELETE 조회 전 6행 FAIL · authcrud no-save 'delete=Y' | 화면 단추(customButtons 'Delete' 일괄삭제 팝업)가 툴바 'Delete(F9)' 앞에 그려져 `/^Delete/`·subButton('Delete').first() 가 화면 단추를 셈 | nscm.ts toolbarButton·subButtonVisible(단축키 단추 화면이면 'X(F#)' 만) · authprobe.ts toolbarRe·customLike · eg_auth.spec.ts EG369·EG374·EG411 · crud.ts 마커 정리 |
+| T431 | SCP0028 ES-5b4cd8e1 crud insert 'Insert 후 행 증가 없음' FAIL | AS-IS Insert 빈 본문 화면도 Insert 단추가 보이면 마커 행 경로를 고름 | crud.ts insertNoop(asisInsertNoop) → 수정 저장 경로 · insertVisible 은 권한 대조용 그대로 |
+| T432 | SCP0028 V-4121e73d F1 '허위 성공 의심' | 숫자 칸 '12801' 입력 글자가 빠져 '1'·'12'·'1280' 저장. 표시값이 원값과 다르기만 하면 입력 성공으로 봄 | crud.ts 숫자 칸 표시값 = 입력값 확인 · typeCell 재입력 · 실패면 재조회로 버리고 다음 후보 |
+| T433 | SCP0028 EG-78281d4c A6 'NULL 먼저 없음 5/5' | 키 NULL 가능 여부를 같은 이름 칸 전체(ALL_TAB_COLUMNS)로 봄 | sort_ci_check.py stmt_before·key_source(별칭 → 원본 표 · 바깥 조인 NULL 가능) · 시험 21/21 |
+| T434 | SCP0028 H5·G1·G2 조회조건 'Model' 못 찾음 | 기준표 행 0 화면에서 표준 명칭('Model' → 'Model/Nickname' 75/78행 · CR-065)을 보지 않음 | judge.py H5 기준표 행 0 경로 · labelalias.ts stdAlias · smoke-extra.ts findCond · _verify findSearchBox |
+| T435 | SCP0028 V-b45d4015 J4 탭 이름 FAIL | 기대값을 mnu_desc 로만 둠. 탭은 메뉴 메시지 코드(MNU00091) 번역 글자 | labeltrans.ts msgTexts · _verify.spec.ts 탭 이름 |
+| T436 | SCP0028 V-15f47ff2 J4 권한 동기화 FAIL | AS-IS 운영 권한 ↔ TO-BE 권한 설정 차이를 오류로 셈(SCP0104 사용자판정과 반대) | CR-116 등록 · judge.py J4 권한 동기화 = TO-BE 권한 설정 기준 |
+| T437 | SCP0028 V-388e3fd3 G6 'From Site 후보 없음 ← 필수' | 일괄입력 팝업이 열린 채 search() 가 팝업 Search 를 눌러 팝업 필수 알림이 화면 기록에 섞임 | nscm.ts 알림 때 그리드 팝업이 있으면 popupRequiredNotes |
+| T438 | SCP0028 FACT-78289eda·FACT-4f8bca15 · B7 '원천 미확인 control' | DataBind(Data.Type.X) 바인딩 미추출 · 호출 없는 private 메서드 안 setListBox 추출 | facts_combosrc.py DataBind 바인딩 · dead_private |
+| T439 | SCP0028 C2·C3 결함 유형 3행 '자동 실측 없음' | 'Insert 없음' 분기가 Insert 단추는 있고 AS-IS 본문이 빈 화면을 보지 않음 | judge.py _no_insert 에 AS-IS Insert 무동작 근거 행 |
+| T440 | SCP0028 V-564a1ac4 F5 병합 셀 Delete '[확인 대상] D 표시 0' | 병합 셀 Delete 가 화면 단추(일괄삭제 팝업)를 누름 · AS-IS 신규 행만 삭제를 보지 않음 | _verify.spec.ts 툴바 Delete · mergecheck.ts asisNewOnly NA(시험 35/35) |
+| T441 | SCP0028 V-b48e5d97 D4 'Delete 조회 전 프로브 미구현' | 조회 전 프로브가 Insert 만 있음 | _verify.spec.ts 조회 전 툴바 Delete 프로브(쓰기 차단) |
+| T442 | SCP0028 V-93e5a09c·V-ed2ee896 G8·G9 '입력값이 본문에 실리지 않음' | 조회영역 클래스가 없어 body 에서 그리드 머리글 'Model' 을 라벨로 잡고 다른 입력칸에 씀 | _verify.spec.ts 그리드·대화상자·메뉴 안 글자는 라벨에서 뺌 |
+| T443 | SCP0028 F4 팝업 SP '호출 없음' | eg_chain(CL_SELFTEST_BASE) 실행은 calls/*.json 을 남기지 않아 T405 호출 기록 판정이 팝업 호출을 못 봄 | fixtures/test.ts EG_CHAIN · eg_chain.py EG_CHAIN=1 |
+| T444 | SCP0028 시나리오 '버튼 Input 없음' · '조건 Division 없음' | 시나리오 btn·iscombo 가 AS-IS 글자만 찾음(측정 계정 KO '입력' · TO-BE 'Div.') | _verify.spec.ts 라벨 후보(labelVariants · Div↔Division · 별칭 · 표준 명칭) |
+| T445 | SCP0028 시나리오 3행 'Insert 뒤 행이 늘지 않음' · 'insert:1940행·신규0' | insert_noop_na 문구표에 시나리오 문구 없음 | judge.py NEWROW_MISS_RE·NEWROW_STEP_RE(대상 이름 신규·Insert 행만) |
+| T446 | SCP0028 V-4b34e536 F5 원값 복원 '값 변경이 안 됨' | 숫자 칸 편집기 주입이 안 먹음 | _verify.spec.ts typeCell 키보드 입력 대체(변경·원복) |
+| T447 | SCP0028 V-ee003a13 A7 '파라미터 값 미정' SKIP | 선언 기본값 '' 로 채운 인자를 빈 값으로 셈 | golden.py 선언 기본값 빈 글자 = 의도된 빈 값 |
+| T448 | SCP0028 V-b1aa0c11 ASIS D1 'siMain.SwitchLock' 미검증 | EditButton 편집 모드 문장 자체를 판정하는 경로 없음 | judge.py CR-093 블록 SwitchLock 문장 NA(CR-084·CR-093) |
+| T449 | SCP0028 T-c770299c F4 PR_GET_MNU_BTN_AUTH '호출 없음' | 공용 권한 SP 를 PROC_M 배선으로만 찾음 | judge.py 같은 실행 EG374·EG411 버튼 권한 실측으로 판정 |
+| T390 | SSP0014 D1 4칸·D1 대조표 4행·FACT 5행 잠금 기대 오류 | Def* 대문자 상수 이름(DIVISION)을 칸 이름으로 써 LockColumn(int,int,bool) 범위가 양 끝 2칸(ENDPOINTS)으로 적힘. SpreadInfo.cs:6921 은 sv.Columns[iCol1, iCol2] 범위 전체 잠금 | facts_lockrules.py defcol: 원문 상수 값 우선 | SSP0014 lock_rules 274 = DIVISION_ID~NICK_NAME 5칸 RANGE |
+| T391 | SSP0014 B4 '?Warranty' 환산 불가 · FACT-b00010d1 | 원천 DataTable 에 NewRow·Rows.Add 로 넣은 항목(W/'Warrnaty', cs:183~187)을 기대 후보에서 뺌. '?' 는 combo_oracle 의 환산 실패 표시 | facts_combosrc.py added_rows 열 · combo_oracle.py run_source 합침·B4 사유 표기 · facts_combovalues.py | combo_oracle --selftest 8/8 |
+| T392 | SSP0014 FACT-32d6dd69 | 행 값 조건 블록(if GetValue=="W", cs:355~360)의 셀 단위 SetCellTypeText·SetValue·SetHAlign 미추출 | facts_cellrules.py cond_cells 열 | SSP0014 OPERATION_GROUP cond_cells 1건 |
+| T393 | SSP0014 FACT-fe5cc623 | 정적 ORDER BY 첫 줄 키만 읽음 | facts_sortrules.py 쉼표로 이어지는 다음 줄 이어 읽기 | SSP0014 keys 5개. 다른 화면 재생성은 원복함(다음 CheckList 재생성 때 반영) |
+
+## T450~T456 (2026-11-20 08:3x~08:5x · SCP0005 미검증 해소 · CheckList 07:35 원장)
+
+| # | 대표 사례 | 왜 미검증·오판이 나왔나 | 고친 곳 | 확인 |
+|---|---|---|---|---|
+| T450 | SCP0005 FACT-4087be3b 외 4건 LT 숫자 칸 시트 POPUP | 컬럼 단위 규칙이 마지막 메타 행(팝업 시트 POPUP)의 시트를 남기고 코드 규칙(SetReNumerCellType)은 시트를 바꾸지 않음. 코드 줄은 `if (spreadInfo.SheetName == SpdSheet.shtMain)`(cs:243) 안 | facts_cellrules.py guard_sheets(감싼 SheetName 블록 상수 → 그 파일 SpdSheet 값) | SCP0005 cell_rules 재생성 LT 5칸 Distribution Route |
+| T451 | SCP0005 D1 route.* 48행 'AS-IS 편집 기대 없음' | 화면 사실 dts_sheets 빈 값이면 TO-BE 메타 시트를 모두 원장에 넣음. API 매핑 이름 시트(route)는 화면이 컬럼 메타로 쓰지 않는 중복 등록 | nscm.ts recordMetaSheets(컬럼 메타 조회 sheetNm 기록 → meta_sheets.json) · ledger.py 기록에 없고 AS-IS 시트에도 없는 시트 제외 | 필터 단위 시험 3건(기록 있음·없음·다른 시트). 겹침 비율 기준은 DMF0005 purchase_81 등 다른 그리드를 묶어 버림 |
+| T452 | SCP0005 V-4e4af2a4 '재조회 행 식별 0건' · F1·F6 3행 측정 중단 | 행 식별 문자열이 숫자 칸(ROUTE_ID)을 뺌. 업무 키 칸을 바꾸면 남은 문자 칸 조합으로 행을 못 찾음 | saveprobe.ts uniqueIdKey·rowsById(편집 전 유일한 ID 칸으로 보조 식별) | tsc 0 |
+| T453 | SCP0005 G4·M4 txtFromCountry 등 8행 'ROUTE_ID 더블클릭 → 팝업 열림 감지 실패' | Distribution Route 선택 팝업 prefill 분기(SCP0007 용)가 화면 자체 조회조건 행까지 맡음 | _trace.spec.ts condPopup(조건 칸 검색 단추 → 팝업 → 첫 행 → 확인 → 조건 값 · 원복) | tsc 0 |
+| T454 | SCP0005 T-6d14c72c M3 '열림 감지 실패' → 검사기 미검증 | 대화상자도 서버 호출도 없는 '열리지 않음'을 감지 실패와 같은 문구로 남겨 judge RX_TOOLFAIL 이 ERROR 로 내림 | _trace.spec.ts M3 대화상자 0 · 호출 0 · 편집기 없음 = '팝업 열리지 않음' 실측 FAIL | tsc 0 |
+| T455 | SCP0005 ES-0967e6d0·ES-fe8e48bc 'Division 40 선택 못 함' | AS-IS 에 Division 조회조건이 없는 화면에도 Division 별 조회 전제를 요구 | e2e_suite_ingest.py no_div(AS-IS controls.csv 이름에 Div 0건 + TO-BE 선택 실패 → NA 근거 기록) | Div 컨트롤 없는 AS-IS 화면 87/417 |
+| T456 | SCP0005 D1 FROM_COUNTRY·FROM_CITY 4행 허위 FAIL | T114 팝업 보조 입력 분기가 CELL=- 만 일반 텍스트로 봄. 메타 CELL 빈 값을 프레임워크가 FPTextBox 로 정함(SpreadInfo.cs:1387~1389) | ledger.py _plain 에 FPTextBox 포함 | 정규식 단위 시험 5건 |
+| T457 | SCP0005 V-4e4af2a4 재검 'FROM_CITY 재조회 NG · TRANSPORT_MODE_NAME 변경으로 중단' | 비슷한 행 찾기를 ID 칸보다 먼저 써서 다른 행(7303)을 집고 원복도 그 행에 함(7305 값 잔존). 시험 칸의 파생 칸(<칸>_NAME) 변화를 다른 칸 변경으로 셈 | saveprobe.ts ID 칸 먼저 · sideDiff · 파생 칸 제외 | tsc 0 · DB 복원 확인 |
+| T458 | SCP0005 T-9b463365 외 3건 Country 조건 '검색 단추 없음' | 한 단추가 두 조회조건 칸을 채우는 화면(btnFromSrch → Country·City)에서 칸 자체 단추만 찾음 | _trace.spec.ts condPopup 같은 묶음(라벨 첫 단어) 칸의 단추 | tsc 0 |
+| T459 | SCP0005 T-85f3a8bb·T-7e1a41bb G4 'popup_args.csv 에 없음' | 클릭 메서드 행은 있는데 host_label 빈 값이면 없음으로 처리 | _trace.spec.ts G4 BTN 인자 원천 컨트롤 이름 → 라벨 | tsc 0 |
+| T460 | SCP0005 FACT-a3f92559·FACT-3d955bfe 색 규칙 cond FALSE | `string.IsNullOrEmpty(변수)` 를 늘 세션 값으로 보고 FALSE. 칸 번호 변수(GetValue(i, nFromCityName))를 lhs 가 못 풂 | facts_lockrules.py atom·lhs | color_rules 재생성 2행 |
+| T470 | SSP0005 X-REASON 17행 '[대조표 근거 없음] 제외 사유 ''' | 대조표 표 머리글에 '사유' 칸이 없으면 사유를 빈 값으로 두고 RX_REASON 낱말만 봄. TO-BE 칸의 'cs:N 사문'·'도달 불가'·'여백 dsn:N'·'E03 동일'·'동일' 을 근거로 못 읽음 | mapping_trace.py reason_claim(AS-IS 줄 인용 + 미이식 근거 주장 · 행 참조·앞 행 상속, 참조 행도 근거 있어야 상속) | selftest T470 7건(음성 3건 포함) · SSP0005 17행 실측 근거 17 |
+| T471 | SSP0005 차등짝 AD- 12행 KEYSET·VALUES·COLSET·ORDER ERROR | E2E 위반 입력 시험 중 포착된 'Invalid Date' 호출(diff SKIP, 대조 대상 아님)을 원장 ERROR 행으로 만듦 | diff_ingest.py is_input_test_dup: 같은 TO-BE 프로시저를 정상 인자로 판정한 호출이 있으면 행 생성 안 함(없으면 종전대로 ERROR) | selftest T471 4건 |
+| T472 | SSP0005 A6 5행 '정렬 기준 차이' 판정필요 | AS-IS SELECT @mQuery = @mQuery + … (피벗 컬럼 목록 대입) 의 ORDER BY 를 결과 정렬 규칙으로 추출 | facts_sortrules.py assign_select: 대입 SELECT 의 ORDER BY = depth 'ASSIGN'(소비처 sort_check·ledger·mapping_trace 가 depth≠0 건너뜀) | selftest T472 3건 · dbo.SSP0005_GET_SHIPMENT_WORKING_DAY 85줄 ASSIGN, 96줄 결과 정렬 유지 |
+| T473 | SSP0005 EG-57ab9048 '실전송 건수 calendar TO-BE 0행' FAIL | 조회 1회에 본 조회·보조 조회(calendar)가 함께 나가면 마지막 호출(보조)을 기록하고 행 수는 본 그리드 것을 기록 | _verify.spec.ts 실전송 건수(A1): 응답 행 수 = 그리드 행 수인 호출 중 마지막 선택 | tsc 0 · E2E 동작 미측정 |
+| T474 | SSP0005 EG022 8행·EG271 1행 'Div 선택 실패' | authprobe selectDiv 가 다중 선택 Division 에서 옵션을 눌러 기존 선택에 더하거나 빼고, 입력값(칩 칸은 빈 값)으로 확인 | selectDiv: 칩·지우기 버튼이면 먼저 비우고 고른 뒤 닫음 · 칩 1개 앞 토큰으로 확인 | tsc 0 · E2E 동작 미측정 |
+| T475 | SSP0005 '조회 결과 0행' 데이터전제 77행 외 0행 파생 검사기공백 | ① ensureRows Division 순회가 '보이는 첫 콤보'(Company)를 Division 으로 봐 순회 0회 ② Division·기간 외 단일 선택 조건(Company 기본값 AA00, SSP_MST_SHIP_CALENDAR 0행 · 데이터 HQ00 등 8개 Company)을 바꾸지 않음 | smoke-extra.ts divSweep 라벨 Div·Division 칸 우선 · sweepCondCombos(칩 없는 단일 선택 콤보 후보 칸마다 최대 8개, 기간 확대 전) · _verify.spec.ts Division 컬럼(A5) 0행 때 같은 순회 | tsc 0 · 사내 DB 실측(Company별 행 수) · E2E 동작 미측정 |

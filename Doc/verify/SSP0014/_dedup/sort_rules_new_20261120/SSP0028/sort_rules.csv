@@ -1,0 +1,12 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0028,SQL,SSP0028_GET_DELIVERY_TRACKING_LT,Doc\asisfacts\db\modules\dbo.SSP0028_GET_DELIVERY_TRACKING_LT.sql,253,,BOD_ID,SET @mDqry3 = @mDqry3 + '	order by BOD_ID' + char(10);,0,동적 SQL
+SSP0028,SQL,SSP0028_GET_DELIVERY_TRACKING_LT,Doc\asisfacts\db\modules\dbo.SSP0028_GET_DELIVERY_TRACKING_LT.sql,286,,BOD_ID,SET @mDqry4 = @mDqry4 + '	order by LD.BOD_ID' + char(10);,0,동적 SQL
+SSP0028,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0028,SQL,SSP0028_GET_AREA,Doc\asisfacts\db\modules\dbo.SSP0028_GET_AREA.sql,26,,ATTRIBUTE1,order by attribute1,0,정적
+SSP0028,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,41,IF(@p_kind='F'),FROM_CITY,SET @mDqry1 = @mDQry1 + 'order by r.From_City' + char(10);,0,동적 SQL
+SSP0028,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,54,IF(@p_kind='F') ▸ ELSE IF(@p_kind='T'),TO_CITY,SET @mDqry1 = @mDQry1 + ' order by r.TO_City' + char(10);,0,동적 SQL
+SSP0028,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,66,IF(@p_kind='F') ▸ ELSE IF(@p_kind='A'),FROM_CITY,SET @mDqry1 = @mDQry1 + 'order by r.From_City' + char(10);,0,동적 SQL
+SSP0028,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,76,IF(@p_kind='F') ▸ ELSE IF(@p_kind='A'),TO_CITY,SET @mDqry1 = @mDQry1 + ' order by r.TO_City' + char(10);,0,동적 SQL
+SSP0028,SQL,SSP0028_GET_COUNTRY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_COUNTRY.sql,26,,FROM_COUNTRY,order by r.From_Country,0,정적
+SSP0028,SQL,SSP0028_GET_COUNTRY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_COUNTRY.sql,34,,TO_COUNTRY,order by r.To_Country;,0,정적
+SSP0028,SQL,SSP0028_GET_DELIVERY_TRACKING_LT_DETAIL,Doc\asisfacts\db\modules\dbo.SSP0028_GET_DELIVERY_TRACKING_LT_DETAIL.sql,232,,"SHIPMENT_NO,CNTR_NO","SET @mDqry2 = @mDQry2 + '  order by DATA.shipment_no, DATA.cntr_no' + char(10);",0,동적 SQL

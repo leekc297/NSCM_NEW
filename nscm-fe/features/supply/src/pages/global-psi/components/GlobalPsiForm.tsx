@@ -348,7 +348,7 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.MODEL, '_Model')}
+              label={t(LBL.MODEL, '_Nick Name')}
               labelAlign='right'
               render={() => (
                 <InputField

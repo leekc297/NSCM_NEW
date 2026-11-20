@@ -6,6 +6,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { createHash } from 'node:crypto';
 import { expect, test } from '../../../tools/E2E/fixtures/test';
+import { withFileLock } from '../../../tools/E2E/lib/writeguard';  // 2026-11-20 D1 동시 실행: 결과 파일 잠금
 import { parseCsv } from '../../../tools/E2E/lib/probe';
 import { setCondByLabel, findCondAny, clickSheetTab, openSheetPopup, sheetNav } from '../../../tools/E2E/lib/smoke-extra';
 import { ariaOf, buttonBar, ensureDirs, headerTextOf, judgeText, keyOf, saveResults, searchAreaTagged, ROOT, type SnapKind, type SnapResult } from '../../../tools/E2E/lib/snap';
@@ -38,14 +39,14 @@ const put = (kind: SnapKind, scope: string, s: SnapResult, extra: Record<string,
   const ev = `[재실측 스냅샷 ${kind}] ${s.status === 'NEW' ? '골든 없음(승인 전)' : s.status === 'MATCH' ? `기준 ${s.golden} ↔ 실측 일치` : s.status === 'DIFF' ? `기준 ${s.golden} ↔ 실측 ${s.received} · 차이 ${s.lines}줄(${s.diff})` : '측정 실패'} · ${s.detail.slice(0, 500)} · 전제 Div ${String(extra.div || '-')} · calls ${CUR.calls} · rows ${CUR.rows} · 기대원천 ${SRC[kind]}`;
   results.push({ row_id: r.row_id, result, evidence: ev.slice(0, 1400), tobe_ref: `E2E @snap ${kind}`, cond: COND_HASH.get(r.row_id), mctx: { calls: CUR.calls, rows: CUR.rows, req: 0 }, expect_src: SRC[kind], evidence_ref: s.golden || s.received, precond: { div: extra.div || '', calls: CUR.calls, rows: CUR.rows, viewport: extra.viewport || '' } });
 };
-const flush = () => {
+const flush = () => withFileLock(OUT, () => {  // 2026-11-20 D1
   if (!ID || CL_SELFTEST) return;
   saveResults(ID, snaps);
   if (!results.length) return;
   const prev: Res[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
   const m = new Map(prev.map(r => [r.row_id, r])); for (const r of results) m.set(r.row_id, r);
   fs.writeFileSync(OUT, JSON.stringify([...m.values()], null, 1), 'utf8');
-};
+});
 const divList = (): string[] => {
   const out: string[] = [];
   const s = plan && plan.sample && plan.sample.div ? String(plan.sample.div) : (process.env.E2E_DIVISION || '');

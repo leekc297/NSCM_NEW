@@ -1,0 +1,41 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 595,
+  "at": "2026-11-20T00:24:16.494Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SSP0014 #4 UserInfoPopup CELL:MAIL_USER2"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7672,
+  "dur": 645,
+  "at": "2026-11-20T00:24:20.795Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SSP0014 #4 UserInfoPopup CELL:MAIL_USER2"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "USER_CHECK",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/USER_CHECK/call-proc",
+  "postData": "{\"userId\":\"secretshushu^ZZ_E2E_BAD_KEY\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 146,
+  "at": "2026-11-20T00:24:23.480Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SSP0014 #4 UserInfoPopup CELL:MAIL_USER2"
+ }
+]

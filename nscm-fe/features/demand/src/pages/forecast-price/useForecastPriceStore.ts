@@ -57,6 +57,7 @@ interface ForecastPriceState {
   // ⭐ SavePricePeriodModal 고정 컬럼 메타 (SHEET_NAME='Sales Price Save All' 25 컬럼 —
   //   admin UI Category Setup 동적 fetch, hook ui-category-setup-column-meta).
   savePriceColumns: RawFlexGridColumnConfig[];
+  savePriceColumnsRequest: number;
   templateColumns: RawFlexGridColumnConfig[];
   templateColumnsRequest: number;
   // ⭐ P_USERINFO 권한 그룹 (CMBO 'FcstPriceUserAuthGroup' 1행) — 세션 groupId 유령 필드 대체.
@@ -185,6 +186,7 @@ const makeInitState = (): ForecastPriceState => ({
   calendar: {},
   m3CutoffYyyymm: '',
   savePriceColumns: [],
+  savePriceColumnsRequest: 0,
   templateColumns: [],
   templateColumnsRequest: 0,
   authGroup: '',
@@ -548,6 +550,8 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
     // ⭐ SavePricePeriodModal 고정 컬럼 — division 필터는 SP(PR_GET_SHEET_COLUMN_LIST) 서버측
     //   (DMF0020 fetchBatchColumns 선례 동일. 실패 시 빈 배열 유지 → modal fallback 컬럼 사용).
     fetchSavePriceColumns: divisionId => {
+      const request = get().savePriceColumnsRequest + 1;
+      set({ savePriceColumnsRequest: request });
       void (async () => {
         try {
           const result = await apiClient.post<RawFlexGridColumnConfig[]>(
@@ -557,6 +561,9 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
               divisionId,
             }
           );
+          // 팝업을 다시 열면 직전 사업부와 새 사업부로 두 번 조회한다. 직전 사업부 응답이
+          //   늦게 오면 헤더를 덮어쓰므로 마지막 요청의 응답만 반영한다.
+          if (get().savePriceColumnsRequest !== request) return;
           set(state => {
             // `?? []` — fetchStaticColumns 와 동일 이유(200 + result:null 방어).
             state.savePriceColumns = result.data.result ?? [];

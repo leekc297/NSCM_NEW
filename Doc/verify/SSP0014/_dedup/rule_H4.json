@@ -1,0 +1,535 @@
+{
+ "rule_id": "H4",
+ "hash": "6af38d8a01d5d1b3",
+ "groups": [
+  {
+   "rows": [
+    "V-10570d79",
+    "V-35dd07f7"
+   ],
+   "why": "같은 대상(화면 축소 시 조회조건·스크롤)을 같은 조건(브라우저 축소)으로 확인하고 기대도 같다: 조회조건 최소 크기 유지, 단일 스크롤. 결함 행과 확정 규칙 행이다."
+  },
+  {
+   "rows": [
+    "V-23f8352d",
+    "V-67eb700a"
+   ],
+   "why": "같은 Main Grid 컬럼 폭을 같은 조건(화면 오픈·개인화 없음)으로 확인한다. 두 행 모두 기본 폭이 기준정보(META) width이고 헤더 문구 길이를 기준으로 한다는 같은 기대다."
+  },
+  {
+   "rows": [
+    "V-623526d0",
+    "V-8b5c406e"
+   ],
+   "why": "같은 대상(조회조건·버튼 배치/콤보 드롭다운)을 같은 조건(노트북 해상도)으로 확인하고 기대도 같다: 겹침 0, 콤보 잘림 0."
+  },
+  {
+   "rows": [
+    "EG-039a6c5e"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 화면 밖 드래그 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-06c00287"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 축소 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-1aa9b73a"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 뷰포트 표시 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-6ebb1ec1"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 반대 방향 드래그 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-af860643"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 가로만 조절 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-ce9b36f0"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 크게 조절 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-e3296622"
+   ],
+   "why": "ItembyDivisionPopup(COND:Model)의 스크롤 없는 한 화면 확인으로 고유하다."
+  },
+  {
+   "rows": [
+    "EG-1b333a8d"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 축소를 확인하며, 셀별로 따로 둔다."
+  },
+  {
+   "rows": [
+    "EG-23401faa"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-52acbba6"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-8b1bb900"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-9cc1836a"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-bed128af"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-c8c1be2b"
+   ],
+   "why": "UserInfoPopup을 USER_ID 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-1222b54b"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-618dab7c"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-c60a234d"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-ceaf4f8d"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-e08c286b"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-fb3b1106"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-ffb8d5f6"
+   ],
+   "why": "UserInfoPopup을 PART_LEADER 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-611607e3"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-794b68d2"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-7a5dc4c1"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-8f196b0d"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-a86f1869"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-d88d6c39"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-eb9ea75a"
+   ],
+   "why": "UserInfoPopup을 TEAM_LEADER 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-265d6b5d"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-3fd44035"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-46960946"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-927daccc"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-d54f89a0"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-f572c767"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-f5dd65b9"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER1 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-553c2f26"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-94640464"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-a77031be"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-b9757587"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-cc7b1a64"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-cd3c6e61"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-d0486ee2"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER2 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-15abd6a9"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-17ce53a0"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-5aaa01f8"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-61f19c51"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-82c72ae5"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-9250c28d"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-d2e81487"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER3 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-114abde2"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-37f0b87e"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-3b284a8c"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-434896c2"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-706f46bc"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-b9e10f64"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-e1e5279c"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER4 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-1576c3f5"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 뷰포트 표시를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-168c0b08"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 크게 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-45e44c2b"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 화면 밖 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-58bad5e2"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 가로만 조절을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-5f98d82d"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 반대 방향 드래그를 확인한다."
+  },
+  {
+   "rows": [
+    "EG-b82e2d4b"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 스크롤 없는 한 화면을 확인한다."
+  },
+  {
+   "rows": [
+    "EG-c7ee263c"
+   ],
+   "why": "UserInfoPopup을 MAIL_USER5 셀에서 열어 축소를 확인한다."
+  },
+  {
+   "rows": [
+    "T-e6389264"
+   ],
+   "why": "대조표 추적 행이며 컬럼 폭 대조라는 다른 성질을 확인하므로 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-195cdaf7"
+   ],
+   "why": "폭 1366에서 조회조건 겹침을 보는 고유 조건이다."
+  },
+  {
+   "rows": [
+    "V-3552fbba"
+   ],
+   "why": "폭 1920에서 조회조건 겹침을 보는 고유 조건으로, 1366과 다른 조건이다."
+  },
+  {
+   "rows": [
+    "V-3e6746b8"
+   ],
+   "why": "조회 뒤 페이지·그리드 바깥 스크롤만 확인한다."
+  },
+  {
+   "rows": [
+    "V-eadcb5d4"
+   ],
+   "why": "화면 전체의 복합 기대(스크롤바 0, 최소 크기, 조회조건 높이 36px)라 다른 행과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-ac0617fd"
+   ],
+   "why": "상/하 그리드 스크롤바를 보는 일반 결함 유형이라 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-8e7f1026"
+   ],
+   "why": "조회·Division 전환 전후의 헤더 높이만 보며, 일반 결함 행보다 조건 범위가 좁아 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-439ad3b0"
+   ],
+   "why": "화면 오픈과 조작 반복까지 포함하는 더 넓은 조건의 헤더 높이 확인이다."
+  },
+  {
+   "rows": [
+    "V-d86a6b7c"
+   ],
+   "why": "헤더 글자 잘림을 보는 고유 기대다."
+  },
+  {
+   "rows": [
+    "V-25eafe59"
+   ],
+   "why": "특정 팝업이 정해지지 않은 일반 결함 유형이라, 팝업별 행과 묶으면 검사가 빠질 수 있어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-29fa27ce"
+   ],
+   "why": "Version 팝업 레이아웃이라는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-46378d50"
+   ],
+   "why": "좌/우 사용자 영역 높이라는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-525ffee3"
+   ],
+   "why": "모든 팝업에 대한 일반 규칙이고 대상 팝업이 특정되지 않아 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-57b264ce"
+   ],
+   "why": "Ver.Cutoff 팝업 조회조건 배치라는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-6776792d"
+   ],
+   "why": "로딩 플로팅 메시지라는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-68a8dc79"
+   ],
+   "why": "텍스트 조회조건의 대소문자 처리와 화면 깜빡임이라는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-8bfbb9df"
+   ],
+   "why": "화면샷 픽셀 차이를 판정하는 규칙이라 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-96f58639"
+   ],
+   "why": "SearchCondition 컴포넌트 너비가 디자인 기준을 따르는지 보는 고유 기대다."
+  },
+  {
+   "rows": [
+    "V-a1837dae"
+   ],
+   "why": "Version 돋보기 버튼 위치라는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-a23c9965"
+   ],
+   "why": "팝업이 특정되지 않은 일반 결함 유형이라 팝업별 RESIZE_MIN 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-cb5b3923"
+   ],
+   "why": "Dynamic Query라는 고유 대상과 결과 건수 기대다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:42:11",
+ "cost": 0.2570123
+}

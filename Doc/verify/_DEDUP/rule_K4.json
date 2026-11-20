@@ -1,0 +1,55 @@
+{
+ "rule_id": "K4",
+ "hash": "aed645b271f2fd48",
+ "groups": [
+  {
+   "refs": [
+    "DM-28"
+   ],
+   "target": "Price Batch Input 버튼 노출",
+   "condition": "Division 이 40/81/81_JV 일 때",
+   "expected": "해당 Division 에서는 Price Batch Input 버튼이 보이지 않는다.",
+   "why": "특정 버튼(Price Batch Input)을 Division 값에 따라 숨기는지 확인하는 항목이다. 대상 버튼과 노출 조건이 다른 항목과 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-74"
+   ],
+   "target": "조회조건 저장(Condition F6) 대상 항목",
+   "condition": "조회조건을 저장한 뒤 복원할 때",
+   "expected": "조회조건 저장(Condition F6)에는 Period 가 들어가지 않아, 복원해도 Period 값은 복원되지 않는다.",
+   "why": "버튼 노출이 아니라 조회조건 저장·복원에 Period 가 빠지는지 확인하는 항목이라 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-78"
+   ],
+   "target": "Delete 버튼의 Data Type별 노출",
+   "condition": "Data Type=Cutoff Data(Sales Plan·Biz Plan)를 고를 때",
+   "expected": "Data Type 이 Cutoff Data 이면 Delete 버튼이 보이지 않는다.",
+   "why": "DM-28 처럼 조건에 따라 버튼을 숨기는 항목이지만, 대상 버튼(Delete)과 조건(Data Type=Cutoff Data)이 달라 확인 동작이 다르다. 묶으면 검사가 빠질 수 있어 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-84"
+   ],
+   "target": "신규행 Insert 시 Currency·중복·Insert 위치·Delete 버튼",
+   "condition": "Exchange Rate 화면에서 신규행을 Insert 할 때",
+   "expected": "Currency=KRW 로 고정되어 편집할 수 없다. 중복 Keyset 이면 \"중복된 데이터가 있습니다\"가 뜬다. 새 행은 선택한 위치 위로 들어가고 Delete 버튼이 있다.",
+   "why": "여러 확인(Currency 고정, 중복 메시지, Insert 위치, Delete 버튼이 있는지)이 섞인 복합 항목이라 다른 항목과 기대 결과가 같지 않다. 따로 둔다."
+  },
+  {
+   "refs": [
+    "GAPPI-15"
+   ],
+   "target": "공통 버튼(Insert/Save/Delete) 권한별 노출 시점",
+   "condition": "화면을 연 직후, 조회하기 전, 자동 선택된 Division 기준",
+   "expected": "공통 SubTitle 버튼(Insert/Save/Delete 등)은 화면을 열 때 선택된 Division 의 권한(PR_GET_MNU_BTN_AUTH_DIV)으로 노출이 정해지고, 조회를 했는지와 상관없다.",
+   "why": "특정 버튼의 조건부 숨김이 아니라 공통 버튼 권한을 언제 적용하는지(화면을 연 직후, 조회 전) 확인하는 항목이라 다른 항목과 대상이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:43",
+ "cost": 0.056385199999999996
+}

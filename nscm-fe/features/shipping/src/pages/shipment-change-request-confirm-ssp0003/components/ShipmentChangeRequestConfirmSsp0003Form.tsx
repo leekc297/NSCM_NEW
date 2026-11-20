@@ -8,6 +8,7 @@ import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 import {
   ALL,
@@ -230,6 +231,12 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.requestId,
+                      next => set({ requestId: next }),
+                    ),
+                  }}
                   onChange={e => set({ requestId: e.target.value })}
                 />
               )}
@@ -256,6 +263,12 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onItemSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}

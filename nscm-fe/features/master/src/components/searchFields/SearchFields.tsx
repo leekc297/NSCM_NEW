@@ -36,6 +36,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 import { ItemByDivisionModal } from '../itemByDivisionModal/ItemByDivisionModal';
 import { OwnerByDivisionModal } from '../ownerByDivisionModal/OwnerByDivisionModal';
@@ -217,6 +218,9 @@ interface PopupSearchInputProps {
   disabled?: boolean; // ⭐ division 기준 비활성 (AS-IS Enabled=false) — 입력/팝업 버튼 모두 잠금
   // 편집 시작 시점 훅 — 표시문(라벨)과 조회키가 다른 필드가 라벨을 풀 때 쓴다.
   onFocus?: () => void;
+  // 멀티라인 붙여넣기(개행→쉼표) opt-in — AS-IS UsrMultiLineEditor 등가(createMultilinePasteHandler).
+  //   기본 off: 이 공용 필드를 쓰는 화면 전체가 아니라 지정 화면만 켠다(사용자 지시 2026-11-19, DMF0045 Project).
+  pasteMultiline?: boolean;
 }
 const popupRowStyle: React.CSSProperties = {
   display: 'flex',
@@ -230,6 +234,7 @@ const PopupSearchInput = ({
   onOpenPopup,
   disabled,
   onFocus,
+  pasteMultiline,
 }: PopupSearchInputProps) => {
   // 콤마 입력 즉시 소실 버그 수정 (2026-09-16): 부모는 값을 string[]로 들고 있다가
   // `value.join(',')`로 내려주는데, 콤마 뒤에 아직 토큰이 없는 편집 중간 상태
@@ -255,6 +260,19 @@ const PopupSearchInput = ({
           focusedRef.current = false;
           setText(value);
         }}
+        inputProps={
+          pasteMultiline
+            ? {
+                onPaste: createMultilinePasteHandler(
+                  () => text,
+                  next => {
+                    setText(next);
+                    onValueChange(next);
+                  }
+                ),
+              }
+            : undefined
+        }
         onChange={e => {
           const v = (e.target as HTMLInputElement).value;
           setText(v);
@@ -867,6 +885,8 @@ interface ProjectFieldProps extends PopupFieldProps {
   // 라벨 코드 override. 기본은 LBL00507('Project'). 화면별 다른 표기 전용(예: DMF0045 = LBL00012 'PJT').
   //   미지정 시 기존 동작 유지(타 화면 영향 없음).
   labelCode?: string;
+  // 멀티라인 붙여넣기(개행→쉼표) opt-in. 기본 off — 지정 화면만 켠다(사용자 지시 2026-11-19, DMF0045).
+  pasteMultiline?: boolean;
 }
 export const ProjectField = (props: ProjectFieldProps) => {
   const L = useL();
@@ -883,6 +903,7 @@ export const ProjectField = (props: ProjectFieldProps) => {
     multiCheckbox,
     disabled,
     labelCode,
+    pasteMultiline,
   } = props;
   return (
     <Grid size={gridSize ?? 4}>
@@ -893,6 +914,7 @@ export const ProjectField = (props: ProjectFieldProps) => {
         render={() => (
           <PopupSearchInput
             disabled={disabled}
+            pasteMultiline={pasteMultiline}
             value={value.join(',')}
             onValueChange={v =>
               onChange(

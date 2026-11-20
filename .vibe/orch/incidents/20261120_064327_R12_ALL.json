@@ -1,0 +1,29 @@
+{
+  "id": "20261120_064327_R12_ALL",
+  "at": "2026-11-20T06:43:27+09:00",
+  "ms": 1795124607730,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_wb_logname.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_wb_logname.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 3 · FAIL 7 · FAIL 3건 로그 이름 서로 다름  / FAIL SCP0005 로그 이름에 화면 ID 2026-11-20T06-43-26_CheckList__________.log / FAIL SCP0005 로그 내용 = 자기 출력만 \"SCP0028\" / FAIL SCP0014 로그 이름에 화면 ID 2026-11-20T06-43-26_CheckList__________.log / FAIL SCP0014 로그 내용 = 자기 출력만 \"SCP0028\"",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_wb_logname.js",
+    "file": "t_wb_logname.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T07:08:53+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

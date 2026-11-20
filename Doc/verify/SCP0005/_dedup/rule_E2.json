@@ -1,0 +1,60 @@
+{
+ "rule_id": "E2",
+ "hash": "0f3d3304f5106014",
+ "groups": [
+  {
+   "rows": [
+    "V-788596b3",
+    "V-4f33ca76"
+   ],
+   "why": "Both rows target the Distribution Route CREATION_DATE column and check the same thing: a nonexistent date is entered and saving it is blocked."
+  },
+  {
+   "rows": [
+    "V-676672f6",
+    "V-9d63b549"
+   ],
+   "why": "Both rows target the Distribution Route LAST_UPDATE_DATE column and check the same thing: a nonexistent date is entered and saving it is blocked."
+  },
+  {
+   "rows": [
+    "V-2b2340d4"
+   ],
+   "why": "This is LAST_UPDATE_DATE in the popup, not the grid column, so it is kept on its own."
+  },
+  {
+   "rows": [
+    "V-44bac2e2"
+   ],
+   "why": "This targets a different column (SHIP_DOC_PREPARATION_DATE) on a new row, with the entered value 20241399, so it is kept on its own."
+  },
+  {
+   "rows": [
+    "V-54471eb3"
+   ],
+   "why": "This row expects a message and no search request when the period is reversed, which conflicts with V-bbf32bc3, so it is kept on its own."
+  },
+  {
+   "rows": [
+    "V-bbf32bc3"
+   ],
+   "why": "This confirmed rule expects the reversed-period search not to be blocked, so its expected result differs and it is kept on its own."
+  },
+  {
+   "rows": [
+    "V-5adcccf6"
+   ],
+   "why": "This applies a defect type from another screen (SCP0007), and its target element on this screen is unclear and its expectation includes 0 SQL Errors, so it is kept on its own."
+  },
+  {
+   "rows": [
+    "V-d367a890"
+   ],
+   "why": "This is a different check: entering letters in the period field, which is kept on its own."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:39:54",
+ "cost": 0.0544817
+}

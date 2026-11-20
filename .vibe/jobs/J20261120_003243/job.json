@@ -1,0 +1,70 @@
+{
+  "id": "J20261120_003243",
+  "itemLabel": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "kind": "chain",
+  "status": "stopped",
+  "mode": "seq",
+  "maxPar": 2,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "createdAt": "2026-11-20T00:32:43+09:00",
+  "startedAt": "2026-11-20T00:32:43+09:00",
+  "endedAt": "2026-11-20T00:33:46+09:00",
+  "note": "사용자 중지",
+  "screens": [
+    {
+      "id": "SCP0005",
+      "status": "cancel",
+      "step": "",
+      "actor": "",
+      "sec": 63,
+      "summary": "✖ 체인 중단: 1/1 '1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) — 원인: $ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\prereq.py SCP0005 --asis SCP0005' FAIL · 완료 0단계 · 63s",
+      "why": "$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\prereq.py SCP0005 --asis SCP0005",
+      "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+      "startedAt": "2026-11-20T00:32:43+09:00",
+      "endedAt": "2026-11-20T00:33:46+09:00",
+      "tries": 1,
+      "actorNote": "실행 주체: 스크립트 1단계 · Claude 0회 · Claude 단계 건너뜀 3 · AI 검토 켬 — 이번 실행 0회 호출 · 0행 · 0.00 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261120_003243\\SCP0005.log"
+    },
+    {
+      "id": "SCP0014",
+      "status": "wait",
+      "step": "",
+      "actor": "",
+      "sec": 0,
+      "summary": "",
+      "why": "",
+      "md": "",
+      "startedAt": "",
+      "endedAt": "",
+      "tries": 0
+    },
+    {
+      "id": "SCP0028",
+      "status": "wait",
+      "step": "",
+      "actor": "",
+      "sec": 0,
+      "summary": "",
+      "why": "",
+      "md": "",
+      "startedAt": "",
+      "endedAt": "",
+      "tries": 0
+    },
+    {
+      "id": "SSP0005",
+      "status": "wait",
+      "step": "",
+      "actor": "",
+      "sec": 0,
+      "summary": "",
+      "why": "",
+      "md": "",
+      "startedAt": "",
+      "endedAt": "",
+      "tries": 0
+    }
+  ]
+}

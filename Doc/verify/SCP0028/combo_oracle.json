@@ -6,6 +6,27 @@
  "results": [
   {
    "kind": "SEARCH",
+   "target": "Valid",
+   "label": "Valid",
+   "scenario": "화면 초기(선택 Division*=81)",
+   "tobe_n": 2,
+   "asis_src": "STATIC YesOrNo @InitControls (SCP0028_Shipment_Lot_Size.cs:135 ← SCP0028_Shipment_Lot_Size)",
+   "asis_n": 2,
+   "rep": "CODE",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 2건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "고정 목록 순서 일치: TO-BE ['Y', 'N'] / AS-IS ['Y', 'N']",
+   "g7": "판정필요",
+   "g7_why": "AS-IS 표시 열 해석 불가(cboValid: 컨트롤 유형 UsrComboBox · 바인딩 없음)"
+  },
+  {
+   "kind": "SEARCH",
    "target": "Division*",
    "label": "Division*",
    "scenario": "화면 초기(선택 Division*=81)",

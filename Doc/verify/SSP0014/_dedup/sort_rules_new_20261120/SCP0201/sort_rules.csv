@@ -1,0 +1,15 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0201,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,3657,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0201,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,3692,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0201,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,4064,IF @p_version_id = 'Current',ITEM_ID,SET @MEXEC = @MEXEC+'							ORDER BY R.ITEM_ID) AS ROW_RANKING												        ' + CHAR(10);,2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0201,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,6996,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0201,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,7367,ELSE,ITEM_ID,SET @MEXEC = @MEXEC+'							ORDER BY R.ITEM_ID) AS ROW_RANKING												' + CHAR(10);,2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0201,SQL,SCP0201_GET_CAPA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0201,SQL,SCP0049_GET_DAY_RANGE,Doc\asisfacts\db\modules\dbo.SCP0049_GET_DAY_RANGE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0201,SQL,SCP0049_GET_SHEET_CALENDAR,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_CALENDAR.sql,130,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SCP0201,SQL,SCP0049_GET_SHEET_USER_TITLE,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_USER_TITLE.sql,78,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+SCP0201,SQL,SCP0049_GET_SHEET_USER_TITLE,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_USER_TITLE.sql,153,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+SCP0201,SQL,SCP0049_SAVE_MAIL_SEND_REQUEST,Doc\asisfacts\db\modules\dbo.SCP0049_SAVE_MAIL_SEND_REQUEST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0201,SQL,PR_SCM_SYS_LOG_BATCH,Doc\asisfacts\db\modules\dbo.PR_SCM_SYS_LOG_BATCH.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0201,SQL,SCP0049_SAVE_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_SAVE_CAPA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0201,CODE,,06.UIL\GSCM.FP.Forms.UIL\CAPA\SCP0201_CAPA.UIL\SCP0201_CAPA.cs,291,,SORT_ORDER,"tmpDivision.DefaultView.Sort = ""SORT_ORDER Asc"";",0,화면 코드 정렬

@@ -1,0 +1,28 @@
+{
+  "id": "20261120_001641_R12_ALL",
+  "at": "2026-11-20T00:16:41+09:00",
+  "ms": 1795101401057,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: workbench.js 웹뷰 스크립트를 t_webview_syntax.js 구문 시험 대상에 추가",
+  "screen": "",
+  "sig": "R12|S8|20261119232524_SELF",
+  "count": 1,
+  "repeat": null,
+  "detail": "개선안 20261119232524_SELF 반영 2026-11-19T23:59 · 점검 항목 S9|file|workbench.js 가 2026-11-20T00:00 점검에 다시 나옴",
+  "evidence": {
+    "check": "S8",
+    "key": "S8|20261119232524_SELF",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:50:23+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S8 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

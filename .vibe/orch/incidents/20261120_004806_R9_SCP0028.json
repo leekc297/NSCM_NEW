@@ -1,0 +1,26 @@
+{
+  "id": "20261120_004806_R9_SCP0028",
+  "at": "2026-11-20T00:48:06+09:00",
+  "ms": 1795103286336,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.dbwin.SCP0028.lock (PID 22056 없음)",
+  "screen": "SCP0028",
+  "sig": "R9|_run.dbwin.SCP0028.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20 00:34:03 · 인자 SCP0028 · 부모 python.exe(3208)",
+  "evidence": {
+    "file": "Doc/e2e/_run.dbwin.SCP0028.lock",
+    "pid": 22056
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:48:11+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.dbwin.SCP0028.lock (PID 22056 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

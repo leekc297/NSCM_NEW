@@ -74,6 +74,7 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
   // Unfix 성공 토스트의 {0} 은 전송 행 수 — AS-IS 는 SP 의 result_cnt(= 전송 데이터셋 행 수, cs:1502)를 쓴다.
   //   공용 useProcMutation 의 onSuccess 는 응답 본문을 주지 않으므로 전송 시점의 건수를 ref 로 넘긴다.
   const unfixCountRef = useRef(0);
+  const userSelectedRef = useRef(false);
   const { mutate: mutateMain } = useProcMutation<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
@@ -111,11 +112,17 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
   };
 
-  // 선택 셀 존재 — AS-IS Unfix 전제(selCells<1 → MSG00134). 자매 SCP0025 hasSelectedCell 과 동일.
-  //   Wijmo 자동(0,0) 선택 탓에 데이터 로드 후엔 실질 상시 통과하나, 두 화면 구조 정합을 위해 유지한다.
+  // 선택 셀 존재 — AS-IS Unfix 전제(selCells<1 → MSG00134). Wijmo 는 로드 시 (0,0)을 자동 선택하므로
+  //   selection 만으로는 상시 통과한다 — 사용자가 셀을 직접 고른 경우(userSelectedRef)만 선택으로 본다.
   const hasSelectedCell = (): boolean => {
     const g = gridRef.current;
-    return !!g && g.rows.length > 0 && (g.selection?.row ?? -1) >= 0 && (g.selection?.col ?? -1) >= 0;
+    return (
+      userSelectedRef.current &&
+      !!g &&
+      g.rows.length > 0 &&
+      (g.selection?.row ?? -1) >= 0 &&
+      (g.selection?.col ?? -1) >= 0
+    );
   };
 
   // Unfix(btnUnfix) — R2 권한(CanUpdate→SAVE, MSG00096) / R1 조회선행 / R3 셀선택→confirm→수집(AS-IS SaveData_FixInfo_U).
@@ -132,12 +139,8 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.NO_PERMISSION, '_No permission.') });
       return;
     }
-    // R1 — 미조회(데이터 없음). AS-IS 는 무반응(cs:1259)이나 TO-BE 는 안내를 유지한다. 데이터 0건은 선택 자체가
-    //   불가하므로 "행 미선택"(SELECT_CELL)으로 안내한다 — 자매 SCP0025 R1 정합(설계 07 R1 승인, 2026-11-12 통일).
-    if (rows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.SELECT_CELL, '_Select a target cell.') });
-      return;
-    }
+    // R1 — 미조회(데이터 없음)는 AS-IS 와 같이 무반응(cs:1259 `Rows.Count <= 0 return`, 사용자 지시 2026-11-19).
+    if (rows.length === 0) return;
     // R3a — 셀 선택 자체가 없으면 "행 미선택"(AS-IS selCells<1, cs:1312).
     if (!hasSelectedCell()) {
       void setAlert({ type: 'alert', content: t(MSG.SELECT_CELL, '_Select a target cell.') });
@@ -267,6 +270,7 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
           visibilityCtx={visibilityCtx}
           adminColumns={staticColumns[SHEETS.MAIN]}
           onFocus={() => undefined}
+          userSelectedRef={userSelectedRef}
         />
       </div>
 

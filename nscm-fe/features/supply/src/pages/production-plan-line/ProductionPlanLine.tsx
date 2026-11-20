@@ -370,17 +370,16 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 요청2(2026-11-04): Plan Date/Type/Seq 선택이 조회확정분(filters[MAIN])과 달라지면 메인 그리드 clear.
   //   선택과 조회결과 불일치 상태로 편집·저장되는 사고 방지 — 재조회(Search) 전까지 빈 상태로 둔다.
   //   filters 가 비면(division 변경·초기) early-return. 편집잠금(요청1)은 Form 이 콤보로 stageEditable 을 갱신해 담당.
-  //   Bucket(2026-11-18): 조회조건 Bucket 이 조회확정분과 달라지면도 clear 한다 — AS-IS 는 버킷 변경 시
-  //   cboBucketType_SelectedIndexChanged(cs:800~813)가 InitSpread+ClearDataSource 로 그리드를 비우고
-  //   재조회를 요구한다(편집분 포함 clear). 이로써 "주합계만 수정하고 Daily 로 보면 일자는 이전값" 식의
-  //   버킷간 불일치 미리보기 상태를 만들지 않는다(사용자 지시 2026-11-18, AS-IS 1:1).
+  //   Bucket 은 clear 대상이 아니다(2026-11-19 정정): AS-IS cboBucketType_SelectedIndexChanged(cs:800~813)는
+  //   chkAll 미체크일 때만 InitSpread+ClearDataSource 하고, chkAll 체크 시엔 SetSpreadColumn(컬럼 visible 토글,
+  //   그리드 유지)만 한다. TO-BE 는 조회가 상시 chkAll='Y'(전체보기 고정·일자 D_ 전량 로드, store L220~223)라 항상
+  //   후자 → 버킷 변경은 재조회 없이 그리드 D_/W_/M_ 컬럼 토글(Grid bucket prop)로만 처리한다(AS-IS 1:1).
   useEffect(() => {
     const f = mainFilter as
       | {
           planStartYyyymmdd?: string | null;
           planType?: string | null;
           seq?: string | null;
-          bucket?: string | null;
         }
       | undefined;
     if (!f) return;
@@ -389,12 +388,11 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (
       norm(f.planStartYyyymmdd) !== (sc.planStartYyyymmdds[0] ?? '') ||
       norm(f.planType) !== (sc.planTypes[0] ?? '') ||
-      norm(f.seq) !== (sc.planSeqs[0] ?? '') ||
-      norm(f.bucket) !== (sc.bucket as string)
+      norm(f.seq) !== (sc.planSeqs[0] ?? '')
     ) {
       clearFilters();
     }
-  }, [mainFilter, sc.planStartYyyymmdds, sc.planTypes, sc.planSeqs, sc.bucket, clearFilters]);
+  }, [mainFilter, sc.planStartYyyymmdds, sc.planTypes, sc.planSeqs, clearFilters]);
 
   const handleSave = async () => {
     const dirty = dirtyRows();

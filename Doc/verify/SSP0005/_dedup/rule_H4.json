@@ -1,0 +1,151 @@
+{
+ "rule_id": "H4",
+ "hash": "e16a6976f9ff064a",
+ "groups": [
+  {
+   "rows": [
+    "V-0a012ab4",
+    "V-f46800f5"
+   ],
+   "why": "Both rows check the search conditions and scrolling when the browser is shrunk, and both expect the search conditions to keep their minimum size with only one scrollbar for the whole screen."
+  },
+  {
+   "rows": [
+    "V-ad028e16",
+    "V-e3998ea2"
+   ],
+   "why": "Both rows check the search condition and button layout and the combo dropdown at laptop resolution, and both expect no overlap and no clipped list items."
+  },
+  {
+   "rows": [
+    "V-c1e6f01f",
+    "V-cb99a7cc"
+   ],
+   "why": "Both rows check Main Grid column widths on screen open with no personal settings, and both expect the default width to come from the base column data (META width) and match at least the header text length."
+  },
+  {
+   "rows": [
+    "V-0a997734"
+   ],
+   "why": "It is unclear whether this header is the page header or the grid header, so it stays apart from the grid header height row (H4-G04)."
+  },
+  {
+   "rows": [
+    "V-4bcbbb07"
+   ],
+   "why": "This checks only the Main Grid header height while the screen is opened, queried, the Division is changed and actions are repeated, and the target differs from the other header row."
+  },
+  {
+   "rows": [
+    "V-4941bae6"
+   ],
+   "why": "This checks search condition overlap at 1920 width, which is a different condition from the 1366 check."
+  },
+  {
+   "rows": [
+    "V-d7c83f9c"
+   ],
+   "why": "This checks search condition overlap at 1366 width, which is a different condition from the 1920 check."
+  },
+  {
+   "rows": [
+    "V-78d9bc25"
+   ],
+   "why": "This checks the shared search condition component width against the design standard on screen open, which is a different condition and expectation from the width-specific overlap checks."
+  },
+  {
+   "rows": [
+    "V-909c64fd"
+   ],
+   "why": "This combined screen rule also requires a 36px search condition height, so its expectation differs from the other rows."
+  },
+  {
+   "rows": [
+    "V-edb955cc"
+   ],
+   "why": "This checks only for page scrolling outside the grid after a query, which is a different target from the upper and lower grid scrollbars."
+  },
+  {
+   "rows": [
+    "V-8498bb0e"
+   ],
+   "why": "This checks for unneeded scrollbars on the upper and lower grids, which is a different target from the page's outer scrolling."
+  },
+  {
+   "rows": [
+    "V-0896f465"
+   ],
+   "why": "This checks only that no loading popup message appears during a search."
+  },
+  {
+   "rows": [
+    "V-540d5f40"
+   ],
+   "why": "This checks the layout of the Project/Model/Owner search condition popup, a popup no other row covers."
+  },
+  {
+   "rows": [
+    "V-710a0604"
+   ],
+   "why": "This checks the specific layout of the Ver.Cutoff popup's search conditions."
+  },
+  {
+   "rows": [
+    "V-77d0d3a9"
+   ],
+   "why": "This is a rule about how pixel differences in screenshots are judged, which is a different kind of check from measuring layout."
+  },
+  {
+   "rows": [
+    "V-7d91cd48"
+   ],
+   "why": "This checks the left and right user area heights after Insert or a bottom tab action."
+  },
+  {
+   "rows": [
+    "V-9eca9110"
+   ],
+   "why": "This checks that popups stay inside the viewport when resized or dragged, and that the close button is always visible."
+  },
+  {
+   "rows": [
+    "V-a9d05cdb"
+   ],
+   "why": "This checks case-insensitive search and no flicker while typing in text search conditions."
+  },
+  {
+   "rows": [
+    "V-bc3e7021"
+   ],
+   "why": "This checks the popup search conditions and buttons when the popup is shrunk, which is a different state from the main screen at laptop resolution."
+  },
+  {
+   "rows": [
+    "V-cf84c50e"
+   ],
+   "why": "This checks Dynamic Query layout and that the result count matches the current system (AS-IS) for the Role DM and ALL condition."
+  },
+  {
+   "rows": [
+    "V-d12c7baa"
+   ],
+   "why": "This checks the Version popup's layout against the design standard."
+  },
+  {
+   "rows": [
+    "V-ef56a00d"
+   ],
+   "why": "This checks where the magnifier button sits on the Version search condition."
+  },
+  {
+   "rows": [
+    "V-f2bd7c17"
+   ],
+   "why": "This checks that header text is not cut off after a query, which differs from checking header height or column width."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:08:49",
+ "cost": 0.0968587
+}

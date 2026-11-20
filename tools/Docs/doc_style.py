@@ -96,21 +96,132 @@ def scan_lines(path):
 _STR = re.compile(r"\"\"\"(.*?)\"\"\"|'''(.*?)'''|\"((?:[^\"\\\n]|\\.)*)\"|'((?:[^'\\\n]|\\.)*)'|`((?:[^`\\]|\\.)*)`", re.S)
 
 
-def scan_source(path):
-    """생성기 소스의 문자열 리터럴 — 주석 줄은 제외. 리터럴 안에서는 인용 구간을 가리지 않는다(리터럴 자체가 따옴표라서)."""
-    src = open(path, encoding='utf-8-sig', errors='replace').read()
-    n = 0
+# ── JS 소스 읽기 (2026-11-20 개선안 20261120001936_SELF_2) ──────────────────────────────
+# _STR 정규식 1개로는 // 주석, /* */ 주석, 정규식 리터럴 안의 따옴표·백틱을 문자열 시작으로 짝짓는다.
+# .js 는 앞에서부터 읽으며 주석과 정규식 리터럴을 건너뛰고 ' " ` 문자열만 뽑는다. 템플릿 ${…} 안은 코드로 다시 읽는다.
+_JS_WORD = re.compile(r'[A-Za-z0-9_$]+')
+_JS_KW = frozenset(('return', 'typeof', 'instanceof', 'in', 'of', 'new', 'delete', 'void', 'throw',
+                    'case', 'do', 'else', 'yield', 'await'))
+_JS_RX_PREV = set('(,=:[!&|?{};+-*%<>~^}')
+
+
+def _blank(s):
+    return re.sub(r'[^\n]', ' ', s)
+
+
+def _js_regex_end(src, i):
+    """src[i] == '/' 인 정규식 리터럴의 끝 위치. 같은 줄에서 닫히지 않으면 None(나눗셈으로 봄)."""
+    n = len(src); j = i + 1; cls = False
+    while j < n:
+        c = src[j]
+        if c == '\n':
+            return None
+        if c == '\\':
+            j += 2; continue
+        if cls:
+            cls = c != ']'
+        elif c == '[':
+            cls = True
+        elif c == '/':
+            j += 1
+            while j < n and (src[j].isalnum() or src[j] in '_$'):
+                j += 1
+            return j
+        j += 1
+    return None
+
+
+def _js_template_text(t):
+    """템플릿 글자 부분에서 /* */ 구간과 줄 머리가 // 인 줄을 뺀다(웹뷰·CSS 주석). 위치는 유지."""
+    t = re.sub(r'/\*.*?\*/', lambda m: _blank(m.group(0)), t, flags=re.S)
+    return '\n'.join(' ' * len(ln) if ln.lstrip().startswith('//') else ln for ln in t.split('\n'))
+
+
+def _js_code(src, i, out, nested):
+    """코드 구간을 읽으며 문자열을 out 에 (따옴표 종류, 시작 위치, 내용) 으로 넣는다. nested 면 짝 맞는 } 다음 위치를 돌려준다."""
+    n = len(src); depth = 0; prev = ''
+    while i < n:
+        c = src[i]
+        if c in ' \t\r\n':
+            i += 1; continue
+        nx = src[i + 1] if i + 1 < n else ''
+        if c == '/' and nx == '/':
+            k = src.find('\n', i); i = n if k < 0 else k; continue
+        if c == '/' and nx == '*':
+            k = src.find('*/', i + 2); i = n if k < 0 else k + 2; continue
+        if c in '\'"':
+            j = i + 1
+            while j < n and src[j] != c and src[j] != '\n':
+                j += 2 if src[j] == '\\' else 1
+            out.append((c, i, src[i + 1:min(j, n)]))
+            i = j + 1; prev = 'a'; continue
+        if c == '`':
+            i = _js_template(src, i, out); prev = 'a'; continue
+        if c == '/' and (prev == '' or prev in _JS_KW or prev in _JS_RX_PREV):
+            k = _js_regex_end(src, i)
+            if k is not None:
+                i = k; prev = 'a'; continue
+        if c == '{':
+            depth += 1
+        elif c == '}':
+            if nested and depth == 0:
+                return i + 1
+            depth -= 1
+        m = _JS_WORD.match(src, i)
+        if m:
+            w = m.group(0); i = m.end(); prev = w if w in _JS_KW else 'a'; continue
+        prev = c; i += 1
+    return n
+
+
+def _js_template(src, i, out):
+    """src[i] == '`'. 글자 부분은 ${…} 를 공백으로 바꿔 1건으로 넣고, ${…} 안은 코드로 읽는다. → 닫는 ` 다음 위치"""
+    n = len(src); j = i + 1; buf = []
+    while j < n:
+        c = src[j]
+        if c == '\\':
+            buf.append(src[j:j + 2]); j += 2; continue
+        if c == '`':
+            j += 1; break
+        if c == '$' and j + 1 < n and src[j + 1] == '{':
+            k = _js_code(src, j + 2, out, True)
+            buf.append(_blank(src[j:k])); j = k; continue
+        buf.append(c); j += 1
+    out.append(('`', i, _js_template_text(''.join(buf))))
+    return j
+
+
+def _js_literals(src):
+    out = []
+    _js_code(src, 0, out, False)
+    return sorted(out, key=lambda x: x[1])
+
+
+def _source_literals(path, src):
+    """→ [(시작 위치, 내용, 안쪽 '…' 인용을 가릴지)]"""
+    if path.lower().endswith('.js'):
+        return [(st, s, q != "'") for q, st, s in _js_literals(src)]
+    res = []
     for m in _STR.finditer(src):
-        s = next((g for g in m.groups() if g is not None), '')
-        if not is_sentence(s):
-            continue
         ls = src.rfind('\n', 0, m.start()) + 1
         head = src[ls:m.start()].lstrip()
         if head.startswith('#') or head.startswith('//') or head.startswith('*'):
             continue
+        s = next((g for g in m.groups() if g is not None), '')
+        res.append((m.start(), s, bool(m.group(1) or m.group(2) or m.group(3) or m.group(5))))
+    return res
+
+
+def scan_source(path):
+    """생성기 소스의 문자열 리터럴 — 주석은 제외. 리터럴 안에서는 인용 구간을 가리지 않는다(리터럴 자체가 따옴표라서)."""
+    src = open(path, encoding='utf-8-sig', errors='replace').read()
+    n = 0
+    for start, s, mask in _source_literals(path, src):
+        if not is_sentence(s):
+            continue
         n += 1
-        line = src.count('\n', 0, m.start()) + 1
-        t = re.sub(r"'[^'\n]{0,80}'|‘[^’\n]{0,80}’|「[^」\n]{0,80}」", lambda q: ' ' * len(q.group(0)), s) if m.group(1) or m.group(2) or m.group(3) or m.group(5) else s
+        line = src.count('\n', 0, start) + 1
+        t = re.sub(r"'[^'\n]{0,80}'|‘[^’\n]{0,80}’|「[^」\n]{0,80}」", lambda q: ' ' * len(q.group(0)), s) if mask else s
         for kind, rx, hint in rules():
             for h in rx.finditer(t):
                 a, b = max(0, h.start() - 6), min(len(s), h.end() + 6)

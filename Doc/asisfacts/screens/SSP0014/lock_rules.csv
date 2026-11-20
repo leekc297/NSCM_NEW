@@ -1,6 +1,6 @@
 ﻿method,line,api,scope,locked,lock_expr,columns,expand,cond,guard,control,raw
 EditButton,272,SwitchLock,MODE,TOGGLE,,,,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,siMain.SwitchLock()
-EditButton,274,LockColumn,ALL_ROWS,Y,,DIVISION;NICK_NAME,ENDPOINTS,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION), siMain.GetColumnIndex(DefColumns.NICK_NAME), true)"
+EditButton,274,LockColumn,ALL_ROWS,Y,,DIVISION_ID;OPERATION_GROUP;FROM_SITE;ITEM_ID;NICK_NAME,RANGE,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION), siMain.GetColumnIndex(DefColumns.NICK_NAME), true)"
 EditButton,275,LockColumn,ALL_ROWS,Y,,USER_NAME,ONE,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.USER_NAME), siMain.GetColumnIndex(DefColumns.USER_NAME), true)"
 EditButton,276,LockColumn,ALL_ROWS,Y,,PART_LEADER_NAME,ONE,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.PART_LEADER_NAME), siMain.GetColumnIndex(DefColumns.PART_LEADER_NAME), true)"
 EditButton,277,LockColumn,ALL_ROWS,Y,,TEAM_LEADER_NAME,ONE,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.TEAM_LEADER_NAME), siMain.GetColumnIndex(DefColumns.TEAM_LEADER_NAME), true)"

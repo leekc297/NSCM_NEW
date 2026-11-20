@@ -34,8 +34,11 @@ OUT = os.path.join(ROOT, 'Doc', 'verify', '_engine_selfcheck.json')
 E2E = os.path.join(ROOT, 'tools', 'E2E')
 
 PY_GLOBS = ['tools/Harness/verify/*.py', 'tools/DbConn/*.py', 'tools/Harness/*.py',
-            'tools/AsisLive/*.py', 'tools/Docs/*.py']  # 2026-11-13 전수 점검: CheckList 체인이 직접 부르는 asis_live_screen.py(diff 단계)·문서 단계가 import 하는 tools/Docs 가 감시 밖이었다(추가 시점 컴파일 0 · 미정의 이름 0)
-JS_GLOBS = ['tools/Harness/*.js', 'tools/Harness/lib/*.js', 'tools/E2E/*.js', 'tools/E2E/lib/*.js']
+            'tools/AsisLive/*.py', 'tools/Docs/*.py',
+            'tools/CommonSync/*.py']  # 2026-11-19 VMO 자가진단 개선안 20261119215147_SELF(사용자 승인): run_verify.py 가 tools/CommonSync/screen_sync.py 를 직접 실행하는데 감시 밖이었다(inventory_check GATE_SCOPE · 추가 시점 컴파일 0 · 미정의 이름 0)
+            # 2026-11-13 전수 점검: CheckList 체인이 직접 부르는 asis_live_screen.py(diff 단계)·문서 단계가 import 하는 tools/Docs 가 감시 밖이었다(추가 시점 컴파일 0 · 미정의 이름 0)
+JS_GLOBS = ['tools/Harness/*.js', 'tools/Harness/lib/*.js', 'tools/E2E/*.js', 'tools/E2E/lib/*.js',
+            'tools/VibeManager/*.js', 'tools/VibeManager/test/*.js']  # 2026-11-19 VMO 자가진단 Q4: VM(VS Code 확장) JS 가 구문 게이트 밖이었다(추가 시점 구문 오류 0)
 TS_GLOBS = ['tools/E2E/lib/*.ts', 'tools/E2E/fixtures/*.ts', 'Doc/e2e/specs/_*.spec.ts', 'Doc/e2e/specs/eg_*.spec.ts']
 DATA_GLOBS = ['tools/Harness/rules/*.csv', 'tools/VibeManager/*.json', 'tools/E2E/e2e.config.json']
 SPEC_WATCH = ['Doc/e2e/specs/_verify.spec.ts', 'Doc/e2e/specs/_trace.spec.ts', 'Doc/e2e/specs/_snap.spec.ts', 'Doc/e2e/specs/eg_popup.spec.ts',

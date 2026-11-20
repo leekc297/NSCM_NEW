@@ -3,6 +3,7 @@ import { PeriodRangePicker } from '@shared/components';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Stack } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 import { LBL } from '../shipment-request-electrode.constants';
 import { useShipmentRequestElectrodeStore } from '../useShipmentRequestElectrodeStore';
@@ -81,6 +82,12 @@ export const ShipmentRequestElectrodeDetailBar = ({
                   />
                 ),
               }}
+              inputProps={{
+                onPaste: createMultilinePasteHandler(
+                  () => sp.itemId2,
+                  next => setSearchParams({ itemId2: next }),
+                ),
+              }}
               onChange={e => setSearchParams({ itemId2: e.target.value })}
             />
           )}
@@ -105,6 +112,12 @@ export const ShipmentRequestElectrodeDetailBar = ({
                     iconComponent={<FunctionSearchIcon appearance='lined' />}
                     onClick={onModelSearch2}
                   />
+                ),
+              }}
+              inputProps={{
+                onPaste: createMultilinePasteHandler(
+                  () => sp.modelId2,
+                  next => setSearchParams({ modelId2: next, nickName2: '' }),
                 ),
               }}
               onChange={e => setSearchParams({ modelId2: e.target.value, nickName2: '' })}

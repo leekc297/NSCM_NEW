@@ -1,0 +1,58 @@
+{
+ "rule_id": "D2",
+ "hash": "f4b44497d006e817",
+ "groups": [
+  {
+   "rows": [
+    "V-30098847"
+   ],
+   "why": "Bucket별(Daily/Weekly/Monthly) Measure 편집 시작 구간을 확인하는 행으로, 같은 요소와 같은 기대 결과를 가진 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-4e9a788e"
+   ],
+   "why": "편집 가능 여부가 아니라 실적 구간 셀의 배경색(회색)을 확인하므로 다른 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-52f23526"
+   ],
+   "why": "MKT_FCST·SCM_FCST 편집 권한을 GET_ADMIN_GROUP_MEASURE와 SCP 설정 시간 기준으로 확인한다. V-e9141f4a도 같은 룩업을 다루지만 조건(Current 버전, Div, VMI, FCST Type)과 기대(AS_In_Req·VMI_In_Req·AS From Site)가 더 넓어 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-608ec118"
+   ],
+   "why": "Partial 주차(M-1·M) 편집 구간과 실적 구분선 위치를 확인하는 고유 조건과 기대 결과이다."
+  },
+  {
+   "rows": [
+    "V-a2885e51"
+   ],
+   "why": "RTF[R+P] Measure의 편집 가능 여부를 Cutoff·SCP Final 상태로 확인하고 수정불가 팝업을 기대하므로 대상 Measure와 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-b38d9415"
+   ],
+   "why": "Div 40 Biz Plan에서 Business Plan·Unit Price(LOC)가 실적·계획 구간 모두 편집 가능한지 확인하므로 다른 Bucket 및 권한 행과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-cb6d8cf8"
+   ],
+   "why": "Monthly 입력과 함께 행 추가 후 저장 값 유지와 더블클릭 팝업까지 확인하므로 상태(신규행)와 기대 결과가 V-30098847의 Monthly 편집 구간과 다르다."
+  },
+  {
+   "rows": [
+    "V-e9141f4a"
+   ],
+   "why": "Current 버전에서 AS_In_Req·VMI_In_Req 권한과 AS From Site 콤보 목록까지 확인하는 복합 기대 결과라서 V-52f23526과 완전히 같지 않아 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:17:28",
+ "cost": 0.0571649
+}

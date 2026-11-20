@@ -49,6 +49,7 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
   const sc = useSalesSitePriorityStore(s => s.searchCondition);
   const set = useSalesSitePriorityStore(s => s.setSearchCondition);
   const setDivision = useSalesSitePriorityStore(s => s.setDivision);
+  const setSiteOptionCodes = useSalesSitePriorityStore(s => s.setSiteOptionCodes);
   const openSearchArea = useSalesSitePriorityStore(s => s.openSearchArea);
 
   const tabId = useTabid();
@@ -79,6 +80,13 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
   const planGroupOptions = toOptions(filterByDivision(toCascadeSource(planGroups), sc.divisionId));
   const siteOptions = toOptions(filterSiteByDivision(toCascadeSource(sites), sc.divisionId));
   const validOptions = toDivisionOptions(validYn);
+
+  // 현재 Division 의 SCM Site 옵션 코드를 store 에 동기화 — setFilter 가 "전체 선택이면 빈값" collapse
+  //   판정에 쓴다(위 store siteOptionCodes 주석). 콤마 서명으로 depend 해 내용이 같으면 재설정하지 않는다.
+  const siteOptionCodesKey = siteOptions.map(o => o.value).join(',');
+  useEffect(() => {
+    setSiteOptionCodes(siteOptionCodesKey ? siteOptionCodesKey.split(',') : []);
+  }, [siteOptionCodesKey, setSiteOptionCodes]);
 
   return (
     <>

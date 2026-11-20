@@ -1,0 +1,18 @@
+{
+ "rule_id": "A9",
+ "hash": "0f5d9da3c83e2ac7",
+ "groups": [
+  {
+   "refs": [
+    "DM-118"
+   ],
+   "target": "Measure Version(A)/Version(B) 명칭",
+   "condition": "",
+   "expected": "선택 버전명이 Version(A)/(B) Measure 명으로 표시",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:39:23"
+}

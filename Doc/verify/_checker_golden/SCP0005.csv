@@ -1,8 +1,8 @@
 ﻿row_id,rule_id,target,result,evidence_head,saved_at,approved_by,approved_at,verdict_src
-V-4f20fdc6,H4,스냅샷 화면샷(패널·헤더 띠 1920/1366) 픽셀 차이,NOT_RUN,,2026-11-19 17:06,,,checker
-V-43ce0a24,G4,스냅샷 조회조건 공용 기간 칸 구조·아이콘,NOT_RUN,,2026-11-19 17:06,,,checker
-V-fb78022a,G4,SCP0005 스냅샷 조회조건 Div 40,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0005\snap\golden\조회조건_Div_40.aria.yml@16fe48,2026-11-19 17:08,사용자(대화),2026-11-19 17:08,user
-V-5daefe3f,K4,SCP0005 스냅샷 버튼 Div 40,NOT_RUN,,2026-11-19 17:06,,,checker
-V-36e6b5c0,A5,SCP0005 스냅샷 헤더 Distribution Route,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0005\snap\golden\헤더_Distribution_Route.txt@b,2026-11-19 17:08,사용자(대화),2026-11-19 17:08,user
-V-e1b5b2c6,H4,SCP0005 스냅샷 화면샷 1920,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0005\snap\golden\화면샷_1920.png@88d7e3bf — Che,2026-11-19 17:08,사용자(대화),2026-11-19 17:08,user
-V-f8f04705,H4,SCP0005 스냅샷 화면샷 1366,PASS,[사용자판정] PASS — 스냅샷 승인 Doc\verify\SCP0005\snap\golden\화면샷_1366.png@35c4a8ef — Che,2026-11-19 17:08,사용자(대화),2026-11-19 17:08,user
+V-4f20fdc6,H4,스냅샷 화면샷(패널·헤더 띠 1920/1366) 픽셀 차이,NOT_RUN,,2026-11-20 07:35,,,checker
+V-43ce0a24,G4,스냅샷 조회조건 공용 기간 칸 구조·아이콘,NOT_RUN,,2026-11-20 07:35,,,checker
+V-fb78022a,G4,SCP0005 스냅샷 조회조건 Div 40,PASS,[재실측 스냅샷 조회조건] 기준 Doc\verify\SCP0005\snap\golden\조회조건_Div_40.aria.yml ↔ 실측 일치 · ,2026-11-20 08:24,사용자(대화),2026-11-20 08:24,user
+V-5daefe3f,K4,SCP0005 스냅샷 버튼 Div 40,NOT_RUN,,2026-11-20 07:35,,,checker
+V-36e6b5c0,A5,SCP0005 스냅샷 헤더 Distribution Route,PASS,[재실측 스냅샷 헤더] 기준 Doc\verify\SCP0005\snap\golden\헤더_Distribution_Route.txt ↔ 실측 일치,2026-11-20 08:24,사용자(대화),2026-11-20 08:24,user
+V-e1b5b2c6,H4,SCP0005 스냅샷 화면샷 1920,PASS,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0005\snap\golden\화면샷_1920.png ↔ 실측 C:\Projects\NS,2026-11-20 08:24,사용자(대화),2026-11-20 08:24,user
+V-f8f04705,H4,SCP0005 스냅샷 화면샷 1366,PASS,[재실측 스냅샷 화면샷] 기준 Doc\verify\SCP0005\snap\golden\화면샷_1366.png ↔ 실측 C:\Projects\NS,2026-11-20 08:24,사용자(대화),2026-11-20 08:24,user

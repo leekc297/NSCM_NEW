@@ -1,7 +1,7 @@
 // orch-improve.js 시험 — 임시 폴더 + 가짜 claude 로 집계 · 분석 · 승인 반영 · 검증 실패 복원 · 반려 · 되돌리기를 본다. 실제 Claude 호출 없음
 //   사용: node test/t_orch_improve.js <VibeManager 폴더>
 const path = require('path'); const fs = require('fs'); const os = require('os'); const cp = require('child_process');
-const dir = process.argv[2] || path.join(__dirname, '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'improve-')); const vibeDir = path.join(root, '.vibe');
 const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
 const R = rel => fs.readFileSync(path.join(root, rel), 'utf8');
@@ -52,6 +52,20 @@ const sleep = t => new Promise(r => setTimeout(r, t));
     chk('집계: 끝 사건 없는 대기 2건 · 화면 목록 · 사라진 대기 1건', wd && wd.started === 3 && wd.unfinished === 2 && wd.unfinishedLive === 0 && wd.unfinishedScreens.join(',') === 'TST0091,TST0092' && wd.gone === 1 && wd.goneSec === 1749 && wd.n === 1 && wd.totalSec === 30, JSON.stringify(wd));
     chk('집계: 기존 항목은 그대로(admit 3건 1500초)', wa2 && wa2.n === 3 && wa2.totalSec === 1500 && wa2.unfinished === 0);
     chk('집계: 끝 사건 없는 Claude 호출 1건', d2.claude.started === 3 && d2.claude.calls === 2 && d2.claude.unfinished === 1, JSON.stringify(d2.claude)); }
+  // 중지된 실행은 실패와 따로 센다(개선안 20261120094530_REVIEW): step.end FAIL 2건 중 1건 뒤에 같은 화면 job.item.end cancel → fail 1 · stopped 1
+  ev.emit('step.end', { task: 'S8.stopTest', name: 'CheckList', actor: 'script', status: 'FAIL', ms_run: 1000, screen: 'TSTS001' });
+  ev.emit('chain.end', { chain: 'stoptest', chainLabel: 'CheckList', ok: false, ms_run: 1000, screen: 'TSTS001' });
+  ev.emit('proc.end', { label: 'stoptest proc', exit: 1, ms_run: 1000, server: false, stopped: false, screen: 'TSTS001' });
+  ev.emit('job.item.end', { screen: 'TSTS001', status: 'cancel', ms_run: 1000 });
+  ev.emit('step.end', { task: 'S8.stopTest', name: 'CheckList', actor: 'script', status: 'FAIL', ms_run: 1000, screen: 'TSTS002' });
+  ev.emit('chain.end', { chain: 'stoptest', chainLabel: 'CheckList', ok: false, ms_run: 1000, screen: 'TSTS002' });
+  ev.emit('proc.end', { label: 'stoptest proc', exit: 1, ms_run: 1000, server: false, stopped: false, screen: 'TSTS002' });
+  ev.emit('job.item.end', { screen: 'TSTS002', status: 'fail', ms_run: 1000 });
+  ev.emit('proc.end', { label: 'stoptest proc', exit: 1, ms_run: 1000, server: false, stopped: true, screen: 'TSTS003' });
+  { const d3 = im.digest(7); const s3 = d3.steps.find(x => x.key === 'S8.stopTest'); const c3 = d3.chains.find(x => x.chain === 'stoptest'); const p3 = d3.procFails.find(x => x.label === 'stoptest proc'); const s8 = d3.steps.find(x => x.key === 'S8.checklistRun');
+    chk('집계: 중지 따로 셈(단계 fail 1 · stopped 1)', s3 && s3.n === 2 && s3.fail === 1 && s3.stopped === 1, JSON.stringify(s3));
+    chk('집계: 중지 따로 셈(체인 ok 0 · stopped 1 · 프로세스 fail 1 · stopped 2)', c3 && c3.n === 2 && c3.ok === 0 && c3.stopped === 1 && p3 && p3.n === 3 && p3.fail === 1 && p3.stopped === 2 && p3.exits[1] === 1, JSON.stringify(c3) + JSON.stringify(p3));
+    chk('집계: 화면 없는 기존 실패는 그대로 fail', s8 && s8.fail === 1 && s8.stopped === 0, JSON.stringify(s8)); }
   chk('분석 예정 판단(이력 없음 = 예정)', im.reviewDue() === true);
   // 분석 → 개선안 등록(근거 없는 안 제외) · 읽기 전용 호출
   setMode('review'); const rv = await im.review(true);

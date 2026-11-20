@@ -113,8 +113,8 @@ class Resolver:
 
     def defcol(self, name):
         """컬럼 상수 멤버 이름 → 컬럼 이름. 대문자·숫자·밑줄만이면 그대로(대부분 이름 = 값). 섞여 있으면 같은 파일 상수 값(EditFlag = "EDIT_FLAG") · 못 찾으면 이름 그대로. T265"""
-        if re.fullmatch(r'[A-Z0-9_]+', name):
-            return name
+        # 2026-11-20 T390(SSP0014 FACT-a7e4b62c): 대문자 이름도 원문 상수 값이 우선 — `const string DIVISION = "DIVISION_ID"`(cs:77) 을 이름 그대로 써
+        #   LockColumn(DIVISION, NICK_NAME) 범위가 메타 순서에서 안 풀려 ENDPOINTS(양 끝만)로 적히고 없는 칸 DIVISION 이 생겼다
         v = self.const_value(name)
         if v and v.startswith('"') and re.fullmatch(r'"[A-Za-z0-9_]+"', v):
             return v.strip('"')
@@ -287,6 +287,11 @@ class Resolver:
                 return 'TRUE' if same0_ == (msh_.group(1) == '==') else 'FALSE'
         # 접는 것(TRUE)
         if re.fullmatch(r'string\.IsNullOrEmpty\(\s*\w+\s*\)', a):
+            # T460(2026-11-20 SCP0005 FACT-a3f92559·FACT-3d955bfe): 변수가 그리드 칸 값(string strFromCity = siMain.GetValue(i, nFromCityName).ToString())이면 COL(X)==""
+            #   (cs:1301~1305 CheckValid). 그 밖(세션 그룹·Division 값)은 종전대로 비어 있지 않다고 본다
+            L0_ = self.lhs(key, re.search(r'\(\s*(\w+)\s*\)', a).group(1), self_col)
+            if L0_ and L0_.startswith('COL('):
+                return f'{L0_}==""'
             return 'FALSE'  # 세션 값(그룹·Division)은 비어 있지 않다고 본다 → '!string.IsNullOrEmpty(x)' 는 expr 의 부정으로 TRUE
         if re.search(r'\b(spd\w+|si\w+|fps|spreadInfo)\s*!=\s*null\b', a) or re.search(r'IsLock\([^)]*\)\s*==\s*false', a) \
                 or re.search(r'\.IsEditMode\s*==\s*true', a) or re.fullmatch(r'(try|finally|else)', a):
@@ -361,6 +366,7 @@ class Resolver:
             if RX_GROUP_SRC.search(ex):
                 return 'GROUP' + sl
             mg = re.search(r'Get(?:Value|Text)\(\s*[\w.]+\s*,\s*\w+\.GetColumnIndex\(\s*([^)]+)\)\s*\)', ex)  # T267: 행 인자 e.Row
+            mg = mg or re.search(r'Get(?:Value|Text)\(\s*[\w.]+\s*,\s*(\w+)\s*\)', ex)  # T460: 칸 번호 변수(nFromCityName = …GetColumnIndex(Def*.X)) — col_arg 가 변수 대입을 따라감
             if mg:
                 kind, nm = self.col_arg(key, mg.group(1))
                 if kind == 'COL':

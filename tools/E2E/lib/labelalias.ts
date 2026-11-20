@@ -43,3 +43,24 @@ export function judgeLabel(asisLabel: string, tobeLabel: string, aliases: LabelA
   if (canon(tobeLabel) === canon(a.asis_label)) return { res: 'FAIL', why: `TO-BE 룰 ${a.req_id}: TO-BE 라벨이 변경 전 '${a.asis_label}' 그대로 — '${a.tobe_label}' 로 변경 대상(보완: SHEET_COLUMNS.COLUMN_LABEL_NAME 메타 / 조회조건 기준표·Form 라벨)` };
   return null;
 }
+
+/** 2026-11-20 T434(SCP0028 V-9e2b9258 G1 '조회조건 Model 칸을 찾지 못함'): 조회조건 기준표(search_cond.csv · CR-065 표준 명칭)가 같은 AS-IS 이름을
+ *  한 TO-BE 이름으로 바꾼 비율이 USE 행 10건 이상·90% 이상이면 그 이름을 칸 찾기 별칭으로 쓴다(judge.py H5 기준표 행 0 경로와 같은 규칙).
+ *  예 AS-IS 'Model' → 'Model/Nickname' 75/78행. 판정(PASS·FAIL)에는 쓰지 않고 칸 찾기에만 쓴다. 없으면 null */
+let STD: Map<string, Map<string, { name: string; n: number }>> | null = null;
+export function stdAlias(asisLabel: string): LabelAlias | null {
+  if (!STD) {
+    STD = new Map();
+    try {
+      const rows = parseCsv(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'rules', 'search_cond.csv'), 'utf8').replace(/^﻿/, '')) as unknown as Record<string, string>[];
+      for (const r of rows) {
+        if ((r.usage || '') !== 'USE' || !r.asis_name || !r.tobe_name || r.tobe_name.trim() === '-') continue;
+        const a = canon(r.asis_name), t = canon(r.tobe_name); const m = STD.get(a) || new Map(); const e = m.get(t) || { name: r.tobe_name.trim(), n: 0 }; e.n++; m.set(t, e); STD.set(a, m);
+      }
+    } catch { /* 기준표 없음 */ }
+  }
+  const k = canon(asisLabel); const m = STD.get(k); if (!m) return null;
+  const tot = [...m.values()].reduce((s, e) => s + e.n, 0); const best = [...m.entries()].sort((x, y) => y[1].n - x[1].n)[0];
+  if (!best || best[0] === k || best[1].n < 10 || best[1].n * 10 < tot * 9) return null;
+  return { req_id: 'CR-065', scope: 'ALL', area: '조회조건', asis_label: asisLabel, tobe_label: best[1].name, match: 'exact', note: `조회조건 기준표 표준 명칭 ${best[1].n}/${tot}행` };
+}

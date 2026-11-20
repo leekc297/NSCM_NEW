@@ -1,2 +1,11 @@
 ﻿시트,위치,규칙,걸린 표현,고치는 법,문장
-,L15,용어,| 원장 단위 시험 26행 해,단위 시험·자동 시험 코드 → 테스트 코드·테스트 케이스 + 테스트 파일명(규칙 19),"| C Insert 무동작 | 26 | AS-IS SCP0028_Shipment_Lot_Size.cs:200~203 InsertButton → InsertRow(), 571~573 InsertRow 본문 비어 있음. TO-BE 실측 'Insert 무동작', 'Insert 뒤 신규 행 없음' | `tools/Harness/verify/facts_lockrules.py` insert_noop, `tools/Harness/verify/judge.py` _asis_insert_noop, insert_noop_na (T362) | 원장 단위 시험 26행 해당없음. facts_lockrules SCP0028 재생성 diff = new_row 열 UNKNOWN → NONE 18칸만. 빈 본문 판정 134화면(원문 확인 표본 SCP0096 cs:274, SSP0020 cs:897) |"
+,L5,기호,v(09:29 · ERROR 278행) · unverif,가운뎃점 나열 → 쉼표,- 입력: 원장 verify_ledger.csv(09:29 · ERROR 278행) · unverified_triage.csv(09:36:54 · 313행 = ERROR 278 + AI 검토 35) · 처리 목록 _unverified_plan.md
+,L5,기호,9:36:54 · 313행 = ERROR 278 + AI 검토 35) · 처리 목록 _,가운뎃점 나열 → 쉼표,- 입력: 원장 verify_ledger.csv(09:29 · ERROR 278행) · unverified_triage.csv(09:36:54 · 313행 = ERROR 278 + AI 검토 35) · 처리 목록 _unverified_plan.md
+,L18,기호,T470 7건 · 음성 3건) · SSP0005,가운뎃점 나열 → 쉼표,- 확인: selftest 91/91(T470 7건 · 음성 3건) · SSP0005 17행 reason_claim 근거 17건
+,L31,기호,## 묶음 5 · 재실행 9행(EG022 Div 선택 8 · EG271 1,가운뎃점 나열 → 쉼표,### 묶음 5 · 재실행 9행(EG022 Div 선택 8 · EG271 1)
+,L46,기호,Site 9행 · Insert/Delete 비노출 15행 · 기준정보 대조,가운뎃점 나열 → 쉼표,- Plant Site 9행 · Insert/Delete 비노출 15행 · 기준정보 대조 범위 4행 · 초기값·후보 2행 · MSG00135 1행 · 스냅샷 2행 · 대조표 X-LOC 2행: _unverified_decisions.md
+,L46,기호,값·후보 2행 · MSG00135 1행 · 스냅샷 2행,가운뎃점 나열 → 쉼표,- Plant Site 9행 · Insert/Delete 비노출 15행 · 기준정보 대조 범위 4행 · 초기값·후보 2행 · MSG00135 1행 · 스냅샷 2행 · 대조표 X-LOC 2행: _unverified_decisions.md
+,L47,기호,(FACT 8 · B7 4) · 검사기 미착수,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
+,L47,기호,TRACE 1 · A1 TRACE 2 · J2 1 ·,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
+,L47,기호,· J2 1 · E4 ASIS 2 · B3 1 ·,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
+,L47,기호,· B3 1 · A7 1 · E2 1 ·,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09

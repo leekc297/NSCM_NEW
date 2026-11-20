@@ -1,0 +1,28 @@
+{
+  "id": "20261120_002620_R12_ALL_7",
+  "at": "2026-11-20T00:26:20+09:00",
+  "ms": 1795101980479,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S3 설치본 차이: CHANGELOG.md 내용 다름",
+  "screen": "",
+  "sig": "R12|S3|CHANGELOG.md",
+  "count": 1,
+  "repeat": null,
+  "detail": "저장소 330998바이트 2026-11-20T00:15 / 설치본 326586바이트 2026-11-20T00:00",
+  "evidence": {
+    "check": "S3",
+    "key": "S3|CHANGELOG.md",
+    "file": "CHANGELOG.md",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:33:36+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S3 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

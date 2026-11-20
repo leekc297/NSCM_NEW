@@ -145,9 +145,9 @@ export const ProjectModal = ({
                   <FormItem
                     label={t('LBL00001', '_Div.')}
                     labelAlign='right'
+                    required
                     render={() => (
                       <CustomDropdown
-                        mandatory
                         disabled
                         value={searchParam?.divisionId ?? ''}
                         options={
@@ -193,6 +193,13 @@ export const ProjectModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -200,13 +207,6 @@ export const ProjectModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
             />
           </div>
         </div>

@@ -1,0 +1,230 @@
+{
+ "rule_id": "M3",
+ "hash": "f001f02677baec09",
+ "groups": [
+  {
+   "refs": [
+    "DM-204-9",
+    "DM-204-9S"
+   ],
+   "target": "SQL 버튼 팝업 쿼리 저장",
+   "condition": "Insert 상태 / 하단 탭에서 SQL 버튼 팝업 오픈",
+   "expected": "SQL 팝업에서 쿼리 등록(저장)이 가능하고 저장 결과가 반영된다",
+   "why": "두 항목은 확인 대상(SQL 팝업 저장)과 기대 결과가 같고 화면만 다르다."
+  },
+  {
+   "refs": [
+    "DM-87",
+    "DM-220"
+   ],
+   "target": "팝업 조회조건 입력 후 결과 필터링",
+   "condition": "팝업 조회조건(User·Model 등)에 검색어 입력 후 조회",
+   "expected": "팝업 조회 결과가 입력한 조회조건(User, Model 등) 값으로 필터된다",
+   "why": "둘 다 팝업 조회조건 값이 조회 결과 필터에 반영되는지를 확인하고 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-177",
+    "DM-181"
+   ],
+   "target": "팝업 텍스트 조회조건 검색 대상 컬럼·Like",
+   "condition": "부분 문자열 입력 후 조회",
+   "expected": "텍스트 조회조건(Team ID/Team Name, User Name/EN 등) 하나로 ID·명칭·영문명 컬럼을 모두 검색하고 부분일치(Like) 검색이 동작한다",
+   "why": "둘 다 텍스트 조회조건이 ID·명칭·영문명 같은 대상 컬럼을 모두 검색하는지를 확인한다."
+  },
+  {
+   "refs": [
+    "DM-22",
+    "DM-29"
+   ],
+   "target": "팝업 Period 기간별 월 컬럼 생성·조회",
+   "condition": "Period 설정 후 팝업(Exchange Rate, Price Batch Input 등) 오픈",
+   "expected": "팝업이 Period 기간 전체만큼 YYYYMM 컬럼(Spread 컬럼)을 그려 조회하고(데이터가 없어도 기간 전체), 이상 데이터(20280001 등)는 0건이다",
+   "why": "둘 다 Period 기간대로 팝업 월 컬럼이 생성·조회되는지를 확인하고 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-13"
+   ],
+   "target": "Team 팝업 조회 대상 범위",
+   "condition": "비 ADMIN 사용자 · 조회조건 공란",
+   "expected": "Team 팝업이 사용자 소속 제한 없이 SSO_DEPT 전체 DEPT를 조회한다",
+   "why": "Team 팝업의 부서 조회 범위를 보는 고유한 확인이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-130"
+   ],
+   "target": "Owner 팝업 사용자 목록 범위",
+   "condition": "권한 무관",
+   "expected": "Owner 팝업이 SSO_USER∩SCM_ADM_USER_M 전체 사용자를 조회하고 선택 입력할 수 있다",
+   "why": "Owner 팝업의 사용자 범위 기준이 다른 사용자 팝업과 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-191"
+   ],
+   "target": "User 팝업 사용자 범위(용도별)",
+   "condition": "Group User 팝업 / User 화면 Insert 팝업",
+   "expected": "Group User 팝업은 등록 사용자(SCM_ADM_USER_M)만 보여 주고, User 화면 Insert 팝업은 SSO 전체를 보여 준다",
+   "why": "용도별로 범위가 다른 두 가지를 함께 확인하는 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-146"
+   ],
+   "target": "팝업 Close 시 미저장 편집 폐기",
+   "condition": "팝업에서 수정 후 저장 없이 Close, 재오픈",
+   "expected": "Close하면 미저장 편집은 버려지고, 재오픈하면 원천 데이터를 다시 조회한다(Exchange Rate 팝업 등)",
+   "why": "Close·재오픈 동작을 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-151"
+   ],
+   "target": "신규 행 Sales Site·Project·Model·Team 입력",
+   "condition": "신규 행 추가",
+   "expected": "Sales Site 입력이 동작하고, Project 팝업은 열릴 때 자동 조회되며, Model 후보는 SALES_PLAN_ITEM_ID 룩업, Team은 SSPM 기준 팝업으로 입력된다",
+   "why": "여러 컬럼의 신규 행 입력을 함께 보는 복합 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-156"
+   ],
+   "target": "Excel Form 팝업 Search 조회",
+   "condition": "",
+   "expected": "Excel Form 팝업에서 Search를 누르면 데이터가 조회된다",
+   "why": "특정 팝업의 Search 조회 여부를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-165"
+   ],
+   "target": "Version 조회조건 목록 표시",
+   "condition": "",
+   "expected": "Version 조회조건에 버전 목록이 조회되어 표시된다",
+   "why": "Version 목록 표시 여부만 보는 확인이라 정렬 항목과 나눈다."
+  },
+  {
+   "refs": [
+    "DM-94"
+   ],
+   "target": "버전 팝업 Version 목록 정렬",
+   "condition": "",
+   "expected": "버전 팝업의 Version 목록이 Version명 DESC로 정렬된다",
+   "why": "정렬 순서를 보는 확인이라 목록 표시 항목과 나눈다."
+  },
+  {
+   "refs": [
+    "DM-212"
+   ],
+   "target": "Project 팝업 Search·Like/콤마 검색",
+   "condition": "",
+   "expected": "Project 팝업에 Search 버튼이 있고, DB를 즉시 조회하며, Like 검색과 콤마 다중 검색이 동작한다",
+   "why": "Search 버튼 제공과 콤마 다중 검색까지 포함해 다른 검색 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-25"
+   ],
+   "target": "Monthly Bucket 입력·저장·팝업 오픈",
+   "condition": "Bucket=Monthly · 행 추가 후 셀 더블클릭",
+   "expected": "Monthly 입력이 가능하고(당월은 비활성), 입력값이 그대로 저장되며(898,139.180 유지), Current 버전은 대소문자와 무관하고, 셀을 더블클릭하면 Project Code/Model 팝업이 열린다",
+   "why": "입력·저장·팝업 오픈을 함께 보는 복합 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-43"
+   ],
+   "target": "Model 팝업 MDM 중지 코드 제외",
+   "condition": "행 추가 후 Item 검색 팝업",
+   "expected": "sMdmActive_Sw=Y가 전달되어 MDM 중지 코드는 Model 팝업에 조회되지 않는다",
+   "why": "MDM 활성 필터를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-51"
+   ],
+   "target": "팝업 Model 조건 입력·End Customer 병합",
+   "condition": "Price Batch Input 팝업",
+   "expected": "팝업 Model 조회조건에 텍스트를 입력할 수 있고, End Customer 컬럼이 셀병합된다",
+   "why": "셀병합 확인이 섞여 있어 다른 입력 항목과 묶지 않는다."
+  },
+  {
+   "refs": [
+    "DM-55"
+   ],
+   "target": "팝업 저장(복수 행 붙여넣기 포함)",
+   "condition": "팝업에서 수정 후 저장 · 복수 행 복사/붙여넣기",
+   "expected": "저장 시 SQL Error가 0건이고, 붙여넣은 복수 행이 모두 저장된다(Exchange Rate 팝업 등)",
+   "why": "저장 오류와 복수 행 저장을 보는 확인으로, 결과 판정 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "GAP-448"
+   ],
+   "target": "팝업 Save 결과 판정(o_rc1 RESULT_CODE)",
+   "condition": "판가 검사에 걸리는 값으로 팝업 Save",
+   "expected": "저장 성공을 결과 커서(o_rc1 첫 행) RESULT_CODE로 판정하고, ≠'0'이면 RESULT_MSG를 표시하며 창을 유지하고 성공 메시지는 내지 않는다",
+   "why": "결과 코드 판정 로직을 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-88"
+   ],
+   "target": "Replace 팝업 Period 기본값·조회",
+   "condition": "",
+   "expected": "팝업 Period 기본값이 메인 그리드 Period와 같고, 팝업 데이터가 정상 조회된다",
+   "why": "메인 Period가 팝업 기본값으로 넘어오는지를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-93"
+   ],
+   "target": "BP Version 팝업 Version Create",
+   "condition": "Version Cutoff 직후 신규 버전",
+   "expected": "신규 컷오프 버전으로 Version Create를 하면 사전 Validation 후 버전이 생성되고 DB에 반영된다",
+   "why": "버전 생성 기능을 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-P29"
+   ],
+   "target": "팝업 Sales Site ALL 재조회",
+   "condition": "개별 Sales Site 조회 후 ALL/전체 선택",
+   "expected": "Sales Site를 ALL/전체로 다시 조회하면 전체 결과가 나온다(Price Batch Input 팝업 등)",
+   "why": "ALL 선택 재조회를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "DM-P64"
+   ],
+   "target": "팝업 Filter 텍스트 입력창",
+   "condition": "",
+   "expected": "팝업 Filter 입력창에 입력할 수 있고, 입력값이 필터에 반영된다",
+   "why": "조회조건이 아닌 Filter 입력창이라 조회조건 필터 묶음과 확실히 같다고 보기 어려워 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-12"
+   ],
+   "target": "더블클릭 팝업 조건(Group/Plant) 전달",
+   "condition": "그리드 셀 더블클릭으로 팝업 오픈",
+   "expected": "Group/Plant 같은 팝업 조건이 전달되고 조회가 정상이다(Capa New Model 팝업 등)",
+   "why": "부모 화면 값이 팝업 조건으로 넘어가는지를 보는 고유한 확인이다."
+  },
+  {
+   "refs": [
+    "SCPSSP-3"
+   ],
+   "target": "팝업 반영 후 메인 그리드 행 정렬",
+   "condition": "입력 팝업 선택 완료 후",
+   "expected": "팝업 선택값이 반영된 뒤 메인 그리드 행 정렬이 AS-IS와 같다",
+   "why": "팝업 반영 후 메인 그리드 정렬을 보는 고유한 확인이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:46:46",
+ "cost": 0.1480852
+}

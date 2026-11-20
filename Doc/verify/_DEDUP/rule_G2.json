@@ -1,0 +1,101 @@
+{
+ "rule_id": "G2",
+ "hash": "91455ca327f9dff4",
+ "groups": [
+  {
+   "refs": [
+    "DM-17",
+    "DM-P29"
+   ],
+   "target": "단일/콤보 조회조건의 ALL 재선택 재조회",
+   "condition": "특정 값(Y/N·개별 Sales Site 등)으로 조회한 뒤 다시 ALL/전체 선택으로 재조회",
+   "expected": "ALL 재선택 후 재조회하면 필터 없이 전체 결과가 정상으로 나온다(Active, Sales Site 등)",
+   "why": "두 항목 모두 '특정 값 선택 → ALL 재선택 → 재조회' 동작을 하고, 기대 결과도 '전체 결과 정상 조회'로 같다."
+  },
+  {
+   "refs": [
+    "DM-129"
+   ],
+   "target": "Key-in 텍스트 조회조건 콤마 다중 입력",
+   "condition": "Project·Model/Nickname·Owner 등 Key-in 조건에 콤마로 값 여러 개 입력",
+   "expected": "Key-in 조회조건(Project·Model/Nickname·Owner 등)은 콤마 다중 입력을 허용하고 입력한 값 전부를 조회한다",
+   "why": "확인 대상이 화면 본문의 Key-in 텍스트 조회조건이라 다른 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-184"
+   ],
+   "target": "Active ALL 조회와 User Group 다중선택",
+   "condition": "Active=ALL 또는 User Group 2개 이상 선택",
+   "expected": "Active=ALL과 User Group 다중선택 조건에서 모두 정상으로 조회된다",
+   "why": "ALL 조회와 다중선택 확인이 섞여 있어, 한쪽 묶음에 넣으면 나머지 검사가 빠질 수 있으므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-199"
+   ],
+   "target": "조회조건 Select ALL 항목 제공",
+   "condition": "",
+   "expected": "Schema 같은 조회조건에 Select ALL 항목이 있고, 선택하면 정상으로 조회된다",
+   "why": "Select ALL 항목이 '있는지'를 확인하는 것이라, 토글 동작이나 재선택을 확인하는 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-2"
+   ],
+   "target": "Product Group·Biz Type 다중선택과 ALL 항목",
+   "condition": "",
+   "expected": "Product Group·Biz Type을 여러 개 고를 수 있고(단일 선택 아님), Biz Type에 ALL 항목이 있다",
+   "why": "단일 선택이 다중 선택으로 바뀌었는지와 ALL 항목이 있는지를 함께 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-212"
+   ],
+   "target": "Project 팝업 검색 기능",
+   "condition": "",
+   "expected": "Project 팝업에 Search 버튼이 있고 DB를 바로 조회하며, Like 검색과 콤마 다중 검색이 된다",
+   "why": "확인 대상이 조회조건이 아니라 팝업 그리드라서 Key-in 조회조건 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-83"
+   ],
+   "target": "조회조건 콤보 후보 표시 형식",
+   "condition": "",
+   "expected": "Item Type 같은 조회조건 콤보 후보가 코드가 아닌 Name으로 표시된다",
+   "why": "콤보 후보의 표시 형식을 보는 확인이라 조회 결과를 보는 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P48"
+   ],
+   "target": "다중 선택 조회조건 결과 반영",
+   "condition": "End Customer 같은 다중 선택 조건에서 2개 이상 선택",
+   "expected": "End Customer 같은 다중 선택 조건에서 고른 값 전부가 조회 결과에 반영된다",
+   "why": "DM-184와 다중선택 부분은 겹치지만, DM-184에는 ALL 확인이 섞여 있어 확신이 없으므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "SCPSSP-2"
+   ],
+   "target": "필수 조회조건 전체 선택 시 검증 메시지",
+   "condition": "From Site 같은 필수 조건을 전체 선택",
+   "expected": "From Site 같은 필수 조회조건을 전체 선택하면 필수 입력 메시지 없이 조회된다",
+   "why": "필수 입력 검증 메시지가 잘못 뜨는지를 보는 확인이라 결과 반영을 보는 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-20"
+   ],
+   "target": "멀티선택 조회조건 Select ALL 토글",
+   "condition": "Select ALL을 반복해서 클릭",
+   "expected": "모든 멀티선택 조회조건의 Select ALL이 전체 선택과 전체 해제를 번갈아 바꾼다",
+   "why": "Select ALL의 선택/해제 토글 동작을 확인하는 것이라, 항목이 있는지를 보는 DM-199와 확인 동작이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:22",
+ "cost": 0.07926520000000001
+}

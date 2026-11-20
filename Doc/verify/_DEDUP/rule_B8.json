@@ -1,0 +1,37 @@
+{
+ "rule_id": "B8",
+ "hash": "577e363db43f9292",
+ "groups": [
+  {
+   "refs": [
+    "DM-21"
+   ],
+   "target": "Div별 Team 콤보 후보와 그리드 콤보 중복",
+   "condition": "조회조건에서 Div 선택, 그리드 신규행 Insert",
+   "expected": "Team 후보가 선택한 Div 의 SSPM DEPT 기준과 일치한다(예: LGESHD.생산기획팀). 그리드의 Team/End Customer/Sales Site 콤보에는 중복 후보가 0건이다.",
+   "why": "Div 연동 Team 후보 검증과 End Customer/Sales Site 콤보 중복 0건 검증이 함께 들어 있어 다른 항목에 묶으면 중복 검사가 빠질 수 있으므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-40"
+   ],
+   "target": "그리드 Team 컬럼 표시값과 신규행 세팅값",
+   "condition": "SSPM 에서 Team(DEPT_ID) 변경 후 조회 및 신규행 추가",
+   "expected": "Team 컬럼에 Owner 소속팀이 아닌 SSPM SITE_ITEM.DEPT_ID 가 표시되고 신규행에도 같은 값이 세팅된다.",
+   "why": "콤보 후보 원천이 아니라 조회 결과와 신규행의 Team 값 자체를 확인하는 항목이라 콤보 항목과 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "DM-C2"
+   ],
+   "target": "조회조건 Team(DEPT) 콤보와 cascade 원천",
+   "condition": "",
+   "expected": "조회조건 Team(DEPT) 콤보와 Sales Site/End Customer/Sold to Customer/Plant Site 의 cascade 후보가 SCM_MST_SITE_ITEM(SSPM).DEPT_ID 를 원천으로 구성된다.",
+   "why": "Div 연동이나 중복 조건 없이 공통 조회조건 콤보 전체의 원천 테이블을 확인하는 항목이라 DM-21 과 확인 범위가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:40:40",
+ "cost": 0.055185200000000004
+}

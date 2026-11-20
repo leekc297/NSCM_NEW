@@ -2,6 +2,7 @@
 //   정적 AST 로 TO-BE 핸들러 본문(beginningEdit·dataMap·cellEditEnded)을 추출하는 대신, 실제 동작을 직접 묻는다.
 //   원형 = Doc/e2e/specs/SCP0007.insertflow.spec.ts(시범). 저장은 하지 않는다 — 값 입력 프로브는 화면을 닫으면 버려진다.
 import type { Page } from '@playwright/test';
+import { emptyAnswered } from './pagereg';
 
 // 보이는 첫 Wijmo 그리드 컨트롤(lib/nscm.ts gridColumnsMeta 와 같은 탐색: $WJ-CTRL 또는 columns 보유 속성)
 // 2026-11-01: 한 화면에 그리드가 여럿(상단 메인 + 하단 시트)이면 첫 그리드만 보여 하위 시트 컬럼을 못 쟀다(DMF0004 Sales Customer) — pickGrid 로 지정하면 그 컬럼을 가진 그리드를 쓴다. 지정 없으면 종전과 같음
@@ -23,7 +24,7 @@ export const probe = {
   CTL_SRC: CTL,
   /** 편집 불가 칸에 시험 값을 직접 넣는다(화면에서 입력 경로가 없는 하위 칸의 '이전 값' 준비용 · 저장하지 않음) */
   /** 저장 없는 시험 — GET 이 아닌 XHR·fetch 를 전부 막고 건수를 센다. off() 로 해제 */
-  blockWrites: async (p: Page) => { const st = { n: 0, urls: [] as string[], reads: 0 }; const h = async (route: import('@playwright/test').Route) => { const q = route.request(); if (q.method() !== 'GET' && ['xhr', 'fetch'].includes(q.resourceType())) { /* 이 앱은 읽기도 POST — 쓰기 이름이 있는 요청만 쓰기로 센다(읽기까지 세면 허위 · 2026-11-02 SCP0028 12건) · 전부 막아 쓰기 이름이 달라도 저장되지 않는다 */ if (/SAVE|DELETE|INSERT|UPDATE|MERGE|\/(INS|UPD|DEL)\b/i.test(q.url())) { st.n++; st.urls.push(q.url().slice(-60)); } else st.reads++; await route.abort().catch(() => undefined); } else await route.continue().catch(() => undefined); }; await p.route('**/*', h); return { st, off: () => p.unroute('**/*', h).catch(() => undefined) }; },
+  blockWrites: async (p: Page) => { const st = { n: 0, urls: [] as string[], reads: 0 }; const h = async (route: import('@playwright/test').Route) => { const q = route.request(); if (q.method() !== 'GET' && ['xhr', 'fetch'].includes(q.resourceType())) { /* 이 앱은 읽기도 POST — 쓰기 이름이 있는 요청만 쓰기로 센다(읽기까지 세면 허위 · 2026-11-02 SCP0028 12건) · 전부 막아 쓰기 이름이 달라도 저장되지 않는다 */ /* 2026-11-20 T374: 저장 전 검증 호출(이름에 CHECK·VALID·VERIFY·CHK · 쓰기 이름 아님)은 실제로 보낸다 — 막으면 화면이 '검증 불가' 저장 실패 알림을 띄워 필수 칸 안내를 가렸다(SSP0014 USER_CHECK) */ if (/[/][^/]*(CHECK|VALID|VERIFY|CHK)[^/]*[/]call-proc/i.test(q.url()) && !/SAVE|DELETE|INSERT|UPDATE|MERGE|[/](INS|UPD|DEL)[^A-Za-z]/i.test(q.url())) { st.reads++; await route.continue().catch(() => undefined); return; } if (/SAVE|DELETE|INSERT|UPDATE|MERGE|\/(INS|UPD|DEL)\b/i.test(q.url())) { st.n++; st.urls.push(q.url().slice(-60)); } else st.reads++; await route.abort().catch(() => undefined); } else await route.continue().catch(() => undefined); }; await p.route('**/*', h); return { st, off: () => p.unroute('**/*', h).catch(() => undefined) }; },
   /** 그리드 붙여넣기 API — pastingCell·pastedCell 까지 같은 경로. 헤드리스 Ctrl+V 는 그리드에 닿지 않는다(2026-11-02 이벤트 0건 실측) */
   pasteText: (p: Page, row: number, binding: string, v: string) =>
     p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return false; c.finishEditing(true); c.select(${row}, col.index); c.setClipString(${J(v)}); return true; })()`) as Promise<boolean>,
@@ -55,7 +56,8 @@ export const probe = {
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; const o = []; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.binding) o.push(String(x.binding)); } return o; })()`) as Promise<string[] | null>,
   rowCount: (p: Page) => p.evaluate(`(() => { const c = ${CTL}; return c ? c.rows.length : -1; })()`) as Promise<number>,
   /** 그리드에 행이 찰 때까지 **시간 상한**으로 대기(기본 120s) → 마지막 행 수. 2026-10-29: 횟수 상한(240회×500ms)은 부하 시 evaluate 1회가 수 초라 15분 테스트 타임아웃을 넘겼다(SCP0111 B1·B2 G1 루프) */
-  waitRows: async (p: Page, ms = 120_000, pollMs = 500): Promise<number> => { const t0 = Date.now(); let n = await probe.rowCount(p); while (n <= 0 && Date.now() - t0 < ms) { await p.waitForTimeout(pollMs); n = await probe.rowCount(p); } return n; },
+  //   2026-11-20 CheckList 속도 개선 B1: 서버가 조회 응답을 0행으로 끝냈으면 상한까지 기다리지 않는다(SSP0005 한 실행에 이 대기 3,732초 · 조회 응답 0.8초). 조건은 lib/pagereg.ts emptyAnswered. 모르면 종전대로 상한까지
+  waitRows: async (p: Page, ms = 120_000, pollMs = 500): Promise<number> => { const t0 = Date.now(); let n = await probe.rowCount(p); while (n <= 0 && Date.now() - t0 < ms) { if (emptyAnswered(p, t0)) { await p.waitForTimeout(1500); n = await probe.rowCount(p); if (n <= 0 && emptyAnswered(p, t0)) return n; } await p.waitForTimeout(pollMs); n = await probe.rowCount(p); } return n; },
   /** CRUD_TYPE='I' 신규행 수 */
   newRowCount: (p: Page) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return -1; let n = 0; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I') n++; } return n; })()`) as Promise<number>,
@@ -74,8 +76,9 @@ export const probe = {
   popupColumn: (p: Page, binding: string) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; ${REQ_SRC} const x = cfgOf(c)[${J(binding)}]; if (!x) return null; return /^FP(Text)?Modal$/i.test(String(x._ctrlType || '')); })()`).catch(() => null) as Promise<boolean | null>,
   /** T349: 같은 칸의 다른 행 값(빈 값·cur 제외 · 가장 많이 쓰인 값 우선) — 팝업 입력 칸(등록 값만 저장되는 칸)에 넣을 실제 값 */
-  otherColumnValue: (p: Page, binding: string, cur: string, maxRows = 5000) =>
-    p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; const cur = String(${J(cur)}).trim().toUpperCase(); const f = new Map(); const n = Math.min(c.rows.length, ${maxRows}); for (let r = 0; r < n; r++) { const d = c.rows[r].dataItem; if (!d) continue; const v = String(d[${J(binding)}] ?? '').trim(); if (!v || v.toUpperCase() === cur) continue; f.set(v, (f.get(v) || 0) + 1); } const s = [...f.entries()].sort((a, b) => b[1] - a[1]); return s.length ? s[0][0] : null; })()`).catch(() => null) as Promise<string | null>,
+  // 2026-11-20 T372(SSP0014 'njlilian' USER_CHECK 0행): exclude = 저장 전 검증에 막힌 값(대문자) · prefer = 검증 응답이 통과시킨 값(대문자) — prefer 에 든 값을 먼저 고른다
+  otherColumnValue: (p: Page, binding: string, cur: string, maxRows = 5000, exclude: string[] = [], prefer: string[] = []) =>
+    p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; const cur = String(${J(cur)}).trim().toUpperCase(); const ex = new Set(${JSON.stringify(exclude.map(x => x.toUpperCase()))}); const pf = new Set(${JSON.stringify(prefer.map(x => x.toUpperCase()))}); const f = new Map(); const n = Math.min(c.rows.length, ${maxRows}); for (let r = 0; r < n; r++) { const d = c.rows[r].dataItem; if (!d) continue; const v = String(d[${J(binding)}] ?? '').trim(); if (!v || v.toUpperCase() === cur || ex.has(v.toUpperCase())) continue; f.set(v, (f.get(v) || 0) + 1); } const s = [...f.entries()].sort((a, b) => (pf.has(b[0].toUpperCase()) ? 1 : 0) - (pf.has(a[0].toUpperCase()) ? 1 : 0) || b[1] - a[1]); return s.length ? s[0][0] : null; })()`).catch(() => null) as Promise<string | null>,
   /** T349: 행의 필수 칸이 전부 채워졌는가 — 필수 설정이 없으면 true */
   requiredFilled: (p: Page, row: number) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return true; ${REQ_SRC} const d = c.rows[${row}] && c.rows[${row}].dataItem; if (!d) return false; return reqCols(c, d.CRUD_TYPE === 'I' ? 'N' : 'E').every(b => String(d[b] ?? '').trim() !== ''); })()`).catch(() => true) as Promise<boolean>,

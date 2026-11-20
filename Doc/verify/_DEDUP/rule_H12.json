@@ -1,0 +1,18 @@
+{
+ "rule_id": "H12",
+ "hash": "ff29c4031a2ae648",
+ "groups": [
+  {
+   "refs": [
+    "GAP-355"
+   ],
+   "target": "그리드 좌측 고정(틀고정) 칸 범위 = SCM_MST_SHEET_COLUMNS 'Sales Monitoring' FIXED_FLAG 'Y'(DIVISION_ID~MEASURE)",
+   "condition": "eunah.koo(40) · 40 → 70090866 → IM → IM_US_TXT · Monthly 2026-10-16~12-31 → Search → 가로 스크롤 오른쪽 끝",
+   "expected": "그리드 좌측 고정 컬럼 범위는 SCM_MST_SHEET_COLUMNS FIXED_FLAG=Y 컬럼으로 정한다(코드 고정 금지).",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:43:49"
+}

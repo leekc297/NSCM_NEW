@@ -1,0 +1,18 @@
+{
+ "rule_id": "E2",
+ "hash": "3df2e6d7328216ec",
+ "groups": [
+  {
+   "refs": [
+    "SCPSSP-23"
+   ],
+   "target": "Period 날짜",
+   "condition": "수정 저장",
+   "expected": "잘못된 날짜(2026-10-33) 저장 차단·조회 SQL Error 0",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:41:32"
+}

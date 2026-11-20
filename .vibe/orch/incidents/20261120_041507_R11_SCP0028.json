@@ -1,0 +1,88 @@
+{
+  "id": "20261120_041507_R11_SCP0028",
+  "at": "2026-11-20T04:15:07+09:00",
+  "ms": 1795115707479,
+  "rule": "R11",
+  "ruleName": "Claude 없이 끝난 체인에 오류 남음",
+  "title": "Claude 없이 끝난 체인. SCP0028 FAIL 29 · 미검증 278 남음",
+  "screen": "SCP0028",
+  "sig": "R11|SCP0028|checklist",
+  "count": 1,
+  "repeat": null,
+  "detail": "체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList): 스크립트 단계 1개 실행, Claude 단계 실행 0, 건너뜀 3",
+  "evidence": {
+    "md": "Doc\\gen\\SCP0028\\FULLRUN.md",
+    "result": "Doc/verify/SCP0028/run_verify.result.json"
+  },
+  "status": "closed",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T04:15:25+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T04:22:37+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 사용자 확인 필요 · 원인 env: 11-20 01:30~03:13 E2E 동안 SCP0028 화면이 쓰는 공용 파일 packages/shared/src/lib/paste.ts 가 로컬에 없어 개발 서버가 '@shared/paste' import 를 풀지 못했고, 시험 80개가 Home 에 남아 1417건이 '화면 권한 없음' ERROR 로 기록됨(Doc/verify/SCP0028/e2e/results.json, e2e_results.json, .vibe/logs/2026-11-20T04-12-05_claude_orch.log). paste.ts 는 04:05 에 생 · 수정 4개 파일 · 허용 범위 밖 파일 변경 9개: tools/CommonSync/screen_sync.py, tools/VibeManager/extension.js, tools/VibeManager/job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/orch-agent.js, tools/VibeManager/orch-watch.js, tools/VibeManager/workbench.js, tools/VibeManager/orch-heal.js · 개선안 등록 20261120042237_INC(승인 대기)",
+      "grade": "B",
+      "log": ".vibe\\logs\\2026-11-20T04-15-33_claude_orch.log",
+      "sec": 418,
+      "turns": 70,
+      "costUsd": 2.8967042000000003,
+      "files": [
+        "tools/E2E/lib/nscm.ts",
+        "tools/E2E/lib/probe.ts",
+        "tools/E2E/lib/pagereg.selftest.js(신규)",
+        "tools/E2E/lib/pagereg.ts(신규)"
+      ]
+    },
+    {
+      "at": "2026-11-20T04:28:06+09:00",
+      "by": "사용자",
+      "what": "닫음"
+    }
+  ],
+  "agent": {
+    "cause_class": "env",
+    "cause": "11-20 01:30~03:13 E2E 동안 SCP0028 화면이 쓰는 공용 파일 packages/shared/src/lib/paste.ts 가 로컬에 없어 개발 서버가 '@shared/paste' import 를 풀지 못했고, 시험 80개가 Home 에 남아 1417건이 '화면 권한 없음' ERROR 로 기록됨(Doc/verify/SCP0028/e2e/results.json, e2e_results.json, .vibe/logs/2026-11-20T04-12-05_claude_orch.log). paste.ts 는 04:05 에 생겼고 04:21 확인에서 화면 모듈 import 20개 오류 0, minyonglee1 세션 메뉴에 SCP0028 있음. 사건 제목의 FAIL 29·미검증 278 은 11-19 16:35 run_verify.result.json 값이고 이번 실행은 1단계 실패로 결과 파일을 쓰지 않음(orch-watch.js:108-121 이 결과 생성 시각을 확인하지 않음).",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "FULLRUN.md, run_verify.result.json, events.jsonl 355~385줄, 체인 로그, e2e results.json·e2e_results.json 판독",
+        "result": "시험 80개 모두 openScreen Home 에 남음, ERROR 1421 중 '화면 권한 없음' 1417"
+      },
+      {
+        "grade": "A",
+        "what": "개발 서버에서 ShipmentLotSize.tsx 와 하위 import 20개 변환 확인, minyonglee1 로그인 뒤 /api/user/session 메뉴 조회, SCM_MGR.SCM_ADM_MNU_M ROUTE_PATH 조회",
+        "result": "변환 오류 0, 4화면 메뉴 모두 있음, SCP0028 ROUTE_PATH shipping/shipping-master/shipment-lot-size USE_YN Y"
+      },
+      {
+        "grade": "A",
+        "what": "사용자 지시: 답변 끝 문구 USD 표시 제거(orch-agent.js:304, workbench.js:685)",
+        "result": "node --check 통과, test/run_all.js PASS 277 FAIL 0 (04:18)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify": "2026-11-20 04:18:40 node --check orch-agent.js·workbench.js 통과, node test/run_all.js 21/21 PASS 277 FAIL 0. 04:21:21 orch_menu_probe(minyonglee1) login 200, SCP0028 메뉴 있음. 04:2x 개발 서버 import 20개 변환 HTTP 오류 0. CheckList 재수행은 지킬 것에 따라 미실행",
+    "status": "need-user",
+    "next_for_user": "SCP0028, SSP0014 CheckList 다시 실행. 실행 허용 목록 11개(grep, ls, head, tail, cut, sort, uniq, wc, tr, date, sed -n)를 .claude/settings.local.json 에 직접 추가(이 세션은 쓰기 권한 없음). 이번 USD 표시 변경은 설치 폴더 복사 뒤 VS Code 다시 로드.",
+    "proposal": {
+      "title": "R11·R10 사건이 지난 실행 결과 건수를 쓰지 않게 함, 동시 실행 로그 파일 분리",
+      "evidence": "orch-watch.js:108-121 checklistSnap 이 run_verify.result.json(ts 2026-11-19T16:35:20)을 그대로 읽어 11-20 04:15 사건 제목에 FAIL 29·미검증 278 표시. workbench.js:437 로그 이름이 초 단위 시각+라벨이라 events.jsonl 364~367줄 4화면이 같은 로그 .vibe/logs/2026-11-20T01-10-48_CheckList…log 에 섞임",
+      "targets": [
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/workbench.js"
+      ],
+      "before_after": "orch-watch.js checkChecklist: 전) 결과 파일 시각과 관계없이 건수 사용 → 후) result.ts 가 체인 시작(ev.ms - ev.ms_run)보다 이르면 R10 비교와 checklist_prev 저장을 건너뛰고 R11 제목을 '<ID> 이번 실행 결과 없음(N단계 실패)'로 씀. workbench.js:437: 전) <시각>_<라벨>.log → 후) <시각>_<화면ID 또는 inst>_<procId>_<라벨>.log",
+      "verify": "test/t_orch_watch.js 에 '체인 시작보다 이른 result.json → 건수 없는 R11 제목, R10 없음' 시험 추가 뒤 node test/run_all.js. 같은 초에 2개 proc 를 띄우는 시험으로 로그 파일 2개 생성 확인",
+      "rollback": "두 파일을 반영 전 .bak 으로 되돌리고 설치 폴더에 다시 복사"
+    }
+  },
+  "proposal": "20261120042237_INC",
+  "snap": "20261120_041507_R11_SCP0028"
+}

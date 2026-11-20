@@ -1,0 +1,115 @@
+{
+  "id": "20261120003909_INC",
+  "at": "2026-11-20T00:39:09+09:00",
+  "ms": 1795102749728,
+  "source": "incident",
+  "status": "applied",
+  "sig": "작업 목록 중지를 감시기에 알리고 rn 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+  "title": "작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+  "evidence": "job.json J20261120_003243 note '사용자 중지' · events.jsonl 241~251행 user.stop 없음 · workbench.js:2643 user.stop 생성처 1곳 · orch-watch.js:120 R11 조건 · orch-watch.js:107~111 checklistSnap · run_verify.result.json:7 started 2026-11-19 13:48:58 · 사건 20261120_003346_R1_SCP0005, 20261120_003346_R11_SCP0005",
+  "targets": [
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "job-runner.js stop(): 변경 전 runner 마다 r.stop() 만 호출함. 변경 후 r.stop() 앞에서 evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms: Date.now() }) 를 남김. orch-watch.js:120: 변경 전 `if (ev.claudeRan === 0 && (cur.fail > 0 || cur.unverified > 0))`. 변경 후 `if (ev.claudeRan === 0 && !userStopped(ev.wb) && resultAfterChainStart(cur, ev) && (cur.fail > 0 || cur.unverified > 0))`. resultAfterChainStart 는 cur.started 를 시각으로 바꿔 ev.ms - ev.ms_run 이상일 때만 참을 돌려줌. t_orch_watch.js 에 user.stop 뒤 chain.end 를 보내는 시험과 started 가 체인 시작보다 앞선 결과로 chain.end 를 보내는 시험을 추가하고, 두 시험 모두 R11 0건을 기대값으로 둠.",
+  "verify": "node --check tools/VibeManager/job-runner.js tools/VibeManager/orch-watch.js · node tools/VibeManager/test/t_orch_watch.js · node tools/VibeManager/test/run_all.js",
+  "rollback": "job-runner.js, orch-watch.js, t_orch_watch.js 를 반영 전 VMO 백업으로 되돌림",
+  "incident": "20261120_003346_R11_SCP0005",
+  "screen": "SCP0005",
+  "history": [
+    {
+      "at": "2026-11-20T05:31:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T05:33:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 341, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0531"
+    },
+    {
+      "at": "2026-11-20T05:33:19+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T05:34:50+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+    },
+    {
+      "at": "2026-11-20T05:38:35+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 반영 Claude 로그 .vibe/logs/2026-11-20T05-33-19_claude_orch.log 의 마지막 기록. 05:34:14 구문 검사와 t_orch_watch.js 통과 뒤 05:34:15 node tools/VibeManager/test/run_all.js 실행 중 '--- exit 1 ---' 로 끝남. 05:34:50 orch-selfcheck.js:498 recoverStale 이 '반영 도중 VMO 가 다시 시작됨(창 다시 로드)' 로 apply-failed 처리함. 대상 파일 반영분 orch-watch.js:116~128(resultAfterChainStart, R11 조건, 수정 05:33:47), test/t_orch_watch.js:104~123(시험 3건, 수정 05:34:01), job-runner.js:255 stop() user.stop 기록(수정 05:26:25, 이번 반영 전부터 있음). 창 다시 로드 원인은 미확인."
+    },
+    {
+      "at": "2026-11-20T05:38:51+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T05:40:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 344, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0539"
+    },
+    {
+      "at": "2026-11-20T05:40:57+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T05:45:08+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 344, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T05:45:08+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 05:41:06~05:42:57 실행. node --check job-runner.js, orch-watch.js 통과(CHECK_OK). node tools/VibeManager/test/t_orch_watch.js ALL PASS. node tools/VibeManager/test/run_all.js 결과 파일 27/27, PASS 344, FAIL 0, 110초(t_orch_agent_real.js, t_orch_agent_diag.js 건너뜀) · 변경 2개 파일 · 대상 목록 밖 변경 2개: tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md",
+      "log": ".vibe\\logs\\2026-11-20T05-40-57_claude_orch.log",
+      "sec": 131,
+      "costUsd": 0.2187347,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md"
+      ]
+    }
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795120731768,
+  "autoFp": "a052ee7959",
+  "interrupted": true,
+  "repair": {
+    "at": "2026-11-20T05:38:35+09:00",
+    "decision": "retry",
+    "cause": "반영 Claude 로그 .vibe/logs/2026-11-20T05-33-19_claude_orch.log 의 마지막 기록. 05:34:14 구문 검사와 t_orch_watch.js 통과 뒤 05:34:15 node tools/VibeManager/test/run_all.js 실행 중 '--- exit 1 ---' 로 끝남. 05:34:50 orch-selfcheck.js:498 recoverStale 이 '반영 도중 VMO 가 다시 시작됨(창 다시 로드)' 로 apply-failed 처리함. 대상 파일 반영분 orch-watch.js:116~128(resultAfterChainStart, R11 조건, 수정 05:33:47), test/t_orch_watch.js:104~123(시험 3건, 수정 05:34:01), job-runner.js:255 stop() user.stop 기록(수정 05:26:25, 이번 반영 전부터 있음). 창 다시 로드 원인은 미확인.",
+    "reason": "안의 수정과 단위 시험은 통과했고 전체 시험(run_all.js) 실행 중 창 다시 로드로 끊겼다. 같은 안을 다시 시도해 반영 뒤 게이트를 끝까지 돌린다. 대상 파일에 이미 반영된 부분은 그대로 두고 빠진 곳만 채운다.",
+    "log": ".vibe\\logs\\2026-11-20T05-37-41_claude_orch.log",
+    "costUsd": 0.5681794,
+    "sec": 55
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 344, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0539",
+  "needsReload": false,
+  "appliedMs": 1795121108653,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_watch.js"
+    ],
+    "verify_result": "2026-11-20 05:41:06~05:42:57 실행. node --check job-runner.js, orch-watch.js 통과(CHECK_OK). node tools/VibeManager/test/t_orch_watch.js ALL PASS. node tools/VibeManager/test/run_all.js 결과 파일 27/27, PASS 344, FAIL 0, 110초(t_orch_agent_real.js, t_orch_agent_diag.js 건너뜀)",
+    "note": "세 대상 파일에 개선안 변경이 이번 실행 전에 들어가 있어 이번 실행에서 Edit 0건. job-runner.js:255 stop() 이 r.stop() 앞에서 user.stop(wb, screen, job, ms) 을 남김. orch-watch.js:116 resultAfterChainStart 있음, :128 R11 조건에 userStopped(ev.wb) 와 resultAfterChainStart(cur, ev) 있음. t_orch_watch.js:104~122 중지 뒤 R11 0건, 앞선 결과 R11 0건, 체인 시작 뒤 결과 R11 1건 시험 있음."
+  },
+  "snap": "prop_20261120003909_INC"
+}

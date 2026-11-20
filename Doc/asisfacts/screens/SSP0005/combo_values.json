@@ -1,16 +1,7 @@
 {
  "screen": "SSP0005",
- "generated": "2026-11-19 13:53:35",
+ "generated": "2026-11-20 10:01:13",
  "vars": {
-  "dt": {
-   "sp": "UP_FX_GetCommonDataList",
-   "code": "PERIOD_\" + value",
-   "targets": [
-    "SEARCH:control"
-   ],
-   "ref": "SSP0005_ShipmentWorkingDay.cs:153 ← SSP0005_ShipmentWorkingDay.cs:910",
-   "rows": []
-  },
   "dtMyDivision": {
    "sp": "UP_FX_GetCommonDataList",
    "code": "MyDivision",

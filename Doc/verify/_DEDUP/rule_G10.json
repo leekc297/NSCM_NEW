@@ -1,0 +1,28 @@
+{
+ "rule_id": "G10",
+ "hash": "b4a222ed5e6d946e",
+ "groups": [
+  {
+   "refs": [
+    "GAP-410"
+   ],
+   "target": "팝업 연결 조회조건(Project·Model/Nickname) 입력칸 Enter 키",
+   "condition": "팝업이 연결된 텍스트 조회조건(PROJECT, MODEL 등)에 값을 입력한 뒤 Enter",
+   "expected": "Project(PROJECT)·Model/Nickname(MODEL)처럼 팝업이 연결된 조회조건 입력칸에서 Enter를 누르면 돋보기 아이콘을 누를 때와 같이 해당 팝업(Project Popup·Model/Nickname Popup)이 열린다.",
+   "why": "Enter로 팝업이 열리는지만 확인하는 기본 항목이다. GAP-427은 팝업 목록 내용(activeFlag)까지 확인하므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "GAP-427"
+   ],
+   "target": "Project·Model/Nickname Enter 팝업 열기와 Model 팝업 activeFlag 전달",
+   "condition": "PROJECT·MODEL 입력칸에 값을 입력하고 Enter를 누른 뒤, 열린 Model/Item 팝업의 목록 품목 수를 돋보기로 연 팝업과 비교",
+   "expected": "Project(PROJECT)·Model/Nickname(MODEL) 입력칸에서 Enter를 누르면 돋보기 아이콘을 누를 때와 같이 해당 팝업(Project Popup·Item Popup)이 열린다. Model 팝업에는 사전 조건 activeFlag가 전달되어 사용 중지 모델이 목록에 나오지 않는다.",
+   "why": "Enter 팝업 열기 외에 activeFlag 미전달로 팝업 목록에 사용 중지 모델이 섞이는지도 확인한다. 확인 대상이 하나 더 있어 GAP-410과 묶으면 이 검사가 빠지므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:11",
+ "cost": 0.049113199999999996
+}

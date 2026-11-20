@@ -1,0 +1,33 @@
+{
+ "proposal": {
+  "id": "20261120005819_INC",
+  "title": "VM 작업 로그 이름에 화면 ID와 procId를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함",
+  "evidence": "events.jsonl:263~265 SCP0005·SCP0014·SCP0028 proc.start 3건의 log 값이 같음(.vibe/logs/2026-11-20T00-33-54_CheckList...log). 그 로그 103행 '120_004430 - log ...SCP0028...' 앞부분이 잘림. 원인 workbench.js:437 logF = 초 단위 시각 + label 의 \\w 외 문자 치환(한글 제거), 화면 ID·id 없음",
+  "targets": [
+   "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "437행 변경 전 `${ts}_${label 치환}.log` → 변경 후 `${ts}_${opts.screen || ''}_${id}_${label 치환}.log`(id = 436행 ++seq). 동작 시험 tools/VibeManager/test/t_*.js 에 같은 초 3건 spawnStream 로그 이름 서로 다름 확인 추가",
+  "verify": "node --check tools/VibeManager/workbench.js, node tools/VibeManager/test/run_all.js 통과. 작업 목록에서 3화면 동시 CheckList 시작 뒤 events.jsonl proc.start 의 log 값 3개가 서로 다른지 확인",
+  "sig": "vm 작업 로그 이름에 화면 id와 procid를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함"
+ },
+ "result": {
+  "applied": true,
+  "verified": false,
+  "changed_files": [
+   "tools/VibeManager/workbench.js",
+   "tools/VibeManager/test/t_wb_logname.js"
+  ],
+  "verify_result": "2026-11-20 06:37:00 node --check workbench.js 출력 CHECK_OK. 06:37:16 node test/t_wb_logname.js PASS 10, ALL PASS. 로그 이름 2026-11-20T06-37-16_SCP0005_1_CheckList__________.log, _SCP0014_2_, _SCP0028_3_ 3개 다름, 각 로그에 자기 화면 ID 만 있음. 06:37:21~06:39:10 node test/run_all.js 파일 30/30, PASS 369, FAIL 0, ALL OK. 작업 목록 3화면 동시 CheckList 뒤 events.jsonl proc.start log 값 확인은 실행하지 않음(미확인)",
+  "note": "개선안의 437행은 지금 파일 499행(spawnStream logF)이라 그 줄을 고침. 화면 ID = opts.screen, 없으면 this.titleId(창의 화면 ID), \\w.- 밖 문자는 _ 로 바꿈. id = 498행 ++seq(모듈 전역). 로그 이름을 읽는 코드는 orch-history.js:218 1곳이고 claude*.log 만 읽어 영향 없음. 시험 첫 실행은 FAIL 4건: spawnStream 이 shell 로 실행돼 process.execPath 경로 공백에서 깨짐. 시험이 스크립트 파일을 node 로 실행하게 고친 뒤 통과. 작업 모드 repairScope=DB_ONLY 는 FE·BE 수정만 막으므로 tools/VibeManager 수정은 막지 않음. verify 3번째 항목은 CheckList 실행이 필요하고 지킬 것 35행에 따라 사용자가 실행하므로 verified=false. .bak, 설치 폴더, CHANGELOG.md 는 건드리지 않음"
+ },
+ "gate": null,
+ "history": [
+  "06:33:34 VMO 자동(게이트 통과 조건): 승인",
+  "06:35:35 VMO: 반영 전 게이트: 구문 검사 22개 파일 통과, 시험 29/29개 파일 통과(PASS 359, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0633",
+  "06:35:42 VMO: 반영 시작",
+  "06:39:33 VMO: 반영 실패. 검증 실패: 2026-11-20 06:37:00 node --check workbench.js 출력 CHECK_OK. 06:37:16 node test/t_wb_logname.js PASS 10, ALL PASS. 로그 이름 2026-11-20T06-37-16_SCP0005_1_CheckList__________.log, _SCP0014_2_, _SCP0028_3_ 3 · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json, Doc/verify/SCP0005/calls/_verify_그리드_더블클릭_팝업_인자_G5_AS-IS_가_팝업에_넘기는_셀_값이_TO-BE_팝업_조회_요청에_들어가는지_0.json, Doc/verify/SCP0005/calls/_verify_그리드_컬럼_프로브_표시_A5_기존행_신규행_편집_D1_입력_후_재편집_콤보_후보_B1_B2_숫자_E1_날짜_0.json, Doc/verify/SCP0005/e2e/shots/index_verify.json, Doc/verify/SCP0005/e2e/shots/verify_그리드_더블클릭_팝업_인자_G5_AS_IS_가_팝업에_넘기는_셀_값이_TO_BE_팝업_조회_요청에_들어가는지.png 는 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120005819_INC"
+}

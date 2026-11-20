@@ -1,0 +1,125 @@
+{
+  "id": "20261120094530_REVIEW_2",
+  "at": "2026-11-20T09:45:30+09:00",
+  "ms": 1795135530545,
+  "source": "review",
+  "status": "applied",
+  "sig": "signature skip header line",
+  "title": "실패 서명에서 'log tail:' 머리 줄과 '$ 명령' 줄을 건너뛰고 다음 원인 줄로 서명을 만든다",
+  "evidence": "incidents topRepeats R2 n=11, sig 'S8.checklistRun | [FAIL] Playwright exit code N - log tail:' 아래 화면 3개(SSP0005, SCP0005, SCP0028). events.jsonl step.end why 의 둘째 줄이 화면마다 다름: SSP0005 '[FAIL] SSP0005_GET_SHIPMENT_WORKING_DAY → PKG_SSP0005…', SCP0005 'TimeoutError: locator.click: Timeout 10000ms exceeded.', SCP0028 '[ERROR] nscm-fe/…/ShipmentLotSize…'. R2 sig '$ <path> <path> <ID> --asis <ID>' n=4 도 같은 형태. 원인 위치: orch-events.js:66 signature 가 첫 비어 있지 않은 줄만 씀. tools/E2E/run-e2e.cmd:164 가 머리 줄을 찍고 :165 에서 꼬리 12줄을 다음 줄에 찍음",
+  "targets": [
+    "tools/VibeManager/orch-events.js",
+    "tools/VibeManager/test/t_orch_events.js"
+  ],
+  "before_after": "변경 전: why 첫 줄 = 서명 → 변경 후: ':' 로 끝나는 머리 줄과 '$ ' 로 시작하는 명령 줄을 건너뛰고 처음 나오는 원인 줄을 서명으로 씀. 건너뛸 줄밖에 없으면 종전대로 첫 줄",
+  "verify": "node tools/VibeManager/test/t_orch_events.js 에 시험 3건 추가('…log tail:\\n[FAIL] X' → X 기준 서명, '$ a.py\\n== 제목' → '== 제목' 기준, 한 줄짜리는 종전과 같음). node tools/VibeManager/test/run_all.js 통과",
+  "rollback": "orch-events.js 를 반영 직전 .bak 로 되돌림. sig_history.json 의 새 서명 기록은 종전 서명과 겹치지 않아 그대로 둬도 됨",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T10:01:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:03:23+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 32/32개 파일 통과(PASS 392, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1001"
+    },
+    {
+      "at": "2026-11-20T10:03:31+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T10:08:28+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+    },
+    {
+      "at": "2026-11-20T10:14:23+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 반영한 Claude 는 10:06:30 에 정상 종료했고 결과는 verified true 임(.vibe/logs/2026-11-20T10-03-32_claude_orch.log: t_orch_events PASS 7 FAIL 0 10:04:02, run_all 33/33 PASS 402 10:06:21). 반영 뒤 게이트 도중 10:07:47 VS Code 가 닫힘(events.jsonl 726~729 user.stop 'VS Code 종료'). 10:09:00 새 VM 프로세스 pid 11196 가 orch-selfcheck.js:502 recoverStale 로 안을 반영 실패로 바꿈. 대상 파일 2개는 10:03:42, 10:03:50 에 바뀐 채 남아 있고 되돌리지 않았음"
+    },
+    {
+      "at": "2026-11-20T10:14:28+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:16:37+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 33/33개 파일 통과(PASS 402, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1014"
+    },
+    {
+      "at": "2026-11-20T10:16:40+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T10:21:24+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 23개 파일 통과, 시험 34/34개 파일 통과(PASS 414, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T10:21:24+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 10:17:06(+09:00) node tools/VibeManager/test/t_orch_events.js: PASS 7, FAIL 0, ALL PASS. 추가 시험 3건 결과: 'log tail:' 머리 줄을 건너뛰어 'S8.checklistRun <ID> | [FAIL] X', '$ a.py' 줄을 건너뛰어 'S8.verify <ID> | == 제목', 한 줄짜리는 종전과 같음. 2026-11-20T01:17:09Z(10:17 KST) node tools/VibeManager/test/run_all.js: · 변경 6개 파일 · 대상 목록 밖 변경 6개: Doc/verify/_llm_usage.csv, tools/Harness/gate_baseline.tsv, Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json",
+      "log": ".vibe\\logs\\2026-11-20T10-16-40_claude_orch.log",
+      "sec": 158,
+      "costUsd": 0.47635070000000007,
+      "files": [
+        "Doc/verify/_llm_usage.csv",
+        "tools/Harness/gate_baseline.tsv",
+        "Doc/verify/SCP0028/llm_cache.json",
+        "Doc/verify/SCP0028/llm_usage.csv",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795137268763,
+  "autoFp": "559b1e07c2",
+  "interrupted": true,
+  "repair": {
+    "at": "2026-11-20T10:14:23+09:00",
+    "decision": "retry",
+    "cause": "반영한 Claude 는 10:06:30 에 정상 종료했고 결과는 verified true 임(.vibe/logs/2026-11-20T10-03-32_claude_orch.log: t_orch_events PASS 7 FAIL 0 10:04:02, run_all 33/33 PASS 402 10:06:21). 반영 뒤 게이트 도중 10:07:47 VS Code 가 닫힘(events.jsonl 726~729 user.stop 'VS Code 종료'). 10:09:00 새 VM 프로세스 pid 11196 가 orch-selfcheck.js:502 recoverStale 로 안을 반영 실패로 바꿈. 대상 파일 2개는 10:03:42, 10:03:50 에 바뀐 채 남아 있고 되돌리지 않았음",
+    "reason": "반영 도중 VS Code 창이 닫혀 반영 뒤 게이트가 끊겼습니다. 안 자체는 시험을 통과했으므로 같은 안을 다시 반영하고 게이트를 돌립니다.",
+    "log": ".vibe\\logs\\2026-11-20T10-13-28_claude_orch.log",
+    "costUsd": 0.6522139999999998,
+    "sec": 55
+  },
+  "retryN": 1,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 23개 파일 통과, 시험 34/34개 파일 통과(PASS 414, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1014",
+  "needsReload": true,
+  "appliedMs": 1795137684647,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-events.js",
+      "tools/VibeManager/test/t_orch_events.js"
+    ],
+    "verify_result": "2026-11-20 10:17:06(+09:00) node tools/VibeManager/test/t_orch_events.js: PASS 7, FAIL 0, ALL PASS. 추가 시험 3건 결과: 'log tail:' 머리 줄을 건너뛰어 'S8.checklistRun <ID> | [FAIL] X', '$ a.py' 줄을 건너뛰어 'S8.verify <ID> | == 제목', 한 줄짜리는 종전과 같음. 2026-11-20T01:17:09Z(10:17 KST) node tools/VibeManager/test/run_all.js: ALL OK, 파일 34/34, PASS 414, FAIL 0, 120.4s, 제외 2건(t_orch_agent_real.js, t_orch_agent_diag.js)",
+    "note": "작업 시작 때 targets 2개 파일에 개선안 내용이 이미 있어 이번 턴에는 수정하지 않음. 이전 시도에서 반영된 것으로 보이나 출처는 미확인. 확인과 시험 실행만 함. 작업 모드 repairScope=DB_ONLY 이지만 tools/VibeManager 는 FE·BE 가 아니라서 막히지 않음"
+  },
+  "snap": "prop_20261120094530_REVIEW_2"
+}

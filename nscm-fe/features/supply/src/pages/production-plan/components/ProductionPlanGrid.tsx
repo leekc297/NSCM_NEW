@@ -22,6 +22,8 @@ import {
   CELL_COLOR,
   LINE_TOTAL_LOAD_MEASURE,
   LINE_TOTAL_WARN_THRESHOLD,
+  QTY_MAX,
+  QTY_MIN,
   RATIO_DECIMALS,
   RATIO_MEASURES,
 } from '../production-plan.constants';
@@ -231,22 +233,49 @@ export const ProductionPlanGrid = ({
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler);
 
-    // 음수 입력 차단 — AS-IS 수치셀 범위 0~99,999,999(design 03 R5). 음수면 입력을 취소해 이전 값 유지.
+    // 범위 밖 입력 차단 — AS-IS SetReNumerCellType(min 0, 소수 0자리, max 99,999,999)(design 03 R5).
+    //   음수·소수·상한 초과면 입력을 취소해 이전 값 유지.
+    const outOfQtyRange = (n: number | null) =>
+      n !== null && (n < QTY_MIN || n > QTY_MAX || !Number.isInteger(n));
     const negativeEditHandler = (sender: FlexGridType, e: { cancel: boolean; col: number }) => {
       if (pivotKind(sender.columns[e.col]?.binding ?? '') === null) return;
       const entered = toNum((sender.activeEditor as HTMLInputElement | null)?.value);
-      if (entered !== null && entered < 0) e.cancel = true;
+      if (outOfQtyRange(entered)) e.cancel = true;
     };
     const negativePasteHandler = (
       sender: FlexGridType,
       e: { cancel: boolean; col: number; data?: unknown }
     ) => {
       if (pivotKind(sender.columns[e.col]?.binding ?? '') === null) return;
-      const pasted = toNum(e.data);
-      if (pasted !== null && pasted < 0) e.cancel = true;
+      if (outOfQtyRange(toNum(e.data))) e.cancel = true;
     };
     g.cellEditEnding.addHandler(negativeEditHandler);
     g.pastingCell.addHandler(negativePasteHandler);
+
+    // '-'·'.' 키 자체를 무시 — AS-IS 수치셀(min 0, 소수 0자리)은 두 키가 입력되지 않는다.
+    //   capture 단계라 wijmo 의 타이핑-편집시작보다 먼저 막는다(셀 선택 상태·편집 중 모두).
+    //   숫자 키는 편집 중 정수부가 8자리(QTY_MAX=99,999,999)를 넘게 되면 키인 자체를 막는다
+    //   (AS-IS 실측 2026-11-20 — 8자리 초과 키 입력 불가). 선택 영역은 대체되므로 제외하고 센다.
+    const qtyMaxDigits = String(QTY_MAX).length;
+    const signKeyHandler = (ev: KeyboardEvent) => {
+      const isSign = ev.key === '-' || ev.key === '.';
+      const isDigit = /^[0-9]$/.test(ev.key);
+      if (!isSign && !isDigit) return;
+      const col = g.selection?.col ?? -1;
+      if (pivotKind(g.columns[col]?.binding ?? '') === null) return;
+      if (isDigit) {
+        const input = g.activeEditor as HTMLInputElement | null;
+        if (!input) return; // 셀 선택 상태의 첫 키 = 기존 값 대체로 편집 시작 → 1자리라 허용
+        const v = input.value ?? '';
+        const start = input.selectionStart ?? v.length;
+        const end = input.selectionEnd ?? v.length;
+        const remaining = (v.slice(0, start) + v.slice(end)).replace(/[^0-9]/g, '');
+        if (remaining.length < qtyMaxDigits) return;
+      }
+      ev.preventDefault();
+      ev.stopPropagation();
+    };
+    g.hostElement?.addEventListener('keydown', signKeyHandler, true);
 
     // pivot Auto-Sync (design 03 §2.4) — W_ 편집 시 하위 D_ 균등분배(+음수 원복), D_ 편집 시 상위 W_·M_ 재집계.
     //   비율 measure(FORMATION_YIELD/LINE_TOTAL_LOAD)는 평균이라 재분배 제외(단순 표시).
@@ -400,6 +429,7 @@ export const ProductionPlanGrid = ({
         g.pastedCell?.removeHandler(cellEditEndedHandler);
         g.formatItem?.removeHandler(formatHandler);
         g.hostElement?.removeEventListener('click', clickDblHandler);
+        g.hostElement?.removeEventListener('keydown', signKeyHandler, true);
       } catch {
         /* unmount race */
       }

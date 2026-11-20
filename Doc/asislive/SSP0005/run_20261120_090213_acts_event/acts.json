@@ -1,0 +1,123 @@
+{
+ "id": "SSP0005",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 0개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SSP0005-Sb39c49"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-20 09:01:21",
+ "data_find": {
+  "at": "2026-11-20 09:01:33",
+  "rows0": 0,
+  "tries": [
+   {
+    "cond": "기간 1개월 앞",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20261020"
+      },
+      "ok": true,
+      "applied": "prop:Value1",
+      "error": null
+     },
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20271014"
+      },
+      "ok": true,
+      "applied": "prop:Value2",
+      "error": null
+     }
+    ],
+    "at": "2026-11-20 09:01:42"
+   },
+   {
+    "cond": "기간 3개월 앞",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20260820"
+      },
+      "ok": true,
+      "applied": "prop:Value1",
+      "error": null
+     },
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20270814"
+      },
+      "ok": true,
+      "applied": "prop:Value2",
+      "error": null
+     }
+    ],
+    "at": "2026-11-20 09:01:50"
+   },
+   {
+    "cond": "기간 6개월 앞",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20260520"
+      },
+      "ok": true,
+      "applied": "prop:Value1",
+      "error": null
+     },
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20270514"
+      },
+      "ok": true,
+      "applied": "prop:Value2",
+      "error": null
+     }
+    ],
+    "at": "2026-11-20 09:01:57"
+   }
+  ],
+  "find_sp": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0005_GET_SHIPMENT_WORKING_DAY"
+  ],
+  "sheets": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0005_GET_SHIPMENT_WORKING_DAY"
+  ],
+  "none": "후보 기간 1개월 앞 / 기간 3개월 앞 / 기간 6개월 앞 전부 0행(미측정)"
+ }
+}

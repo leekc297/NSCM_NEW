@@ -133,7 +133,10 @@ export const VersionInfoModal = ({ open, tabId, onClose }: Props) => {
         </div>
       }
       customContentArea={
-        <>
+        // 모듈(조회조건 / 결과그리드) 사이 간격 12px — 다른 검색 팝업과 통일.
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: 12, height: '100%', minHeight: 0 }}
+        >
           {/* 다른 modal(MaterialByDivisionModal 등)과 같은 공용 SearchArea — Search 버튼은 우측, F5·Enter 조회 연결. */}
           <SearchArea searchButtonLabel={t(LBL.SEARCH, 'Search')} onSearch={handleSearch} conditions={
             <>
@@ -196,7 +199,7 @@ export const VersionInfoModal = ({ open, tabId, onClose }: Props) => {
               isReadOnly
             />
           </ResultArea>
-        </>
+        </div>
       }
     />
   );

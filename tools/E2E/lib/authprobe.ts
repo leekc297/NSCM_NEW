@@ -64,6 +64,17 @@ export function buttonSnapshot(p: Page): Promise<BtnSnap[]> {
     return { name: t || (own || '').trim() || (anc ? (anc.getAttribute('aria-label') || anc.getAttribute('title') || '').trim() : ''), disabled: (b as HTMLButtonElement).disabled };
   }).filter(x => x.name));
 }
+/** 2026-11-20 T430: 공용 툴바 단추 코드 판별. 단축키 붙은 단추('Search(F5)' 등)가 하나라도 있으면 SubTitle 화면 = 'Save(F7)'·'Insert(F8)'·'Delete(F9)' 만 툴바 단추.
+ *  화면 단추(customButtons · 예 SCP0028 일괄삭제 'Delete')는 공통 버튼 권한(CR-070) 대상이 아니라 세지 않는다. 단축키 단추가 없는 화면은 종전 접두 일치 */
+export function toolbarRe(names: string[]): Record<'SAVE' | 'INSERT' | 'DELETE', RegExp> {
+  const hot = names.some(n => /\(F\d+\)\s*$/.test(n));
+  return hot ? { SAVE: /^Save\s*\(F\d+\)$/i, INSERT: /^Insert\s*\(F\d+\)$/i, DELETE: /^Delete\s*\(F\d+\)$/i } : { SAVE: /^Save/i, INSERT: /^Insert/i, DELETE: /^Delete/i };
+}
+/** 툴바 규칙에서 빠진 같은 이름 화면 단추(보고 문구용) */
+export function customLike(names: string[], code: 'SAVE' | 'INSERT' | 'DELETE'): string[] {
+  const loose = { SAVE: /^Save/i, INSERT: /^Insert/i, DELETE: /^Delete/i }[code]; const re = toolbarRe(names)[code];
+  return [...new Set(names.filter(n => loose.test(n) && !re.test(n)))];
+}
 export const isDivLabel = (k: string) => /^(div|division|사업부)$/.test(k);
 /** Division 칸: 값·콤보 후보(코드). 후보 텍스트 앞 토큰이 코드(FE 표기 '81 Automotive …') */
 export async function divState(nscm: Nscm): Promise<{ value: string; code: string; options: string[]; found: boolean; multiAll?: boolean }> {
@@ -102,13 +113,22 @@ export async function divState(nscm: Nscm): Promise<{ value: string; code: strin
 export async function selectDiv(nscm: Nscm, code: string): Promise<boolean> {
   const p = nscm.page; const snap = await condSnapshot(p); const it = snap.find(c => isDivLabel(c.key)); if (!it) return false;
   const box = p.locator('[class*="_formItem_"]').filter({ has: p.locator('label', { hasText: new RegExp(`^\\s*${it.label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`) }) }).first();
+  // 2026-11-20 T474(SSP0005 EG022 8행·EG271 1행 'Div 선택 실패'): 다중 선택 Division(칩·지우기 버튼)에서 옵션을 누르면 기존 선택에 더하거나 빼서
+  //   표시값이 코드 하나가 되지 않았다 → nscm.setDivision 과 같이 먼저 비우고 고른 뒤 목록을 닫는다
+  const clr = box.locator('button[aria-label="Clear"]').first();
+  const multi = (await clr.count().catch(() => 0)) > 0 && (await box.locator('.MuiChip-root, [class*="MuiAutocomplete-tag"]').count().catch(() => 0)) > 0;
+  if (multi) { await box.hover().catch(() => undefined); await clr.click({ timeout: 3_000, force: true }).catch(() => undefined); await p.waitForTimeout(300); }
   await box.locator('[role="combobox"], input').first().click({ timeout: 5_000 }).catch(() => undefined);
   const opt = p.getByRole('option', { name: new RegExp(`^\\s*${code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|$)`) }).first();
   if (!(await opt.isVisible({ timeout: 4_000 }).catch(() => false))) { await p.keyboard.press('Escape').catch(() => undefined); return false; }
   await opt.click({ timeout: 3_000 }).catch(() => undefined);
+  if (multi) await p.keyboard.press('Escape').catch(() => undefined);
   await p.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined); await p.waitForTimeout(400);
   const after = (await condSnapshot(p)).find(c => isDivLabel(c.key));
-  return !!after && (after.value.trim().split(/\s+/)[0] || '') === code;
+  if (!!after && (after.value.trim().split(/\s+/)[0] || '') === code) return true;
+  // T474: 다중 선택 칸은 입력값이 비고 선택이 칩으로만 보인다 — 칩이 1개이고 그 앞 토큰이 코드면 선택 성공
+  const chips = (await box.locator('.MuiChip-root, [class*="MuiAutocomplete-tag"]').allInnerTexts().catch(() => [] as string[])).map(t => t.trim()).filter(Boolean);
+  return chips.length === 1 && (chips[0].split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '') === code;
 }
 
 /** 조회조건 칸 콤보 후보 표시 문구 — 콤보가 아니면 null */

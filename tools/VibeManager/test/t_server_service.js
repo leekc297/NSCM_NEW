@@ -1,15 +1,18 @@
-// server-service.js · orch-state.js 동작 시험 — 시험용 포트 5599 의 임시 node 서버만 띄우고 끈다(8080·5173 은 상태만 읽는다)
+// server-service.js · orch-state.js 동작 시험 — 실행마다 빈 포트를 받아 임시 node 서버만 띄우고 끈다(8080·5173 은 상태만 읽는다)
+//   2026-11-19 22:5x: 고정 포트 5599 → 빈 포트. 시험 2개가 같은 때 돌면(VMO 주기 점검 S2 + 명령줄 실행 · 개선안 반영 게이트) 한쪽이 '포트 5599 사용 중' · '종료 뒤 상태 up' 으로 실패했다(사건 20261119_225004_R12_ALL)
 const Module = require('module'); const path = require('path'); const fs = require('fs'); const os = require('os');
 const notes = [];
 const vs = { window: { createStatusBarItem: () => ({ show() { }, dispose() { } }), showInformationMessage: (m) => { notes.push('info: ' + m); return Promise.resolve(); }, showWarningMessage: (m) => { notes.push('warn: ' + m); return Promise.resolve(); }, showErrorMessage: (m) => { notes.push('err: ' + m); return Promise.resolve(); } }, StatusBarAlignment: { Left: 1 }, ThemeColor: function (n) { this.n = n; }, commands: { executeCommand: () => { } } };
 const orig = Module._load; Module._load = function (req, ...r) { return req === 'vscode' ? vs : orig.call(this, req, ...r); };
-const dir = process.argv[2]; const PORT = 5599;
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..')); let PORT = 0;
+const freePort = () => new Promise((res, rej) => { const s = require('net').createServer(); s.unref(); s.on('error', rej); s.listen(0, '127.0.0.1', () => { const n = s.address().port; s.close(() => res(n)); }); });
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'svc-')); const p = { root, vibeDir: path.join(root, '.vibe') };
 const srvJs = path.join(root, 'srv.js');
-fs.writeFileSync(srvJs, `const http=require('http');console.log('booting');setTimeout(()=>{http.createServer((q,s)=>{console.log('req '+q.url);s.end('ok')}).listen(${PORT},'127.0.0.1',()=>console.log('Started TestApp in 0.3 seconds'));},300);`);
+const writeSrv = () => fs.writeFileSync(srvJs, `const http=require('http');console.log('booting');setTimeout(()=>{http.createServer((q,s)=>{console.log('req '+q.url);s.end('ok')}).listen(${PORT},'127.0.0.1',()=>console.log('Started TestApp in 0.3 seconds'));},300);`);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const load = () => { for (const k of Object.keys(require.cache)) if (/server-service|orch-events|orch-state/.test(k)) delete require.cache[k]; return { svc: require(path.join(dir, 'server-service')), st: require(path.join(dir, 'orch-state')) }; };
 (async () => {
+  PORT = await freePort(); writeSrv(); console.log('시험 포트', PORT);
   let ok = true; const chk = (name, cond, extra) => { console.log(cond ? 'PASS' : 'FAIL', name, extra || ''); if (!cond) ok = false; };
   let { svc, st } = load(); const got = []; svc.subscribe(m => got.push(m)); st.init(p);
   const it = { cmd: `node "${srvJs}"`, ready: 'Started TestApp in ([\\d.]+) seconds', port: PORT, readyTimeoutSec: 20, expectProc: 'node|cmd' };
@@ -34,9 +37,11 @@ const load = () => { for (const k of Object.keys(require.cache)) if (/server-ser
   require('http').get({ host: '127.0.0.1', port: PORT, path: '/after-reload' }, x => x.resume());
   await sleep(1800);
   chk('다시 붙은 뒤 새 로그 수신', got2.some(m => m.type === 'out' && /after-reload/.test(m.text)));
+  // 측정이 진행 중일 때 다시 부르면: 그 측정이 끝난 뒤 새로 한 번 잰다(2026-11-19 23:5x 정정 · 종전에는 바로 돌아가 옛 상태가 남음)
+  { let firstDone = false; const first = svc.pollOnce().then(() => { firstDone = true; }); await svc.pollOnce(); chk('측정 중 재호출 = 진행 중 측정이 끝난 뒤 새로 잼(옛 상태로 바로 돌아가지 않음)', firstDone === true); await first; }
   const sr = await svc.stop(p, it, 'TEST SRV');
   chk('종료', sr && sr.ok, JSON.stringify(sr));
-  await svc.pollOnce();
+  const inflight = svc.pollOnce(); await svc.pollOnce(); await inflight; // 진행 중 측정과 겹쳐 불러도 종료 뒤 상태를 잰다
   const s2 = svc.stateList().find(x => x.port === PORT);
   chk('종료 뒤 상태 down', s2 && s2.state === 'down', JSON.stringify(s2));
   chk('종료 뒤 등록 해제', !svc.isRunning('TEST SRV'));

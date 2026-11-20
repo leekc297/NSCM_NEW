@@ -1,0 +1,268 @@
+{
+ "rule_id": "E4",
+ "hash": "a1ef7d1346116d4c",
+ "groups": [
+  {
+   "rows": [
+    "T-239d320f",
+    "T-1572ce8c",
+    "V-fb2bb601"
+   ],
+   "why": "All three check that MSG00006 (save failed) appears under the same else branch at SaveData line 700 and that processing stops."
+  },
+  {
+   "rows": [
+    "T-16ce7bee",
+    "T-a5c1bb0f",
+    "V-4ff698de"
+   ],
+   "why": "All three check that MSG00084 (enter an integer greater than 0) appears from checkValidSize line 771 when LOT_SIZE is 0, and that processing stops."
+  },
+  {
+   "rows": [
+    "T-e025353a",
+    "T-fdfe4318",
+    "V-fe6dcb91"
+   ],
+   "why": "All three check that MSG00099 appears from checkValidSize line 764 when Lot Size is less than Increment, and that processing stops."
+  },
+  {
+   "rows": [
+    "V-1f64fec6",
+    "V-86208af2"
+   ],
+   "why": "Both check the same Lot Size<Increment validation message when the language is KO, and both expect the KO message to be shown."
+  },
+  {
+   "rows": [
+    "T-a48de69e",
+    "T-cc3cc178",
+    "V-356aae9e"
+   ],
+   "why": "All three check that MSG00133 (no changes made) appears from SaveData line 608 when modiCnt==0, and that processing stops."
+  },
+  {
+   "rows": [
+    "T-281e8ef6",
+    "T-d35a8011",
+    "V-88b49284"
+   ],
+   "why": "All three check that MSG00004 (N records saved) appears from SaveData line 691 when the save succeeds with result S."
+  },
+  {
+   "rows": [
+    "V-2a373e9a",
+    "V-bba93c1b"
+   ],
+   "why": "Both save a new row whose key duplicates an existing row, and both expect the save to be blocked with a duplicate message."
+  },
+  {
+   "rows": [
+    "T-0caf6c62"
+   ],
+   "why": "MSG00031 (FindDelete deleted) is the only row for this message."
+  },
+  {
+   "rows": [
+    "T-4677b9e5"
+   ],
+   "why": "MSG00284 (FindDelete error) is the only row for this message."
+  },
+  {
+   "rows": [
+    "T-141a62a1"
+   ],
+   "why": "Trace row for the LOT_SIZE column meta (required M); no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-2030b1b3"
+   ],
+   "why": "Trace row for the checkRequiredOfSpread / useSaveWithValidation implementation, which is a different kind of check."
+  },
+  {
+   "rows": [
+    "T-2eca880a"
+   ],
+   "why": "The From Site search condition is a separate element."
+  },
+  {
+   "rows": [
+    "T-833aceab"
+   ],
+   "why": "The To Site search condition is a separate element."
+  },
+  {
+   "rows": [
+    "T-61a9d269"
+   ],
+   "why": "The Division search condition is a separate element."
+  },
+  {
+   "rows": [
+    "T-2f878317"
+   ],
+   "why": "MSG00059 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-627e2743"
+   ],
+   "why": "MSG00429 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-86090cf3"
+   ],
+   "why": "MSG01091 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-884ad9f3"
+   ],
+   "why": "MSG00002 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9c0060f9"
+   ],
+   "why": "MSG00016 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-a79c50f4"
+   ],
+   "why": "MSG00014 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c96012e6"
+   ],
+   "why": "MSG00683 has no e4 information, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-61a37bf5"
+   ],
+   "why": "Trace row for the rule that only edited rows are saved, which is a different property."
+  },
+  {
+   "rows": [
+    "T-dbdb5f4b"
+   ],
+   "why": "Trace row for the whole useShipmentLotSizeValidation implementation, covering both LOT<INC and the 0 value, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-904e7990"
+   ],
+   "why": "Checks that editing and saving LOT_SIZE on an existing row raises no false required-field alert, which differs in state and expected result."
+  },
+  {
+   "rows": [
+    "V-3add823f"
+   ],
+   "why": "General type from another screen: RTF unit-price check and Waterfall sync; separate."
+  },
+  {
+   "rows": [
+    "V-411bc395"
+   ],
+   "why": "General type: Unit Price conditionally required; separate."
+  },
+  {
+   "rows": [
+    "V-61e0df0d"
+   ],
+   "why": "General type: Cell Prod Site check; separate."
+  },
+  {
+   "rows": [
+    "V-6ee8c35c"
+   ],
+   "why": "General type: false alerts from the unit-price check; separate."
+  },
+  {
+   "rows": [
+    "V-71c70424"
+   ],
+   "why": "General type: BP Version Create; separate."
+  },
+  {
+   "rows": [
+    "V-76046ea6"
+   ],
+   "why": "General type: blocking key-in values in combo cells; separate."
+  },
+  {
+   "rows": [
+    "V-8386b5e5"
+   ],
+   "why": "General type: Project required check; separate."
+  },
+  {
+   "rows": [
+    "V-889edbd2"
+   ],
+   "why": "General type: RTF edit-permission conditions; separate."
+  },
+  {
+   "rows": [
+    "V-88f389d9"
+   ],
+   "why": "General type: Biz Type not-found message; separate."
+  },
+  {
+   "rows": [
+    "V-99a40358"
+   ],
+   "why": "General type: multiple Owners in the lower grid; separate."
+  },
+  {
+   "rows": [
+    "V-bcc7826c"
+   ],
+   "why": "General type: Text required / ETC save; separate."
+  },
+  {
+   "rows": [
+    "V-c043b51a"
+   ],
+   "why": "General type: Cust Group relationship / Active; separate."
+  },
+  {
+   "rows": [
+    "V-c2dd419b"
+   ],
+   "why": "General type: digit-count overflow message; separate."
+  },
+  {
+   "rows": [
+    "V-d818149d"
+   ],
+   "why": "General type: Excel Upload check messages; separate."
+  },
+  {
+   "rows": [
+    "V-dc6b83b4"
+   ],
+   "why": "Composite general type (Currency, duplicate Keyset, Insert position, Delete button) with different expected results, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-f3396c0a"
+   ],
+   "why": "General type: blocking old-code Sold to/Ship to combinations; separate."
+  },
+  {
+   "rows": [
+    "V-faf1a2c8"
+   ],
+   "why": "Confirmed rule for the Edit-button path, which checks a different property (edit state)."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:18:35",
+ "cost": 0.17912899999999998
+}

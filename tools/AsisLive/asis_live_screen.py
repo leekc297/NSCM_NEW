@@ -149,8 +149,13 @@ def main():
         except Exception: old = {}
         try: b_age = (time.time() - time.mktime(time.strptime(str(old.get("at"))[:19], "%Y-%m-%d %H:%M:%S"))) / 3600
         except Exception: b_age = 1e9
-        if old.get("status") == "OK" and b_age <= max_age:
-            print("[재사용] %s 최근 묶음(%s · %.1f시간 전 · 기준 %s시간)이 있어 런처는 다시 띄우지 않음 — 강제는 --force 또는 VERIFY_ASIS_LIVE=always" % (mid, old.get("at"), b_age, max_age))
+        # 2026-11-20 사용자 지시: 나이(24시간) 대신 원장 지문(tools/Harness/verify/asis_fp.py) — 원장이 같으면 오래돼도 재사용. VERIFY_ASIS_LIVE_MAX_AGE_H 를 지정했을 때만 나이도 본다
+        sys.path.insert(0, P("tools", "Harness", "verify")); import asis_fp
+        fp_ok, fp_why = asis_fp.same(mid, "bundle")
+        age_ok = (b_age <= max_age) if os.environ.get("VERIFY_ASIS_LIVE_MAX_AGE_H") else True
+        if not (old.get("status") == "OK" and fp_ok and age_ok) and old.get("status") == "OK": print("[새로 실측] %s 직전 묶음(%s)을 쓰지 않음 — %s" % (mid, old.get("at"), fp_why if not fp_ok else "지정한 나이 기준 %s시간 초과" % max_age))
+        if old.get("status") == "OK" and fp_ok and age_ok:
+            print("[재사용] %s 직전 묶음(%s · %.1f시간 전 · %s) — 런처는 다시 띄우지 않음 · 강제는 --force 또는 VERIFY_ASIS_LIVE=always" % (mid, old.get("at"), b_age, fp_why))
             # 런처를 쓰지 않는 단계는 매번 다시 한다 — CheckList 가 방금 새로 만든 대조표 추적·차등 검증 결과와 맞대야 하기 때문(11-13 SCP0028 전체 실행에서 재사용 시 대조가 빠진 것 보정)
             T = lambda n: os.path.join("tools", "AsisLive", n); st2 = []
             step(st2, "소스 분기 시나리오·대조표 연결 갱신", [T("asis_live_scen_src.py"), mid], 600)
@@ -217,6 +222,10 @@ def main():
         if os.path.exists(P("Doc", "asislive", mid, "save_scenario.json")): step(st, "AS-IS↔TO-BE 저장 인자 대조", [T("asis_live_save_cmp.py"), mid], 600)   # 저장 실행 자체는 묶음에 넣지 않는다(DB 에 쓰는 작업 — 메뉴로 따로)
         bad = [s for s in st if s["rc"] not in (0, None)]
         out["status"] = "OK" if not bad else "PARTIAL"; out["end"] = now()
+        if out["status"] == "OK":  # 2026-11-20 이 묶음이 어느 원장 기준인지 남김(다음 실행 재사용 판단 · asis_fp.py)
+            try:
+                sys.path.insert(0, P("tools", "Harness", "verify")); import asis_fp; asis_fp.record(mid, "bundle", "screen_bundle")
+            except Exception as _e: print("[원장 지문 기록 실패] %s" % _e)
         save(mid, out)
         print("\n[%s] %s AS-IS 런처 실측 묶음 · 단계 %d · 실패 %d%s · %ds" % (out["status"], mid, len(st), len(bad), (" (" + ", ".join("%s rc=%s" % (s["step"][:14], s["rc"]) for s in bad) + ")") if bad else "", sum(s["sec"] for s in st)))
         print("@@LINK 📂 AS-IS 실측|Doc/asislive/%s" % mid)

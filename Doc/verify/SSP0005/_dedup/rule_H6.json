@@ -1,0 +1,140 @@
+{
+ "rule_id": "H6",
+ "hash": "652d889b306eded2",
+ "groups": [
+  {
+   "rows": [
+    "V-187c8df9",
+    "V-fb7d019b"
+   ],
+   "why": "Both rows click the edge (border) of the From City search button and expect the popup to open."
+  },
+  {
+   "rows": [
+    "V-192ed0ae",
+    "V-c552f094"
+   ],
+   "why": "Both rows check the No. column, query/filter count and common-grid shortcut/Sort behaviour of the Contribution Sales Version popup grid with a filter applied, and expect the same result."
+  },
+  {
+   "rows": [
+    "V-2b835ba2",
+    "V-d8af9dc3"
+   ],
+   "why": "Both rows check that the button order in all popups is unified as OK → CLOSE."
+  },
+  {
+   "rows": [
+    "V-8b79c444",
+    "V-fb14ee9c"
+   ],
+   "why": "Both rows check that the Model/Owner/Project/Version popup grids show exactly one No. column at a suitable width, with the same expected text."
+  },
+  {
+   "rows": [
+    "T-423e205f"
+   ],
+   "why": "This trace row checks that the SpdMain_CellDoubleClick entry point exists, which no other row checks."
+  },
+  {
+   "rows": [
+    "T-7e9678ff"
+   ],
+   "why": "This trace row checks that ProgressForm in FindData_Main (cs:372) exists in the source, which no other row checks."
+  },
+  {
+   "rows": [
+    "T-84dcab63"
+   ],
+   "why": "This trace row checks that ProgressForm in SaveData_Main (cs:438) exists in the source, which is a different location from FindData_Main."
+  },
+  {
+   "rows": [
+    "V-24fbe0fc"
+   ],
+   "why": "This row checks the Version search-condition size and the Description column width in the Version popup, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-2d86ad1c"
+   ],
+   "why": "This row checks that the search-condition popup shows its buttons on one screen without a scrollbar, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-4f804a36"
+   ],
+   "why": "This row checks the Ver.Cutoff popup's Period, Description position and Div/Type search-condition size, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-50123682"
+   ],
+   "why": "This row checks that there is no border line at the top of the popup, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-5203d9c1"
+   ],
+   "why": "This row applies the TO-BE meta cell popup exception rule, which has a different scope and expected result from the other rows."
+  },
+  {
+   "rows": [
+    "V-7c9e9ed5"
+   ],
+   "why": "This row checks the registered text in the popup title, with no '_' fallback, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-87963c53"
+   ],
+   "why": "This row checks the popup's Search button, immediate DB query and Like/comma multi-value search, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-a7542bf9"
+   ],
+   "why": "This row checks the viewport limit when resizing or dragging the popup and that the CLOSE button stays visible, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-b5c55b2e"
+   ],
+   "why": "This row checks the button layout of the column settings popup (ColumnLayoutModal), which is a different popup with a different expected result."
+  },
+  {
+   "rows": [
+    "V-bf313591"
+   ],
+   "why": "This row checks single-selection mode in the grid-cell Model popup, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-c059caa4"
+   ],
+   "why": "This row checks the single search condition (ID and Name) in the Team popup, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-d1560a5a"
+   ],
+   "why": "This row checks that search conditions and buttons do not overlap when the popup is shrunk, which is a different state from the other rows."
+  },
+  {
+   "rows": [
+    "V-dc0abcc5"
+   ],
+   "why": "This row checks Module/Sub Module/Active fields and the popup section title, which are different elements with a different expected result."
+  },
+  {
+   "rows": [
+    "V-e57dc73c"
+   ],
+   "why": "This row is a broad check that the whole popup layout follows the design standard, and it does not match any single-item row exactly."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:08:53",
+ "cost": 0.08719759999999999
+}

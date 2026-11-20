@@ -1,0 +1,56 @@
+{
+ "rule_id": "M2",
+ "hash": "86e38c1af1d5ea57",
+ "groups": [
+  {
+   "refs": [
+    "DM-204-3",
+    "DM-204-3S"
+   ],
+   "target": "SQL View 버튼(VIEW) 클릭 결과",
+   "condition": "Insert 상태 또는 하단 탭 등 각 상태에서 클릭",
+   "expected": "SQL View(VIEW) 버튼을 클릭하면 모든 항목에서 SQL Error가 0건이다",
+   "why": "두 항목 모두 같은 SQL View 버튼을 같은 조건에서 클릭하고 SQL Error 0건을 기대하므로, 확인 동작과 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-146"
+   ],
+   "target": "팝업 Close 후 재오픈 시 편집 내용 처리",
+   "condition": "팝업에서 데이터를 수정한 뒤 저장하지 않고 Close",
+   "expected": "팝업(예: Exchange Rate)을 Close하면 저장하지 않은 편집은 버려지고, 다시 열면 원천 데이터를 새로 조회하며 Save 건수가 맞게 나온다",
+   "why": "팝업을 닫았을 때 미저장 편집이 버려지는지 확인하는 항목이라, 다른 항목과 확인 대상이 다르므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-56"
+   ],
+   "target": "BPS I/F 버튼 실행 반영·메시지",
+   "condition": "BPS I/F 버튼이 있는 화면에서 실행",
+   "expected": "BPS I/F를 실행하면 환율이 실제로 반영되고, 반영할 대상이 없으면 \"반영할 환율 정보가 없습니다\" 메시지가 나오며, Last Update Date/By 컬럼이 표시된다",
+   "why": "I/F 버튼을 실행했을 때의 반영 결과와 안내 메시지, 컬럼 표시를 확인하는 항목이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-88"
+   ],
+   "target": "Replace 팝업 Period 기본값·조회",
+   "condition": "메인 그리드에서 Replace 버튼으로 팝업 열기",
+   "expected": "Replace 팝업의 Period 기본값이 메인 그리드의 Period와 같고, 팝업 데이터가 정상 조회된다",
+   "why": "팝업 조회조건 Period의 기본값이 메인 화면과 연동되는지 확인하는 고유 항목이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-93"
+   ],
+   "target": "BP Version 팝업 Version Create",
+   "condition": "Version Cutoff 직후의 신규 버전으로 생성",
+   "expected": "신규 컷오프 버전으로 Version Create를 실행하면 사전 Validation을 거쳐 버전이 생성되고 DB에 반영된다",
+   "why": "버전 생성 버튼의 Validation과 DB 반영을 확인하는 항목이라 다른 버튼 동작과 기대 결과가 다르므로 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:46:14",
+ "cost": 0.0527052
+}

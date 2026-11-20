@@ -1,0 +1,29 @@
+{
+ "rule_id": "E5",
+ "hash": "f2fb59e58eb2daa2",
+ "groups": [
+  {
+   "refs": [
+    "GAPPI-10",
+    "GAPPI-11"
+   ],
+   "target": "그리드 콤보형 셀(CELL_COMBO) 붙여넣기 시 후보 외 값 차단",
+   "condition": "그리드 콤보 셀에 후보 목록에 없는 값을 Ctrl+V로 붙여넣은 뒤 Save",
+   "expected": "모든 그리드 콤보 셀(CELL_COMBO)은 붙여넣기(Paste)로 들어온 후보 밖 값을 지워서 저장되지 않게 한다.",
+   "why": "두 항목 모두 콤보 셀에 후보 외 값을 Ctrl+V로 붙여넣고 저장해 보는 같은 확인이고 기대 결과도 같습니다. 사업부 차이(전 사업부, Div 82)는 원 결함의 조건이라 무시합니다."
+  },
+  {
+   "refs": [
+    "DM-70"
+   ],
+   "target": "그리드 콤보 셀 Key-in 입력 시 후보 외 값 차단",
+   "condition": "신규 행에서 상위 콤보(예: Sales Site)를 고르고 하위 콤보 셀(예: Sales Company·Sales Plant)을 선택한 뒤 직접 Key-in",
+   "expected": "콤보 셀(Sales Company·Sales Plant 등)은 Key-in으로 직접 입력한 후보 외 값이 저장되지 않도록 막거나 검증한다.",
+   "why": "입력 방식이 붙여넣기가 아니라 직접 Key-in이고 신규 행에서 상위 콤보와 연동되는 조건도 있어 확인 동작이 다르므로, 검사가 빠지지 않도록 따로 둡니다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:58",
+ "cost": 0.0420292
+}

@@ -1,0 +1,123 @@
+{
+ "rule_id": "K2",
+ "hash": "0ec62070ab33400a",
+ "groups": [
+  {
+   "rows": [
+    "V-0d13579b",
+    "V-70de9f3e",
+    "V-7c637198",
+    "V-a138cffc"
+   ],
+   "why": "All four check the same thing: the Measures in the search result appear in the saved Measure Setting order."
+  },
+  {
+   "rows": [
+    "V-413a3bee",
+    "V-e4846293"
+   ],
+   "why": "Same target (Save/OK in the column and Measure Setting popups), same condition (no changes) and same expected result (no re-search)."
+  },
+  {
+   "rows": [
+    "V-c3c535ba",
+    "V-df4735ba"
+   ],
+   "why": "Same check: a user with no saved personalization switches Div and gets that Div's UI Category Default columns and Measures."
+  },
+  {
+   "rows": [
+    "EG-45863dbe"
+   ],
+   "why": "The target is 'clear after save' but the expected result is 'Column button', which matches no other row, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-038b8c0b"
+   ],
+   "why": "It is the only row that saves personalization with a required column removed in one Div and then checks another Div."
+  },
+  {
+   "rows": [
+    "V-0ace5923"
+   ],
+   "why": "Its mixed expectations (row count matches AS-IS, Team shown as Name, columns follow the popup settings) are not shared by any other row."
+  },
+  {
+   "rows": [
+    "V-13c892dd"
+   ],
+   "why": "Only this row checks that the grid columns rebuild right away when Column Setting OK is pressed."
+  },
+  {
+   "rows": [
+    "V-152ab31c"
+   ],
+   "why": "Specific columns: VERSION removed from the setting list, and AS FROM SITE hidden for Div 40."
+  },
+  {
+   "rows": [
+    "V-3a7b3779"
+   ],
+   "why": "Checks whether specific Measures are in the Measure Setting list for each Div (VMI and MKT FCST AMT), which no other row does."
+  },
+  {
+   "rows": [
+    "V-3fa0f08f"
+   ],
+   "why": "Only checks that the Default button restores the default columns; it does not include V-588c6a7f's save → close → reopen state, so kept separate."
+  },
+  {
+   "rows": [
+    "V-588c6a7f"
+   ],
+   "why": "Checks two things after save → close → reopen: the new tab is kept, and Default means the original default. Neither the state nor the expected result matches V-3fa0f08f."
+  },
+  {
+   "rows": [
+    "V-709e3edf"
+   ],
+   "why": "Same red, locked required-column check as V-c6b9a0fc, but it also expects user-selected columns to appear in the result, so it is not grouped to avoid dropping that check."
+  },
+  {
+   "rows": [
+    "V-c6b9a0fc"
+   ],
+   "why": "The condition is a Div 40→81→40 switch and the expected result covers only red required columns and the multilingual message, so it is not the same as V-709e3edf."
+  },
+  {
+   "rows": [
+    "V-84b75f4c"
+   ],
+   "why": "Checks the state right after opening the screen, before Search: the setting candidates are re-queried when Division is auto-selected. No other row checks this state."
+  },
+  {
+   "rows": [
+    "V-9087ddfa"
+   ],
+   "why": "Expects the Measure Setting button to be removed. That is the opposite of the Measure order rows, which assume the button exists."
+  },
+  {
+   "rows": [
+    "V-b12a0804"
+   ],
+   "why": "Only this row checks that internal columns such as COL_LIST are not shown in the search grid."
+  },
+  {
+   "rows": [
+    "V-b685dddf"
+   ],
+   "why": "This screen rule bundles several items into one expected result, so it does not match any single row exactly."
+  },
+  {
+   "rows": [
+    "V-f56699b2"
+   ],
+   "why": "Only this row checks the Measure name 'MKT FCST[R+P]'."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:21:52",
+ "cost": 0.08472299999999999
+}

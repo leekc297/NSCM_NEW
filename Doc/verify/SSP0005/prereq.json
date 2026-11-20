@@ -1,7 +1,7 @@
 {
  "menu_id": "SSP0005",
  "asis_id": "SSP0005",
- "generated": "2026-11-19 13:52:26",
+ "generated": "2026-11-20 09:59:48",
  "rc": 0,
  "items": [
   {
@@ -23,7 +23,7 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "4.9시간 전 export(기준 12시간)"
+   "evidence": "9.4시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
@@ -49,9 +49,9 @@
   {
    "key": "golden",
    "what": "골든 케이스(golden_cases.csv)",
-   "status": "DONE",
-   "producer": "tools/DbConn/gen_golden_cases.py <ID>",
-   "evidence": "4건 생성 (GET 3 · SAVE 1) · rc=0 · 1s · 골든 케이스 276건 → C:\\Projects\\NSCM\\Doc\\golden\\golden_cases.csv (To-Be 매칭 220 / 파라미터 완비 30 / 수동보존 12) · TO-BE PROC 미매칭 1건(SSP0005:SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "4건 있음 · TO-BE PROC 미매칭 1건(SSP0005:SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
   },
   {
    "key": "e2e_plan",
@@ -63,16 +63,16 @@
   {
    "key": "e2e_spec",
    "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
-   "status": "DONE",
-   "producer": "tools/E2E/gen-e2e.js <ID>",
-   "evidence": "rc=0 · 0s · SSP0005 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 없음)) → 계정 1: jinhuannj SSP0005 → SSP0005 smoke/crud(read-only)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 28화면/32행)"
+   "status": "OK",
+   "producer": "tools/E2E/gen-e2e.js",
+   "evidence": "최신"
   },
   {
    "key": "smoke",
    "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
    "status": "DONE",
    "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
-   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 91s · failed [chromium] › ..\\..\\Doc\\e2e\\specs\\SSP0005.smoke.spec.ts:11:7 › SSP0005 ShipmentWorkingDay 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 2 passed (1.3m) # E2E 결과 — 2026-11-19 13:52 테스트 3 · PASS 2 · FAIL 1 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0005\\run_20261119_135056_smoke.log"
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 94s · failed [chromium] › ..\\..\\Doc\\e2e\\specs\\SSP0005.smoke.spec.ts:11:7 › SSP0005 ShipmentWorkingDay 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 2 passed (1.4m) # E2E 결과 — 2026-11-20 09:59 테스트 6 · PASS 4 · FAIL 2 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0005\\run_20261120_095814_smoke.log"
   }
  ]
 }

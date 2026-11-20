@@ -1,0 +1,59 @@
+{
+ "rule_id": "DB-SYN",
+ "hash": "156588948a407e72",
+ "groups": [
+  {
+   "rows": [
+    "V-89afd97d",
+    "V-903f28b4"
+   ],
+   "why": "Both rows check that the DB objects SCMP_APP uses (PKG, tables/views, synonyms, privileges) and the menu, PROC_M and SHEET_COLUMNS metadata exist and are VALID. Both expect a missing or broken object to stop the test and show up under 'action needed' item 1 instead of as a defect."
+  },
+  {
+   "rows": [
+    "EG-7159be79"
+   ],
+   "why": "This row runs a static check on PKG_SSP0014 for TB_FX_* references and a valid ATTRIBUTE9 combo SQL_ID. No other row checks both of these on the same package."
+  },
+  {
+   "rows": [
+    "V-408cbf90"
+   ],
+   "why": "This row checks TB_FX_* user-table references in other packages (PKG_DMF0003 and others) and also expects the SCM_ADM_* tables to be used. Its target and expected result differ from the PKG_SSP0014 check."
+  },
+  {
+   "rows": [
+    "T-34d5b51b"
+   ],
+   "why": "This trace row only follows the separate SP PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK (row 3 of the comparison sheet), so no other row has the same target."
+  },
+  {
+   "rows": [
+    "T-40339ab5"
+   ],
+   "why": "This trace row only follows the separate SP PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP (row 1 of the comparison sheet)."
+  },
+  {
+   "rows": [
+    "T-447b36eb"
+   ],
+   "why": "This trace row follows the ProgressForm(FindData/SaveData) row element, which is a different element type from the SP trace rows."
+  },
+  {
+   "rows": [
+    "T-7e9aebc2"
+   ],
+   "why": "This trace row only follows the lookup SP SSP0014_GET_SHIPMENT_MODEL_PIC (row 4 of the comparison sheet)."
+  },
+  {
+   "rows": [
+    "T-a910edb5"
+   ],
+   "why": "This trace row only follows the save SP SSP0014_SAVE_SHIPMENT_MODEL_PIC (row 2 of the comparison sheet), which is a different object from the lookup SP."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:13:12",
+ "cost": 0.06291780000000001
+}

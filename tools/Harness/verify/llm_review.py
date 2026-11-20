@@ -51,6 +51,43 @@ RX_AGG = re.compile(r'^(\[[^\]]*\]\s*|실측\[[A-Z]+-[0-9a-f]+\]: )*(행 집계|
 RX_USER = re.compile(r'^(\[사용자판정\]|\[사용자의견|\[정적 판정\] \[사용자 확정)')
 RX_GATE = re.compile(r'^(\[(증거 부족|보류 규칙)[^\]]*\]\s*)+')
 RX_STAMP = re.compile(r'@?\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?|\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2})?')
+SWEEP_TAIL = ' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)'   # judge 판정필요 정리(REVIEW_SWEEP)가 판정필요를 ERROR 로 바꿀 때 붙이는 꼬리
+# 2026-11-20 A1: AI 가 원문을 읽어도 풀 수 없는 미검증 — 다시 재야 답이 나온다(unverified_classes.csv 담당). 이 행은 판정 검토에 보내지 않는다
+REMEASURE_ACTORS = ('엔진', '자동', '사람', '보완', '집계')
+JUDGE_ACTORS = ('판단',)            # 판정 대기(기계가 결론을 못 낸 비교) — 판정필요와 같게 본다
+SAME_MAX = 30                       # A3 한 항목에 싣는 같은 증거 행 상한
+_CLS = None
+
+
+def uv_class(ev):
+    """(분류, 담당) — unverified_resolve.classify 와 같은 표(unverified_classes.csv)"""
+    global _CLS
+    try:
+        import unverified_resolve as _ur
+        if _CLS is None:
+            _CLS = _ur.load_classes()
+        c, a, _ = _ur.classify(ev, _CLS)
+        return c, a
+    except Exception:
+        return '미분류', '엔진'
+
+
+def eff_result(r):
+    """판정 검토가 보는 결과. ERROR 중 판정 대기 행(판정필요 정리 꼬리 · 분류표 담당 '판단')은 판정필요로 본다(2026-11-20 A2 · 사용자 승인 결정 1)"""
+    cur = r.get('result') or ''
+    if cur != 'ERROR':
+        return cur
+    ev = r.get('evidence') or ''
+    c, a = uv_class(ev)
+    return '판정필요' if a in JUDGE_ACTORS else 'ERROR'
+
+
+def remeasure_reason(r):
+    """재측정으로만 풀리는 미검증 행이면 사유, 아니면 ''"""
+    if (r.get('result') or '') != 'ERROR':
+        return ''
+    c, a = uv_class(r.get('evidence') or '')
+    return f'재측정 대상({c}·{a}) — AI 판정 대상 아님' if a in REMEASURE_ACTORS else ''
 
 
 def P(*a):
@@ -216,7 +253,17 @@ def facts_findings(mid, limit=20):
             for x in read_csv(P('Doc', 'verify', mid, 'llm_facts.csv')) if x.get('verified') == 'Y'][:limit]
 
 
-def row_brief(r):
+def row_brief(r, v1=False):
+    f = lambda k, n: (r.get(k) or '').replace('\r', ' ').strip()[:n]
+    b = row_brief_v1(r)
+    if not v1 and eff_result(r) != (r.get('result') or ''):
+        b['state'] = '판정 대기(기계가 비교는 했으나 결론을 못 냄) — 판정필요 행과 같이 판단'
+    if not v1 and r.get('_same'):
+        b['same_rows'] = r['_same']
+    return b
+
+
+def row_brief_v1(r):
     f = lambda k, n: (r.get(k) or '').replace('\r', ' ').strip()[:n]
     return {'row_id': r['row_id'], 'source': r.get('source', ''), 'rule_id': r.get('rule_id', ''), 'result': r.get('result', ''),
             'target': f('target', 200), 'condition': f('condition', 200), 'expected': f('expected', 500), 'asis_ref': f('asis_ref', 300),
@@ -269,8 +316,14 @@ PROMPT_TAIL = """
 {"items":[{"row_id":"…","class":"실결함|검사기오판|TOBE룰|데이터차이|추출오류|확인불가","verdict":"FAIL|PASS|NA|판정필요","confidence":"높음|보통|낮음","evidence":[{"ref":"경로:줄","quote":"원문"}],"rule_ref":"등록 룰 번호 또는 빈 값","reason":"…","fix_hint":"…","general":"Y|N"}]}"""
 
 
-def build_prompt(mid, ctx, chunk):
-    head = PROMPT_HEAD.format(mid=mid, asis_id=ctx['asis_id'], asis_files=' · '.join(ctx['asis_files']) or '(files.csv 없음 — GSCM/ 에서 화면 ID 로 Glob)',
+PROMPT_ADD_HEAD = ("- state 가 '판정 대기'인 ERROR 행은 기계가 비교를 했지만 결론을 못 낸 행이다. 판정필요 행과 같이 판단한다.\n"
+                   "- same_rows 가 있는 행은 같은 규칙에서 증거 문장이 같은 행 묶음이다. 대상(target)을 모두 보고, 같은 판단이 모든 행에 맞으면 same=\"Y\", 다른 행이 있으면 그 row_id 를 except 에 적는다.\n")
+PROMPT_HEAD2 = PROMPT_HEAD.replace('## 근거 규칙', PROMPT_ADD_HEAD + '\n## 근거 규칙', 1)   # 2026-11-20 A2·A3
+PROMPT_TAIL2 = PROMPT_TAIL.replace('"general":"Y|N"}]}', '"general":"Y|N","same":"Y|N(same_rows 있을 때만)","except":["same_rows 중 이 판단이 맞지 않는 row_id"]}]}', 1)
+
+
+def build_prompt(mid, ctx, chunk, v1=False):
+    head = (PROMPT_HEAD if v1 else PROMPT_HEAD2).format(mid=mid, asis_id=ctx['asis_id'], asis_files=' · '.join(ctx['asis_files']) or '(files.csv 없음 — GSCM/ 에서 화면 ID 로 Glob)',
                               facts_dir=ctx['facts_dir'], page_dir=ctx['page_dir'] or '(nscm-fe/features/**/pages 에서 화면 ID 로 Grep)', verify_dir=ctx['verify_dir'])
     parts = [head, '## 검사기 결함 유형(지금까지 확인된 오판 원인)', ' / '.join(defect_types()) or '(없음)', '']
     for rid in sorted({r.get('rule_id') or '' for r in chunk}):
@@ -282,8 +335,14 @@ def build_prompt(mid, ctx, chunk):
     ff = facts_findings(mid)
     if ff:
         parts += ['## AS-IS 사실 추출 검토 후보(추출본이 원문과 다른 곳 — 원문 인용 확인됨. 이 컬럼·컨트롤이 걸린 행은 기대값이 틀렸는지 먼저 본다)', *['- ' + x for x in ff], '']
-    parts += ['## 검토할 행', json.dumps([row_brief(r) for r in chunk], ensure_ascii=False, indent=1), PROMPT_TAIL]
+    parts += ['## 검토할 행', json.dumps([row_brief(r, v1=v1) for r in chunk], ensure_ascii=False, indent=1), PROMPT_TAIL if v1 else PROMPT_TAIL2]
     return '\n'.join(parts)
+
+
+def row_key(ctx, r):
+    """2026-11-20 A5 행 기억 키 — 행 내용 + 그 규칙의 TO-BE 룰 + AS-IS 화면 ID"""
+    b = row_brief(dict(r, _same=None))
+    return llm_call.key_of('judge-row2', json.dumps([ctx.get('asis_id'), b, rules_for(r.get('rule_id') or '')], ensure_ascii=False, sort_keys=True))
 
 
 def chunks(targets, n):
@@ -314,7 +373,7 @@ def is_asis_ref(ref):
 
 def decide(r, it):
     """답 1건 → llm_review.csv 행(인용 확인 · 반영 여부)"""
-    cur = r.get('result') or ''
+    cur = eff_result(r)
     cls = it.get('class') if it.get('class') in CLASSES else '확인불가'
     ver = it.get('verdict') if it.get('verdict') in VERDICTS else cur
     evs = [e for e in (it.get('evidence') or []) if isinstance(e, dict)]
@@ -331,8 +390,12 @@ def decide(r, it):
         why = '근거 없음'
     elif not ok_any:
         why = '인용 미확인'
+    elif cur == 'ERROR' and ver != 'NA':
+        why = '미검증 행은 NA(대상 없음 근거)만 반영'
+    elif cur == 'ERROR' and not (cls in ('검사기오판', 'TOBE룰', '추출오류') and (ok_asis or (rule_ok and ok_any))):
+        why = '미검증 행 NA 는 AS-IS 원문 인용 또는 등록 룰 번호 필요'
     elif cur == 'ERROR':
-        why = '미검증 행은 의견만(판정 반영 안 함)'
+        apply, why = 'Y', ('AS-IS 원문 인용 확인' if ok_asis else f'등록 룰 {rule_ref} + 인용 확인') + ' · 대상 없음(미검증 → NA)'
     elif ver == cur:
         why = '판정 같음'
     elif cls == '확인불가':
@@ -402,16 +465,94 @@ def run(mid, dry=False, from_file=None):
         print(f'[ERROR] 원장 없음: Doc/verify/{mid}/verify_ledger.csv'); return 0
     cand = [r for r in rows if (r.get('result') or '') in TARGET]
     out, targets = [], []
+    # 2026-11-20 중복 정리 G2(dedup_screen.py · AI 판단 목록): 같은 확인으로 묶인 구성원은 대표 행만 검토한다(대표 결과가 같거나 대표도 검토 대상일 때)
+    try:
+        import dedup_screen as _dd; _dup = _dd.load_map(mid)
+    except Exception:
+        _dup = {}
+    _by = {r['row_id']: r for r in rows}
+    # 2026-11-20 구간 B: 기준 원장의 같은 확인 구성원(대표 행이 따로 있음)은 대표만 검토
+    _crit_mem = {x['row_id']: x.get('crit_id', '') for x in read_csv(P('Doc', 'verify', mid, 'criteria', 'row_map.csv')) if x.get('role') == '구성원'}
     for r in cand:
         why = skip_reason(r)
+        _rep = _by.get(_dup.get(r['row_id'], ''))
+        if not why and _rep and ((_rep.get('result') or '') in TARGET or _rep.get('result') == r.get('result')):
+            why = f"중복 정리 구성원(대표 {_rep['row_id']} 를 검토)"
+        if not why and r['row_id'] in _crit_mem:
+            why = f"기준 원장 같은 확인 구성원({_crit_mem[r['row_id']]} 대표를 검토)"
         if why:
             out.append(blank(r, '검토 제외', why))
         else:
             targets.append(r)
     c = llm_call.cfg(); n = max(1, int(c.get('llmReviewBatch') or 6))
-    ch = chunks(targets, n); ctx = screen_ctx(mid)
-    print(f'[AI 검토] 대상 {len(cand)}행(FAIL·판정필요·미검증) · 검토 {len(targets)}행 · 검토 제외 {len(cand) - len(targets)}행 · 묶음 {len(ch)}개(묶음당 {n}행)', flush=True)
-    meta = {'calls': 0, 'cached': 0, 'failed': 0, 'cost': 0.0, 'chunks': len(ch)}
+    ctx = screen_ctx(mid)
+    # 2026-11-20 C4 행 단위 답 기억: 행 1개만 넣은 프롬프트(행 내용 + 그 규칙의 TO-BE 룰·지난 판정 + 결함 유형 + 사실 검토 후보)의 해시가 같으면 지난 답을 그대로 쓴다.
+    #   종전 묶음 단위 기억은 행 하나가 늘거나 줄면 뒤 묶음 경계가 밀려 전부 다시 물었다. 같은 입력 = 같은 답이므로 판정 반영 규칙(decide)은 그대로
+    rc_p = os.path.join(llm_call.vdir(mid), 'llm_rowcache.json')
+    try:
+        rowcache = json.load(open(rc_p, encoding='utf-8'))
+    except (OSError, ValueError):
+        rowcache = {}
+    # 2026-11-20 A5: 키 = 행 내용 + 그 규칙의 TO-BE 룰 + AS-IS 화면 ID(결함 유형표·사실 후보·지난 판정은 실행마다 바뀌어 기억을 깨므로 뺀다). 종전 키(v1)로 저장된 답도 찾는다
+    rkey = {r['row_id']: row_key(ctx, r) for r in targets}
+    hit = []
+    for r in targets:
+        if from_file:
+            break
+        k = rkey[r['row_id']]
+        if k not in rowcache:
+            k1 = llm_call.key_of('judge-row', build_prompt(mid, ctx, [r], v1=True))
+            if k1 in rowcache:
+                rowcache[k] = rowcache[k1]
+        if k in rowcache:
+            hit.append(r)
+    targets = [r for r in targets if r not in hit]
+    for r in hit:
+        out.append(decide(r, rowcache[rkey[r['row_id']]]))
+    # 2026-11-20 A1: 재측정으로만 풀리는 미검증 행은 새로 묻지 않는다(기억된 답이 있으면 위에서 이미 반영 · 호출 비용 없음)
+    for r in [x for x in targets if remeasure_reason(x)]:
+        out.append(blank(r, '검토 제외', remeasure_reason(r)))
+    targets = [x for x in targets if not remeasure_reason(x)]
+    # 2026-11-20 A3: 같은 규칙·같은 증거·같은 판정 대기 상태 행은 대표 1행으로 묻는다(대상 목록은 same_rows 로 보임). 예외로 답한 행은 llm_solo.json 에 남겨 다음 실행에 단독으로 묻는다
+    solo_p = os.path.join(llm_call.vdir(mid), 'llm_solo.json')
+    try:
+        solo = set(json.load(open(solo_p, encoding='utf-8')))
+    except (OSError, ValueError):
+        solo = set()
+    grp = {}
+    for r in sorted(targets, key=lambda x: x['row_id']):
+        g = (r.get('rule_id') or '', ev_hash(r.get('evidence')), eff_result(r)) if r['row_id'] not in solo else ('', r['row_id'], '')
+        grp.setdefault(g, []).append(r)
+    members = {}
+    reps = []
+    for g, rs in grp.items():
+        rep = rs[0]; rest = rs[1:SAME_MAX + 1]
+        if rest:
+            rep = dict(rep, _same=[{'row_id': x['row_id'], 'target': (x.get('target') or '')[:160]} for x in rest]); members[rep['row_id']] = rest
+        reps.append(rep)
+        for x in rs[SAME_MAX + 1:]:   # 상한 넘는 행은 다음 실행에서(같은 묶음의 대표 답이 기억되므로 그때 상속)
+            out.append(blank(x, '미검토', f'같은 증거 묶음 {SAME_MAX + 1}행 초과 — 다음 실행'))
+    n_same = sum(len(v) for v in members.values())
+    targets = reps
+    rk_lock = __import__('threading').Lock()
+
+    def _remember(r, it):
+        """답 1건마다 행 기억 저장(중단돼도 다음 실행이 재사용)"""
+        if from_file or not it:
+            return
+        with rk_lock:
+            rowcache[rkey.get(r['row_id']) or row_key(ctx, r)] = it
+            try:
+                tmp = rc_p + '.tmp'; json.dump(rowcache, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False); os.replace(tmp, rc_p)
+            except OSError:
+                pass
+    if hit:
+        print(f'[AI 검토] 행 단위 기억 재사용 {len(hit)}행(입력 같음) · 새로 물을 행 {len(targets)}', flush=True)
+    ch = chunks(targets, n)
+    n_skip = sum(1 for x in out if x['class'] in ('검토 제외', '미검토'))
+    n_remeasure = sum(1 for x in out if (x.get('apply_why') or '').startswith('재측정 대상'))
+    print(f'[AI 검토] 대상 {len(cand)}행(FAIL·판정필요·미검증) · 새로 검토 {len(targets)}행(같은 증거 행 {n_same}행 함께) · 기억 재사용 {len(hit)}행 · 검토 제외 {n_skip}행(재측정 대상 {n_remeasure}) · 묶음 {len(ch)}개(묶음당 {n}행)', flush=True)
+    meta = {'calls': 0, 'cached': 0, 'failed': 0, 'cost': 0.0, 'chunks': len(ch), 'same': n_same, 'remeasure_skip': n_remeasure, 'row_hit': len(hit)}
     if dry:
         for i, g in enumerate(ch, 1):
             p = build_prompt(mid, ctx, g)
@@ -420,29 +561,82 @@ def run(mid, dry=False, from_file=None):
     from_data = None
     if from_file:
         from_data = llm_call.parse_json(open(from_file, encoding='utf-8-sig').read()) or {}
-    for i, g in enumerate(ch, 1):
-        prompt = build_prompt(mid, ctx, g)
+    # 2026-11-20 C3 동시 호출(harness.json llmReviewPar · 기본 4) · C5 답 JSON 해석 실패는 1번 다시 요청. 결과 순서와 반영 규칙은 종전과 같다(묶음 번호 순으로 처리)
+    import concurrent.futures as _cf, threading as _th
+    try:
+        _par = max(1, int(c.get('llmReviewPar') or 4))
+    except (TypeError, ValueError):
+        _par = 4
+    _plock = _th.Lock(); _pdone = [0]
+
+    def _ask(ig):
+        i, g = ig; prompt = build_prompt(mid, ctx, g)
         if from_data is not None:
-            res = {'ok': True, 'data': from_data, 'cached': False, 'cost': 0.0, 'why': ''}
-        else:
-            print(f"  · AI 판정 검토 묶음 {i}/{len(ch)} — {len(g)}행 · 규칙 {','.join(sorted({x.get('rule_id') or '' for x in g}))}", flush=True)
-            res = llm_call.ask(mid, 'judge', prompt, rows=len(g))
+            return i, g, {'ok': True, 'data': from_data, 'cached': False, 'cost': 0.0, 'why': ''}
+        res = llm_call.ask(mid, 'judge', prompt, rows=len(g) + sum(len(members.get(x['row_id'], [])) for x in g))
+        if not res['ok'] and '해석 실패' in (res.get('why') or ''):
+            res = llm_call.ask(mid, 'judge', prompt, rows=len(g), use_cache=False)
+            if not res['ok']: res['why'] = '다시 요청 뒤에도 ' + (res.get('why') or '')
+        with _plock:
+            _pdone[0] += 1
+            print(f"  · AI 판정 검토 묶음 {_pdone[0]}/{len(ch)} — {len(g)}행 · 규칙 {','.join(sorted({x.get('rule_id') or '' for x in g}))}{' · 캐시' if res.get('cached') else ''}", flush=True)
+        if res.get('ok'):
+            _its = {str(it.get('row_id') or ''): it for it in ((res['data'] or {}).get('items') or []) if isinstance(it, dict)}
+            for r in g:
+                _remember(r, _its.get(r['row_id']))
+        return i, g, res
+    with _cf.ThreadPoolExecutor(max_workers=_par if from_data is None else 1) as _ex:
+        _answers = list(_ex.map(_ask, list(enumerate(ch, 1))))
+    print(f"[AI 검토] 동시 {_par} · 묶음 {len(ch)}개 처리 끝", flush=True)
+    nochange = 0; new_solo = set()
+    for i, g, res in _answers:
         if not res['ok']:
             meta['failed'] += 1
             print(f"[WARN] AI 검토 묶음 {i} 결과 없음 — {res['why']} · 기계 판정 유지", flush=True)
             out += [blank(r, '미검토', res['why'][:120]) for r in g]
+            out += [blank(x, '미검토', '대표 행 결과 없음') for r in g for x in members.get(r['row_id'], [])]
             continue
+        _n0 = sum(1 for x in out if x.get('apply') == 'Y')
         meta['cached' if res.get('cached') else 'calls'] += 1; meta['cost'] += float(res.get('cost') or 0)
         items = {str(it.get('row_id') or ''): it for it in ((res['data'] or {}).get('items') or []) if isinstance(it, dict)}
         for r in g:
             it = items.get(r['row_id'])
             out.append(decide(r, it) if it else blank(r, '미검토', '답에 이 행이 없음'))
+            if it and not from_file:
+                rowcache[rkey[r['row_id']]] = it
+            # A3 같은 증거 행: 대표 답이 같다고 한 행은 같은 답으로 판정(인용은 대표 답 그대로 확인) · 예외 행은 다음 실행에 단독
+            ex = {str(x) for x in ((it or {}).get('except') or [])} if it else set()
+            same_ok = bool(it) and str(it.get('same') or 'Y').upper().startswith('Y')
+            for x in members.get(r['row_id'], []):
+                if it and same_ok and x['row_id'] not in ex:
+                    d_ = decide(x, dict(it, row_id=x['row_id'])); d_['reason'] = (f"[대표 {r['row_id']} 와 같은 증거] " + d_['reason'])[:900]; out.append(d_)
+                    if not from_file:
+                        rowcache[rkey.get(x['row_id']) or row_key(ctx, x)] = dict(it, row_id=x['row_id'])
+                else:
+                    out.append(blank(x, '미검토', f"대표 {r['row_id']} 와 판단이 다름 — 다음 실행에 단독 검토" if it else '대표 행 답 없음')); new_solo.add(x['row_id'])
+        if sum(1 for x in out if x.get('apply') == 'Y') == _n0 and not res.get('cached'):
+            nochange += 1
+    if not from_file and not dry:
+        try:
+            tmp = rc_p + '.tmp'; json.dump(rowcache, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False); os.replace(tmp, rc_p)
+        except OSError as _e:
+            print(f'[WARN] 행 단위 기억 저장 실패: {_e}', flush=True)
+        if new_solo:
+            try:
+                json.dump(sorted(solo | new_solo), open(solo_p, 'w', encoding='utf-8'), ensure_ascii=False)
+            except OSError:
+                pass
     order = {r['row_id']: k for k, r in enumerate(cand)}
     out.sort(key=lambda x: order.get(x['row_id'], 10 ** 9))
     j = write_out(mid, out, meta)
     if len(out) != len(cand):
         print(f'[ERROR] 행 수 불일치: 대상 {len(cand)} ≠ 기록 {len(out)}')
     print(f"[AI 검토] 묶음 {len(ch)} · 행 {j['reviewed']} · 근거 확인 {j['verified']} · 판정 반영 {j['apply']} · 엔진 보완 대상 {j['engine_fix']} · 미검토 {j['unreviewed']} · 호출 {meta['calls']}(캐시 {meta['cached']} · 실패 {meta['failed']}) · 비용 ${meta['cost']:.4f}", flush=True)
+    if not from_file:
+        w_ = llm_call.log_effect(mid, 'judge', calls=meta['calls'], cached=meta['cached'] + len(hit), applied=j['apply'], nochange_calls=nochange,
+                                 skipped_rows=n_remeasure, note=f"같은 증거 함께 {n_same}행 · 실패 {meta['failed']}")
+        if w_:
+            print(w_, flush=True)
     print(f'@@LINK 🧠 AI 판정 검토|Doc/verify/{mid}/llm_review.md', flush=True)
     return 0
 
@@ -523,7 +717,17 @@ def selftest():
     d = decide(r0, {'class': '검사기오판', 'verdict': 'PASS', 'evidence': []})
     chk('반영 — 근거 없음 불가', d['apply'] == 'N' and d['apply_why'] == '근거 없음')
     d = decide({'row_id': 'V-2', 'result': 'ERROR', 'evidence': 'x'}, {'class': '검사기오판', 'verdict': 'NA', 'evidence': good})
-    chk('반영 — 미검증 행은 의견만', d['apply'] == 'N' and d['class'] == '검사기오판')
+    chk('반영 — 미검증 행 NA 는 AS-IS 원문·룰 근거 필요', d['apply'] == 'N' and d['class'] == '검사기오판')
+    d = decide({'row_id': 'V-2', 'result': 'ERROR', 'evidence': 'x'}, {'class': '검사기오판', 'verdict': 'PASS', 'evidence': good})
+    chk('반영 — 미검증 행은 PASS 로 바꾸지 않음', d['apply'] == 'N')
+    sw = {'row_id': 'V-4', 'result': 'ERROR', 'evidence': '헤더 글자 잘림' + SWEEP_TAIL}
+    chk('판정 대기 — 판정필요 정리 꼬리 = 판정필요', eff_result(sw) == '판정필요' and remeasure_reason(sw) == '')
+    chk('재측정 대상 — 검사기 공백은 AI 에 보내지 않음', remeasure_reason({'result': 'ERROR', 'evidence': '[측정 경로 없음] 서버 콤보'}) != '')
+    chk('재측정 대상 — 시간 초과', remeasure_reason({'result': 'ERROR', 'evidence': 'locator.click Timeout 5000ms'}) != '')
+    chk('재측정 대상 아님 — FAIL', remeasure_reason({'result': 'FAIL', 'evidence': '[측정 경로 없음]'}) == '')
+    k1 = row_key({'asis_id': 'Z'}, {'row_id': 'V-9', 'rule_id': 'A1', 'result': 'FAIL', 'evidence': '값 다름 @11-19 10:00'})
+    k2 = row_key({'asis_id': 'Z'}, {'row_id': 'V-9', 'rule_id': 'A1', 'result': 'FAIL', 'evidence': '값 다름 @11-20 09:00'})
+    chk('행 기억 키 — 시각만 다르면 같음', k1 == k2)
     d = decide(r0, {'class': '데이터차이', 'verdict': '판정필요', 'evidence': good})
     chk('반영 — 데이터 차이 FAIL → 판정필요', d['apply'] == 'Y')
     d = decide(r0, {'class': '실결함', 'verdict': 'FAIL', 'evidence': good})

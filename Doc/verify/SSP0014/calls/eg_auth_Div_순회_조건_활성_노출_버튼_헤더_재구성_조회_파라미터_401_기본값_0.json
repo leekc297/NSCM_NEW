@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 513,
+  "at": "2026-11-20T00:30:59.393Z",
+  "user": "minyonglee1",
+  "test": "Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7672,
+  "dur": 546,
+  "at": "2026-11-20T00:31:09.755Z",
+  "user": "minyonglee1",
+  "test": "Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 5160,
+  "dur": 394,
+  "at": "2026-11-20T00:31:11.745Z",
+  "user": "minyonglee1",
+  "test": "Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7672,
+  "dur": 500,
+  "at": "2026-11-20T00:31:13.943Z",
+  "user": "minyonglee1",
+  "test": "Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값"
+ }
+]

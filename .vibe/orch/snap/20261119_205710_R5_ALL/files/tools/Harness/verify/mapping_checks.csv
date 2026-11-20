@@ -1,0 +1,72 @@
+﻿type,scope,pattern,checks,meaning
+EXCL,STATUS,^(제외|해당없음|N/A),X-REASON,제외·해당없음 행 — 사유·근거(룰·사용자 지시·AS-IS 원문·이동 위치)가 있는지 + 이동한 기능이면 이동 위치에서 동작
+NOTIMPL,STATUS,^미구현,X-NOTIMPL,미구현 행 — 구현 대상(FAIL로 집계). 구현 후 아래 유형 검증으로 전환
+CRUD_MATRIX,FE,"^CRUD:",F1;F5;J2,CRUD 매트릭스 행 — 실저장→재조회→DB·상태 표시·권한별 버튼
+MODAL,FE,"^MODAL:|ShowDialog|모달 ?(열림|호출|팝업)",H6;M3;M4,팝업(모달) — 표준·내부 기능·선택값 반영
+COMMON_UC,FE,^COMMON:UC|UI 공통\(통합테스트\),K4;H10;G3,UI 공통 체크 축 — 버튼 구성·메시지 표준·조회조건 저장/복원
+COND_PANEL,FE,usrConditionPanel|UsrConditionPanel|SearchArea,K-SA;G3,조회영역 토글·조회조건 저장/복원
+COND_CTL,FE,"§1\s+(cbo|clb|txt|chk|rdo|rgrp|drp|dt|usr)\w*\s*/|조회조건",G4;SC1;G1;G6,조회조건 컨트롤 — 표시·라벨·순서·값 변경→조회 반영·초기값
+COND_COMBO,FE,"§1\s+(cbo|clb)\w*\s*/",B1;B2;B4;B6,조회조건 콤보 — 후보(빈행·중복·AS-IS 원천)·ALL/다중 사양
+GRID_DEF,FE,"§1\s+spd\w*\s*/|FpSpread|SheetView|DataGrid|그리드|시트",A5;H5;H2,그리드 정의 — 표시 컬럼·라벨·색
+EVT_CASCADE,FE,SelectedIndexChanged|ItemCheck|EditValueChanged|CheckedChanged|SetChangeControl|ValueChanged,C1;C4,조회조건 연쇄 — 상위 변경→하위 후보·초기화·그리드 상태
+EVT_POPUP,FE,CellDoubleClick|ButtonClicked|btn\w*Srch|Popup|팝업,H6;G5;M4,셀/버튼 팝업 — 표준·인자 연동·선택값 반영
+EVT_PASTE,FE,ClipboardPasted|Paste|붙여넣기,F3;E1;C3,붙여넣기 — 값·검증·연쇄·저장 경로
+EVT_GRIDCOMBO,FE,ComboSelChange|ComboCloseUp|cellEditEnded|handleCellEdit|dsdm\.Changed|SpdMain_Changed|DataModel_Changed,C2;C3;C6,셀 변경 연쇄 — 하위 셀 후보·자동 채움·무변경 미발동
+EVT_SCROLL,FE,TopChange|LeftChange|Scroll,H2;H4,스크롤 시 색·레이아웃 유지
+CELL_NUM,FE,SetReNumerCellType|NumberCellType|NumberRules|소수|decimal|integerOnly|positiveOnly,E1,숫자 셀 — 소수자리·정수·부호·범위
+CELL_DATE,FE,DateCellType|YYYYMMDD|날짜,E2,날짜 셀 — 형식·유효성
+CELL_LOCK,FE,LockRange|LockColumn|SwitchLock|\bLock\b|잠금,D1;D3,편집 잠금 — 컬럼·행 조건부
+CELL_COMBO,FE,SetCellTypeCombo|ComboCellType|dataMap|셀 콤보,B1;B2;B4;D5;E5,셀 콤보 — 후보·에디터·후보 외 값 차단
+CELL_MERGE,FE,SmartColMerge|Merge|병합,H3,셀 병합
+CELL_COLOR,FE,SetFGColor|SetBGColor|ForeColor|BackColor|색,H2,배경·글자색 규칙
+CELL_VISIBLE,FE,Visible\s*=|Hidden|ColumnVisible|숨김,A5,컬럼 표시 여부
+CELL_SETVALUE_CASCADE,FE,"SetValue\s*/\s*\((e\.Row|iRow|i,|nViewRow)|SetText\s*/\s*\((e\.Row|iRow|i,|nViewRow|ROUTE|TRANSPORT|PRIORITY|DAYS_|LT_|DIS_)|dr\[",C3,연쇄·팝업 선택 자동 채움
+CELL_SETVALUE_DEFAULT,FE,SetValue|SetText|기본값,D4,신규행 기본값·자동세팅
+ENDPOINT_SAVE,FE,_SAVE_|SaveData|저장 SP,F1;F6;F4;DB-SYN,저장 SP — DB 반영·값 보존·SQL 오류 0·시노님/권한
+ENDPOINT_GET,FE,"§4a|_GET_|FindData|GetData|조회 SP",A1;A6;F4;DB-SYN,조회 SP — AS-IS 건수·SQL 오류 0·시노님/권한
+BTN_SAVE,FE,SaveButton|Save\b|저장,F1;F2;J2,저장 버튼 — DB 반영·1회 저장·권한
+BTN_INSERT,FE,InsertButton|Insert\b|AddRow|추가,D4;D6;J2,추가 버튼 — 전제·기본값·위치·권한
+BTN_DELETE,FE,DeleteButton|Delete\b|삭제,F1;F5;J2,삭제 버튼 — DB 반영·상태·권한
+BTN_EDIT,FE,EditButton|Edit\b|편집,D1;D3;J2,편집 모드 — 편집 구간·권한
+BTN_SEARCH,FE,FindButton|Search\b|조회,G1;A1;J2,조회 버튼 — 결과 반영·AS-IS 건수·권한
+MSG,FE,MSG\d{5}|GMessageBox|메시지,E4;I1;H10,메시지 — 발생 조건·등록·표준
+DATA_SRC,FE,BLUtils|Data\.Common|Lookup|GetDivision|Get\w*Site|COMBO_DATA|콤보 원천,B4;B3,콤보 원천 — AS-IS 원천 집합·정렬
+VALIDATION,FE,validation|검증|Validate,E3;E4,입력·업무 검증
+EXPRESSION,FE,expression|Expression|조건부,D3;H2,조건부 잠금·표현
+GENERIC,FE,.,X-ROW,기타 — 구현 위치 존재 + 해당 동작 확인
+A_WIRE,ACT,^(\.ctor|InitializeComponent|InitEvent)$,G03-WIRE,이벤트·컨트롤 배선 — AS-IS 이벤트가 TO-BE 핸들러로 전부 연결
+A_DISPOSE,ACT,^Dispose$,X-REOPEN,화면 닫기·재오픈 — 오류·잔존 상태 없음
+A_LOAD,ACT,^(Form_Load|InitControls|DefineProperty|Init\w*)$,G6;A10;G4,화면 초기화 — 조회조건 기본값·조회 전 그리드·표시
+A_GRIDDEF,ACT,^(CreateSpread|InitSpread|SetImageCell|SetSpread\w*)$,A5;H2;H5;D5,그리드 구성 — 컬럼·색·라벨·에디터
+A_FIND,ACT,^(FindButton|FindData\w*|Search\w*|Retrieve\w*)$,G1;A1;A6;F4,조회 — 결과 반영·AS-IS 건수·SQL 오류
+A_SAVE,ACT,^(SaveButton|SaveData\w*)$,F1;F2;F4;F6,저장 — DB 반영·1회·SQL 오류·값 보존
+A_INSERT,ACT,^InsertButton$,D4;D6,추가 — 전제·기본값·위치
+A_DELETE,ACT,^DeleteButton$,F1;F5,삭제 — DB 반영·상태
+A_EDIT,ACT,^EditButton$,D1;D3,편집 모드 — 편집 구간
+A_CHANGED,ACT,(Changed|ComboSelChange|ComboCloseUp)$,C2;C3;C6,셀·조회조건 변경 연쇄
+A_PASTE,ACT,ClipboardPasted,F3;E1;C3,붙여넣기
+A_POPUP,ACT,(CellDoubleClick|ButtonClicked|Srch_Click|Popup\w*)$,H6;G5;M4,팝업
+A_SCROLL,ACT,(TopChange|LeftChange)$,H2;H4,스크롤
+A_COLOR,ACT,Color,H2,색
+A_COMBOSRC,ACT,^Get\w+$,B4;B3,콤보 원천
+A_BIZ,ACT,^Set\w+$,C3;E4,업무 처리 — 연쇄 채움·업무 검증
+A_BTNLIST,ACT,ButtonList|_Click$,K4;J2,버튼 구성·권한
+A_GENERIC,ACT,.,X-ROW,기타 진입점 — 동작 확인
+K_ENDPOINT,ACTKIND,ENDPOINT,F4;DB-SYN,SP 호출 — SQL 오류 0·시노님/권한
+K_POPUP,ACTKIND,POPUP,H6;G5,팝업 열기·인자
+K_MESSAGE,ACTKIND,MESSAGE,E4;I1,메시지 발생 조건·등록
+K_VALIDATE,ACTKIND,VALIDATE,E3;E4,검증
+K_GRID_LOCK,ACTKIND,GRID_LOCK,D1;D3,잠금
+K_GRID_COMBO,ACTKIND,GRID_COMBO,B1;B2;B4;D5,셀 콤보
+K_COMBO_DATA,ACTKIND,COMBO_DATA,B4;B3,콤보 원천
+K_LIST_REBIND,ACTKIND,LIST_REBIND,C1;C2,목록 재구성(연쇄)
+K_GRID_SET,ACTKIND,GRID_SET,C3;D4,셀 값 세팅 — 연쇄 채움·신규행 기본값
+K_GRID_STYLE,ACTKIND,GRID_STYLE,H2,셀 색·스타일
+K_VALUE_SET,ACTKIND,VALUE_SET,C3,컨트롤 값 세팅 — 초기값·연쇄 채움
+K_UI_PROP,ACTKIND,UI_PROP,G4;A5,컨트롤 표시·활성 속성
+K_EVENT_WIRE,ACTKIND,EVENT_WIRE,G03-WIRE,이벤트 연결 — TO-BE 핸들러 배선
+K_GRID_BIND,ACTKIND,GRID_BIND,A1,그리드 데이터 바인딩 — 조회 결과
+K_GRID_INIT,ACTKIND,GRID_INIT,A5;H5,그리드 시트·컬럼 구성
+K_THROW,ACTKIND,THROW,E4,예외·중단 — 업무 검증 메시지
+K_RESOURCE,ACTKIND,RESOURCE,X-REOPEN,자원 해제 — 닫기·재오픈
+K_GRID_CLEAR,ACTKIND,GRID_CLEAR,C4,조건 변경 핸들러 안의 그리드 초기화(ClearDataSource·RemoveRows·Clear) — 조건 변경 시 그리드 상태(2026-10-30 SCP0111 Plan Date)

@@ -135,6 +135,34 @@ def ai_review_rows(mid, tri):
     return n
 
 
+def judge_rows_to_decision(mid, tri):
+    """2026-11-20 C1(사용자 지시 '판단이 필요한 부분에만 AI · 미검증 1회 해소'): 담당 '판단' 행 정리.
+       판단 행은 검사기를 고쳐도 줄지 않는다(기계가 비교는 했고 결론을 못 낸 행). 판정 검토(llm_review.py)가 판정필요와 같이 보고, 근거가 확인되면 judge 가 판정을 바꾼다.
+       여기 남은 판단 행 = 검토는 했으나 근거로 결론이 안 난 행 → 담당 '결정'(결정 목록 · 처리 대상 아님).
+       AI 가 검사기오판·추출오류·미등록 룰로 가린 행 → 담당 '엔진'. 검토 기록이 없거나 AI 검토가 꺼져 있으면 종전 '판단' 유지(세션 처리). 반환 = 결정으로 옮긴 행 수"""
+    try:
+        import llm_call as _lc
+        if not _lc.enabled('judge'):
+            return 0
+    except Exception:
+        return 0
+    rv = {x['row_id']: x for x in _read(os.path.join(ROOT, 'Doc', 'verify', mid, 'llm_review.csv')) if x.get('row_id')}
+    if not rv:
+        return 0
+    n = 0
+    for t in tri:
+        if t.get('actor') != '판단' or t.get('_ai'):
+            continue
+        x = rv.get(t['row_id'])
+        if not x or x.get('class') in ('미검토', '검토 제외', ''):
+            continue   # 아직 검토 안 됨 — 다음 판정 검토가 본다(종전 담당 유지)
+        if x.get('class') in AI_ENGINE and x.get('verified') == 'Y':
+            t['actor'] = '엔진'; continue
+        t['actor'] = '결정'; n += 1
+        t['remedy'] = ('AI 판정 검토 결과 근거로 결론이 나지 않음(' + (x.get('class') or '') + ' · ' + (x.get('apply_why') or '') + ') → 결정 목록 · 근거 ' + (x.get('evidence_ref') or '없음') + ' · ' + (x.get('reason') or '')[:300])[:900]
+    return n
+
+
 def _read(p):
     try:
         with open(p, encoding='utf-8-sig', newline='') as fh:
@@ -150,7 +178,7 @@ def counts(tri):
     by_class = collections.Counter(t['class'] for t in unv)
     actionable = sum(by_actor[a] for a in WORK_ACTORS) + by_actor['자동'] + ai
     return {'total': len(unv), 'by_actor': dict(by_actor), 'by_class': dict(by_class), 'actionable': actionable, 'ai_review': ai,
-            'human': by_actor['사람'], 'aggregate': by_actor['집계'], 'blocked': by_actor['보완'], 'guide': by_actor['가이드']}  # 보완 = 선행 FAIL(화면 기능 누락) 뒤에만 잴 수 있는 행
+            'human': by_actor['사람'], 'aggregate': by_actor['집계'], 'blocked': by_actor['보완'], 'guide': by_actor['가이드'], 'decide': by_actor['결정']}  # 보완 = 선행 FAIL(화면 기능 누락) 뒤에만 잴 수 있는 행
 
 
 def run(cmd, cwd=None):
@@ -308,8 +336,9 @@ def main():
             if t['actor'] == '대조표':
                 t['actor'] = '가이드'; t['remedy'] = 'DB MODE(repairScope DB_ONLY): 대조표(FE 폴더) 수정 불가, FE 가이드(FE_GUIDE_*.md)로 남기고 결정 목록에 적음 · 재수행으로 줄지 않아 처리 대상에서 뺌'
     ai_n = ai_review_rows(mid, tri)
+    dec_n = judge_rows_to_decision(mid, tri)   # 2026-11-20 C1
     after = counts(tri)
-    print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}(AI 판정 검토가 가린 엔진 보완 대상 {ai_n} 포함), 사람 확인 {after["human"]}, 집계 {after["aggregate"]}'), flush=True)
+    print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}(AI 판정 검토가 가린 엔진 보완 대상 {ai_n} 포함), 사람 확인 {after["human"]}, 결정 목록 {after["decide"]}(판단 행 중 AI 검토로 결론 안 남 {dec_n}), 집계 {after["aggregate"]}'), flush=True)
     os.makedirs(vd, exist_ok=True)
     with open(os.path.join(vd, 'unverified_triage.csv'), 'w', encoding='utf-8-sig', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=['row_id', 'source', 'rule_id', 'target', 'class', 'actor', 'remedy', 'evidence'], extrasaction='ignore')

@@ -35,6 +35,11 @@ def _key_value(v, col, data_type):
     return d.strftime('%Y%m%d') if 'YYYYMMDD' in col.upper() or 'YMD' in col.upper() else d.strftime('%Y-%m-%d')
 
 
+def _q(col):
+    """2026-11-20 orch: UPDATE SET 칸 이름 = 따옴표 식별자(예약어 INCREMENT 등 ORA-03050 방지). 이름은 cursor.description 원문(대소문자 그대로)"""
+    return '"' + str(col).replace('"', '""') + '"'
+
+
 def decide(cur, old, at):
     """cur·old = 컬럼 사전 · at = 기록 시각. 반환 (동작, 사유) — RESTORE | SAME | SKIP"""
     diff = sorted(k for k in cur if str(cur.get(k)) != str(old.get(k)))
@@ -73,7 +78,8 @@ def selftest():
              ('감사 정상', judge_audit({**O, 'CREATED_BY': 'a'}, {**C, 'CREATED_BY': 'a'}, at, 'T')[0], 'PASS'),
              ('생성자 변경', judge_audit({**O, 'CREATED_BY': 'a'}, {**C, 'CREATED_BY': 'b'}, at, 'T')[0], 'FAIL'),
              ('수정 칸 그대로', judge_audit(O, {**O, 'A': 2}, at, 'T')[0], 'FAIL'),
-             ('감사 칸 없음', judge_audit({'A': 1}, {'A': 1}, at, 'T')[0], 'NA')]
+             ('감사 칸 없음', judge_audit({'A': 1}, {'A': 1}, at, 'T')[0], 'NA'),
+             ('예약어 칸 따옴표(INCREMENT)', _q('INCREMENT'), '"INCREMENT"')]
     bad = 0
     for n, got, want in cases:
         k = got == want
@@ -161,7 +167,8 @@ def keyless(mid, fp, tables, at, why='키 없는 복원'):
                 if ch:
                     tn = t.split('.')[-1].upper(); trace['changed'][tn] = trace['changed'].get(tn, 0) + 1
                     ra, wa = judge_audit(o, c, at, tn); trace['audit'].append({'target': f'{tn}|{rid}', 'result': ra, 'why': wa})
-                    cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); n_up += 1
+                    # 2026-11-20 orch(SCP0028 ORA-03050): 칸 이름이 예약어(INCREMENT)면 따옴표 없이 실패 → 원장 이름 그대로 따옴표로 감싼다
+                    cur.execute(f"UPDATE {t} SET {', '.join(f'{_q(k)}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); n_up += 1
             print(f'[restore_touched] {t}: 키 없는 복원 · 시험 계정 변경 행 {len(rids)} → 되돌림 {n_up} · 새 행 삭제 {n_del}')
         cx.commit()
     print(f'[restore_touched] {mid}: 한계 — 저장이 지운 행(감사 칸으로 못 찾음)은 복원 대상 밖 · save_residue 와 별도 확인 필요')
@@ -282,7 +289,7 @@ def main(mid):
                             ra, wa = judge_audit(o, c, at, t); audit.append({'target': f"{t}|{'/'.join(kv.values())}|{rid}", 'result': ra, 'why': wa})
                             if act == 'RESTORE':
                                 ch = [k for k in names if str(c[k]) != str(o[k])]
-                                cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); okn += 1; _mark('changed', t)
+                                cur.execute(f"UPDATE {t} SET {', '.join(f'{_q(k)}=:v{i}' for i, k in enumerate(ch))} WHERE ROWID = CHARTOROWID(:r)", {**{f'v{i}': o[k] for i, k in enumerate(ch)}, 'r': rid}); okn += 1; _mark('changed', t)
                             elif act == 'SKIP':
                                 bad += 1
                             print(f'[restore_touched] {t} {list(kv.values())} ROWID {rid}: {act} {why}')
@@ -294,7 +301,7 @@ def main(mid):
                 ra, wa = judge_audit(o, c, at, t); audit.append({'target': f"{t}|{'/'.join(kv.values())}", 'result': ra, 'why': wa})
                 if act == 'RESTORE':
                     ch = [k for k in names if str(c[k]) != str(o[k])]
-                    cur.execute(f"UPDATE {t} SET {', '.join(f'{k}=:v{i}' for i, k in enumerate(ch))} WHERE {where}", {**kv, **{f'v{i}': o[k] for i, k in enumerate(ch)}}); _mark('changed', t)
+                    cur.execute(f"UPDATE {t} SET {', '.join(f'{_q(k)}=:v{i}' for i, k in enumerate(ch))} WHERE {where}", {**kv, **{f'v{i}': o[k] for i, k in enumerate(ch)}}); _mark('changed', t)
                 print(f'[restore_touched] {t} {list(kv.values())}: {act} {why}')
                 if act == 'SKIP':
                     bad += 1

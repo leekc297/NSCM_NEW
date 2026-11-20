@@ -61,6 +61,32 @@ def norm_keys(txt):
     return keys
 
 
+def assign_select(before):
+    """T472 — before(ORDER BY 앞 원문, 주석 제거본)에서 같은 괄호 깊이(0)의 마지막 SELECT 가 변수 대입(SELECT [TOP n] @v =)이면 True"""
+    d = 0; i = len(before)
+    up = before.upper()
+    while i > 0:
+        i -= 1; c = before[i]
+        if c == ')': d += 1
+        elif c == '(':
+            d -= 1
+            if d < 0: return False
+        elif d == 0 and up.startswith('SELECT', i) and (i == 0 or not (up[i - 1].isalnum() or up[i - 1] in '_@')) and not (up[i + 6:i + 7].isalnum() or up[i + 6:i + 7] == '_'):
+            return bool(re.match(r'(?is)SELECT\s+(?:TOP\s*\(?\s*\d+\s*\)?\s+)?@\w+\s*=', before[i:]))
+    return False
+
+
+def _selftest_assign():
+    a = "SET @q = ''\nSELECT @q = @q + ',' + yyyymmdd FROM ( SELECT TOP 10 'D_' + x AS yyyymmdd , x AS s FROM T GROUP BY x ) AS A\n"
+    b = "SELECT a, b FROM T WHERE x IN (SELECT @v = 1)\n"
+    c = "SELECT @v = 1\nSELECT a FROM T\n"
+    cases = [('T472 대입 SELECT 의 ORDER BY = 결과 규칙 아님', assign_select(a) is True), ('T472 결과셋 SELECT = 결과 규칙', assign_select(b) is False), ('T472 앞 대입 문장과 다른 결과 SELECT = 결과 규칙', assign_select(c) is False)]
+    bad = sum(1 for _, ok in cases if not ok)
+    for n, ok in cases: print(('PASS ' if ok else 'FAIL ') + n)
+    print(f'selftest {len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
+
+
 def sp_rules(sp, screen):
     p = os.path.join(MOD, f'dbo.{sp}.sql')
     if not os.path.exists(p): return [{'screen_id': screen, 'kind': 'SQL', 'sp': sp, 'file': '', 'line': '', 'guard': '', 'keys': '', 'raw': '', 'depth': '', 'note': 'AS-IS SP 원문 없음(Doc/asisfacts/db/modules)'}]
@@ -71,11 +97,23 @@ def sp_rules(sp, screen):
             tail = m.group(1)
             # 동적 문자열: 'ORDER BY a, b ' + char(10) → 따옴표 전까지
             if "'" in tail: tail = tail.split("'")[0]
+            elif "'" not in line:
+                # 2026-11-20 T393(SSP0014 FACT-fe5cc623): 정적 ORDER BY 가 여러 줄(다음 줄이 ',키' 로 시작하거나 이 줄이 ',' 로 끝남)이면 이어 읽는다 —
+                #   종전엔 첫 줄만 읽어 keys=DIVISION_ID 하나(dbo.SSP0014_GET_SHIPMENT_MODEL_PIC.sql:89~93 실제 5키)
+                j = ln
+                while j < len(lines):
+                    s2 = lines[j].strip()
+                    if not s2 or not (s2.startswith(',') or tail.rstrip().endswith(',')):
+                        break
+                    tail = tail.rstrip() + ' ' + s2; j += 1
             tail = re.split(r'(?i)\)\s*(?:T|AS\s+\w+)?\s*$|\bFOR\s+XML|\bOFFSET\b|\bOPTION\b|;', tail)[0]
             keys = norm_keys(tail)
             # 깊이: 이 줄까지의 괄호 균형(서브쿼리 안이면 >0)
             before = '\n'.join(lines[:ln - 1]) + line[:m.start()]
             depth = max(0, before.count('(') - before.count(')'))
+            # 2026-11-20 T472(SSP0005 A6 5행 · AI 검토 검사기오판): 이 ORDER BY 가 끝내는 문장이 변수 대입 SELECT(SELECT @v = @v + …)면 결과셋이 없다 —
+            #   피벗 컬럼 목록 문자열을 만드는 정렬이라 결과 행 순서 규칙이 아니다(depth 'ASSIGN' · 소비처는 depth≠0 을 건너뜀)
+            if not ("'" in line) and depth == 0 and assign_select(before): depth = 'ASSIGN'
             # 가드: 동적 SQL 이면 바로 위 비어있지 않은 줄들 중 IF/ELSE IF/BEGIN 를 거슬러 올라가며 수집(최대 6줄)
             guard = []
             dyn = bool(re.search(r'(?i)@\w+\s*=\s*@\w+\s*\+', line)) or "'" in line
@@ -93,7 +131,7 @@ def sp_rules(sp, screen):
                     if s and ind(lines[k]) == 0 and not re.match(r'(?i)^(ELSE\s+IF|IF|ELSE|BEGIN|END)\b', s) and guard: break
                     k -= 1
             out.append({'screen_id': screen, 'kind': 'SQL', 'sp': sp, 'file': os.path.relpath(p, ROOT), 'line': ln, 'guard': ' ▸ '.join(guard), 'keys': ','.join(keys), 'raw': line.strip()[:240], 'depth': depth,
-                        'note': ('동적 SQL' if dyn else '정적') + ('' if depth == 0 else ' · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님') + ('' if keys else ' · 키 해석 실패(사람 확인)')})
+                        'note': ('동적 SQL' if dyn else '정적') + ('' if depth == 0 else (' · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님' if depth == 'ASSIGN' else ' · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님')) + ('' if keys else ' · 키 해석 실패(사람 확인)')})
     if not out: out.append({'screen_id': screen, 'kind': 'SQL', 'sp': sp, 'file': os.path.relpath(p, ROOT), 'line': '', 'guard': '', 'keys': '', 'raw': '', 'depth': 0, 'note': 'ORDER BY 없음 — 결과 순서 미정(테이블 순)'})
     return out
 
@@ -141,6 +179,7 @@ def run(screen):
 if __name__ == '__main__':
     a = sys.argv[1:]
     if not a: print(__doc__); sys.exit(2)
+    if a[0] == '--selftest': sys.exit(_selftest_assign())
     if a[0] == '--all':
         for s in sorted(os.listdir(SCR)):
             if os.path.isdir(os.path.join(SCR, s)) and not s.startswith('_'): run(s)

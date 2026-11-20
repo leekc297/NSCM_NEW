@@ -1,0 +1,5 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0021,SQL,SCP0021_GET_LOSS_TIME_EXCEPT,Doc\asisfacts\db\modules\dbo.SCP0021_GET_LOSS_TIME_EXCEPT.sql,84,,"DIVISION_ID,PLANT_SITE_ID,FACTORY_ID,OPERATION_ID,LINE_ID","ORDER BY t.division_id , t.plant_site_id , t.factory_id , t.operation_id , t.line_id",0,정적
+SCP0021,SQL,SCP0021_GET_LOSS_TIME,Doc\asisfacts\db\modules\dbo.SCP0021_GET_LOSS_TIME.sql,86,,"LOSS_TIME_ORDER,DIVISION_ID,SCM_SITE_ID,FACTORY_ID,OPERATION_ID,LINE_ID","ORDER BY loss_time_order, L.DIVISION_ID, S.SCM_SITE_ID , L.FACTORY_ID , L.OPERATION_ID , L.LINE_ID",0,정적
+SCP0021,SQL,SCP0021_SAVE_LOSS_TIME_EXCEPT,Doc\asisfacts\db\modules\dbo.SCP0021_SAVE_LOSS_TIME_EXCEPT.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0021,SQL,SCP0021_SAVE_LOSS_TIME,Doc\asisfacts\db\modules\dbo.SCP0021_SAVE_LOSS_TIME.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

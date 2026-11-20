@@ -359,7 +359,9 @@ export const WarehouseCapacity = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={itemIds => setSearchCondition({ itemId: itemIds })}
-        preSearchParams={{ divisionId: sc.divisionId, scpModuleType: 'SCP0133' }}
+        // AS-IS(.cs:1344) 정합: Model/Nickname 입력값을 팝업 Material 검색어로 넘겨 그 값으로 조회한다.
+        //   미전달 시 팝업이 사업부 전체를 열던 갭(SCP0133 No.2) 교정.
+        preSearchParams={{ divisionId: sc.divisionId, scpModuleType: 'SCP0133', itemId: sc.itemId }}
       />
     </>
   );

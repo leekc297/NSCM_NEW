@@ -1,7 +1,8 @@
-import { type CellRangeEventArgs, CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { DataType } from '@mescius/wijmo';
+import { type CellRangeEventArgs, CellType, DataMap, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MaterialByDivisionModal } from 'features/master/src/components';
-import { type MutableRefObject, useEffect, useMemo, useState } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils } from '@foundation/utils';
@@ -12,6 +13,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { COMBO } from '../sales-site-priority.constants';
 import type { SalesSitePriorityRow } from '../sales-site-priority.types';
 import {
+  filterSiteByDivision,
   findPlanGroupCodeByName,
   isPlanGroupCodeInCombo,
   toCascadeSource,
@@ -46,6 +48,28 @@ export const SalesSitePriorityGrid = ({
   //   그리드 단독 fetch — 화면 전역 division 이 아니라 붙여넣기 대상 행의 DIVISION_ID 로 좁힌다.
   const [planGroupsRaw] = useTabComboQueries({ filters: [COMBO.PLAN_GROUP] });
   const planGroupSource = useMemo(() => toCascadeSource(planGroupsRaw), [planGroupsRaw]);
+  // 활성(콤보 등록=VALID_YN='Y') Plan Group 코드 집합 — 비활성 코드(예: PG0031/PG0004)를 표시·엑셀에서
+  //   빈칸 처리하는 dataMap 패치의 판정 기준. updatedLayout 패치 클로저가 최신 집합을 읽도록 ref 로 든다.
+  const planGroupActive = useMemo(
+    () => new Set(planGroupSource.map(r => r.CODE)),
+    [planGroupSource]
+  );
+  const planGroupActiveRef = useRef(planGroupActive);
+  planGroupActiveRef.current = planGroupActive;
+
+  // SCM site 셀콤보 원본(ScmSite, DIVISION_ID 반환) — 조회조건 Site 콤보와 동일 소스(getCombo 세션
+  //   캐시 공유). admin 자동콤보 경로는 PARAM2='DIVISION_ID:DIVISION_ID' 로 행 DIVISION_ID 정확일치만
+  //   좁혀, 가상 division 'EE'(및 EE_UC 등)가 실사이트 division(81/40/82·81_UC…)과 안 맞아 후보 0건이
+  //   된다(AS-IS 와 불일치). AS-IS RefreshSiteByDivision(cs:254-268)은 EE->81/40/82 합집합, EE_xx->81_xx
+  //   로 확장한 dtScmSite 를 리스트박스와 셀콤보(SetComBoParam "ScmSite", cs:306)에 공용으로 바인딩한다.
+  //   편집 진입 시 행 DIVISION_ID 로 그 확장(filterSiteByDivision)을 재현한 dataMap 으로 스왑한다
+  //   (형제 SCP0037 operation-lt 의 SCM_SITE_ID 편집/표시 이원화 패턴 동일).
+  const [sitesRaw] = useTabComboQueries({ filters: [COMBO.SITE] });
+  const siteSource = useMemo(() => toCascadeSource(sitesRaw), [sitesRaw]);
+  const siteSourceRef = useRef(siteSource);
+  siteSourceRef.current = siteSource;
+  // 편집 진입 시 스왑하고 종료 시 되돌릴 admin 자동콤보 원본 dataMap(표시용 전체 매핑).
+  const scmSiteOriginalMap = useRef<DataMap | null>(null);
 
   useEffect(() => {
     const g = gridRef.current;
@@ -59,9 +83,71 @@ export const SalesSitePriorityGrid = ({
       const binding = sender.columns[e.col]?.binding ?? '';
       if (!isCellEditable(binding)) {
         e.cancel = true;
+        return;
+      }
+      // SCM site 셀콤보 — 행 DIVISION_ID 로 좁힌 EE 확장 후보로 dataMap 스왑(위 siteSource 주석).
+      //   admin 자동콤보 원본은 EE 행에서 후보 0건이라 드롭다운이 빈 채로 열린다 — filterSiteByDivision
+      //   이 EE->81/40/82, EE_xx->81_xx 로 확장한 후보를 편집 전용 dataMap 으로 건다. 비-EE division 은
+      //   정확일치와 동일 결과라 기존 동작 불변. 종료 시 cellEditEnded 가 원본 표시 매핑으로 되돌린다.
+      if (binding === 'SCM_SITE_ID') {
+        const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+        if (!row) return;
+        const col = sender.columns[e.col];
+        if (scmSiteOriginalMap.current === null) scmSiteOriginalMap.current = col.dataMap;
+        const candidates = filterSiteByDivision(siteSourceRef.current, s(row.DIVISION_ID));
+        col.dataMap = new DataMap(
+          candidates.map(c => ({ CODE: c.CODE, NAME: c.NAME || c.CODE })),
+          'CODE',
+          'NAME'
+        );
       }
     };
     g.beginningEdit.addHandler(beginningEditHandler);
+
+    // SCM site 편집 종료 -> admin 전체 표시 매핑으로 원복(편집/표시 이원화, 형제 SCP0037 동일).
+    const cellEditEndedHandler = (sender: FlexGrid, e: { row: number; col: number }) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding === 'SCM_SITE_ID' && scmSiteOriginalMap.current !== null) {
+        sender.columns[e.col].dataMap = scmSiteOriginalMap.current;
+      }
+    };
+    g.cellEditEnded.addHandler(cellEditEndedHandler);
+
+    // 레이아웃 재계산(컬럼 재생성)마다 재적용하는 보정 2종 — 공용 DataGrid 가 updatedLayout 에서
+    //   컬럼/콤보 dataMap 을 재대입하므로 즉시 1회 + updatedLayout 핸들러로 건다.
+    const applyLayoutFixes = () => {
+      // No.9) FROM/TO 날짜 컬럼 dataType=Date + 'yyyy-MM-dd' — FPDate(InputDate 달력) 편집 성립 +
+      //   빈 셀(신규행) 편집 시 직전 행 Date 가 에디터에 남아 새어드는 누수 차단(행을 Date 로 들어 빈값=
+      //   ''(null 등가)이면 에디터가 비어 열린다). 형제 demand-exception/SCP0127/0128 동형.
+      for (const binding of ['FROM_YYYYMMDD', 'TO_YYYYMMDD']) {
+        const col = g.getColumn(binding);
+        if (!col) continue;
+        if (col.dataType !== DataType.Date) col.dataType = DataType.Date;
+        if (col.format !== 'yyyy-MM-dd') col.format = 'yyyy-MM-dd';
+        // Wijmo InputDate(col.editor) 의 isRequired 기본값(true)은 빈 셀 편집기에 null 대입을 거부해
+        //   직전 행 날짜를 유지한다(새어듦). 편집기 인스턴스에 직접 false 를 박아 공유 columnMapping
+        //   빌드 상태와 무관하게 확실히 적용한다(No.9, Column.isRequired 와는 별개 속성).
+        const editor = col.editor as { isRequired?: boolean } | null | undefined;
+        if (editor && editor.isRequired !== false) editor.isRequired = false;
+      }
+      // No.10) 비활성(콤보 미등록=VALID_YN='N', 예 PG0031/PG0004) Plan Group 코드는 셀 표시·엑셀
+      //   다운로드 모두 빈칸 — AS-IS FarPoint 는 콤보 후보에 없는 값을 빈칸으로 그리고(formatItem 이
+      //   그리드 DOM 은 이미 가린다), 엑셀 변환기는 dataMap.getDisplayValue 로 값을 뽑아 미등록 코드는
+      //   원문(PG0031)을 그대로 내보낸다. dataMap 의 getDisplayValue 를 패치해 활성 집합 밖 코드는 ''
+      //   을 돌려주면 그리드·엑셀(export 가 live col.dataMap 인스턴스를 그대로 스냅샷, gridAction
+      //   collectLiveColumnExportMeta)이 함께 빈칸이 된다. 드롭다운 후보(getDisplayValues)는 패치하지
+      //   않아 cascade 편집은 그대로다. applyComboDataMaps 가 매 재대입하는 새 dataMap 에 플래그로 1회씩 건다.
+      const pgCol = g.getColumn('OPMZ_PLAN_GR_ID');
+      const dm = pgCol?.dataMap as (DataMap & { __blankMiss?: boolean }) | null | undefined;
+      if (dm && !dm.__blankMiss) {
+        const orig = dm.getDisplayValue.bind(dm);
+        dm.getDisplayValue = (key: unknown) =>
+          planGroupActiveRef.current.has(s(key)) ? orig(key) : '';
+        dm.__blankMiss = true;
+      }
+    };
+    applyLayoutFixes();
+    g.updatedLayout.addHandler(applyLayoutFixes);
 
     // PRIO_RANK 는 1 이상의 정수만 허용 — 편집 중 숫자(0~9) 이외의 문자는 셀에 남지 않게 막는다(AS-IS 등가).
     //   AS-IS 메타는 PRIO_RANK 가 FPNumber/DATA_SCALE_NUMBER=NULL 이고, FarPoint NumberCellType 은
@@ -75,9 +161,16 @@ export const SalesSitePriorityGrid = ({
     //   문자를 즉시 제거하는 sanitize 를 주력으로 쓴다. 동기 제거라 렌더 전에 값이 정리돼 화면에 글자가 남지
     //   않는다. 붙여넣기·IME 조합확정(insertFromPaste/insertCompositionText)도 같은 input 경로라 함께 걸린다.
     //   붙여넣기 Plan Group 변환 등 다른 경로는 저장검증(Number.isInteger, MSG01190)이 막는 이중 안전망.
+    //
+    //   자릿수 cap(15) — PRIO_RANK 는 number 셀('n0')이라 16자리 이상 입력하면 JS 수치가
+    //   Number.MAX_SAFE_INTEGER(≈9e15)를 넘어 정밀도가 깨지고 1e21↑은 지수표기(1.23e+24)로 뭉개진다
+    //   (화면 표시·저장값 손상). 15자리는 항상 안전정수라 그 손상을 막는다. AS-IS 자체엔 입력 자릿수
+    //   제한이 없고 저장 시 Int32 초과를 OverflowException 으로 막지만(cs:675), 그 상한(2,147,483,647,
+    //   10자리)은 15자리 어떤 값도 넘으므로 저장검증(MSG01036)이 그대로 걸러 AS-IS 저장 중단과 등가다.
+    const PRIO_MAX_DIGITS = 15;
     const sanitizePrioInput = (ev: Event) => {
       const el = ev.target as HTMLInputElement;
-      const cleaned = el.value.replace(/\D/g, '');
+      const cleaned = el.value.replace(/\D/g, '').slice(0, PRIO_MAX_DIGITS);
       if (cleaned === el.value) return;
       const caret = (el.selectionStart ?? el.value.length) - (el.value.length - cleaned.length);
       el.value = cleaned;
@@ -102,6 +195,23 @@ export const SalesSitePriorityGrid = ({
           !isPlanGroupCodeInCombo(planGroupSource, s(row.DIVISION_ID), s(row.OPMZ_PLAN_GR_ID))
         ) {
           editor.value = '';
+        }
+        return;
+      }
+      // FROM/TO 날짜 편집기 — 빈 셀(신규행)을 열면 공유 InputDate 인스턴스가 직전 행의 Date 를 들고
+      //   있어 입력 없이 Tab 해도 그 날짜가 새어든다(No.9). isRequired=true(Wijmo 기본)면 null 대입이
+      //   거부되므로 먼저 false 로 열고, 셀값이 비어 있으면 편집기 값을 명시적으로 null 로 비운다
+      //   (applyLayoutFixes 의 isRequired override 와 이중 안전망 — 실셀 편집 시점에 직접 clear).
+      if (binding === 'FROM_YYYYMMDD' || binding === 'TO_YYYYMMDD') {
+        const row = _s.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+        const dateEditor = _s.getColumn(binding)?.editor as
+          | { isRequired?: boolean; value?: unknown }
+          | null
+          | undefined;
+        if (dateEditor) {
+          dateEditor.isRequired = false;
+          const cur = row?.[binding];
+          if (cur === '' || cur === null || cur === undefined) dateEditor.value = null;
         }
         return;
       }
@@ -170,6 +280,8 @@ export const SalesSitePriorityGrid = ({
     return () => {
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
+        g.cellEditEnded?.removeHandler(cellEditEndedHandler);
+        g.updatedLayout?.removeHandler(applyLayoutFixes);
         g.pastedCell?.removeHandler(pastedCellHandler);
         g.prepareCellForEdit?.removeHandler(prepareEditHandler);
         g.formatItem?.removeHandler(formatItemHandler);

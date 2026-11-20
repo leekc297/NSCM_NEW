@@ -1,0 +1,124 @@
+{
+ "rule_id": "H13",
+ "hash": "7a99442b6bb629e9",
+ "groups": [
+  {
+   "rows": [
+    "V-202a7bd1"
+   ],
+   "why": "POPUP 시트의 LT_LAY_OFF_CLEARANCE 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-36607c52"
+   ],
+   "why": "POPUP 시트의 LT_WAIT_SHIPPING 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-3af75872"
+   ],
+   "why": "POPUP 시트의 LT_ARRIVAL_INLAND 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-69e28856"
+   ],
+   "why": "POPUP 시트의 LT_VOYAGE 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-bd424130"
+   ],
+   "why": "POPUP 시트의 LT_DEPARTURE_INLAND 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-2e58adff"
+   ],
+   "why": "route.* 행은 SCP0007_DistributionRoutePopup 코드에서 하드코딩한 그리드로 보인다(헤더 'Sea/Air Ferry', 'Preparation Data'가 SCP0007 자료와 일치). SCP0005 메타 시트 'Distribution Route'와 같은 그리드인지 확인되지 않아 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-40b3e60c"
+   ],
+   "why": "route 그리드의 LT_WAIT_SHIPPING 컬럼이다. Distribution Route 메타 시트와 같은 그리드인지 확인되지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-55f27633"
+   ],
+   "why": "route 그리드의 LT_VOYAGE 컬럼이다. 헤더가 'Sea/Air Ferry'로 메타 시트의 'Voyage'와 달라 다른 요소로 본다."
+  },
+  {
+   "rows": [
+    "V-5bddbbce"
+   ],
+   "why": "route 그리드의 PRIORITY 컬럼이다. 헤더가 'Priority'로 메타 시트의 'Priority*'와 달라 다른 요소로 본다."
+  },
+  {
+   "rows": [
+    "V-aba40ef5"
+   ],
+   "why": "route 그리드의 SHIP_DOC_PREPARATION_DATE 컬럼이다. 헤더가 'Preparation Data'로 SCP0007 하드코딩 그리드에서 온 것이라 메타 시트와 구분한다."
+  },
+  {
+   "rows": [
+    "V-c8bba1d5"
+   ],
+   "why": "route 그리드의 LT_ARRIVAL_INLAND 컬럼이다. Distribution Route 메타 시트와 같은 그리드인지 확인되지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-e83138f7"
+   ],
+   "why": "route 그리드의 LT_DEPARTURE_INLAND 컬럼이다. Distribution Route 메타 시트와 같은 그리드인지 확인되지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-42256de2"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 LT_WAIT_SHIPPING 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-5a8617b3"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 SHIP_DOC_PREPARATION_DATE 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-818e0f13"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 LT_ARRIVAL_INLAND 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-9ff859ed"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 LT_VOYAGE 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ca28ef2c"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 LT_LAY_OFF_CLEARANCE 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-d2ee1070"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 LT_DEPARTURE_INLAND 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-fa45c6e4"
+   ],
+   "why": "SCP0005 메타 시트 Distribution Route의 PRIORITY 컬럼이고, 같은 시트·같은 컬럼인 행이 따로 없어 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:43:01",
+ "cost": 0.1864133
+}

@@ -1,157 +1,13 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-19T17:08:49+09:00",
+ "ts": "2026-11-20T08:24:15+09:00",
  "producer": "run_verify",
  "id": "SCP0005",
  "skip_e2e": false,
- "started": "2026-11-19 13:48:58",
+ "started": "2026-11-20 06:07:32",
  "state": "completed",
  "verdict": "fail",
  "issues": [
-  {
-   "id": "V-f648eb06",
-   "class": "J1",
-   "msg": "SCP0005 화면",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e32d34a2",
-   "class": "L1",
-   "msg": "SCP0005 화면",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-3aecb21a",
-   "class": "F2",
-   "msg": "SCP0005 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-e4a3ef56",
-   "class": "C3",
-   "msg": "SCP0005 시나리오 [자동] FROM_CITY 팝업 선택 → TO_COUNTRY 채움",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-9beff6f2",
-   "class": "C3",
-   "msg": "SCP0005 시나리오 [자동] FROM_COUNTRY 팝업 선택 → TO_COUNTRY 채움",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify 시나리오 @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-2ca073e5",
-   "class": "N1",
-   "msg": "SCP0005 센티널 표시",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify 표시 @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-087d756b",
-   "class": "E3",
-   "msg": "SCP0005 Excel 필수 칸 빈 업로드",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify Excel @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-1d8d1afb",
-   "class": "F10",
-   "msg": "PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-5b44fefc",
-   "class": "D1",
-   "msg": "Distribution Route.FROM_COUNTRY (Country*)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-9a1db2df",
-   "class": "D1",
-   "msg": "Distribution Route.FROM_COUNTRY (Country*)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-1ff8658b",
-   "class": "D1",
-   "msg": "Distribution Route.FROM_CITY (City*)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-599dd774",
-   "class": "D1",
-   "msg": "Distribution Route.FROM_CITY (City*)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @verify @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
   {
    "id": "V-3134fc3e",
    "class": "E4",
@@ -159,7 +15,7 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
+     "ref": "E2E @trace @11-20 08:12"
     }
    ],
    "grade": "hard"
@@ -171,55 +27,19 @@
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
+     "ref": "E2E @trace @11-20 08:12"
     }
    ],
    "grade": "hard"
   },
   {
-   "id": "V-536d9503",
-   "class": "L1",
-   "msg": "그리드 방향키 이동 응답",
+   "id": "V-7ccb8dd4",
+   "class": "K3",
+   "msg": "[결함 유형 묶음 K3-G01 · 1건] 그리드 Ctrl+클릭 다중 선택(팝업 그리드 포함)",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-433764ba",
-   "class": "E3",
-   "msg": "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-f7d054e1",
-   "class": "F2",
-   "msg": "[DMF0082 결함 일반화] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F)",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "V-f1cb080a",
-   "class": "C3",
-   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "규칙 판정 상속"
+     "ref": "E2E @verify @11-20 08:12 · 미포함 항목 다른 실측 연결"
     }
    ],
    "grade": "hard"
@@ -273,30 +93,6 @@
    "grade": "soft"
   },
   {
-   "id": "T-d920ea16",
-   "class": "X-ROW",
-   "msg": "SCP0005_DistributionRoute.FindButton",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-432b276b",
-   "class": "X-ROW",
-   "msg": "SCP0005_DistributionRoute.FindDataMain",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "기계(상속·집계)"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
    "id": "T-a12fee3f",
    "class": "X-ROW",
    "msg": "SCP0005_DistributionRoute.SaveData",
@@ -309,25 +105,13 @@
    "grade": "hard"
   },
   {
-   "id": "T-ece1c98b",
-   "class": "E4",
-   "msg": "MSG00043",
+   "id": "EG-a1c25099",
+   "class": "M3",
+   "msg": "SCP0005 팝업 SCP0005_DistributionRoutePopup CELL:ROUTE_ID OPEN",
    "evidence": [
     {
      "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
-    }
-   ],
-   "grade": "hard"
-  },
-  {
-   "id": "T-f048d4a9",
-   "class": "E4",
-   "msg": "MSG00043",
-   "evidence": [
-    {
-     "kind": "exec",
-     "ref": "E2E @trace @11-19 17:08"
+     "ref": "E2E @eg-popup @11-20 08:12"
     }
    ],
    "grade": "hard"
@@ -335,33 +119,34 @@
  ],
  "warnings": [],
  "summary": {
-  "rows": 2520,
-  "PASS": 1151,
-  "FAIL": 27,
-  "판정필요": 44,
-  "미검증": 392,
-  "해당없음": 906,
+  "rows": 2401,
+  "PASS": 1212,
+  "FAIL": 9,
+  "판정필요": 20,
+  "미검증": 308,
+  "해당없음": 852,
   "AI판단만_강등": 0,
   "grade": {
-   "기계": 1518,
-   "없음(판정 대기)": 44,
-   "없음(미검증)": 392,
-   "사람": 6,
-   "기계(상속·집계)": 552,
-   "출처 미기록": 8
+   "기계": 1580,
+   "AI 작성·인용 확인": 28,
+   "없음(미검증)": 308,
+   "사람": 2,
+   "기계(상속·집계)": 451,
+   "없음(판정 대기)": 20,
+   "출처 미기록": 12
   },
-  "fail_listed": 27,
+  "fail_listed": 9,
   "coverage": {
    "rules": 92,
-   "measured": 997,
-   "not_run_error": 344,
-   "na": 280,
+   "measured": 1036,
+   "not_run_error": 269,
+   "na": 315,
    "suspect_na100": []
   }
  },
  "docs": {
-  "CheckList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v5.xlsx",
-  "ActionItemList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v5.xlsx"
+  "CheckList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v7.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v7.xlsx"
  },
  "evidence": [
   {

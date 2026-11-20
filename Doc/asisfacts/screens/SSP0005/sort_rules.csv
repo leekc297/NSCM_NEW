@@ -1,5 +1,5 @@
 ﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
-SSP0005,SQL,SSP0005_GET_SHIPMENT_WORKING_DAY,Doc\asisfacts\db\modules\dbo.SSP0005_GET_SHIPMENT_WORKING_DAY.sql,85,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SSP0005,SQL,SSP0005_GET_SHIPMENT_WORKING_DAY,Doc\asisfacts\db\modules\dbo.SSP0005_GET_SHIPMENT_WORKING_DAY.sql,85,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
 SSP0005,SQL,SSP0005_GET_SHIPMENT_WORKING_DAY,Doc\asisfacts\db\modules\dbo.SSP0005_GET_SHIPMENT_WORKING_DAY.sql,96,,"DIVISION_ID,COMPANY_ID","SET @mEXEC = @mEXEC+'	ORDER BY division_id , company_id '+CHAR(10);",0,동적 SQL
 SSP0005,SQL,SCM0001_GET_SCP_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
 SSP0005,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적

@@ -1,0 +1,38 @@
+{
+ "rule_id": "D5",
+ "hash": "f629190cec3bf023",
+ "groups": [
+  {
+   "refs": [
+    "DM-115",
+    "DM-193"
+   ],
+   "target": "코드성 컬럼의 셀 입력 방식(Menu Type·Auth Unit·System)",
+   "condition": "",
+   "expected": "Menu Type·Auth Unit·System 같은 코드성 컬럼은 Lookup 코드 콤보에서 선택해 입력한다(Key-in 아님)",
+   "why": "두 항목 모두 코드성 컬럼의 셀 에디터가 Lookup 콤보 선택인지를 확인하며, 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-162"
+   ],
+   "target": "콤보 편집기·COL_LIST 노출·Measure 위치",
+   "condition": "",
+   "expected": "콤보로 설정된 컬럼은 콤보 편집기로 입력하고, VISIBLE=N 컬럼과 COL_LIST는 보이지 않으며, Measure는 UI Category에 정의된 위치에 나온다",
+   "why": "콤보 편집기 외에 COL_LIST·VISIBLE=N 비노출과 Measure 위치까지 확인하므로, 다른 묶음에 넣으면 이 검사가 빠진다."
+  },
+  {
+   "refs": [
+    "DM-151"
+   ],
+   "target": "신규 행 Sales Site·Project·Model·Team 입력",
+   "condition": "신규 행",
+   "expected": "신규 행에서 Sales Site를 입력할 수 있고, Project 팝업을 열면 바로 조회되며, Model 후보는 SALES_PLAN_ITEM_ID 룩업으로 나오고, Team은 SSPM 기준 팝업으로 입력한다",
+   "why": "신규 행에서 팝업 자동 조회, 룩업 후보, 팝업 입력을 함께 확인하는 항목이라 확인 동작과 기대 결과가 다른 항목과 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:37",
+ "cost": 0.0448692
+}

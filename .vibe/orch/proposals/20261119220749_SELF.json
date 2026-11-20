@@ -1,0 +1,112 @@
+{
+  "id": "20261119220749_SELF",
+  "at": "2026-11-19T22:07:49+09:00",
+  "ms": 1795093669851,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn light settle skip",
+  "title": "VM 파일 수정 직후 120초 안에는 가벼운 점검에서 S3 를 빼고 무거운 점검에서만 판정",
+  "evidence": "입력 key S3|orch-improve.js, S3|orch-selfcheck.js, S3|orchestra.js, S3|workbench.js(저장소 수정 22:03, 점검 22:05:27). tools/VibeManager/orch-selfcheck.js:370 은 지문이 바뀌고 selfSettleSec(120초) 지난 뒤 무거운 점검을 돌리지만 :371 의 가벼운 점검은 LIGHT(:21)에 든 S3 를 대기 없이 돌림. :239-243 이 S3 fail 항목마다 사건 R12 를 올리고 :375 가 새 사건이 있으면 Claude 진단을 호출함. .vibe/orch/selfcheck/history.jsonl 22:05:27 '정기' S3 fail:4, raised.json R12 4건(20261119_220527_R12_ALL ~ _4), sync_log.jsonl 22:05:54 같은 4개 파일 복사. 직전 진단 비용 3.23 USD(diag_meta.json).",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "before_after": "변경 전: tick() 의 가벼운 점검이 지문 변경 여부와 무관하게 S3 를 돌려 수정 중인 파일을 fail 로 판정하고 파일마다 R12 사건 1건과 진단 호출을 만듦 → 변경 후: fp !== fpChecked(바뀐 뒤 무거운 점검 전)인 동안 가벼운 점검은 LIGHT 에서 S3 를 뺀 목록으로 실행. S3 는 120초 뒤 무거운 점검(S1, S2, S4 와 같은 지문)에서 판정하고 통과하면 종전대로 자동 동기화. 수동 실행 run(['S3']) 은 그대로.",
+  "verify": "t_orch_selfcheck.js 에 시험 추가: 저장소 파일을 바꾼 직후 tick() 1회 → R12 사건 수 그대로, result.json checks.S3.at 그대로. selfSettleSec 0 으로 tick() 1회 → S3 판정 실행. 기대 = 추가 시험 통과.",
+  "rollback": "VMO 백업본으로 orch-selfcheck.js, test/t_orch_selfcheck.js 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T22:15:00+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:16:38+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2215"
+    },
+    {
+      "at": "2026-11-19T22:16:38+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:18:21+09:00",
+      "by": "VMO",
+      "what": "반영 실패 — 검증 실패: 미실행. node tools/VibeManager/test/t_orch_selfcheck.js 실행이 승인 요청으로 4회 차단됨(Bash 2회, PowerShell 2회, 2026-11-19 22:17 이후). 추가 시험 7건의 통과 여부 미확인 · 대상 파일 2개 복원",
+      "log": ".vibe\\logs\\2026-11-19T22-16-38_claude_orch.log",
+      "sec": 101,
+      "costUsd": 1.817219,
+      "files": [
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-19T22:26:20+09:00",
+      "by": "Claude Code 세션",
+      "what": "다시 대기로 돌림 — 반영 실패 원인이 개선안이 아닌 VMO 결함(허용 도구 인자가 셸에서 쪼개져 node 명령 거부)이었고 orch-agent.js 를 고침"
+    },
+    {
+      "at": "2026-11-19T22:30:49+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:32:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 227, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2230"
+    },
+    {
+      "at": "2026-11-19T22:32:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:35:26+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 231, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T22:35:26+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager → PASS 21건, FAIL 0건, ALL PASS (2026-11-19 22:33:34). 추가 시험 4건 통과: ① 첫 tick = 무거운 점검, S3 ok ② good.js 수정 직후 tick(selfSettleSec 120) = ran [S5,S6,S7,S8,S9], R12 7→7, checks.S3.at 22:33:32 그대로 ③ selfSettleSec 0 tick = 무거운 점검에서 S3 fail(S3 · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-19T22-32-27_claude_orch.log",
+      "sec": 79,
+      "costUsd": 1.6250695999999998,
+      "files": [
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S3",
+  "selfKey": "S3|orch-selfcheck.js",
+  "auto": true,
+  "autoTried": true,
+  "autoMs": 1795095049453,
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_selfcheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager → PASS 21건, FAIL 0건, ALL PASS (2026-11-19 22:33:34). 추가 시험 4건 통과: ① 첫 tick = 무거운 점검, S3 ok ② good.js 수정 직후 tick(selfSettleSec 120) = ran [S5,S6,S7,S8,S9], R12 7→7, checks.S3.at 22:33:32 그대로 ③ selfSettleSec 0 tick = 무거운 점검에서 S3 fail(S3|good.js), R12 7→8 ④ 그 뒤 tick = 가벼운 점검 ran 에 S3 포함, R12 8 그대로. 1차 실행(22:33:23)은 추가 시험 ①이 FAIL 이었음. 첫 tick 이 하루 1회 점검(S10,S6,S9)도 돌려 result.json 의 ran 이 덮였고, history.jsonl 로 확인하게 시험을 고친 뒤 통과.",
+    "note": "orch-selfcheck.js 는 371행 1줄만 Edit. 구문 검사, test/run_all.js, 정의 정합은 미실행(VMO 게이트 대상). 설치 폴더와 CHANGELOG.md 는 건드리지 않음."
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 231, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261119_self2230",
+  "needsReload": true,
+  "appliedMs": 1795095326317,
+  "synced": [
+    "orch-selfcheck.js"
+  ],
+  "snap": "prop_20261119220749_SELF"
+}

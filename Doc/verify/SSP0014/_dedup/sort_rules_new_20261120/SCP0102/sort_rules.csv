@@ -1,0 +1,14 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0102,SQL,SCP0102_GET_BOD_VALIDATION_REPORT,Doc\asisfacts\db\modules\dbo.SCP0102_GET_BOD_VALIDATION_REPORT.sql,345,,BOD_ID,ORDER BY BOD_ID,0,정적
+SCP0102,SQL,SCP0102_GET_BOD_VALIDATION_REPORT,Doc\asisfacts\db\modules\dbo.SCP0102_GET_BOD_VALIDATION_REPORT.sql,392,,BOD_ID,ORDER BY LD.BOD_ID',0,동적 SQL
+SCP0102,SQL,SCP0102_GET_BOD_VALIDATION_REPORT,Doc\asisfacts\db\modules\dbo.SCP0102_GET_BOD_VALIDATION_REPORT.sql,519,,"BOD_ID,Y_YEAR","ORDER BY BOD_ID, Y_YEAR",1,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0102,SQL,SCP0102_GET_BOD_VALIDATION_REPORT,Doc\asisfacts\db\modules\dbo.SCP0102_GET_BOD_VALIDATION_REPORT.sql,538,,"BOD_ID,Y_YEAR","ORDER BY BOD_ID, Y_YEAR",1,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0102,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0102,SQL,SSP0028_GET_AREA,Doc\asisfacts\db\modules\dbo.SSP0028_GET_AREA.sql,26,,ATTRIBUTE1,order by attribute1,0,정적
+SCP0102,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,41,IF(@p_kind='F'),FROM_CITY,SET @mDqry1 = @mDQry1 + 'order by r.From_City' + char(10);,0,동적 SQL
+SCP0102,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,54,IF(@p_kind='F') ▸ ELSE IF(@p_kind='T'),TO_CITY,SET @mDqry1 = @mDQry1 + ' order by r.TO_City' + char(10);,0,동적 SQL
+SCP0102,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,66,IF(@p_kind='F') ▸ ELSE IF(@p_kind='A'),FROM_CITY,SET @mDqry1 = @mDQry1 + 'order by r.From_City' + char(10);,0,동적 SQL
+SCP0102,SQL,SSP0028_GET_CITY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_CITY.sql,76,IF(@p_kind='F') ▸ ELSE IF(@p_kind='A'),TO_CITY,SET @mDqry1 = @mDQry1 + ' order by r.TO_City' + char(10);,0,동적 SQL
+SCP0102,SQL,SSP0028_GET_COUNTRY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_COUNTRY.sql,26,,FROM_COUNTRY,order by r.From_Country,0,정적
+SCP0102,SQL,SSP0028_GET_COUNTRY,Doc\asisfacts\db\modules\dbo.SSP0028_GET_COUNTRY.sql,34,,TO_COUNTRY,order by r.To_Country;,0,정적
+SCP0102,SQL,SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL,Doc\asisfacts\db\modules\dbo.SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL.sql,655,,"SHIPMENT_NO,CNTR_NO","SET @mDqry1 = @mDqry1 + '  ORDER BY INFO.SHIPMENT_NO, INFO.CNTR_NO ' + char(10);",0,동적 SQL

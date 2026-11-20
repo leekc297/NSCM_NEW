@@ -47,6 +47,9 @@
 }
 
 // 상단 그리드 예외 보유 행(EXCEPT_YN='Y') 하늘색 — AS-IS setExceptYnColor (LightSkyBlue alpha 80).
+//   필수: 불투명색으로 쓴다. 값은 rgba(135, 206, 250, 0.31)을 흰 바탕에 합성한 색이라 보이는 색은 같다.
+//   DataGrid 는 cloneFrozenCells 라 고정 컬럼(Model/Nick Name)을 클론으로 한 겹 더 덮는데,
+//   반투명이면 스크롤 후 클론 아래로 어긋난 다른 행의 실제 셀 글자가 비쳐 겹쳐 보인다(2026-11-19).
 .tableWrapper :global(.wj-cell.tact-except-row:not(.wj-state-selected):not(.wj-state-multi-selected)) {
-  background-color: rgba(135, 206, 250, 0.31);
+  background-color: rgb(218, 240, 253);
 }

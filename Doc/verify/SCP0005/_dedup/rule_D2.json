@@ -1,0 +1,58 @@
+{
+ "rule_id": "D2",
+ "hash": "e3aa9615d8de4b4f",
+ "groups": [
+  {
+   "rows": [
+    "V-31566648"
+   ],
+   "why": "RTF[R+P]가 Cutoff 상태에 따라 편집·저장이 차단되는지 보는 행이다. 대상 Measure와 Cutoff 조건이 다른 행과 겹치지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-4f91ce49"
+   ],
+   "why": "Monthly Bucket 입력, 저장값 보존, 더블클릭 팝업 오픈을 보는 행이다. 대상과 기대가 다른 행과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-6703c1cf"
+   ],
+   "why": "MKT_FCST·SCM_FCST 편집 권한을 Div·권한·시간대 기준(GET_ADMIN_GROUP_MEASURE)으로 보는 행이다. V-f207589d와 일부 겹치지만 그 행은 AS_In_Req·VMI_In_Req·AS From Site 콤보까지 확인해 기대가 같지 않으므로 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-87cb85e1"
+   ],
+   "why": "Bucket(Daily/Weekly/Monthly)마다 Measure 편집 시작 구간이 맞는지 보는 행이다. 조건과 기대가 다른 행과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b16dac0f"
+   ],
+   "why": "실적 구간 셀이 회색으로 표시되는지 보는 행이다. 편집 가능 여부가 아닌 표시 속성이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-cc32171d"
+   ],
+   "why": "Div 40 Biz Plan에서 Business Plan·Unit Price(LOC) 2개만 편집 가능한지 보는 행이다. 대상 Measure와 조건이 다른 행과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-e59f084b"
+   ],
+   "why": "Partial 주차(M-1·M) 편집 가능 여부와 실적 구분선 위치를 보는 행이다. 대상 구간과 기대가 다른 행과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-f207589d"
+   ],
+   "why": "Current 버전에서 여러 Measure의 권한·Div·VMI별 편집 가능 여부와 AS From Site 콤보 목록을 함께 보는 행이다. 확인 범위가 V-6703c1cf보다 넓어 기대가 같지 않으므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:38:57",
+ "cost": 0.0578254
+}

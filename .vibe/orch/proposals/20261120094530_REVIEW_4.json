@@ -1,0 +1,110 @@
+{
+  "id": "20261120094530_REVIEW_4",
+  "at": "2026-11-20T09:45:30+09:00",
+  "ms": 1795135530916,
+  "source": "review",
+  "status": "superseded",
+  "sig": "wait gone sec last seen",
+  "title": "측정 추가: 사라진 대기의 대기 시간을 발견 시각이 아닌 마지막 생존 확인 시각까지로 잰다",
+  "evidence": "집계 waits dbwin gone 3, goneSec 70097, unfinishedScreens DMF0042. events.jsonl wait.gone 3건이 2026-11-20 00:48:35(VM 재시작 뒤 첫 sweep)에 한꺼번에 기록됨. 각 why 의 시작 시각은 2026-11-19 17:48:56, 18:20:33, 18:47:25. orch-watch.js:239 가 sec_wait = Date.now() - g.t0 로 계산해 VM 이 꺼져 있던 시간까지 더함. 대기 프로세스가 끝난 실제 시각은 미확인",
+  "targets": [
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js"
+  ],
+  "before_after": "변경 전: wait.gone sec_wait = 발견 시각 - 시작 → 변경 후: orch-state 가 tick 마다 살아 있는 대기의 seenMs 를 갱신. wait.gone 에 sec_wait = seenMs - 시작(이번 VM 에서 한 번도 살아 있는 것을 못 봤으면 null), sec_upper = 발견 시각 - 시작 을 함께 남김. digest goneSec 는 sec_wait 만 더하고 goneUnknown 건수를 따로 셈",
+  "verify": "node tools/VibeManager/test/t_orch_watch_gone.js 에 시험 2건 추가(살아 있다 사라진 대기 → sec_wait 는 마지막 생존 확인까지, 재시작 직후 이미 없는 대기 → sec_wait null, goneUnknown 1). node tools/VibeManager/test/run_all.js 통과",
+  "rollback": "4개 파일을 반영 직전 .bak 로 되돌림. 새 필드는 종전 코드가 읽지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T10:30:29+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:32:36+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 24개 파일 통과, 시험 36/36개 파일 통과(PASS 462, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1030"
+    },
+    {
+      "at": "2026-11-20T10:32:40+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T10:36:27+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 1) node tools/VibeManager/test/t_orch_watch_gone.js: PASS 9, FAIL 0, ALL PASS (2026-11-20 10:33:56). 추가 시험 결과: 살아 있다 사라진 대기 sec_wait 100, sec_upper 102. 재시작 직후 이미 없는 대기 sec_wait null, sec_upper 3600.  · 대상 파일 4개 복원 · 대상 밖 변경 Doc/verify/_ENGINE_MASTER.md, Doc/verify/_llm_usage.csv, tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/orchestra.js, tools/VibeManager/workbench.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T10-32-40_claude_orch.log",
+      "sec": 225,
+      "costUsd": 1.0704980000000002,
+      "files": [
+        "Doc/verify/_ENGINE_MASTER.md",
+        "Doc/verify/_llm_usage.csv",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/workbench.js",
+        "Doc/verify/SCP0028/criteria/criteria.csv",
+        "Doc/verify/SCP0028/criteria/criteria.json",
+        "Doc/verify/SCP0028/criteria/criteria.md",
+        "Doc/verify/SCP0028/criteria/live_link.csv",
+        "Doc/verify/SCP0028/criteria/row_map.csv",
+        "Doc/verify/SCP0028/llm_cache.json",
+        "Doc/verify/SCP0028/llm_effect.csv",
+        "Doc/verify/SCP0028/llm_usage.csv",
+        "Doc/verify/_llm_effect.csv",
+        "tools/Harness/_verify_next/criteria_build.py",
+        "tools/Harness/verify/criteria_build.py",
+        "tools/VibeManager/orch-dict.js",
+        "tools/VibeManager/test/t_orch_dict.js",
+        "tools/VibeManager/test/t_orch_watch_gone.js",
+        "tools/VibeManager/test/t_webview_syntax.js"
+      ]
+    },
+    {
+      "at": "2026-11-20T10:36:59+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261120103659_SELF 로 다시 올림(자동 반영). 원인 run_all.js 실패 1건 = tools/VibeManager/test/t_orch_state_old.js:27. 이 시험은 VM 시작 뒤 들어왔으나 이미 죽어 있던 대기(PID 999998)에 g[0].sec_wait >= 1790 을 기대함. 변경 뒤 동작(한 번도 살아 있는 것을 못 본 대기 sec_wait null)과 충돌함. 단독 실행 출력 \"sec_wait\":null,\"sec_upper\":1805 (result.verify_result, 2026-11-20 10:35:47 기록). 이 파일이 승인 targets 에 없어 반영한 Claude 가 고치지 않았고 10:36:27 반영 실패, 대상 4개 복원됨. t_orch_watch_gone.js 는 PASS 9 FAIL 0(10:33:56). 같은 필드를 쓰는 t_orch_improve.js 는 run_all 에서 통과함"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795138228945,
+  "autoFp": "994e3e6081",
+  "result": {
+    "applied": true,
+    "verified": false,
+    "changed_files": [
+      "tools/VibeManager/orch-state.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_watch_gone.js"
+    ],
+    "verify_result": "1) node tools/VibeManager/test/t_orch_watch_gone.js: PASS 9, FAIL 0, ALL PASS (2026-11-20 10:33:56). 추가 시험 결과: 살아 있다 사라진 대기 sec_wait 100, sec_upper 102. 재시작 직후 이미 없는 대기 sec_wait null, sec_upper 3600. digest gone 2, goneUnknown 1, goneSec 100. 2) node tools/VibeManager/test/run_all.js: 파일 35/36 통과, PASS 465, FAIL 1 (2026-11-20 10:35:47 기록, 10:36:07 확인). 실패 1건은 t_orch_state_old.js:27 '사라진 대기 = wait.gone 사건 1건'. 이 시험은 VM 시작 전에 이미 없던 대기(PID 999998)에 sec_wait >= 1790 을 기대함. 단독 실행 출력은 \"sec_wait\":null,\"sec_upper\":1805 이고, 승인된 변경 후 동작(이번 VM 에서 살아 있는 것을 못 봤으면 null)과 같음",
+    "note": "t_orch_state_old.js 는 승인 targets 밖이라 고치지 않음. 시험을 맞추려면 27행 조건을 g[0].sec_wait === null && g[0].sec_upper >= 1790 으로 바꾸는 개선안 승인 필요. 이미 기록된 wait.gone 3건(2026-11-20 00:48:35, sec_upper 없음)은 종전 sec_wait(합계 70097초)가 그대로 goneSec 에 더해짐. 종전 기록을 goneUnknown 으로 돌리는 처리는 before_after 범위 밖이라 넣지 않음. wait.gone 에 seen_ms 필드도 함께 남김"
+  },
+  "repair": {
+    "at": "2026-11-20T10:36:59+09:00",
+    "decision": "revise",
+    "cause": "run_all.js 실패 1건 = tools/VibeManager/test/t_orch_state_old.js:27. 이 시험은 VM 시작 뒤 들어왔으나 이미 죽어 있던 대기(PID 999998)에 g[0].sec_wait >= 1790 을 기대함. 변경 뒤 동작(한 번도 살아 있는 것을 못 본 대기 sec_wait null)과 충돌함. 단독 실행 출력 \"sec_wait\":null,\"sec_upper\":1805 (result.verify_result, 2026-11-20 10:35:47 기록). 이 파일이 승인 targets 에 없어 반영한 Claude 가 고치지 않았고 10:36:27 반영 실패, 대상 4개 복원됨. t_orch_watch_gone.js 는 PASS 9 FAIL 0(10:33:56). 같은 필드를 쓰는 t_orch_improve.js 는 run_all 에서 통과함",
+    "reason": "안의 동작은 맞음. 옛 동작을 기대하는 시험 파일 1개가 대상에서 빠져 있었음",
+    "log": ".vibe\\logs\\2026-11-20T10-36-29_claude_orch.log",
+    "costUsd": 0.3984059,
+    "sec": 30
+  },
+  "supersededBy": "20261120103659_SELF"
+}

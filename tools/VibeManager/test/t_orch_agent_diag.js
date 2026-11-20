@@ -2,7 +2,7 @@
 //   대상 = 화면 <ID> 의 CheckList 판정 정체(R10 형태): Doc/verify/<ID>/run_verify.result.json · unverified_history.csv 를 근거로 넘긴다.
 //   사용: node test/t_orch_agent_diag.js <VibeManager 폴더> <화면ID> [모델]
 const path = require('path'); const fs = require('fs');
-const dir = process.argv[2] || path.join(__dirname, '..'); const id = String(process.argv[3] || '').toUpperCase(); const root = path.resolve(dir, '..', '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..')); const id = String(process.argv[3] || '').toUpperCase(); const root = path.resolve(dir, '..', '..');
 if (!id) { console.log('화면 ID 필요'); process.exit(2); }
 const p = { root, vibeDir: path.join(root, '.vibe'), claude: process.env.CLAUDE_BIN || 'claude', claudeModel: process.argv[4] || '' };
 const agent = require(path.join(dir, 'orch-agent'));

@@ -1,0 +1,18 @@
+{
+ "rule_id": "A7",
+ "hash": "d855e155c03542ed",
+ "groups": [
+  {
+   "refs": [
+    "DM-169"
+   ],
+   "target": "결과 컬럼 값(Plan Type=MKT FCST Version 컬럼 등)",
+   "condition": "전 Plan Type",
+   "expected": "모든 컬럼에 값 조회(AS-IS 와 컬럼 값 일치)",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:39:09"
+}

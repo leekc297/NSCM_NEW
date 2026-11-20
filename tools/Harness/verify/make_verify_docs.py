@@ -736,6 +736,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('menu_id')
     ap.add_argument('--scope', choices=['DB_ONLY', 'DB_FE'])
+    ap.add_argument('--plan-only', action='store_true', help='설명 정리 필요 목록(no_summary.json)까지만 · xlsx 쓰지 않음(2026-11-20 A6 · run_verify 가 설명 문장 작성 전에 부름)')
     a = ap.parse_args()
     mid = a.menu_id.upper()
     _load_prev(mid)
@@ -755,6 +756,53 @@ def main():
         if eff != r['result']:
             r['_raw_result'], r['result'] = r['result'], eff
     rules = {r['rule_id']: r for r in read_csv(P('tools', 'Harness', 'verify', 'detect_rules.csv'))}
+    # 2026-11-20 사용자 지시 G2(중복 정리 · AI 판단 Doc/verify/<ID>/dedup_screen.csv): CheckList 는 대표 행만. 결과가 대표와 같은 구성원은 '중복 정리' 시트로 옮긴다.
+    #   결과가 대표와 다른 구성원(직접 측정 결과 다름)은 본 목록에 그대로 둔다(묶음 판단 오류를 숨기지 않음)
+    dup_rows = []
+    try:
+        import dedup_screen as _dd; _dmap = _dd.load_map(mid)
+    except Exception:
+        _dmap = {}
+    if _dmap:
+        _by = {r['row_id']: r for r in rows}; _keep = []
+        for r in rows:
+            _rep = _by.get(_dmap.get(r['row_id'], ''))
+            if _rep and _rep.get('result') == r.get('result'):
+                dup_rows.append((r, _rep))
+            else:
+                _keep.append(r)
+        rows = _keep
+
+    # 2026-11-20 수정분 재점검: 이번 실행이 부분 실행(run_mode only)이면 이번에 다시 재지 않은 E2E·검사기 행에 '이전 측정 유지(측정 시각)' 를 붙인다(원장은 그대로 · 문서 표시만).
+    #   데이터에 기대는 규칙(LAYER_BY_RULE DB_OBJECT)은 '데이터 변경 미확인' 도 붙인다 — TO-BE DB 데이터 변경은 소스 지문에 넣을 수 없음
+    keep_n = 0; delta_info = {}
+    try:
+        _rm = json.load(open(P('Doc', 'verify', mid, 'run_mode.json'), encoding='utf-8'))
+        if _rm.get('mode') == 'only':
+            _er = json.load(open(P('Doc', 'verify', mid, 'e2e_results.json'), encoding='utf-8'))
+            _runs = [str(x.get('run') or '') for x in _er if x.get('run')]; _last = max(_runs) if _runs else ''
+            _old = {x['row_id']: str(x.get('run') or '') for x in _er if str(x.get('run') or '') and str(x.get('run')) < _last}
+            _st = set(_rm.get('stages') or [])
+            def _kept(r):
+                if r['row_id'] in _old: return _old[r['row_id']]
+                if r['row_id'].startswith('EG-') and 'eg' not in _st: return '직전 팝업·권한 검사'
+                if r['row_id'].startswith('ES-') and 'suite' not in _st: return '직전 E2E 4종'
+                if r.get('source') == 'ASIS_DIFF' and 'diff' not in _st: return '직전 차등 검증'
+                return ''
+            _db = {k for k, v in LAYER_BY_RULE.items() if v == 'DB_OBJECT'} if isinstance(LAYER_BY_RULE, dict) else set()
+            for r in rows:
+                k = _kept(r)
+                if not k: continue
+                keep_n += 1
+                when = (f'{k[:4]}-{k[4:6]}-{k[6:8]} {k[8:10]}:{k[10:12]}' if re.match(r'^\d{14}$', k) else k)
+                r['evidence'] = f"[이전 측정 유지 {when}{' · 데이터 변경 미확인' if r.get('rule_id') in _db else ''}] " + (r.get('evidence') or '')
+            try:
+                _ds = json.load(open(P('Doc', 'verify', mid, 'delta_scope.json'), encoding='utf-8'))
+            except (OSError, ValueError):
+                _ds = {}
+            delta_info = {'rules': len(_rm.get('rules') or []), 'stages': ','.join(sorted(_st)) or '없음', 'why': _ds.get('why', ''), 'last_full': _ds.get('last_full', '')}
+    except (OSError, ValueError, KeyError):
+        pass
 
     # ── 정합검증서 ──
     wb = Workbook()
@@ -765,6 +813,8 @@ def main():
     ws0['A1'].font = Font(bold=True, size=14)
     ws0.append(['정답 기준: O1 AS-IS 동작 · O2 확정 규칙(디자인·공통·고객 확정 요구) · O3 기능 무결성(오류·무반응·허위 성공)'])
     ws0.append(['미검증(NOT_RUN·ERROR)은 PASS 가 아니다 — 미검증 시트에 사유와 함께 남긴다.'])
+    if delta_info:
+        ws0.append([f"수정분 재점검: 재측정 규칙 {delta_info['rules']}개 · 추가 단계 {delta_info['stages']} · 이전 측정 유지 {keep_n}행 · 마지막 전체기능 재점검 {delta_info['last_full'] or '없음'} · 범위 근거: {delta_info['why'][:200]}"])
     fx = [r for r in rows if r['source'] == 'RULE_SCREEN' and r['rule_id'] == 'DB-SYN' and '시노님 자동 보완' in (r.get('evidence') or '')]
     if fx:
         ws0.append([f"🔧 시노님 자동 보완 — {(fx[0].get('evidence') or '').split('시노님 자동 보완 ', 1)[-1][:380]}"])
@@ -971,6 +1021,18 @@ def main():
         if g: _rg[g] = r2
         _rv.append(r2)
     write_sheet(wb, '판정 필요', LH, [lrow(i, r) for i, r in enumerate(_rv, 1)], LW, result_col=RESULT_COL)
+    # 2026-11-20 구간 B '기준' 시트: 기준 원장(Doc/verify/<ID>/criteria/criteria.csv) 중 사람이 볼 항목 = 판단 대기 · 대상 아님 · TO-BE 룰 결합 · AI 가 요소를 정한 항목.
+    #   사용자의견 열에 '대상 아님' · 'TO-BE RULE' · '오류 아님' · '확정' 을 적으면 다음 기준 정리(criteria_build.py)가 그 항목에 고정한다(AI 보다 우선)
+    try:
+        _cr = [x for x in read_csv(P('Doc', 'verify', mid, 'criteria', 'criteria.csv')) if x.get('status') != '확정' or x.get('by') not in ('코드', '')]
+        _ord = {'판단 대기': 0, '대상 아님': 1, '확정': 2}
+        _cr.sort(key=lambda x: (_ord.get(x.get('status'), 3), x.get('elem_key', ''), x.get('rule_id', '')))
+        CH = ['No', '기준 항목', '상태', '요소', '규칙', '확인', '기대', '근거', 'AS-IS 실측', 'TO-BE 룰', '정한 주체', '원장 행 수', '사용자의견']
+        write_sheet(wb, '기준', CH, [[i, x['crit_id'], x.get('status', ''), x.get('elem_key', ''), x.get('rule_id', ''), x.get('check', ''), x.get('expected', ''), x.get('basis', ''),
+                                     x.get('src_live', ''), x.get('src_rule', ''), x.get('by', ''), len([y for y in (x.get('rows') or '').split(';') if y]), ''] for i, x in enumerate(_cr, 1)],
+                    [6, 16, 10, 22, 8, 40, 40, 50, 30, 14, 10, 8, 30])
+    except Exception as _ex:
+        print(f'  [WARN] 기준 시트 작성 실패: {_ex}')
     # 2026-11-18 전 화면: 두 시트에 보이는 행 중 정리 파일(action_summary.csv) 문장이 없는 행 = 설명 정리 필요(50_DOC_STYLE.md CheckList 설명 칸 틀)
     _NO_SUMMARY.update(r['row_id'] for r in list(fails) + _rv if not _summary_text(r))
     try:  # 2026-11-19 설명 문장 작성(llm_desc.py)용 — 정리 파일 문장이 없는 행과 그 행에 묶인 행
@@ -978,6 +1040,9 @@ def main():
                   open(P('Doc', 'verify', mid, 'no_summary.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     except Exception as _ex:
         print(f'  [WARN] no_summary.json 기록 실패: {_ex}')
+    if a.plan_only:
+        print(f'[설명 정리 필요] {len(_NO_SUMMARY)}건(목록만 · --plan-only · 문서는 설명 문장 작성 뒤 1회 생성)')
+        return 0
     base = {(d['src'] + '-' + d['no']): d for d in read_csv(P('Doc', 'verify', 'defects_baseline.csv'))}
     drows = []
     for i, ref in enumerate(dref, 1):
@@ -1014,6 +1079,11 @@ def main():
         print(f'  [WARN] checklist_counts.json 기록 생략: {_ex}')
     write_sheet(wb, '미검증', LH + ['사유'], [lrow(i, r) + [f"{unverified_reason(r)} · " + (r['evidence'] or ('E2E 미구현 규칙 — 판정기 확장 대상' if 'E2E' in r['method'] else '판정기 미구현'))] for i, r in enumerate(unv, 1)],
                 LW + [40], result_col=RESULT_COL)
+    if dup_rows:
+        write_sheet(wb, '중복 정리', ['대표 행', '대표 대상', '결과', '중복 행', '출처', '규칙', '대상', '조건'],
+                    [[rp['row_id'], (rp.get('target') or '')[:120], r.get('result', ''), r['row_id'], r.get('source', ''), r.get('rule_id', ''), (r.get('target') or '')[:160], (r.get('condition') or '')[:160]] for r, rp in sorted(dup_rows, key=lambda x: (x[1]['row_id'], x[0]['row_id']))],
+                    [12, 40, 8, 12, 12, 7, 50, 40], result_col=3)
+        ws0.append([]); ws0.append([f"중복 정리(AI 판단 Doc/verify/{mid}/dedup_screen.csv): 같은 확인으로 묶인 {len(dup_rows)}행은 대표 행 결과와 같아 '중복 정리' 시트로 옮김 · 위 집계는 대표 행 기준"])
     write_sheet(wb, '검출 규칙', ['규칙', '유형', '명칭', '정답', '방법', '기대 원천', '판정 방법'],
                 [[k, v['family'], v['name'], v['oracle'], v['method'], v['expected_source'], v['how']] for k, v in rules.items()], [7, 6, 30, 8, 12, 40, 60])
     p1, n1 = next_path(mid, name, 'CheckList')

@@ -1,0 +1,75 @@
+﻿# Claude Code Stop hook — 이번 작업에서 바뀐 To-Be 화면 폴더에 최종 게이트(check.js --final). 미구현/BLOCK 남으면 종료를 막고 사유를 돌려준다.
+# 2026-11-19 사용자 지시: DB MODE(harness.json repairScope DB_ONLY)에서는 FE 소스가 변경 대상이 아니다.
+#   DB MODE  = 게이트를 돌리지 않는다. 지금 nscm-fe 화면 폴더 상태를 기준선(gate_baseline.tsv)으로 적는다.
+#   UI/DB MODE = 기준선과 내용이 달라진 파일이 있는 화면 폴더만 게이트 대상.
+#   종전: nscm-fe 저장소 git status 전체(기준 커밋 2026-07-26 이후 내려받은 소스 포함)를 '이번 작업에서 바뀐 화면'으로 보아
+#         작업하지 않은 DMF0042 정적 검증이 Claude 턴이 끝날 때마다 떴다(2026-11-19 죽은 잠금 5건 · R4 오탐 1건).
+#   시험: NSCM_HARNESS_JSON = 설정 파일 경로 · NSCM_GATE_BASELINE = 기준선 경로 · NSCM_GATE_DRYRUN=1 = 대상 폴더만 출력하고 끝
+$ErrorActionPreference = 'Stop'
+try { [Console]::InputEncoding = [Text.Encoding]::UTF8; [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch { }
+try { $payload = [Console]::In.ReadToEnd() | ConvertFrom-Json } catch { exit 0 }
+if ($payload.stop_hook_active) { exit 0 }   # 이미 게이트로 재개된 턴 — 무한 루프 방지
+# 2026-11-19 VMO 개선안 20261119193539_REVIEW_2(사용자 승인): VMO 에이전트가 띄운 Claude(env VIBE_ORCH=1)는 화면을 만들지 않으므로 최종 게이트를 건너뛴다.
+#   종전: 에이전트 호출 끝에 이 hook 이 정적 게이트를 띄워 결과 JSON 을 낸 뒤 result 줄 없이 exit 1 로 끝나거나(18:29 R7 사건) 호출 시간에 61초가 더해졌다
+if ($env:VIBE_ORCH -eq '1') { exit 0 }
+$fe = "C:\Projects\NSCM\nscm-fe"; $harness = "C:\Projects\NSCM\tools\Harness"
+if (-not (Test-Path "$fe\.git") -and -not (Test-Path "C:\Projects\NSCM\.git")) { exit 0 }
+$scope = ''
+try { $cfgPath = if ($env:NSCM_HARNESS_JSON) { $env:NSCM_HARNESS_JSON } else { "$harness\harness.json" }; $scope = ([IO.File]::ReadAllText($cfgPath) | ConvertFrom-Json).repairScope } catch { $scope = '' }
+$baseF = if ($env:NSCM_GATE_BASELINE) { $env:NSCM_GATE_BASELINE } else { "$harness\gate_baseline.tsv" }
+
+Push-Location $fe
+$lines = @(& git -c core.quotepath=false status --porcelain -uall 2>$null)
+Pop-Location
+$sha = [Security.Cryptography.SHA1]::Create()
+$cur = @{}   # 경로 → 내용 해시(없는 파일 = D)
+foreach ($l in $lines) {
+  if (-not $l -or $l.Length -lt 4) { continue }
+  $p = $l.Substring(3).Trim('"'); if ($p -match ' -> ') { $p = ($p -split ' -> ')[-1].Trim('"') }
+  if ($p -notmatch 'features/[^/]+/src/pages/[^/]+/') { continue }
+  $full = Join-Path $fe $p
+  if (Test-Path -LiteralPath $full -PathType Leaf) { try { $cur[$p] = [BitConverter]::ToString($sha.ComputeHash([IO.File]::ReadAllBytes($full))).Replace('-', '').ToLower() } catch { $cur[$p] = 'ERR' } } else { $cur[$p] = 'D' }
+}
+
+if ($scope -eq 'DB_ONLY') {
+  # DB MODE: 게이트 없음. 지금 상태 = 내려받은 소스 = 변경 대상 아님 → 기준선으로 적는다
+  try {
+    $out = New-Object Collections.Generic.List[string]
+    $out.Add("# gate_baseline at=$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') scope=DB_ONLY n=$($cur.Count)")
+    foreach ($k in ($cur.Keys | Sort-Object)) { $out.Add("$($cur[$k])`t$k") }
+    [IO.File]::WriteAllLines($baseF, $out, (New-Object Text.UTF8Encoding($false)))
+  } catch { }
+  exit 0
+}
+
+# UI/DB MODE: 기준선과 같은 파일은 뺀다
+$base = @{}
+if (Test-Path -LiteralPath $baseF) { foreach ($b in [IO.File]::ReadAllLines($baseF)) { if ($b.StartsWith('#')) { continue }; $i = $b.IndexOf("`t"); if ($i -gt 0) { $base[$b.Substring($i + 1)] = $b.Substring(0, $i) } } }
+$changed = @($cur.Keys | Where-Object { -not $base.ContainsKey($_) -or $base[$_] -ne $cur[$_] })
+if (-not $changed -or $changed.Count -eq 0) { if ($env:NSCM_GATE_DRYRUN) { "TARGETS 0 (changed 0 / status $($cur.Count) / baseline $($base.Count))" }; exit 0 }
+$dirs = $changed | ForEach-Object { ($_ -replace '(features/[^/]+/src/pages/[^/]+)/.*', '$1') } | Sort-Object -Unique
+$blocks = @(); $targets = @()
+foreach ($d in $dirs) {
+  $full = Join-Path $fe $d
+  if (-not (Test-Path $full)) { continue }
+  # 하네스로 생성한 화면(Doc\gen\<ID> 존재)만 최종 게이트 대상 — 기존 화면 수정은 PostToolUse 경고까지만
+  $constFile = Get-ChildItem -Path $full -Filter '*.constants.ts' -File -ErrorAction SilentlyContinue | Select-Object -First 1
+  if (-not $constFile) { continue }
+  $m = [regex]::Match((Get-Content $constFile.FullName -Raw), "MENU_ID = '([A-Z0-9_]+)'")
+  if (-not $m.Success -or -not (Test-Path "C:\Projects\NSCM\Doc\gen\$($m.Groups[1].Value)")) { continue }
+  $targets += "$($m.Groups[1].Value) $d"
+  if ($env:NSCM_GATE_DRYRUN) { continue }
+  # 2026-11-19 VMO 개선안 20261119193539_REVIEW(사용자 승인): 화면별 게이트 시작·끝을 VMO 사건 기록(.vibe/orch/events.jsonl)에 남긴다. 기록 실패는 게이트에 영향 없음
+  $evF = "C:\Projects\NSCM\.vibe\orch\events.jsonl"; $gid = $m.Groups[1].Value; $gt0 = Get-Date
+  $ev = { param($type, $extra) try { $o = [ordered]@{ at = (Get-Date -Format "yyyy-MM-ddTHH:mm:sszzz"); ms = [DateTimeOffset]::Now.ToUnixTimeMilliseconds(); type = $type; src = "hook"; pid = $PID; script = "harness-stop-gate.ps1"; screen = $gid; label = "Stop hook 최종 게이트 $gid" }; foreach ($k in $extra.Keys) { $o[$k] = $extra[$k] }; [IO.File]::AppendAllText($evF, (($o | ConvertTo-Json -Compress -Depth 3) + "`n"), (New-Object Text.UTF8Encoding($false))) } catch { } }
+  & $ev "proc.start" @{ cmd = "node check.js --page $d --final" }
+  $out = & node "$harness\check.js" --page $full --final 2>&1 | Out-String
+  if ($LASTEXITCODE -eq 2) { $blocks += $out }
+  & $ev "proc.end" @{ exit = $LASTEXITCODE; ms_run = [int]((Get-Date) - $gt0).TotalMilliseconds; why = $(if ($LASTEXITCODE -ne 0) { ($out -split "`r?`n" | Where-Object { $_ -match "\[(FAIL|ERROR|BLOCK)\]" } | Select-Object -First 3) -join " | " } else { "" }) }
+}
+if ($env:NSCM_GATE_DRYRUN) { "TARGETS $($targets.Count) (changed $($changed.Count) / status $($cur.Count) / baseline $($base.Count))"; $targets; exit 0 }
+if ($blocks.Count -gt 0) {
+  @{ decision = 'block'; reason = "[Harness 최종 게이트] 화면 작업이 끝나지 않았습니다. 아래 항목을 처리하고 __asis-mapping__.md 상태를 갱신하세요.`n" + ($blocks -join "`n") } | ConvertTo-Json -Compress -Depth 3
+  exit 0
+}
+exit 0

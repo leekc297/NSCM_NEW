@@ -1,0 +1,136 @@
+﻿elem_key,kind,item,asis_static,asis_live,tobe,verdict,status,src
+SP:SCP0028_GET_SHIPMENT_LOT_SIZE,실측-파싱 대조,SCP0028_GET_SHIPMENT_LOT_SIZE,SCP0028_Shipment_Lot_Size.cs:349 FindData,1회 · 구간 find,,MATCH,확정,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+SP:SQL: SELECT *,실측-파싱 대조,SQL: SELECT *,,1회,,INLINE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+SP:SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,실측-파싱 대조,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,SCP0028_Shipment_Lot_Size.cs:417 FindInput,0회,,NOT_CALLED,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+SP:SCP0028_SAVE_SHIPMENT_LOT_SIZE,실측-파싱 대조,SCP0028_SAVE_SHIPMENT_LOT_SIZE,SCP0028_Shipment_Lot_Size.cs:511 FindDelete,0회,,NOT_CALLED,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,(선언 ↔ 실측),32개,26개,,INFO,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,BaseRibbonCtl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,Change,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,cbo,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,chkAll,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,clb,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,panel1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,pictureBox1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlMain,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,statusStripBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,textBox1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,textBox2,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtTextKeyin,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboDivision,Y,Div* [필수],,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboOperationGroup,Y,Operation Group,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbFromSite,Y,From Site,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtItemId,Y,Model,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnItemId,Y,layoutControlItem11,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboValid,Y,Valid,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnInput,Y,Input,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnDelete,Y,Delete,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbToSite,Y,To Site,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbTransMode,Y,Trans Mode,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+,실측-파싱 대조,spdMain/Shipment Lot Size,정적 컬럼 사실 18행(시트 미지정 포함),컬럼 20(보임 15) · 헤더 1단 · 행 1735 · 고정 1,,LIVE,판단 대기,Doc/verify/SCP0028/asis_live/live_vs_static.csv
+COL:DIVISION_ID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COL:FROM_SITE,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.from_site,,"EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,WA00-A,WA00-E,WA00-P,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,NA00-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00_81-W,MI00",,ALL_SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COL:ITEM_ID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.item_id,,,,SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COND:OPERATION GROUP,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.operation_group,,"P,A,E",,ALL_SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COL:TO_SITE,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.to_site,,"EG00,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A",,ALL_SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COND:TRANS MODE,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.trans_mode,,,,SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COND:VALID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.valid,,,,SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.action_flag,,,D,TOBE_ONLY,판단 대기,Doc/asislive/SCP0028/cond_compare.csv
+COL:DIVISION_ID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COL:FROM_SITE,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.from_site,,"EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,WA00-A,WA00-E,WA00-P,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,NA00-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00_81-W,MI00",,ALL_SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COL:ITEM_ID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.item_id,,,,SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COND:OPERATION GROUP,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.operation_group,,"P,A,E",,ALL_SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COL:TO_SITE,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.to_site,,"EG00,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A",,ALL_SAME,확정,Doc/asislive/SCP0028/cond_compare.csv
+COND:TRANS MODE,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.trans_mode,,,,ASIS_ONLY,판단 대기,Doc/asislive/SCP0028/cond_compare.csv
+COND:VALID,조회 인자,SCP0028_GET_SHIPMENT_LOT_SIZE.valid,,,,ASIS_ONLY,판단 대기,Doc/asislive/SCP0028/cond_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,M,M,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800,1,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,12801,12801,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS,Club Car_US_AGS,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,SEA,SEA,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,M,M,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS,Club Car_US_AGS,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,AIR,SEA,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,M,M,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS,Club Car_US_AGS,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,AIR,SEA,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,M,M,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800,1,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,12801,12801,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS,Club Car_US_AGS,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,SEA,SEA,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,M,M,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,1,1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,1,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS,Club Car_US_AGS,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,AIR,SEA,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y,Y,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,M^M,M^M,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81^81,81^81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A^HQ07-A,HQ07-A^HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,12800^288,1^288,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1^ACEN1053I-A1,ACEP2065I-B1^ACEN1053I-A1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,12801^5761,12801^5761,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A^A,A^A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N^N,N^N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS^CS Enertech_KR_OSN,Club Car_US_AGS^CS Enertech_KR_OSN,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,SEA^TRK,SEA^TRK,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,Y^Y,Y^Y,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.active_flag,,D,M,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.debug_mode,,F,N,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:DIVISION_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.division_id,,81,81,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:FROM_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.from_site,,HQ07-A,HQ07-A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:INCREMENT,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.increment,,0,1,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:ITEM_ID,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.item_id,,ACEP2065I-B1,ACEP2065I-B1,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:LOT_SIZE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.lot_size,,0,12800,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COND:OPERATION GROUP,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.operation_group,,A,A,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:SPLIT_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.split_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+COL:TO_SITE,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.to_site,,Club Car_US_AGS,Club Car_US_AGS,SAME,확정,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.transport_mode,,X,SEA,DIFF,판단 대기,Doc/asislive/SCP0028/save_compare.csv
+,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0028/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0028_SAVE_SHIPMENT_LOT_SIZE.valid_yn,,N,N,SAME,확정,Doc/asislive/SCP0028/save_compare.csv

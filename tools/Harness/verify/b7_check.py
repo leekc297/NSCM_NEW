@@ -34,8 +34,43 @@ def read_csv(p):
         return list(csv.DictReader(f))
 
 
+_SSP_BF = None
+
+
+def ssp_bigfilter_sets(text=None):
+    """2026-11-20 T380(SSP0014 B7 판정필요 6행 '원천 미확인 cboDivision, cboOperationGroup'): SSP/Common/BigFilter.xml list_line_ssp 의
+    N번째 결과셋 = N번째 'SELECT * FROM @T…' 직전 블록의 INSERT … EXEC [SP] @Code='X', @Param1='Y' — 결과셋 번호 → (SP, @Code, @Param1).
+    결과셋 번호는 facts_combosrc.SSP_INNER(DataService.GetSSPInnerTable 열 → 번호). 순수 함수(text 를 주면 파일을 읽지 않음)"""
+    global _SSP_BF
+    if text is None and _SSP_BF is not None:
+        return _SSP_BF
+    import facts_combosrc as fc
+    t = text if text is not None else fc.read_text(co.BIGFILTER_SSP)
+    b = t[t.find('list_line_ssp'):] if 'list_line_ssp' in t else t
+    if '<![CDATA[' in b:
+        b = b[b.find('<![CDATA[') + 9:b.find(']]>')]
+    pat = re.compile(r"(?is)EXEC\s+\[?(?:dbo\]?\.\[?)?(\w+)\]?\s+@Code\s*=\s*'([^']*)'(?:\s*,\s*@Param1\s*=\s*(?:'([^']*)'|@\w+))?")
+    out, prev = [], 0
+    for m in re.finditer(r'(?i)\bSELECT\s+\*\s+FROM\s+@\w+', b):
+        ms = list(pat.finditer(b[prev:m.start()]))
+        prev = m.end()
+        out.append((ms[-1].group(1), ms[-1].group(2), ms[-1].group(3) or '') if ms else None)
+    if text is None:
+        _SSP_BF = out
+    return out
+
+
 def src_tables(cx, sp, code):
     """콤보 원천이 읽는 테이블 — UP_FX_* 는 @Code 분기 본문, 전용 SP 는 원문 전체"""
+    if sp.startswith('SSP_BIGFILTER') and code:
+        import facts_combosrc as fc
+        spec = fc.SSP_INNER.get(code)
+        sets = ssp_bigfilter_sets()
+        if spec and spec[0] < len(sets) and sets[spec[0]]:
+            isp, icode, p1 = sets[spec[0]]
+            ts, where = src_tables(cx, isp, icode)
+            return ts, f"SSP_BIGFILTER {code} = BigFilter.xml list_line_ssp 결과셋 {spec[0]} → {where}{f' (@Param1={p1})' if p1 else ''}"
+        return None, f'원천 SP 없음/BigFilter(SSP_BIGFILTER {code} 결과셋 번호 미등록)'
     if sp in ('STATIC', '') or sp.startswith(('DM_BIGFILTER', 'SSP_BIGFILTER')):
         return None, ('고정 목록' if sp == 'STATIC' else '원천 SP 없음/BigFilter')
     if code and sp.upper().startswith('UP_FX_'):
@@ -130,5 +165,17 @@ def main():
     print(f"{mid}: B7(a) {res['a']['verdict']} — {res['a']['note'][:220]} → {out}")
 
 
+def selftest():
+    """T380 결과셋 번호 → (SP, @Code, @Param1) 해석 시험"""
+    t = ("<q id='list_line_ssp'><![CDATA[ BEGIN INSERT @T EXEC [UP_FX_GetCommonDataList_SCP] @Code = 'A1' , @Param1 = @GROUP_ID SELECT * FROM @T END "
+         "BEGIN DELETE @T INSERT @T EXEC [UP_FX_GetCommonDataList] @Code = 'LookupCommon' , @Param1 = 'OPG' , @Param2 = '' SELECT	* FROM @T END "
+         "BEGIN SELECT * FROM @T END ]]></q>")
+    got = ssp_bigfilter_sets(t)
+    cases = [(got[0], ('UP_FX_GetCommonDataList_SCP', 'A1', '')), (got[1], ('UP_FX_GetCommonDataList', 'LookupCommon', 'OPG')), (got[2], None), (len(got), 3)]
+    bad = [(g, e) for g, e in cases if g != e]
+    print(f'b7_check selftest {len(cases) - len(bad)}/{len(cases)}' + (f' FAIL {bad}' if bad else ''))
+    sys.exit(1 if bad else 0)
+
+
 if __name__ == '__main__':
-    main()
+    selftest() if '--selftest' in sys.argv else main()

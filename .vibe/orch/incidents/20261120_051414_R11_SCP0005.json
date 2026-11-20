@@ -1,0 +1,26 @@
+{
+  "id": "20261120_051414_R11_SCP0005",
+  "at": "2026-11-20T05:14:14+09:00",
+  "ms": 1795119254820,
+  "rule": "R11",
+  "ruleName": "Claude 없이 끝난 체인에 오류 남음",
+  "title": "Claude 없이 끝난 체인. SCP0005 FAIL 27 · 미검증 392 남음",
+  "screen": "SCP0005",
+  "sig": "R11|SCP0005|checklist",
+  "count": 1,
+  "repeat": null,
+  "detail": "체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList): 스크립트 단계 1개 실행, Claude 단계 실행 0, 건너뜀 3",
+  "evidence": {
+    "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+    "result": "Doc/verify/SCP0005/run_verify.result.json"
+  },
+  "status": "closed",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T05:56:49+09:00",
+      "by": "사용자",
+      "what": "닫음(일괄)"
+    }
+  ]
+}

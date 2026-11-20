@@ -146,7 +146,7 @@ export async function measure(page: Page, tag: string): Promise<PopMeasure | nul
     for (const c of ${CTLS(tag)}) {
       const cols = []; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; cols.push({ binding: String(x.binding || ''), header: String(x.header || ''), visible: x.visible !== false, width: Math.round(x.renderWidth || x.width || 0), readOnly: !!x.isReadOnly, allowMerging: Number(x.allowMerging ? 1 : 0), dataType: Number(x.dataType || 0), hasMap: !!x.dataMap }); }
       const host = c.hostElement; const corner = host ? [...host.querySelectorAll('.wj-topleft .wj-cell')].map(e => (e.innerText || '').trim()).filter(Boolean) : [];
-      grids.push({ rows: c.rows.length, cols, selectionMode: Number(c.selectionMode), isReadOnly: !!c.isReadOnly, allowSorting: c.allowSorting, allowMerging: Number(c.allowMerging || 0), corner, rowHeaderCols: c.rowHeaders ? c.rowHeaders.columns.length : 0, rowHeaderW: c.rowHeaders && c.rowHeaders.columns.length ? Math.round(c.rowHeaders.columns[0].renderWidth || 0) : 0, hasCheck: !!(host && host.querySelector('.wj-cells input[type="checkbox"], .wj-colheaders input[type="checkbox"]')), frozen: Number(c.frozenColumns || 0) });
+      grids.push({ rows: c.rows.length, cols, selectionMode: Number(c.selectionMode), isReadOnly: !!c.isReadOnly, allowSorting: c.allowSorting, allowMerging: Number(c.allowMerging || 0), corner, rowHeaderCols: c.rowHeaders ? c.rowHeaders.columns.length : 0, rowHeaderW: c.rowHeaders && c.rowHeaders.columns.length ? Math.round(c.rowHeaders.columns[0].renderWidth || 0) : 0, hasCheck: !!(host && host.querySelector('.wj-cells input[type="checkbox"], .wj-colheaders input[type="checkbox"], .wj-rowheaders input[type="checkbox"]')), frozen: Number(c.frozenColumns || 0) });
     }
     const rawText = (root.innerText || '');
     const noGrid = [...root.querySelectorAll('button, label, h1, h2, h3, h4, h5, span')].filter(e => !e.closest('.wj-flexgrid') && vis(e) && e.children.length === 0).map(e => (e.innerText || '').trim()).filter(Boolean);
@@ -222,7 +222,7 @@ export async function pickRows(page: Page, dlg: Locator, tag: string, rows: numb
     await page.waitForTimeout(120);
   }
   let okText = '';
-  const hasCheckPick = await page.evaluate(`(() => { const c = ${CTLS(tag)}[0]; return !!(c && c.hostElement.querySelector('.wj-cells input[type="checkbox"]')); })()`).catch(() => false);
+  const hasCheckPick = await page.evaluate(`(() => { const c = ${CTLS(tag)}[0]; return !!(c && c.hostElement.querySelector('.wj-cells input[type="checkbox"], .wj-rowheaders input[type="checkbox"]')); })()`).catch(() => false);  /* 2026-11-20 T494(SCP0028 EG-ea38ffcb PICK_DBL): 공용 모달 체크박스는 행 머리(rowHeaders)에 있음(T148) · 측정 hasCheck 도 같음 */
   if (how === 'ok' || hasCheckPick) {
     const ok = dlg.getByRole('button', { name: /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i }).first();
     if (await ok.isVisible().catch(() => false)) { okText = (await ok.innerText().catch(() => '')).trim(); await ok.click({ timeout: 5_000 }).catch(() => undefined); }

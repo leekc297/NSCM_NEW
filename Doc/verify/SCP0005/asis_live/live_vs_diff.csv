@@ -1,5 +1,5 @@
 ﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
-SCP0005_GET_DISTRIBUTION_ROUTE,PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE,GET,6,PASS:5 ROWS_ONLY:1,,1,find,8036,"{""p_from_country"": """", ""p_from_city"": """", ""p_to_country"": """", ""p_to_city"": """", ""p_transport_mode"": """", ""p_valid_yn"": """"}",BOTH,차등 검증·실측 모두 있음
+SCP0005_GET_DISTRIBUTION_ROUTE,PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE,GET,7,DIFF:4 PASS:2 ROWS_ONLY:1,,1,find,8036,"{""p_from_country"": """", ""p_from_city"": """", ""p_to_country"": """", ""p_to_city"": """", ""p_transport_mode"": """", ""p_valid_yn"": """"}",BOTH,차등 검증·실측 모두 있음
 SCP0005_GET_DISTRIBUTION_ROUTEID,,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
 SCP0005_SAVE_DISTRIBUTION_ROUTE,,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
-SCP0005_GET_COUNTRY_CITY,PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY,GET,4,PASS:3 ROWS_ONLY:1,,1,find,89426,"{""p_country"": """", ""p_city"": """", ""p_city_name"": """", ""debug_mode"": ""F""}",BOTH,차등 검증·실측 모두 있음
+SCP0005_GET_COUNTRY_CITY,PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY,GET,3,PASS:2 ROWS_ONLY:1,,1,find,89426,"{""p_country"": """", ""p_city"": """", ""p_city_name"": """", ""debug_mode"": ""F""}",BOTH,차등 검증·실측 모두 있음

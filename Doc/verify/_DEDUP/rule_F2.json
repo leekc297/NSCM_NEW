@@ -1,0 +1,66 @@
+{
+ "rule_id": "F2",
+ "hash": "041d92fab9dbd492",
+ "groups": [
+  {
+   "refs": [
+    "DM-10",
+    "DM-11",
+    "DM-12"
+   ],
+   "target": "저장 후 Sales Site 조회조건 콤보 갱신",
+   "condition": "신규 Sales Site 생성 후 저장",
+   "expected": "저장이 1회로 성공하고, 새로 저장한 Sales Site가 Sales Site 조회조건 콤보에 바로 보인다",
+   "why": "세 항목은 Div 값만 다르고, 확인할 대상(저장 1회와 Sales Site 조회조건 콤보 즉시 노출)과 기대 결과는 같다."
+  },
+  {
+   "refs": [
+    "DM-131"
+   ],
+   "target": "복사/붙여넣기 후 저장 시 변경 감지",
+   "condition": "그리드 셀에 값을 복사/붙여넣기한 뒤 저장",
+   "expected": "붙여넣은 값이 변경으로 인식되어 저장 1회로 반영된다",
+   "why": "붙여넣기 입력의 변경 감지를 확인하는 항목이라 다른 항목과 확인 동작이 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-146"
+   ],
+   "target": "편집 팝업(Exchange Rate 등) Close 후 재오픈",
+   "condition": "팝업에서 값 수정 후 저장하지 않고 Close, 다시 열기",
+   "expected": "팝업을 Close하면 저장하지 않은 편집은 버려지고, 다시 열면 원천 데이터를 새로 조회해 표시한다(Exchange Rate 팝업 Save 건수 포함)",
+   "why": "팝업을 닫았을 때 미저장 편집을 버리는지 확인하는 항목으로, 저장 동작 확인과는 대상이 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-209"
+   ],
+   "target": "상위값 변경 후 하위 콤보 후보와 저장",
+   "condition": "Sales Site Company 변경 후 하단 그리드 Sales Company/Sales Plant 콤보 확인",
+   "expected": "변경한 Company 기준으로 Sales Company/Sales Plant 후보가 표시되고, 키인 수정이 저장 1회로 반영된다",
+   "why": "연동 콤보 후보 갱신과 키인 저장을 확인하는 항목으로, 다른 항목과 확인 대상이 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-225"
+   ],
+   "target": "CRUD Status M 표시 해제",
+   "condition": "셀 값을 수정한 뒤 원래 값으로 되돌리기",
+   "expected": "원래 값으로 되돌리면 CRUD Status M(수정) 표시가 해제된다",
+   "why": "원래 값 복원 시 변경 상태 플래그가 해제되는지 확인하는 고유 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-5"
+   ],
+   "target": "신규행 저장과 Sales Site 셀 콤보 후보",
+   "condition": "신규행 Insert 후 저장",
+   "expected": "저장이 성공하면 DB에 반영되고 재조회 결과에 표시되며 저장은 1회로 끝난다. Sales Site 셀 콤보 후보는 선택한 Div의 것만 나온다",
+   "why": "조회조건 콤보가 아니라 그리드 셀 콤보의 Div 필터와 신규행 저장을 확인하므로 DM-10~12와 대상이 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:42:17",
+ "cost": 0.058085200000000003
+}

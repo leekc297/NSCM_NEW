@@ -1,0 +1,215 @@
+{
+ "rule_id": "M4",
+ "hash": "8659886d4f2a1d37",
+ "groups": [
+  {
+   "rows": [
+    "V-b9c73bf6",
+    "V-dd0bea69"
+   ],
+   "why": "두 행은 대상(팝업 입력 컬럼)과 조건(팝업 선택 직후)이 같고, 기대도 '선택 즉시 셀에 값 표시'로 같으며 출처(CONFIRMED·DEFECT)와 문장만 다르다."
+  },
+  {
+   "rows": [
+    "EG-115bf92b"
+   ],
+   "why": "FROM_CITY 셀의 OK 반영 검사이며, 다른 셀(FROM_COUNTRY, TO_CITY, TO_COUNTRY)의 PICK_OK와 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "EG-1d5314b9"
+   ],
+   "why": "TO_CITY 셀의 팝업 기간을 메인 Period에 반영하는지 보는 검사로, 다른 셀의 PERIOD_BACK과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-2f8d892b"
+   ],
+   "why": "TO_CITY 셀의 선택 모드 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-36b4c687"
+   ],
+   "why": "FROM_COUNTRY 셀(SCM0002 팝업)의 OK 반영 검사로, 다른 셀과 대상 및 팝업이 다르다."
+  },
+  {
+   "rows": [
+    "EG-50fe3754"
+   ],
+   "why": "FROM_COUNTRY 셀의 단일 선택 모드 검사로, 기대가 구체적(_bMultiSelect=false)이어서 다른 셀의 '단일/다중 구분'과 다르다."
+  },
+  {
+   "rows": [
+    "EG-75672636"
+   ],
+   "why": "TO_COUNTRY 셀의 선택 모드 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-7929dcc3"
+   ],
+   "why": "TO_COUNTRY 셀의 PERIOD_BACK 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-8a3c8b57"
+   ],
+   "why": "TO_CITY 셀의 OK 반영 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-96ac489e"
+   ],
+   "why": "FROM_CITY 셀의 선택 모드 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-b1c05e47"
+   ],
+   "why": "FROM_CITY 셀의 PERIOD_BACK 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-cad2f0e1"
+   ],
+   "why": "FROM_COUNTRY 셀(SCM0002 팝업)의 PERIOD_BACK 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-e70b6e86"
+   ],
+   "why": "TO_COUNTRY 셀의 OK 반영 검사로, 다른 셀과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-09572c32"
+   ],
+   "why": "TO_CITY_NAME 컬럼의 대조표 추적 행으로, 대조표 대응 여부라는 다른 성질을 확인하므로 규칙 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-1abc48ee"
+   ],
+   "why": "btnToSrch 버튼의 대조표 추적 행으로, 다른 버튼이나 요소와 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-26aaaaf4"
+   ],
+   "why": "조회조건 txtToCity의 추적 행으로, 다른 조회조건과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-3d44d32d"
+   ],
+   "why": "조회조건 txtFromCountry의 추적 행으로, 다른 조회조건과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-47ab9353"
+   ],
+   "why": "조회조건 txtFromCity의 추적 행으로, 다른 조회조건과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-60ee26ff"
+   ],
+   "why": "ProgressForm(react-query isFetching) 대체 구현을 추적하는 행으로, 팝업 선택값과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-85c42a0a"
+   ],
+   "why": "FROM_COUNTRY 컬럼의 대조표 추적 행이며, 규칙 행과 확인하는 성질이 다를 수 있어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-85f5c6e4"
+   ],
+   "why": "TO_CITY 컬럼의 대조표 추적 행이며, 규칙 행과 확인하는 성질이 다를 수 있어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-9343bbce"
+   ],
+   "why": "진입점 핸들러 spdMain_CellDoubleClick를 추적하는 행으로, 대상이 다른 요소들과 다르다."
+  },
+  {
+   "rows": [
+    "T-9bdeb368"
+   ],
+   "why": "ROUTE_ID 컬럼(트리거)의 추적 행으로, 대상이 다른 요소들과 다르다."
+  },
+  {
+   "rows": [
+    "T-a369d15d"
+   ],
+   "why": "TO_COUNTRY 컬럼의 대조표 추적 행이며, 규칙 행과 확인하는 성질이 다를 수 있어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-cf269bb3"
+   ],
+   "why": "btnFromSrch 버튼의 추적 행으로, btnToSrch와 대상 버튼이 다르다."
+  },
+  {
+   "rows": [
+    "T-e67491a7"
+   ],
+   "why": "FROM_CITY 컬럼의 대조표 추적 행이며, 규칙 행과 확인하는 성질이 다를 수 있어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-e6db5ee7"
+   ],
+   "why": "FROM_CITY_NAME 컬럼의 추적 행으로, 대상 컬럼이 다른 행들과 다르다."
+  },
+  {
+   "rows": [
+    "T-ef2618be"
+   ],
+   "why": "조회조건 txtToCountry의 추적 행으로, 다른 조회조건과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-f2e92228"
+   ],
+   "why": "R11/R12 셀 더블클릭→RegionModal→setRegion 구현 위치를 추적하는 행으로, 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-fce350f2"
+   ],
+   "why": "SCP0005_DistributionRoutePopup 팝업 자체의 추적 행으로, 대상이 다른 요소들과 다르다."
+  },
+  {
+   "rows": [
+    "V-21ead191"
+   ],
+   "why": "공용 팝업에서 확정 방법(OK 단추·더블클릭)과 무관하게 같은 값을 넘기는지 보는 검사로, 기대가 다른 행들과 다르다."
+  },
+  {
+   "rows": [
+    "V-6115c121"
+   ],
+   "why": "Exchange Rate 팝업을 Close할 때 미저장 편집을 폐기하고 재오픈 시 다시 조회하는지 보는 검사로, 대상과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-742c75f5"
+   ],
+   "why": "팝업을 선택 없이 닫으면 기존 값을 유지하는지 보는 검사로, 상태(취소)와 기대가 다른 행들과 다르다."
+  },
+  {
+   "rows": [
+    "V-ebbd8cb1"
+   ],
+   "why": "Model 팝업(ITEM_ID)의 단일 선택 검사로, 이 화면의 FROM_COUNTRY 선택 모드와 대상 팝업이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:45:37",
+ "cost": 0.1314741
+}

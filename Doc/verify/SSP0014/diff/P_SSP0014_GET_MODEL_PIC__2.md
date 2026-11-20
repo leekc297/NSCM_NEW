@@ -1,10 +1,10 @@
 # SSP0014 · SSP0014_GET_SHIPMENT_MODEL_PIC ↔ PKG_SSP0014.P_SSP0014_GET_MODEL_PIC
 
-- 실행 2026-11-19 16:07:06 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 실행 2026-11-20 09:34:58 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
 - **판정 DIFF** — 공통 7667행 중 불일치 셀 195 — diff/P_SSP0014_GET_MODEL_PIC__2.csv · 키 원천 cleanup_spec.json · 키 DIVISION_ID+FROM_SITE+ITEM_ID · golden 집합 판정 DIFF
 - 호출 #2 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 7672 · 원천 Doc\verify\SSP0014\calls\_snap__snap_그리드_헤더_텍스트_모델_시트_0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "40", "operationGroup": "", "fromSite": "", "validYn": "", "itemId": "", "userId": "", "language": "KO"}`
-- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}` · 같은 본문의 세션 조합 2종 중 최다(84회) 사용 — 나머지 [{'sesLangCd': 'KO', 'sesUserId': 'kijung03.kim'}]
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}` · 같은 본문의 세션 조합 3종 중 최다(155회) 사용 — 나머지 [{'sesLangCd': 'KO', 'sesUserId': 'kijung03.kim'}, {'sesLangCd': 'KO', 'sesUserId': 'bindy122678'}]
 - AS-IS 인자(번역): `{"p_division_id": "40", "p_operation_group": "", "p_from_site": "", "p_valid_yn": "", "p_item_id": "", "p_user_id": "", "p_language": "KO"}`
 
 ### 결과셋 1  As-is 7667행 ↔ To-Be O_RC1 7671행

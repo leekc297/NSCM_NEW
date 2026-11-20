@@ -1,0 +1,382 @@
+{
+ "rule_id": "J2",
+ "hash": "96ed6ccb42b27803",
+ "groups": [
+  {
+   "rows": [
+    "EG-038dec52"
+   ],
+   "why": "EG374 DELETE·조회 전·SCP/40/SCM PI Admin 계정 노출 확인으로, 다른 행과 버튼·계정 조합이 겹치지 않음."
+  },
+  {
+   "rows": [
+    "EG-1672c145"
+   ],
+   "why": "EG369 SAVE·Div 81_HG·조회 전 확인으로, 같은 버튼·Div 조합을 가진 다른 행이 없음."
+  },
+  {
+   "rows": [
+    "EG-1bdafc53"
+   ],
+   "why": "EG374 SAVE·SCP/40/SCM PI Admin 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-1e23ee08"
+   ],
+   "why": "EG374 DELETE·SCP/81/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-26a7eaaf"
+   ],
+   "why": "EG374 INSERT·SCP/40/ADMIN 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-298b42af"
+   ],
+   "why": "EG369 INSERT·Div 81_ST 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-2f9effa0"
+   ],
+   "why": "EG369 SAVE·Div 82 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-3023d90b"
+   ],
+   "why": "EG374 SAVE·SCP/82/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-31421a34"
+   ],
+   "why": "EG374 INSERT·SCP/82/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-34943f6b"
+   ],
+   "why": "EG369 SAVE·Div 81_UC 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-3b49204b"
+   ],
+   "why": "EG374 INSERT·SCP/81/SCP Planner 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-40352682"
+   ],
+   "why": "EG374 DELETE·SCP/40/SCP Planner 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-454957ba"
+   ],
+   "why": "EG369 SAVE·Div 81_HM 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-46d761dd"
+   ],
+   "why": "EG374 INSERT·SCP/81/SCM PI Admin 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-493dc0d8"
+   ],
+   "why": "EG369 INSERT·Div 81_HG 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-4dbe33c2"
+   ],
+   "why": "EG374 SAVE·SCP/40/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-50392c56"
+   ],
+   "why": "EG374 INSERT·SCP/81/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-50fd3a64"
+   ],
+   "why": "Insert 차단 메시지의 AS-IS GROUP 분기 확인으로, 버튼 노출 확인과 성질이 다름."
+  },
+  {
+   "rows": [
+    "EG-53b1410c"
+   ],
+   "why": "EG369 DELETE·Div 82 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-5ee59851"
+   ],
+   "why": "EG369 DELETE·Div 81_HD 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-6019dc2c"
+   ],
+   "why": "EG369 INSERT·Div 82 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-660641c3"
+   ],
+   "why": "EG369 INSERT·Div 81_HM 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-71bc8dee"
+   ],
+   "why": "EG374 INSERT·SCP/40/SCM PI Admin 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-7a88dc15"
+   ],
+   "why": "EG374 DELETE·SCP/40/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-7cf0b518"
+   ],
+   "why": "EG374 INSERT·SCP/40/SCP Planner 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-8480898d"
+   ],
+   "why": "EG369 DELETE·Div 81 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-860816ba"
+   ],
+   "why": "EG369 DELETE·Div 81_HG 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-9002be9c"
+   ],
+   "why": "EG369 SAVE·Div 40 Div 단위 확인으로, 계정 그룹 기준인 EG374 행과 조건이 다름."
+  },
+  {
+   "rows": [
+    "EG-9381c725"
+   ],
+   "why": "EG374 DELETE·SCP/40/SCP Tester 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-93881697"
+   ],
+   "why": "EG369 SAVE·Div 81_HD 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-9ad3a48b"
+   ],
+   "why": "EG369 INSERT·Div 81_UC 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-9c73f639"
+   ],
+   "why": "EG374 DELETE·SCP/81/SCM PI Admin 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-9e9aed49"
+   ],
+   "why": "EG374 SAVE·SCP/40/SCP Planner 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-aaab3ad0"
+   ],
+   "why": "EG374 SAVE·SCP/40/SCP Tester 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-b06292a8"
+   ],
+   "why": "EG374 SAVE·SCP/81/SCM PI Admin 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-b1eb9792"
+   ],
+   "why": "전체 Div의 AS-IS Div·GROUP 분기 문장 확인으로, 개별 버튼 노출 측정과 성질이 다름."
+  },
+  {
+   "rows": [
+    "EG-b30ac021"
+   ],
+   "why": "EG369 INSERT·Div 81 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-b3547da8"
+   ],
+   "why": "EG369 INSERT·Div 40 Div 단위 확인으로, 계정 그룹 기준인 EG374 행과 조건이 다름."
+  },
+  {
+   "rows": [
+    "EG-b67063c4"
+   ],
+   "why": "EG374 INSERT·SCP/40/SCP Tester 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-b949a64b"
+   ],
+   "why": "EG374 DELETE·SCP/82/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-b9cd5e26"
+   ],
+   "why": "EG374 DELETE·SCP/81/SCP Planner 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-c242a0ef"
+   ],
+   "why": "EG369 SAVE·Div 81_ST 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-c38dabee"
+   ],
+   "why": "EG369 INSERT·Div 81_HD 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-c439434a"
+   ],
+   "why": "EG374 SAVE·SCP/81/SCP Planner 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-c5a47b69"
+   ],
+   "why": "EG374 SAVE·SCP/81/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-c6b0131a"
+   ],
+   "why": "EG369 SAVE·Div 81 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-cb356733"
+   ],
+   "why": "EG369 DELETE·Div 81_UC 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-d91571e3"
+   ],
+   "why": "EG369 DELETE·Div 81_HM 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-de116d01"
+   ],
+   "why": "EG369 DELETE·Div 40 Div 단위 확인으로, 계정 그룹 기준인 EG374 행과 조건이 다름."
+  },
+  {
+   "rows": [
+    "EG-e407edd5"
+   ],
+   "why": "EG374 INSERT·SCP/40/SCM Viewer 비노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-f01f41fe"
+   ],
+   "why": "EG374 SAVE·SCP/40/ADMIN 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-f5581822"
+   ],
+   "why": "EG374 DELETE·SCP/40/ADMIN 노출 확인으로, 다른 행과 버튼·계정 조합이 다름."
+  },
+  {
+   "rows": [
+    "EG-f72bc688"
+   ],
+   "why": "EG369 DELETE·Div 81_ST 확인으로, 다른 행과 버튼·Div 조합이 다름."
+  },
+  {
+   "rows": [
+    "V-0a3b3696"
+   ],
+   "why": "조회 전후와 상관없이 노출이 같은지 보는 일반 규칙으로, 특정 버튼·Div 하나의 측정과 같다고 확신할 수 없음."
+  },
+  {
+   "rows": [
+    "V-2cac90a6"
+   ],
+   "why": "Price Batch Input 버튼이 대상이며, 이 버튼은 다른 행에 없음."
+  },
+  {
+   "rows": [
+    "V-3d9b89ee"
+   ],
+   "why": "조회 후 권한 없는 계정과 있는 계정을 비교하는 행으로, 조회 전 노출 행과 상태가 다름."
+  },
+  {
+   "rows": [
+    "V-4114d871"
+   ],
+   "why": "기능 유무, 권한, Division 변경 시 다시 조회(cascade)까지 묶은 확정 규칙이라 개별 노출 행과 범위가 다름."
+  },
+  {
+   "rows": [
+    "V-77b7dac5"
+   ],
+   "why": "그룹 권한 운영 데이터 동기화를 AS-IS와 대조하는 결함 행이라 확인 방법이 다름."
+  },
+  {
+   "rows": [
+    "V-9576f1ee"
+   ],
+   "why": "권한 없는 기능 차단과 노출 일치를 화면 전체 범위로 확인하는 포괄 행이라 개별 행과 묶기 확실하지 않음."
+  },
+  {
+   "rows": [
+    "V-becdede7"
+   ],
+   "why": "Measure Setting 버튼이 대상이며, 이 버튼은 다른 행에 없음."
+  },
+  {
+   "rows": [
+    "V-c0763e78"
+   ],
+   "why": "Data Type=Cutoff Data 조건에서 Delete 비노출을 보는 행으로, 조건이 다른 행과 다름."
+  },
+  {
+   "rows": [
+    "V-d1efd124"
+   ],
+   "why": "SCP 편집 가능 시간에 SCP Planner의 Insert·저장 불가를 보는 행으로, 조회 전 노출 행과 상태·기대가 다름."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:21:56",
+ "cost": 0.20553529999999998
+}

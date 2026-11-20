@@ -1,0 +1,147 @@
+{
+  "id": "20261120001936_SELF_2",
+  "at": "2026-11-20T00:19:36+09:00",
+  "ms": 1795101576263,
+  "source": "self",
+  "status": "applied",
+  "sig": "docstyle js walk vn",
+  "title": "doc_style.py JS 소스 검사에서 주석과 정규식 리터럴 제외(확인 기준 정정 재제출)",
+  "evidence": "failed 20261119232523_SELF 2회 실패 사유 = 확인 기준 'tabview.js 위반 0' 불충족. 결과 기록(result.verify_result)은 extension.js 51 → 40, tabview.js 2 → 1, workbench.js 333 → 313 이고 남은 tabview.js 1건은 tabview.js:134 '파일이 큽니다(${…} MB) — 에디터로 여세요' 화면 문구의 줄표로 실제 위반임. 수정 내용은 기대대로 동작했고 확인 기준이 틀림. 원인 코드 = tools/Docs/doc_style.py:96 _STR 정규식이 // 주석과 정규식 리터럴 안의 따옴표, 백틱을 문자열로 짝지음. :107-110 은 문자열 시작 줄 머리만 봄. 지금 doc_style.py 는 복원된 원본(:96 _STR 그대로 확인). failed 20261119232524_SELF_3 의 남은 걸림 중 prompt-panel.js:164(웹뷰 JS 주석), orchestra.js L156, L168, L250, L448, L499(주석), L449(정규식)도 같은 원인.",
+  "targets": [
+    "tools/Docs/doc_style.py"
+  ],
+  "before_after": "변경 전: .js 도 _STR 정규식 1개로 문자열을 뽑아 주석 속 백틱이 다음 백틱까지를 문자열로 만듦 → 변경 후: .js 는 앞에서부터 읽으며 // 주석, /* */ 주석, 정규식 리터럴을 건너뛰고 ', \", ` 문자열만 뽑음. 템플릿 ${…} 안은 다시 읽음. 템플릿 글자 부분에서 줄 머리가 // 인 줄과 /* */ 구간은 뺌. .py, .cs, .ps1, xlsx, md 경로와 규칙 CSV 는 그대로.",
+  "verify": "python -m py_compile tools/Docs/doc_style.py 통과. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/tabview.js tools/VibeManager/orchestra.js --out <임시 폴더> --quiet 실행. 기대: tabview.js 에 L100 행 없음(L134 행은 개선안 'small modules v2' 반영 전이면 1건 남음), extension.js.style.csv 에 L348 '룰 진입', L388 '꺼진 ho', L555 '서브그룹' 행 없음, orchestra.js 에 L156, L168, L250, L448, L449, L499 행 없음. 출력 폴더는 .vibe/orch/selfcheck/doc_style 대신 임시 폴더를 씀(CHANGELOG.md:53 같은 폴더 동시 사용 기록).",
+  "rollback": "VMO 가 만든 tools/Docs/doc_style.py.bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T00:33:36+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T00:35:32+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 260, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0033"
+    },
+    {
+      "at": "2026-11-20T00:35:41+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-20T01:04:42+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T01:06:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 20/20개 파일 통과(PASS 270, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0104"
+    },
+    {
+      "at": "2026-11-20T01:06:35+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T01:06:46+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+    },
+    {
+      "at": "2026-11-20T01:08:55+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 반영 기록 .vibe/logs/2026-11-20T01-06-35_claude_orch.log 가 01:06:45 에 exit 1 로 끊김. 그때까지 도구 호출은 Grep(줄 27)과 Read(줄 29) 2건이고 Edit, Write 는 없음. history 01:06:46 기록대로 반영 도중 VMO 창이 다시 로드됨. 01:07:55 cmp 결과 tools/Docs/doc_style.py 가 doc_style.py.bak_20261120_self0104 와 같고 :96 _STR 은 원본 그대로임. 파일 일부만 바뀐 상태 없음. 반영 뒤 게이트는 돌지 않음(result, gate null). 다시 로드한 원인은 미확인이며 events.jsonl 01:05~01:07 에 기록 없음."
+    },
+    {
+      "at": "2026-11-20T01:09:46+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T01:11:38+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 20/20개 파일 통과(PASS 270, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0109"
+    },
+    {
+      "at": "2026-11-20T01:11:47+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T01:15:41+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 20/20개 파일 통과(PASS 270, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T01:15:41+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 01:13:12 python -m py_compile tools/Docs/doc_style.py 통과. python tools/Docs/doc_style.py extension.js tabview.js orchestra.js --out .vibe/tmp/ds_self2_after --quiet 출력: extension.js 문장 205 위반 21(수정 전 32), tabview.js 문장 8 위반 1(수정 전 2, 남은 행 L134 'MB) — 에디터로' 화면 문구), orchestra.js 문장 76 위반 8( · 변경 12개 파일 · 대상 목록 밖 변경 11개: Doc/e2e/results/SCP0005/_test_timing.jsonl, Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SSP0005/_test_timing.jsonl, Doc/e2e/results/SSP0014/_test_timing.jsonl, Doc/e2e/results/SSP0014/artifacts/SSP0014.smoke-SSP0014-Ship-ddd6d--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/error-context.md, Doc/e2e/results/SSP0014/artifacts/SSP0014.smoke-SSP0014-Ship-ddd6d--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/test-failed-1.png",
+      "log": ".vibe\\logs\\2026-11-20T01-11-47_claude_orch.log",
+      "sec": 122,
+      "costUsd": 0.6832775,
+      "files": [
+        "Doc/e2e/results/SCP0005/_test_timing.jsonl",
+        "Doc/e2e/results/SCP0028/_test_timing.jsonl",
+        "Doc/e2e/results/SSP0005/_test_timing.jsonl",
+        "Doc/e2e/results/SSP0014/_test_timing.jsonl",
+        "Doc/e2e/results/SSP0014/artifacts/SSP0014.smoke-SSP0014-Ship-ddd6d--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/error-context.md",
+        "Doc/e2e/results/SSP0014/artifacts/SSP0014.smoke-SSP0014-Ship-ddd6d--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/test-failed-1.png",
+        "Doc/tobefacts/db/_export_log.md",
+        "tools/Docs/doc_style.py",
+        "Doc/e2e/results/SCP0005/artifacts/SCP0005.smoke-SCP0005-Dist-ab368--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/error-context.md",
+        "Doc/e2e/results/SCP0005/artifacts/SCP0005.smoke-SCP0005-Dist-ab368--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/test-failed-1.png",
+        "Doc/e2e/results/SSP0005/artifacts/SSP0005.smoke-SSP0005-Ship-b5136--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/error-context.md",
+        "Doc/e2e/results/SSP0005/artifacts/SSP0005.smoke-SSP0005-Ship-b5136--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/test-failed-1.png"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|extension.js",
+  "repairOf": "20261119232523_SELF",
+  "repairRoot": "20261119232523_SELF",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795104586566,
+  "autoFp": "c374032cbe",
+  "interrupted": true,
+  "repair": {
+    "at": "2026-11-20T01:08:55+09:00",
+    "decision": "retry",
+    "cause": "반영 기록 .vibe/logs/2026-11-20T01-06-35_claude_orch.log 가 01:06:45 에 exit 1 로 끊김. 그때까지 도구 호출은 Grep(줄 27)과 Read(줄 29) 2건이고 Edit, Write 는 없음. history 01:06:46 기록대로 반영 도중 VMO 창이 다시 로드됨. 01:07:55 cmp 결과 tools/Docs/doc_style.py 가 doc_style.py.bak_20261120_self0104 와 같고 :96 _STR 은 원본 그대로임. 파일 일부만 바뀐 상태 없음. 반영 뒤 게이트는 돌지 않음(result, gate null). 다시 로드한 원인은 미확인이며 events.jsonl 01:05~01:07 에 기록 없음.",
+    "reason": "반영하던 중 VM 창이 다시 로드되어 작업이 끊겼고 파일은 하나도 바뀌지 않았다. 안 자체에는 실패 근거가 없어 같은 안으로 다시 반영한다.",
+    "log": ".vibe\\logs\\2026-11-20T01-07-32_claude_orch.log",
+    "costUsd": 0.581982,
+    "sec": 83
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 20/20개 파일 통과(PASS 270, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0109",
+  "needsReload": false,
+  "appliedMs": 1795104941797,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/Docs/doc_style.py"
+    ],
+    "verify_result": "2026-11-20 01:13:12 python -m py_compile tools/Docs/doc_style.py 통과. python tools/Docs/doc_style.py extension.js tabview.js orchestra.js --out .vibe/tmp/ds_self2_after --quiet 출력: extension.js 문장 205 위반 21(수정 전 32), tabview.js 문장 8 위반 1(수정 전 2, 남은 행 L134 'MB) — 에디터로' 화면 문구), orchestra.js 문장 76 위반 8(수정 전 9). tabview.js 에서 L97 LCS 주석 행이 빠짐(개선안의 L100 은 지금 줄 번호로 L97). extension.js.style.csv 에 '룰 진입', '꺼진 ho', '서브그룹' 행 없음. orchestra.js 에 L156, L168, L250, L448, L449, L499 행 없음. 01:13:30 백업 doc_style.py.bak_20261120_self0109 와 새 파일로 tools/Docs/doc_style.py 를 검사해 .py 경로 결과 50건 일치(True). 임시 출력 폴더 .vibe/tmp/ds_self2_before, ds_self2_after 는 확인 뒤 삭제.",
+    "note": "새로 잡힌 위반 extension.js L368, L380, L455, L466, L485, L498, L521, L583 과 orchestra.js L351~L417 은 종전에 따옴표 짝 오류로 가려졌던 문자열임. L380, L455, L466 은 소스에서 문자열 안 줄표 확인, 나머지 미확인. 남은 오탐 1건 = orchestra.js L13(웹뷰 템플릿 안 L503 정규식 / · | — |\\. /). 템플릿 글자 부분의 정규식 제외는 승인 범위 밖이라 고치지 않음. 작업 모드 DB_ONLY 이나 대상이 tools/Docs 라 hook 차단 없음."
+  },
+  "snap": "prop_20261120001936_SELF_2"
+}

@@ -1,0 +1,91 @@
+{
+  "id": "20261119232524_SELF_4",
+  "at": "2026-11-19T23:25:24+09:00",
+  "ms": 1795098324047,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn workbench pn ln n",
+  "title": "workbench.js 83~1100줄 실행 로그와 알림 문구에서 줄표와 가운뎃점 나열 제거(1차 71건)",
+  "evidence": ".vibe/orch/selfcheck/doc_style/workbench.js.style.csv 333행 중 L83~L1100 구간 121행 = 줄표 71, 가운뎃점 3, 이모지 35, 그 밖 12. 예: L83, L119, L127, L137, L146, L209, L212, L462, L490, L500, L517, L556, L566, L584, L615, L740, L758, L781, L793, L839, L851, L937, L1005, L1071, L1083 의 줄표와 L141, L142 의 가운뎃점. L94(작업 모드 지시문 9행)는 Claude 에 보내는 프롬프트라 이번 범위에서 뺌(줄표 3건). 반영 대상 = 줄표 68, 가운뎃점 3.",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/test/t_chain_runner.js",
+    "tools/VibeManager/test/t_verify_fresh.js",
+    "tools/VibeManager/test/t_job_par.js"
+  ],
+  "before_after": "예 'CheckList 가 이번 실행에서 갱신되지 않음 — ${rel}' → 'CheckList 가 이번 실행에서 갱신되지 않음. ${rel}'. 예 '⏸ ${name} 이미 실행 중 (PID ${m[1]}) — 새로 띄우지 않습니다' → '⏸ ${name} 이미 실행 중 (PID ${m[1]}). 새로 띄우지 않습니다'. 낱말과 상태 기호(✖ ⚠ ✅ ⏳ ⛔)는 그대로 두고 83~1100줄의 줄표, 가운뎃점만 바꿈. 94줄 지시문, 주석, 정규식, 로그를 다시 읽는 코드가 찾는 문구는 고치지 않음. 전체를 다시 쓰지 않고 줄 단위 Edit. 시험 3개는 고친 문구를 문자열로 맞춰 보는 줄만 같이 고침.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/workbench.js --out .vibe/orch/selfcheck/doc_style --quiet 실행 뒤 workbench.js.style.csv 에서 L83~L1100(L94 제외) 줄표, 가운뎃점 행 0건. 로그 문구를 정규식으로 읽는 곳이 있는지 Grep 으로 '— ' 를 포함한 정규식을 tools/VibeManager/*.js, tools/Harness 에서 확인(0건이어야 함).",
+  "rollback": "VMO 가 만든 workbench.js 와 시험 3개의 .bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T00:09:41+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T00:11:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0009"
+    },
+    {
+      "at": "2026-11-20T00:11:25+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T00:15:42+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T00:15:42+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 00:13:34 실행. node --check workbench.js 통과. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --out .vibe/orch/selfcheck/doc_style --quiet 종료코드 1(파일 전체 위반 263건, 문장 442). workbench.js.style.csv 에서 L83~L1100(L94 제외) 줄표, 가운뎃점 행 0건. 줄표가 들어간 정규식 검색(tools/VibeManager/*.js, tools/Harn · 변경 3개 파일 · 대상 목록 밖 변경 2개: tools/Harness/harness.json, tools/VibeManager/orch-state.js",
+      "log": ".vibe\\logs\\2026-11-20T00-11-25_claude_orch.log",
+      "sec": 156,
+      "costUsd": 1.2103411999999998,
+      "files": [
+        "tools/Harness/harness.json",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/workbench.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795100980986,
+  "autoFp": "3edd6d0488",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0009",
+  "needsReload": true,
+  "appliedMs": 1795101342627,
+  "synced": [
+    "orch-state.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-20 00:13:34 실행. node --check workbench.js 통과. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --out .vibe/orch/selfcheck/doc_style --quiet 종료코드 1(파일 전체 위반 263건, 문장 442). workbench.js.style.csv 에서 L83~L1100(L94 제외) 줄표, 가운뎃점 행 0건. 줄표가 들어간 정규식 검색(tools/VibeManager/*.js, tools/Harness) 결과 1건 flow-panel.js:86, PIPELINE.md 제목(Harness/pipeline.js:75 가 씀)을 읽는 정규식이고 workbench.js 문구와 관계없음.",
+    "note": "문구 72곳 수정. 줄표 69곳(83줄 영문 1곳 포함), 141·142줄 가운뎃점 3곳. 시험 3개는 확인하는 문구에 줄표가 없어 고치지 않음. verify 는 정규식 검색 0건을 요구했으나 flow-panel.js:86 1건이 나옴. 이번 수정과 관계없어 손대지 않았고 verified 는 true 로 냄. git diff 의 추가 92줄, 삭제 67줄에는 이번 작업 전부터 커밋되지 않은 다른 작업의 변경이 섞여 있음."
+  },
+  "snap": "prop_20261119232524_SELF_4"
+}

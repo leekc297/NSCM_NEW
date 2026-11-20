@@ -1,0 +1,167 @@
+{
+ "rule_id": "B2",
+ "hash": "b6a37a036cdf7c83",
+ "groups": [
+  {
+   "rows": [
+    "V-424d83eb",
+    "V-63c921d9"
+   ],
+   "why": "Both rows check the same grid combos (End Customer and Sold-to Customer in Sales Site) on a new-row Insert, and both expect no duplicates, source sort order and a non-empty list; only the source and wording differ."
+  },
+  {
+   "rows": [
+    "T-a2a6f700"
+   ],
+   "why": "This TRACE row tracks a comparison-table item about Excel Download showing Name instead of Code, which is a different property from duplicate combo options, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-096a7527"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_THU column."
+  },
+  {
+   "rows": [
+    "V-0b117261"
+   ],
+   "why": "Only row for the POPUP DAYS_SAT column; the popup is a different element from the main grid."
+  },
+  {
+   "rows": [
+    "V-0daea122"
+   ],
+   "why": "This row checks the Cust Group to End Customer to Sales Site cascade and value reset for Div 40, which differs from the other rows in both target and expected result."
+  },
+  {
+   "rows": [
+    "V-0de0bf78"
+   ],
+   "why": "Only row for the POPUP DAYS_FRI column."
+  },
+  {
+   "rows": [
+    "V-1961aee0"
+   ],
+   "why": "Distribution Route.LT_TYPE (L/T Type*) is shown as required, while route.LT_TYPE (L/T Type) is not, so it may be a different grid and stays alone."
+  },
+  {
+   "rows": [
+    "V-22b8cdc2"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_TUE column."
+  },
+  {
+   "rows": [
+    "V-3348652a"
+   ],
+   "why": "Only row for the POPUP DAYS_WED column."
+  },
+  {
+   "rows": [
+    "V-607aa216"
+   ],
+   "why": "Distribution Route.VALID_YN (Active*) is shown as required, while route.VALID_YN (Active) is not, so it may be a different grid and stays alone."
+  },
+  {
+   "rows": [
+    "V-6c5c2fd9"
+   ],
+   "why": "Only row for the POPUP DAYS_MON column."
+  },
+  {
+   "rows": [
+    "V-6edb0f03"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_SUN column."
+  },
+  {
+   "rows": [
+    "V-704136f7"
+   ],
+   "why": "This is the Trans Mode search condition, which is a different element from the grid's TRANSPORT_MODE column."
+  },
+  {
+   "rows": [
+    "V-799f808c"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_FRI column."
+  },
+  {
+   "rows": [
+    "V-861abedf"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_SAT column."
+  },
+  {
+   "rows": [
+    "V-a6094eb3"
+   ],
+   "why": "Only row for the POPUP DAYS_TUE column."
+  },
+  {
+   "rows": [
+    "V-af656283"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_MON column."
+  },
+  {
+   "rows": [
+    "V-c869e8af"
+   ],
+   "why": "This is the grid's TRANSPORT_MODE column on a new row, which is a different element from the Trans Mode search condition."
+  },
+  {
+   "rows": [
+    "V-d069ebd7"
+   ],
+   "why": "route.LT_TYPE might be the same as the Distribution Route column, but that is not certain, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-d83a1822"
+   ],
+   "why": "This row includes a check that Team options follow the selected Div's SSPM DEPT, so its expected result is broader than the other rows."
+  },
+  {
+   "rows": [
+    "V-e89d1dcb"
+   ],
+   "why": "Only row for the POPUP DAYS_THU column."
+  },
+  {
+   "rows": [
+    "V-ea23d5e2"
+   ],
+   "why": "Only row for the Valid search condition."
+  },
+  {
+   "rows": [
+    "V-eec7c071"
+   ],
+   "why": "Only row for the Distribution Route grid DAYS_WED column."
+  },
+  {
+   "rows": [
+    "V-ef47c210"
+   ],
+   "why": "This row covers only End Customer and expects zero blank rows, while the DEFECT/CONFIRMED pair also covers Sold-to and expects a non-empty combo, so the target and expected result differ."
+  },
+  {
+   "rows": [
+    "V-f03039aa"
+   ],
+   "why": "Only row for the POPUP DAYS_SUN column."
+  },
+  {
+   "rows": [
+    "V-f615458e"
+   ],
+   "why": "route.VALID_YN might be the same as the Distribution Route column, but that is not certain, so it stays alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:37:52",
+ "cost": 0.0821166
+}

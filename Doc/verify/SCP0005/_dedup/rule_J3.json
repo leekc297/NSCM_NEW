@@ -1,0 +1,53 @@
+{
+ "rule_id": "J3",
+ "hash": "6e9cf0493046b7a1",
+ "groups": [
+  {
+   "rows": [
+    "EG-13d04c2c",
+    "EG-1ebb0564"
+   ],
+   "why": "Both rows come from the same screen rule, target the whole SCP0005 screen and expect the same thing (the AS-IS GROUP and row-value lock rule); only the rule number differs (EG377 vs EG378)."
+  },
+  {
+   "rows": [
+    "EG-bda34109"
+   ],
+   "why": "It checks only the GET_ADMIN_GROUP_MEASURE rows, which is a different scope and expectation from the GROUP/row-value lock rule, so it stays on its own."
+  },
+  {
+   "rows": [
+    "V-2ac33430"
+   ],
+   "why": "It checks columns whose AS-IS lock rule has a GROUP condition by logging in with other permission-group accounts, which is broader than the EG377/378 rule (that one also covers row-value locks), so it stays on its own to be safe."
+  },
+  {
+   "rows": [
+    "V-1ad306e6"
+   ],
+   "why": "It checks whether AS From Site is enabled and how its combo works for stockpile vs customer Sales Sites, plus the Measure candidates, so the target and expectation differ from the others."
+  },
+  {
+   "rows": [
+    "V-6bb1944f"
+   ],
+   "why": "It checks whether RTF[R+P] can be edited depending on Cutoff/SCP Final status and the edit-blocked popup, which is a different column and state condition."
+  },
+  {
+   "rows": [
+    "V-77daec0c"
+   ],
+   "why": "It checks the edit window of the MKT_FCST and SCM_FCST Measures by Div, permission and time window, and the DM PLANNER block, which is a different element and expectation from the general GET_ADMIN_GROUP_MEASURE rows."
+  },
+  {
+   "rows": [
+    "V-bef78493"
+   ],
+   "why": "In the Current version it checks several Measures (Unit Price, AS_In_Req, VMI_In_Req and others) and the AS From Site combo by Div/VMI condition, which covers a different set of targets and expectations from the other rows."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:44:30",
+ "cost": 0.058038400000000004
+}

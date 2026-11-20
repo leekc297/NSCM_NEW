@@ -172,7 +172,7 @@ export const PrdnCtryModal = ({ open, modalClose, divisionId, value, onConfirm }
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL01232', 'Prod. Country')}</h2>
+          <h2 className='headerTitle'>{t('LBL01278', 'Prod. Country')}</h2>
         </div>
       }
       customContentArea={
@@ -198,6 +198,8 @@ export const PrdnCtryModal = ({ open, modalClose, divisionId, value, onConfirm }
             </ResultArea>
           </div>
           <div className={styles.modalButtonWrapper}>
+            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Close' onClick={modalClose} />
+            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Skip' onClick={handleSkip} />
             <Button
               appearance='contained'
               priority='primary'
@@ -207,8 +209,6 @@ export const PrdnCtryModal = ({ open, modalClose, divisionId, value, onConfirm }
               iconPosition='leading'
               onClick={handleOk}
             />
-            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Skip' onClick={handleSkip} />
-            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Close' onClick={modalClose} />
           </div>
         </div>
       }

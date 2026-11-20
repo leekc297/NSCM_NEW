@@ -1,0 +1,172 @@
+{
+ "id": "SCP0028",
+ "group": "ADMIN",
+ "cellrun": true,
+ "inputrun": true,
+ "edit": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Lot Size",
+     "rows_before": 1735,
+     "rows_after": 1735,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "LOT_SIZE",
+       "before": "",
+       "after": "12,800"
+      },
+      {
+       "row": 0,
+       "col": "INCREMENT",
+       "before": "",
+       "after": "12,800"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LOT_SIZE]",
+   "kind": "cell",
+   "change": "첫 행 값 입력  → 12,800(수정 모드) · 입력 뒤 값 12,800 · 변경 표시 '' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0028-S5fcb37"
+   ],
+   "cell": {
+    "before": "",
+    "after": "12,800",
+    "action_before": "",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain[INCREMENT]",
+   "kind": "cell",
+   "change": "첫 행 값 입력  → 12,800(수정 모드) · 입력 뒤 값 12,800 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0028-S5fcb37"
+   ],
+   "cell": {
+    "before": "12,800",
+    "after": "12,800",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Lot Size",
+     "rows_before": 1735,
+     "rows_after": 1735,
+     "cells": [
+      {
+       "row": 0,
+       "col": "VALID_YN",
+       "before": "Y",
+       "after": "N"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[VALID_YN]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 Y → N(수정 모드) · 입력 뒤 값 N · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "Y",
+    "after": "N",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Lot Size",
+     "rows_before": 1735,
+     "rows_after": 1735,
+     "cells": [
+      {
+       "row": 0,
+       "col": "SPLIT_YN",
+       "before": "N",
+       "after": "Y"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[SPLIT_YN]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 N → Y(수정 모드) · 입력 뒤 값 Y · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "N",
+    "after": "Y",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-20 09:33:04",
+ "edit_mode": true,
+ "plan": {
+  "grid": "spdMain",
+  "sheet": "Shipment Lot Size",
+  "named_cols": [
+   "LOT_SIZE",
+   "INCREMENT"
+  ],
+  "branches": 1,
+  "branches_without_col_name": 0,
+  "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 8개까지"
+ }
+}

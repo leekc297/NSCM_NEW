@@ -1,0 +1,23 @@
+{
+ "rule_id": "F10",
+ "hash": "4a4363189f4b7344",
+ "groups": [
+  {
+   "rows": [
+    "V-072aeef0",
+    "V-ddc8b74f"
+   ],
+   "why": "두 행 모두 같은 저장 PROC P_SCP0028_SAVE_SHIPMENT_LOT_SIZE와 그 1단계 하위 호출에서 COMMIT·TRUNCATE·DDL·DBMS_STATS·자율 트랜잭션이 0건인지 보는 같은 정적 검사이고 기대 결과도 같으므로, 트리거가 DELETE와 SAVE로 달라도 한 번 측정해 결과를 나눠 쓸 수 있다."
+  },
+  {
+   "rows": [
+    "V-9496af63"
+   ],
+   "why": "대상이 저장 PROC가 아닌 조회용 PROC P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT이고 조건도 main/INSERT라서 검사 요소가 다르므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:18:33",
+ "cost": 0.0474503
+}

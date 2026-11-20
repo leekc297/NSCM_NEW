@@ -30,15 +30,15 @@ export const ControlButtonGroup = ({
       />
       <Button
         appearance='outlined'
-        iconComponent={<ControlConfirmIcon size='default' />}
-        buttonLabel='OK'
-        onClick={handleOk}
-      />
-      <Button
-        appearance='outlined'
         iconComponent={<ControlCloseIcon size='default' />}
         buttonLabel='Cancel'
         onClick={handleCancel}
+      />
+      <Button
+        appearance='outlined'
+        iconComponent={<ControlConfirmIcon size='default' />}
+        buttonLabel='OK'
+        onClick={handleOk}
       />
     </div>
   );

@@ -1,0 +1,3 @@
+pattern,canon,source,enabled,note
+"^([WMDY])_?(\d{6,8})$",\1_\2,dyn_columns.csv binding_regex 실측(2026-11-06),Y,동적 기간 컬럼 — AS-IS 'W202611' ↔ TO-BE 'W_202611' 를 같은 이름으로
+"^(.+?)_?(40|81|82)$",\1,미확인(설계 추정 — 실례 필요),N,FE 바인딩 접미 Division(…40) — 실례 확인 전까지 적용하지 않음

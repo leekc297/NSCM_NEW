@@ -1,0 +1,337 @@
+// 2026-11-19 VMO P2: 서버 서비스 — BE·FE·AS-IS IIS 서버 프로세스를 창이 아닌 확장 호스트가 소유한다.
+//   종전: 서버를 띄운 Workbench 창의 procs 에 들어가 그 창을 닫으면 서버도 종료됐고, BE/FE Log 는 그 창에만 나왔다.
+//   지금: ① 서버 출력은 파이프 대신 로그 파일(.vibe/logs/<시각>_<이름>.log)로 보내고 그 파일을 이어 읽는다
+//           → 창을 닫거나 VS Code 창을 다시 로드해도 서버가 죽지 않고(.vibe/orch/servers.json 으로 다시 붙는다) 로그가 이어진다
+//         ② 로그는 최근 BUF_MAX 줄을 보관하고 구독한 창 전부에 보낸다(나중에 연 창도 보관분을 받는다)
+//         ③ server_guard.py 가 띄운 서버 로그(Doc/e2e/logs/_server_<port>.log)도 같은 창에 보인다
+//         ④ 포트 연결 + HTTP 응답으로 상태를 POLL_MS 마다 재고 상태 표시줄 항목(BE · FE)에 항상 표시한다
+//   보호 프로세스(VPN 등 PROTECTED_PROC)는 종료하지 않는다 — 종전 규칙 그대로.
+'use strict';
+const vscode = require('vscode');
+const cp = require('child_process');
+const fs = require('fs');
+const path = require('path');
+let errlog = { note() { return null; }, init() { return ''; } }; try { errlog = require('./orch-errlog'); } catch { } // 2026-11-19 자가진단 Q1: 삼키던 오류를 .vibe/orch/vm_errors.jsonl 에 남긴다
+const net = require('net');
+const http = require('http');
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+
+const BUF_MAX = 5000;
+const POLL_MS = 5000;
+const TAIL_MS = 700;
+const HEALTH = { 8080: '/user/login', 5173: '/' };          // tools/Harness/verify/server_guard.py URL 과 같은 경로
+const LABEL = { 8080: 'BE', 5173: 'FE', 8086: 'AS-IS IIS' };
+const BAR_PORTS = [8080, 5173];
+
+const logs = {};                 // stream → [{text, cls}]
+const subs = new Set();          // fn(msg)
+const servers = new Map();       // name → { name, port, stream, child|null, pid, logF, t0, ready, attached, stopTail }
+const states = {};               // port → { port, label, state('up'|'listen'|'down'), since, owner('vm'|'external'|''), name, bootSec }
+const bars = {};                 // port → StatusBarItem
+const guardTail = {};            // port → stop()
+let root = '', vibeDir = '', pollTimer = null, started = false, polling = false;
+
+const two = n => String(n).padStart(2, '0');
+const stampFile = () => { const d = new Date(); return `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}T${two(d.getHours())}-${two(d.getMinutes())}-${two(d.getSeconds())}`; };
+const hhmmss = ms => { const d = new Date(ms || Date.now()); return `${two(d.getHours())}:${two(d.getMinutes())}:${two(d.getSeconds())}`; };
+function evt(type, data) { try { if (orchEv && vibeDir) { orchEv.init(vibeDir); orchEv.emit(type, data); } } catch { } }
+const streamOf = (port, name) => (Number(port) === 8080 || /\bBE\b/i.test(name || '') ? 'be' : Number(port) === 5173 || /\bFE\b/i.test(name || '') ? 'fe' : 'svc');
+
+// ── 포트 점유자 · 종료 (workbench.js 에서 옮김 — 1.7.9 · 1.8.1) ──
+function portOwnerInfo(port) {
+  try {
+    if (process.platform === 'win32') {
+      const ns = cp.execSync(`netstat -ano -p tcp | findstr /R /C:":${port} .*LISTENING"`, { encoding: 'utf8', windowsHide: true, timeout: 8000 });
+      const m = /LISTENING\s+(\d+)\s*$/m.exec(ns); if (!m) return null;
+      const pid = Number(m[1]); let name = '';
+      try { const tl = cp.execSync(`tasklist /FI "PID eq ${pid}" /FO CSV /NH`, { encoding: 'utf8', windowsHide: true, timeout: 8000 }); name = (tl.split(',')[0] || '').replace(/"/g, '').trim(); } catch { }
+      return { pid, name: name || 'PID' };
+    }
+    const o = cp.execSync(`lsof -iTCP:${port} -sTCP:LISTEN -P -n | tail -n +2`, { encoding: 'utf8', timeout: 8000 }).trim();
+    if (!o) return null; const f = o.split(/\s+/); return { pid: Number(f[1]), name: f[0] };
+  } catch { return null; }
+}
+function portOwner(port) { const i = portOwnerInfo(port); return i ? `${i.name} ${i.pid}` : ''; }
+// 종료 금지 프로세스 — VPN/보안 에이전트(종료 시 사내망 끊김: F5FltSrv) · 시스템
+const PROTECTED_PROC = /^(F5FltSrv|f5fpclientW|BIGIPEdge|svchost|System|lsass|csrss|wininit|services|explorer|Code|vpnagent|vpnui|GlobalProtect|PanGPS|NordVPN|openvpn)/i;
+function killTree(pid) {
+  if (!pid) return false;
+  try {
+    if (process.platform === 'win32') {
+      const r = cp.spawnSync('taskkill', ['/PID', String(pid), '/T', '/F'], { encoding: 'utf8', windowsHide: true, timeout: 15000 });
+      if (r.status === 0) return true;
+      const ps = `Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq ${pid} } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }; Stop-Process -Id ${pid} -Force -ErrorAction Stop`;
+      const r2 = cp.spawnSync('powershell', ['-NoProfile', '-Command', ps], { encoding: 'utf8', windowsHide: true, timeout: 20000 });
+      return r2.status === 0;
+    }
+    try { process.kill(-pid, 'SIGTERM'); } catch { process.kill(pid, 'SIGTERM'); } return true;
+  } catch { return false; }
+}
+function pidAlive(pid) { if (!pid) return false; try { process.kill(pid, 0); return true; } catch (e) { return !!(e && e.code === 'EPERM'); } }
+
+// ── 구독 · 로그 보관 ──
+function post(m) { for (const fn of subs) { try { fn(m); } catch (ex) { errlog.note('server-service', 'post', ex); } } }
+function out(stream, text, cls) {
+  const b = logs[stream] || (logs[stream] = []);
+  b.push({ text: String(text), cls: cls || '' }); if (b.length > BUF_MAX) b.splice(0, b.length - BUF_MAX);
+  post({ type: 'out', stream, text: String(text), cls: cls || '' });
+}
+/** fn(msg) — msg: {type:'out',stream('be'|'fe'|'svc'),text,cls} | {type:'server',name,ok,sec,state} | {type:'serverState',states} */
+function subscribe(fn) { subs.add(fn); return () => subs.delete(fn); }
+function snapshot(stream) { return (logs[stream] || []).slice(); }
+const portRank = p => { const i = BAR_PORTS.indexOf(p); return i >= 0 ? i : 100 + p; };   // BE · FE 먼저, 나머지는 포트 순
+function stateList() { return Object.keys(states).map(Number).sort((a, b) => portRank(a) - portRank(b)).map(p => Object.assign({}, states[p])); }
+
+// ── 파일 이어 읽기 ──
+function tailFile(file, onLine, fromBytes) {
+  let pos = fromBytes == null ? 0 : fromBytes; let buf = ''; let stopped = false; let busy = false;
+  const tick = () => {
+    if (stopped || busy) return; busy = true;
+    fs.stat(file, (e, st) => {
+      if (e || stopped) { busy = false; return; }
+      if (st.size < pos) { pos = 0; buf = ''; }               // 파일이 새로 만들어짐
+      if (st.size === pos) { busy = false; return; }
+      const len = Math.min(st.size - pos, 512 * 1024); const b = Buffer.alloc(len);
+      fs.open(file, 'r', (e2, fd) => {
+        if (e2) { busy = false; return; }
+        fs.read(fd, b, 0, len, pos, (e3, n) => {
+          fs.close(fd, () => { });
+          if (!e3 && n > 0) { pos += n; buf += b.slice(0, n).toString('utf8'); const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { try { onLine(ln); } catch (ex) { errlog.note('server-service', 'tailLine', ex); } } }
+          busy = false;
+        });
+      });
+    });
+  };
+  const timer = setInterval(tick, TAIL_MS); tick();
+  return { stop: () => { stopped = true; clearInterval(timer); if (buf) { try { onLine(buf); } catch (ex) { errlog.note('server-service', 'tailLine', ex); } buf = ''; } }, flush: tick };
+}
+
+// ── 다시 붙기용 등록부 ──
+const regFile = () => (vibeDir ? path.join(vibeDir, 'orch', 'servers.json') : '');
+function saveReg() {
+  try { const f = regFile(); if (!f) return; fs.mkdirSync(path.dirname(f), { recursive: true });
+    fs.writeFileSync(f, JSON.stringify([...servers.values()].map(s => ({ name: s.name, port: s.port, pid: s.pid, logF: s.logF, t0: s.t0, ready: !!s.ready })), null, 2), 'utf8'); } catch { }
+}
+function reattach() {
+  let reg = []; try { reg = JSON.parse(fs.readFileSync(regFile(), 'utf8')); } catch { reg = []; }
+  for (const r of reg) {
+    if (!r || !r.name || servers.has(r.name) || !r.logF || !fs.existsSync(r.logF)) continue;
+    const listening = r.port ? !!portOwnerInfo(r.port) : pidAlive(r.pid);
+    if (!listening) continue;
+    const stream = streamOf(r.port, r.name); let size = 0; try { size = fs.statSync(r.logF).size; } catch { }
+    const from = Math.max(0, size - 64 * 1024); let first = from > 0;
+    const s = { name: r.name, port: r.port, stream, child: null, pid: r.pid, logF: r.logF, t0: r.t0 || Date.now(), ready: true, attached: true };
+    out(stream, `↺ ${r.name} 다시 붙음 — 이 창을 다시 로드하기 전에 띄운 서버(로그 ${path.relative(root, r.logF)})\n`, 'cmd');
+    const tl = tailFile(r.logF, ln => { if (first) { first = false; return; } out(stream, ln + '\n'); }, from);
+    s.stopTail = tl.stop; servers.set(r.name, s);
+  }
+  saveReg();
+}
+
+// ── 상태 측정(포트 연결 + HTTP 응답) ──
+function tcpOpen(port, host, ms) {
+  return new Promise(res => { let done = false; const fin = v => { if (done) return; done = true; try { sk.destroy(); } catch { } res(v); };
+    const sk = net.connect({ port, host }); sk.setTimeout(ms, () => fin(false)); sk.once('connect', () => fin(true)); sk.once('error', () => fin(false)); });
+}
+function httpAlive(port, host, pth, ms) {
+  return new Promise(res => { let done = false; const fin = v => { if (done) return; done = true; res(v); };
+    try { const rq = http.get({ host, port, path: pth, timeout: ms }, r => { r.resume(); fin(true); }); rq.on('timeout', () => { try { rq.destroy(); } catch { } fin(false); }); rq.on('error', () => fin(false)); } catch { fin(false); } });
+}
+async function probe(port) {
+  for (const host of ['127.0.0.1', '::1']) {
+    if (!(await tcpOpen(port, host, 1500))) continue;
+    if (!HEALTH[port]) return 'up';
+    return (await httpAlive(port, host, HEALTH[port], 3000)) ? 'up' : 'listen';
+  }
+  return 'down';
+}
+function ownerOf(port) { for (const s of servers.values()) if (Number(s.port) === Number(port)) return s; return null; }
+function paintBar(port) {
+  const b = bars[port]; const st = states[port]; if (!b || !st) return;
+  const icon = st.state === 'up' ? '$(pass-filled)' : st.state === 'listen' ? '$(warning)' : '$(circle-slash)';
+  b.text = `${icon} ${st.label} ${port}`;
+  b.color = st.state === 'up' ? new vscode.ThemeColor('testing.iconPassed') : st.state === 'listen' ? new vscode.ThemeColor('editorWarning.foreground') : new vscode.ThemeColor('disabledForeground');
+  const word = st.state === 'up' ? '응답 있음' : st.state === 'listen' ? '포트만 열림(HTTP 응답 없음)' : '꺼짐';
+  b.tooltip = `${st.label} 포트 ${port} — ${word} · ${hhmmss(st.since)} 부터${st.owner ? ` · ${st.owner === 'vm' ? 'VM 이 띄움' : 'VM 밖에서 띄움'}` : ''}\n클릭 = VMO 창 ${st.label} Log`;
+  b.show();
+}
+async function pollOnce() {
+  if (polling) return; polling = true;
+  try {
+    const ports = [...new Set([...BAR_PORTS, ...[...servers.values()].map(s => Number(s.port)).filter(Boolean), ...Object.keys(states).map(Number)])];
+    let changed = false;
+    for (const port of ports) {
+      const now = await probe(port); const own = ownerOf(port);
+      const prev = states[port];
+      const owner = now === 'down' ? '' : own ? 'vm' : 'external';
+      if (!prev || prev.state !== now || prev.owner !== owner) {
+        states[port] = { port, label: LABEL[port] || `포트 ${port}`, state: now, since: Date.now(), owner, name: own ? own.name : '', bootSec: prev && prev.bootSec != null && now !== 'down' ? prev.bootSec : null };
+        changed = true;
+        if (prev) evt('server.state', { port, name: own ? own.name : '', state: now, prev: prev.state, owner, source: 'poll' });
+      }
+      paintBar(port);
+    }
+    if (changed) post({ type: 'serverState', states: stateList() });
+  } catch (ex) { errlog.note('server-service', 'poll', ex); } finally { polling = false; }
+}
+
+// ── server_guard.py 가 띄운 서버 로그 ──
+function watchGuardLogs() {
+  for (const port of BAR_PORTS) {
+    if (guardTail[port]) continue;
+    const f = path.join(root, 'Doc', 'e2e', 'logs', `_server_${port}.log`); const stream = streamOf(port, '');
+    let size = 0; try { size = fs.statSync(f).size; } catch { }
+    const tl = tailFile(f, ln => { if (ownerOf(port)) return; out(stream, ln + '\n'); }, size);   // VM 이 띄운 서버가 있으면 그 로그만 보인다
+    guardTail[port] = tl.stop;
+  }
+}
+
+// ── 기동 ──
+/** it = quick.json 서버 항목(cmd · ready · port · readyTimeoutSec · hint) · say(text, cls) = 요청한 창의 Task Log 출력(없어도 됨)
+ *  반환 Promise<{ok, sec, msg, timeout?}> — 기동 완료·실패·시간 초과 때 한 번 */
+function start(p, it, cwd, name, say) {
+  init(p);
+  say = typeof say === 'function' ? say : () => { };
+  const stream = streamOf(it.port, name);
+  const t0 = Date.now(); let ready = false; let timer = null; const tail = [];
+  const re = it.ready ? new RegExp(it.ready) : null;
+  let settle = null; const result = new Promise(r => { settle = r; });
+  const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true });
+  const logF = path.join(logDir, `${stampFile()}_${String(name || 'server').replace(/[^\w.-]/g, '_')}.log`);
+  let fd = null; try { fd = fs.openSync(logF, 'a'); } catch (e) { say(`✖ ${name} 로그 파일을 열 수 없음: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: '로그 파일 열기 실패' }); }
+  out(stream, `▶ ${name}\n  $ cmd /c ${it.cmd}\n`, 'cmd');
+  let child;
+  try { child = cp.spawn('cmd', ['/c', it.cmd], { cwd, shell: process.platform === 'win32', env: Object.assign({}, process.env), stdio: ['ignore', fd, fd], windowsHide: true }); }
+  catch (e) { try { fs.closeSync(fd); } catch { } out(stream, `✖ ${name} 실행 실패: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: e.message }); }
+  try { fs.closeSync(fd); } catch { }
+  const s = { name, port: it.port || null, stream, child, pid: child.pid, logF, t0, ready: false, attached: false };
+  servers.set(name, s); saveReg();
+  evt('proc.start', { screen: '', label: name, stream, childPid: child.pid || null, log: path.relative(p.root, logF), cmd: String(it.cmd).slice(0, 400), server: true });
+  const done = (ok, msg) => {
+    if (ready) return; ready = true; if (timer) clearTimeout(timer);
+    const sec = Math.round((Date.now() - t0) / 1000); try { settle({ ok, sec, msg }); } catch (ex) { errlog.note('server-service', 'settle', ex); }
+    out(stream, `${ok ? '✅' : '✖'} ${name} ${msg} (${sec}s)${it.hint ? ' — ' + it.hint.split(' · ')[0] : ''}\n`, ok ? 'ok' : 'bad');
+    post({ type: 'server', name, ok, sec });
+    evt('server.state', { name, port: it.port || null, state: ok ? 'ready' : 'failed', ms_boot: Date.now() - t0, msg: String(msg || '').slice(0, 300), source: 'start' });
+    if (ok) { s.ready = true; saveReg(); if (it.port) { const pv = states[it.port] || {}; states[it.port] = Object.assign({ port: it.port, label: LABEL[it.port] || `포트 ${it.port}`, state: 'listen', since: Date.now(), owner: 'vm', name }, pv, { bootSec: sec, owner: 'vm', name }); } pollOnce(); }
+    if (ok) vscode.window.showInformationMessage(`Vibe_Manager ✅ ${name} 기동 완료 (${sec}s)${it.port ? ` · 포트 ${it.port}` : ''}`);
+    else Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ✖ ${name} ${String(msg).split('\n')[0]}`, 'Log 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', stream === 'be' ? 'belog' : stream === 'fe' ? 'felog' : 'board'); }, () => { });
+  };
+  const onLine = ln => {
+    out(stream, ln + '\n');
+    tail.push(ln); if (tail.length > 8) tail.shift();
+    if (!ready && re && re.test(ln)) done(true, '기동 완료');
+    if (!ready && /Port \d+ was already in use|Address already in use|EADDRINUSE/.test(ln)) done(false, `기동 실패 — 포트 ${it.port || ''} 사용 중`);
+    if (!ready && /is not recognized as an internal or external command|cannot find the path|could not find or load main class/i.test(ln)) done(false, `기동 실패 — 명령 실행 불가: ${ln.trim().slice(0, 120)}`);
+  };
+  const tl = tailFile(logF, onLine, 0); s.stopTail = tl.stop;
+  const to = Number(it.readyTimeoutSec || 0);
+  if (to > 0 && re) timer = setTimeout(() => {
+    if (ready) return;
+    if (it.port && portOwner(it.port)) { done(true, `포트 ${it.port} LISTEN 확인(완료 로그는 미출력)`); return; }
+    out(stream, `⚠ ${name} ${to}초 안에 완료 로그('${it.ready}')가 보이지 않습니다\n`, 'warn');
+    try { settle({ ok: false, sec: to, msg: '시간 초과(완료 로그·포트 미확인)', timeout: true }); } catch (ex) { errlog.note('server-service', 'settle', ex); }
+  }, to * 1000);
+  child.on('error', e => { out(stream, `spawn 실패: ${e.message}\n`, 'bad'); });
+  child.on('close', code => {
+    setTimeout(() => {                                            // 로그 파일의 남은 줄을 마저 읽은 뒤 정리
+      try { tl.stop(); } catch { }
+      servers.delete(name); saveReg();
+      out(stream, `■ ${name} 종료 exit ${code} — 로그 ${path.relative(p.root, logF)}\n`, ready && s.ready ? 'warn' : 'bad');
+      evt('proc.end', { screen: '', label: name, stream, childPid: s.pid || null, exit: code, ms_run: Date.now() - t0, server: true, log: path.relative(p.root, logF), why: '', sig: '' });
+      if (!ready) done(false, `기동 실패 — exit ${code}${tail.length ? '\n   ' + tail.filter(x => x.trim()).slice(-4).join('\n   ') : ''}`);
+      else { post({ type: 'server', name, state: 'stopped', sec: Math.round((Date.now() - t0) / 1000) }); evt('server.state', { name, port: it.port || null, state: 'exited', exit: code, ms_up: Date.now() - t0, source: 'start' }); }
+      pollOnce();
+    }, TAIL_MS + 200);
+  });
+  return result;
+}
+
+// ── 종료(Finish) — ① 포트 점유 프로세스 트리 종료 ② VM 이 띄운 같은 이름 프로세스 트리 종료 ③ 포트 해제까지 최대 20초 ──
+async function stop(p, it, name, say) {
+  init(p);
+  const stream = streamOf(it.port, name);
+  const t0 = Date.now(); const expect = new RegExp(`^(${it.expectProc || 'java|node|cmd|powershell|pwsh'})(\\.exe)?$`, 'i');
+  let acted = false;
+  const occ = it.port ? portOwnerInfo(it.port) : null;
+  if (occ) {
+    if (PROTECTED_PROC.test(occ.name)) { out(stream, `⛔ ${name} 종료 중단 — 포트 ${it.port} 점유 프로세스 ${occ.name}(${occ.pid}) 는 보호 대상(VPN/시스템). 수동 확인 필요.\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ⛔ ${name}: 포트 ${it.port} 점유자 ${occ.name} 는 종료 금지 대상입니다.`); return { ok: false, why: 'protected' }; }
+    if (!expect.test(occ.name)) { out(stream, `⚠ ${name} 종료 보류 — 포트 ${it.port} 점유 프로세스가 예상(${it.expectProc || 'java|node'})과 다름: ${occ.name}(${occ.pid}). 직접 확인 후 종료하세요.\n`, 'warn'); vscode.window.showWarningMessage(`Vibe_Manager ⚠ ${name}: 포트 ${it.port} 점유자 ${occ.name}(${occ.pid}) 가 예상 프로세스가 아니라 종료하지 않았습니다.`); return { ok: false, why: 'unexpected' }; }
+    out(stream, `⏹ ${name} 종료 — 포트 ${it.port} 점유 ${occ.name}(${occ.pid}) 트리 종료 ${killTree(occ.pid) ? '요청됨' : '실패(권한?)'}\n`, 'warn'); acted = true;
+  }
+  for (const s of [...servers.values()]) {
+    const same = s.name === name || (it.port && Number(s.port) === Number(it.port));
+    if (!same || !s.pid) continue;
+    if (!pidAlive(s.pid)) { if (s.attached) { try { s.stopTail && s.stopTail(); } catch { } servers.delete(s.name); saveReg(); } continue; }
+    const ok = killTree(s.pid); out(stream, `⏹ ${s.name} VM 프로세스(PID ${s.pid}) 트리 종료 ${ok ? '요청됨' : '실패 — 권한 확인'}\n`, 'warn'); acted = true;
+    if (s.attached) { try { s.stopTail && s.stopTail(); } catch { } servers.delete(s.name); saveReg(); }
+  }
+  if (!acted) { out(stream, `ℹ ${name} 실행 중 아님 — 포트 ${it.port || '-'} 비어 있음\n`, 'ok'); post({ type: 'server', name, state: 'stopped', sec: 0 }); pollOnce(); return { ok: true, why: 'not-running' }; }
+  let freed = !it.port;
+  for (let i = 0; it.port && i < 20; i++) { await new Promise(r => setTimeout(r, 1000)); if (!portOwnerInfo(it.port)) { freed = true; break; } }
+  const sec = Math.round((Date.now() - t0) / 1000);
+  if (freed) { out(stream, `✅ ${name} 종료 완료 (${sec}s)${it.port ? ` — 포트 ${it.port} 해제` : ''}\n`, 'ok'); post({ type: 'server', name, state: 'stopped', sec }); vscode.window.showInformationMessage(`Vibe_Manager ✅ ${name} 종료 완료 (${sec}s)`); }
+  else { const still = portOwnerInfo(it.port); out(stream, `⚠ ${name} 종료 요청 후 ${sec}s — 포트 ${it.port} 아직 점유: ${still ? still.name + ' ' + still.pid : '?'}\n`, 'bad'); vscode.window.showWarningMessage(`Vibe_Manager ⚠ ${name}: 포트 ${it.port} 가 아직 점유 중입니다 (${still ? still.name + ' ' + still.pid : '?'}).`); }
+  evt('server.state', { name, port: it.port || null, state: freed ? 'stopped' : 'stop-failed', ms_stop: Date.now() - t0, source: 'stop' });
+  pollOnce();
+  return { ok: freed, sec };
+}
+
+/** E2E 선행 — ports 가 LISTEN 이 아니면 serverItems(quick.json kind terminal · port) 로 기동하고 기다린다. 반환 true = 전부 LISTEN */
+async function ensure(p, ports, serverItems, resolveCwd, say) {
+  init(p);
+  say = typeof say === 'function' ? say : () => { };
+  ports = ports && ports.length ? ports : [8080, 5173];
+  const label = pt => (LABEL[pt] ? `${LABEL[pt]} ${pt}` : `포트 ${pt}`);
+  const need = ports.filter(pt => !portOwnerInfo(pt));
+  if (!need.length) { say(`🔌 선행 확인 — ${ports.map(label).join(' · ')} 기동 중(LISTEN)\n`, 'ok'); return true; }
+  say(`🔌 선행 확인 — ${need.map(label).join(' · ')} 미기동 → 먼저 기동합니다(완료까지 대기)\n`, 'warn');
+  const waitPort = (pt, sec) => new Promise(res => { const t1 = Date.now(); const tick = () => { if (portOwnerInfo(pt)) return res(true); if (Date.now() - t1 > sec * 1000) return res(false); setTimeout(tick, 2000); }; tick(); });
+  const jobs = need.map(pt => {
+    const it = (serverItems || []).find(x => x.kind === 'terminal' && Number(x.port) === pt);
+    if (!it) { say(`⛔ ${label(pt)} 기동 항목(kind terminal · port ${pt})이 quick.json 에 없습니다\n`, 'bad'); return Promise.resolve(false); }
+    const name = it.name || it.label; const cwd = resolveCwd(it);
+    if (!fs.existsSync(cwd)) { say(`⛔ ${name} 폴더 없음: ${cwd}\n`, 'bad'); return Promise.resolve(false); }
+    if (servers.has(name)) { say(`⏳ ${name} 이미 기동 중 — 포트 ${pt} 가 열릴 때까지 대기\n`, 'warn'); return waitPort(pt, Number(it.readyTimeoutSec || 300)); }
+    return start(p, it, cwd, name, say).then(r => (r && r.ok) || !!portOwnerInfo(pt));
+  });
+  const rs = await Promise.all(jobs);
+  for (const pt of need) if (!portOwnerInfo(pt)) await waitPort(pt, 10);
+  const missing = ports.filter(pt => !portOwnerInfo(pt));
+  if (rs.every(Boolean) && !missing.length) { say(`✅ 선행 완료 — ${ports.map(label).join(' · ')} LISTEN\n`, 'ok'); return true; }
+  say(`✖ 선행 실패 — ${missing.map(label).join(' · ') || '기동 실패'} (VMO 창 BE Log / FE Log 확인) → E2E 를 실행하지 않습니다\n`, 'bad');
+  try { vscode.window.showWarningMessage(`Vibe_Manager ✖ E2E 선행 실패 — ${missing.map(label).join(' · ') || '서버 기동 실패'} (VMO 창 BE/FE Log 확인)`); } catch { }
+  return false;
+}
+
+function isRunning(name) { return servers.has(name); }
+
+/** 확장 활성화 때 1회(여러 번 불러도 됨). p = paths() — root · vibeDir 필요. ctx = ExtensionContext(상태 표시줄 등록용, 없어도 됨) */
+function init(p, ctx) {
+  if (p && p.root && !root) { root = p.root; vibeDir = p.vibeDir || path.join(p.root, '.vibe'); }
+  if (!root || started) return;
+  started = true;
+  try {
+    let prio = 49;
+    for (const port of BAR_PORTS) {
+      const b = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, prio--);
+      b.command = { command: 'vibeManager.openOrchestra', title: 'Vibe_Manager VMO', arguments: [port === 8080 ? 'belog' : 'felog'] };
+      b.text = `$(sync~spin) ${LABEL[port]} ${port}`; b.show(); bars[port] = b;
+      if (ctx && ctx.subscriptions) ctx.subscriptions.push(b);
+    }
+  } catch (ex) { errlog.note('server-service', 'init', ex); }
+  try { reattach(); } catch (ex) { errlog.note('server-service', 'reattach', ex); }
+  try { watchGuardLogs(); } catch (ex) { errlog.note('server-service', 'watchGuardLogs', ex); }
+  pollOnce(); pollTimer = setInterval(pollOnce, POLL_MS);
+  if (ctx && ctx.subscriptions) ctx.subscriptions.push({ dispose: () => dispose(false) });
+}
+/** killServers = true 면 VM 이 띄운 서버도 종료(설정 vibeManager.orch.stopServersOnExit). 기본은 서버를 남긴다 */
+function dispose(killServers) {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  for (const k of Object.keys(guardTail)) { try { guardTail[k](); } catch { } delete guardTail[k]; }
+  for (const s of servers.values()) { try { s.stopTail && s.stopTail(); } catch { } if (killServers && s.pid) killTree(s.pid); }
+  if (killServers) { servers.clear(); saveReg(); }
+  started = false;
+}
+
+module.exports = { init, dispose, start, stop, ensure, subscribe, snapshot, stateList, isRunning, pollOnce, portOwnerInfo, portOwner, killTree, PROTECTED_PROC, streamOf };

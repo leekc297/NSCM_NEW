@@ -1,0 +1,28 @@
+{
+  "id": "20261119_230431_R12_ALL",
+  "at": "2026-11-19T23:04:31+09:00",
+  "ms": 1795097071111,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_server_service.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_server_service.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 12 · FAIL 1 · FAIL 종료 뒤 상태 down {\"port\":64658,\"label\":\"포트 64658\",\"state\":\"up\",\"since\":1795097065025,\"owner\":\"vm\",\"name\":\"TEST SRV\",\"bootSec\":null} / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_server_service.js",
+    "file": "t_server_service.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-19T23:18:09+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

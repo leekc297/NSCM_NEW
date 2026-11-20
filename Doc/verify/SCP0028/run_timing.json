@@ -1,0 +1,154 @@
+[
+ {
+  "run_at": "2026-11-20 06:07:32",
+  "wall_min": 100.9,
+  "stage_min": {
+   "pre": 2.2,
+   "facts": 0.0,
+   "static": 0.2,
+   "e2e": 44.8,
+   "eg": 7.5,
+   "diff": 7.4,
+   "post": 24.3,
+   "docs": 9.9
+  },
+  "top": [
+   {
+    "stage": "e2e",
+    "tool": "playwright _verify _trace _snap",
+    "start": "06:14:35",
+    "min": 44.8
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "07:22:54",
+    "min": 15.2
+   },
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "07:38:43",
+    "min": 9.4
+   },
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "06:59:21",
+    "min": 7.5
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "07:15:31",
+    "min": 7.4
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "07:09:49",
+    "min": 4.4
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "06:08:42",
+    "min": 2.1
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "07:07:46",
+    "min": 2.1
+   },
+   {
+    "stage": "diff",
+    "tool": "diff_verify.py",
+    "start": "07:07:13",
+    "min": 0.5
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "07:06:51",
+    "min": 0.3
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-20 08:28:54",
+  "wall_min": 78.5,
+  "stage_min": {
+   "pre": 1.9,
+   "facts": 1.1,
+   "static": 0.3,
+   "e2e": 46.2,
+   "eg": 8.2,
+   "diff": 6.0,
+   "post": 12.3,
+   "docs": 0.3
+  },
+  "top": [
+   {
+    "stage": "e2e",
+    "tool": "playwright _verify _trace _snap",
+    "start": "08:34:28",
+    "min": 46.2
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "09:38:29",
+    "min": 8.2
+   },
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "09:20:40",
+    "min": 8.2
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "09:30:51",
+    "min": 4.0
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "08:29:35",
+    "min": 1.8
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "09:36:49",
+    "min": 1.7
+   },
+   {
+    "stage": "facts",
+    "tool": "llm_facts.py",
+    "start": "08:32:49",
+    "min": 1.1
+   },
+   {
+    "stage": "diff",
+    "tool": "diff_verify.py",
+    "start": "09:29:19",
+    "min": 0.8
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "09:30:08",
+    "min": 0.7
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "09:28:52",
+    "min": 0.4
+   }
+  ]
+ }
+]

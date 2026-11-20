@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6689,
+                      "duration": 4927,
                       "errors": [],
                       "stdout": [
                         {
@@ -142,7 +142,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:49:00.645Z",
+                      "startTime": "2026-11-19T22:21:07.276Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -173,56 +173,53 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 111099,
+                      "duration": 85734,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 11s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 8s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 13s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 13s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\eg_combos.json — UNKNOWN\n"
-                        },
-                        {
-                          "text": "[eg_auth] SCP/40/ADMIN 15s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 13s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCP Planner 15s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 12s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 12s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 10s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 9s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 10s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -239,7 +236,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:49:10.601Z",
+                      "startTime": "2026-11-19T22:21:15.223Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -270,7 +267,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4837,
+                      "duration": 4886,
                       "errors": [],
                       "stdout": [
                         {
@@ -279,7 +276,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:51:06.247Z",
+                      "startTime": "2026-11-19T22:22:44.220Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -310,7 +307,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 28611,
+                      "duration": 21884,
                       "errors": [],
                       "stdout": [
                         {
@@ -322,7 +319,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:51:14.003Z",
+                      "startTime": "2026-11-19T22:22:51.922Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -353,7 +350,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 363,
+                      "duration": 227,
                       "errors": [],
                       "stdout": [
                         {
@@ -362,7 +359,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:51:46.220Z",
+                      "startTime": "2026-11-19T22:23:16.708Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -393,7 +390,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9816,
+                      "duration": 7313,
                       "errors": [],
                       "stdout": [
                         {
@@ -402,7 +399,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:51:51.630Z",
+                      "startTime": "2026-11-19T22:23:20.553Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -433,7 +430,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 351,
+                      "duration": 293,
                       "errors": [],
                       "stdout": [
                         {
@@ -442,7 +439,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:52:05.848Z",
+                      "startTime": "2026-11-19T22:23:31.063Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -473,7 +470,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 8759,
+                      "duration": 6826,
                       "errors": [],
                       "stdout": [
                         {
@@ -482,7 +479,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:52:10.347Z",
+                      "startTime": "2026-11-19T22:23:34.743Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -513,7 +510,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10173,
+                      "duration": 8138,
                       "errors": [],
                       "stdout": [
                         {
@@ -525,7 +522,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:52:23.406Z",
+                      "startTime": "2026-11-19T22:23:44.767Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -545,8 +542,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T07:48:59.616Z",
-    "duration": 221506.799,
+    "startTime": "2026-11-19T22:21:06.624Z",
+    "duration": 169929,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

@@ -1,0 +1,35 @@
+{
+ "proposal": {
+  "id": "20261120005942_INC",
+  "title": "VM 창이 끝날 때 job 없이 띄운 체인에도 끝 기록(chain.end ok=false, why 창 종료) 남기기",
+  "evidence": "extension.js:777-786 deactivate 가 job-runner 작업만 정리함. events.jsonl:38 체인 job \"\". 21:53 에 체인 4건이 끝 기록 없이 사라져 R5 사건 4건이 생김.",
+  "targets": [
+   "tools/VibeManager/extension.js",
+   "tools/VibeManager/workbench.js (체인 실행 상태를 들고 있는 모듈, 위치 미확인)"
+  ],
+  "before_after": "변경 전: deactivate 에서 workbench 체인 정리 없음 → 감시기가 주인 PID 없음으로 R5 '진행 없음' 사건 생성. 변경 후: deactivate 에서 실행 중인 workbench 체인마다 chain.end(ok=false, why='VM 창 종료로 중단', aborted=true) 기록, R5 는 aborted 체인을 사건 대신 '중단됨' 표시로 처리.",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. 가짜 체인을 띄운 상태에서 deactivate 호출 시험(t_*.js 추가)으로 events.jsonl 에 chain.end aborted 1건 기록되는지 확인.",
+  "sig": "vm 창이 끝날 때 job 없이 띄운 체인에도 끝 기록 chain.end ok false why 창 종료 남기기"
+ },
+ "result": {
+  "applied": true,
+  "verified": false,
+  "changed_files": [
+   "tools/VibeManager/workbench.js",
+   "tools/VibeManager/extension.js",
+   "tools/VibeManager/test/t_chain_abort.js"
+  ],
+  "verify_result": "2026-11-20 06:49 KST. node tools/VibeManager/test/t_chain_abort.js: PASS 7(chain.end aborted 1건, why 'VM 창 종료로 중단', 앞에 user.stop 같은 wb, 상태 체인 0, sweep chain 0, 다시 불러도 1건). node tools/VibeManager/test/run_all.js: 파일 30/31, PASS 369, FAIL 7. 실패 파일 t_wb_logname.js 1개(로그 이름 3건 같음 2026-11-20T06-51-31_CheckList__________.log)",
+  "note": "실행 중 체인 목록(workbench.js liveChains)과 abortRunningChains 추가. deactivate 에서 job-runner.dispose 뒤, 감시기 정리 전에 부름. user.stop(why vscode.dispose)을 먼저 남겨 orch-watch.js:174 가 R11, CheckList 정체 사건을 만들지 않게 함. chain.end 가 남으면 orch-state.js:42 가 체인을 지워 R5 gone 사건 없음. 대상 밖 orch-watch.js 는 수정 안 함. run_all 실패 t_wb_logname.js 는 다른 개선안 20261120005819_INC 의 시험(06:37 생성)이고 이번에 고치지 않은 spawnStream 로그 이름을 봄. 이번 변경 전에도 실패했는지 미확인."
+ },
+ "gate": null,
+ "history": [
+  "06:43:27 VMO 자동(게이트 통과 조건): 승인",
+  "06:45:26 VMO: 반영 전 게이트: 구문 검사 22개 파일 통과, 시험 29/30개 파일 통과(PASS 362, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261120_self0643",
+  "06:45:34 VMO: 반영 시작",
+  "06:52:12 VMO: 반영 실패. 검증 실패: 2026-11-20 06:49 KST. node tools/VibeManager/test/t_chain_abort.js: PASS 7(chain.end aborted 1건, why 'VM 창 종료로 중단', 앞에 user.stop 같은 wb, 상태 체인 0, sweep chain 0, 다시 불러도 1건). node tools/VibeManager/test/ · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/a1_live.json, Doc/verify/SCP0005/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json, Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json, Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json, Doc/verify/SCP0005/calls/_verify_Insert_행_Division_D4__0.json 는 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120005942_INC"
+}

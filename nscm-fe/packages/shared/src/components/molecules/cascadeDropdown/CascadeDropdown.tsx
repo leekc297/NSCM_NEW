@@ -158,6 +158,16 @@ export const CascadeDropdown = ({
     return path;
   }, [value, levels]);
 
+  // 팝업이 열려 있는 동안 controlled value 가 외부에서 바뀌면(부모가 자동 기본값을 채우는 경우 등)
+  //   activePath 를 그 값에 맞춘다. 예: Plan Date 를 바꾸면 부모가 Plan Type(맨 아래)·Seq 기본값을
+  //   채우는데, activePath 가 방금 고른 date 에 멈춰 있어 Type/Seq 열에 그 자동 선택이 하이라이트되지
+  //   않고 Seq 열도 안 뜨던 문제(SCP0013 "날짜 바꾸면 Type 이 아무것도 선택 안 됨") 교정. 열려 있을
+  //   때만 동기화하므로 사용자의 수동 네비게이션(각 pick 이 value 를 커밋 → valuePath 가 따라옴)과도
+  //   어긋나지 않는다. valuePath 는 value 기준 useMemo 라 값이 바뀔 때만 effect 가 돈다(루프 없음).
+  useEffect(() => {
+    if (open) setActivePath(valuePath);
+  }, [open, valuePath]);
+
   // 팝업에 펼쳐 보일 열들 — activePath 를 따라 내려가며 자식이 있는 동안 열을 이어 붙인다.
   const columns = useMemo(() => {
     const result: CascadeNode[][] = [tree];

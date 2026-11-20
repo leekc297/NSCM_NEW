@@ -1,0 +1,29 @@
+{
+  "id": "20261120_104349_R12_ALL_3",
+  "at": "2026-11-20T10:43:49+09:00",
+  "ms": 1795139029091,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U9 업무 작업 기록 불일치 J20261120_060728",
+  "screen": "",
+  "sig": "R12|S13|U9|rec|J20261120_060728",
+  "count": 1,
+  "repeat": null,
+  "detail": "작업 상태 interrupted(VS Code 종료로 중단됨)인데 화면 SCP0005, SCP0028, SSP0005, SSP0014 이 '실행 중'으로 남음. 실행 중 체인 없음",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U9|rec|J20261120_060728",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T10:55:54+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

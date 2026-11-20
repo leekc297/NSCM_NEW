@@ -1,0 +1,87 @@
+{
+  "id": "20261120_004820_R2_SCP0014",
+  "at": "2026-11-20T00:48:20+09:00",
+  "ms": 1795103300689,
+  "rule": "R2",
+  "ruleName": "같은 오류 반복",
+  "title": "같은 오류 반복 SCP0014 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 6) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0014",
+  "sig": "S8.checklistRun | [FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 <ID> 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님",
+  "count": 3,
+  "repeat": {
+    "same": 2,
+    "all": 2,
+    "screens": [
+      "SCP0014"
+    ]
+  },
+  "detail": "[FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 SCP0014 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님\n[FAIL] 사전 작업 미충족 — Doc/verify/SCP0014/prereq.json 확인(AS-IS Fact Pack·TO-BE 화면·E2E plan/스펙/smoke 중 생산 실패)\n[ERROR] 원장 없음: Doc\\verify\\SCP0014\\verify_ledger.csv. 🔎 CheckList 먼저 실행",
+  "evidence": {
+    "runId": "SCP0014_1795102432154",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:50:59+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T00:51:46+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 개선안 올림 · 원인 env: TO-BE에 SCP0014 화면이 없음. Doc/tobefacts/db/menu.csv(11-20 00:34 export)에 SCP0014 0건, nscm-fe/src 검색 0건, Doc/verify/SCP0014/screen_sync.json reason 'no page dir'. tools/Harness/verify/prereq.py:219-221 이 화면 폴더 없음으로 FAIL(rc 6) 처리함. 00:34 사건(20261120_003421_R1_SCP0014)과 원인 같고, 화면 없는 상태에서 CheckList 를 다시 실행 · 개선안 등록 20261120005146_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T00-51-05_claude_orch.log",
+      "sec": 35,
+      "turns": 5,
+      "costUsd": 0.4439553,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드 뒤 지난 기록을 다시 읽어 올린 중복). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_004820_R2_SCP0014.json",
+  "lastAt": "2026-11-20T00:48:34+09:00",
+  "lastMs": 1795103314283,
+  "agent": {
+    "cause_class": "env",
+    "cause": "TO-BE에 SCP0014 화면이 없음. Doc/tobefacts/db/menu.csv(11-20 00:34 export)에 SCP0014 0건, nscm-fe/src 검색 0건, Doc/verify/SCP0014/screen_sync.json reason 'no page dir'. tools/Harness/verify/prereq.py:219-221 이 화면 폴더 없음으로 FAIL(rc 6) 처리함. 00:34 사건(20261120_003421_R1_SCP0014)과 원인 같고, 화면 없는 상태에서 CheckList 를 다시 실행해 tools/VibeManager/orch-watch.js:73-77 failure() 가 R2 로 올림.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "menu.csv, nscm-fe/src, screen_sync.json, prereq.py:210-225 재확인(2026-11-20 00:51:14)",
+        "result": "SCP0014 메뉴 0건, FE 0건, 'no page dir' 유지. 00:34 사건과 원인 같음"
+      },
+      {
+        "grade": "A",
+        "what": "orch-watch.js R2 판정 경로 확인",
+        "result": "failure()가 서명 횟수만 세고 '대상 아님' 실패를 거르지 않음"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 바뀐 파일이 없고 CheckList 재수행은 사용자 실행 대상임. 확인 시각 2026-11-20 00:51:14",
+    "status": "proposal",
+    "next_for_user": "SCP0014는 TO-BE 화면이 개발되기 전까지 CheckList 대상이 아님. 화면을 개발할지 정하고, 그 전에는 SCP0014 CheckList 를 실행하지 않음.",
+    "proposal": {
+      "title": "TO-BE 화면이 없는 화면의 CheckList 실패를 반복 오류(R1·R2) 사건에서 제외",
+      "evidence": "prereq.py:219-221 FAIL 문구 'TO-BE 화면 미개발이면 CheckList 대상 아님'(rc 6). orch-watch.js:73-77 failure()가 서명 횟수만 세서 같은 원인으로 R1(00:34) 다음 R2(00:48) 생성. Claude 조치가 2회 호출됨.",
+      "targets": [
+        "tools/VibeManager/orch-watch.js"
+      ],
+      "before_after": "전: CheckList 실패 상세에 'TO-BE 화면 미개발이면 CheckList 대상 아님'이 있어도 R1/R2 사건을 만들고 Claude 조치를 부름. 후: failure() 첫 줄에서 detail 에 그 문구가 있으면 사건을 만들지 않고 '대상 아님(TO-BE 화면 없음)' 안내만 남김. Claude 조치를 부르지 않음.",
+      "verify": "node --check tools/VibeManager/orch-watch.js. tools/VibeManager/test/t_orch_watch_skip_notarget.js 를 추가해 이 detail 로 failure() 를 2회 부르면 사건 0건, 다른 detail 은 기존대로 R1 다음 R2 인지 확인. node tools/VibeManager/test/run_all.js 통과",
+      "rollback": "orch-watch.js 를 .bak_20261120_orch 로 되돌리고 추가한 시험 파일 삭제"
+    }
+  },
+  "proposal": "20261120005146_INC",
+  "notice": true,
+  "reload": "replay",
+  "prevStatus": "need-user"
+}

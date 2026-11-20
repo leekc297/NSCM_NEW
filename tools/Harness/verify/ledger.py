@@ -489,6 +489,20 @@ def main():
             used |= set((r.get('dts_sheets') or '').split())
     if used and any(c['sheet_name'] in used for c in cols):
         cols = [c for c in cols if c['sheet_name'] in used]
+    # T451(2026-11-20 SCP0005 D1 80행): 화면 사실(dts_sheets)이 없으면 E2E 가 기록한 컬럼 메타 조회 시트(Doc/verify/<ID>/meta_sheets.json · nscm.ts recordMetaSheets)를 쓴다.
+    #   가리는 시트 = 화면이 한 번도 조회하지 않았고 AS-IS 시트 이름(grid_columns_asis)에도 없는 시트만(API 매핑 이름 중복 메타 'route' 등). AS-IS 에 있는 시트(팝업 POPUP 등)는 그대로 둔다
+    elif not used:
+        try:
+            _ms = json.load(open(P('Doc', 'verify', mid, 'meta_sheets.json'), encoding='utf-8')).get(mid, {}).get('sheets', [])
+        except Exception:  # noqa: BLE001 — 기록 없음 = 종전 동작
+            _ms = []
+        _nzs = lambda x: re.sub(r'[^a-z0-9]', '', (x or '').lower())  # noqa: E731
+        _asis_sh = {_nzs(r.get('sheet')) for r in read_csv(os.path.join(sdir, 'grid_columns_asis.csv'))}
+        if _ms and any(c['sheet_name'] in _ms for c in cols):
+            _drop = {c['sheet_name'] for c in cols if c['sheet_name'] not in _ms and _nzs(c['sheet_name']) not in _asis_sh}
+            if _drop:
+                print(f"[ledger] T451 컬럼 메타 미조회 시트 제외 {sorted(_drop)} (조회 기록 {_ms})")
+                cols = [c for c in cols if c['sheet_name'] not in _drop]
     for c in cols:
         sheet, col = c['sheet_name'], c['column_name']
         t = f"{sheet}.{col} ({c.get('column_label_name', '')})"
@@ -508,7 +522,9 @@ def main():
                 # T114(2026-11-06 SCP0131 ITEM_ID): AS-IS 셀이 일반 텍스트 셀(cell_rules TEXT · CELL=-)이고 편집 가능(e[k]=Y)이면 AS-IS 도 직접 입력이 된다
                 #   (더블클릭 팝업은 보조 입력) → '직접 편집 차단' 기대가 아니라 '팝업 보조 입력' — TO-BE 가 직접+팝업이든 팝업 전용(CR-072)이든 정상(잘못된 값 처리는 E7)
                 _acr = cr.get(col.upper()) or cr.get(col) or {}
-                _plain = (_acr.get('cell_type') or 'TEXT').upper() in ('TEXT', '') and 'CELL=-' in (_acr.get('ref') or 'CELL=-')
+                # T456(2026-11-20 SCP0005 D1 FROM_COUNTRY·FROM_CITY 4행 허위 FAIL): 메타 CELL 이 비면 프레임워크가 FPTextBox(기본 텍스트 칸)로 정한다(SpreadInfo.cs:1387~1389)
+                #   → CELL=FPTextBox 도 일반 텍스트 셀. 종전엔 CELL=- 만 일반으로 봐 '직접 편집 차단' 기대를 만들었다
+                _plain = (_acr.get('cell_type') or 'TEXT').upper() in ('TEXT', '', 'FPTEXTBOX') and re.search(r'CELL=(-|FPTextBox)(?!\w)', _acr.get('ref') or 'CELL=-') is not None
                 if _plain:
                     add('COLUMN', 'D1', t, condition=cond, expected=f"팝업 보조 입력(직접 입력 허용 + 더블클릭 팝업) — AS-IS 일반 텍스트 셀(CELL=-) · {popup_cols[col.upper()]}",
                         asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · AS-IS cell_rules {_acr.get('cell_type') or 'TEXT'} {(_acr.get('ref') or '')[:60]} · {tobe}", area='그리드')
@@ -696,6 +712,14 @@ def main():
     #   5) 는 이 화면 + COMMON 결함만 넣어 다른 화면 결함 274건이 이 화면 검증에 대입되지 않았다(SCP0007 실측 36/310).
     #   분류에서 일반 규칙(general_rule=Y)으로 정리된 결함은 모든 화면에 'GENERAL' 행으로 넣고, 같은 규칙의 실측을 상속한다.
     #   규칙 대상 요소가 이 화면에 없으면 judge 가 NA(근거 포함)로, 검사기가 없으면 판정필요(W4)로 남긴다 — PASS 로 지나가지 않는다.
+    # 2026-11-20 중복 정리 목록(AI 판단) · harness.json dedupGeneral(기본 true) · 사용자 판정이 있는 행 ID(묶지 않음)
+    try:
+        dd_on = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8-sig')).get('dedupGeneral', True) is not False
+    except (OSError, ValueError):
+        dd_on = True
+    dd_groups = {(r['rule_id'], r['ref']): r for r in read_csv(P('Doc', 'verify', '_dedup', 'general_groups.csv'))} if dd_on else {}
+    dd_keep = {r.get('row_id', '') for f in ('_user_verdicts.csv', '_user_verdicts_direct.csv') for r in read_csv(P('Doc', 'verify', f)) if (r.get('menu_id') or '').upper() == mid}
+    dd_members = {}
     for d in read_csv(P('Doc', 'verify', 'defects_baseline.csv')):
         if d['menu_id'] in (mid, 'COMMON'):
             continue
@@ -707,10 +731,22 @@ def main():
         ref = f"{d['src']}-{d['no']}"
         rule_txt = (c.get('general_rule_text') or '').strip() if gen else ''
         for rule_id in [x.strip() for x in (c.get('rule_ids') or '').split(';') if x.strip()]:
-            add('GENERAL', rule_id, f"[{d['menu_id']} 결함 {'일반화' if gen else '유형'}] " + (c.get('target') or d['test_content'][:60]),
-                condition=(c.get('condition') or '') + ('' if gen else ' (원 결함은 화면 고유 대상 — 같은 규칙의 이 화면 요소로 확인)'), expected=rule_txt or (c.get('expected') or '')[:300],
-                asis_ref=f"결함원장 {ref} ({d['menu_id']} {d['ui_name']}) — 이 화면에 같은 형태의 오류가 있는지", area='결함일반화',
+            tgt = f"[{d['menu_id']} 결함 {'일반화' if gen else '유형'}] " + (c.get('target') or d['test_content'][:60])
+            cond = (c.get('condition') or '') + ('' if gen else ' (원 결함은 화면 고유 대상 — 같은 규칙의 이 화면 요소로 확인)')
+            aref = f"결함원장 {ref} ({d['menu_id']} {d['ui_name']}) — 이 화면에 같은 형태의 오류가 있는지"
+            # 2026-11-20 중복 정리(dedup_general.py · AI 판단 목록 Doc/verify/_dedup/general_groups.csv): 같은 확인이 되는 결함 유형은 묶음 1개 = 행 1개.
+            #   사용자 판정이 남은 행(행 ID 기준)은 묶지 않고 종전 행으로 둔다(판정 기록 유지)
+            g = dd_groups.get((rule_id, ref)) if dd_on else None
+            if g and int(g.get('size') or 1) > 1 and rid(mid, 'GENERAL', rule_id, tgt, cond, aref, ref) not in dd_keep:
+                dd_members.setdefault((rule_id, g['group_id']), {'g': g, 'refs': [], 'oracle': c.get('oracle', ''), 'method': c.get('method', '')})['refs'].append(f"{ref}({d['menu_id']})")
+                continue
+            add('GENERAL', rule_id, tgt, condition=cond, expected=rule_txt or (c.get('expected') or '')[:300], asis_ref=aref, area='결함일반화',
                 oracle=c.get('oracle', ''), method=c.get('method', ''), defect_ref=ref)
+    for (rule_id, gid), m in sorted(dd_members.items()):
+        g = m['g']; refs = m['refs']
+        add('GENERAL', rule_id, f"[결함 유형 묶음 {gid} · {len(refs)}건] {g['target']}", condition=g.get('condition') or '',
+            expected=(g.get('expected') or '')[:600], asis_ref=f"결함원장 {', '.join(refs)} — 같은 확인으로 묶음(AI 판단 Doc/verify/_dedup/general_groups.csv {gid}) · 이 화면에 같은 형태의 오류가 있는지",
+            area='결함일반화', oracle=m['oracle'], method=m['method'], defect_ref=';'.join(x.split('(')[0] for x in refs), note=f'중복 정리 {len(refs)}건')
 
     # 6) 확정 규칙 (전 화면)
     for r in read_csv(P('tools', 'Harness', 'rules', 'confirmed_requirements.csv')):

@@ -1545,6 +1545,28 @@
           ]
         },
         {
+          "id": "S8.checklistDelta",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "CheckList 수정분 재점검 — 지난 실행 뒤 바뀐 소스(FE 화면·공용, PROC, 메타, 검사기) 범위만 다시 측정(delta_scope: 기준선 대조 + AI 판단, 직전 미해결 행 규칙 포함) → 미검증 분류 · 기준선 없음·넓은 변경이면 전체",
+          "kind": "python",
+          "script": "${harnessDir}/verify/checklist_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--delta"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
           "id": "S8.verifyStatic",
           "title": "UI CheckList (E2E 없이) — 서버 없이 정적·메타 판정만, E2E 행은 미검증으로 표시",
           "kind": "python",

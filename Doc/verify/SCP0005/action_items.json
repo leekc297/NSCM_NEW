@@ -1,120 +1,32 @@
 [
  {
-  "row_id": "V-f648eb06",
-  "rule_id": "J1",
-  "target": "SCP0005 화면",
-  "same": []
- },
- {
   "row_id": "V-660a833e",
   "rule_id": "H5",
   "target": "SCP·SSP 컬럼·조회조건 라벨 Valid→Active",
   "same": []
  },
  {
-  "row_id": "V-087d756b",
-  "rule_id": "E3",
-  "target": "SCP0005 Excel 필수 칸 빈 업로드",
+  "row_id": "V-dac80ff3",
+  "rule_id": "L1",
+  "target": "조회조건 텍스트 입력 중 그리드",
   "same": []
  },
  {
-  "row_id": "V-9beff6f2",
-  "rule_id": "C3",
-  "target": "SCP0005 시나리오 [자동] FROM_COUNTRY 팝업 선택 → TO_COUNTRY 채움",
+  "row_id": "EG-a1c25099",
+  "rule_id": "M3",
+  "target": "SCP0005 팝업 SCP0005_DistributionRoutePopup CELL:ROUTE_ID OPEN",
   "same": []
  },
  {
-  "row_id": "V-e4a3ef56",
-  "rule_id": "C3",
-  "target": "SCP0005 시나리오 [자동] FROM_CITY 팝업 선택 → TO_COUNTRY 채움",
-  "same": []
- },
- {
-  "row_id": "V-3aecb21a",
-  "rule_id": "F2",
-  "target": "SCP0005 시나리오 [자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I",
-  "same": []
- },
- {
-  "row_id": "V-1d8d1afb",
-  "rule_id": "F10",
-  "target": "PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD",
+  "row_id": "V-7ccb8dd4",
+  "rule_id": "K3",
+  "target": "[결함 유형 묶음 K3-G01 · 1건] 그리드 Ctrl+클릭 다중 선택(팝업 그리드 포함)",
   "same": []
  },
  {
   "row_id": "V-3134fc3e",
   "rule_id": "E4",
   "target": "MSG00043",
-  "same": [
-   "T-ece1c98b",
-   "T-f048d4a9"
-  ]
- },
- {
-  "row_id": "V-2ca073e5",
-  "rule_id": "N1",
-  "target": "SCP0005 센티널 표시",
   "same": []
- },
- {
-  "row_id": "V-5b44fefc",
-  "rule_id": "D1",
-  "target": "Distribution Route.FROM_COUNTRY (Country*)",
-  "same": [
-   "V-9a1db2df"
-  ]
- },
- {
-  "row_id": "V-1ff8658b",
-  "rule_id": "D1",
-  "target": "Distribution Route.FROM_CITY (City*)",
-  "same": [
-   "V-599dd774"
-  ]
- },
- {
-  "row_id": "V-e32d34a2",
-  "rule_id": "L1",
-  "target": "SCP0005 화면",
-  "same": [
-   "V-dac80ff3",
-   "V-536d9503"
-  ]
- },
- {
-  "row_id": "T-ece1c98b",
-  "rule_id": "E4",
-  "target": "",
-  "folded_into": "V-3134fc3e"
- },
- {
-  "row_id": "T-f048d4a9",
-  "rule_id": "E4",
-  "target": "",
-  "folded_into": "V-3134fc3e"
- },
- {
-  "row_id": "V-9a1db2df",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-5b44fefc"
- },
- {
-  "row_id": "V-599dd774",
-  "rule_id": "D1",
-  "target": "",
-  "folded_into": "V-1ff8658b"
- },
- {
-  "row_id": "V-dac80ff3",
-  "rule_id": "L1",
-  "target": "",
-  "folded_into": "V-e32d34a2"
- },
- {
-  "row_id": "V-536d9503",
-  "rule_id": "L1",
-  "target": "",
-  "folded_into": "V-e32d34a2"
  }
 ]

@@ -1,0 +1,9 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0014,SQL,SCP0014_GET_PROBLEM_REPORT,Doc\asisfacts\db\modules\dbo.SCP0014_GET_PROBLEM_REPORT.sql,180,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SCP0014,SQL,SCP0014_GET_PROBLEM_REPORT,Doc\asisfacts\db\modules\dbo.SCP0014_GET_PROBLEM_REPORT.sql,206,,"DIVISION_ID,PLANT_SITE_ID,SALES_SITE_ID,PROJECT_CODE","SET @mEXEC = @mEXEC+'		ORDER BY  division_id, plant_site_id, sales_site_id, project_code'+CHAR(10);",0,동적 SQL
+SCP0014,SQL,SCP0014_GET_PROBLEM_REPORT,Doc\asisfacts\db\modules\dbo.SCP0014_GET_PROBLEM_REPORT.sql,243,,"DIVISION_ID,PLANT_SITE_ID,SALES_SITE_ID,PROJECT_CODE","ORDER BY  division_id, plant_site_id, sales_site_id, project_code",0,정적
+SCP0014,SQL,SCP0014_GET_PEGGING_INFO,Doc\asisfacts\db\modules\dbo.SCP0014_GET_PEGGING_INFO.sql,62,,"DISPLAY_SEQ,PLAN_END_DATE DESC,PLAN_START_DATE DESC","order by b.display_seq, PLAN_END_DATE desc,PLAN_START_DATE desc",0,정적
+SCP0014,SQL,SCP0014_GET_PLAN_PROBLEM,Doc\asisfacts\db\modules\dbo.SCP0014_GET_PLAN_PROBLEM.sql,44,,PROBLEM_SEQ,order by a.problem_seq,0,정적
+SCP0014,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SCP0014,SQL,SCM0001_GET_DIVISION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_DIVISION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0014,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적

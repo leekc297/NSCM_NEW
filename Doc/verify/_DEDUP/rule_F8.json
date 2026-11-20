@@ -1,0 +1,37 @@
+{
+ "rule_id": "F8",
+ "hash": "8dff382c5fe2ec30",
+ "groups": [
+  {
+   "refs": [
+    "DM-113"
+   ],
+   "target": "재요청 건의 Reject Reason·Request Date",
+   "condition": "Reject된 건을 다시 요청한 뒤 조회",
+   "expected": "재요청 건은 Reject Reason 이 비어 있고, Request Date 는 MAX(Create Date, Last Update Date)로 표시된다",
+   "why": "Reject 후 재요청할 때 이전 반려 사유를 지우고 요청일을 다시 계산하는지 보는 항목이라, 감사 컬럼이나 승인일 생성 시점을 보는 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-183"
+   ],
+   "target": "Created By/Date·Updated By/Date 감사 컬럼",
+   "condition": "신규 행 저장 후 같은 행을 수정해 저장",
+   "expected": "Insert 때는 Created By/Date 와 Updated By/Date 가 모두 채워지고, Update 때는 Updated By/Date 만 바뀌며 Created By/Date 는 그대로다",
+   "why": "저장 화면 전반의 생성·수정 감사 컬럼 갱신 규칙을 보는 항목이라, 요청·승인 흐름의 파생 필드를 보는 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-233"
+   ],
+   "target": "요청 시점의 Approval Date 컬럼",
+   "condition": "Auth Request 등 승인 요청만 한 상태",
+   "expected": "승인 전 Request 시점에는 Approval Date 가 생기지 않고 비어 있다",
+   "why": "승인일이 너무 일찍 생기는지 보는 항목이라, 재요청 때 필드를 초기화하는지 보는 DM-113과 확인 동작과 기대 결과가 달라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:02",
+ "cost": 0.0425532
+}

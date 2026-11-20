@@ -1,0 +1,1132 @@
+{
+ "at": "2026-11-20T10:43:49+09:00",
+ "checks": [
+  {
+   "id": "S6",
+   "name": "미확인 추적",
+   "status": "warn",
+   "count": 184,
+   "at": "2026-11-20T10:43:46+09:00",
+   "info": {
+    "total": 184,
+    "open": 184,
+    "confirmed": 0,
+    "dropped": 0,
+    "reloadOpen": 99,
+    "reloadLoaded": 99
+   },
+   "items": [
+    {
+     "level": "warn",
+     "what": "2026-11-20 업무 작업창 B 스튜디오 디자인 · 개선안 자동 반영 기록 시각 표시 정정",
+     "detail": "VS Code 실화면(창 다시 로드 필요 · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1j92l92#a4226848ed"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 업무 작업창 B 스튜디오 디자인 · 개선안 자동 반영 기록 시각 표시 정정",
+     "detail": "지금 도는 CheckList 가 끝난 뒤)",
+     "key": "S6|CL:2026-11-20:1j92l92#61afcc22c5"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 다시 시도한 개선안이 또 반영 실패하면 다시 진단",
+     "detail": "실제 VMO 동작(창 다시 로드 필요. · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1i1jg9x#9174b62ba1"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 다시 시도한 개선안이 또 반영 실패하면 다시 진단",
+     "detail": "지금 도는 CheckList 4화면이 끝난 뒤 로드)",
+     "key": "S6|CL:2026-11-20:1i1jg9x#c8452bd735"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: VM 창이 끝날 때 job 없이 띄운 체인에도 끝 기록(chain.end ok=false",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1l4j8d8#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: VM 작업 로그 이름에 화면 ID와 실행 번호를 넣어 같은 초에 시작한 실행끼리 로그를 ",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:9wl81k#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: CheckList 체인 R11 판정 때 이번 체인이 만든 결과 파일만 사용",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1696b0k#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: 강제 종료된 실행은 '중지'로 표시하고 동시 실행 로그 파일 이름 겹침 제거",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:v2jtfa#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: R11·R10 사건이 지난 실행 결과 건수를 쓰지 않게 함, 동시 실행 로그 파일 분리",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1o25gd0#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: VM 다시 시작 때 지난 실행을 '사라진 실행(R5)'으로 늦게 올리지 않기, 실행 시작",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1l5a5cp#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: VS Code 종료(dispose)로 멈춘 실행도 감시기에 중지로 알려 R1, R2, R",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:1rgz55i#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: TO-BE 화면이 없는 화면의 CheckList 실패를 반복 오류(R1·R2) 사건에서 ",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T10:08 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:rfje4i#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 CheckList 전체기능 재점검 / 수정분 재점검 분리",
+     "detail": "make_verify_docs.py: 다시 재지 않은 행에 '[이전 측정 유지 측정 시각]', 데이터 규칙(DB_OBJECT)은 '· 데이터 변경 미확인', 요약에 재측정 규칙 수·유지 행 수·마지막 전체 시각",
+     "key": "S6|CL:2026-11-20:sz6wij#90f3127145"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 CheckList 전체기능 재점검 / 수정분 재점검 분리",
+     "detail": "실제 수정분 재점검 실행 시간과 판정 비교(전체 재점검과 ledger_diff).",
+     "key": "S6|CL:2026-11-20:sz6wij#623c022078"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 CheckList 전체기능 재점검 / 수정분 재점검 분리",
+     "detail": "첫 수정분 재점검은 기준선이 없어 전체로 실행됨.",
+     "key": "S6|CL:2026-11-20:sz6wij#f3f93179a2"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 CheckList 전체기능 재점검 / 수정분 재점검 분리",
+     "detail": "SCP0005 는 직전 실행이 끊겨 미해결 행이 많아(946행) 범위가 넓음",
+     "key": "S6|CL:2026-11-20:sz6wij#c9af1e6afe"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: 작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T05:46 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:pkxifp#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 VMO 자가 보완: 작업 목록 중지를 감시기에 user.stop 으로 알리고 CheckList 체인 R11 ",
+     "detail": "VS Code 실화면(창 다시 로드 필요). · 창 로드 기록 2026-11-20T05:34 있음(화면 확인은 사용자)",
+     "key": "S6|CL:2026-11-20:10g8i34#03a4c87e73"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 CheckList 속도 개선 묶음: 중복 정리(AI) · E2E 동시 실행 · 진입 확인 선행 · AS-IS",
+     "detail": "실제 CheckList 실행으로 잰 시간과 원장 판정 차이(ledger_diff).",
+     "key": "S6|CL:2026-11-20:kto5dp#5d8243b38b"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-20 CheckList 속도 개선 묶음: 중복 정리(AI) · E2E 동시 실행 · 진입 확인 선행 · AS-IS",
+     "detail": "동시 실행은 첫 실행이 시험 종류를 기록한 뒤 두 번째 실행부터.",
+     "key": "S6|CL:2026-11-20:kto5dp#321aee434f"
+    }
+   ]
+  },
+  {
+   "id": "S9",
+   "name": "반복 수정",
+   "status": "warn",
+   "count": 13,
+   "at": "2026-11-20T10:43:46+09:00",
+   "info": {
+    "collectedAt": "2026-11-20T09:46:10+09:00",
+    "repeatFiles": 40,
+    "repeatAsks": 1
+   },
+   "items": [
+    {
+     "level": "warn",
+     "what": "workbench.js 7일 안 변경 기록 57건",
+     "detail": "2026-11-14 부터, 전체 61건, 세션 수정 182건",
+     "key": "S9|file|workbench.js",
+     "file": "workbench.js"
+    },
+    {
+     "level": "warn",
+     "what": "orch-watch.js 7일 안 변경 기록 27건",
+     "detail": "2026-11-19 부터, 전체 27건, 세션 수정 56건",
+     "key": "S9|file|orch-watch.js",
+     "file": "orch-watch.js"
+    },
+    {
+     "level": "warn",
+     "what": "quick.json 7일 안 변경 기록 27건",
+     "detail": "2026-11-13 부터, 전체 53건, 세션 수정 7건",
+     "key": "S9|file|quick.json",
+     "file": "quick.json"
+    },
+    {
+     "level": "warn",
+     "what": "harness.json 7일 안 변경 기록 25건",
+     "detail": "2026-11-18 부터, 전체 30건, 세션 수정 0건",
+     "key": "S9|file|harness.json",
+     "file": "harness.json"
+    },
+    {
+     "level": "warn",
+     "what": "run_all.js 7일 안 변경 기록 24건",
+     "detail": "2026-11-19 부터, 전체 24건, 세션 수정 1건",
+     "key": "S9|file|run_all.js",
+     "file": "run_all.js"
+    },
+    {
+     "level": "warn",
+     "what": "orchestra.js 7일 안 변경 기록 18건",
+     "detail": "2026-11-19 부터, 전체 18건, 세션 수정 29건",
+     "key": "S9|file|orchestra.js",
+     "file": "orchestra.js"
+    },
+    {
+     "level": "warn",
+     "what": "extension.js 7일 안 변경 기록 18건",
+     "detail": "2026-11-17 부터, 전체 22건, 세션 수정 46건",
+     "key": "S9|file|extension.js",
+     "file": "extension.js"
+    },
+    {
+     "level": "warn",
+     "what": "orch-selfcheck.js 7일 안 변경 기록 17건",
+     "detail": "2026-11-19 부터, 전체 17건, 세션 수정 13건",
+     "key": "S9|file|orch-selfcheck.js",
+     "file": "orch-selfcheck.js"
+    },
+    {
+     "level": "warn",
+     "what": "job-runner.js 7일 안 변경 기록 17건",
+     "detail": "2026-11-19 부터, 전체 17건, 세션 수정 19건",
+     "key": "S9|file|job-runner.js",
+     "file": "job-runner.js"
+    },
+    {
+     "level": "warn",
+     "what": "orch-agent.js 7일 안 변경 기록 15건",
+     "detail": "2026-11-19 부터, 전체 15건, 세션 수정 29건",
+     "key": "S9|file|orch-agent.js",
+     "file": "orch-agent.js"
+    },
+    {
+     "level": "warn",
+     "what": "t_orch_watch.js 7일 안 변경 기록 14건",
+     "detail": "2026-11-19 부터, 전체 14건, 세션 수정 12건",
+     "key": "S9|file|t_orch_watch.js",
+     "file": "t_orch_watch.js"
+    },
+    {
+     "level": "warn",
+     "what": "e2e_results.json 7일 안 변경 기록 13건",
+     "detail": "2026-11-20 부터, 전체 13건, 세션 수정 0건",
+     "key": "S9|file|e2e_results.json",
+     "file": "e2e_results.json"
+    },
+    {
+     "level": "warn",
+     "what": "같은 지시 2건",
+     "detail": "개선안 1번 승인할게요, 반영해주세요.",
+     "key": "S9|ask|fa3c49f4ee"
+    }
+   ]
+  },
+  {
+   "id": "S10",
+   "name": "용량",
+   "status": "warn",
+   "count": 2,
+   "at": "2026-11-19T22:47:37+09:00",
+   "info": {
+    "logsGB": 56.7,
+    "logFiles": 1385,
+    "bigFiles": 2,
+    "bakRepo": 323,
+    "bakInstalled": 124,
+    "snapDirs": 8
+   },
+   "items": [
+    {
+     "level": "warn",
+     "what": ".vibe/logs/be_bootrun_20261112_1031.log 28.9GB",
+     "detail": "마지막 수정 2026-11-13T17:28",
+     "key": "S10|log|be_bootrun_20261112_1031.log",
+     "file": ".vibe/logs/be_bootrun_20261112_1031.log",
+     "gb": 28.9
+    },
+    {
+     "level": "warn",
+     "what": ".vibe/logs/be_bootrun_20261114_0148.log 25.9GB",
+     "detail": "마지막 수정 2026-11-16T11:34",
+     "key": "S10|log|be_bootrun_20261114_0148.log",
+     "file": ".vibe/logs/be_bootrun_20261114_0148.log",
+     "gb": 25.9
+    }
+   ]
+  },
+  {
+   "id": "S11",
+   "name": "고정 문구",
+   "status": "warn",
+   "count": 299,
+   "at": "2026-11-20T10:11:33+09:00",
+   "info": {
+    "files": 22,
+    "violations": 299,
+    "report": ".vibe/orch/selfcheck/doc_style"
+   },
+   "items": [
+    {
+     "level": "warn",
+     "what": "workbench.js 문장 규칙 위반 245건",
+     "detail": "수식어 6 번역투 1 기호 234 틀 1 추측 1 용어 2",
+     "key": "S11|workbench.js",
+     "file": "workbench.js"
+    },
+    {
+     "level": "warn",
+     "what": "extension.js 문장 규칙 위반 21건",
+     "detail": "수식어 1 기호 19 추상어 1",
+     "key": "S11|extension.js",
+     "file": "extension.js"
+    },
+    {
+     "level": "warn",
+     "what": "server-service.js 문장 규칙 위반 17건",
+     "detail": "기호 17",
+     "key": "S11|server-service.js",
+     "file": "server-service.js"
+    },
+    {
+     "level": "warn",
+     "what": "orchestra.js 문장 규칙 위반 7건",
+     "detail": "기호 7",
+     "key": "S11|orchestra.js",
+     "file": "orchestra.js"
+    },
+    {
+     "level": "warn",
+     "what": "history.js 문장 규칙 위반 4건",
+     "detail": "기호 4",
+     "key": "S11|history.js",
+     "file": "history.js"
+    },
+    {
+     "level": "warn",
+     "what": "orch-agent.js 문장 규칙 위반 2건",
+     "detail": "기호 2",
+     "key": "S11|orch-agent.js",
+     "file": "orch-agent.js"
+    },
+    {
+     "level": "warn",
+     "what": "jobs.js 문장 규칙 위반 1건",
+     "detail": "기호 1",
+     "key": "S11|jobs.js",
+     "file": "jobs.js"
+    },
+    {
+     "level": "warn",
+     "what": "orch-watch.js 문장 규칙 위반 1건",
+     "detail": "기호 1",
+     "key": "S11|orch-watch.js",
+     "file": "orch-watch.js"
+    },
+    {
+     "level": "warn",
+     "what": "prompt-panel.js 문장 규칙 위반 1건",
+     "detail": "기호 1",
+     "key": "S11|prompt-panel.js",
+     "file": "prompt-panel.js"
+    }
+   ]
+  },
+  {
+   "id": "S13",
+   "name": "사용자 지적",
+   "status": "fail",
+   "count": 15,
+   "at": "2026-11-20T10:43:49+09:00",
+   "info": {
+    "ledger": 11,
+    "active": 11,
+    "per": {
+     "U1": 0,
+     "U2": 4,
+     "U3": 0,
+     "U4": 0,
+     "U5": 0,
+     "U6": 0,
+     "U7": 0,
+     "U8": 0,
+     "U9": 3,
+     "U10": 8,
+     "U11": 0
+    },
+    "coveredUntil": "2026-11-20T10:07:29+09:00",
+    "lastLearnAt": "",
+    "lastLearn": "",
+    "newPrompts": 13,
+    "learnStarted": true
+   },
+   "items": [
+    {
+     "level": "warn",
+     "what": "U2 CheckList SCP0028 184분(목표 30분)",
+     "detail": "11-20 04:15 끝 · 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 오래 걸린 구간(Doc/verify/SCP0028/run_timing.json 2026-11-20 08:28:54): e2e playwright _verify _trace _snap 46.2분, post llm_review.py 8.2분, eg eg_chain.py 8.2분",
+     "key": "S13|U2|SCP0028",
+     "uid": "U2",
+     "quote": "화면1개에 대한 CHECKLIST 작업이 4시간 이상 소요된다는건 필요한 시점에 CHECKLIST 작업을 돌려서 볼 수 없다는 것과 동일합니다"
+    },
+    {
+     "level": "warn",
+     "what": "U2 CheckList SSP0014 184분(목표 30분)",
+     "detail": "11-20 04:15 끝 · 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 오래 걸린 구간(Doc/verify/SSP0014/run_timing.json 2026-11-20 08:38:17): e2e playwright _verify _trace _snap 35분, eg eg_chain.py 15.3분, post llm_review.py 4.8분",
+     "key": "S13|U2|SSP0014",
+     "uid": "U2",
+     "quote": "화면1개에 대한 CHECKLIST 작업이 4시간 이상 소요된다는건 필요한 시점에 CHECKLIST 작업을 돌려서 볼 수 없다는 것과 동일합니다"
+    },
+    {
+     "level": "warn",
+     "what": "U2 CheckList SSP0005 243분(목표 30분)",
+     "detail": "11-20 05:14 끝 · 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 오래 걸린 구간(Doc/verify/SSP0005/run_timing.json 2026-11-20 06:07:32): e2e playwright _verify _trace _snap 143.7분, post llm_review.py 18분, eg eg_chain.py 11.6분",
+     "key": "S13|U2|SSP0005",
+     "uid": "U2",
+     "quote": "화면1개에 대한 CHECKLIST 작업이 4시간 이상 소요된다는건 필요한 시점에 CHECKLIST 작업을 돌려서 볼 수 없다는 것과 동일합니다"
+    },
+    {
+     "level": "warn",
+     "what": "U2 CheckList SCP0005 243분(목표 30분)",
+     "detail": "11-20 05:14 끝 · 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 오래 걸린 구간(Doc/verify/SCP0005/run_timing.json 2026-11-20 06:07:32): e2e playwright _verify _trace _snap 54.5분, post llm_review.py 25.8분, docs llm_desc.py 11.5분",
+     "key": "S13|U2|SCP0005",
+     "uid": "U2",
+     "quote": "화면1개에 대한 CHECKLIST 작업이 4시간 이상 소요된다는건 필요한 시점에 CHECKLIST 작업을 돌려서 볼 수 없다는 것과 동일합니다"
+    },
+    {
+     "level": "fail",
+     "what": "U9 업무 작업 기록 불일치 J20261120_003352",
+     "detail": "작업 상태 interrupted(VS Code 종료로 중단됨)인데 화면 SCP0028 이 '실행 중'으로 남음. 실행 중 체인 없음",
+     "key": "S13|U9|rec|J20261120_003352",
+     "uid": "U9",
+     "quote": "VM 업무 작업 에서 4개의 작업이 수행중이였는데, 제가 중지를 눌렀습니다. 상단에 사용자 중지라는 TEXT 가 보이는데 아직 상황판에는 4개의 작업이 수행중인 것으로 보이고 있습니다."
+    },
+    {
+     "level": "fail",
+     "what": "U9 업무 작업 기록 불일치 J20261120_054831",
+     "detail": "작업 상태 interrupted(VS Code 종료로 중단됨)인데 화면 SSP0014 이 '실행 중'으로 남음. 실행 중 체인 없음",
+     "key": "S13|U9|rec|J20261120_054831",
+     "uid": "U9",
+     "quote": "VM 업무 작업 에서 4개의 작업이 수행중이였는데, 제가 중지를 눌렀습니다. 상단에 사용자 중지라는 TEXT 가 보이는데 아직 상황판에는 4개의 작업이 수행중인 것으로 보이고 있습니다."
+    },
+    {
+     "level": "fail",
+     "what": "U9 업무 작업 기록 불일치 J20261120_060728",
+     "detail": "작업 상태 interrupted(VS Code 종료로 중단됨)인데 화면 SCP0005, SCP0028, SSP0005, SSP0014 이 '실행 중'으로 남음. 실행 중 체인 없음",
+     "key": "S13|U9|rec|J20261120_060728",
+     "uid": "U9",
+     "quote": "VM 업무 작업 에서 4개의 작업이 수행중이였는데, 제가 중지를 눌렀습니다. 상단에 사용자 중지라는 TEXT 가 보이는데 아직 상황판에는 4개의 작업이 수행중인 것으로 보이고 있습니다."
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SCP0005",
+     "detail": "11-20 00:33 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SCP0005|1795102426111",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SCP0014",
+     "detail": "11-20 00:34 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SCP0014|1795102461102",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SSP0005",
+     "detail": "11-20 00:47 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SSP0005|1795103254248",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SCP0005",
+     "detail": "11-20 00:47 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SCP0005|1795103254402",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SCP0028",
+     "detail": "11-20 04:15 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SCP0028|1795115707473",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SSP0014",
+     "detail": "11-20 04:15 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SSP0014|1795115708304",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SSP0005",
+     "detail": "11-20 05:14 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SSP0005|1795119254671",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    },
+    {
+     "level": "warn",
+     "what": "U10 Claude 단계 건너뛰고 끝난 CheckList SCP0005",
+     "detail": "11-20 05:14 · 건너뜀 3 · 실행 스크립트 1",
+     "key": "S13|U10|SCP0005|1795119254819",
+     "uid": "U10",
+     "quote": "CHECKLIST 에도 클로드 AI 가 반영되고 있는줄 알았는데, 반영되지 않고 있으면서, 계속 오류만 반복해서 발생시키고 있던 현상"
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "repeatFiles": [
+  {
+   "file": "workbench.js",
+   "count": 57,
+   "from": "2026-11-14",
+   "total": 61,
+   "edits": 182
+  },
+  {
+   "file": "orch-watch.js",
+   "count": 27,
+   "from": "2026-11-19",
+   "total": 27,
+   "edits": 56
+  },
+  {
+   "file": "quick.json",
+   "count": 27,
+   "from": "2026-11-13",
+   "total": 53,
+   "edits": 7
+  },
+  {
+   "file": "harness.json",
+   "count": 25,
+   "from": "2026-11-18",
+   "total": 30,
+   "edits": 0
+  },
+  {
+   "file": "run_all.js",
+   "count": 24,
+   "from": "2026-11-19",
+   "total": 24,
+   "edits": 1
+  },
+  {
+   "file": "orchestra.js",
+   "count": 18,
+   "from": "2026-11-19",
+   "total": 18,
+   "edits": 29
+  },
+  {
+   "file": "extension.js",
+   "count": 18,
+   "from": "2026-11-17",
+   "total": 22,
+   "edits": 46
+  },
+  {
+   "file": "orch-selfcheck.js",
+   "count": 17,
+   "from": "2026-11-19",
+   "total": 17,
+   "edits": 13
+  },
+  {
+   "file": "job-runner.js",
+   "count": 17,
+   "from": "2026-11-19",
+   "total": 17,
+   "edits": 19
+  },
+  {
+   "file": "orch-agent.js",
+   "count": 15,
+   "from": "2026-11-19",
+   "total": 15,
+   "edits": 29
+  },
+  {
+   "file": "t_orch_watch.js",
+   "count": 14,
+   "from": "2026-11-19",
+   "total": 14,
+   "edits": 12
+  },
+  {
+   "file": "e2e_results.json",
+   "count": 13,
+   "from": "2026-11-20",
+   "total": 13,
+   "edits": 0
+  },
+  {
+   "file": "results.json",
+   "count": 13,
+   "from": "2026-11-20",
+   "total": 16,
+   "edits": 0
+  },
+  {
+   "file": "run_verify.py",
+   "count": 13,
+   "from": "2026-11-18",
+   "total": 17,
+   "edits": 0
+  },
+  {
+   "file": "steps.json",
+   "count": 12,
+   "from": "2026-11-13",
+   "total": 25,
+   "edits": 0
+  }
+ ],
+ "repeatAsks": [
+  {
+   "text": "개선안 1번 승인할게요, 반영해주세요.",
+   "count": 2,
+   "ids": [
+    "CL:2026-11-19:f0tgr5",
+    "CL:2026-11-19:1d5e0uc"
+   ]
+  }
+ ],
+ "unverifiedOpen": [
+  {
+   "id": "CL:2026-11-20:1j92l92",
+   "date": "2026-11-20",
+   "title": "업무 작업창 B 스튜디오 디자인 · 개선안 자동 반영 기록 시각 표시 정정",
+   "text": "VS Code 실화면(창 다시 로드 필요",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1j92l92",
+   "date": "2026-11-20",
+   "title": "업무 작업창 B 스튜디오 디자인 · 개선안 자동 반영 기록 시각 표시 정정",
+   "text": "지금 도는 CheckList 가 끝난 뒤)",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1i1jg9x",
+   "date": "2026-11-20",
+   "title": "다시 시도한 개선안이 또 반영 실패하면 다시 진단",
+   "text": "실제 VMO 동작(창 다시 로드 필요.",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1i1jg9x",
+   "date": "2026-11-20",
+   "title": "다시 시도한 개선안이 또 반영 실패하면 다시 진단",
+   "text": "지금 도는 CheckList 4화면이 끝난 뒤 로드)",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1l4j8d8",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: VM 창이 끝날 때 job 없이 띄운 체인에도 끝 기록(chain.end ok=false, aborted, why 'VM 창 종료로 중단') 남기기(검증 기대값, 대상 경로 정정)",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:9wl81k",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: VM 작업 로그 이름에 화면 ID와 실행 번호를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함(검증 = 시험만)",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1696b0k",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: CheckList 체인 R11 판정 때 이번 체인이 만든 결과 파일만 사용",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:v2jtfa",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: 강제 종료된 실행은 '중지'로 표시하고 동시 실행 로그 파일 이름 겹침 제거",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1o25gd0",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: R11·R10 사건이 지난 실행 결과 건수를 쓰지 않게 함, 동시 실행 로그 파일 분리",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1l5a5cp",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: VM 다시 시작 때 지난 실행을 '사라진 실행(R5)'으로 늦게 올리지 않기, 실행 시작 기록에 화면 ID 채우기",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1rgz55i",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: VS Code 종료(dispose)로 멈춘 실행도 감시기에 중지로 알려 R1, R2, R11 사건을 만들지 않는다",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:rfje4i",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: TO-BE 화면이 없는 화면의 CheckList 실패를 반복 오류(R1·R2) 사건에서 제외",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T10:08:27+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:sz6wij",
+   "date": "2026-11-20",
+   "title": "CheckList 전체기능 재점검 / 수정분 재점검 분리",
+   "text": "make_verify_docs.py: 다시 재지 않은 행에 '[이전 측정 유지 측정 시각]', 데이터 규칙(DB_OBJECT)은 '· 데이터 변경 미확인', 요약에 재측정 규칙 수·유지 행 수·마지막 전체 시각",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:sz6wij",
+   "date": "2026-11-20",
+   "title": "CheckList 전체기능 재점검 / 수정분 재점검 분리",
+   "text": "실제 수정분 재점검 실행 시간과 판정 비교(전체 재점검과 ledger_diff).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:sz6wij",
+   "date": "2026-11-20",
+   "title": "CheckList 전체기능 재점검 / 수정분 재점검 분리",
+   "text": "첫 수정분 재점검은 기준선이 없어 전체로 실행됨.",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:sz6wij",
+   "date": "2026-11-20",
+   "title": "CheckList 전체기능 재점검 / 수정분 재점검 분리",
+   "text": "SCP0005 는 직전 실행이 끊겨 미해결 행이 많아(946행) 범위가 넓음",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:pkxifp",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: 작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:46:37+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:10g8i34",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: 작업 목록 중지를 감시기에 user.stop 으로 알리고 CheckList 체인 R11 판정에서 사용자 중지를 뺀다",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:34:50+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:kto5dp",
+   "date": "2026-11-20",
+   "title": "CheckList 속도 개선 묶음: 중복 정리(AI) · E2E 동시 실행 · 진입 확인 선행 · AS-IS 실측 원장 기준 재사용",
+   "text": "실제 CheckList 실행으로 잰 시간과 원장 판정 차이(ledger_diff).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:kto5dp",
+   "date": "2026-11-20",
+   "title": "CheckList 속도 개선 묶음: 중복 정리(AI) · E2E 동시 실행 · 진입 확인 선행 · AS-IS 실측 원장 기준 재사용",
+   "text": "동시 실행은 첫 실행이 시험 종류를 기록한 뒤 두 번째 실행부터.",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:kto5dp",
+   "date": "2026-11-20",
+   "title": "CheckList 속도 개선 묶음: 중복 정리(AI) · E2E 동시 실행 · 진입 확인 선행 · AS-IS 실측 원장 기준 재사용",
+   "text": "VS Code 실화면",
+   "loaded": "2026-11-20T05:34:50+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1wyiovs",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: 작은 모듈 고정 문구 줄표, 가운뎃점, 틀 정리(시험 파일 포함 재제출)",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:34:50+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:v2knjv",
+   "date": "2026-11-20",
+   "title": "업무 작업 내용을 같은 화면 ID 의 Workbench 창과 공유(Console, 단계 보드, 이력)",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:34:50+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:v2knjv",
+   "date": "2026-11-20",
+   "title": "업무 작업 내용을 같은 화면 ID 의 Workbench 창과 공유(Console, 단계 보드, 이력)",
+   "text": "실제 CheckList 업무 작업을 돌리는 동안 Workbench Console 에 보이는 모습.",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:v2knjv",
+   "date": "2026-11-20",
+   "title": "업무 작업 내용을 같은 화면 ID 의 Workbench 창과 공유(Console, 단계 보드, 이력)",
+   "text": "중지 버튼으로 실제 화면이 멈추는지",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:egu3di",
+   "date": "2026-11-20",
+   "title": "VS Code 종료로 끊긴 업무 작업 = 사용자 중지로 알림",
+   "text": "미확인: 실제 창 다시 로드 때 사건 0건(다음 로드 때 확인)",
+   "loaded": "2026-11-20T05:34:50+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1j92d7y",
+   "date": "2026-11-20",
+   "title": "VMO 사건: 창 다시 로드로 생긴 사건을 사용자 확인 필요에서 뺌 · 일괄 닫기 · 이력 자동 수집 체크",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:14:49+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1j92d7y",
+   "date": "2026-11-20",
+   "title": "VMO 사건: 창 다시 로드로 생긴 사건을 사용자 확인 필요에서 뺌 · 일괄 닫기 · 이력 자동 수집 체크",
+   "text": "일괄 닫기 버튼, 자동 수집 체크를 눌러 본 결과",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1x0zblk",
+   "date": "2026-11-20",
+   "title": "에이전트 대화로 멈춘 화면은 실패 사건 없음 · 요청 파일로 화면 하나 중지, 다시 실행",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:14:49+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1x0zblk",
+   "date": "2026-11-20",
+   "title": "에이전트 대화로 멈춘 화면은 실패 사건 없음 · 요청 파일로 화면 하나 중지, 다시 실행",
+   "text": "실제 에이전트 대화가 요청 파일을 쓰는지",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1wtaszy",
+   "date": "2026-11-20",
+   "title": "VMO 자가 복구: 화면 진입 실패 → 원인 → 해결 → 확인 → 그 화면 다시 실행 · 업무 작업창 세부 진행 표시",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:14:49+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1wtaszy",
+   "date": "2026-11-20",
+   "title": "VMO 자가 복구: 화면 진입 실패 → 원인 → 해결 → 확인 → 그 화면 다시 실행 · 업무 작업창 세부 진행 표시",
+   "text": "실제 빠진 공용 파일을 common_sync 로 받는 동작(지금 빠진 파일 0건이라 받기 경로는 시험에서 가짜로 대체).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1wtaszy",
+   "date": "2026-11-20",
+   "title": "VMO 자가 복구: 화면 진입 실패 → 원인 → 해결 → 확인 → 그 화면 다시 실행 · 업무 작업창 세부 진행 표시",
+   "text": "실제 R13 → 자가 복구 → 다시 실행 전 과정 실동작",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1jv3c2v",
+   "date": "2026-11-20",
+   "title": "체인 실행 중에도 VMO 자가진단 계속 · 화면 진입 실패 반복 사건(R13) · 화면 소스 받기에 빠진 공용 파일 확인",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:14:49+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1jv3c2v",
+   "date": "2026-11-20",
+   "title": "체인 실행 중에도 VMO 자가진단 계속 · 화면 진입 실패 반복 사건(R13) · 화면 소스 받기에 빠진 공용 파일 확인",
+   "text": "실제 vite 변환 오류 응답으로 R13 문구 추출(시험은 흉내 서버).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1jv3c2v",
+   "date": "2026-11-20",
+   "title": "체인 실행 중에도 VMO 자가진단 계속 · 화면 진입 실패 반복 사건(R13) · 화면 소스 받기에 빠진 공용 파일 확인",
+   "text": "screen_sync 가 빠진 파일을 common_sync 로 받는 실동작(지금은 빠진 파일 0건).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:1jv3c2v",
+   "date": "2026-11-20",
+   "title": "체인 실행 중에도 VMO 자가진단 계속 · 화면 진입 실패 반복 사건(R13) · 화면 소스 받기에 빠진 공용 파일 확인",
+   "text": "SCP0028, SSP0014 실화면 열림은 사용자 확인 필요.",
+   "loaded": "2026-11-20T05:14:49+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1jv3c2v",
+   "date": "2026-11-20",
+   "title": "체인 실행 중에도 VMO 자가진단 계속 · 화면 진입 실패 반복 사건(R13) · 화면 소스 받기에 빠진 공용 파일 확인",
+   "text": "지금 도는 두 화면 CheckList 는 화면을 열지 못한 결과라 다시 실행해야 함",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-20:10r9piy",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: doc_style.py JS 소스 검사에서 주석과 정규식 리터럴 제외(확인 기준 정정 재제출)",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T05:14:49+09:00"
+  },
+  {
+   "id": "CL:2026-11-20:1yx3am2",
+   "date": "2026-11-20",
+   "title": "VMO 자가 보완: S8 개선안 효과 판정에서 S9 반복 수정 key 제외",
+   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "loaded": "2026-11-20T01:06:46+09:00"
+  }
+ ],
+ "failed": [
+  {
+   "id": "20261120094531_REVIEW",
+   "title": "중지 직후 남은 잠금은 사건 없이 지우고 처리 기록만 남긴다",
+   "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_lock_repeat.js"
+   ],
+   "tries": 1,
+   "why": "반영 실패. Claude exit 1 · 대상 파일 2개 복원 · 대상 밖 변경 tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md 는 그대로 남음"
+  },
+  {
+   "id": "20261120005059_INC",
+   "title": "R2 반복 집계에서 같은 실행의 실패를 한 번만 세고, VS Code 종료로 끊긴 실행은 반복 집계에서 뺀다",
+   "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/test/t_orch_watch.js"
+   ],
+   "tries": 1,
+   "why": "반영 실패 진단: 자동으로 풀 수 없음. 개선안 내용이 06:06 끊긴 반영 때 이미 들어가 그 뒤 시험을 통과하고 있어 다시 반영할 것이 없습니다. 반영 완료로 닫고 CHANGELOG 절을 남길지 사람이 정해야 합니다. 이번 진단에서 시험 직접 실행은 승인 대기로 미실행입니다. 원인 06:03:39 다시 반영 중 06:06:12 창 다시 로드로 끊긴 시도의 변경이 되돌려지지 않고 남음. orch-watch.js.bak_20261120_self0601 개선안 표시 0건, self0609 이후 백업 3건. 지금 tools/VibeManager/orch-watch.js:28,68~78,85~86,166~177,347 과 test/t_orch_watch.js:141~155 에 안의 변경 있음. 설치 폴더 marisoft.vibe-manager-2.0.1/orch-watch.js:28,68,165,347 에도 있음. 그 뒤 게이트 CHANGELOG.md:75(07:29 t_orch_watc"
+  }
+ ],
+ "known": [
+  {
+   "title": "측정 추가: 사라진 대기의 대기 시간을 발견 시각이 아닌 마지막 생존 확인 시각까지로 잰다(옛 기대 시험 1건 포함)",
+   "status": "pending",
+   "reason": ""
+  },
+  {
+   "title": "하위 프로세스 소멸 뒤 10초 유예하고 그동안 proc.end 가 없을 때만 R5(사라진 실행)로 올린다",
+   "status": "pending",
+   "reason": ""
+  },
+  {
+   "title": "R3 단계 지연 기준을 화면별 통계로 분리",
+   "status": "pending",
+   "reason": ""
+  },
+  {
+   "title": "중지 직후 남은 잠금은 사건 없이 지우고 처리 기록만 남긴다",
+   "status": "apply-failed",
+   "reason": ""
+  },
+  {
+   "title": "측정 추가: 사라진 대기의 대기 시간을 발견 시각이 아닌 마지막 생존 확인 시각까지로 잰다",
+   "status": "superseded",
+   "reason": ""
+  },
+  {
+   "title": "측정 추가: 에이전트 Claude 호출 끝 기록에 결과 줄 수신 여부, 마지막 진행 종류, 중지 주체를 남긴다",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "실패 서명에서 'log tail:' 머리 줄과 '$ 명령' 줄을 건너뛰고 다음 원인 줄로 서명을 만든다",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "측정 추가: 7일 집계에서 중지된 실행을 실패와 따로 센다(단계, 체인, 프로세스)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VM 창이 끝날 때 job 없이 띄운 체인에도 끝 기록(chain.end ok=false, aborted, why 'VM 창 종료로 중단') 남기기(검증 기대값, 대상 경로 정정)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VM 작업 로그 이름에 화면 ID와 실행 번호를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함(검증 = 시험만)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "CheckList 체인 R11 판정 때 이번 체인이 만든 결과 파일만 사용",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "강제 종료된 실행은 '중지'로 표시하고 동시 실행 로그 파일 이름 겹침 제거",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "R11·R10 사건이 지난 실행 결과 건수를 쓰지 않게 함, 동시 실행 로그 파일 분리",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VM 창이 끝날 때 job 없이 띄운 체인에도 끝 기록(chain.end ok=false, why 창 종료) 남기기",
+   "status": "superseded",
+   "reason": ""
+  },
+  {
+   "title": "VM 작업 로그 이름에 화면 ID와 procId를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함",
+   "status": "superseded",
+   "reason": ""
+  },
+  {
+   "title": "VM 다시 시작 때 지난 실행을 '사라진 실행(R5)'으로 늦게 올리지 않기, 실행 시작 기록에 화면 ID 채우기",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VS Code 종료(dispose)로 멈춘 실행도 감시기에 중지로 알려 R1, R2, R11 사건을 만들지 않는다",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "TO-BE 화면이 없는 화면의 CheckList 실패를 반복 오류(R1·R2) 사건에서 제외",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "R2 반복 집계에서 같은 실행의 실패를 한 번만 세고, VS Code 종료로 끊긴 실행은 반복 집계에서 뺀다",
+   "status": "apply-failed",
+   "reason": ""
+  },
+  {
+   "title": "작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "작업 목록 중지를 감시기에 user.stop 으로 알리고 CheckList 체인 R11 판정에서 사용자 중지를 뺀다",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "작은 모듈 고정 문구 줄표, 가운뎃점, 틀 정리(시험 파일 포함 재제출)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "doc_style.py JS 소스 검사에서 주석과 정규식 리터럴 제외(확인 기준 정정 재제출)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "S8 개선안 효과 판정에서 S9 반복 수정 key 제외",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "workbench.js 83~1100줄 실행 로그와 알림 문구에서 줄표와 가운뎃점 나열 제거(1차 71건)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "작은 모듈 6개 고정 문구에서 줄표와 가운뎃점 나열 제거(prompt-panel, orch-selfcheck, history, orchestra, flow-panel, chain-runner)",
+   "status": "superseded",
+   "reason": ""
+  },
+  {
+   "title": "extension.js 알림과 트리 문구에서 줄표 제거(18건), '모두' 1건 삭제",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "workbench.js 웹뷰 스크립트를 t_webview_syntax.js 구문 시험 대상에 추가",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "doc_style.py 소스 검사에서 JS 주석과 잘못 짝지은 백틱 구간 제외",
+   "status": "superseded",
+   "reason": ""
+  },
+  {
+   "title": "job-runner.js, server-service.js 고정 문구에서 줄표 제거(29건)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "S6 미확인 원장: 기능 설명 줄 제외, '미확인:' 줄 문장 단위 분리, 'VS Code 화면' 항목을 창 로드 기록과 연결",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VM 파일 수정 직후 120초 안에는 가벼운 점검에서 S3 를 빼고 무거운 점검에서만 판정",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VMO 3개 모듈 고정 문구에서 줄표와 가운뎃점 나열 제거(62건)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "VMO 켜고 끄기의 harness.json 교체에 EPERM 재시도 적용, 쓰기 실패를 오류 기록에 남김",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "서버 로그 2개 삭제(.vibe/logs be_bootrun, 58,885,136,326바이트)",
+   "status": "pending",
+   "reason": ""
+  },
+  {
+   "title": "변경 게이트 감시 대상에 tools/CommonSync 추가",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "R5 진행 없음 판정에 E2E 산출물 수정 시각 반영",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "측정 추가: 끝 사건 없이 사라진 대기와 Claude 호출을 집계에 포함",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "측정 추가: 잠금 파일에 실행 주체 기록, 같은 죽은 잠금 3회부터 묶음 사건 1건",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "오케스트라 에이전트의 Claude 호출에서는 종료 전 게이트를 건너뜀",
+   "status": "applied",
+   "reason": ""
+  }
+ ]
+}

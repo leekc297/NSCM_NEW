@@ -58,3 +58,41 @@
 - 확인: mapping_trace.py --selftest 81/81 · py_compile 통과 · engine_selfcheck PASS(17:07:12 · TSC 0)
 - 다른 화면 영향(원장 COLUMN 칸 기준 대응 생기는 화면 6): DMF0005·DMF0006 TEAM_ID → DEPT_ID, DMF0021 CELL_PACK_COUNT → FORECAST_INFO_CELL_PACK_COUNT, SSP0005 COMPANY → COMPANY_ID·DIVISION → DIVISION_ID, SSP0014 DIVISION → DIVISION_ID, SSP0020 LAST_UPDATE_BY → LAST_UPDATED_BY. 다음 CheckList 부터
 - 백업: 라운드 1 백업 mapping_trace.py.bak_20261119_ssp14u(라운드 1·2 변경 전 원본)
+
+## 라운드 3 (2026-11-20 07:43~08:3x · 일괄 보완)
+
+- 입력: CheckList 2026-11-20 06:08~07:43 결과. 원장 07:33:06 ERROR 127행(집계 77) + AI 판정 검토 24행. 분류 07:43:36 라운드 1 = 처리 대상 68(AI 검토 24 포함), 가이드 4, 사람 2, 집계 77
+- 행별 조치 `_unverified_plan.md`(집계 아닌 74행 + 집계 77행 = 151행). 결정 `_unverified_decisions.md`(8건 9행). FE 가이드 `FE_GUIDE_20261120_0800.md`(G6 1건, doc_style 위반 0)
+- 라운드 1 의 저장 경로 보완(T349·T350)은 반영됐으나 시험 값 'njlilian' 이 USER_CHECK 에 막혀 저장 묶음이 다시 미검증이 됨. 같은 시도를 되풀이하지 않고 검증 차단을 알아보고 통과 값으로 다시 고르게 바꿈
+- 재측정: run_verify, 개별 검사기 재실행 안 함. 다음 CheckList 재수행에서 측정
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 재측정 |
+|---|---|---|---|---|
+| S 저장 경로 | 27 | e2e_results.json V-9526999b·ES-de56f621: 'USER_ID → njlilian · [60s] 저장 응답 USER_CHECK:200 · SAVE call-proc 없음'. probe.otherColumnValue 가 다른 행 최빈값 'njlilian' 을 고름. useShipmentModelPicValidation.ts:47~58 = USER_CHECK 통과 목록에 없으면 MSG01261 알림 후 저장 중단. nscm.alertText 가 숨은 대화상자 포함 마지막 요소를 읽어 알림 '' · closeAlert 는 :visible 로 그 알림을 닫음. saveprobe.saveReload 가 USER_CHECK 호출을 저장 요청으로 세어 'r20 재조회 NG'(V-9bcbf1f5)·DB 무변화(V-6ea977f3) 기록. 저장 경로 시험은 USER_CHECK 에 가짜 실패를 넣음(V-5473aa5a). eg_popup CELL_BADKEY 는 확인 버튼을 먼저 눌러 알림을 닫음(8행). E3 는 숨은 요소 .first() 를 읽고 blockWrites 가 USER_CHECK 를 막음. save_audit.json 07:09 F7·F8 'NOT_RUN 저장 미실행' | T370 nscm.ts alertText · T371 nscm.ts save(검증 알림 선읽기, 검증 호출 뒤 알림이면 대기 끝, preCheckOnly) · T372 nscm.ts pre 기록, saveprobe.ts precheckValues·notePrecheck·saveReload·cellRoundTrip 재시도, probe.ts otherColumnValue exclude·prefer, crud.ts 재시도·'[업무 검증 차단]', _verify.spec.ts F 판정 · T373 _verify.spec.ts 저장 경로 검증 호출 통과·재시도 · T374 _verify.spec.ts E3, probe.ts blockWrites, rowstate.ts · T375 eg_popup.spec.ts CELL_BADKEY | 미측정 |
+| C AS-IS 사실 추출 | 17 | cs:77 `const string DIVISION = "DIVISION_ID"` 를 안 풀어 cs:274 LockColumn 범위가 양 끝만 적힘(SpreadInfo.cs:6921 범위 전체 잠금). cs:183~187 NewRow 'W/Warrnaty' 누락. cs:355~360 조건부 셀 형식 누락. dbo.SSP0014_GET_SHIPMENT_MODEL_PIC.sql:89~93 ORDER BY 5키 중 1키만 | T390 facts_lockrules.py · T391 facts_combosrc.py, combo_oracle.py, facts_combovalues.py · T392 facts_cellrules.py · T393 facts_sortrules.py. SSP0014 사실 5종 재생성(lock_rules, edit_expect, combo_src, cell_rules, sort_rules) | 미측정 |
+| D 대조표 추적 | 13 | 대조표 부록 표 번호 겹침(97·106·117·118줄), 서술본·이력 표(91·170줄), 구현 위치 칸 미독(ShipmentModelPicGrid.tsx:228), 미배치 usrButton1(Designer.cs:33), 팝업 인자 전용 clbFromSite(actions.csv 841줄), calls/*.json USER_CHECK 15건 미합침, CR-096(confirmed_requirements.csv:97) 미적용 | T400~T404 mapping_trace.py · T405 judge.py f4_calllog · T406 popup_args_check.py, mapping_trace.py. T-d1bd8978·T-bab6f023 은 결정 D7 | 미측정 |
+| B 콤보 원천·조회 | 11 | b7_check.json 06:14 '원천 미확인 cboDivision, cboOperationGroup'(SSP_BIGFILTER 미해석). G9 plan key 'user' ↔ @p_user_id 미대응(AS-IS sql:86~88 LIKE). K3 팝업 그리드 행 혼입. sort_check.csv 300자 잘림. G1 결과 코드 ↔ 후보 이름 미환산 | T380 b7_check.py · T381~T383 judge.py · T384 sort_check.py, sort_ci_check.py · T385 _trace.spec.ts | 미측정 |
+| J 결정 | 6(+D 2, B 1) | 행별 근거는 결정 목록 | T376 eg_auth.spec.ts + 신규 combo_branch_filter.py(EG-a6f6bebc, 종전 D5) | 미측정 |
+
+### 확인
+
+- tsc(tools/E2E · lib·specs) 오류 0(07:5x 두 번, 다른 세션 T430~T432 변경 포함)
+- 단위 시험: 저장 묶음 10/10(통과 목록 추출, 막힌 값 기록, MSG01261 업무 검증 분류, E3 필수 안내·실패 알림·저장 요청, 실패 주입 차단·실패 문구) · combo_branch_filter --selftest 4/4 · b7_check 4/4 · sort_ci_check 14/14 · mapping_trace 84/84 · popup_args_check 6/6 · combo_oracle 8/8
+- engine_selfcheck PASS(08:32:54 · TSC 0 · selftest JS 32·PY 59)
+- inventory_check --write-registry: tools/Harness/README.md 에 combo_branch_filter.py 등록
+- 실제 E2E 동작(검증 차단 뒤 통과 값 재시도, 알림 읽기)은 미측정
+
+### 다른 화면 영향과 정리
+
+- 공용 저장 시험 변경(T370~T375)은 E2E 를 쓰는 전 화면에 다음 실행부터 적용. 검증 호출 통과 규칙은 이름에 CHECK·VALID·VERIFY·CHK 가 있고 쓰기 이름이 없는 call-proc 만
+- B 묶음: B7 '원천 미확인' 123행 15화면(SSP_BIGFILTER 46건 7화면만 풀림), A6 정렬 130행 24화면, K3 35행 19화면. 바뀌는 행 수 미측정
+- D 묶음: 행 ID 겹치는 대조표 47화면은 대조표 추적 행 ID 가 새로 생기고 옛 행 ID 사용자판정은 이어지지 않음. F4 진입·조회 밖 SP 19화면 103행
+- C 묶음 정리: 영향 측정 때 다른 화면 157개 sort_rules.csv 가 새 추출기 결과로 바뀐 채 남음(08:01:09~08:08:01). 08:3x 실행 전 원본으로 되돌림(156개, 불일치 0). 바뀐 내용은 Doc/verify/SSP0014/_dedup/sort_rules_new_20261120 에 보관. lock_rules·edit_expect·cell_rules 33화면은 git 기준과 같음. SCP0028 combo_src.csv(08:08:41)에 added_rows 열이 붙어 있음(다른 세션 실행분인지 미확인, 그대로 둠)
+- popup_args_check.py SSP0014 실행으로 Doc/verify/SSP0014/popup_args.csv 가 새 내용으로 바뀜(원본 백업 없음, 다음 CheckList 재생성)
+
+### 남은 사유
+
+- M4|BTN:btnItemId PASS 근거가 Model 팝업이 아닌 UserInfoPopup(TEAM_LEADER 더블클릭) 실측임(D 묶음 확인). 검사기 근거 연결 결함 의심, 이번 라운드 범위 밖이라 고치지 않음
+- 백업: 각 파일 옆 *.bak_20261120_ssp14u. eg_auth.spec.ts 백업은 수정 뒤 git HEAD 본으로 만듦(다른 세션 T430 변경 미포함)

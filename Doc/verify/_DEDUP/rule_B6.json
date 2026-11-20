@@ -1,0 +1,91 @@
+{
+ "rule_id": "B6",
+ "hash": "cdcdc6d77de10b1f",
+ "groups": [
+  {
+   "refs": [
+    "DM-114"
+   ],
+   "target": "Approval Result 조회조건 콤보 항목",
+   "condition": "",
+   "expected": "Approval Result 콤보가 있으면 ALL/Approved/Requesting/Reject 4개 항목만 나오고, 한 목록 안에 여러 언어가 섞이지 않는다",
+   "why": "Approval Result라는 특정 조건의 항목 구성과 언어 혼용을 확인하는 고유 항목이라 따로 둔다"
+  },
+  {
+   "refs": [
+    "DM-129"
+   ],
+   "target": "Key-in 텍스트 조회조건 콤마 다중 입력",
+   "condition": "",
+   "expected": "Key-in 텍스트 조회조건(Project·Model/Nickname·Owner 등)에 콤마로 여러 값을 넣을 수 있고, 조회하면 입력한 값 전부의 결과가 나온다",
+   "why": "선택형 콤보가 아니라 텍스트 입력의 다중값 처리를 확인하므로 다른 B6 항목과 확인 대상이 다르다"
+  },
+  {
+   "refs": [
+    "DM-199"
+   ],
+   "target": "Schema 조회조건 Select ALL 제공",
+   "condition": "",
+   "expected": "Schema 조회조건이 있으면 Select ALL이 제공되고, Select ALL로 조회해도 정상 조회된다",
+   "why": "Schema라는 특정 조건에 ALL이 있는지 확인하는 항목이며, 다른 조건(Biz Type 등)의 ALL 확인과는 대상이 달라 단독으로 둔다"
+  },
+  {
+   "refs": [
+    "DM-2"
+   ],
+   "target": "Product Group·Biz Type 조회조건 다중선택/ALL",
+   "condition": "",
+   "expected": "Product Group과 Biz Type 조회조건을 다중 선택할 수 있고, Biz Type에는 ALL 항목이 있다",
+   "why": "Product Group·Biz Type이라는 특정 조건의 다중선택과 ALL을 확인하므로 대상이 같은 항목이 없다"
+  },
+  {
+   "refs": [
+    "DM-200"
+   ],
+   "target": "API Type 조회조건 콤보 리스트화",
+   "condition": "",
+   "expected": "API Type 조회조건이 있으면 직접 입력이 아니라 콤보 리스트에서 골라 조회한다",
+   "why": "API Type 조건의 입력 방식(콤보 리스트)을 확인하는 고유 항목이다"
+  },
+  {
+   "refs": [
+    "DM-202"
+   ],
+   "target": "Module 조회조건·Insert 콤보 및 공지 팝업 서식",
+   "condition": "Insert 팝업 포함",
+   "expected": "Module 조회조건은 ALL/Common/DM/SCP/FP/SSP 다중선택이고 Insert Module은 단일선택이다. Sub Module은 없고, 라벨이 제목 형식이며, Active 기본값은 Y다. Notice Content 서식이 동작하고, 팝업 섹션 타이틀이 테두리 밖에 있다",
+   "why": "Module 다중선택 외에 Insert 단일선택, Active 기본값, 팝업 서식 같은 확인이 더 들어 있어 DM-203과 묶으면 검사 범위가 어긋나므로 따로 둔다"
+  },
+  {
+   "refs": [
+    "DM-203"
+   ],
+   "target": "Module 다중선택·Sub Module 미표시",
+   "condition": "",
+   "expected": "Module 조회조건은 다중선택이 되고, Sub Module 조회조건은 표시되지 않는다",
+   "why": "DM-202의 일부와 겹치지만 DM-202에 다른 확인 대상이 많아 확신하기 어려우므로 따로 둔다"
+  },
+  {
+   "refs": [
+    "DM-83"
+   ],
+   "target": "조회조건 콤보 후보 표시값(Name/코드)",
+   "condition": "",
+   "expected": "모든 조회조건 콤보(Item Type 등)의 후보는 코드가 아니라 Name으로 표시된다",
+   "why": "특정 조건이 아니라 콤보 후보의 표시값 형식을 확인하므로 다른 항목과 대상이 다르다"
+  },
+  {
+   "refs": [
+    "SCPSSP-20"
+   ],
+   "target": "멀티선택 조회조건 Select ALL 토글 동작",
+   "condition": "",
+   "expected": "모든 멀티선택 조회조건에서 Select ALL을 누르면 전체 선택이 되고, 다시 누르면 전체 해제가 된다",
+   "why": "ALL이 있는지가 아니라 Select ALL의 선택/해제 토글 동작을 확인하므로 DM-199·DM-2와 기대 결과가 다르다"
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:40:19",
+ "cost": 0.07918120000000001
+}

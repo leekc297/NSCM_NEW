@@ -1,0 +1,65 @@
+{
+ "rule_id": "L1",
+ "hash": "f17d515c0e9ae3db",
+ "groups": [
+  {
+   "refs": [
+    "DM-86",
+    "SCPSSP-13"
+   ],
+   "target": "조회 버튼 실행 시 조회 응답 시간",
+   "condition": "화면 기본 조회조건(Div, Cell Type 등)으로 조회",
+   "expected": "조회(Plant Assign 등 결과 포함)가 기준 시간(수 초) 이내에 정상 완료되고, AS-IS 수준보다 느리지 않아야 한다",
+   "why": "둘 다 조회 1회의 응답 시간이 기준 이내인지 보는 같은 확인이며, Div·Cell Type 값 차이는 원 결함의 조건일 뿐이다."
+  },
+  {
+   "refs": [
+    "DM-206"
+   ],
+   "target": "조회조건 텍스트 입력 중 그리드 재렌더",
+   "condition": "조회조건 입력란에 텍스트 연속 입력",
+   "expected": "조회조건을 입력하는 동안 그리드가 재렌더(깜박임)되지 않아야 한다",
+   "why": "응답 시간이 아니라 입력 중 그리드 깜박임 여부를 보는 확인이라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-3"
+   ],
+   "target": "조회조건 텍스트 입력·그리드 셀 클릭 응답",
+   "condition": "조회 후 Customer Group 등 조회조건 입력과 셀 클릭을 연속 조작",
+   "expected": "키 입력·셀 클릭 응답이 기준 시간 이내이고, 조작이 쌓여도 점점 느려지지 않아야 한다",
+   "why": "텍스트 입력과 셀 클릭이 쌓일 때 느려지는지 보는 확인이다. 방향키 이동(SCPSSP-7)과 동작이 달라 확신이 없으므로 묶지 않는다."
+  },
+  {
+   "refs": [
+    "SCPSSP-7"
+   ],
+   "target": "그리드 방향키 이동 응답",
+   "condition": "조회 후 그리드에서 방향키 반복 이동",
+   "expected": "방향키를 반복해 이동해도 응답 저하가 없어야 한다",
+   "why": "방향키 이동 응답만 보는 확인이라 셀 클릭·텍스트 입력(DM-3)과 묶지 않는다."
+  },
+  {
+   "refs": [
+    "DM-75"
+   ],
+   "target": "저장 시 Cell Prod Site 검증·저장 응답",
+   "condition": "Report Type Sales/Biz Plan, Data Type ETC Data 저장",
+   "expected": "Cell Prod Site 무효값은 저장이 막히고, 저장 후 Application Gr·Country Name이 조회되며, 저장이 3초 안에 끝나야 한다",
+   "why": "저장 검증, 저장 후 컬럼 표시, 저장 시간을 함께 보는 복합 확인이라 다른 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-76"
+   ],
+   "target": "Delete 응답 속도·병합 셀 Delete CRUD Status",
+   "condition": "병합된 셀 선택 후 Delete",
+   "expected": "1건 삭제 응답이 기준 시간 이내여야 하고(40초 수준이면 안 됨), 병합 셀을 Delete하면 병합된 행 전체에 CRUD Status D가 표시되고 삭제되어야 한다",
+   "why": "삭제 응답 시간과 병합 셀 삭제 처리를 보는 확인이라 조회·저장 확인과 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:57",
+ "cost": 0.0624052
+}

@@ -63,6 +63,13 @@ export const useSalesSitePriorityValidation = () => {
         if (!Number.isInteger(prio) || prio < 1) {
           return alert(MSG.PRIO_MIN, '{0} must be an integer greater than 0.', 'PRIORITY');
         }
+        // 상한 — AS-IS 는 저장 시 Convert.ToInt32(v_prio_rank)(cs:675)가 Int32.MaxValue(2,147,483,647)
+        //   초과에서 OverflowException 으로 저장을 중단한다(전용 메시지 없이 abort). TO-BE 는 등가 상한을
+        //   MSG01036 으로 명시 차단한다. 셀 입력은 15자리로 cap(SalesSitePriorityGrid)해 JS 수치 정밀도
+        //   손실·지수표기를 막되, 2,147,483,648~(15자리) 구간은 이 저장검증이 걸러 AS-IS 저장 중단과 등가.
+        if (prio > 2147483647) {
+          return alert(MSG.PRIO_MAX, 'Only values less than or equal to {0} are allowed.', '2,147,483,647');
+        }
       }
 
       // 3) From <= To. 셀 원형(표시값)은 포맷이 섞인다 — GET 은 'yyyy-MM-dd HH:mm:ss'(시간부 포함),

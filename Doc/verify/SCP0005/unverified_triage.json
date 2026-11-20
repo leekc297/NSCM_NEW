@@ -1,68 +1,52 @@
 {
  "menu_id": "SCP0005",
- "at": "2026-11-19 17:08:50",
- "round": 1,
+ "at": "2026-11-20 10:07:42",
+ "round": 2,
  "ledger": "Doc\\verify\\SCP0005\\verify_ledger.csv",
  "before": {
-  "total": 392,
+  "total": 88,
   "by_actor": {
-   "엔진": 161,
-   "판단": 120,
-   "집계": 108,
-   "사람": 1,
-   "자동": 2
+   "집계": 88
   },
   "by_class": {
-   "검사기공백": 133,
-   "데이터전제": 3,
-   "판단": 120,
-   "미분류": 25,
-   "집계": 108,
-   "스냅샷승인": 1,
-   "재실행": 2
+   "집계": 88
   },
-  "actionable": 283,
+  "actionable": 0,
   "ai_review": 0,
-  "human": 1,
-  "aggregate": 108,
+  "human": 0,
+  "aggregate": 88,
   "blocked": 0,
   "guide": 0
  },
  "after": {
-  "total": 392,
+  "total": 88,
   "by_actor": {
-   "엔진": 161,
-   "판단": 120,
-   "집계": 108,
-   "사람": 1,
-   "자동": 2
+   "집계": 88
   },
   "by_class": {
-   "검사기공백": 133,
-   "데이터전제": 3,
-   "판단": 120,
-   "미분류": 25,
-   "집계": 108,
-   "스냅샷승인": 1,
-   "재실행": 2
+   "집계": 88
   },
-  "actionable": 283,
-  "ai_review": 0,
-  "human": 1,
-  "aggregate": 108,
+  "actionable": 182,
+  "ai_review": 182,
+  "human": 0,
+  "aggregate": 88,
   "blocked": 0,
   "guide": 0
  },
- "actionable": 283,
- "human": 1,
+ "actionable": 182,
+ "human": 0,
  "rerun": null,
- "unverified_sheet": 911,
- "ledger_mtime": 1795075699.148,
- "prev_actionable": null,
+ "unverified_sheet": 716,
+ "ledger_mtime": 1795133170.264,
+ "prev_actionable": 182,
  "continue": 1,
  "stalled": false,
  "resolved_actionable": [],
  "new_actionable": [],
- "pending_recheck": null,
+ "pending_recheck": {
+  "fixed_at": "2026-11-20 10:07",
+  "ledger_at": "2026-11-20 09:06",
+  "note": "미검증 해소 보완 2026-11-20 10:07 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ },
  "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
 }

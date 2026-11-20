@@ -1,0 +1,199 @@
+{
+ "id": "SCP0028",
+ "group": "ADMIN",
+ "cellrun": true,
+ "eventrun": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Lot Size",
+     "rows_before": 1735,
+     "rows_after": 1735,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 37,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 38,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 39,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 40,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 41,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 5 로 옮김 · top 0->5",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0028-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Shipment Lot Size",
+     "rows_before": 1735,
+     "rows_after": 1735,
+     "cells": [
+      {
+       "row": 0,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 1,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 2,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 3,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 4,
+       "col": "COLMERGE",
+       "before": "",
+       "after": "X"
+      },
+      {
+       "row": 37,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 38,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 39,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 40,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      },
+      {
+       "row": 41,
+       "col": "COLMERGE",
+       "before": "X",
+       "after": ""
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "보이는 첫 행을 0 으로 되돌림 · top 5->0",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0028-Sb39c49"
+   ]
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "control": "spdMain",
+   "kind": "event",
+   "change": "TopChange 처리기 직접 호출(행 30개) · TopChangeEventArgs(view=FarPoint.Win.Spread.SpreadView,oldTop=0,newTop=1,rowViewportIndex=0)",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0028-Sb39c49"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-20 07:13:18"
+}

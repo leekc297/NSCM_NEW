@@ -127,12 +127,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7054,
+                  "duration": 5746,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:41:50.120Z",
+                  "startTime": "2026-11-19T22:13:49.255Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -142,11 +142,11 @@
           ],
           "id": "85feec5f8d5a0014d343-10dc9f2ef8975978ad08",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup MAIN SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_COUNTRY",
+          "title": "@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -163,55 +163,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 57457,
-                  "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
-                    },
-                    {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
-                    }
-                  ],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-19T07:42:00.859Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "85feec5f8d5a0014d343-75e34a02001f09b374bd",
-          "file": "eg_popup.spec.ts",
-          "line": 953,
-          "column": 9
-        },
-        {
-          "title": "@eg-popup PICK SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_COUNTRY",
-          "ok": true,
-          "tags": [
-            "eg-popup"
-          ],
-          "tests": [
-            {
-              "timeout": 300000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 19709,
+                  "duration": 5710,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:43:01.888Z",
+                  "startTime": "2026-11-19T22:13:58.182Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -219,49 +176,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-82e5229240fee3026f2b",
+          "id": "85feec5f8d5a0014d343-36bd474b012394269406",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_COUNTRY",
-          "ok": true,
-          "tags": [
-            "eg-popup"
-          ],
-          "tests": [
-            {
-              "timeout": 240000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 12781,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-19T07:43:25.268Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "85feec5f8d5a0014d343-71fe1a9b112495280967",
-          "file": "eg_popup.spec.ts",
-          "line": 953,
-          "column": 9
-        },
-        {
-          "title": "@eg-popup MAIN SCP0005 #101 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "title": "@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -278,55 +199,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 56487,
-                  "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
-                    },
-                    {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
-                    }
-                  ],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-19T07:43:42.377Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "85feec5f8d5a0014d343-f9b3eb0da9a8fd712019",
-          "file": "eg_popup.spec.ts",
-          "line": 953,
-          "column": 9
-        },
-        {
-          "title": "@eg-popup PICK SCP0005 #101 (TO-BE 메타 팝업) CELL:FROM_CITY",
-          "ok": true,
-          "tags": [
-            "eg-popup"
-          ],
-          "tests": [
-            {
-              "timeout": 300000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 18667,
+                  "duration": 5481,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:44:42.333Z",
+                  "startTime": "2026-11-19T22:14:06.236Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -334,49 +212,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-7f4bbb9232a82d39f320",
+          "id": "85feec5f8d5a0014d343-906f1cc8ea7980b739a8",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #101 (TO-BE 메타 팝업) CELL:FROM_CITY",
-          "ok": true,
-          "tags": [
-            "eg-popup"
-          ],
-          "tests": [
-            {
-              "timeout": 240000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 12607,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-19T07:45:04.450Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "85feec5f8d5a0014d343-853a6b9f1ede44d86327",
-          "file": "eg_popup.spec.ts",
-          "line": 953,
-          "column": 9
-        },
-        {
-          "title": "@eg-popup MAIN SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "title": "@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -393,7 +235,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 57403,
+                  "duration": 52720,
                   "errors": [],
                   "stdout": [
                     {
@@ -405,7 +247,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:45:20.200Z",
+                  "startTime": "2026-11-19T22:14:13.986Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -413,13 +255,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-12f0495f298fba000830",
+          "id": "85feec5f8d5a0014d343-1092056dd61097a578d8",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup PICK SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "title": "@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -436,12 +278,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19237,
+                  "duration": 16634,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:46:20.983Z",
+                  "startTime": "2026-11-19T22:15:09.271Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -449,13 +291,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-f2e4c2b67f2241e29bd1",
+          "id": "85feec5f8d5a0014d343-2909d89a901366b6809f",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "title": "@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -472,12 +314,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13256,
+                  "duration": 10795,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:46:43.541Z",
+                  "startTime": "2026-11-19T22:15:28.314Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -485,13 +327,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-bfc749d59286cb818ecd",
+          "id": "85feec5f8d5a0014d343-e2b1340c5e573950476e",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup MAIN SCP0005 #103 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "title": "@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -508,19 +350,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 58100,
+                  "duration": 20148,
                   "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
-                    },
-                    {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
-                    }
-                  ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:47:00.004Z",
+                  "startTime": "2026-11-19T22:15:41.470Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -528,13 +363,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-622a5777868cb7166c41",
+          "id": "85feec5f8d5a0014d343-b495c373db6baa8f2d69",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup PICK SCP0005 #103 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "title": "@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -551,12 +386,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 21736,
+                  "duration": 20163,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:48:01.698Z",
+                  "startTime": "2026-11-19T22:16:03.778Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -564,13 +399,13 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-179e44016312c4a60206",
+          "id": "85feec5f8d5a0014d343-109be23a1f49f10d81c1",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #103 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "title": "@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -587,12 +422,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13273,
+                  "duration": 12264,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T07:48:26.723Z",
+                  "startTime": "2026-11-19T22:16:26.132Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -600,9 +435,354 @@
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-24a6a7ecae0d3e720511",
+          "id": "85feec5f8d5a0014d343-d5e1ef74c6b15c4f9a04",
           "file": "eg_popup.spec.ts",
-          "line": 953,
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup MAIN SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 53115,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:16:40.797Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-108d0318e527bd570ce2",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup PICK SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16518,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:17:36.394Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-e93d88f3a8f2f29be58e",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup CELL SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10383,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:17:55.217Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-dd8fb2513d62ba28dda0",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup MAIN SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 52055,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:18:07.911Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-941fb26a8c4dad9c93f6",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup PICK SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16495,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:19:02.484Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-b62d70882e6870fe67d1",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup CELL SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10832,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:19:21.543Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-86985cb0001ff2773b5a",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup MAIN SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 52769,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:19:34.779Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-5db38f1dfd3fda4b9a41",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup PICK SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16633,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:20:29.948Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-2341077df54cb8fc949c",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup CELL SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11152,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-19T22:20:48.980Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-4e9d52bb649c8b4dabb6",
+          "file": "eg_popup.spec.ts",
+          "line": 956,
           "column": 9
         }
       ]
@@ -610,9 +790,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T07:41:48.287Z",
-    "duration": 415427.188,
-    "expected": 13,
+    "startTime": "2026-11-19T22:13:48.778Z",
+    "duration": 434062.984,
+    "expected": 18,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

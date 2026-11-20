@@ -1,0 +1,130 @@
+{
+ "rule_id": "M1",
+ "hash": "9fd232aace3f16ee",
+ "groups": [
+  {
+   "refs": [
+    "DM-101",
+    "DM-106"
+   ],
+   "target": "Excel Form 버튼 클릭 동작",
+   "condition": "",
+   "expected": "Excel Form 버튼을 누르면 팝업 없이 양식이 바로 다운로드된다(Period 연동 화면은 메인 Period 기준 양식)",
+   "why": "두 항목 모두 Excel Form 버튼을 눌렀을 때 팝업 없이 바로 다운로드되는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-35"
+   ],
+   "target": "Excel Form 입력 버킷과 Main Period 연동",
+   "condition": "Main 기간 설정 후 조회 전",
+   "expected": "조회하지 않아도 Excel Form 입력 버킷이 Main Period 와 연동된다",
+   "why": "조회 전 버킷과 기간이 연동되는지 확인하는 항목이라 단순 다운로드 동작과 대상이 달라 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-36"
+   ],
+   "target": "Excel Form 다운로드 내용(데이터 없음)",
+   "condition": "",
+   "expected": "Excel Form 은 데이터 없이 양식만 다운로드된다(건수 비교 불필요)",
+   "why": "양식에 데이터가 들어 있지 않은지 확인하는 항목으로, 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-107"
+   ],
+   "target": "Excel Form 양식 헤더 구조",
+   "condition": "",
+   "expected": "Excel Form 양식 헤더가 AS-IS 와 같은 2단 병합 구조다",
+   "why": "헤더 구조를 AS-IS 와 비교하는 항목으로, 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-109"
+   ],
+   "target": "Excel Form 양식 Bucket 단위·값",
+   "condition": "Monthly Bucket 화면",
+   "expected": "양식 Bucket 이 Monthly(AS-IS 52주 기준 계산)이고 M0~M12 값은 공란이다",
+   "why": "Bucket 단위와 계산 기준을 확인하는 항목으로, 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-156"
+   ],
+   "target": "Excel Form 팝업 Search",
+   "condition": "Excel Form 팝업이 있는 화면",
+   "expected": "Excel Form 팝업에서 Search 를 누르면 데이터가 조회된다",
+   "why": "팝업이 있는 화면의 Search 동작을 확인하는 항목이라 팝업 없는 다운로드 항목과 묶지 않는다."
+  },
+  {
+   "refs": [
+    "DM-102",
+    "DM-157"
+   ],
+   "target": "Excel Upload 후 OK 저장·DB 반영",
+   "condition": "업로드 성공 후 OK",
+   "expected": "업로드 성공 후 OK 를 누르면 SQL Error 없이 DB 에 반영된다(Customs Handbook/Project/Model 키 항목이 모두 비어 있으면 Validation Error)",
+   "why": "두 항목 모두 정상 업로드 후 OK 를 눌러 DB 반영을 확인하고 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-103"
+   ],
+   "target": "Excel Upload 수량(QTY) 미입력 메시지",
+   "condition": "Period 구간 수량 미입력",
+   "expected": "사용자가 이해할 수 있는 문구 \"Please Input QTY\" 가 표시된다",
+   "why": "수량 미입력이라는 특정 검증 문구를 확인하는 항목으로, 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-104",
+    "DM-34"
+   ],
+   "target": "Excel Upload 헤더·컬럼명 불일치 검증",
+   "condition": "양식 헤더/컬럼명(예: Division→Div) 변경 후 업로드",
+   "expected": "헤더명이 양식과 다르면 업로드를 막고 사용자 문구(\"Invalid Column Header Title\")로 안내한다. 첨부 파일은 1개만 선택된다",
+   "why": "두 항목 모두 양식 헤더나 컬럼명을 바꿔 올렸을 때 업로드가 막히고 안내 문구가 나오는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-105"
+   ],
+   "target": "Excel Upload 다중 오류 메시지 전부 표시",
+   "condition": "여러 행·항목(Sales Site/Project/Model)에 오류",
+   "expected": "행·항목별 실제 원인 메시지를 모두 표시하고 관계없는 메시지로 바꾸지 않는다",
+   "why": "여러 오류가 모두 표시되는지 확인하는 항목이다. DM-108 은 Key·Period 반영까지 함께 보므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-108"
+   ],
+   "target": "Excel Upload Key 영역·Period From/To 컬럼",
+   "condition": "",
+   "expected": "Key·Period From/To 컬럼이 업로드되어 반영되고, 행별 Validation 원인 메시지가 일치한다",
+   "why": "Key·Period From/To 컬럼 반영을 확인하는 복합 항목이라 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "GAP-156"
+   ],
+   "target": "공용 업로드 창 저장 전 Cancel·X 확인창",
+   "condition": "검증 성공(Error 0) 후 OK 를 누르지 않고 Cancel 또는 X",
+   "expected": "확인창 MSG00684 「취소하시겠습니까?」가 표시된다",
+   "why": "저장 전에 닫을 때 확인창이 뜨는지 확인하는 항목으로, 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "GAP-433"
+   ],
+   "target": "공용 Excel Upload 오류 행 저장 차단",
+   "condition": "오류 행이 있는 파일 Upload → OK",
+   "expected": "Upload(검사) → OK(저장) 2단계로 동작하고, 오류 행이 1건이라도 있으면 MSG00657 로 저장을 막아 원장이 바뀌지 않는다",
+   "why": "오류가 있을 때 저장이 막히는지 확인하는 항목이라 정상 저장 항목과 기대 결과가 반대다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:46:23",
+ "cost": 0.1097732
+}

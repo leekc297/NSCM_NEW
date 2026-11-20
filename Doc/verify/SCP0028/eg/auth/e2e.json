@@ -630,7 +630,7 @@
   "ctx": "SCP/40/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -646,7 +646,7 @@
   "ctx": "SCP/40/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -662,7 +662,7 @@
   "ctx": "SCP/40/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -678,7 +678,7 @@
   "ctx": "SCP/40/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -694,7 +694,7 @@
   "ctx": "SCP/40/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -710,7 +710,7 @@
   "ctx": "SCP/40/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -806,7 +806,7 @@
   "ctx": "SCP/40/SCP Tester",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -822,7 +822,7 @@
   "ctx": "SCP/40/SCP Tester",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -838,7 +838,7 @@
   "ctx": "SCP/40/SCP Tester",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -854,7 +854,7 @@
   "ctx": "SCP/40/SCP Tester",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -870,7 +870,7 @@
   "ctx": "SCP/40/SCP Tester",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -886,7 +886,7 @@
   "ctx": "SCP/40/SCP Tester",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -998,7 +998,7 @@
   "ctx": "SCP/40/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1014,7 +1014,7 @@
   "ctx": "SCP/40/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1030,7 +1030,7 @@
   "ctx": "SCP/40/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1046,7 +1046,7 @@
   "ctx": "SCP/40/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1060,9 +1060,9 @@
   "screen": "SCP0028",
   "target": "DELETE 버튼 조회 전",
   "ctx": "SCP/40/SCM Viewer",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1076,9 +1076,9 @@
   "screen": "SCP0028",
   "target": "DELETE 버튼 조회 전",
   "ctx": "SCP/40/SCM Viewer",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1174,7 +1174,7 @@
   "ctx": "SCP/40/ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1190,7 +1190,7 @@
   "ctx": "SCP/40/ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1206,7 +1206,7 @@
   "ctx": "SCP/40/ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1222,7 +1222,7 @@
   "ctx": "SCP/40/ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1238,7 +1238,7 @@
   "ctx": "SCP/40/ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1254,7 +1254,7 @@
   "ctx": "SCP/40/ADMIN",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1350,7 +1350,7 @@
   "ctx": "SCP/40/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1366,7 +1366,7 @@
   "ctx": "SCP/40/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1382,7 +1382,7 @@
   "ctx": "SCP/40/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1398,7 +1398,7 @@
   "ctx": "SCP/40/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1414,7 +1414,7 @@
   "ctx": "SCP/40/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1430,7 +1430,7 @@
   "ctx": "SCP/40/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1526,7 +1526,7 @@
   "ctx": "SCP/81/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1542,7 +1542,7 @@
   "ctx": "SCP/81/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1558,7 +1558,7 @@
   "ctx": "SCP/81/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1574,7 +1574,7 @@
   "ctx": "SCP/81/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1590,7 +1590,7 @@
   "ctx": "SCP/81/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1606,7 +1606,7 @@
   "ctx": "SCP/81/SCP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1702,7 +1702,7 @@
   "ctx": "SCP/81/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1718,7 +1718,7 @@
   "ctx": "SCP/81/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1734,7 +1734,7 @@
   "ctx": "SCP/81/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1750,7 +1750,7 @@
   "ctx": "SCP/81/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1764,9 +1764,9 @@
   "screen": "SCP0028",
   "target": "DELETE 버튼 조회 전",
   "ctx": "SCP/81/SCM Viewer",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1780,9 +1780,9 @@
   "screen": "SCP0028",
   "target": "DELETE 버튼 조회 전",
   "ctx": "SCP/81/SCM Viewer",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1878,7 +1878,7 @@
   "ctx": "SCP/81/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1894,7 +1894,7 @@
   "ctx": "SCP/81/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1910,7 +1910,7 @@
   "ctx": "SCP/81/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1926,7 +1926,7 @@
   "ctx": "SCP/81/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1942,7 +1942,7 @@
   "ctx": "SCP/81/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1958,7 +1958,7 @@
   "ctx": "SCP/81/SCM PI Admin",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -2070,7 +2070,7 @@
   "ctx": "SCP/82/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -2086,7 +2086,7 @@
   "ctx": "SCP/82/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -2102,7 +2102,7 @@
   "ctx": "SCP/82/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -2118,7 +2118,7 @@
   "ctx": "SCP/82/SCM Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -2132,9 +2132,9 @@
   "screen": "SCP0028",
   "target": "DELETE 버튼 조회 전",
   "ctx": "SCP/82/SCM Viewer",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -2148,9 +2148,9 @@
   "screen": "SCP0028",
   "target": "DELETE 버튼 조회 전",
   "ctx": "SCP/82/SCM Viewer",
-  "result": "FAIL",
+  "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출 · 같은 이름 화면 단추 Delete 는 툴바 아님(제외)",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {

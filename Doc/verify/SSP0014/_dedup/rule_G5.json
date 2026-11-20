@@ -1,0 +1,334 @@
+{
+ "rule_id": "G5",
+ "hash": "d8b0ea99b36cb577",
+ "groups": [
+  {
+   "rows": [
+    "V-84d25ca8",
+    "V-11a4fcdf"
+   ],
+   "why": "둘 다 USER_ID 셀 더블클릭 때 여는 UserInfoPopup의 AS-IS 호출(생성과 ShowDialog)이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-6ad1182d",
+    "V-c4ea73fb"
+   ],
+   "why": "둘 다 MAIL_USER1 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-9bbebfe3",
+    "V-56fc463e"
+   ],
+   "why": "둘 다 MAIL_USER2 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-8a43cba5",
+    "V-456975c2"
+   ],
+   "why": "둘 다 MAIL_USER3 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-113d1799",
+    "V-e88e29a7"
+   ],
+   "why": "둘 다 MAIL_USER4 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-92b73e23",
+    "V-a66510d8"
+   ],
+   "why": "둘 다 MAIL_USER5 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-dfb225ee",
+    "V-51cca87a"
+   ],
+   "why": "둘 다 PART_LEADER 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-b70eeccb",
+    "V-969965a4"
+   ],
+   "why": "둘 다 TEAM_LEADER 셀의 UserInfoPopup 생성과 ShowDialog 호출이고 인자 기대도 같다."
+  },
+  {
+   "rows": [
+    "V-3585f079",
+    "V-80d16b8e"
+   ],
+   "why": "둘 다 SCM0002_ItembyDivisionPopup(popItem)의 생성과 ShowDialog 호출이고 인자 기대가 같은 '()'이다."
+  },
+  {
+   "rows": [
+    "V-823e49e7",
+    "V-85f5daf0"
+   ],
+   "why": "둘 다 조회 전 Excel 양식 입력 버킷이 메인 Period와 같은지 확인하는 같은 대상, 같은 상태, 같은 기대다."
+  },
+  {
+   "rows": [
+    "V-09dc84eb",
+    "V-c879265b",
+    "V-4f9bf1c1"
+   ],
+   "why": "셋 다 팝업이 연결된 조회조건이나 셀에 텍스트를 넣고 팝업을 열 때, 그 텍스트가 조건으로 넘어가 필터된 결과가 나오는지 확인하는 같은 일반 규칙이다."
+  },
+  {
+   "rows": [
+    "V-c0bf9bd9"
+   ],
+   "why": "Form_Load에 (true, sdivision, sScmSite, sProject, sItemId) 인자를 넘기는 호출이라 기대가 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-457478ae"
+   ],
+   "why": "MAIL_USER1 FILTER_ARG는 요청 본문 값 확인으로 AS-IS 인자 '()' 행과 측정 방법이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-49675ac2"
+   ],
+   "why": "MAIL_USER4 FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-4ec26fe3"
+   ],
+   "why": "PART_LEADER FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6bba32f9"
+   ],
+   "why": "MAIL_USER2 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-7129865a"
+   ],
+   "why": "MAIL_USER5 FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-8079a65d"
+   ],
+   "why": "MAIL_USER2 FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-8499ebeb"
+   ],
+   "why": "USER_ID 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-863d1a6c"
+   ],
+   "why": "PART_LEADER 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-8d7d99f6"
+   ],
+   "why": "USER_ID FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-94bb3462"
+   ],
+   "why": "Model 검색 버튼의 테두리 클릭 확인이고 다른 화면의 From City 버튼과는 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-9b19be92"
+   ],
+   "why": "MAIL_USER4 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-a00bfe11"
+   ],
+   "why": "Model 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-acd622b7"
+   ],
+   "why": "MAIL_USER5 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-b1923d0e"
+   ],
+   "why": "Model 팝업의 Division 고정을 확인하며 Version 팝업 행과는 팝업이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-b8e77d98"
+   ],
+   "why": "Model 팝업 Material 값의 FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-cd1830f9"
+   ],
+   "why": "MAIL_USER1 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-d354fe1c"
+   ],
+   "why": "Model 조회조건에 특정 텍스트를 넣어 전달되는지 보는 화면 고유 행이라 일반 규칙과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "EG-d9e279b3"
+   ],
+   "why": "MAIL_USER3 FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-e1c5b1d2"
+   ],
+   "why": "TEAM_LEADER FILTER_ARG만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-f9d82c86"
+   ],
+   "why": "MAIL_USER3 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-fa3ca35a"
+   ],
+   "why": "TEAM_LEADER 팝업 Period만 다루는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-3a730d4a"
+   ],
+   "why": "대조표 추적 행이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-5ccae5f5"
+   ],
+   "why": "대조표 추적 행이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-b38a4606"
+   ],
+   "why": "대조표 추적 행이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-da775172"
+   ],
+   "why": "대조표 추적 행이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-e94523cf"
+   ],
+   "why": "대조표 추적 행이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-fdee70b5"
+   ],
+   "why": "대조표 추적 행이라 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-066d4f8a"
+   ],
+   "why": "공용 모달 인자 범위에 대한 확정 판정 기준이라 개별 측정 행과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-150d7bb9"
+   ],
+   "why": "Team 팝업에서 부서 조회 범위를 확인하는 고유 기대라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-2ebbb4d4"
+   ],
+   "why": "From City 버튼 대상이라 Model 버튼 행과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-354e06d1"
+   ],
+   "why": "Period, Description 배치, 조건 크기를 함께 보는 복합 기대라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-5e22f080"
+   ],
+   "why": "신규 행에서 Model 팝업의 MDM 중지 코드 제외를 확인하는 고유 기대라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-602280a7"
+   ],
+   "why": "Version 팝업의 Div 고정 확인이라 Model 팝업 행과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-6c67fa58"
+   ],
+   "why": "팝업 Spread 기간 컬럼 생성을 확인하는 행이라 Period 기본값 행과 기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-842cc722"
+   ],
+   "why": "일반 Period 기본값 규칙에 단위 변환 기대가 붙어 있어 컬럼별 Period 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-99e36d3e"
+   ],
+   "why": "Capa New Model 팝업의 Group/Plant 조건을 다루는 다른 대상이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-a2f7cf6e"
+   ],
+   "why": "대상이 막연한 Model 팝업 필터 행이라 확신이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-c88d2fa4"
+   ],
+   "why": "Enter 키로 팝업이 열리는지 확인하는 행이라 인자 전달과 방법이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-eae58106"
+   ],
+   "why": "Model/Nickname의 입력값, 기간, 고정 조건을 함께 보는 복합 기대라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ef7e8fee"
+   ],
+   "why": "신규 행에서 여러 컬럼을 함께 보는 복합 기대라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:41:22",
+ "cost": 0.22128029999999999
+}

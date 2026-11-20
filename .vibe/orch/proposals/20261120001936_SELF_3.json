@@ -1,0 +1,126 @@
+{
+  "id": "20261120001936_SELF_3",
+  "at": "2026-11-20T00:19:36+09:00",
+  "ms": 1795101576290,
+  "source": "self",
+  "status": "applied",
+  "sig": "small modules vn with selfapply test",
+  "title": "작은 모듈 고정 문구 줄표, 가운뎃점, 틀 정리(시험 파일 포함 재제출)",
+  "evidence": "failed 20261119232524_SELF_3 사유 = orch-selfcheck.js:362 '반영 완료 — 생성물 삭제' 를 test/t_orch_selfapply.js:90 정규식 /반영 완료 — 생성물 삭제/ 가 맞춰 보는데 이 시험 파일이 targets 밖이라 못 고침. 나머지 남은 걸림은 주석(prompt-panel.js:164)과 이모지(history.js L164, L167, L172)로 확인 기준을 0 으로 잡은 것이 틀림. 대상 파일 8개는 복원됨(지금 prompt-panel.js:15, 60, 72, 122, 152, 153, 155, orch-selfcheck.js:362, 363, history.js:164 에 줄표 그대로 확인). 입력 key S11|prompt-panel.js 9, S11|orch-selfcheck.js 7, S11|history.js 6, S11|flow-panel.js 2, S11|chain-runner.js 1, S11|tabview.js 2, S11|server-service.js 18(그중 L259 '예상 프로세스가 아니라 종료하지' 틀 1건).",
+  "targets": [
+    "tools/VibeManager/prompt-panel.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/history.js",
+    "tools/VibeManager/flow-panel.js",
+    "tools/VibeManager/chain-runner.js",
+    "tools/VibeManager/tabview.js",
+    "tools/VibeManager/server-service.js",
+    "tools/VibeManager/test/t_orch_selfapply.js"
+  ],
+  "before_after": "화면, 알림 문자열만 고침. 예 'git merge ${item.remote}/${br} — 충돌 시' → 'git merge ${item.remote}/${br}. 충돌 시'. 'Enter 전송 · Shift+Enter 줄바꿈' → 'Enter 전송, Shift+Enter 줄바꿈'. orch-selfcheck.js:362 '반영 완료 — 생성물 삭제' → '반영 완료, 생성물 삭제' 와 t_orch_selfapply.js:90 정규식을 같은 문구로. history.js:164 추측 어미 1건 단정형으로. tabview.js:134 '(… MB) — 에디터로 여세요' → '(… MB). 에디터로 여세요'. server-service.js:259 '예상 프로세스가 아니라 종료하지 않았습니다' → '예상 프로세스와 달라 종료하지 않았습니다'. 고치지 않는 것: 주석, 정규식, 이모지(history.js L164, L167, L172), server-service.js 상태 기호 ✅ ⚠ ⛔ ✖ 17건(workbench.js:451 FAIL_RE 와 :1908 이 ✖ 로 실패 줄을 가림), 코드 식별자.",
+  "verify": "node tools/VibeManager/test/t_orch_selfapply.js 실행. 기대: '7일이 지나면 남은 로그도 삭제' 항목 PASS, FAIL 0. python tools/Docs/doc_style.py <대상 JS 7개> --out <임시 폴더> --quiet 실행. 기대: 줄표, 가운뎃점, 틀 행은 prompt-panel.js L140, L164(웹뷰 주석, doc_style 개선안 반영 뒤 사라짐)만 남고 history.js 는 이모지 3행, server-service.js 는 상태 기호 17행만 남음. prompt-panel.js 웹뷰를 고쳤으므로 node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager FAIL 0.",
+  "rollback": "VMO 가 만든 대상 8개 파일의 .bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T05:17:56+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T05:19:54+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 26/26개 파일 통과(PASS 326, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0518"
+    },
+    {
+      "at": "2026-11-20T05:20:05+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T05:24:05+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 340, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 6개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T05:24:05+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 05:21:06 node tools/VibeManager/test/t_orch_selfapply.js: ALL PASS, FAIL 0, '7일이 지나면 남은 로그도 삭제 · 반영 완료' PASS(이력 문구 '반영 완료, 생성물 삭제 1개'). 2026-11-20 05:21:43 python tools/Docs/doc_style.py 대상 JS 7개: prompt-panel.js 위반 1(L140 웹뷰, 걸린 곳은 L164 주석 'Enter 전송 · Shift+Enter 줄바꿈'), orch-selfcheck.js · 변경 20개 파일 · 대상 목록 밖 변경 12개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0028/shots/SCP0028_cond.png, Doc/e2e/results/SCP0028/shots/SCP0028_open.png, Doc/e2e/results/SCP0028/shots/SCP0028_searched.png, Doc/tobefacts/db/_export_log.md, Doc/verify/SCP0028/run_mode.json",
+      "log": ".vibe\\logs\\2026-11-20T05-20-05_claude_orch.log",
+      "sec": 119,
+      "costUsd": 0.8409256,
+      "files": [
+        "Doc/e2e/results/SCP0028/_test_timing.jsonl",
+        "Doc/e2e/results/SCP0028/shots/SCP0028_cond.png",
+        "Doc/e2e/results/SCP0028/shots/SCP0028_open.png",
+        "Doc/e2e/results/SCP0028/shots/SCP0028_searched.png",
+        "Doc/tobefacts/db/_export_log.md",
+        "Doc/verify/SCP0028/run_mode.json",
+        "Doc/verify/SCP0028/screen_sync.json",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/E2E/accounts.json",
+        "tools/VibeManager/chain-runner.js",
+        "tools/VibeManager/flow-panel.js",
+        "tools/VibeManager/history.js",
+        "tools/VibeManager/prompt-panel.js",
+        "tools/VibeManager/server-service.js",
+        "tools/VibeManager/tabview.js",
+        "Doc/db/probe_20261120_052010.md",
+        "Doc/e2e/results/SCP0028/artifacts/SCP0028.smoke-SCP0028-Ship-7dde6-기준표-순서-·-Checkbox-Radio-디자인-chromium/error-context.md",
+        "Doc/e2e/results/SCP0028/artifacts/SCP0028.smoke-SCP0028-Ship-7dde6-기준표-순서-·-Checkbox-Radio-디자인-chromium/test-failed-1.png",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_selfapply.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|prompt-panel.js",
+  "repairOf": "20261119232524_SELF_3",
+  "repairRoot": "20261119232524_SELF_3",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795119476845,
+  "autoFp": "b73670a738",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 340, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0518",
+  "needsReload": true,
+  "appliedMs": 1795119845481,
+  "synced": [
+    "chain-runner.js",
+    "flow-panel.js",
+    "orch-selfcheck.js",
+    "prompt-panel.js",
+    "server-service.js",
+    "tabview.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/prompt-panel.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/history.js",
+      "tools/VibeManager/flow-panel.js",
+      "tools/VibeManager/chain-runner.js",
+      "tools/VibeManager/tabview.js",
+      "tools/VibeManager/server-service.js",
+      "tools/VibeManager/test/t_orch_selfapply.js"
+    ],
+    "verify_result": "2026-11-20 05:21:06 node tools/VibeManager/test/t_orch_selfapply.js: ALL PASS, FAIL 0, '7일이 지나면 남은 로그도 삭제 · 반영 완료' PASS(이력 문구 '반영 완료, 생성물 삭제 1개'). 2026-11-20 05:21:43 python tools/Docs/doc_style.py 대상 JS 7개: prompt-panel.js 위반 1(L140 웹뷰, 걸린 곳은 L164 주석 'Enter 전송 · Shift+Enter 줄바꿈'), orch-selfcheck.js 0, flow-panel.js 0, chain-runner.js 0, tabview.js 0, history.js 이모지 4(L153 ⚠, L164 ⚠, L167 💬, L172 💬), server-service.js 상태 기호 17. 같은 시각 node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager: ALL PASS.",
+    "note": "작업 모드 DB_ONLY(harness.json:15), 대상이 tools/VibeManager 라 차단 없음. 개선안 기대와 다른 점은 history.js 이모지 잔존이 3행이 아니라 4행인 것(L153 '· ⚠ 작업후 미기록'). 개선안이 이모지를 고치지 않는 것으로 정해 두었으므로 그대로 둠. 줄표·가운뎃점·틀·추측 어미는 지정 대상 파일에서 주석 외 0건. history.js:164 추측 어미 '섞일 수 있습니다' → '섞여 있으면 구분하지 못합니다'. server-service.js git diff 66줄 중 이번 수정은 3군데(L266 틀, L273, L280 줄표), 나머지는 이 작업 전부터 있던 미커밋 변경. orch-selfcheck.js, t_orch_selfapply.js 는 Git 미추적 파일. 임시 출력 폴더 .vibe/tmp_ds1, .vibe/tmp_ds2 삭제함."
+  },
+  "snap": "prop_20261120001936_SELF_3"
+}

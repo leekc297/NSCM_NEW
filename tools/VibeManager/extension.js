@@ -47,8 +47,8 @@ function resolveClaude(force) {
   let best = null; const seen = [];
   for (const f of claudeCandidates()) { const v = claudeVersionOf(f); seen.push(`${f} = ${v || '?'}`); if (v && (!best || cmpVer(v, best.ver) > 0)) best = { file: f, ver: v }; }
   claudeBin = best || { file: 'claude', ver: '' }; claudeBin.seen = seen;
-  log(`Claude CLI 선택: ${claudeBin.file} (${claudeBin.ver || '버전 미확인'}) — 후보 ${seen.join(' · ') || '없음'}`);
-  if (claudeBin.ver && cmpVer(claudeBin.ver, CLAUDE_MIN) < 0) vscode.window.showWarningMessage(`Vibe_Manager: 찾은 Claude CLI 최신이 ${claudeBin.ver} 입니다 — 최신 모델은 ${CLAUDE_MIN} 이상 필요. 터미널에서 'claude update' 또는 VS Code Claude Code 확장을 업데이트하세요.`);
+  log(`Claude CLI 선택: ${claudeBin.file} (${claudeBin.ver || '버전 미확인'}), 후보 ${seen.join(' · ') || '없음'}`);
+  if (claudeBin.ver && cmpVer(claudeBin.ver, CLAUDE_MIN) < 0) vscode.window.showWarningMessage(`Vibe_Manager: 찾은 Claude CLI 최신이 ${claudeBin.ver} 입니다. 최신 모델은 ${CLAUDE_MIN} 이상 필요. 터미널에서 'claude update' 또는 VS Code Claude Code 확장을 업데이트하세요.`);
   return claudeBin;
 }
 
@@ -64,7 +64,11 @@ function findRoot() {
   const def = process.platform === 'win32' ? 'C:\\Projects\\NSCM' : path.join(process.env.HOME || '', 'Projects', 'NSCM');
   return fs.existsSync(def) ? def : (ws[0] ? ws[0].uri.fsPath : '');
 }
-function paths() {
+// 2026-11-20 성능: CheckList 4화면 실행 중 확장 호스트가 8초씩 응답 없음을 반복(renderer.log 09시 100회). CPU 표본 20초 중 VM 14.8초, 그중 paths() → findRoot 의 existsSync 7.9초.
+//   실행 로그 줄마다 여러 모듈이 paths() 를 불러 설정 읽기와 파일 존재 확인을 되풀이했다 → 결과를 3초 기억(설정이 바뀌면 바로 지움). 돌려주는 값은 사본
+let pathsMemo = null, pathsMemoAt = 0;
+function paths() { const now = Date.now(); if (pathsMemo && now - pathsMemoAt < 3000) return Object.assign({}, pathsMemo); pathsMemo = pathsCompute(); pathsMemoAt = now; return Object.assign({}, pathsMemo); }
+function pathsCompute() {
   const c = cfg(); const root = normDrive(findRoot());
   const abs = p => (!p ? '' : path.isAbsolute(p) ? p : path.join(root, p));
   return {
@@ -224,10 +228,10 @@ function onTaskEnd(e) {
   const id = def.task, code = e.exitCode; recordRun(id, { event: 'end', endTime: Date.now(), exitCode: code });
   if (def.histDir) { try { history.finish(Object.assign({}, paths(), { pageDirOf: pageDirOfId }), def.histDir, code); } catch (err) { log(`이력 after 실패: ${err.message}`); } }
   const task = findTask(id); const title = task ? task.title : id;
-  if (code == null) { vscode.window.showWarningMessage(`Vibe_Manager ? ${title} — 터미널이 종료 코드를 돌려주지 않았습니다(터미널 프로파일 -NoExit/shellIntegration off). 워크벤치를 열어 두고 실행하면 작업 출력 탭에서 실제 결과를 볼 수 있습니다.`); tree.refresh(); refreshDashboard(); updateStatusBar(); return; }
+  if (code == null) { vscode.window.showWarningMessage(`Vibe_Manager ? ${title}. 터미널이 종료 코드를 돌려주지 않았습니다(터미널 프로파일 -NoExit/shellIntegration off). 워크벤치를 열어 두고 실행하면 작업 출력 탭에서 실제 결과를 볼 수 있습니다.`); tree.refresh(); refreshDashboard(); updateStatusBar(); return; }
   if (code === 0) vscode.window.showInformationMessage(`Vibe_Manager ✓ ${title}`);
-  else if (code === 1 && task && task.kind === 'node' && /check\.js|gap\.js|recon\.js|repair-loop\.js|probe\.py|golden\.py/.test(task.script || '')) vscode.window.showWarningMessage(`Vibe_Manager ! ${title} — 경고 있음 (터미널 확인)`);
-  else vscode.window.showWarningMessage(`Vibe_Manager ✗ ${title} (exit ${code}) — 터미널 출력을 확인하세요`);
+  else if (code === 1 && task && task.kind === 'node' && /check\.js|gap\.js|recon\.js|repair-loop\.js|probe\.py|golden\.py/.test(task.script || '')) vscode.window.showWarningMessage(`Vibe_Manager ! ${title}. 경고 있음 (터미널 확인)`);
+  else vscode.window.showWarningMessage(`Vibe_Manager ✗ ${title} (exit ${code}). 터미널 출력을 확인하세요`);
   tree.refresh(); refreshDashboard(); updateStatusBar();
 }
 async function runClaude(task, vars) {
@@ -258,7 +262,7 @@ async function openPath(target, line) {
   }
   const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(target)); await vscode.window.showTextDocument(doc, { preview: false });
 }
-async function openBrowser(target) { if (!fs.existsSync(target)) { vscode.window.showWarningMessage(`아직 없습니다: ${target} — 4단계 GAP 실행 먼저`); return; } await vscode.env.openExternal(vscode.Uri.file(target)); }
+async function openBrowser(target) { if (!fs.existsSync(target)) { vscode.window.showWarningMessage(`아직 없습니다: ${target}. 4단계 GAP 실행 먼저`); return; } await vscode.env.openExternal(vscode.Uri.file(target)); }
 
 // 작업 전/후 소스 비교 — git 작업트리 vs HEAD (페이지 폴더의 변경 파일 목록 → 선택 → diff 에디터)
 async function showDiff(dir) {
@@ -269,7 +273,7 @@ async function showDiff(dir) {
   let status; try { status = cp.execSync(`git status --porcelain -- "${relDir}"`, { cwd: repo, encoding: 'utf8' }); } catch (e) { vscode.window.showErrorMessage('git status 실패: ' + e.message); return; }
   const files = status.split(/\r?\n/).filter(Boolean).map(l => ({ st: l.slice(0, 2).trim(), file: l.slice(3).replace(/"/g, '').trim() }));
   if (!files.length) { vscode.window.showInformationMessage('변경 파일이 없습니다 (HEAD 와 동일)'); return; }
-  const pick = await vscode.window.showQuickPick(files.map(f => ({ label: path.basename(f.file), description: `${f.st === '??' ? '신규' : f.st} ${f.file}`, f })), { placeHolder: `변경 ${files.length}개 — 비교할 파일` });
+  const pick = await vscode.window.showQuickPick(files.map(f => ({ label: path.basename(f.file), description: `${f.st === '??' ? '신규' : f.st} ${f.file}`, f })), { placeHolder: `변경 ${files.length}개, 비교할 파일` });
   if (!pick) return;
   const full = path.join(repo, pick.f.file);
   if (pick.f.st === '??') { await vscode.window.showTextDocument(vscode.Uri.file(full)); return; }
@@ -293,7 +297,7 @@ async function agentBatch(task, vars) {
   const passed = new Set(fs.existsSync(agentDir) ? agentGateSummary(agentDir).items.filter(i => i.status === 'PASS').map(i => i.id) : []);
   const skip = await vscode.window.showQuickPick([{ label: '이미 PASS 인 화면 제외', description: `${targets.filter(i => passed.has(i)).length}화면 제외`, v: true }, { label: '전부 다시 실행', v: false }], { placeHolder: '재실행 범위' }); if (!skip) return;
   if (skip.v) targets = targets.filter(i => !passed.has(i));
-  if (!targets.length) { vscode.window.showInformationMessage('실행할 화면이 없습니다 (모두 PASS).'); return; }
+  if (!targets.length) { vscode.window.showInformationMessage('실행할 화면이 없습니다 (PASS).'); return; }
   const a = await vscode.window.showWarningMessage(`${pick.label} ${targets.length}화면에 Agent 실행 (드라이버 ${p.agentDriver}, 모델 ${p.agentModel}). 화면당 수십 초~수 분.`, { modal: true }, '실행'); if (a !== '실행') return;
   await runShell(Object.assign({}, task, { kind: 'powershell' }), vars, [...targets, '-Driver', p.agentDriver, '-Model', p.agentModel]);
 }
@@ -302,7 +306,7 @@ async function gateReport() {
   if (!fs.existsSync(agentDir)) { vscode.window.showWarningMessage('Agent 결과가 없습니다.'); return; }
   const s = agentGateSummary(agentDir); const indexFile = path.join(p.outDir, 'screens', '_index.csv');
   const all = fs.existsSync(indexFile) ? readCsv(indexFile).map(r => r.screen_id).filter(id => id && !p.excludeScreens.some(re => re.test(id))) : null;
-  const lines = [`# Agent 게이트 집계 — ${new Date().toLocaleString()}`, '', `- 실행 화면 ${s.total}${all ? ` / 대상 ${all.length} (미실행 ${all.length - s.total})` : ''}`, `- PASS ${s.pass} · FAIL ${s.fail}`, '', '| 화면ID | 상태 | 문서 | 상세 | 실패 항목 | 시각 |', '|---|---|---:|---|---|---|'];
+  const lines = [`# Agent 게이트 집계, ${new Date().toLocaleString()}`, '', `- 실행 화면 ${s.total}${all ? ` / 대상 ${all.length} (미실행 ${all.length - s.total})` : ''}`, `- PASS ${s.pass} · FAIL ${s.fail}`, '', '| 화면ID | 상태 | 문서 | 상세 | 실패 항목 | 시각 |', '|---|---|---:|---|---|---|'];
   for (const i of s.items) lines.push(`| ${i.id} | ${i.status === 'PASS' ? '✅ PASS' : '❌ ' + i.status} | ${i.docs}/8 | ${i.detail} | ${i.checks.join('<br>')} | ${fmtTime(i.mtime.getTime())} |`);
   if (all && all.length > s.total) { const done = new Set(s.items.map(i => i.id)); lines.push('', `## 미실행 화면 (${all.filter(id => !done.has(id)).length})`, '', all.filter(id => !done.has(id)).join(', ')); }
   const dir = path.join(p.vibeDir, 'reports'); fs.mkdirSync(dir, { recursive: true }); const file = path.join(dir, `agent_gates_${history.nowLocal().slice(0, 10)}.md`);
@@ -318,19 +322,19 @@ async function quickScreen() {
   const pageDir = (() => { if (!st.gen) return ''; try { const r = JSON.parse(fs.readFileSync(path.join(p.genDir, ID, 'register.json'), 'utf8')); return path.join(p.tobeDir, 'features', ...r.routePath.split('/').flatMap((s, i) => i === 0 ? [s, 'src', 'pages'] : [s])); } catch (_) { return ''; } })();
   const mark = b => b ? '$(pass-filled)' : '$(circle-large-outline)';
   const items = [
-    { label: `${mark(st.pack)} 1 As-is Fact Pack 열기`, description: st.pack ? 'Doc/asisfacts/screens/' + ID : '없음 — pack 먼저', run: () => openPath(path.join(p.outDir, 'screens', ID)) },
+    { label: `${mark(st.pack)} 1 As-is Fact Pack 열기`, description: st.pack ? 'Doc/asisfacts/screens/' + ID : '없음. pack 먼저', run: () => openPath(path.join(p.outDir, 'screens', ID)) },
     { label: `${mark(st.agent)} 3 Agent 문서 생성/열기`, description: st.agent ? '게이트 결과 있음 → 열기' : '실행 (분석서 5종 + 문서 3종)', run: () => st.agent ? openPath(path.join(p.outDir, 'agent', ID)) : runTask(findTask('S3.agent'), { ids: ID }) },
     { label: `${mark(st.gen)} 5 신규 화면 골격 생성 (new-screen.ps1)`, description: st.gen ? 'GEN_NOTES 있음 → 열기' : '골격 생성 + nscm-fe 적용 + 1차 게이트', run: () => st.gen ? openPath(path.join(p.genDir, ID, 'GEN_NOTES.md')) : runTask(findTask('S5.new'), { id: ID }) },
-    { label: `$(sparkle) 5 Claude Code 로 TODO 이식`, description: st.gen ? '프롬프트 자동 전달' : 'GEN_NOTES 없음 — 골격 먼저', run: () => runTask(findTask('S5.claude'), { id: ID }) },
+    { label: `$(sparkle) 5 Claude Code 로 TODO 이식`, description: st.gen ? '프롬프트 자동 전달' : 'GEN_NOTES 없음. 골격 먼저', run: () => runTask(findTask('S5.claude'), { id: ID }) },
     { label: `$(checklist) 5 게이트 판정 / 최종(--final)`, description: pageDir || '페이지 폴더 미확인', run: async () => { const f = await vscode.window.showQuickPick(['게이트 판정', '최종 게이트 (--final)'], {}); if (!f) return; runTask(findTask(f.startsWith('최종') ? 'S5.final' : 'S5.check'), { dir: pageDir }); } },
     { label: `$(diff) 5 작업 전/후 소스 비교`, description: pageDir || '페이지 폴더 미확인', run: () => showDiff(pageDir) },
     { label: `$(book) 6 문서 3종 확정 (Agent -Phase docs)`, description: '분석서는 유지, 3종만 재생성', run: () => runTask(findTask('S6.docs'), { ids: ID }) },
-    { label: `$(rocket) ★ ID 하나로 끝까지 (FE 골격→등록 SQL→PKG→수선→이식→E2E 스펙→대조표)`, description: 'pipeline.js — 끝나면 DoD 패널에서 ❌ 만 확인', run: () => runTask(findTask('S5.pipeline'), { id: ID }) },
+    { label: `$(rocket) ★ ID 하나로 끝까지 (FE 골격→등록 SQL→PKG→수선→이식→E2E 스펙→대조표)`, description: 'pipeline.js. 끝나면 DoD 패널에서 ❌ 만 확인', run: () => runTask(findTask('S5.pipeline'), { id: ID }) },
     { label: `$(sync) 5 자동 수선 루프 (gen→Claude→게이트 ×3)`, description: has(path.join(p.genDir, ID, 'REPAIR.md')) ? 'REPAIR.md 있음 → 재실행' : '사람 개입 없이 PASS 까지', run: () => runTask(findTask('S5.repair'), { ids: ID }) },
     { label: `$(beaker) 4 골든 테스트 (As-is SP ↔ To-Be PROC 결과 대조)`, description: has(path.join(p.goldenDir, ID)) ? 'Doc/golden/' + ID : '케이스 생성 후 실행', run: () => runTask(findTask('S4.golden'), { ids: ID }) },
-    { label: `$(rocket) ★ ID 하나로 전체 (파싱→분석→생성→보완→테스트→문서)`, description: '순차 체인 — 실패 단계에서 멈추고 Doc/gen/<ID>/FULLRUN.md', run: async () => { const it = (promptPanel.loadQuick(p.extDir, p.root).groups || []).flatMap(g => g.items).find(x => x.chainId === 'full'); if (!it) return vscode.window.showWarningMessage('quick.json 에 chainId=full 항목이 없습니다'); await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(it, ID, false); } },
+    { label: `$(rocket) ★ ID 하나로 전체 (파싱→분석→생성→보완→테스트→문서)`, description: '순차 체인. 실패 단계에서 멈추고 Doc/gen/<ID>/FULLRUN.md', run: async () => { const it = (promptPanel.loadQuick(p.extDir, p.root).groups || []).flatMap(g => g.items).find(x => x.chainId === 'full'); if (!it) return vscode.window.showWarningMessage('quick.json 에 chainId=full 항목이 없습니다'); await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(it, ID, false); } },
   ];
-  const pick = await vscode.window.showQuickPick(items, { placeHolder: `${ID} — 어느 단계 작업?`, matchOnDescription: true }); if (pick) await pick.run();
+  const pick = await vscode.window.showQuickPick(items, { placeHolder: `${ID}, 어느 단계 작업?`, matchOnDescription: true }); if (pick) await pick.run();
 }
 
 // ───────────────────────── 트리: 단계 ─────────────────────────
@@ -592,7 +596,7 @@ async function checkEnv() {
 function updateStatusBar() {
   if (!statusBar) return; const p = paths(); if (!p.root) { statusBar.text = '$(warning) Vibe_Manager: 루트 없음'; statusBar.show(); return; }
   const vars = Object.assign({}, p, { inputs: {} }); const steps = loadSteps(); const done = steps.filter(s => stepStatus(s, vars).state === 'pass').length;
-  statusBar.text = `$(rocket) Vibe_Manager ${done}/${steps.length}`; statusBar.tooltip = 'NSCM 전환 단계 — 클릭하면 대시보드'; statusBar.show();
+  statusBar.text = `$(rocket) Vibe_Manager ${done}/${steps.length}`; statusBar.tooltip = 'NSCM 전환 단계. 클릭하면 대시보드'; statusBar.show();
 }
 // 1.9.3: 대시보드 = Workbench HTML 탭(별도 웹뷰 창 대신). 본문은 dashboardHtml() 에서 style+body 만 떼고 버튼을 data-action 으로 바꿔 쓴다. Workbench 가 없을 때만 구 패널
 function dashboardBody() {
@@ -613,7 +617,7 @@ async function openDashboard() {
     if (ok) return;
   } catch { /* 구 패널로 */ }
   if (dashboard) { dashboard.reveal(); refreshDashboard(); return; }
-  dashboard = vscode.window.createWebviewPanel('vibeManager.dashboard', 'NSCM 전환 흐름 — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+  dashboard = vscode.window.createWebviewPanel('vibeManager.dashboard', 'NSCM 전환 흐름, Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
   dashboard.onDidDispose(() => { dashboard = null; });
   dashboard.webview.onDidReceiveMessage(m => { if (m.type === 'run') { const t = findTask(m.id); if (t) runTask(t); } if (m.type === 'refresh') refreshDashboard(); if (m.type === 'quick') quickScreen(); });
   refreshDashboard();
@@ -644,7 +648,9 @@ ${stepHtml}
 // ───────────────────────── 기타 명령 · 활성화 ─────────────────────────
 async function editSteps() { const p = paths(); if (!p.root) return; const target = path.join(p.vibeDir, 'steps.json'); if (!fs.existsSync(target)) { fs.mkdirSync(p.vibeDir, { recursive: true }); fs.copyFileSync(path.join(p.extDir, 'steps.json'), target); vscode.window.showInformationMessage('기본 steps.json 을 .vibe/steps.json 으로 복사했습니다. 이 파일이 있으면 내장본 대신 사용됩니다.'); } await vscode.window.showTextDocument(await vscode.workspace.openTextDocument(vscode.Uri.file(target))); }
 async function openTaskLog() { const f = path.join(paths().vibeDir, 'runs.log'); if (!fs.existsSync(f)) { vscode.window.showInformationMessage('실행 기록이 아직 없습니다.'); return; } await openPath(f); }
-function log(msg) { if (out) out.appendLine(`[${new Date().toLocaleTimeString()}] ${msg}`); }
+function log(msg) { if (out) out.appendLine(`[${new Date().toLocaleTimeString()}] ${msg}`);
+  // 2026-11-19 자가진단 Q1: 실패·오류 문구는 파일(.vibe/orch/vm_errors.jsonl)에도 남긴다. 종전에는 Output 채널에만 남았다
+  if (/실패|오류|error|fail|cannot|없음\b/i.test(String(msg))) { try { require('./orch-errlog').note('extension', 'log', String(msg)); } catch { } } }
 
 function activate(context) {
   ctx = context; out = vscode.window.createOutputChannel('Vibe_Manager');
@@ -688,7 +694,7 @@ function activate(context) {
     vscode.commands.registerCommand('vibeManager.openWorkbenchNew', () => { workbench.open(wbApi(), { fresh: true }); }),
     // 2026-11-19 VMO P2: VMO 창(기능 · BE/FE Log · 상황판). tab = board | belog | felog | task
     // 2026-11-19 VMO P8: 업무 작업창(업무 1개 × 화면 여러 개 일괄 실행). 여러 개 열 수 있다
-    vscode.commands.registerCommand('vibeManager.openJobs', () => { try { require('./jobs').open(wbApi()); } catch (e) { vscode.window.showErrorMessage(`Vibe_Manager 업무 작업창을 열 수 없음: ${e.message}`); } }),
+    vscode.commands.registerCommand('vibeManager.openJobs', () => { try { require('./jobs').open(wbApi()); } catch (e) { vscode.window.showErrorMessage(`Vibe_Manager VMW 창을 열 수 없음: ${e.message}`); } }),
     vscode.commands.registerCommand('vibeManager.openOrchestra', tab => { workbench.openOrchestra(wbApi(), { tab: typeof tab === 'string' ? tab : '' }); }),
     vscode.commands.registerCommand('vibeManager.openFlow', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (workbench.openFlowTab()) return; return flowPanel.open({ paths, runTaskById: (tid, preset) => runTask(findTask(tid), preset), openPath }); }),
     vscode.commands.registerCommand('vibeManager.openTaskHistory', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); workbench.showTab('thist'); }),
@@ -707,17 +713,31 @@ function activate(context) {
       openPath(t); }),
     vscode.commands.registerCommand('vibeManager.checkEnv', checkEnv),
     vscode.tasks.onDidEndTaskProcess(onTaskEnd),
-    vscode.workspace.onDidChangeConfiguration(e => { if (e.affectsConfiguration('vibeManager')) { if (e.affectsConfiguration('vibeManager.claudeCommand')) { const p1 = paths(); process.env.CLAUDE_BIN = p1.claude; process.env.ASISFACTS_CLAUDE = p1.claude; }
-      if (e.affectsConfiguration('vibeManager.language')) { const ko = paths().language === 'ko'; vscode.window.showInformationMessage(ko ? 'Vibe_Manager 언어: 한국어 — 사이드바 메뉴는 즉시, Workbench 는 새 창부터 적용됩니다.' : 'Vibe_Manager language: English — sidebar menu updates now; Workbench applies to newly opened windows.'); }
+    vscode.workspace.onDidChangeConfiguration(e => { if (e.affectsConfiguration('vibeManager')) { pathsMemo = null; if (e.affectsConfiguration('vibeManager.claudeCommand')) { const p1 = paths(); process.env.CLAUDE_BIN = p1.claude; process.env.ASISFACTS_CLAUDE = p1.claude; }
+      if (e.affectsConfiguration('vibeManager.language')) { const ko = paths().language === 'ko'; vscode.window.showInformationMessage(ko ? 'Vibe_Manager 언어: 한국어. 사이드바 메뉴는 즉시, Workbench 는 새 창부터 적용됩니다.' : 'Vibe_Manager language: English — sidebar menu updates now; Workbench applies to newly opened windows.'); }
       tree.refresh(); refreshDashboard(); } }));
   // 1.8.3: 새 VSIX 가 설치됐는데 아직 이전 버전이 실행 중이면(Reload 전) 메뉴(quick.json 실시간)와 코드가 어긋난다 → 활성화 시 안내
   try {
     const mine = String((context.extension && context.extension.packageJSON && context.extension.packageJSON.version) || '');
     const extRoot = path.dirname(context.extensionPath); const vers = fs.readdirSync(extRoot).filter(d => /^marisoft\.vibe-manager-\d/.test(d)).map(d => d.replace(/^marisoft\.vibe-manager-/, ''));
     const newest = vers.sort((a, b) => cmpVer(a, b)).pop();
-    if (mine && newest && cmpVer(newest, mine) > 0) vscode.window.showWarningMessage(`Vibe_Manager ${newest} 이 설치되어 있지만 지금은 ${mine} 이 실행 중입니다 — 메뉴와 기능이 어긋날 수 있으니 창을 새로고침하세요.`, 'Reload Window').then(a => { if (a) vscode.commands.executeCommand('workbench.action.reloadWindow'); });
+    if (mine && newest && cmpVer(newest, mine) > 0) vscode.window.showWarningMessage(`Vibe_Manager ${newest} 이 설치되어 있지만 지금은 ${mine} 이 실행 중입니다. 메뉴와 기능이 어긋날 수 있으니 창을 새로고침하세요.`, 'Reload Window').then(a => { if (a) vscode.commands.executeCommand('workbench.action.reloadWindow'); });
   } catch { }
   const p = paths();
+  // 2026-11-19 자가진단 Q1: 오류 기록 시작 · 활성화 시각 기록(.vibe/orch/activations.jsonl — CHANGELOG 의 '창 다시 로드 필요' 항목이 로드됐는지 판정하는 근거)
+  //   처리되지 않은 Promise 거부는 스택에 이 확장 경로가 있을 때만 기록한다(다른 확장의 오류 제외)
+  try {
+    if (p.root) {
+      const errlog = require('./orch-errlog'); errlog.init(p.vibeDir);
+      const ver = String((context.extension && context.extension.packageJSON && context.extension.packageJSON.version) || '');
+      fs.appendFileSync(path.join(p.vibeDir, 'orch', 'activations.jsonl'), JSON.stringify({ at: require('./orch-events').nowLocal(), ms: Date.now(), pid: process.pid, version: ver, extDir: context.extensionPath }) + '\n', 'utf8');
+      const mine = e => { const st = String((e && e.stack) || ''); return st.includes(context.extensionPath) || /vibe-?manager/i.test(st); };
+      const onRej = e => { if (mine(e)) errlog.note('extension', 'unhandledRejection', e); };
+      const onExc = e => { if (mine(e)) errlog.note('extension', 'uncaughtException', e); };
+      process.on('unhandledRejection', onRej); process.on('uncaughtExceptionMonitor', onExc);
+      context.subscriptions.push({ dispose: () => { process.removeListener('unhandledRejection', onRej); process.removeListener('uncaughtExceptionMonitor', onExc); } });
+    }
+  } catch (e) { log(`오류 기록 시작 실패: ${e.message}`); }
   if (p.root) for (const glob of ['**/_gate.csv', '**/_index.csv', '**/crosscheck_report.csv', '**/grid_runs.csv', '**/_summary.csv', '**/GEN_NOTES.md', '**/rules/*.csv', '**/.claude/settings.json']) { const w = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(vscode.Uri.file(p.root), glob)); const h = () => { tree.refresh(); refreshDashboard(); }; w.onDidChange(h); w.onDidCreate(h); w.onDidDelete(h); context.subscriptions.push(w); }
   updateStatusBar(); log(`활성화. 루트=${p.root || '(없음)'} 단계정의=${stepsFile()}`);
   // 1.6: 활성화 시 워크벤치를 첫 화면으로 자동 기동 (사이드바 뷰가 사라졌으므로 즉시 접근 보장).
@@ -736,7 +756,7 @@ function activate(context) {
       const watch = require('./orch-watch'); watch.init(p, { serverSvc: require('./server-service') });
       let lastNote = 0;
       watch.on((inc, isNew) => {
-        if (!isNew || Date.now() - lastNote < 60000) return; lastNote = Date.now();
+        if (!isNew || inc.notice || Date.now() - lastNote < 60000) return; lastNote = Date.now();
         Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager 사건 ${inc.rule} ${inc.ruleName}${inc.screen ? ` · ${inc.screen}` : ''} — ${String(inc.title).slice(0, 160)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { });
       });
       // P4 에이전트: 새 사건을 받아 조치(코드 조치 → Claude 조치). 파일을 고쳤거나 사용자 확인이 필요하면 알림
@@ -746,9 +766,23 @@ function activate(context) {
         notify: (inc, what) => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO — ${inc.rule}${inc.screen ? ` ${inc.screen}` : ''}: ${String(what).slice(0, 200)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { }); },
       });
       // P8·P9 업무 작업 실행기. 서버 이상(R6)·TCP 연결 수(R8) 사건이 생기면 실행 중 작업을 일시 중지하고 사건이 해결되면 다시 진행한다
-      try { const jr = require('./job-runner'); jr.init(wbApi()); jr.attachWatch(watch); } catch (e) { log(`업무 작업 실행기 시작 실패: ${e.message}`); }
+      try { const jr = require('./job-runner'); jr.init(wbApi()); jr.attachWatch(watch); } catch (e) { log(`VMW 실행기 시작 실패: ${e.message}`); }
+      // 2026-11-20 자가 복구: 화면 진입 실패(R13) → 원인 확인 → 해결 → 확인 → 그 화면 다시 실행. 풀지 못하면 에이전트로 넘김
+      try { require('./orch-heal').init({ paths, notify: (inc, what) => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO 자가 복구 ${inc.screen}: ${String(what).slice(0, 200)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { }); } }); } catch (e) { log(`자가 복구 시작 실패: ${e.message}`); }
       // P5 상시 개선안: 체인이 끝났을 때와 1시간마다 확인해 마지막 분석에서 reviewEveryHours 지났으면 분석 1회. 반영은 사용자 승인 뒤에만
       require('./orch-improve').init({ notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO — ${String(text).slice(0, 200)}`, '개선안 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'prop'); }, () => { }); } });
+      // 2026-11-19 자가진단 Q2~Q6: 작업 이력 취합과 VM 자가진단. 수집 · 점검은 코드만 쓰고 Claude 는 진단과 주제별 정리에서만 부른다
+      try {
+        require('./orch-history').init({ paths });
+        // 2026-11-20 사용자 지적 점검(S13)과 큰 그림 점검. 큰 그림 점검 주기·적용 여부 = 환경설정 orch.visionEveryDays(기본 1일) · orch.visionEnabled(기본 적용)
+        require('./orch-usercheck').init({ paths });
+        // 2026-11-20 작업 재개: 켜진 뒤 8초에 창 다시 로드로 끊긴 체인이 있으면 알림 1건(VMW 작업 · Workbench 체인)
+        setTimeout(() => { try { const rs = workbench.resumable(paths()); if (!rs.length) return; const jobsN = new Set(rs.filter(r => r.job).map(r => r.job)).size; const wbN = rs.filter(r => !r.job).length;
+          Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager: 창 다시 로드로 끊긴 작업 재개 가능 ${rs.length}건(VMW 작업 ${jobsN} · Workbench 체인 ${wbN}). 끊긴 단계부터 다시 실행할 수 있습니다`, ...(jobsN ? ['VMW 열기'] : []), ...(wbN ? ['Workbench 열기'] : []))).then(a => { if (a === 'VMW 열기') vscode.commands.executeCommand('vibeManager.openJobs'); else if (a === 'Workbench 열기') vscode.commands.executeCommand('vibeManager.openWorkbench'); });
+        } catch (e) { log(`재개 알림 실패: ${e.message}`); } }, 8000);
+        require('./orch-vision').init({ paths, settings: () => ({ visionEnabled: cfg().get('orch.visionEnabled') !== false, visionEveryDays: Number(cfg().get('orch.visionEveryDays')) || 1 }), notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO. ${String(text).slice(0, 200)}`, '개선안 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'prop'); }); } });
+        require('./orch-selfcheck').init({ paths, notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO 자가진단. ${String(text).slice(0, 200)}`, '자가진단 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'self'); }, () => { }); } });
+      } catch (e) { log(`자가진단 시작 실패: ${e.message}`); }
       if (cfg().get('orch.autoOpen') !== false) setTimeout(() => { try { workbench.openOrchestra(wbApi(), { background: true }); } catch (e) { log(`VMO 창 열기 실패: ${e.message}`); } }, 1500);
     }
   } catch (e) { log(`VMO 시작 실패: ${e.message}`); }
@@ -757,6 +791,9 @@ function deactivate() {
   // 서버는 기본으로 남긴다(다시 로드하면 server-service 가 .vibe/orch/servers.json 으로 다시 붙는다). 설정 vibeManager.orch.stopServersOnExit=true 면 종료
   try { require('./server-service').dispose(cfg().get('orch.stopServersOnExit') === true); } catch { }
   try { require('./job-runner').dispose(); } catch { } // 실행 중이던 업무 작업은 '중단됨'으로 남긴다(다시 열어 이어서 실행)
+  try { require('./workbench').abortRunningChains('VM 창 종료로 중단'); } catch { } // 개선안 20261120065425_SELF: job 없이 띄운 체인도 chain.end(aborted) 를 남긴다
+  try { require('./orch-selfcheck').dispose(); } catch { }
+  try { require('./orch-vision').dispose(); } catch { }
   try { require('./orch-improve').dispose(); } catch { }
   try { require('./orch-agent').dispose(); } catch { }
   try { require('./orch-watch').dispose(); } catch { }

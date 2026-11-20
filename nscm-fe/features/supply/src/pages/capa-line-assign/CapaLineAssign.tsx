@@ -887,9 +887,17 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheet={linePopupSheet}
         divisionType={divisionType}
         tabId={tabId}
-        divisionId={applied?.divisionId ?? sc.divisionId}
+        // AS-IS `ShowLine`(cs:5954-5967)의 `_ori_*`/`_*` 는 모두 `clb*.ControlValues` = 조회조건
+        //   컨트롤의 **현재(라이브) 값**이다(getOriSite cs:471 등). 조회(Search) 여부와 무관하게 메인
+        //   에서 고른 즉시 팝업으로 넘어간다 → 확정(applied)이 아니라 입력중 searchParams(sc)를 쓴다.
+        //   divisionType·masterRows 도 sc 기반 라이브라 divisionId 도 라이브로 맞춰야 일치한다.
+        divisionId={sc.divisionId}
         divisionOptions={cascade.divisionOptions}
         masterRows={cascade.masterRows}
+        initialSiteIds={sc.siteIds}
+        initialPlantIds={sc.plantIds}
+        initialFactoryIds={sc.factoryIds}
+        initialLineIds={sc.lineIds}
         onClose={() => setOpenLinePopup(false)}
         onConfirm={handleLinePopupConfirm}
       />
@@ -902,24 +910,33 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         divisionId={applied?.divisionId ?? sc.divisionId}
         verId={applied?.verId ?? sc.verId}
         verSeq={applied?.verSeq ?? sc.verSeq}
+        // AS-IS `ShowSopAssignModel`(cs:5884-5928): 메인 라이브 조회조건을 P02 로 넘겨 그 값으로 첫
+        //   조회한다(P03 와 동일 — `_ori_*`=`clb*.ControlValues`, 조회 여부 무관). searchParams(sc) 사용.
+        initialSiteIds={sc.siteIds}
+        initialPlantIds={sc.plantIds}
+        initialFactoryIds={sc.factoryIds}
+        initialLineIds={sc.lineIds}
+        initialOperationIds={sc.operationIds}
+        initialElectrodeTypes={sc.electrodeTypes}
         onClose={() => setOpenSopModelPopup(false)}
         onConfirm={handleSopModelConfirm}
       />
 
       {/*
         P01 Item — 그리드 셀(`NICK_NAME`/`ITEM_ID`) 경유. AS-IS `ShowItem` 은 `Init(true, …)` 로
-        열지만(cs:5847) 실사용은 **단일선택**이다 — 팝업(`SCM0002_CAPAItemPopup`)에 OK/확정 버튼이
-        없고(InsertButton 등 전부 빈 구현, cs:255-269) 유일한 확정 경로인 셀 더블클릭이 그 한 행만
-        담고 즉시 Close 한다(`spdMain_CellDoubleClick`→`SetItem`→`Close`, cs:355-359). `SetItem` 의
-        `multiSelect` 다건 분기(`GetSelections`, cs:373-397)는 이를 실행할 UI(다건 선택 후 확정)가
-        없어 실질 도달 불가다. 따라서 `multiSelect` 를 켜지 않아 체크박스 없이 더블클릭 단건으로만
-        확정한다(AS-IS 일치). `handleItemPopupSelect` 의 1건 경로(현재행 수정)만 타며 이는 AS-IS
-        `selectedItems.Count == 1 → Edit_Row_Assign`(cs:5717) 과 같다.
+        **다중선택**으로 연다(cs:5860). 팝업(`SCM0002_CAPAItemPopup`)의 버튼리스트에 **OK 버튼이 실재**
+        하고(Designer buttonItem2 = `ButtonListType.OK`), OK → `SetItem()` 이 `multiSelect` 분기에서
+        `GetSelections()` 로 **선택된 전 범위 행을 수집**한다(cs:344-346·373-397). cs:255-269 의 빈
+        구현은 CRUD 툴바(Insert/Delete/Edit/Save)지 확정 버튼이 아니다 — 과거 "확정 UI 없음" 판단은 이
+        둘을 혼동한 오판이었다. → `multiSelect` 를 켠다. 선택 1건이면 `handleItemPopupSelect` 가 현재행
+        수정(= AS-IS `Count==1 → Edit_Row_Assign`), 2건 이상이면 건수만큼 행 추가(= `Count>1 →
+        Insert_Row_Assign`, cs:5719-5731). 체크박스 다건 모드는 자매 SCP0105 와 동일 규약이다.
         `OPERATION_GROUP = shop_group` 필터는 AS-IS 가 **조회 직후 목록 자체**에 건다
         (SCM0002_CAPAItemPopup.cs:301-303) — 공용 `operationGroup` prop 이 같은 위치에 걸어준다.
       */}
       <CapaItemPopup
         open={itemPopupRow !== null}
+        multiSelect
         operationGroup={SHOP_GROUP_BY_DIVISION_TYPE[divisionType]}
         params={{
           // AS-IS `ShowItem` 은 인자를 쓰지 않고 **조회조건 컨트롤 현재값**을 넘긴다 — `_division`/

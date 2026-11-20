@@ -1,0 +1,274 @@
+{
+ "rule_id": "E4",
+ "hash": "3003075943c1bc63",
+ "groups": [
+  {
+   "rows": [
+    "T-59de933f",
+    "T-f6d2008f",
+    "V-21c0cf89"
+   ],
+   "why": "All three are MSG00134 in BtnInput_Click line 699. It fires when SelectDay has no cell selected, so they check the same condition and expect the same message and stop."
+  },
+  {
+   "rows": [
+    "T-57fe96b8",
+    "T-db2a4710",
+    "V-6f1aea63"
+   ],
+   "why": "All three are MSG00135 in BtnInput_Click line 676. They check the same condition, input outside edit mode (column 0 hidden), and expect the same message."
+  },
+  {
+   "rows": [
+    "T-f5e2b116",
+    "T-c61b1188",
+    "V-23e055de",
+    "T-bc60d5c7"
+   ],
+   "why": "All four are MSG00093 in BtnInput_Click line 688. It fires when cboInputValue has no selection, so they test the same element and condition and expect the same message."
+  },
+  {
+   "rows": [
+    "T-a05684ff",
+    "T-c409c22a",
+    "V-c3498440"
+   ],
+   "why": "All three are MSG00050 in BtnInput_Click line 714. They check the same FormatException catch and expect the same invalid-number message."
+  },
+  {
+   "rows": [
+    "T-cd6386c9",
+    "T-d9af9685",
+    "V-8c0b1fa7"
+   ],
+   "why": "All three are MSG00004 in SaveData_Main line 555. They check the same successful save and expect the same message showing the saved row count."
+  },
+  {
+   "rows": [
+    "V-e3a3e44f",
+    "V-ddd9849f"
+   ],
+   "why": "Both save a row whose key matches an existing row and expect the save to be blocked with a duplicate-key message."
+  },
+  {
+   "rows": [
+    "T-2d2a01e5"
+   ],
+   "why": "This is the A02 trace row for the existence of 2 required-value checks (cs:377, 456), which is a different kind of check from the others, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-35bab764"
+   ],
+   "why": "MSG00667 has no linked rule (e4None) and no matching row, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-526f0502"
+   ],
+   "why": "MSG00719 has no linked rule (e4None) and no matching row, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-6a36644b"
+   ],
+   "why": "MSG01153 is the TO-BE ID for MSG00134, but its row has no linked rule (e4None), so it stays alone to be safe."
+  },
+  {
+   "rows": [
+    "T-6bb51613"
+   ],
+   "why": "MSG00618 has no linked rule (e4None) and no matching row, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-70f04acc"
+   ],
+   "why": "This is the P05 trace row that checks SaveButton exists in source (cs:360), which is a different kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-78e5f7bd"
+   ],
+   "why": "MSG00672 is the TO-BE ID for MSG00004, but its row has no linked rule (e4None), so it stays alone to be safe."
+  },
+  {
+   "rows": [
+    "T-8379129e"
+   ],
+   "why": "This is the V03 trace row that checks the outer-catch exception message exists in source, which is a different kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9c41c2a1"
+   ],
+   "why": "This dynamic-message ledger row cannot be matched to a specific catch, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9df99546"
+   ],
+   "why": "This dynamic-message ledger row cannot be matched to a specific catch, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-bd3cd7a1"
+   ],
+   "why": "This drpPeriod condition row tracks an AS-IS entry point that is never called, which is a different element and kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ce9e8ca9"
+   ],
+   "why": "This SetChangedPeriod row tracks an entry point that is never called, which is a different element from the drpPeriod condition, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d0627780"
+   ],
+   "why": "This is the C08 trace row that checks lcInputValue exists in source, which is a different kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-f940fd4d"
+   ],
+   "why": "MSG01122 is the TO-BE ID for MSG00093, but its row has no linked rule (e4None), so it stays alone to be safe."
+  },
+  {
+   "rows": [
+    "T-ff56d71b"
+   ],
+   "why": "MSG00614 has no linked rule (e4None) and no matching row, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-07221532"
+   ],
+   "why": "This DMF0042 defect type checks several things together (Currency, Insert position, Delete button), so its expected result differs from the other rows."
+  },
+  {
+   "rows": [
+    "V-1cca1463"
+   ],
+   "why": "This DMF0005 defect type covers multiple Owners and the double-click lookup, which is a different element."
+  },
+  {
+   "rows": [
+    "V-318ddbd5"
+   ],
+   "why": "This SCP0028 defect type is the KO message for Lot Size<Increment, which is a different condition."
+  },
+  {
+   "rows": [
+    "V-332e1491"
+   ],
+   "why": "This DMF0082 defect type is the missing-Biz-Type popup message, which is a different element."
+  },
+  {
+   "rows": [
+    "V-38b1e144"
+   ],
+   "why": "This DMF0005 defect type checks customer relationships and the Active column, which are different elements."
+  },
+  {
+   "rows": [
+    "V-64ab72ce"
+   ],
+   "why": "This is the rule that Unit Price is required when a quantity is entered, which is a different condition and expected result."
+  },
+  {
+   "rows": [
+    "V-7f38f4c1"
+   ],
+   "why": "This is the exception message from the catch inside the save path, which is a different condition from the outer catch."
+  },
+  {
+   "rows": [
+    "V-89755ead"
+   ],
+   "why": "This DMF0044 defect type is the Cell Prod Site check, which is a different element."
+  },
+  {
+   "rows": [
+    "V-8bcce9c3"
+   ],
+   "why": "This checks that editing a dynamic period cell on an existing row and saving raises no false required-field message, which is a different state and expected result."
+  },
+  {
+   "rows": [
+    "V-8cafb24b"
+   ],
+   "why": "This DMF0021 defect type covers the RTF unit-price check and Waterfall sync, which is a different element."
+  },
+  {
+   "rows": [
+    "V-9944445b"
+   ],
+   "why": "This DMF0021 defect type covers the required Text check and ETC edit save, which is a different element."
+  },
+  {
+   "rows": [
+    "V-a6e0f5a1"
+   ],
+   "why": "This DMF0044 defect type is Version Create in the BP Version popup, which is a different element."
+  },
+  {
+   "rows": [
+    "V-a8c6f5ff"
+   ],
+   "why": "This is the rule that blocks typed-in values outside a combo cell's choices, which is a different element and expected result."
+  },
+  {
+   "rows": [
+    "V-b1bc5569"
+   ],
+   "why": "This is the save digit-limit and calculated-value overflow message, which is a different condition."
+  },
+  {
+   "rows": [
+    "V-b7da4f1b"
+   ],
+   "why": "This is the false missing-unit-price warning when a price is entered, which is a different expected result from the required-price rule."
+  },
+  {
+   "rows": [
+    "V-bdd714b9"
+   ],
+   "why": "This is the Project column required check, which is a different element."
+  },
+  {
+   "rows": [
+    "V-e0adace4"
+   ],
+   "why": "This is the per-row validation messages for Excel Upload, which is a different element."
+  },
+  {
+   "rows": [
+    "V-ec4de82c"
+   ],
+   "why": "This confirmed rule covers how edit mode is replaced by an automatic editable state, which is a different kind of check."
+  },
+  {
+   "rows": [
+    "V-f388367d"
+   ],
+   "why": "This DMF0004 defect type is the Sold to/Ship to old-code save check, which is a different element."
+  },
+  {
+   "rows": [
+    "V-f55f813e"
+   ],
+   "why": "This is the exception message from the outer catch, which is a different condition from the catch inside the save path."
+  },
+  {
+   "rows": [
+    "V-f97ded11"
+   ],
+   "why": "This DMF0021 defect type is the condition for editing RTF[R+P], which is a different element and state."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:14",
+ "cost": 0.1805886
+}

@@ -39,8 +39,9 @@ ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, HERE)
 import evidence_check  # noqa: E402
 
-KINDS = ('facts', 'judge', 'opinion', 'desc')
-DEFAULTS = {'llmReview': True, 'llmReviewKinds': list(KINDS), 'llmReviewModel': '', 'llmReviewEffort': 'high', 'llmReviewBudgetUsd': 0, 'llmReviewBatch': 6, 'llmReviewTimeoutMin': 20, 'llmReviewLean': True}
+KINDS = ('facts', 'judge', 'opinion', 'desc', 'dedup', 'delta', 'criteria', 'port', 'repair')   # 2026-11-20 A7: dedup·delta 도 켜고 끔 대상 · criteria = 기준 정리(구간 B) · port·repair = UI 개발 검토·보완 진단(구간 D)
+DEFAULTS = {'llmReview': True, 'llmReviewKinds': list(KINDS), 'llmReviewModel': '', 'llmReviewEffort': 'high', 'llmReviewEffortByKind': {}, 'llmReviewBudgetUsd': 0, 'llmReviewBatch': 6, 'llmReviewPar': 4, 'llmReviewTimeoutMin': 20, 'llmReviewLean': True}
+EFFECT_COLS = ['at', 'menu_id', 'kind', 'calls', 'cached', 'applied', 'nochange_calls', 'skipped_rows', 'note']
 USAGE_COLS = ['at', 'menu_id', 'kind', 'rows', 'model', 'effort', 'input_tokens', 'output_tokens', 'cache_read_tokens', 'cache_creation_tokens', 'cost_usd', 'num_turns', 'ms', 'rc', 'cached', 'why']
 _RUN_START = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -74,7 +75,13 @@ def vdir(mid):
     return d
 
 
+# 2026-11-20 C3(AI 검토 동시 호출): 같은 프로세스 안 여러 스레드가 캐시와 사용량 파일을 같이 쓴다 — 읽고 고쳐 쓰는 구간을 잠근다
+import threading as _th
+_LOCK = _th.RLock()
+
+
 def _append(path, row):
+  with _LOCK:
     new = not os.path.exists(path)
     with open(path, 'a', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=USAGE_COLS, extrasaction='ignore')
@@ -91,6 +98,26 @@ def log_usage(mid, row):
             _append(p, row)
         except OSError as e:
             print(f'[WARN] 사용량 기록 실패 {os.path.relpath(p, ROOT)}: {e}')
+
+
+def log_effect(mid, kind, calls=0, cached=0, applied=0, nochange_calls=0, skipped_rows=0, note=''):
+    """2026-11-20 A8: AI 지점별 효과 — 호출 수, 반영 건수, 바꾼 것이 없는 호출 수. Doc/verify/<ID>/llm_effect.csv · Doc/verify/_llm_effect.csv
+       반환 = 경고 문장(바꾼 것이 없는 호출이 절반을 넘으면) 또는 ''"""
+    row = {'at': now(), 'menu_id': mid, 'kind': kind, 'calls': calls, 'cached': cached, 'applied': applied, 'nochange_calls': nochange_calls, 'skipped_rows': skipped_rows, 'note': str(note or '')[:300]}
+    for p in (os.path.join(vdir(mid), 'llm_effect.csv'), os.path.join(ROOT, 'Doc', 'verify', '_llm_effect.csv')):
+        try:
+            with _LOCK:
+                new = not os.path.exists(p)
+                with open(p, 'a', encoding='utf-8-sig', newline='') as f:
+                    w = csv.DictWriter(f, fieldnames=EFFECT_COLS, extrasaction='ignore')
+                    if new:
+                        w.writeheader()
+                    w.writerow(row)
+        except OSError as e:
+            print(f'[WARN] 효과 기록 실패 {os.path.relpath(p, ROOT)}: {e}')
+    if calls >= 2 and nochange_calls * 2 > calls:
+        return f'[WARN] AI {kind} 호출 {calls}회 중 {nochange_calls}회는 바꾼 것이 없음(절반 초과) · Doc/verify/{mid}/llm_effect.csv'
+    return ''
 
 
 def read_usage(mid=None):
@@ -131,9 +158,13 @@ def _cache_load(mid):
 
 
 def _cache_save(mid, c):
-    tmp = _cache_path(mid) + '.tmp'
-    json.dump(c, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False)
-    os.replace(tmp, _cache_path(mid))
+    # 동시 호출 안전: 저장 직전 파일을 다시 읽어 합친다(다른 스레드가 먼저 쓴 항목 보존)
+    with _LOCK:
+        cur = _cache_load(mid); cur.update(c)
+        tmp = _cache_path(mid) + f'.{os.getpid()}.{_th.get_ident()}.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(cur, f, ensure_ascii=False)
+        os.replace(tmp, _cache_path(mid))
 
 
 def key_of(kind, prompt):
@@ -153,7 +184,7 @@ def parse_json(text):
         return None
 
 
-def claude_cmd():
+def claude_cmd(kind=''):
     b = (os.environ.get('CLAUDE_BIN') or '').strip() or 'claude'
     c = cfg()
     args = ['-p', '--output-format', 'json', '--permission-mode', 'default', '--allowedTools', 'Read,Glob,Grep',
@@ -165,14 +196,14 @@ def claude_cmd():
     m = str(c.get('llmReviewModel') or '').strip() or (os.environ.get('CLAUDE_MODEL') or '').strip()
     if m:
         args += ['--model', m]
-    e = str(c.get('llmReviewEffort') or '').strip().lower()
+    e = str(((c.get('llmReviewEffortByKind') or {}).get(kind) if isinstance(c.get('llmReviewEffortByKind'), dict) else '') or c.get('llmReviewEffort') or '').strip().lower()   # 2026-11-20 A7 종류별 effort(정리·설명은 낮게)
     if e in ('low', 'medium', 'high', 'xhigh', 'max'):
         args += ['--effort', e]
     return b, args, m, e
 
 
-def _spawn(prompt, timeout):
-    b, args, m, e = claude_cmd()
+def _spawn(prompt, timeout, kind=''):
+    b, args, m, e = claude_cmd(kind)
     # .exe 는 직접, .cmd/.bat·이름만(PATH) 은 셸로 — Windows 에서 래퍼 스크립트는 셸이 있어야 실행된다(e2e-judge.js 는 항상 shell)
     direct = b.lower().endswith('.exe') and os.path.isfile(b)
     env = dict(os.environ, VIBE_HARNESS='1', NSCM_SKIP_RULE_READ='1')
@@ -195,13 +226,15 @@ def ask(mid, kind, prompt, rows=0, use_cache=True, from_text=None):
     if from_text is not None:
         d = parse_json(from_text)
         return {'ok': d is not None, 'data': d, 'why': '' if d is not None else '답 JSON 해석 실패', 'cached': False, 'cost': 0.0, 'ms': 0}
+    if kind in KINDS and not enabled(kind):   # 2026-11-20 A7: 꺼진 종류는 호출하지 않는다(부른 쪽은 결과 없음 처리 = 기계 판정·단독 유지)
+        return {'ok': False, 'data': None, 'why': f'꺼짐(harness.json llmReviewKinds 에 {kind} 없음)', 'cached': False, 'cost': 0.0, 'ms': 0, 'skipped': True}
     left = budget_left(mid)
     if left is not None and left <= 0:
         return {'ok': False, 'data': None, 'why': f"상한 초과(llmReviewBudgetUsd {cfg()['llmReviewBudgetUsd']})", 'cached': False, 'cost': 0.0, 'ms': 0, 'skipped': True}
     t0 = datetime.datetime.now()
     use = {'kind': kind, 'rows': rows, 'cached': 'N'}
     try:
-        rc, out, err, m, e = _spawn(prompt, int(cfg().get('llmReviewTimeoutMin') or 20) * 60)
+        rc, out, err, m, e = _spawn(prompt, int(cfg().get('llmReviewTimeoutMin') or 20) * 60, kind)
     except subprocess.TimeoutExpired:
         use.update(rc=-1, why='시간 초과', ms=int((datetime.datetime.now() - t0).total_seconds() * 1000)); log_usage(mid, use)
         return {'ok': False, 'data': None, 'why': '시간 초과', 'cached': False, 'cost': 0.0, 'ms': use['ms']}
@@ -283,6 +316,19 @@ def selftest():
     chk('ask — 배관(from_text)', r['ok'] and r['data'] == {'items': []})
     c = cfg()
     chk('설정 — 기본 키', all(k in c for k in DEFAULTS))
+    chk('설정 — 동시 호출 기본값', int(DEFAULTS['llmReviewPar']) == 4 and 'llmReviewPar' in c)
+    chk('종류 — dedup·delta·criteria 켜고 끔 대상', all(k in KINDS for k in ('dedup', 'delta', 'criteria')))
+    chk('효과 — 절반 초과 경고', log_effect('_SELFTEST', 'judge', calls=4, nochange_calls=3).startswith('[WARN]') and log_effect('_SELFTEST', 'judge', calls=4, nochange_calls=2) == '')
+    for _f in ('llm_effect.csv', 'llm_usage.csv'):
+        try:
+            os.remove(os.path.join(ROOT, 'Doc', 'verify', '_SELFTEST', _f))
+        except OSError:
+            pass
+    try:
+        _p = os.path.join(ROOT, 'Doc', 'verify', '_llm_effect.csv'); _ls = open(_p, encoding='utf-8-sig').read().splitlines(True)
+        open(_p, 'w', encoding='utf-8-sig').write(''.join(x for x in _ls if ',_SELFTEST,' not in x))
+    except OSError:
+        pass
     try:
         os.rmdir(os.path.join(ROOT, 'Doc', 'verify', '_SELFTEST'))
     except OSError:

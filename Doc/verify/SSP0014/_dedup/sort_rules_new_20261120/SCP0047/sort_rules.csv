@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0047,SQL,SCP0047_GET_KPI_TARGET,Doc\asisfacts\db\modules\dbo.SCP0047_GET_KPI_TARGET.sql,83,IF ( @debug_mode ='T'),NR DESC,", (Select TOP 1 TOKEN from dbo.UF_FX_String_Split (DEPT.DEPT_NAME_KO,'.') as P ORDER BY P.NR DESC) AS DEPT_NM",1,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0047,SQL,SCP0047_GET_KPI_TARGET,Doc\asisfacts\db\modules\dbo.SCP0047_GET_KPI_TARGET.sql,173,,MONTH,ORDER BY month  ;,0,정적
+SCP0047,SQL,SCP0047_GET_KPI_TARGET,Doc\asisfacts\db\modules\dbo.SCP0047_GET_KPI_TARGET.sql,185,,MONTH,ORDER BY month  ;,0,정적
+SCP0047,SQL,SCP0047_GET_KPI_TARGET,Doc\asisfacts\db\modules\dbo.SCP0047_GET_KPI_TARGET.sql,201,IF ( @debug_mode ='T'),"KPI_ID,DIVISION_ID,DISPLAY_SEQ","SET @mEXEC = @mEXEC + ' 	ORDER BY A.KPI_ID, A.DIVISION_ID, A.DISPLAY_SEQ																					' + CHAR(10);",0,동적 SQL
+SCP0047,SQL,PR_SCM_SYS_LOG_BATCH,Doc\asisfacts\db\modules\dbo.PR_SCM_SYS_LOG_BATCH.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

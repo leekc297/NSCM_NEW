@@ -1,6 +1,7 @@
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { Button, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
+import { createMultilinePasteHandler } from '@shared/paste';
 
 // AS-IS 조회조건 Project/Model/Requestor 는 "텍스트 + 돋보기 팝업버튼"(design 02 §4.6).
 //   SSP0015 ShipmentPsiDetailBar 디자인 참고 — 별도 sibling 버튼이 아니라 InputField 의
@@ -26,6 +27,9 @@ export const PopupInput = ({ value, onChange, onOpen }: Props) => (
           onClick={onOpen}
         />
       ),
+    }}
+    inputProps={{
+      onPaste: createMultilinePasteHandler(() => value, onChange),
     }}
     onChange={e => onChange(e.target.value)}
   />

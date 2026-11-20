@@ -1,6 +1,6 @@
 // orch-agent.js 프롬프트 대기열 · 지금 보내기 · VMO 켜고 끄기 시험(가짜 claude). 사용: node test/t_orch_agent_q.js <VibeManager 폴더>
 const path = require('path'); const fs = require('fs'); const os = require('os');
-const dir = process.argv[2] || path.join(__dirname, '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'agq-')); const vibeDir = path.join(root, '.vibe');
 const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
 const HJ = path.join(root, 'tools', 'Harness', 'harness.json');
@@ -51,6 +51,20 @@ const idle = async (ms = 15000) => { const t0 = Date.now(); while (Date.now() - 
   watch.tick(); await sleep(600);
   const r9 = watch.list().find(x => x.rule === 'R9');
   chk('켜면 사건 생성 · 자동 조치', !!r9 && r9.status === 'resolved' && !fs.existsSync(path.join(root, 'Doc', 'e2e', '_run.verify.TST0009.lock')), r9 && r9.status);
+  // 6) harness.json 교체: rename 이 EPERM 이어도 재시도 뒤 복사로 반영하고 tmp_orch 를 남기지 않음
+  chk('끄기, 켜기 뒤 tmp_orch 없음', !fs.existsSync(HJ + '.tmp_orch'));
+  const realRename = fs.renameSync; let renameTry = 0;
+  fs.renameSync = (a, b) => { if (String(a).endsWith('.tmp_orch')) { renameTry++; const e = new Error('EPERM: operation not permitted, rename'); e.code = 'EPERM'; throw e; } return realRename(a, b); };
+  let offE; try { offE = agent.setEnabled(false); } finally { fs.renameSync = realRename; }
+  const hjE = JSON.parse(fs.readFileSync(HJ, 'utf8'));
+  chk('rename EPERM = 3회 재시도 뒤 복사로 반영', offE.ok && renameTry === 3 && hjE.orch.enabled === false && hjE.orch.agentMaxPerHour === 20 && hjE.orchNote === 'x', `ok=${offE.ok} 시도=${renameTry}`);
+  chk('rename EPERM 뒤 tmp_orch 없음', !fs.existsSync(HJ + '.tmp_orch'));
+  // 7) writeJson 실패는 false 를 돌려주고 오류 기록(vm_errors.jsonl)에 남김
+  const errF = path.join(vibeDir, 'orch', 'vm_errors.jsonl'); const errN = () => { try { return fs.readFileSync(errF, 'utf8').split('\n').filter(x => /writeJson/.test(x)).length; } catch { return 0; } };
+  const e0 = errN(); const realWrite = fs.writeFileSync;
+  fs.writeFileSync = (f, ...a) => { if (/_R1_TWJ0001\.json$/.test(String(f))) { const e = new Error('EPERM: operation not permitted, open'); e.code = 'EPERM'; throw e; } return realWrite(f, ...a); };
+  let wj; try { wj = watch.raise('R1', { screen: 'TWJ0001', title: 'writeJson 실패 시험' }); } finally { fs.writeFileSync = realWrite; }
+  chk('writeJson 실패 = 사건 파일 없음 + 오류 기록 1건', !!wj && !watch.get(wj.id) && errN() === e0 + 1, `기록=${errN() - e0}`);
   agent.dispose(); watch.dispose(); st.dispose(); await sleep(150); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

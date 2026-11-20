@@ -1,0 +1,133 @@
+# -*- coding: utf-8 -*-
+"""차등 검증 결과(Doc/verify/<ID>/diff/diff_summary.csv) → 원장 행(source=ASIS_DIFF · row_id AD-…) + e2e_results.json 반입(2026-11-06 플랜 2-4)
+  python tools/Harness/verify/diff_ingest.py <ID>
+규칙 매핑은 tools/Harness/rules/diff_rule_map.csv (코드에 규칙 ID 를 적지 않는다): diff_item(KEYSET/VALUES/COLSET/ORDER) → rule_id · verdict_map(diff 판정 → 원장 결과)
+판정은 judge.py 가 한다 — 여기서는 eg_ingest.py 와 같이 원장 행 + e2e_results 항목만 만든다(evidence 에 3-증거: 기대 원천 ASIS:<sp> · 증거 경로 diff/*.md · 전제 = 호출 인자).
+"""
+import csv, hashlib, io, json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import safe_io  # 2026-11-13 T284: 기존 파일 'w' 재열기 Errno 22(SCP0028 15:57) 대비 — safe_io(재시도 → r+b)
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+P = lambda *a: os.path.join(ROOT, *a)
+csv.field_size_limit(10 ** 8)
+
+
+def rd(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def rid(mid, *parts):
+    return 'AD-' + hashlib.md5('|'.join([mid] + [str(x) for x in parts]).encode('utf-8')).hexdigest()[:8]
+
+
+# 2026-11-20 T458(SSP0005 차등짝 12행 · AI 검토 검사기오판): E2E 위반 입력 시험(기간 역전 등) 중 포착된 호출은 FE 가 'Invalid Date' 를 보내
+#   diff_verify 가 SKIP(대조 대상 아님)으로 둔다. 같은 TO-BE 프로시저를 정상 인자로 판정(PASS·DIFF·ROWS_ONLY·COLS)한 호출이 있으면 이 호출은 원장 행을 만들지 않는다.
+#   정상 인자 판정 호출이 없으면 종전대로 행을 만든다(ERROR · 측정 공백을 숨기지 않음)
+INPUT_TEST_MARK = 'E2E 입력 시험 중 포착된 호출'
+
+
+def judged_procs(summ):
+    return {(s.get('tobe_proc') or '').upper() for s in summ if s.get('verdict') in ('PASS', 'DIFF', 'ROWS_ONLY', 'COLS') and s.get('tobe_proc')}
+
+
+def is_input_test_dup(s, judged):
+    return s.get('verdict') == 'SKIP' and INPUT_TEST_MARK in str(s.get('note') or '') and (s.get('tobe_proc') or '').upper() in judged
+
+
+def selftest():
+    sm = [{'tobe_proc': 'PKG_A.P_GET', 'verdict': 'PASS'}, {'tobe_proc': 'PKG_A.P_GET', 'verdict': 'SKIP', 'note': f"인자 미해결(UNRESOLVED): d='Invalid Date'({INPUT_TEST_MARK} — 대조 대상 아님)"},
+          {'tobe_proc': 'PKG_B.P_GET', 'verdict': 'SKIP', 'note': f"인자 미해결(UNRESOLVED): d='Invalid Date'({INPUT_TEST_MARK} — 대조 대상 아님)"},
+          {'tobe_proc': 'PKG_A.P_GET', 'verdict': 'SKIP', 'note': '인자 미해결(UNRESOLVED): x — param_map.csv 에 값/대응 지정'}]
+    j = judged_procs(sm)
+    cases = [('T458 정상 인자 판정 호출이 있는 입력 시험 호출 = 행 없음', is_input_test_dup(sm[1], j) is True),
+             ('T458 정상 인자 판정 호출이 없으면 행 유지', is_input_test_dup(sm[2], j) is False),
+             ('T458 입력 시험 아닌 미해결 인자 = 행 유지', is_input_test_dup(sm[3], j) is False),
+             ('T458 판정 호출 = 행 유지', is_input_test_dup(sm[0], j) is False)]
+    bad = sum(1 for _, ok in cases if not ok)
+    for n, ok in cases: print(('PASS ' if ok else 'FAIL ') + n)
+    print(f'selftest {len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
+
+
+def main():
+    if '--selftest' in sys.argv: return selftest()
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    if not args:
+        print(__doc__); return 2
+    mid = args[0].upper(); vd = P('Doc', 'verify', mid)
+    summ = rd(os.path.join(vd, 'diff', 'diff_summary.csv'))
+    rmap = rd(P('tools', 'Harness', 'rules', 'diff_rule_map.csv'))
+    lp = os.path.join(vd, 'verify_ledger.csv')
+    if not os.path.exists(lp):
+        print(f'[diff_ingest] {mid}: 원장 없음'); return 2
+    with open(lp, encoding='utf-8-sig', newline='') as f:
+        r_ = csv.DictReader(f); fields = r_.fieldnames; rows = [r for r in r_ if not r['row_id'].startswith('AD-')]
+    out = []
+    judged = judged_procs(summ)
+    for s in summ:
+        if not s.get('asis_sp') and s.get('verdict') == 'SKIP' and not s.get('tobe_proc'):
+            continue  # 배선·포착 자체가 없는 호출은 원장 행을 만들지 않는다(미검증 사유는 diff_summary 에 남음)
+        if is_input_test_dup(s, judged):
+            continue  # T458 — 같은 TO-BE 프로시저를 정상 인자로 판정한 호출이 있다(그 호출 행이 판정)
+        sp, proc, v = s.get('asis_sp') or '(짝 없음)', s.get('tobe_proc') or '', s.get('verdict') or 'ERR'
+        base_ev = (f"[차등 검증 #{s.get('call_no')}] {s.get('sheet')}/{s.get('btn')} AS-IS {sp} ↔ TO-BE {proc} · 판정 {v} · {s.get('note', '')} · 키({s.get('key_source', '')}) {s.get('keys', '')} · "
+                   f"AS-IS {s.get('asis_rows', '')}행 ↔ TO-BE {s.get('tobe_rows', '')}행 · 공통 {s.get('common', '')} · 단독 AS-IS {s.get('asis_only', '')} / TO-BE {s.get('tobe_only', '')} · 불일치 셀 {s.get('diff_cells', '')} · 순서 {s.get('order', '')}"
+                   f" · 전제: AS-IS 인자 {s.get('params_asis', '')[:300]}{(' · 재시도 ' + s['retry']) if s.get('retry') else ''} · 증거 {s.get('md', '')}")
+        for m in rmap:
+            vm = dict(x.split('=', 1) for x in (m.get('verdict_map') or '').split(';') if '=' in x)
+            item = m['diff_item']
+            res = vm.get(v)
+            # 2026-11-16(SSP0020 UNSET 4행 미검증): 저장 SP(kind=SAVE)는 차등 검증이 실행하지 않는다(쓰기 금지) — 미검증이 아니라 대상 아님. 저장 동작은 저장 검사(F 계열·폼 저장형 시나리오)가 판정한다
+            save_skip = (v == 'SKIP' and str(s.get('note') or '').startswith('kind=SAVE'))
+            if save_skip: res = 'NA'
+            if item == 'KEYSET' and v == 'PASS' and (str(s.get('asis_only') or '0') not in ('', '0') or str(s.get('tobe_only') or '0') not in ('', '0')):
+                res = vm.get('ASIS_ONLY', '판정필요')  # 사용자 결정 2026-11-06: 건수(단독행) 차이 = 판정필요
+            if item == 'ORDER' and (v == 'PASS' or (v == 'DIFF' and s.get('order'))):
+                # 2026-11-18 미검증 해소(SCP0096 ORDER 허위 FAIL 4): 값 차이(DIFF) 호출도 순서는 따로 잰 결과(order 칸)로 판정한다 — 종전 DIFF=FAIL 일괄
+                res = vm.get(s.get('order') or 'NA', 'NA')
+            if item == 'COLSET' and v in ('PASS', 'DIFF', 'ROWS_ONLY') and (s.get('cols_only_a') or s.get('cols_only_t')):
+                res = vm.get('COLS', '판정필요')
+            if not res:
+                res = 'ERROR'
+            tgt = (m.get('target_tpl') or '{sp}').format(sp=sp, common=s.get('common', ''), asis_only=s.get('asis_only', ''), tobe_only=s.get('tobe_only', ''), diff_cells=s.get('diff_cells', ''),
+                                                        cols_only_a=s.get('cols_only_a', ''), cols_only_t=s.get('cols_only_t', ''))
+            r = {k: '' for k in fields}
+            r.update({'row_id': rid(mid, item, proc, s.get('call_no')), 'source': 'ASIS_DIFF', 'family': m['rule_id'][:1], 'rule_id': m['rule_id'], 'axis': '2', 'area': '차등 검증',
+                      'target': f"{mid} {tgt}", 'condition': f"호출 #{s.get('call_no')} {s.get('sheet')}/{s.get('btn')} 인자: {s.get('params_tobe', '')[:200]}", 'oracle': 'O1',
+                      'expected': m.get('expected', ''), 'asis_ref': f"AS-IS SP {sp} 실행 결과(golden 차등 · {m.get('basis', '')})", 'method': 'DB', 'result': 'NOT_RUN',
+                      'note': f"diff_item={item}"})
+            if 'oracle_class' in fields: r['oracle_class'] = 'ASIS'
+            if 'expect_src' in fields: r['expect_src'] = f"ASIS:{sp}"
+            if 'evidence_ref' in fields: r['evidence_ref'] = s.get('md', '')
+            if 'precond' in fields: r['precond'] = json.dumps({'calls': 1, 'rows': s.get('tobe_rows') or 0, 'asis_rows': s.get('asis_rows') or 0, 'params': (s.get('params_tobe') or '')[:300]}, ensure_ascii=False)
+            if 'applicable' in fields: r['applicable'] = 'Y'; r['applicable_why'] = '차등 검증 실행 행'
+            rows.append(r)
+            # 2026-11-16 CR-105(사용자 결정): 값·행 집합 차이는 DB 데이터 차이라 판정에서 뺀다 — 해당없음에 근거를 붙인다(근거 없는 해당없음 금지)
+            if save_skip: base_ev = '[저장 SP — 조회 결과 대조 대상 아님(쓰기 SP 실행 금지) · 저장 동작은 저장 검사에서 판정] ' + base_ev if not base_ev.startswith('[저장 SP') else base_ev
+            cr105 = '[CR-105] 값·행 집합 차이는 AS-IS DEV 와 사내 DB 데이터 차이 — 판정 제외(컬럼 집합·정렬·조건 로직으로 판정) · ' if (res == 'NA' and item in ('KEYSET', 'VALUES')) else ''
+            out.append({'row_id': r['row_id'], 'result': res, 'evidence': (f"[{item}] " + cr105 + base_ev)[:1500], 'tobe_ref': f"DB @diff {item}",
+                        'mctx': {'calls': 1, 'rows': int(s.get('tobe_rows') or 0) if str(s.get('tobe_rows') or '').isdigit() else 0, 'req': 0},
+                        'expect_src': f"ASIS:{sp}", 'evidence_ref': s.get('md', ''), 'precond': {'params': (s.get('params_tobe') or '')[:300]}})
+    _buf = io.StringIO(newline='')
+    w = csv.DictWriter(_buf, fieldnames=fields); w.writeheader(); w.writerows(rows)
+    safe_io.write_text(lp, _buf.getvalue(), 'utf-8-sig', log=print)
+    ej = os.path.join(vd, 'e2e_results.json')
+    try:
+        prev = safe_io.read_json_list(ej)  # 없으면 [] · 있는데 못 읽으면 예외(못 읽은 채 덮어써 E2E 판정을 지우지 않는다)
+    except ValueError:
+        prev = []
+    keep = [e for e in prev if not str(e.get('row_id', '')).startswith('AD-')]
+    safe_io.write_text(ej, json.dumps(keep + out, ensure_ascii=False, indent=1).replace('\n', os.linesep), 'utf-8', log=print)
+    cnt = {}
+    for o in out: cnt[o['result']] = cnt.get(o['result'], 0) + 1
+    print(f"[diff_ingest] {mid}: diff 요약 {len(summ)}행 → 원장 ASIS_DIFF {len(out)}행(" + ' · '.join(f'{k} {v}' for k, v in sorted(cnt.items())) + f") · e2e_results 반입 {len(out)} (judge.py 가 판정)")
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

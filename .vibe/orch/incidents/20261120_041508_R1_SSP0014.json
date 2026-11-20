@@ -1,0 +1,82 @@
+{
+  "id": "20261120_041508_R1_SSP0014",
+  "at": "2026-11-20T04:15:08+09:00",
+  "ms": 1795115708283,
+  "rule": "R1",
+  "ruleName": "실행 실패",
+  "title": "1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SSP0014",
+  "sig": "S8.checklistRun | [FAIL] <path> SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N",
+  "count": 1,
+  "repeat": {
+    "same": 1,
+    "all": 1,
+    "screens": [
+      "SSP0014"
+    ]
+  },
+  "detail": "[FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n[ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n[FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:549 MaterialByDivisionModal preSearchParams.operationGroup: 연동 누락: Operation group(operationGroup='') — 화면 조회조건 Operation group(searchCondition.operationGrou…\n✖ 버튼_Div_40: 누락 [USER_CHECK] 순서 []\n✖ 버튼_Div_40: 검증 MISMATCH(누락 USER_CHECK · 순서 ) — --force 와 --opinion 사유 없이는 승인 불가",
+  "evidence": {
+    "runId": "SSP0014_1795104646286",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "closed",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T04:22:37+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T04:25:56+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 사용자 확인 필요 · 원인 env: 04:14:51 에이전트 대화에서 사용자 지시로 SSP0014 checklist_run.py 프로세스 트리를 taskkill /T /F 로 끊어 exit 1 이 남음(.vibe/logs/2026-11-20T04-14-51_claude_orch.log:17,19 · .vibe/runs.log:2103). 끊긴 지점은 llm_review 묶음 25/221(.vibe/jobs/J20261120_011046/SSP0014.log:916), 중지 사유는 같은 로그 324~596행의 화면 진입 실패(Home 에 남음) 반복. 사건 상세의 Ss · 허용 범위 밖 파일 변경 3개: tools/VibeManager/job-runner.js, tools/VibeManager/test/t_job_runner.js, tools/VibeManager/test/t_orch_heal.js · 개선안 등록 20261120042556_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T04-22-42_claude_orch.log",
+      "sec": 188,
+      "turns": 41,
+      "costUsd": 1.6582585000000005,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T04:27:53+09:00",
+      "by": "사용자",
+      "what": "닫음"
+    }
+  ],
+  "agent": {
+    "cause_class": "env",
+    "cause": "04:14:51 에이전트 대화에서 사용자 지시로 SSP0014 checklist_run.py 프로세스 트리를 taskkill /T /F 로 끊어 exit 1 이 남음(.vibe/logs/2026-11-20T04-14-51_claude_orch.log:17,19 · .vibe/runs.log:2103). 끊긴 지점은 llm_review 묶음 25/221(.vibe/jobs/J20261120_011046/SSP0014.log:916), 중지 사유는 같은 로그 324~596행의 화면 진입 실패(Home 에 남음) 반복. 사건 상세의 SsoUserModal FAIL, 버튼_Div_40 MISMATCH 줄은 판정 결과 줄을 VM 이 원인으로 고른 것임(tools/VibeManager/workbench.js:463,466).",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "runs.log, events.jsonl 374~391행, 04-14-51 에이전트 대화 로그, 화면별 작업 로그(.vibe/jobs/J20261120_011046/SSP0014.log) 대조",
+        "result": "SCP0028, SSP0014 가 04:15:07~08 에 taskkill 로 종료된 것 확인. run_verify.py 는 1 을 반환하는 경로 없음(종료코드 0, 3~10)"
+      },
+      {
+        "grade": "A",
+        "what": "Doc/verify/SSP0014/screen_sync.json 조회(04:25:15)",
+        "result": "04:22:22 deps-only 받기 끝남, deps.missing = []"
+      }
+    ],
+    "changed_files": [],
+    "verify": "B 등급 수정 없음. 검증 대상 없어 미실행. 조회 근거는 2026-11-20 04:25:15 date 실행값 기준",
+    "status": "proposal",
+    "next_for_user": "SSP0014 CheckList 다시 실행 필요(이번 결과는 화면을 열지 못한 채 나온 것이라 판정 근거로 쓸 수 없음).",
+    "proposal": {
+      "title": "강제 종료된 실행은 '중지'로 표시하고 동시 실행 로그 파일 이름 겹침 제거",
+      "evidence": "workbench.js:463,466 은 종료코드가 0 이 아니면 로그의 마지막 [FAIL]/✖ 줄 5개를 원인으로 씀. 이번 사건 서명이 판정 결과 줄(SsoUserModal ssoUserYn)로 잡힘. workbench.js:437 로그 파일 이름 = 초 단위 시각 + 단계 이름이라 01:10:48 에 시작한 4개 체인이 .vibe/logs 파일 1개를 같이 씀(SCP0005, SSP0005 출력이 섞임)",
+      "targets": [
+        "tools/VibeManager/workbench.js"
+      ],
+      "before_after": "437행: 파일 이름 = 시각_단계이름.log → 시각_단계이름_화면ID_procId.log. 463~472행: 실행 중 사용자 중지나 외부 taskkill 로 끝났는지 표시(procs 에 stopped 플래그, 또는 종료코드 1 이면서 마지막 출력이 진행 줄이면 '중지됨')를 받아 why = '중지됨(사용자 지시)', 사건 규칙 R1 대상에서 제외",
+      "verify": "node tools/VibeManager/test/run_all.js, t_*.js 에 '같은 초에 시작한 체인 2개의 로그 파일 이름이 다름'과 '중지 표시된 실행은 why 가 중지됨' 시험 추가",
+      "rollback": "workbench.js 를 .bak 으로 되돌림"
+    }
+  },
+  "proposal": "20261120042556_INC"
+}

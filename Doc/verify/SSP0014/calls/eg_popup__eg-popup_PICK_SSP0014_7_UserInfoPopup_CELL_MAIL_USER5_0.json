@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 417,
+  "at": "2026-11-20T00:27:36.949Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SSP0014 #7 UserInfoPopup CELL:MAIL_USER5"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7672,
+  "dur": 628,
+  "at": "2026-11-20T00:27:41.357Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SSP0014 #7 UserInfoPopup CELL:MAIL_USER5"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 357,
+  "at": "2026-11-20T00:27:42.527Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SSP0014 #7 UserInfoPopup CELL:MAIL_USER5"
+ },
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 581,
+  "at": "2026-11-20T00:27:45.300Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SSP0014 #7 UserInfoPopup CELL:MAIL_USER5"
+ }
+]

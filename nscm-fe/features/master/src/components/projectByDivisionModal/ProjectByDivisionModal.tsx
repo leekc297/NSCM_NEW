@@ -257,9 +257,9 @@ export const ProjectByDivisionModal = ({
                   <FormItem
                     label={t('LBL00001', '_Div.')}
                     labelAlign='right'
+                    required
                     render={() => (
                       <CustomDropdown
-                        mandatory
                         disabled
                         value={searchParam?.divisionId ?? ''}
                         options={
@@ -275,9 +275,9 @@ export const ProjectByDivisionModal = ({
                   <FormItem
                     label={t('LBL00044', '_Team')}
                     labelAlign='right'
+                    required
                     render={() => (
                       <CustomDropdown
-                        mandatory
                         multiple
                         disabled
                         limitTags={1}
@@ -389,6 +389,13 @@ export const ProjectByDivisionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -396,13 +403,6 @@ export const ProjectByDivisionModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
             />
           </div>
         </div>

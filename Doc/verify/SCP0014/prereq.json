@@ -1,0 +1,36 @@
+{
+ "menu_id": "SCP0014",
+ "asis_id": "SCP0014",
+ "generated": "2026-11-20 00:34:20",
+ "rc": 6,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SCP0014)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "DONE",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "16시간 지난 메타 → 다시 export · rc=0 · 14s · _meta.csv 1530행 proc_params.csv 8719행 sheet_columns.csv 17273행 sheet_measures.csv 1763행 combo_sql.csv 747행 menu.csv 218행 msg_master.csv 5099행 btn_auth.csv 14823행 user_group.csv 23행 user_group_user.csv 13089행 user_group_menu.csv 2214행 users.csv 8612행 division.csv 14행 unit_auth.csv 25062행 tables.csv 5773행 columns.csv 18289행 procs_catalog.csv 2055행 완료: C:\\Projects\\NSCM\\Doc\\tobefacts\\db (성공 17 / 실패 0)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 소스·인덱스",
+   "status": "FAIL",
+   "producer": "-",
+   "evidence": "nscm-fe 에서 SCP0014 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님"
+  }
+ ]
+}

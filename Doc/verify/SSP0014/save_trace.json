@@ -1,0 +1,25 @@
+{
+ "mode": "keyset",
+ "at": "2026-11-20 08:51:57",
+ "account": "minyonglee1",
+ "tables_scanned": [
+  "SSP_MST_MODEL_USER"
+ ],
+ "changed": {
+  "SSP_MST_MODEL_USER": 1
+ },
+ "created": {},
+ "audit": [
+  {
+   "target": "SSP_MST_MODEL_USER|40/AZ00-A/MCMM9314U0A1-018",
+   "result": "PASS",
+   "why": "SSP_MST_MODEL_USER 생성 칸 불변 · 수정 칸 정상"
+  },
+  {
+   "target": "SSP_MST_MODEL_USER|40/CN003256_40-A/MIF489266C11-I03",
+   "result": "PASS",
+   "why": "SSP_MST_MODEL_USER 생성 칸 불변 · 수정 칸 정상"
+  }
+ ],
+ "generated": "2026-11-20 09:37:32"
+}

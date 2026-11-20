@@ -1,0 +1,16 @@
+id,pattern,scope,level,message
+F01,"from\s+'(\.\./){3,}",tsx,BLOCK,상대 경로 import 금지 — @foundation/@shared/@{feature} 별칭 사용
+F02,"from\s+'@(demand|supply|shipping|master|admin|authority|report|sdm|factory|spms-demand)/",tsx,BLOCK,Feature 간 직접 import 금지 — shared 로 승격
+F03,"console\.log\(",tsx,BLOCK,console.log 금지
+F04,":\s*any\b|as\s+any\b|<any>",tsx,BLOCK,any 타입 금지
+F05,"style=\{\{",tsx,BLOCK,inline style 금지 — SCSS Module
+F06,"\b(rowStatus|ROW_STATUS|actionFlag)\b",tsx,BLOCK,자체 행상태 필드 금지 — CRUD_TYPE(GridAction/EditTracker) 전용
+F07,"\b(DATEADD|CHARINDEX|STRING_SPLIT|GETDATE|ISNULL|IIF)\s*\(|WITH\s*\(\s*NOLOCK\s*\)",sql,BLOCK,MSSQL 전용 구문 — Oracle 치환
+F08,"System\.out\.println",java,BLOCK,println 금지 — @Slf4j
+F09,"@Autowired",java,BLOCK,필드 주입 금지 — 생성자 주입(@RequiredArgsConstructor)
+F10,"columns\s*=\s*\[\s*\{\s*binding",tsx,WARN,FE 하드코딩 컬럼 배열 — As-is 가 HARDCODED 인 시트만 허용(grid_effective 근거 주석 필수)
+F11,"\.catch\(\s*\(\)\s*=>\s*\{\s*\}\s*\)",tsx,BLOCK,빈 catch 금지(콤보 호출 실패 삼킴)
+F12,"t\('(MSG|LBL)\?+",tsx,WARN,미확정 메시지/라벨 코드 — SCM_ADM_MESSAGE_M 등록 코드로 교체
+F13,"<(input|button|label|select|textarea)[\s>]",tsx,WARN,native HTML 폼 요소 금지 — LGES 디자인 시스템(FormItem/InputField/Button) 사용 (룰 06 §3.1/§3.7)
+F14,"options=\{\s*[A-Za-z_.?]+\s*\?\?\s*\[\]\s*\}",tsx,WARN,콤보 options 에 CODE/NAME 원본 직접 전달 — label/value 로 map 변환 필요 (룰 06 §3.4)
+F15,"onSearch=\{\s*\(\)\s*=>",tsx,WARN,onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5)

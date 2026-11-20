@@ -107,7 +107,18 @@ export const MSG = {
   SAVED_COUNT: 'MSG00672',
   SAVE_SUCCESS: 'MSG00004', // No changes to unfix. (변경/대상없음 토스트 — 자매 정합)
   PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (자매 PERIOD_RANGE 정합)
+  // 최대조회기간 초과 — AS-IS FindData_Main 이 조회 전 DateUtil.Check_PeriodDate_New(dCalendar, "1", "7")
+  //   (DateUtil.cs:236)로 차단. AS-IS 번호 MSG00172("최대 조회일은 From Date + {0} 입니다.")는 TO-BE
+  //   SCM_ADM_MSG_M 에 미등록이고, 동일 문구가 MSG01187(KO/EN 역조회 일치)로 재번호 등록돼 있다(ora.py 실측,
+  //   Hook #114). AS-IS 번호 재사용 금지에 따라 TO-BE 코드로 역매핑.
+  PERIOD_MAX: 'MSG01187',
 } as const;
+
+// AS-IS Check_PeriodDate_New(dCalendar, "1", "7") 의 최대조회기간 경계와 메시지 표시값.
+//   경계: to >= from + 1년 + 7개월 + 7일 이면 차단(DateUtil.cs:244-267, 경계 포함). 캘린더 단위 가산이라
+//   dayjs add(1,'year').add(7,'month').add(7,'day') 로 등가 재현한다(윤년·월말 보정 포함 — 고정 일수 가산 금지).
+//   라벨 {0}: AS-IS 가 하드코딩한 표시값 364+7+213=584 를 그대로 쓴다(DateUtil.cs:270).
+export const MAX_PERIOD_LABEL_DAYS = 584;
 
 // i18n 라벨 코드 — DB 실측 LBL ID(SCM_ADM_MSG_M, design 02 §4.5). 표준 화면(bod-item·shipment-working-day)
 //   정합: 코드를 상수로 정의하고 호출부에서 t(LBL.X, '_fallback') 로 조회한다.

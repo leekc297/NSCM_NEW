@@ -1,0 +1,65 @@
+{
+ "rule_id": "E3",
+ "hash": "24659ee9b1e96daa",
+ "groups": [
+  {
+   "refs": [
+    "GAP-217",
+    "SSP45-7"
+   ],
+   "target": "신규 행 필수 컬럼 미입력 저장 검증",
+   "condition": "Insert로 행 추가 후 필수 컬럼(Team(DEPT_ID), ITEM_ID, FROM_SITE, TO_SITE, PROJECT_CODE, INCOTERMS, FCST_TYPE, TR_MODE, MEASURE 등 Input Type IM 컬럼)은 비우고 다른 셀만 입력한 뒤 Save",
+   "expected": "필수(IM) 컬럼이 비어 있는 신규 행은 저장되지 않고 필수 검증 메시지(예: MSG00429)를 표시한다. IO 컬럼은 입력할 수 있지만 필수 검사 대상이 아니다.",
+   "why": "둘 다 신규 행에서 필수 컬럼을 비운 채 저장하면 저장이 막히고 필수 검증 메시지가 나오는지 확인하는 같은 동작과 기대 결과이다."
+  },
+  {
+   "refs": [
+    "DM-102"
+   ],
+   "target": "Excel Upload 후 OK 저장·필수 항목 검증",
+   "condition": "Excel Upload 후 OK",
+   "expected": "업로드가 성공한 뒤 OK를 누르면 SQL Error 없이 DB에 반영된다. Customs Handbook·Project·Model이 모두 미입력이면 Validation Error를 표시한다.",
+   "why": "그리드 저장이 아닌 Excel 업로드 경로의 검증이라 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "DM-110"
+   ],
+   "target": "FCST Type=ETC 신규 행 Team·Measure 입력 제어",
+   "condition": "FCST Type=ETC 신규 행",
+   "expected": "Team은 SSPM 기준 콤보로 입력하며 필수이다. Measure는 Sales AMT(LOC)로 고정되어 입력할 수 없다(Div 공통).",
+   "why": "특정 FCST Type에서의 콤보 입력과 고정값 제어를 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-18"
+   ],
+   "target": "팝업 컬럼(Team) 붙여넣기·편집 제어와 필수 검증",
+   "condition": "복사/붙여넣기로 Team 입력 후 저장",
+   "expected": "붙여넣을 때 Team 코드가 함께 들어가야 한다(명칭만으로는 입력 불가). 입력된 필수 컬럼(Team, Project)을 미입력으로 오판하지 않는다. Team은 직접 편집할 수 없고 삭제·붙여넣기·팝업으로만 입력한다.",
+   "why": "붙여넣기 코드 동반과 편집 제한까지 포함해 단순 필수 오판 확인과 범위가 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-215"
+   ],
+   "target": "입력된 필수 컬럼(Project) 오판 여부",
+   "condition": "필수 컬럼(Project) 입력 후 저장",
+   "expected": "Project 등 필수 컬럼이 입력되어 있으면 필수 검증 메시지가 나오지 않는다.",
+   "why": "값이 입력된 경우 오검출이 없는지 보는 확인이라 미입력 차단 항목과 기대 결과가 반대이다. DM-18과는 범위가 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-222"
+   ],
+   "target": "Insert 저장 검증·Delete CRUD Status 표시",
+   "condition": "Insert 후 필수 누락 저장, 행 Delete",
+   "expected": "필수 컬럼이 누락되면 검증 메시지를 표시하고, 저장에 실패하면 성공 toast를 띄우지 않는다. Delete하면 CRUD Status에 D Flag를 표시한다.",
+   "why": "성공 toast 미표시와 Delete D Flag 확인이 함께 있어 신규 행 필수 검증 묶음과 기대 결과가 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:56",
+ "cost": 0.07303319999999999
+}

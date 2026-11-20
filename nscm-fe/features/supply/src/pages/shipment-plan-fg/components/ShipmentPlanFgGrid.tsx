@@ -3,7 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import type { EditTracker } from '@foundation/utils';
+import { type EditTracker, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
@@ -334,6 +334,12 @@ export const ShipmentPlanFgGrid = ({
       }
       const kind = dynColKindOf(binding);
       const dataItem = e.panel?.rows?.[e.row]?.dataItem as Record<string, unknown> | undefined;
+      // 데이터 셀 음수 = 빨강 (AS-IS NumberCellType.NegativeRed — 전 수치 셀 공통, 형제 FG 화면 동형).
+      //   전 Measure 행 대상(아래 SHIP_PLAN_AMEND 게이트보다 먼저). 문자/코드 셀은 toGridNumber 가 0 으로
+      //   떨어져 제외되고, 양수면 색을 원복한다(Wijmo 셀 DOM 재사용 색 누수 방지 — 공용 헬퍼 규약).
+      if (e.panel?.cellType === CellType.Cell && dataItem) {
+        paintNegativeText(e.cell, toGridNumber(dataItem[binding]));
+      }
       if (!dataItem || s(dataItem.MEASURE) !== MEASURE.SHIP_PLAN_AMEND || !kind) return;
       if ((kind === 'D' || (kind === 'W' && bucketType === BUCKET_TYPE.WEEKLY)) && isCellFixed(fixedCells, dataItem, binding)) {
         // Fix 초록이 편집 노랑보다 우선 — DOM 재사용으로 남은 wj-cell-editable 잔상을 지우고 인라인 초록을 칠한다

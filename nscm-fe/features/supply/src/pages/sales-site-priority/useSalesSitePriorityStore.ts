@@ -22,6 +22,11 @@ interface State {
   openSearchArea: boolean;
   // ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(실측 14행 등록됨, design 03 §1).
   staticColumns: StaticColumnsBySheet;
+  // 현재 Division 의 SCM Site 콤보 전체 옵션 코드(Form 이 동기화) — setFilter 가 "전체 선택이면 빈값"
+  //   collapse 판정에만 쓴다(조회조건 영속 대상 아님). AS-IS RefreshSiteByDivision 후 조회(cs:410)의
+  //   `clbSite.ControlValues=="ALL" ? string.Empty` 재현: 전체 선택을 전 코드 열거로 보내면 GET SP 가
+  //   p_scm_site_id 를 200자에서 잘라 IN 절이 깨져 0건이 된다(빈값=전체조회 61건과 불일치).
+  siteOptionCodes: string[];
 }
 
 interface Action {
@@ -33,6 +38,7 @@ interface Action {
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
+  setSiteOptionCodes: (codes: string[]) => void;
 }
 
 // AS-IS setPeriod(.cs:815~830): 이번 주 월요일 ~ 월요일+52주. AS-IS 는 `Monday - DayOfWeek` 라 일요일(0)에는
@@ -65,6 +71,7 @@ const initState: State = {
   filters: {},
   openSearchArea: true,
   staticColumns: emptyStaticColumns,
+  siteOptionCodes: [],
 };
 
 export const useSalesSitePriorityStore = createPersistedStoreWithTab<State & Action>(
@@ -102,10 +109,9 @@ export const useSalesSitePriorityStore = createPersistedStoreWithTab<State & Act
         if (itemId !== undefined) next.itemId = itemId;
         const validYn = map.get('validYn');
         if (validYn !== undefined) next.validYn = validYn;
-        const fromDate = map.get('fromDate');
-        if (fromDate !== undefined) next.fromDate = fromDate;
-        const toDate = map.get('toDate');
-        if (toDate !== undefined) next.toDate = toDate;
+        // period(fromDate/toDate)는 F6 저장 대상이 아니다(사용자 지시 2026-11-19, SalesSitePriority.tsx
+        //   conditionParam). 복원에서도 제외해 기간은 항상 기본값(defaultPeriod)으로 둔다 — 과거 저장분에
+        //   날짜 행이 남아 있어도 복원하지 않는다(다음 F6 저장 시 전체 DELETE+재삽입으로 정리됨).
         state.searchCondition = next;
       });
     },
@@ -132,11 +138,19 @@ export const useSalesSitePriorityStore = createPersistedStoreWithTab<State & Act
     setFilter: () => {
       set(state => {
         const c = state.searchCondition;
+        // SCM Site 전체 선택 -> 빈값(전체 조회)으로 collapse. 공유 CustomDropdown(2026-10-23 요구)은
+        //   전체 선택을 'ALL' 로 뭉개지 않고 전 코드를 열거해 내보내므로(칩 표시 유지), siteIds 에 현재
+        //   Division 의 모든 옵션 코드가 담긴다. 그대로 join 하면 GET SP 가 200자에서 잘라 0건이 되어
+        //   AS-IS(cs:410 ALL->string.Empty, 전체조회 61건)와 어긋난다. 표시는 열거를 유지하고 조회
+        //   파라미터만 비운다. codes 가 아직 없거나(0건) 일부만 선택이면 열거 그대로 보낸다.
+        const opt = state.siteOptionCodes;
+        const selected = new Set(c.siteIds);
+        const siteAllSelected = opt.length > 0 && opt.every(code => selected.has(code));
         state.filters = {
           [SHEETS.MAIN]: {
             divisionId: c.divisionId, // 1
             planGroupId: c.planGroupIds.join(','), // 2
-            scmSiteId: c.siteIds.join(','), // 3
+            scmSiteId: siteAllSelected ? '' : c.siteIds.join(','), // 3
             itemId: c.itemId, // 4
             validYn: c.validYn, // 5
             periodFrom: c.fromDate, // 6
@@ -145,6 +159,11 @@ export const useSalesSitePriorityStore = createPersistedStoreWithTab<State & Act
         };
       });
     },
+    // Form 이 현재 Division 의 SCM Site 콤보 옵션 코드를 동기화한다(setFilter 전체선택 collapse 판정용).
+    setSiteOptionCodes: codes =>
+      set(state => {
+        state.siteOptionCodes = codes;
+      }),
     clearFilters: () =>
       set(state => {
         state.filters = {};

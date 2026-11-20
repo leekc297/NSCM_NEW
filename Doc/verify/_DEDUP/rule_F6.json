@@ -1,0 +1,109 @@
+{
+ "rule_id": "F6",
+ "hash": "8890a6548bcf8db2",
+ "groups": [
+  {
+   "refs": [
+    "DM-14"
+   ],
+   "target": "Team·Owner 컬럼 저장 값",
+   "condition": "신규 데이터 입력 후 저장",
+   "expected": "사용자가 입력한 Team 값이 저장 후에도 그대로 유지되고, Owner 를 선택해도 Team 이 비어 있을 때만 자동으로 채워진다",
+   "why": "Owner 선택과 Team 자동 채움 사이의 관계를 확인하는 항목이라 다른 항목과 확인 대상이 다르다"
+  },
+  {
+   "refs": [
+    "DM-149"
+   ],
+   "target": "Text 필수 Validation·ETC 행 수정 저장",
+   "condition": "기존 행 수정 후 저장 / FCST Type=ETC 행 수정",
+   "expected": "Text 필수 검사는 FCST Type=ETC 신규 입력이나 ETC 테이블 변경 때만 걸리고, ETC 행을 수정해 저장하면 새 행 없이 기존 행이 갱신된다",
+   "why": "조건부 필수 Validation과 수정 저장 시 행 중복 생성 여부를 함께 확인하는 고유 항목이다"
+  },
+  {
+   "refs": [
+    "DM-171"
+   ],
+   "target": "Unit Price(LOC) 장기 조회기간 저장",
+   "condition": "조회기간을 최대(약 2년)로 잡고 뒤쪽 주차(51주차 이후) 값 입력 후 저장",
+   "expected": "저장 성공 메시지가 나온 뒤 전체 조회기간의 Unit Price(LOC) 값이 DB에 반영되고 재조회 때 그대로 보인다",
+   "why": "긴 조회기간의 뒤쪽 구간이 저장되는지를 확인하므로, 일반 저장 반영을 보는 DM-5와 확인 조건이 달라 묶지 않았다"
+  },
+  {
+   "refs": [
+    "DM-189"
+   ],
+   "target": "Dept 컬럼 자동 세팅·Use Y/N 헤더",
+   "condition": "User 선택 후 신규 사용자 저장",
+   "expected": "Dept 는 직접 입력할 수 없고, User 를 선택하면 SSO DEPT 가 자동으로 들어가며, 저장 후 DEPT ID/Name 이 표시되고 Use Y/N·Active 헤더가 병합되어 보인다",
+   "why": "SSO 기반 Dept 자동 세팅과 헤더 병합을 확인하는 고유 항목이다"
+  },
+  {
+   "refs": [
+    "DM-192"
+   ],
+   "target": "하위 시트(Division) 저장 후 조회",
+   "condition": "Group=JV Planner, 신규 User 추가 후 Division 추가·저장",
+   "expected": "저장 후 Division 시트에 저장한 행이 조회되고, 같은 값을 다시 입력하면 실제 중복과 의미가 맞는 메시지가 나온다",
+   "why": "마스터-하위 시트 저장 반영과 중복 메시지를 확인하는 고유 항목이다"
+  },
+  {
+   "refs": [
+    "DM-25"
+   ],
+   "target": "Monthly Bucket 입력·저장 값·Project Code/Model 팝업",
+   "condition": "Bucket=Monthly, 행 추가 후 셀 더블클릭",
+   "expected": "Monthly 입력이 가능하고(당월은 비활성), 입력값이 반올림 없이 그대로 저장되며(예: 898,139.180), Current 버전은 대소문자와 무관하게 인식되고, Project Code/Model 셀을 더블클릭하면 팝업이 열린다",
+   "why": "소수 값 보존 외에 Bucket 입력 가능 여부와 팝업 오픈까지 함께 확인하므로 값 보존만 보는 DM-79와 묶지 않았다"
+  },
+  {
+   "refs": [
+    "DM-39"
+   ],
+   "target": "AS From Site 변경 후 주차 수량",
+   "condition": "저장 검증 팝업 이후 AS From Site 입력·변경",
+   "expected": "AS From Site 를 입력하거나 바꿔도 이미 입력한 주차별 수량(W35~W38 등)이 초기화되지 않고 유지된다",
+   "why": "다른 컬럼을 바꿨을 때 입력 수량이 초기화되는지 보는 항목이라 저장 값 보존 항목과 확인 동작이 다르다"
+  },
+  {
+   "refs": [
+    "DM-5"
+   ],
+   "target": "신규행 저장 반영·Sales Site 셀 콤보",
+   "condition": "신규행 Insert 후 저장",
+   "expected": "저장 성공 메시지가 나오면 실제로 DB에 반영되어 재조회 때 보이고, 저장은 한 번만 실행되며, Sales Site 콤보에는 선택한 Div 의 값만 나온다",
+   "why": "저장 반영에 더해 중복 저장과 Div 기준 콤보 필터까지 확인하므로 DM-171과 기대 결과 범위가 달라 따로 두었다"
+  },
+  {
+   "refs": [
+    "DM-61"
+   ],
+   "target": "Div 전환 시 필수 컬럼(Project Code·Plant Site) 표시",
+   "condition": "한 Div 의 개인화 컬럼 구성을 가진 상태에서 다른 Div 로 전환",
+   "expected": "개인화 구성에 전환한 Div 의 필수 컬럼(Project Code·Plant Site 등)이 없으면 자동으로 추가되어 필수 컬럼이 항상 표시되고 저장할 수 있다",
+   "why": "개인화와 Div 전환 사이의 컬럼 표시를 확인하는 고유 항목이다"
+  },
+  {
+   "refs": [
+    "DM-79"
+   ],
+   "target": "입력 수치 저장 값 보존",
+   "condition": "Report Type=Biz Plan, Data Type=Cutoff 로 값 입력 후 저장",
+   "expected": "Biz Plan Cutoff Data 에 입력한 값이 그대로 저장되고 0 으로 바뀌지 않는다(Double 0 없음)",
+   "why": "특정 Report/Data Type 에서 값이 0 으로 바뀌는지만 확인하므로, 여러 확인이 섞인 DM-25와 묶지 않았다"
+  },
+  {
+   "refs": [
+    "DM-P13"
+   ],
+   "target": "Cust Group-End Customer-Sales Site 관계·Active 컬럼",
+   "condition": "관계 데이터와 Active 값 입력 후 저장",
+   "expected": "Cust Group-End Customer-Sales Site 관계가 맞지 않는 데이터는 저장이 막히고, Active=N 으로 저장하면 N 이 유지되며, End Customer 를 바꾸면 Sales Site 가 따라 바뀐다(cascade)",
+   "why": "계층 관계 검증과 cascade, Active 값 보존을 함께 확인하는 고유 항목이다"
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:42:54",
+ "cost": 0.0926052
+}

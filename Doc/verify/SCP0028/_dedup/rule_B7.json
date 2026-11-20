@@ -1,0 +1,148 @@
+{
+ "rule_id": "B7",
+ "hash": "2a8e80cde866e886",
+ "groups": [
+  {
+   "rows": [
+    "EG-3d3c0637"
+   ],
+   "why": "Checks the YesOrNo combo with no validYn in the request; that request differs from the other rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-efc00f57"
+   ],
+   "why": "Checks the YesOrNo combo with validYn='Y' in the request, which is a different request from the one without validYn, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-4d83c65f"
+   ],
+   "why": "Checks the LookupCommon combo for lookupType TRANSPORT_MODE_CODE; the lookup type is unique, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-a4789aad"
+   ],
+   "why": "Checks LookupCommon for OPERATION_GROUP with no validYn, which differs from the request with validYn='Y'."
+  },
+  {
+   "rows": [
+    "EG-cf4453ce"
+   ],
+   "why": "Checks LookupCommon for OPERATION_GROUP with validYn='Y'; the extra condition makes it a different request."
+  },
+  {
+   "rows": [
+    "EG-db8a1530"
+   ],
+   "why": "Checks LookupCommon with no lookupType and validYn='Y'; this parameter combination appears in no other row."
+  },
+  {
+   "rows": [
+    "EG-51f0faad"
+   ],
+   "why": "Checks only the Division_SCP combo request, which no other row uses."
+  },
+  {
+   "rows": [
+    "EG-d84ade87"
+   ],
+   "why": "Checks the SCM0001_GET_DIVISION combo; its comboId and SQL differ from Division_SCP, so they are not grouped."
+  },
+  {
+   "rows": [
+    "EG-67dff2e4"
+   ],
+   "why": "Checks the ToSiteByDivision combo with divisionId='' (empty), so its condition differs from divisionId='81'."
+  },
+  {
+   "rows": [
+    "EG-71fba094"
+   ],
+   "why": "Checks the ToSiteByDivision combo with divisionId='81', so its condition differs from the empty-value request."
+  },
+  {
+   "rows": [
+    "EG-befbedc8"
+   ],
+   "why": "Checks the FromSiteByDivision combo with divisionId='' (empty), so its condition differs from divisionId='81'."
+  },
+  {
+   "rows": [
+    "EG-ca9a2849"
+   ],
+   "why": "Checks the FromSiteByDivision combo with divisionId='81', so its condition differs from the empty-value request."
+  },
+  {
+   "rows": [
+    "V-02cca4b6"
+   ],
+   "why": "Checks the screen behavior of the Division* search condition; this element and method (saving master data in the UI, then checking the change is reflected) differ from the DB re-execution rows."
+  },
+  {
+   "rows": [
+    "V-13254dec"
+   ],
+   "why": "Checks the screen behavior of the Valid search condition, a different element from the other search conditions."
+  },
+  {
+   "rows": [
+    "V-8c12aeea"
+   ],
+   "why": "Checks the screen behavior of the To Site search condition, a different element from the other search conditions."
+  },
+  {
+   "rows": [
+    "V-fcba9999"
+   ],
+   "why": "Checks the screen behavior of the From Site search condition, a different element from the other search conditions."
+  },
+  {
+   "rows": [
+    "V-e3cbb602"
+   ],
+   "why": "Checks the screen behavior of the Operation Group search condition, a different element from the other search conditions."
+  },
+  {
+   "rows": [
+    "V-e7534976"
+   ],
+   "why": "Checks the screen behavior of the Trans Mode search condition, a different element from the other search conditions."
+  },
+  {
+   "rows": [
+    "V-4625c728"
+   ],
+   "why": "Checks whether the Team search condition rebinds right after a new team is saved and still includes it after reopening; no other row targets this element with this expectation."
+  },
+  {
+   "rows": [
+    "V-7b4221db"
+   ],
+   "why": "Checks the display value of the Team (DEPT_ID) cell combo; it expects the team name to show, which differs from DMF0003's 'change reflected on re-query', so they are kept apart to be safe."
+  },
+  {
+   "rows": [
+    "V-fadf569b"
+   ],
+   "why": "Checks that a Team (DEPT_ID) changed in SSPM is reflected on re-query with Div=82; the condition and expectation differ from the cell-combo display-value row."
+  },
+  {
+   "rows": [
+    "V-b9c4dc0d"
+   ],
+   "why": "Checks the search-condition combo for a new master such as Sales Site after a single save succeeds; it cannot be tied to a specific search condition with confidence, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-f0ce81ef"
+   ],
+   "why": "Checks that End Customer and Sold to Customer newly registered in LOOKUP appear in the grid combo; no other row targets these grid cell combos."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:17:04",
+ "cost": 0.0892709
+}

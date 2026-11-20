@@ -1,0 +1,137 @@
+{
+ "rule_id": "M4",
+ "hash": "b061c0865763e512",
+ "groups": [
+  {
+   "rows": [
+    "V-56d81a6a",
+    "V-b6ac431c"
+   ],
+   "why": "Both target the popup-input column right after a popup selection and expect the value to appear in the cell immediately; only the source (DEFECT vs CONFIRMED) and wording differ."
+  },
+  {
+   "rows": [
+    "EG-8d8c9f55"
+   ],
+   "why": "Only row checking that confirming the condition-area Model popup with OK puts the value into the target field."
+  },
+  {
+   "rows": [
+    "EG-ac9382f0"
+   ],
+   "why": "Checks that the condition-area Model popup is multi-select; the grid-cell Model popup row expects single-select, so the element and expected result differ."
+  },
+  {
+   "rows": [
+    "EG-ad8eaa01"
+   ],
+   "why": "Only row checking that the popup's period is carried back to the main screen's Period."
+  },
+  {
+   "rows": [
+    "EG-ea38ffcb"
+   ],
+   "why": "Checks double-click confirm on the condition-area Model popup; the DMF0003 general row targets the Project/Model popups on a new grid row, so the element and state differ."
+  },
+  {
+   "rows": [
+    "V-31ed3615"
+   ],
+   "why": "Checks that OK and double-click return the same values to new-row grid popups (Project, Model and others), which is a different element and state from the condition-area Model popup."
+  },
+  {
+   "rows": [
+    "V-8c1055e7"
+   ],
+   "why": "Only row checking that closing the Model condition popup without a selection keeps the existing value."
+  },
+  {
+   "rows": [
+    "V-c0280822"
+   ],
+   "why": "Checks the Exchange Rate popup discarding unsaved edits on Close and re-querying when reopened; no other row checks this popup or behavior."
+  },
+  {
+   "rows": [
+    "V-cd91e8b8"
+   ],
+   "why": "Checks that the grid-cell Model popup allows only single-select, which differs from the condition-area popup's multi-select in both element and expected result."
+  },
+  {
+   "rows": [
+    "T-2a9cd623"
+   ],
+   "why": "TRACE row for the btnDelete button; it confirms the trace entry exists, not the selected value being applied."
+  },
+  {
+   "rows": [
+    "T-365b3790"
+   ],
+   "why": "TRACE row for the 6 parameters of procedure P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP; it checks an implementation trace, which is a different property."
+  },
+  {
+   "rows": [
+    "T-41bb3f1f"
+   ],
+   "why": "TRACE row for the TRANS_MODE_CODE column; no other row targets this column."
+  },
+  {
+   "rows": [
+    "T-5bb8509f"
+   ],
+   "why": "TRACE row for the clbFromSite condition; this condition element is different from all other rows."
+  },
+  {
+   "rows": [
+    "T-71daa499"
+   ],
+   "why": "TRACE row for the popup search area layout and Find button; it checks the implementation location and layout."
+  },
+  {
+   "rows": [
+    "T-84c5ee4c"
+   ],
+   "why": "TRACE row for the clbToSite condition, a different element from From Site."
+  },
+  {
+   "rows": [
+    "T-8ef356b6"
+   ],
+   "why": "TRACE row for the btnInput button; no other row targets this button."
+  },
+  {
+   "rows": [
+    "T-8f84f97b"
+   ],
+   "why": "TRACE row for the toolbar DeleteButton being visible but doing nothing; it checks the implementation location."
+  },
+  {
+   "rows": [
+    "T-ba663c76"
+   ],
+   "why": "TRACE row for the txtItemId/Model condition; because it is a trace-existence check, it is not grouped with the EG rows."
+  },
+  {
+   "rows": [
+    "T-beee3244"
+   ],
+   "why": "TRACE row for the popup's automatic query on entry ('D' only); this is a different property from applying the selected value."
+  },
+  {
+   "rows": [
+    "T-c5782dcb"
+   ],
+   "why": "TRACE row for the btnItemId button; it checks the trace, not a reflection result."
+  },
+  {
+   "rows": [
+    "T-fde69078"
+   ],
+   "why": "TRACE row for the popup OK handleConfirm message branches and checked-row return; it checks the implementation location and logic, so it is kept separate from EG-8d8c9f55."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:22:30",
+ "cost": 0.08686719999999999
+}

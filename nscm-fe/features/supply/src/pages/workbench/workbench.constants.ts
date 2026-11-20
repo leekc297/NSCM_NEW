@@ -167,6 +167,12 @@ export const CHG_TYPE = { NEW: 'New', CHANGE: 'Change' } as const;
 /** 코드 컬럼 미해당 시 AS-IS 가 채우는 센티널(cs:736·1242~1248). */
 export const NOT_APPLICABLE = '-';
 
+/**
+ * MKT FCST 중복검증에서 빈 PLANT_SITE_ID 를 대신하는 값. AS-IS 빈값('')이 이관 데이터에 '/' 로
+ * 적재돼 있다(DM_PLN_NET_DEMAND·SCP_OPMZ_DMD_ADJ 40·82 실측). 저장 payload 는 빈값 그대로 보낸다.
+ */
+export const EMPTY_PLANT_SITE = '/';
+
 /** Elec. Demand 신규행 PLAN_TYPE 고정값(cs:792). */
 export const ELEC_DEMAND_PLAN_TYPE = 'FN';
 

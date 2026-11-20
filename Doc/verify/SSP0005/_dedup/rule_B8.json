@@ -1,0 +1,29 @@
+{
+ "rule_id": "B8",
+ "hash": "5579f710dd0182ce",
+ "groups": [
+  {
+   "rows": [
+    "V-27564a52",
+    "V-a0556d41"
+   ],
+   "why": "두 행 모두 MKT FCST 조회·신규행의 Team 컬럼을 SSPM Team 변경 후 조회해 확인하고, 기대 결과도 'Owner 소속팀이 아닌 SSPM DEPT_ID를 Team으로 표시·세팅'으로 같다. 출처(GENERAL·CONFIRMED)만 다르다."
+  },
+  {
+   "rows": [
+    "V-50affe7b"
+   ],
+   "why": "대상이 그리드 Team 컬럼이 아니라 조회조건 콤보 5종이다. 기대 결과도 콤보별 AS-IS 원천 후보와 SSPM 기준 Team cascade로 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-c6d97171"
+   ],
+   "why": "Div 선택 후의 조회조건 Team과 신규행(81_HD) 그리드 콤보를 함께 확인한다. 기대 결과에 End Customer/Sales Site 중복 0이 포함돼 다른 행과 대상·상태·기대가 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:39",
+ "cost": 0.0394176
+}

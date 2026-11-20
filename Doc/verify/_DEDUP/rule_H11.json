@@ -1,0 +1,20 @@
+{
+ "rule_id": "H11",
+ "hash": "cf7be3d8404829b5",
+ "groups": [
+  {
+   "refs": [
+    "GAPSELF-3",
+    "GAPSELF-7"
+   ],
+   "target": "저장(Save) 실행 중 스피너(Spinner · Loading)",
+   "condition": "값 수정 후 Save 클릭 → 서버 응답 전 화면 확인",
+   "expected": "Save 등 서버 호출 중에는 스피너(Spinner · Loading)를 표시한다.",
+   "why": "두 항목 모두 Save 클릭 후 응답 전 스피너 표시를 확인하는 같은 동작과 같은 기대 결과이며, 화면(DMF0003/DMF0021)과 Div(82/40) 차이만 있다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:44:00",
+ "cost": 0.0315772
+}

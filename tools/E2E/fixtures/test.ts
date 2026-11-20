@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import { test as base } from '@playwright/test';
 import { Nscm, CFG, beLogMark, beLogErrors } from '../lib/nscm';
 import { installRequestMutations, flushMutationLog } from '../lib/mutate';
+import { installWriteGuard, recordKind } from '../lib/writeguard';
 export type Opts = { account: string; division: string };
 
 // 2026-11-06(속도 개선 ① 계측): 테스트 1건의 시간을 구간별로 잰다 — 로그인 · 화면 열기 · 조회 · 고정 대기(page.waitForTimeout) · 나머지(본문).
@@ -75,15 +76,19 @@ export const test = base.extend<{ nscm: Nscm } & Opts>({
     await installRequestMutations(page);  // CheckList 자기검증 요청 변이(CL_MUTATE 지정 시만, 2026-10-28)
     // VERIFY_NO_SAVE=1 — 저장 계열 call-proc 를 서버로 보내지 않고 가짜 응답으로 돌려준다(요청 자체는 nscm.calls 에 남아 '저장 요청이 나갔다' 는 사실은 측정된다) · 정리 정의 없는 화면 일괄 실행용
     if (process.env.VERIFY_NO_SAVE || process.env.CL_FAKE_SAVE) await page.route(/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i, r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [], message: '[VERIFY_NO_SAVE] 서버 미전송' }) }));
+    // 2026-11-20 D1: 쓰기 요청 감시(시험 종류 기록) · 동시 실행 단계(E2E_PHASE=read)면 쓰기 요청을 서버로 보내지 않음(lib/writeguard.ts)
+    const wg = await installWriteGuard(page);
     const n = new Nscm(page);
     const tm = timingProbe(n, page);
     const tl = Date.now(); await n.loginAs(account); tm.add('login', Date.now() - tl);
     await use(n);
     tm.flush(testInfo);
+    recordKind(testInfo.file, testInfo.title, wg);
     // 2026-11-06 플랜 2-1: 이 테스트가 보낸 모든 non-SAVE call-proc 본문 → Doc/verify/<ID>/calls/<spec>_<test>_<retry>.json (a1_live.json 은 마지막 1건만) · diff_verify.py 입력
     try {
       const vid = (process.env.VERIFY_ID || '').toUpperCase();
-      if (vid && !(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE)) {
+      // 2026-11-20 T443(SCP0028 F4 T-fad117f6·T-a9985ef6 · judge f4_calllog T405): 팝업·권한 검사(eg_chain · CL_SELFTEST_BASE)도 화면 호출을 남겨 '다른 시나리오 호출 기록' 판정에 쓴다(EG_CHAIN=1). 자기검증 기준선(checklist_selftest)·변이 실행은 종전대로 남기지 않음
+      if (vid && !(process.env.CL_MUTATE || (process.env.CL_SELFTEST_BASE && process.env.EG_CHAIN !== '1'))) {
         const recs = n.allCalls.filter(c => !/SAVE|INS|UPD|DEL/i.test(c.btn) && !!c.body).map(c => ({ menu: c.menu, sheet: c.sheet, btn: c.btn, url: c.url.slice(0, 200), postData: c.body, status: c.status, rows: c.rows, dur: c.dur ?? null, at: c.at || '', user: n.curUser, test: testInfo.title }));
         if (recs.length) {
           const d = path.join(__dirname, '..', '..', '..', 'Doc', 'verify', vid, 'calls'); fs.mkdirSync(d, { recursive: true });

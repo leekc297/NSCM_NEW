@@ -3,6 +3,7 @@ import dayjs, { type Dayjs } from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { todayInTimeZone } from '@foundation/utils';
 import { clsx } from '@shared/clsx';
 import { Button, FormItem } from '@shared/lges';
 import {
@@ -11,7 +12,7 @@ import {
   ControlConfirmIcon,
   FunctionCalendarIcon,
 } from '@shared/lges-icons';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import styles from './PeriodRangePicker.module.scss';
 
@@ -39,7 +40,7 @@ interface PeriodRangePickerProps {
   required?: boolean;
   // FormItem 래퍼 클래스 — 다른 조회조건 필드와 동일 레이아웃(commonStyles.formItem) 적용용.
   className?: string;
-  // 고정 프리셋 버튼 주 단위 목록(각 n → W{n} 버튼). 기본값은 W26/W52/W82(하위호환 — 미지정 소비자 불변).
+  // 고정 프리셋 버튼 주 단위 목록(각 n → W{n} 버튼). 기본값은 W26/W52(W82 은 기본 미표시 — 사용자 지시 2026-11-19).
   quickWeeks?: number[];
   // 동적 WLast 프리셋 — 값을 주면 W{lastWeeks} 버튼이 고정 프리셋 옆에 뜬다(미지정이면 미표시).
   //   quickWeeks 에 이미 같은 주 수가 있으면 중복이라 띄우지 않는다(예: lastWeeks=52 ↔ 고정 W52).
@@ -111,6 +112,8 @@ interface MonthPanelProps {
   draftStart: Dayjs | null;
   draftEnd: Dayjs | null;
   onDayClick: (day: Dayjs) => void;
+  // 사용자 타임존 기준 '오늘'(PC 시계 아님) — 오늘 셀 강조·연도 범위 산정에 쓴다.
+  today: Dayjs;
 }
 
 const MonthPanel = ({
@@ -121,17 +124,20 @@ const MonthPanel = ({
   draftStart,
   draftEnd,
   onDayClick,
+  today,
 }: MonthPanelProps) => {
   const weeks = useMemo(() => buildMonthWeeks(cursor), [cursor]);
   const [yearAnchor, setYearAnchor] = useState<HTMLElement | null>(null);
   const [monthAnchor, setMonthAnchor] = useState<HTMLElement | null>(null);
 
-  // AS-IS YearSet(L104~119) 규칙 재사용 — ExchangeRateModal.tsx:179-186 과 동일 범위(현재년 -5~+10)
+  // AS-IS YearSet(L104~119) 규칙 재사용 — ExchangeRateModal.tsx:179-186 과 동일 범위(현재년 -5~+10).
+  //   '현재년' 은 사용자 타임존 기준(연말/연초 경계에서 PC 시계와 어긋나지 않도록).
   const yearOptions = useMemo(() => {
-    const from = new Date().getFullYear() - 5;
-    const to = new Date().getFullYear() + 10;
+    const base = today.year();
+    const from = base - 5;
+    const to = base + 10;
     return Array.from({ length: to - from + 1 }, (_, i) => from + i);
-  }, []);
+  }, [today]);
 
   const handleYearSelect = (y: number) => {
     onCursorChange(cursor.year(y));
@@ -231,7 +237,7 @@ const MonthPanel = ({
                 day.isAfter(draftStart, 'day') &&
                 day.isBefore(draftEnd, 'day');
 
-              const isToday = day.isSame(dayjs(), 'day');
+              const isToday = day.isSame(today, 'day');
               // AS-IS 토(파랑)/일(빨강) 글자색 — 선택/오늘(배경+흰글자)이 아닐 때만.
               const plain = !isStart && !isEnd && !isToday;
               const isSaturday = day.isoWeekday() === 6;
@@ -273,7 +279,7 @@ export const PeriodRangePicker = ({
   label,
   required,
   className,
-  quickWeeks = [26, 52, 82],
+  quickWeeks = [26, 52],
   lastWeeks,
   quickWeeksFromToday,
   allowTextInput,
@@ -281,6 +287,11 @@ export const PeriodRangePicker = ({
 }: PeriodRangePickerProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore(state => state.setAlert);
+  // 달력의 '오늘'(Today·W 버튼·오늘 셀 강조·연도 범위)은 PC 시계가 아니라 사용자 타임존(session.tmzCd)
+  //   기준으로 잡는다 — 화면 최초 오픈 시 Period 기본값(서버 FN_MULTY_TIME)과 같은 날짜. 한국 PC 에 미국
+  //   타임존으로 설정한 사용자가 달력 Today 로 한국 날짜가 들어가던 문제 교정. 미매핑·빈 코드는 브라우저 폴백.
+  const tmzCd = useSessionStore(state => state.session.tmzCd);
+  const today = useMemo(() => todayInTimeZone(tmzCd), [tmzCd]);
   const anchorRef = useRef<HTMLDivElement>(null);
   // 기간 역전 안내(setAlert)가 떠 있는 동안은 click-away 로 달력을 닫지 않기 위한 억제 플래그.
   //   setAlert 는 MUI Dialog(포털)로 뜨므로 그 버튼/백드롭 클릭이 Popper 바깥 클릭으로 잡혀
@@ -300,8 +311,8 @@ export const PeriodRangePicker = ({
   const [open, setOpen] = useState(false);
   const [draftStart, setDraftStart] = useState<Dayjs | null>(null);
   const [draftEnd, setDraftEnd] = useState<Dayjs | null>(null);
-  const [leftCursor, setLeftCursor] = useState(dayjs());
-  const [rightCursor, setRightCursor] = useState(dayjs().add(1, 'month'));
+  const [leftCursor, setLeftCursor] = useState(today);
+  const [rightCursor, setRightCursor] = useState(today.add(1, 'month'));
 
   // 키인 기본 활성. 명시적으로 allowTextInput={false} 를 준 소비자만 달력 전용.
   //   monthOnly 는 표기(YYYY-MM)와 일 단위 키인이 어긋나므로 항상 달력 전용으로 강제한다.
@@ -343,7 +354,7 @@ export const PeriodRangePicker = ({
   };
 
   const handleOpen = () => {
-    const s = parseValue(start) ?? dayjs();
+    const s = parseValue(start) ?? today;
     const e = parseValue(end);
     setDraftStart(s);
     setDraftEnd(e);
@@ -401,15 +412,14 @@ export const PeriodRangePicker = ({
   // Today — From 만 오늘 날짜로 이동(To 는 그대로, 단 오늘이 기존 To 보다 뒤면 To 는 재선택하도록 비운다).
   //   좌측 패널(From) 커서도 오늘이 보이는 달로 옮긴다.
   const handleToday = () => {
-    const today = dayjs();
     handleStartDayClick(today);
     setLeftCursor(today);
   };
 
-  // W26/W52/W92(quickWeeks 기본값): 현재 선택된 From 기준 해당 주 수 구간. From 이 없으면 오늘을 From 으로 삼는다.
+  // W26/W52(quickWeeks 기본값): 현재 선택된 From 기준 해당 주 수 구간. From 이 없으면 오늘을 From 으로 삼는다.
   //   quickWeeksFromToday=true 인 화면(SCP0024)은 선택된 From 을 무시하고 항상 오늘을 base 로 삼는다.
   const handleQuickWeeks = (weeks: number) => {
-    const base = quickWeeksFromToday ? dayjs() : (draftStart ?? dayjs());
+    const base = quickWeeksFromToday ? today : (draftStart ?? today);
     const newEnd = base.add(weeks * 7 - 1, 'day');
     setDraftStart(base);
     setDraftEnd(newEnd);
@@ -513,6 +523,7 @@ export const PeriodRangePicker = ({
                     draftStart={draftStart}
                     draftEnd={draftEnd}
                     onDayClick={handleStartDayClick}
+                    today={today}
                   />
                   <MonthPanel
                     cursor={rightCursor}
@@ -522,6 +533,7 @@ export const PeriodRangePicker = ({
                     draftStart={draftStart}
                     draftEnd={draftEnd}
                     onDayClick={handleEndDayClick}
+                    today={today}
                   />
                 </div>
                 <div className={styles.footer}>
@@ -557,6 +569,13 @@ export const PeriodRangePicker = ({
                   </div>
                   <div className={styles.footerActions}>
                     <Button
+                      appearance='outlined'
+                      priority='normal'
+                      size='medium'
+                      buttonLabel='Cancel'
+                      onClick={handleCancel}
+                    />
+                    <Button
                       appearance='contained'
                       priority='primary'
                       size='medium'
@@ -565,13 +584,6 @@ export const PeriodRangePicker = ({
                       iconPosition='leading'
                       onClick={handleOk}
                       disabled={!draftStart || !draftEnd}
-                    />
-                    <Button
-                      appearance='outlined'
-                      priority='normal'
-                      size='medium'
-                      buttonLabel='Cancel'
-                      onClick={handleCancel}
                     />
                   </div>
                 </div>

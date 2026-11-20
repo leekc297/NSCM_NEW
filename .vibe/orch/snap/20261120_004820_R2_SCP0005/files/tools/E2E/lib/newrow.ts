@@ -1,0 +1,105 @@
+// 신규행 저장 전 검증 판정(2026-10-31 엔진 갭 E05 · EG158 컬럼별 필수 공란 · EG162 키 중복) — 저장 요청은 가짜 응답으로 끊어 DB 무변경
+//   판정은 순수 함수로 두어 newrow.selftest.js 로 FAIL 검출을 입증한다
+export type J = { result: 'PASS' | 'FAIL' | 'ERROR'; why: string };
+
+/** 필수 컬럼 하나만 비우고 Save — 저장 요청이 나가면 안 되고 문구가 있어야 한다 */
+export function judgeRequired(s: { calls: number; msg: string; label: string; col: string; fillFails: string[]; control: 'sent' | 'dup' | 'blocked' | 'none'; otherCol?: string; cascaded?: boolean }): J {
+  const m = s.msg.trim(); const named = !!m && ((!!s.label && m.includes(s.label)) || m.includes(s.col));
+  if (s.calls > 0) {
+    // 다른 칸을 못 채웠는데도 요청이 나갔다면 그 칸의 공란까지 통과한 것 — 이 컬럼 공란이 원인임은 그대로 입증된다
+    return { result: 'FAIL', why: `필수 '${s.label || s.col}' 공란인데 저장 요청 ${s.calls}건` };
+  }
+  if (!m) return { result: 'FAIL', why: `필수 '${s.label || s.col}' 공란 저장 — 요청은 없으나 안내 문구 없음` };
+  if (named) return { result: 'PASS', why: `차단 · 문구에 컬럼명 있음 '${m.slice(0, 80)}'` };
+  // 문구가 다른 컬럼을 가리키면 비운 컬럼의 증거가 아니다(허위 PASS 방지 · 2026-11-01 DMF0004)
+  // 2026-11-16 SCP0104 Site 공란: 이 컬럼을 비우자 하위 컬럼(otherCol)도 연쇄로 비워져 그 컬럼 문구로 차단 — 차단 원인은 이 컬럼 공란이다(AS-IS ClearCurrRowSubCodes 와 같은 연쇄)
+  if (s.otherCol && s.cascaded) return { result: 'PASS', why: `차단 · ${s.col} 공란으로 하위 ${s.otherCol} 도 연쇄 비움 → 문구 '${m.slice(0, 80)}'` };
+  if (s.otherCol) return { result: 'ERROR', why: `[다른 컬럼이 차단] ${s.otherCol} 문구 '${m.slice(0, 80)}' — ${s.col} 공란 효과 측정 불가` };
+  // 문구가 다른 칸을 가리키면 이 컬럼이 원인이라는 근거가 없다
+  if (s.fillFails.length) return { result: 'ERROR', why: `[입력 경로 실패] ${s.fillFails.slice(0, 4).join(',')} 입력 실패 · 문구 '${m.slice(0, 80)}' — 이 컬럼이 차단 원인인지 판정 불가` };
+  if (s.control === 'blocked') return { result: 'ERROR', why: `[대조군 실패] 전 칸을 채워도 저장이 막힘 · 문구 '${m.slice(0, 80)}' — 이 컬럼 공란이 원인인지 판정 불가` };
+  return { result: 'PASS', why: `차단 · 문구에 컬럼명 없음 '${m.slice(0, 80)}'` };
+}
+
+/** 기존 행을 그대로 복사한 신규 행 Save — 키 중복이므로 저장 전 차단이 기대값. 요청이 나가면 서버 검증 실측 전까지 판정 불가 */
+export function judgeDup(s: { calls: number; msg: string; fillFails: string[]; asisDup: string }): J {
+  const m = s.msg.trim();
+  if (s.fillFails.length && !s.calls) return { result: 'ERROR', why: `[입력 경로 실패] ${s.fillFails.slice(0, 4).join(',')} 입력 실패 — 같은 키를 만들지 못함 · 문구 '${m.slice(0, 80)}'` };
+  if (s.calls > 0 && s.fillFails.length) return { result: 'ERROR', why: `[입력 경로 실패] ${s.fillFails.slice(0, 4).join(',')} 입력 실패 — 같은 키 재현 아님` };
+  if (s.calls > 0) return s.asisDup ? { result: 'FAIL', why: `같은 키 신규 행인데 저장 요청 · AS-IS 저장 전 중복 검증 ${s.asisDup}` } : { result: 'ERROR', why: '[서버 검증 미측정] 저장 전 차단 없음 · AS-IS 화면 코드에도 없음 — 서버 차단은 실저장 측정 필요' };
+  if (!m) return { result: 'FAIL', why: '같은 키 신규 행 — 요청은 없으나 안내 문구 없음' };
+  if (/중복|duplicate|already|이미|존재/i.test(m)) return { result: 'PASS', why: `저장 전 차단 '${m.slice(0, 80)}'` };
+  return { result: 'ERROR', why: `[차단 사유 확인 필요] 중복 문구가 아님 '${m.slice(0, 80)}'` };
+}
+
+/** AS-IS Insert 진입점에 실제 동작 문장이 없으면(빈 구현) TO-BE 무동작이 정상 — 신규 행 없음을 FAIL 로 내면 허위(2026-11-01 SCP0028 InsertRow 빈 구현) */
+export function asisInsertNoop(acts: Record<string, string>[], ents: Record<string, string>[]): { noop: boolean; ref: string } {
+  const ms = new Set(ents.filter(z => /insert/i.test(z.entry || '')).map(z => z.method)); if (!ms.size) return { noop: true, ref: 'AS-IS Insert 진입점 없음' };
+  const body = acts.filter(z => ms.has(z.method) && !['CALL_LOCAL', 'RETURN', 'BRANCH', 'LOCAL'].includes(z.kind));
+  return { noop: body.length === 0, ref: body.length ? `${body[0].method}:${body[0].line}` : `AS-IS ${[...ms].join(',')} 실행 문장 0` };
+}
+
+// 2026-11-09 T173(SSP0025 2번 F5 허위 FAIL) — AS-IS Delete 가 신규 행만 지우는지. tools/Harness/verify/asis_delete.py 와 같은 규칙(단일 규칙 · 양쪽 일치 시험 asisdelete.selftest.js)
+//   DeleteButton 에서 CALL_LOCAL 로 도달하는 화면 메서드(깊이 6)의 삭제 문장(DATA_OP·CALL_EXT · target .Delete/.DeleteRow/.Rows.Remove/.RemoveRow(s))
+//   전부가 유효 guard(호출 경로 guard ▸ 문장 guard)의 if 조각에 '== CAppSetting.StringI|FlagI' 를 가지면 신규 행 전용('else of (...)' 조각 제외)
+//   종전 _trace.spec.ts 판정(DeleteButton 의 FlagI BRANCH)은 위임(this.Delete() → sv.Rows.Remove · guard == StringI)을 놓쳤다
+const DEL_RX = /\.(Delete|DeleteRow|Rows\.Remove|RemoveRows?)$/;
+const NEWI_RX = /==\s*CAppSetting\.(StringI|FlagI)\b/;
+export function asisDeleteStmts(acts: Record<string, string>[], entry = 'DeleteButton', depth = 6, rx: RegExp = DEL_RX): { a: Record<string, string>; g: string }[] {
+  const by = new Map<string, Record<string, string>[]>(); for (const a of acts) { const m = a.method || ''; if (!by.has(m)) by.set(m, []); by.get(m)!.push(a); }
+  const out: { a: Record<string, string>; g: string }[] = []; const seen = new Set<string>();
+  const walk = (m: string, chain: string, d: number): void => {
+    if (seen.has(m) || d > depth) return; seen.add(m);
+    // 2026-11-10 T180(SCP0033 3번): 앞선 return 가드 'if (x != CAppSetting.FlagI) return;' 뒤 문장에 '(앞선 return) x == FlagI' 조각을 붙인다(asis_delete.py 와 같은 규칙 · '&&' 조건 제외)
+    const ln = (a: Record<string, string>) => Number(a.line || 0) || 0;
+    const early: { line: number; pre: string; syn: string }[] = [];
+    for (const a of by.get(m) || []) {
+      if ((a.kind || '') !== 'RETURN') continue;
+      const segs = String(a.guard || '').split('▸').map(s => s.trim()).filter(Boolean);
+      const mm = segs.length ? /^if \((.+?)\s*!=\s*CAppSetting\.(StringI|FlagI)\s*\)$/.exec(segs[segs.length - 1]) : null;
+      if (mm && !mm[1].includes('&&')) early.push({ line: ln(a), pre: segs.slice(0, -1).join(' ▸ '), syn: `(앞선 return ${segs[segs.length - 1]}) ${mm[1]} == CAppSetting.${mm[2]}` });
+    }
+    for (const a of by.get(m) || []) {
+      const g0 = a.guard || ''; const extra = early.filter(e => ln(a) > e.line && g0.startsWith(e.pre)).map(e => e.syn);
+      const g = [chain, ...extra, g0].filter(Boolean).join(' ▸ '); const k = a.kind || '';
+      if (k === 'CALL_LOCAL') { const n = String(a.target || '').replace(/^this\./, '').split('.').pop() || ''; if (by.has(n)) walk(n, g, d + 1); }
+      else if ((k === 'DATA_OP' || k === 'CALL_EXT') && rx.test(a.target || '')) out.push({ a, g });
+    }
+  };
+  walk(entry, '', 0); return out;
+}
+export function asisDeleteNewOnly(acts: Record<string, string>[]): { newOnly: boolean; ref: string } {
+  const st = asisDeleteStmts(acts);
+  const ok = st.length > 0 && st.every(({ g }) => g.split('▸').map(s => s.trim()).some(seg => !seg.startsWith('else of') && NEWI_RX.test(seg)));
+  return { newOnly: ok, ref: ok ? `${st[0].a.method}:${st[0].a.line}` : '' };
+}
+
+/** 2026-11-10 T190(SSP0015·SSP0023·SSP0060 조치필요 238~283건): AS-IS Insert 문장(InsertButton 에서 CALL_LOCAL 로 도달 · .Insert/.AddRow/.AddNew)의 유효 guard.
+ *  guard 가 있으면(편집 모드 IsLock==false · 활성 시트 · 행 상태 등) 검사기가 그 전제를 맞추지 못해 신규 행이 없을 수 있다 — FAIL 이 아니라 측정 실패로 낸다.
+ *  반환 guarded = 모든 Insert 문장에 비어 있지 않은 guard · guard = 첫 문장 guard 원문 · ref = 메서드:줄 */
+const INS_RX = /\.(Insert|AddRow|AddNew|AddNewRow|InsertRow)$/;
+export function asisInsertGuard(acts: Record<string, string>[]): { guarded: boolean; guard: string; ref: string } {
+  const st = asisDeleteStmts(acts, 'InsertButton', 6, INS_RX);
+  const ok = st.length > 0 && st.every(({ g }) => g.trim() !== '');
+  return { guarded: ok, guard: ok ? st[0].g.slice(0, 220) : '', ref: st.length ? `${st[0].a.method}:${st[0].a.line}` : '' };
+}
+
+/** 2026-11-12 Y01(C1-01): AS-IS Insert 메서드(InsertButton 에서 CALL_LOCAL 로 도달)가 '활성 행의 값이 이것이 아니면 return' 하는 조건.
+ *  RETURN 문장의 마지막 guard 조각이 `if (X != "V")` 꼴(다른 조건과 &&·|| 로 묶이지 않은 것)일 때 {col: X, val: V} — X 는 AS-IS 지역 변수 이름이라
+ *  그 이름의 컬럼이 화면 그리드에 있을 때만 호출부가 행 선택 조건으로 쓴다(없으면 무시). 중복 제거 · 순서 = 원문 순서 */
+export function asisInsertRowConds(acts: Record<string, string>[], entry = 'InsertButton', depth = 6): { col: string; val: string; ref: string }[] {
+  const by = new Map<string, Record<string, string>[]>(); for (const a of acts) { const m = a.method || ''; if (!by.has(m)) by.set(m, []); by.get(m)!.push(a); }
+  const out: { col: string; val: string; ref: string }[] = []; const seen = new Set<string>(); const key = new Set<string>();
+  const walk = (m: string, d: number): void => {
+    if (seen.has(m) || d > depth) return; seen.add(m);
+    for (const a of by.get(m) || []) {
+      const k = a.kind || '';
+      if (k === 'CALL_LOCAL') { const n = String(a.target || '').replace(/^this\./, '').split('.').pop() || ''; if (by.has(n)) walk(n, d + 1); continue; }
+      if (k !== 'RETURN') continue;
+      const segs = String(a.guard || '').split('▸').map(s => s.trim()).filter(Boolean); if (!segs.length) continue;
+      const mm = /^if \(\s*([A-Za-z_][A-Za-z0-9_]*)\s*!=\s*"([^"]*)"\s*\)$/.exec(segs[segs.length - 1]); if (!mm || !mm[2]) continue;
+      const kk = `${mm[1]}=${mm[2]}`; if (key.has(kk)) continue; key.add(kk); out.push({ col: mm[1], val: mm[2], ref: `${a.method}:${a.line}` });
+    }
+  };
+  walk(entry, 0); return out;
+}

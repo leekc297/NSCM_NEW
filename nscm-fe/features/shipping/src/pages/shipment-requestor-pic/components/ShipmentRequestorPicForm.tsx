@@ -7,6 +7,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import { COMBO, LBL } from '../shipment-requestor-pic.constants';
@@ -156,6 +157,12 @@ export const ShipmentRequestorPicForm = ({ onSearch, onItemSearch, onModelSearch
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
+                    ),
+                  }}
                   onChange={e => set({ itemId: e.target.value })}
                 />
               )}
@@ -184,6 +191,12 @@ export const ShipmentRequestorPicForm = ({ onSearch, onItemSearch, onModelSearch
                         iconComponent={<FunctionSearchIcon appearance='lined' />}
                         onClick={onModelSearch}
                       />
+                    ),
+                  }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.modelId,
+                      next => set({ modelId: next, nickName: '' }),
                     ),
                   }}
                   // 직접입력은 품번(modelId) 기준 — 이전 팝업에서 세팅된 nickName 보조조건을 지운다.

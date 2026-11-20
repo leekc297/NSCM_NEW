@@ -1,0 +1,53 @@
+{
+ "rule_id": "J3",
+ "hash": "4eab8b234aa07984",
+ "groups": [
+  {
+   "rows": [
+    "EG-7f08ef27",
+    "EG-c2267549"
+   ],
+   "why": "Both rows check the same whole-screen GROUP and row-value lock rules in edit_expect.csv with the same expected result, and eg_auth.spec.ts records EG377 and EG378 from the same per-account, per-Div comparison, so one measurement serves both."
+  },
+  {
+   "rows": [
+    "EG-710db8ce"
+   ],
+   "why": "This row checks each Measure cell against the GET_ADMIN_GROUP_MEASURE lookup, which is a different source and target from the edit_expect GROUP rules."
+  },
+  {
+   "rows": [
+    "V-37b981cb"
+   ],
+   "why": "It also checks the GET_ADMIN_GROUP_MEASURE time window and expects DM PLANNER to be blocked from editing MKT_FCST[R+P], which EG376 does not expect, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-5ef21cd2"
+   ],
+   "why": "It covers only columns with a GROUP condition, while EG377 and EG378 also cover row-value lock rules, so a shared result could fail this row for the wrong reason."
+  },
+  {
+   "rows": [
+    "V-194511dd"
+   ],
+   "why": "It checks a different state, the Cutoff and SCP Final status, and expects edit and save to be blocked with a cannot-modify popup."
+  },
+  {
+   "rows": [
+    "V-09720f7f"
+   ],
+   "why": "It checks a different element, whether the AS From Site combo is enabled, and the Measure candidates for each Sales Site type."
+  },
+  {
+   "rows": [
+    "V-44f684c8"
+   ],
+   "why": "It covers several Measures in the Current version and expects different conditions for each, such as AS_In_Req, VMI_In_Req and the AS From Site list, so it does not fully match any other row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:09:51",
+ "cost": 0.11310310000000001
+}

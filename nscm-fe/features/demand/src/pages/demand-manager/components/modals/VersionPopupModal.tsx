@@ -328,18 +328,18 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
 
           <div className={styles.modalButtonWrapper}>
             <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel='OK'
-              onClick={adoptCurrentSelection}
-            />
-            <Button
               appearance='outlined'
               priority='normal'
               size='medium'
               buttonLabel='Close'
               onClick={modalClose}
+            />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel='OK'
+              onClick={adoptCurrentSelection}
             />
           </div>
         </div>

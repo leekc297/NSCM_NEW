@@ -50,6 +50,16 @@ interface Props {
   divisionOptions: ComboOption[];
   /** 마스터 4축 cascade 원천 — AS-IS 가 부모에서 넘기던 DataTable 과 동일(메인 화면과 같은 출처). */
   masterRows: ComboRow[];
+  /**
+   * 팝업 조회조건 시드 — 메인 화면의 **현재(라이브) Site/Plant/Building/Line 조회조건 선택값**이다.
+   * AS-IS `ShowLine`(cs:5954-5967)의 `_ori_*`/`_*` 가 `clb*.ControlValues`(getOriSite cs:471 등)라
+   * 조회(Search) 여부와 무관하게 고른 즉시 반영된다 → 부모가 확정값이 아닌 searchParams 를 넘긴다.
+   * 오픈 시 이 값을 상속해 첫 조회한다. `[ALL]` 이면 전체.
+   */
+  initialSiteIds: string[];
+  initialPlantIds: string[];
+  initialFactoryIds: string[];
+  initialLineIds: string[];
   onClose: () => void;
   onConfirm: (rows: GridRow[]) => void;
 }
@@ -98,6 +108,10 @@ export const CapaLineModal = ({
   divisionId,
   divisionOptions,
   masterRows,
+  initialSiteIds,
+  initialPlantIds,
+  initialFactoryIds,
+  initialLineIds,
   onClose,
   onConfirm,
 }: Props) => {
@@ -248,23 +262,31 @@ export const CapaLineModal = ({
 
   const handleSearch = () => setApplied(buildFilters());
 
-  // 부모 Division 이 바뀌면 팝업 기본 Division 과 하위 선택을 그 값으로 되맞춘다(AS-IS 는 매 오픈
-  //   `SetDefConditions` 로 부모값 상속 — 팝업 로컬 편집분은 부모 변경 시 무효화하는 것이 안전하다).
+  // 오픈 시 부모 확정 조회조건을 상속해 시드한다 — AS-IS `ShowLine`(cs:5954-5967)이 메인 Site/Plant/
+  //   Building/Line 을 팝업 생성자에 넘기고 `SetDefConditions`→`_FindData`(cs:437)로 그 값으로 첫
+  //   조회한다. AS-IS 는 매 오픈 새 폼(`new SCP0104_CAPA_Line`)이라 직전 팝업 검색을 복원하지 않고
+  //   늘 부모값을 상속한다 → 열 때마다 메인 조건으로 리시드한다.
   useEffect(() => {
+    if (!open) return;
     setLocalDivisionId(divisionId);
-    setSiteIds([ALL]);
-    setPlantIds([ALL]);
-    setFactoryIds([ALL]);
-    setLineIds([ALL]);
-  }, [divisionId]);
+    setSiteIds(initialSiteIds);
+    setPlantIds(initialPlantIds);
+    setFactoryIds(initialFactoryIds);
+    setLineIds(initialLineIds);
+    setApplied(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
-  // 오픈 시 자동조회 — AS-IS Form_Load → `_FindData`(cs:437). 아직 조회한 적 없을 때만 한 번.
-  //   재오픈 시 `applied` 가 남아 있으면 직전 조건·결과를 그대로 복원한다.
+  // 시드된 조건으로 조회 — `applied` 가 비면(위 시드 effect 가 `null` 로 세움) 1회 질의한다. deps 에
+  //   `open` 을 넣지 않는다: 넣으면 오픈 전환 렌더에서 시드 state 반영 전(아직 이전 값)에 먼저 돌아
+  //   stale 조건으로 조회된다. 시드 effect 의 setState 들이 settle 된 **다음 렌더**(applied·조건 변경)에
+  //   서만 돌게 해, `buildFilters` 가 시드값·재계산된 후보(cascade)로 CSV 를 만들게 한다. `applied` 가
+  //   서면 가드로 멈춰 이후 조건변경은 Search 로만 조회된다(`!open` 가드는 닫힘 중 질의를 막는다).
   useEffect(() => {
     if (!open || applied) return;
     setApplied(buildFilters());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [applied, localDivisionId, siteIds, plantIds, factoryIds, lineIds]);
 
   const handleSubmit = () => {
     const checked = rows.filter(isChecked);
@@ -421,6 +443,13 @@ export const CapaLineModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={onClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -428,13 +457,6 @@ export const CapaLineModal = ({
               iconComponent={<ControlConfirmIcon size='small' />}
               iconPosition='leading'
               onClick={handleSubmit}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={onClose}
             />
           </div>
         </div>

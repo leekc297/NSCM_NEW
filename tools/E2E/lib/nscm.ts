@@ -8,6 +8,7 @@
  */
 import { expect, type Page, type Locator, type Response } from '@playwright/test';
 import * as fs from 'node:fs';
+import { pageReg } from './pagereg';
 import * as path from 'node:path';
 import * as net from 'node:net';
 import { spawn } from 'node:child_process';
@@ -39,7 +40,16 @@ export async function waitBeUp(tag: string, maxMs = Number(process.env.E2E_BE_WA
   console.log(`[BE 대기] ${tag}: ${Math.round(maxMs / 1000)}초 안에 BE 가 뜨지 않음`); return -1;
 }
 
-export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string; body?: string; dur?: number; sets?: Record<string, Record<string, unknown>[]>; at?: string };
+export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; rowsSure?: boolean; done?: boolean; doneAt?: number; ms: number; req?: string; res?: string; body?: string; dur?: number; pre?: string; sets?: Record<string, Record<string, unknown>[]>; at?: string };
+
+/** T451: 컬럼 메타 조회 시트 기록(화면 ID별 · 실행 사이 누적 · 시각) — ledger.py 의 사용 시트 판단 근거 */
+function recordMetaSheets(vid: string, menu: string, names: string[]): void {
+  const fp = path.join(__dirname, '..', '..', '..', 'Doc', 'verify', vid, 'meta_sheets.json');
+  let cur: Record<string, { sheets: string[]; at: string }> = {}; try { cur = JSON.parse(fs.readFileSync(fp, 'utf8')); } catch { cur = {}; }
+  const e = cur[menu] || { sheets: [], at: '' }; const add = names.filter(n => !e.sheets.includes(n)); if (!add.length && e.at) return;
+  e.sheets = [...e.sheets, ...add]; e.at = new Date(Date.now() - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 19).replace('T', ' '); cur[menu] = e;
+  try { fs.mkdirSync(path.dirname(fp), { recursive: true }); fs.writeFileSync(fp, JSON.stringify(cur, null, 1)); } catch { /* 폴더 없음 */ }
+}
 
 export class Nscm {
   calls: ProcCall[] = [];
@@ -61,9 +71,19 @@ export class Nscm {
   tparts: Record<string, number> = {};
   reqs = { fe: 0, api: 0 };
   private tp(k: string, t0: number) { this.tparts[k] = (this.tparts[k] || 0) + (Date.now() - t0); }
+  /** 2026-11-20 B1: 진행 중인 call-proc 요청 수 · 마지막 call-proc 요청 시각(probe.waitRows 의 0행 조기 판정용 · lib/pagereg.ts) */
+  pendingProc = 0; lastProcReqAt = 0;
   constructor(public page: Page) {
+    pageReg.set(page, this);
+    const isProc = (u: string) => /\/call-proc(?:-stream)?(?:\?|$)/.test(u);
+    page.on('request', rq => { if (isProc(rq.url())) { this.pendingProc++; this.lastProcReqAt = Date.now(); } });
+    const procEnd = (rq: { url(): string }) => { if (isProc(rq.url())) this.pendingProc = Math.max(0, this.pendingProc - 1); };
+    page.on('requestfinished', procEnd); page.on('requestfailed', procEnd);
     page.on('request', (rq) => { if (/\/api\//.test(rq.url())) this.reqs.api++; else this.reqs.fe++; });
     page.on('response', (res: Response) => { if (res.status() >= 500 && /\/api\//.test(res.url())) { const rec = { url: res.url().slice(0, 200), status: res.status(), body: '' }; this.serverErrors.push(rec); res.text().then(t => { rec.body = String(t || '').slice(0, 600); }).catch(() => undefined); } });  // 본문(ORA 코드)으로 '이 화면의' DB 오류인지 가린다(2026-10-29)
+    // 2026-11-20 T451(SCP0005 D1 80행 판정필요): 화면이 실제로 부른 컬럼 메타 시트(/admin/menu/<ID>/column 본문 sheetNm)를 Doc/verify/<VERIFY_ID>/meta_sheets.json 에 모은다.
+    //   TO-BE 메타에 API 매핑 이름 시트(route)가 따로 등록된 화면은 원장이 같은 그리드를 두 시트로 세어 'AS-IS 편집 기대 없음'을 남겼다 — ledger.py 가 이 기록으로 쓰지 않는 시트를 가린다
+    page.on('request', rq => { try { const mm = /\/admin\/menu\/([^/?]+)\/column(?:\?|$)/.exec(rq.url()); const vid = (process.env.VERIFY_ID || '').toUpperCase(); if (!mm || !vid || process.env.CL_MUTATE) return; let body: Record<string, unknown> = {}; try { body = JSON.parse(rq.postData() || '{}'); } catch { body = {}; } const raw = body.sheetNm ?? body.sheetName ?? (body.data as Record<string, unknown> | undefined)?.sheetNm; const names = (Array.isArray(raw) ? raw : [raw]).map(v => String(v ?? '').trim()).filter(Boolean); if (!names.length) return; recordMetaSheets(vid, decodeURIComponent(mm[1]).toUpperCase(), names); } catch { /* 기록 실패는 측정에 영향 없음 */ } });
     page.on('pageerror', err => { this.consoleErrors.push(`pageerror: ${String(err && err.message || err).slice(0, 300)}`); });
     page.on('console', msg => { if (msg.type() === 'error') { const t = msg.text(); if (!/favicon|net::ERR_|Failed to load resource|\[vite\]|React DevTools|Download the React/i.test(t)) this.consoleErrors.push(`console.error: ${t.slice(0, 300)}`); } });
     page.on('response', async (res: Response) => {
@@ -98,12 +118,17 @@ export class Nscm {
         if (/json/.test(ct) && res.status() === 200) {
           const j = await res.json();
           if (rec.req != null) { try { rec.res = JSON.stringify(j).slice(0, 300); } catch { /* ignore */ } }
+          // 2026-11-20 T372(SSP0014 USER_CHECK): SAVE 류가 아닌 작은 응답(저장 전 검증 결과 등)은 본문을 남긴다 — 저장 시험이 서버가 통과시킨 값 목록으로 시험 값을 다시 고른다
+          if (rec.req == null) { try { const js = JSON.stringify(j); if (js.length <= 3000) rec.pre = js; } catch { /* ignore */ } }
           const arr = Array.isArray(j) ? j : (j?.data ?? j?.result ?? j?.rows ?? null);
           rec.rows = Array.isArray(arr) ? arr.length : (arr && typeof arr === 'object' ? Object.values(arr).reduce((n: number, v: unknown) => n + (Array.isArray(v) ? v.length : 0), 0) : null);
+          // 2026-11-20 B1: 행 수를 확실히 센 응답만 표시(배열, 또는 값이 전부 배열인 객체). 더 깊은 구조는 0 으로 셀 수 있어 조기 판정에 쓰지 않는다
+          rec.rowsSure = Array.isArray(arr) || (!!arr && typeof arr === 'object' && Object.values(arr).length > 0 && Object.values(arr).every(v => Array.isArray(v)));
           // 2026-11-03 부가 결과셋(기준월·컷오프 등 작은 셋)을 남긴다 — 시나리오 dynlock 이 화면 자신의 응답값(AS-IS ds.Tables[1] 과 같은 원천)으로 경계를 정한다
           { const sets: Record<string, Record<string, unknown>[]> = {}; const scan = (o: unknown) => { if (!o || typeof o !== 'object' || Array.isArray(o)) return; for (const [k, v] of Object.entries(o as Record<string, unknown>)) { if (v === arr) continue; if (Array.isArray(v) && v.length > 0 && v.length <= 2000 && v[0] && typeof v[0] === 'object') sets[k] = (v as Record<string, unknown>[]).slice(0, 3); } }; scan(j); scan((j as { result?: unknown })?.result); scan((j as { data?: unknown })?.data); scan(arr); if (Object.keys(sets).length) rec.sets = sets; }
         }
       } catch { /* 스트리밍/비JSON */ }
+      rec.done = true; rec.doneAt = Date.now();
     });
   }
 
@@ -222,6 +247,9 @@ export class Nscm {
         await this.page.waitForTimeout(200);
       }
     }
+    // 2026-11-20 A4: FE 개발 서버 변환 오류(vite-error-overlay)가 떠 있으면 화면 모듈을 불러오지 못한 것 — 탭 클릭·재진입을 몇 번 해도 같다(결정적).
+    //   보정 3회(약 60초)를 건너뛰고 바로 'viteerr' 로 끝낸다(SCP0028·SSP0014 11-20: '@shared/paste' 없음으로 시험마다 66초 · 판정은 같은 진입 실패)
+    if (await this.page.locator('vite-error-overlay').count().catch(() => 0)) return 'viteerr';
     // URL 이 /view/home 으로 되돌아가며 Home 이 재마운트 → 공지 팝업이 다시 뜬다. 한 번 더 닫고(오늘 하루 체크 포함) 탭을 클릭한다.
     for (let round = 0; round < 3; round++) {
       await this.dismissNotices(round === 0 ? 4_000 : 1_500);
@@ -280,6 +308,13 @@ export class Nscm {
     await this.restoreBrokenLang(menuId);
     const how = await this.activateScreenTab(menuId);
     this.tp('open.activate.' + how, t0); t0 = Date.now();
+    if (how === 'viteerr') {
+      const msg = ((await this.page.locator('vite-error-overlay').first().evaluate(el => ((el as HTMLElement).shadowRoot?.querySelector('.message-body')?.textContent || (el as HTMLElement).shadowRoot?.textContent || '')).catch(() => '')) || '').replace(/\s+/g, ' ').slice(0, 300);
+      this.feError = msg || 'vite-error-overlay';
+      console.log(`[openScreen] ${menuId}: FE 변환 오류(vite) ${this.feError} — 화면 진입 실패로 처리`);
+      return { authorized: false, notFound: false, beDown: false };
+    }
+    this.feError = '';
     const notFound = await this.page.getByText(/404|Not Found|페이지를 찾을 수 없/i).first().isVisible({ timeout: 3_000 }).catch(() => false);
     const guest = await this.page.getByText(/not authorized|권한이 없|권한신청|Apply for permission/i).first().isVisible({ timeout: 3_000 }).catch(() => false);
     if (guest) await this.closeAlert();
@@ -316,6 +351,10 @@ export class Nscm {
   }
   /** openScreen 재시도 중 표시(BE 재기동 뒤 1회만 다시 연다) */
   private openRetry = false;
+  /** 2026-11-20 A4: 마지막 openScreen 의 FE 변환 오류 문구(없으면 '') */
+  feError = '';
+  /** 2026-11-20 B2: 마지막 search 가 알림에 막혀 조회 요청이 나가지 않았으면 그 알림 문구 */
+  searchBlocked = '';
 
   /** 알림/확인 다이얼로그 닫기 (확인 우선) */
   async closeAlert(prefer: 'ok' | 'cancel' = 'ok') {
@@ -331,7 +370,9 @@ export class Nscm {
 
   /** 열려 있는 에러/경고 알림 텍스트(없으면 '') */
   async alertText() {
-    const dlg = this.page.locator('[role="dialog"], [role="alertdialog"], .MuiDialog-root').last();
+    // 2026-11-20 SSP0014 미검증 해소(T370): 숨은 대화상자(MDI keep-alive 탭에 남은 DOM)까지 포함한 마지막 요소를 집으면 보이는 알림이 있어도 '' 를 돌려줬다
+    //   (closeAlert 는 :visible 로 골라 그 알림을 읽지 않고 닫음 → 저장 전 검증 차단 MSG01261 문구 유실, 증거 '알림 ''). 보이는 대화상자만 본다
+    const dlg = this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last();
     return (await dlg.isVisible({ timeout: 500 }).catch(() => false)) ? (await dlg.innerText({ timeout: 2_000 }).catch(() => '')).trim() : '';  // 닫히는 중인 대화상자(W9 저장 직후) 예외 방지 2026-10-27
   }
 
@@ -471,6 +512,8 @@ export class Nscm {
   /** 2026-11-06 T59: 필수 알림이 가리킨 조회조건 칸을 화면 콤보 후보(ALL·빈 값 제외 첫 후보)로 채운다 — 사전 데이터셋 아님(화면 후보만).
    *  반환 '선택 …' = 채움 · 그 밖 = 실패 사유. 다중선택은 첫 후보 1개만 체크한다(index 로 다른 후보 지정 가능) */
   requiredNotes: string[] = [];
+  /** T437: 그리드 팝업이 열린 상태에서 뜬 필수 알림(화면 조회조건 G6 대상 아님 · 기록만) */
+  popupRequiredNotes: string[] = [];
   requiredFilled: string[] = [];
   async fillRequired(label: string, index = 0): Promise<string> {
     await this.expandSearchArea().catch(() => undefined);
@@ -499,25 +542,36 @@ export class Nscm {
     const t0 = Date.now();
     // 메인 조회(call-proc) 응답을 기다린다 — 초기기간 조회(dayRange)는 조회 버튼과 무관하므로 제외.
     // 2026-10-20: 감시를 클릭 '전에' 걸어 빠른 응답을 놓치지 않는다(실측: 뒤에 걸면 재조회 121s). 조회 버튼이 없는 계정은 F5 도 무동작 → 10s 만
+    this.searchBlocked = '';
     const waitSearch = this.page.waitForResponse(r => /call-proc/.test(r.url()) && !/\/dayRange\//i.test(r.url()) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: btn ? (opts.timeout ?? CFG.searchTimeoutMs) : 10_000 }).catch(() => undefined);
     // 2026-11-10 T207(SSP0023 G1·G8 허위 FAIL 4건): 조회 버튼 1회에 call-proc 이 여러 개 나가는 화면(SSP0023 main 30~37s + calendar 0.2s)에서
     //   waitSearch 는 먼저 끝난 calendar 응답으로 풀려 main 응답 전에 빈(로딩 중) 그리드를 읽었다 — 서버는 22행. 클릭 뒤 시작된 조회 call-proc 이 모두 끝날 때까지 기다린다.
     const pend = new Set<import('@playwright/test').Request>(); const isQ = (u: string) => /call-proc/.test(u) && !/\/dayRange\//i.test(u) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(u);
-    const onReq = (r: import('@playwright/test').Request) => { if (isQ(r.url())) pend.add(r); }; const onDone = (r: import('@playwright/test').Request) => { pend.delete(r); };
+    let qStarted = 0; const onReq = (r: import('@playwright/test').Request) => { if (isQ(r.url())) { pend.add(r); qStarted = Date.now(); } }; const onDone = (r: import('@playwright/test').Request) => { pend.delete(r); };
     this.page.on('request', onReq); this.page.on('requestfinished', onDone); this.page.on('requestfailed', onDone);
     if (btn) await btn.click({ timeout: 10_000 }).catch(() => undefined); else await this.page.keyboard.press('F5');
     // 2026-11-06 T59(SCP0016): 필수 조회조건이 비어 화면이 '… 필수 입력 항목입니다' 알림으로 조회를 막으면 call-proc 이 안 나가
     //   응답 대기(searchTimeoutMs 120s)를 다 쓰고 0행으로 끝났다(테스트당 8~15분 · 7시간). 알림을 감시해 그 칸을 화면 콤보 후보로 채우고 재조회한다.
     let got = false; void waitSearch.then(r => { if (r) got = true; });
+    // 2026-11-20 B2: 필수 입력이 아닌 알림이 떠 있고 클릭 뒤 조회 요청이 하나도 나가지 않은 채 5초가 지나면 화면이 조회를 막은 것 — 응답 대기(120초)를 하지 않는다.
+    //   요청이 하나라도 시작됐으면 종전처럼 끝까지 기다린다(느린 조회와 구별). 결과(조회 호출 0건)는 종전과 같다
+    let blocked = '';
     for (let fill = 0; fill < 4; fill++) {
-      let req = '';
-      for (const t1 = Date.now(); !got && Date.now() - t1 < 12_000;) { const m = await this.alertText().catch(() => ''); if (m && REQUIRED_RX.test(m)) { req = m; break; } await this.page.waitForTimeout(400); }
+      let req = ''; let alertSince = 0;
+      for (const t1 = Date.now(); !got && Date.now() - t1 < 12_000;) { const m = await this.alertText().catch(() => ''); if (m && REQUIRED_RX.test(m)) { req = m; break; }
+        if (m && fill === 0 && !qStarted && !pend.size) { if (!alertSince) alertSince = Date.now(); else if (Date.now() - alertSince >= 5_000) { blocked = m; break; } } else alertSince = 0;
+        await this.page.waitForTimeout(400); }
+      if (blocked) { console.log(`[search] 조회 요청 없음 — 알림 '${blocked.replace(/\s+/g, ' ').slice(0, 80)}' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(${Math.round(CFG.searchTimeoutMs / 1000)}초) 생략`); this.searchBlocked = blocked; break; }
       if (!req || got) break;
       const label = requiredLabelOf(req);
+      // 2026-11-20 T437(SCP0028 V-388e3fd3 G6 'From Site 후보 없음 ← From Site 값은 필수'): 그리드 팝업(일괄입력 등)이 열린 채 search() 가 불리면 팝업 Search 가 눌려
+      //   팝업 조회조건의 필수 알림이 화면 조회조건 필수 알림(G6 '검사기 우회 기록')으로 섞였다 → 알림 때 그리드 팝업이 떠 있으면 팝업 기록(popupRequiredNotes)으로 따로 둔다
+      const inPopup = await this.page.locator('[role="dialog"]').filter({ has: this.page.locator('.wj-flexgrid') }).first().isVisible({ timeout: 300 }).catch(() => false);
       await this.clearDialogs();
       const note = label ? await this.fillRequired(label) : '';
-      this.requiredNotes.push(`${label || '(항목명 해석 불가)'}: ${note || '채우기 실패'} ← '${req.replace(/\s+/g, ' ').slice(0, 60)}'`);
-      console.log(`[required] ${this.requiredNotes[this.requiredNotes.length - 1]}`);
+      const reqNote = `${label || '(항목명 해석 불가)'}: ${note || '채우기 실패'} ← '${req.replace(/\s+/g, ' ').slice(0, 60)}'`;
+      if (inPopup) this.popupRequiredNotes.push(reqNote); else this.requiredNotes.push(reqNote);
+      console.log(`[required${inPopup ? ' 팝업' : ''}] ${reqNote}`);
       if (!note.startsWith('선택')) { this.page.off('request', onReq); this.page.off('requestfinished', onDone); this.page.off('requestfailed', onDone); return this.calls.slice(before); }  // 채우지 못함 — 응답 대기 없이 반환(호출부는 0행 처리)
       const ws2 = this.page.waitForResponse(r => /call-proc/.test(r.url()) && !/\/dayRange\//i.test(r.url()) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: opts.timeout ?? CFG.searchTimeoutMs }).catch(() => undefined);
       void ws2.then(r => { if (r) got = true; });
@@ -525,7 +579,7 @@ export class Nscm {
       await Promise.race([ws2, this.page.waitForTimeout(12_500)]);
       if (got) break;
     }
-    if (!got) await waitSearch;
+    if (!got && !blocked) await waitSearch;
     { const lim = opts.timeout ?? CFG.searchTimeoutMs; const t2 = Date.now(); await this.page.waitForTimeout(300); while (pend.size && Date.now() - t2 < lim) await this.page.waitForTimeout(300);
       if (pend.size) console.log(`[search] 조회 요청 ${pend.size}건이 ${Math.round(lim / 1000)}s 안에 끝나지 않음: ${[...pend].map(r => r.url().replace(/^.*\/api\//, '')).join(', ')}`); }
     this.page.off('request', onReq); this.page.off('requestfinished', onDone); this.page.off('requestfailed', onDone);
@@ -685,7 +739,16 @@ export class Nscm {
   subButton(name: 'Save' | 'Insert' | 'Delete' | 'Search' | 'Sort' | 'Filter' | 'Excel Upload' | string): Locator {
     return this.page.getByRole('button', { name: new RegExp(`^${escapeRe(name)}(\\(F\\d+\\))?$`, 'i') }).first();
   }
-  async subButtonVisible(name: string) { return this.subButton(name).isVisible({ timeout: 3_000 }).catch(() => false); }
+  async subButtonVisible(name: string) { return (await this.toolbarButton(name)).isVisible({ timeout: 3_000 }).catch(() => false); }
+  /** 2026-11-20 T430(SCP0028 EG374·EG411·authcrud 7행): 공용 툴바(SubTitle) 단추는 'Save(F7)'·'Insert(F8)'·'Delete(F9)' 처럼 단축키를 붙여 그린다.
+   *  화면 단추(customButtons 'Delete' = 일괄삭제 팝업)가 앞에 그려져 subButton('Delete').first() 가 그 단추를 툴바 Delete 로 잡았다.
+   *  단축키 붙은 단추가 하나라도 보이는 화면(SubTitle 화면)이면 Save·Insert·Delete 는 단축키 붙은 단추만 찾는다. 그 밖 화면은 종전 subButton */
+  async toolbarButton(name: string): Promise<Locator> {
+    if (!/^(Save|Insert|Delete)$/i.test(name)) return this.subButton(name);
+    const hot = await this.page.getByRole('button', { name: /\(F\d+\)\s*$/ }).count().catch(() => 0);
+    if (!hot) return this.subButton(name);
+    return this.page.getByRole('button', { name: new RegExp(`^${escapeRe(name)}\\s*\\(F\\d+\\)$`, 'i') }).first();
+  }
   /** 지금 연 화면 ID(openScreen 이 기록) — clickInsert 가 AS-IS 사실을 찾는 데 쓴다 */
   curMenu = '';
   /** 가장 최근 clickInsert 의 행 선택 재시도 내역(없으면 '') — 호출부가 증거에 붙일 수 있다 */
@@ -764,14 +827,14 @@ export class Nscm {
     this.lastInsertTrail = '';
     const cnt = () => this.page.evaluate(() => { let n = 0; for (const e of Array.from(document.querySelectorAll('.wj-flexgrid'))) { if ((e as HTMLElement).offsetParent === null) continue; const c = (e as unknown as Record<string, { rows?: { length: number; [i: number]: { dataItem?: { CRUD_TYPE?: string } } } }>)['$WJ-CTRL']; if (!c || !c.rows) continue; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I') n++; } } return n; }).catch(() => -1);
     const n0 = await cnt();
-    await this.subButton('Insert').click({ timeout: 10_000, ...(opts || {}) });
+    await (await this.toolbarButton('Insert')).click({ timeout: 10_000, ...(opts || {}) });
     if (n0 < 0 || !this.curMenu) return;
     await this.page.waitForTimeout(700);
     const dlg = await this.page.locator('[role="dialog"], [role="alertdialog"]').first().isVisible({ timeout: 300 }).catch(() => false);
     if (dlg) {
       // 선택 팝업: 앞 행을 골라 OK. 신규 행이 안 생기면(전부 중복 키) Insert 를 다시 눌러 팝업 조건의 다른 후보로 최대 3번 더 시도
       let t = await this.pickFromInsertPopup().catch(() => '');
-      for (let k = 0; t && k < 3; k++) { const n1 = await cnt(); if (n1 < 0 || n1 > n0) break; await this.subButton('Insert').click({ timeout: 10_000 }).catch(() => undefined); await this.page.waitForTimeout(1_200); t = await this.pickFromInsertPopup(3, k).catch(() => ''); }
+      for (let k = 0; t && k < 3; k++) { const n1 = await cnt(); if (n1 < 0 || n1 > n0) break; await (await this.toolbarButton('Insert')).click({ timeout: 10_000 }).catch(() => undefined); await this.page.waitForTimeout(1_200); t = await this.pickFromInsertPopup(3, k).catch(() => ''); }
       return;
     }
     const n1 = await cnt(); if (n1 < 0 || n1 > n0) return;
@@ -823,7 +886,7 @@ export class Nscm {
       const ttl = ((await dlg0.locator('h1, h2, h3, [class*="title" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 60);
       throw new Error(`[측정 경로 없음] Save 를 누를 수 없음 — 팝업 '${ttl || '(제목 없음)'}' 이 열려 있어 화면 Save 버튼이 가려짐(Insert·셀 조작이 선택 팝업을 여는 화면 · 검사기가 팝업을 처리하지 못함)`);
     }
-    await this.subButton('Save').click({ timeout: 10_000 });
+    await (await this.toolbarButton('Save')).click({ timeout: 10_000 });
     // 2026-11-10 T223(SSP0060 '저장 세부' 실패 20:4x · 화면 실측: Save 뒤 'Request' 팝업 — Change Reason* 콤보·Reason Detail* 텍스트·OK 필수):
     //   저장 입력 팝업을 처리하지 못해 다음 Save 가 팝업에 막혀 10초 타임아웃 → '원복 저장 후 복원되지 않음' 허위 FAIL. 필수(*) 칸을 채우고 OK — 생긴 요청 행은 restore_touched 가 지운다
     { const note = await this.fillSaveInputPopup().catch(() => ''); if (note) { this.requiredNotes.push(note); console.log(`[save] ${note}`); } }
@@ -831,15 +894,26 @@ export class Nscm {
     await this.page.waitForTimeout(500); let toast = ''; for (const t of await this.page.locator('.MuiSnackbar-root, [role="alert"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) { const v = t.replace(/\s+/g, ' ').trim(); if (v && !staleToast.has(v)) { toast = v; break; } }
     const preAlert = await this.alertText().catch(() => '');
     const preCancel = !!preAlert && await this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last().getByRole('button', { name: /^(취소|Cancel|No|아니오)$/i }).first().isVisible().catch(() => false);
+    // 2026-11-20 SSP0014 미검증 해소(T371): 아래 closeAlert 가 닫는 대화상자가 확인창이 아니라 저장 전 검증 알림일 수 있다(USER_CHECK 응답 뒤 MSG01261) → 닫기 전에 문구를 읽어 둔다
+    const lateAlert = preAlert ? '' : await this.alertText().catch(() => '');
+    const lateCancel = !!lateAlert && await this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last().getByRole('button', { name: /^(취소|Cancel|No|아니오)$/i }).first().isVisible().catch(() => false);
     await this.closeAlert('ok');
     // quickBlock: 취소 버튼 없는 알림 = 저장 전 차단 — 응답을 기다리지 않는다(저장 구간을 가짜 응답으로 끊는 시험 전용)
-    if (!(opts.quickBlock && preAlert && !preCancel)) await waitSave;
+    // T371: 저장 전 검증 호출(SAVE 류가 아닌 call-proc · 예 SSP0014 USER_CHECK)만 끝나고 취소 버튼 없는 알림이 뜨면 저장 요청은 나가지 않는다 — SAVE 응답을 60s 기다리지 않고 알림 문구를 돌려준다
+    const SAVE_RE = /SAVE|INS|UPD|DEL/i; let preCheckMsg = lateAlert && !lateCancel && this.calls.slice(before).some(c => !SAVE_RE.test(c.btn)) && !this.calls.slice(before).some(c => SAVE_RE.test(c.btn)) ? lateAlert : '';
+    if (!(opts.quickBlock && preAlert && !preCancel) && !preCheckMsg) {
+      let stop = false; let seenAt = 0;
+      const poll = (async () => { const end = Date.now() + (opts.timeout ?? 60_000); while (!stop && Date.now() < end) { await this.page.waitForTimeout(400).catch(() => undefined); const cs = this.calls.slice(before); if (cs.some(c => SAVE_RE.test(c.btn))) return; if (!cs.length || cs.some(c => !c.status)) continue; const a = await this.alertText().catch(() => ''); if (!a) continue; const cx = await this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last().getByRole('button', { name: /^(취소|Cancel|No|아니오)$/i }).first().isVisible().catch(() => false); if (!cx) { preCheckMsg = a; return; } /* 2026-11-20 T378(SSP0014 라운드 4 ES-de56f621 '[60s] 저장 응답 USER_CHECK:200 알림=…'): 알림 창에 취소 모양 단추가 있어 60초를 기다렸다 → 확인 질문(?·하시겠·Would you·Do you)이 아닌 알림이 2초 넘게 그대로면 저장 전 차단 */ if (!/[?？]|하시겠|Would you|Do you|Are you/i.test(a)) { seenAt = seenAt || Date.now(); if (Date.now() - seenAt >= 2_000) { preCheckMsg = a; return; } } else seenAt = 0; } })();
+      await Promise.race([waitSave, poll]); stop = true;
+    }
     await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);
     // 결과 알림(성공/ORA 오류)은 닫힐 때까지 최대 3회 — 남아 있으면 다음 클릭(조회·셀 편집)이 전부 막힌다(2026-10-20 실측)
-    let msg = ''; for (let k = 0; k < 3; k++) { const m = await this.alertText(); if (!m) break; msg = msg || m; await this.closeAlert('ok'); await this.page.waitForTimeout(300); }
+    let msg = preCheckMsg; for (let k = 0; k < 3; k++) { const m = await this.alertText(); if (!m) break; msg = msg || m; await this.closeAlert('ok'); await this.page.waitForTimeout(300); }
     // 결과 커서의 ERR_CODE(call-proc 성공 판정 = 결과 커서 CODE) 도 메시지에 반영
     const calls = this.calls.slice(before); for (const c of calls) { const m2 = /"ERR_CODE":\s*(-?\d+)[^}]*"ERR_MESSAGE":\s*"([^"]{0,200})/.exec(c.res || ''); if (m2 && m2[1] !== '0' && !msg) msg = m2[2]; }
-    const clean = (t: string) => t.replace(/(^|[ ]|[\r\n])+(Confirm|확인|OK|Cancel|취소)([ ]|[\r\n])*$/g, '').trim(); return { calls, message: clean(msg || (calls.length ? toast : (preAlert || toast))) };
+    // T371: 저장 요청 유무는 SAVE 류 호출로 센다 — 검증 호출만 있으면 저장 전 알림(preAlert)이 사유다(종전: 호출 1건이라도 있으면 preAlert 를 버림)
+    const saveN = calls.filter(c => SAVE_RE.test(c.btn)).length;
+    const clean = (t: string) => t.replace(/(^|[ ]|[\r\n])+(Confirm|확인|OK|Cancel|취소)([ ]|[\r\n])*$/g, '').trim(); return { calls, message: clean(msg || (saveN ? toast : (preAlert || toast))), preCheckOnly: saveN === 0 && calls.length > 0 };
   }
   /**
    * 다국어 미적용 노출 — 2026-10-23 사용자 지시: t(코드, '_기본문구') 의 코드가 SCM_ADM_MSG_M 에 없으면 '_기본문구' 가 그대로 보인다 → 오류.

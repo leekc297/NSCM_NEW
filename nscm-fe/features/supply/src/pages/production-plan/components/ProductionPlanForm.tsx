@@ -91,7 +91,10 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
   //   옵션 목록을 그대로 쓴다.
   const inDivision = (r: ComboResponse): boolean =>
     !sc.divisionId || str(r.DIVISION_ID) === sc.divisionId;
-  const planDateOptions = toOptions((planDates ?? []).filter(inDivision));
+  // Plan Date CODE(PLAN_START_YYYYMMDD)는 division 별로 중복될 수 있다(같은 날짜가 div 40·81 양쪽, OVER_52W_YN
+  //   상이) → CODE 만으로 매칭하면 타 division 행을 집어 W{n} 프리셋이 어긋난다. 드롭다운과 동일 필터로 좁혀 쓴다.
+  const planDatesInDiv = (planDates ?? []).filter(inDivision);
+  const planDateOptions = toOptions(planDatesInDiv);
   const planTypeOptions = toOptions(
     (planTypes ?? []).filter(
       r =>
@@ -307,7 +310,9 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
             t(LBL.OPERATION_GROUP, '_Operation Group'),
             sc.operationGroupId,
             operationGroupOptions,
-            v => set({ operationGroupId: v }),
+            // Operation Group 이 바뀌면 Plant Site 목록이 재조회되므로 이전 선택을 비운다 — 남겨두면
+            //   새 목록에 없는 이전 site 가 화면엔 안 보이면서 조회 파라미터(scmSiteId)로 넘어간다.
+            v => set({ operationGroupId: v, plantSiteIds: [] }),
             true
           )}
           {multi(t(LBL.ELECTRODE, '_Electrode'), sc.electrodeTypes, electrodeOptions, v =>
@@ -372,7 +377,7 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
               label={t(LBL.PERIOD, '_Period')}
               quickWeeks={QUICK_WEEKS}
               // 동적 WLast — 선택 Plan Date 행 OVER_52W_YN='Y' 면 W{PLAN_WEEKS}(DATE_WEEKLY1_SCP_ALL, 2026-11-17).
-              lastWeeks={over52WeekPreset(planDates, sc.planStartYyyymmdds[0] ?? '')}
+              lastWeeks={over52WeekPreset(planDatesInDiv, sc.planStartYyyymmdds[0] ?? '')}
             />
           </Grid>
         </>

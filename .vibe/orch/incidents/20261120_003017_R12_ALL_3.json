@@ -1,0 +1,28 @@
+{
+  "id": "20261120_003017_R12_ALL_3",
+  "at": "2026-11-20T00:30:17+09:00",
+  "ms": 1795102217407,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: VM 파일 수정 직후 120초 안에는 가벼운 점검에서 S3 를 빼고 무거운 점검에서만 판정",
+  "screen": "",
+  "sig": "R12|S8|20261119220749_SELF",
+  "count": 1,
+  "repeat": null,
+  "detail": "개선안 20261119220749_SELF 반영 2026-11-19T22:35 · 점검 항목 S3|orch-selfcheck.js 가 2026-11-20T00:26 점검에 다시 나옴",
+  "evidence": {
+    "check": "S8",
+    "key": "S8|20261119220749_SELF",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:50:23+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S8 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

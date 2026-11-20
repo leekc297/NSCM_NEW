@@ -1,0 +1,22 @@
+{
+  "id": "20261120_111147_R12_ALL_2",
+  "at": "2026-11-20T11:11:47+09:00",
+  "ms": 1795140707732,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U8 VMO inc 화면 표시 누락",
+  "screen": "",
+  "sig": "R12|S13|U8|inc",
+  "count": 1,
+  "repeat": null,
+  "detail": "11-20 10:55 화면이 받은 최신 활동 2026-11-20T10:42:40+09:00 · 원본 최신 2026-11-20T10:55:54+09:00 (20261120_105554_R12_ALL) · 받은 115건 / 원본 115건",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U8|inc",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": []
+}

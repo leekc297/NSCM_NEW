@@ -1,0 +1,27 @@
+{
+  "id": "20261120_060643_R9_SCP0005",
+  "at": "2026-11-20T06:06:43+09:00",
+  "ms": 1795122403739,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.verify.SCP0005.lock (PID 5080 없음)",
+  "screen": "SCP0005",
+  "sig": "R9|_run.verify.SCP0005.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-19T20:55:00.764Z · 인자 verify SCP0005",
+  "evidence": {
+    "file": "Doc/e2e/_run.verify.SCP0005.lock",
+    "pid": 5080
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T06:06:45+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.verify.SCP0005.lock (PID 5080 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "20261120_004734_R1_SCP0005",
+  "at": "2026-11-20T00:47:34+09:00",
+  "ms": 1795103254377,
+  "rule": "R1",
+  "ruleName": "실행 실패",
+  "title": "1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0005",
+  "sig": "S8.checklistRun | [FAIL] Playwright exit code N - log tail:",
+  "count": 1,
+  "repeat": {
+    "same": 1,
+    "all": 2,
+    "screens": [
+      "SSP0005",
+      "SCP0005"
+    ]
+  },
+  "detail": "[FAIL] Playwright exit code 1 - log tail:",
+  "evidence": {
+    "runId": "SCP0005_1795102432143",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창이 닫히며 끝난 프로세스). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "notice": true,
+  "reload": "shutdown",
+  "prevStatus": "open"
+}

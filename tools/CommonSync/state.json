@@ -1,8 +1,8 @@
 {
- "baseline": "06e7d22ded01a46846c08a0d9c65d0d497111081",
- "baselineInfo": "06e7d22de 2026-11-19 09:47 eunjoo_hwang fix(combo): 단일 선택 콤보 dirty-confirm 취소 시 표시값이 store와 어긋나는 문제 전역 교정",
- "applied": "2026-11-19T09:54:26",
- "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261119\\README.md",
+ "baseline": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
+ "baselineInfo": "c62b4200c 2026-11-20 11:16 Jeongyun Park fix(SCP0011): 입력 차단·편집 잠금·조회조건 AS-IS 패리티",
+ "applied": "2026-11-20T11:28:39",
+ "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261120\\README.md",
  "baselineBeApplied": "2026-11-12T10:30:49",
  "reportBe": "_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112\\README.md",
  "baselineBe": "3e1e0a081018e7121c5e7c323c3785532097f201",
@@ -110,6 +110,12 @@
    "from": "724a6155065f07664677fd7819e26033b806930a",
    "applied": "2026-11-19T09:54:26",
    "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261119\\README.md"
+  },
+  {
+   "baseline": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
+   "from": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+   "applied": "2026-11-20T11:28:39",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261120\\README.md"
   }
  ]
 }

@@ -1,0 +1,172 @@
+{
+ "rule_id": "J2",
+ "hash": "dba1054d13f458e9",
+ "groups": [
+  {
+   "rows": [
+    "EG-078908f8"
+   ],
+   "why": "DELETE 버튼, 조회 전, Div 40 SSP Viewer, 비노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-158532ce"
+   ],
+   "why": "DELETE 버튼, 조회 전, Div 81 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-15a9733a"
+   ],
+   "why": "INSERT 버튼, 조회 전, Div 82 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-26ed7e24"
+   ],
+   "why": "INSERT 버튼, 조회 전, Div 81 SSP Viewer, 비노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-2f72a0f1"
+   ],
+   "why": "EG369 전체 Div의 AS-IS Div·GROUP 분기 문장을 확인하는 행이라 버튼 노출 측정과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "EG-397e1a0f"
+   ],
+   "why": "INSERT 버튼, 조회 전, Div 40 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-42515862"
+   ],
+   "why": "INSERT 버튼, 조회 전, Div 81 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-4d489a61"
+   ],
+   "why": "SAVE 버튼, 조회 전, Div 40 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-5da805d2"
+   ],
+   "why": "SAVE 버튼, 조회 전, Div 81 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-6e303f99"
+   ],
+   "why": "SAVE 버튼, 조회 전, Div 82 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-983afc4d"
+   ],
+   "why": "SAVE 버튼, 조회 전, Div 40 SSP Viewer, 비노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-a594e950"
+   ],
+   "why": "EG369 CR-070 공통버튼 Div의 권한 프로시저 결과를 확인하는 행이라 개별 버튼 노출 측정과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-c1104d6b"
+   ],
+   "why": "INSERT 버튼, 조회 전, Div 40 SSP Viewer, 비노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-c6148723"
+   ],
+   "why": "DELETE 버튼, 조회 전, Div 82 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-c72c53b0"
+   ],
+   "why": "EG373 Insert 차단 메시지(AS-IS GROUP 분기)를 확인하는 행이라 버튼 노출과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "EG-d2fe62f7"
+   ],
+   "why": "DELETE 버튼, 조회 전, Div 40 SSP Planner, 노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-da3faba9"
+   ],
+   "why": "SAVE 버튼, 조회 전, Div 81 SSP Viewer, 비노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-fd6e2d03"
+   ],
+   "why": "DELETE 버튼, 조회 전, Div 81 SSP Viewer, 비노출 기대. 같은 Div·그룹·버튼 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "V-30e45b47"
+   ],
+   "why": "권한 없는 계정과 있는 계정을 조회 후 비교하는 일반 결함 유형이라 조회 전 개별 행이나 화면 규칙과 상태·방법이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-3c04771c"
+   ],
+   "why": "화면 기능 유무와 Division 변경 시 권한 재조회(cascade)까지 확인하는 확정 규칙이라 기대 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-42616e24"
+   ],
+   "why": "Price Batch Input 버튼은 다른 화면(DMF0020) 고유 요소라 공통 버튼과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-5d5f56c6"
+   ],
+   "why": "SCP Planner와 편집가능 시간 조건의 Insert·Save 불가를 확인하는 행이라 SSP 그룹 권한 행과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-77658cc1"
+   ],
+   "why": "조회 실행 여부와 무관하게 OPEN 시 Division으로 노출이 정해지는지를 확인하는 행이라 기대 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-83fd2b9b"
+   ],
+   "why": "Data Type=Cutoff Data일 때 Delete 비노출이라는 화면 고유 조건이라 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-85cb4be1"
+   ],
+   "why": "그룹ID별 메뉴·버튼 권한 데이터를 운영 데이터와 대조하는 행이라 메뉴 노출까지 포함해 방법과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-f73f3f6a"
+   ],
+   "why": "Measure Setting 버튼 제거는 다른 화면 고유 요소라 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-f885dd85"
+   ],
+   "why": "화면 전체 권한 일치를 포괄적으로 서술한 행이라 특정 행과 측정 단위가 같다고 확신할 수 없어 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:09:32",
+ "cost": 0.1118711
+}

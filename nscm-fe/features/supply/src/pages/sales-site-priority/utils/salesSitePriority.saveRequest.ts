@@ -16,6 +16,8 @@
 //   userId 는 세션유저 — SP 가 P_USER_ID 를 루프 안 SCM_ARR_SPL_VAL 로 행별 분해하므로 행마다 실어
 //   '^'-fold 한다(CREATED_BY/LAST_UPDATED_BY 갱신용, call-proc 은 세션유저 미주입).
 
+import dayjs from 'dayjs';
+
 import { apiClient } from '@foundation/apis';
 import { safeString } from '@foundation/utils';
 
@@ -38,7 +40,25 @@ interface FieldSpec {
 //   AS-IS .Replace("-","").Substring(0,8) 등가. 저장검증(From>To)도 동일 정규화를 공유한다 — GET 은
 //   'yyyy-MM-dd HH:mm:ss'(시간부 포함), 붙여넣기 셀은 복사원 포맷 그대로라, 문자열 원형 비교는
 //   포맷·구분자·시간부 불일치에 깨진다(useSalesSitePriorityValidation 재사용).
-export const ymd8 = (v: unknown): string => safeString(v).replace(/\D/g, '').slice(0, 8);
+//   셀값이 Date 객체일 수 있다 — FPDate(InputDate) 편집을 성립시키려 그리드 행을 Date 로 들기 때문
+//   (toGridDate, 형제 demand-exception/SCP0127/0128 동형). safeString(Date)='' 라 숫자 추출 전에
+//   Date 를 'YYYYMMDD' 로 먼저 포맷한다(안 그러면 날짜가 공백으로 저장되는 회귀).
+export const ymd8 = (v: unknown): string =>
+  v instanceof Date
+    ? dayjs(v).format('YYYYMMDD')
+    : safeString(v).replace(/\D/g, '').slice(0, 8);
+
+// 그리드 표시/편집용 Date 변환 — FPDate(InputDate 달력) 에디터는 셀값이 문자열이면 Date 에 못 묶여
+//   빈 채로 뜨고, 빈 셀을 열면 직전에 편집한 다른 행의 Date 가 그대로 남아(에디터 인스턴스 재사용)
+//   입력 없이 Tab 해도 그 날짜가 새어든다(No.9). 행을 Date 로 들면 빈값은 ''(null 등가)이라 에디터가
+//   비어 열린다. "2026-06-01 00:00:00"/"2026-06-01"/"20260601" 모두 허용, 빈값·무효는 ''.
+export const toGridDate = (v: unknown): Date | '' => {
+  if (v instanceof Date) return v;
+  const str = safeString(v).trim();
+  if (str === '') return '';
+  const d = /^\d{8}$/.test(str) ? dayjs(str, 'YYYYMMDD') : dayjs(str);
+  return d.isValid() ? d.toDate() : '';
+};
 
 const PRE_DELIM = '|';
 const preToken = (row: Row, idx: number): string =>

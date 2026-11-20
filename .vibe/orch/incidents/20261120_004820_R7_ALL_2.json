@@ -1,0 +1,39 @@
+{
+  "id": "20261120_004820_R7_ALL_2",
+  "at": "2026-11-20T00:48:20+09:00",
+  "ms": 1795103300611,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
+  "screen": "",
+  "sig": "R7|응답 중 종료",
+  "count": 3,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-19T23-18-09_claude_orch.log",
+    "label": "VM 자가진단",
+    "source": "orch",
+    "cls": "응답 중 종료"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:48:21+09:00",
+      "by": "VMO",
+      "what": "Claude 종료 분류 응답 중 종료. stderr 와 로그(.vibe\\logs\\2026-11-19T23-18-09_claude_orch.log) 확인",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드 뒤 지난 기록을 다시 읽어 올린 중복). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_004820_R7_ALL_2.json",
+  "lastAt": "2026-11-20T00:48:33+09:00",
+  "lastMs": 1795103313746,
+  "notice": true,
+  "reload": "replay",
+  "prevStatus": "need-user"
+}

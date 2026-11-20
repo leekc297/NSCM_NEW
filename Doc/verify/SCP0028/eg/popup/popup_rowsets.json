@@ -412,6 +412,23 @@
   ]
  },
  {
+  "call": 1,
+  "cls": "SCM0002_ShipmentLotSizePopup",
+  "trig": "BTN:btnInput",
+  "account": "minyonglee1",
+  "rows": 0,
+  "body": "{\"comboId\":\"ToSiteByDivision\",\"divisionId\":\"''\",\"mnuId\":\"SCP0028\"}",
+  "url": "",
+  "title": "SSP Lot Size - 입력",
+  "buttons": [
+   "Search(F5)",
+   "OK",
+   "Close"
+  ],
+  "columns": [],
+  "sample": []
+ },
+ {
   "call": 2,
   "cls": "SCM0002_ItembyDivisionPopup",
   "trig": "COND:btnItemId",

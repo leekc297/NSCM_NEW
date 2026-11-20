@@ -13,6 +13,7 @@ import * as path from 'node:path';
 import type { Locator } from '@playwright/test';
 
 import { test } from '../../../tools/E2E/fixtures/test';
+import { withFileLock } from '../../../tools/E2E/lib/writeguard';  // 2026-11-20 D1 동시 실행: 결과 파일 잠금
 import type { Nscm } from '../../../tools/E2E/lib/nscm';
 import { judgePeriodReverse } from '../../../tools/E2E/lib/shellcheck';
 import { dropdownOptions, parseCsv, probe } from '../../../tools/E2E/lib/probe';
@@ -67,14 +68,14 @@ const asisEntryCall = (tobeProc: string): string => {
   } catch { /* facts 없음 */ }
   return '';
 };
-const flush = () => {
+const flush = () => withFileLock(OUT, () => {  // 2026-11-20 D1
   if (!ID || !results.length) return;
   const prev: Res[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
   // 같은 행에 이미 확정 판정(PASS/FAIL/NA)이 있으면 판정필요·ERROR 로 덮지 않는다(2026-10-28: 뒤 테스트의 '프로브 불가' 판정필요가 앞 실측 FAIL 을 지우던 결함)
   const ded = new Set(fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(x => x.note === '전용').map(x => x.row_id) : []); /* 전용 행의 전용 시험(@verify TAG) 결과는 일괄 판정이 덮지 않는다(2026-11-02 T32) */ const m = new Map(prev.map(r => [r.row_id, r])); for (const r of results) { const ex = m.get(r.row_id); if (ex && ded.has(r.row_id) && /^E2E @verify \S/.test(ex.tobe_ref || '')) continue; if (ex && ['PASS', 'FAIL', 'NA'].includes(ex.result) && ['판정필요', 'ERROR'].includes(r.result) && (!RUN_ID || ex.run === RUN_ID)) continue; m.set(r.row_id, r); }
   // 2026-11-13 점검: 결과 파일 일시 잠금("UNKNOWN: unknown error, open …e2e_results.json" 11-12 SCP0028)으로 기록이 빠지지 않게 최대 5회 다시 쓴다(_verify.spec 과 같은 처리)
   { const body = JSON.stringify([...m.values()], null, 1); for (let k = 0; ; k++) { try { fs.writeFileSync(OUT, body, 'utf8'); break; } catch (e) { if (k >= 4) throw e; Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 300 * (k + 1)); } } }
-};
+});
 const COND_HASH = new Map(rows.map(r => [r.row_id, createHash('sha1').update(String(r.condition || ''), 'utf8').digest('hex').slice(0, 8)]));  // 측정 시점의 검사 조건 — judge 가 조건이 바뀐 낡은 판정을 가려낸다(2026-10-29)
 // P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
 const CUR: { nscm: Nscm | null } = { nscm: null };
@@ -1300,10 +1301,15 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       const trig = m3trig;
       const pt = await probe.cellCenter(p, ex.row, trig);
       if (pt) {
+        const m3Calls0 = nscm.calls.length;  // T454
         await p.mouse.dblclick(pt.x, pt.y);
         let dlg: import('@playwright/test').Locator | null = null; const until = Date.now() + 10_000;
         while (!dlg && Date.now() < until) { dlg = await tagPopup(nscm, 'm3'); if (!dlg) await p.waitForTimeout(300); }
-        if (!dlg) { for (const { x } of m3) put(x.row_id, 'FAIL', `${trig} 더블클릭 → 팝업 열림 감지 실패`); }
+        // T454(2026-11-20 SCP0005 T-6d14c72c): 대화상자 없음 = 종전 '열림 감지 실패'(judge 가 검사기 미검증으로 내림). 10초 동안 대화상자 0 · 서버 호출 0 · 편집기 없음이면
+        //   화면이 더블클릭에 아무것도 하지 않은 것 → 실측 FAIL('팝업 열리지 않음'). 호출이 있었거나 편집기가 열렸으면 종전처럼 감지 실패로 둔다
+        if (!dlg) { const callsAfter = nscm.calls.slice(m3Calls0).length; const ed = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; return !!(c && c.activeEditor); })()`).catch(() => false);
+          const none = callsAfter === 0 && !ed;
+          for (const { x } of m3) put(x.row_id, 'FAIL', none ? `${trig} 더블클릭(r${ex.row}) → 10초 동안 대화상자 0 · 서버 호출 0 · 편집기 없음 — 팝업 열리지 않음(AS-IS 더블클릭 팝업 ${x.target.slice(0, 60)})` : `${trig} 더블클릭 → 팝업 열림 감지 실패(서버 호출 ${callsAfter} · 편집기 ${ed ? '열림' : '없음'})`); }
         else {
           const before = nscm.calls.length; const dsearch = dlg.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }).first();
           let rowsIn = -1; let err = '';
@@ -1487,18 +1493,25 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         // ALL 해제 → 결과에 실제로 있는 값 1개 체크 → 조회
         const freq = new Map<string, number>(); for (const v of base) if (v) freq.set(v, (freq.get(v) || 0) + 1);
         const target = [...freq.entries()].sort((a, b2) => a[1] - b2[1])[0]?.[0] || '';
+        // 2026-11-20 T385(SSP0014 V-ccba28ce From Site): 결과 칸은 코드(FROM_SITE)인데 후보는 이름('AZ Mobile Assy-Cell')만 보여 코드로는 후보를 못 찾고 임의 후보를 골라 0행 →
+        //   이 화면 콤보 응답(nscm.combos 코드·이름 쌍) 중 결과 값과 코드가 가장 많이 겹치는 것으로 코드 → 이름을 환산해 후보를 찾는다(이름이 후보에 1번만 나올 때만 — 같은 이름 여러 코드는 고르지 않음)
+        const nmOf = (() => { const ks = new Set(freq.keys()); let best: { c: string; v: string }[] = [], hit = 0; for (const cb of nscm.combos) { const rs = cb.rows || []; const h = rs.filter(r => ks.has(r.c)).length; if (h > hit) { hit = h; best = rs; } } const m = new Map<string, string>(); for (const r of best) if (r.c && r.v && r.v !== r.c && !m.has(r.c)) m.set(r.c, r.v.trim()); return m; })();
+        const candOf = (ts: string[], v: string) => { const k = ts.findIndex(t => t === v || t.split(/\s+/)[0] === v || t.startsWith(v + ' ')); if (k >= 0) return k; const nm = nmOf.get(v); return nm && ts.filter(t => t === nm).length === 1 ? ts.indexOf(nm) : -1; };
+        let chosen = '';
         const firstTxt = o.texts[0] || ''; const allChecked = await p.evaluate(() => { const c = [...document.querySelectorAll('.MuiAutocomplete-popper li[role="option"] input[type="checkbox"]')] as HTMLInputElement[]; return c.length > 0 && c.every(i => i.checked); });
         if (allChecked && /select all|^all$|전체/i.test(firstTxt)) { await o.lis.first().click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); }
-        const search = p.locator('.MuiAutocomplete-popper [data-dropdown-search]'); if (target && await search.isVisible().catch(() => false)) { await search.fill(target); await p.waitForTimeout(500); }
+        const search = p.locator('.MuiAutocomplete-popper [data-dropdown-search]'); if (target && await search.isVisible().catch(() => false)) { await search.fill(nmOf.get(target) || target); await p.waitForTimeout(500); }
         let texts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim());
-        let idx = target ? texts.findIndex(t => t === target || t.split(/\s+/)[0] === target || t.startsWith(target + ' ')) : -1;
+        let idx = target ? candOf(texts, target) : -1; if (idx >= 0) chosen = target;
         // 2026-11-19 SSP0014 미검증 해소(T355): 결과에서 가장 드문 값이 후보에 없으면(비활성 코드 CN003256_40-A — A2 행) 검색창 거름으로 목록이 비어 '후보 1개' ERROR(2행).
         //   검색어를 지우고 결과 값을 드문 순으로 최대 12개 더 시도 → 그래도 없으면 거르지 않은 전체 목록에서 고른다(아래 fallback)
         if (idx < 0 && target && await search.isVisible().catch(() => false)) {
           const tries = [...freq.entries()].sort((a, b2) => a[1] - b2[1]).map(e => e[0]).filter(v => v !== target).slice(0, 12);
-          for (const v of tries) { await search.fill(v); await p.waitForTimeout(400); const ts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); const k = ts.findIndex(t => t === v || t.split(/\s+/)[0] === v || t.startsWith(v + ' ')); if (k >= 0) { texts = ts; idx = k; break; } }
+          for (const v of tries) { await search.fill(nmOf.get(v) || v); await p.waitForTimeout(400); const ts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); const k = candOf(ts, v); if (k >= 0) { texts = ts; idx = k; chosen = v; break; } }
           if (idx < 0) { await search.fill(''); await p.waitForTimeout(400); texts = (await o.lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim()); }
         }
+        // T385: 검색창이 없는 콤보도 결과 값(드문 순)을 이름으로 환산해 전체 목록에서 찾는다
+        if (idx < 0 && nmOf.size) for (const v of [...freq.entries()].sort((a, b2) => a[1] - b2[1]).map(e => e[0]).slice(0, 40)) { const k = candOf(texts, v); if (k > 0) { idx = k; chosen = v; break; } }
         const fallback = idx < 0;  // 결과에 있는 값을 후보에서 못 찾아 아무 후보를 고름 — 0행이면 '데이터 없음' 일 뿐 반영 실패의 근거가 아니다(아래 ERROR)
         if (idx < 0) idx = texts.findIndex((t, i) => i > 0 && t && !/select all|^all$/i.test(t));
         if (idx < 0) { await p.keyboard.press('Escape'); const r0: Res['result'] = texts.length <= 1 ? 'ERROR' : 'FAIL'; put(g.rid, r0, `[멀티선택 ${g.labels[0]}] 선택할 옵션 없음(후보 ${texts.length})${texts.length <= 1 ? ' — 후보가 1개 이하라 선택 변경 검사 불가(콤보 원천 오류·데이터 없음: B1/B4·DB-SYN 참조)' : ''}`); if (g.g2) put(g.g2, r0, `[멀티선택 ${g.labels[0]}] 후보 없음${texts.length <= 1 ? ' — 후보가 1개 이하라 ALL 검사 불가' : ''}`); continue; }
@@ -1508,7 +1521,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const al1 = await nscm.alertText().catch(() => ''); await nscm.clearDialogs();
         const chg1 = await waitGridChange(p, sig1);
         const vals = col ? ((await probe.columnValues(p, col)) || []) : []; const rowsOne = await probe.rowCount(p);
-        const code = optText.split(/\s+/)[0]; const okv = (v: string) => v === code || v === optText || optText.startsWith(v + ' ') || v.startsWith(code);
+        const code = chosen || optText.split(/\s+/)[0]; const okv = (v: string) => v === code || v === optText || optText.startsWith(v + ' ') || v.startsWith(code);
         const bad = [...new Set(vals.filter(v => v && !okv(v)))];
         const singleOk = col ? (vals.length > 0 && !bad.length) : rowsOne > 0 && rowsOne < baseRows;
         // FAIL 발행 근거(2026-10-30 SCP0100 Div '판정 오류'): 조회 요청이 실제로 나갔고 그 요청 본문에 고른 값이 실렸는데도 결과가 어긋날 때만 화면 결함.
@@ -1875,6 +1888,34 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const fc = async (labels: string[], tag: string) => { await p.evaluate(() => document.querySelectorAll('[data-e2e-cond]').forEach(e => e.removeAttribute('data-e2e-cond'))).catch(() => undefined); return findCond(nscm, labels, tag); };
     const all = ID ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
     const trc = (rule: string) => rows.filter(x => x.rule_id === rule).map(x => ({ x, c: condOf(x) }));
+    // T453: 화면 조회조건 칸 검색 단추 → 팝업 → 첫 행 선택 → 확인 → 조건 칸 값. 칸을 못 찾으면 null(측정 경로 없음)
+    const condPopup = async (labels: string[], tag: string): Promise<{ label: string; btn: boolean; opened: boolean; rows: number; before: string; after: string; alert: string } | null> => {
+      await nscm.expandSearchArea(true).catch(() => undefined); const f = await fc(labels, tag); if (!f) return null;
+      const before = await condValue(f.root, f.kind); const btn = f.root.locator('button, [role="button"]').last();
+      // T458(2026-11-20 SCP0005 재검 09:43 T-9b463365 외 3건 '검색 단추 없음'): AS-IS 는 From/To 검색 단추 하나가 Country·City 두 칸을 함께 채운다(btnFromSrch_Click cs:340~352).
+      //   이 칸에 단추가 없으면 라벨 첫 단어가 같은 조회조건 칸(From Country → From City)의 검색 단추로 열고, 이 칸 값을 읽는다
+      let useBtn = btn; let via = '';
+      if (!(await btn.isVisible().catch(() => false))) {
+        const mate = await p.evaluate(({ lab, tg }) => { const first = (lab || '').trim().split(/\s+/)[0].toLowerCase(); if (!first) return ''; const items = Array.from(document.querySelectorAll('[class*="_formItem_"], [class*="formItem"]')) as HTMLElement[];
+          for (const it of items) { const l = ((it.children[0] as HTMLElement | undefined)?.innerText || '').trim(); if (!l || l === lab || l.split(/\s+/)[0].toLowerCase() !== first) continue; const b2 = it.querySelector('button, [role="button"]') as HTMLElement | null; if (!b2 || !b2.getBoundingClientRect().width) continue; b2.setAttribute('data-e2e-matebtn', tg); return l; } return ''; }, { lab: f.label, tg: tag }).catch(() => '');
+        if (!mate) return { label: f.label, btn: false, opened: false, rows: 0, before, after: before, alert: '' };
+        useBtn = p.locator(`[data-e2e-matebtn="${tag}"]`).first(); via = mate;
+      }
+      const mateF = via ? await fc([via], `${tag}_mate`) : null; const mateBefore = mateF ? await condValue(mateF.root, mateF.kind) : '';
+      await useBtn.click({ timeout: 5_000 }).catch(() => undefined);
+      let dlg: import('@playwright/test').Locator | null = null; const until = Date.now() + 10_000;
+      while (!dlg && Date.now() < until) { dlg = await tagPopup(nscm, tag); if (!dlg) await p.waitForTimeout(300); }
+      if (!dlg) return { label: via ? `${f.label}(${via} 단추)` : f.label, btn: true, opened: false, rows: 0, before, after: before, alert: await nscm.alertText() };
+      const ds = dlg.getByRole('button', { name: /^(조회|Search|Find)(\(F5\))?$/i }).first(); if (await ds.isVisible().catch(() => false)) { await ds.click().catch(() => undefined); await p.waitForTimeout(2_500); }
+      const rowsN = await dlg.locator('.wj-cells .wj-row').count().catch(() => 0);
+      if (rowsN > 0) { const r0 = dlg.locator('.wj-cells .wj-row').first(); await r0.locator('.wj-cell').nth(1).click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(300);
+        const okb = dlg.getByRole('button', { name: /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i }).first(); if (await okb.isVisible().catch(() => false)) await okb.click().catch(() => undefined); else await r0.locator('.wj-cell').nth(1).dblclick({ timeout: 5_000 }).catch(() => undefined); }
+      await p.waitForTimeout(800); const alert = await nscm.alertText(); if (await dlg.isVisible().catch(() => false)) await closeVisibleDialogs(nscm); await nscm.clearDialogs();
+      const f2 = await fc(labels, `${tag}_after`); const after = f2 ? await condValue(f2.root, f2.kind) : '';
+      if (f2 && after !== before) { const inp = f2.root.locator('input').first(); await inp.fill(before).catch(() => undefined); }  // 조건 원복(다음 검사 영향 없게)
+      if (via) { const m2 = await fc([via], `${tag}_mate2`); if (m2 && (await condValue(m2.root, m2.kind)) !== mateBefore) await m2.root.locator('input').first().fill(mateBefore).catch(() => undefined); }  // T458 같이 채워진 칸 원복
+      return { label: via ? `${f.label}(${via} 단추)` : f.label, btn: true, opened: true, rows: rowsN, before, after, alert };
+    };
     const byRule = (src: string, rule: string, tgt?: RegExp) => all.filter(r => r.source === src && r.rule_id === rule && (!tgt || tgt.test(r.target + ' ' + r.expected)));
     const msgText = (() => { const m = new Map<string, string[]>(); try { for (const r of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'tobefacts', 'db', 'msg_master.csv'), 'utf8'))) { const id = r.msg_id || r.MSG_ID || Object.values(r)[0]; const t = r.msg_nm || r.MSG_NM || Object.values(r)[2]; if (id && t) m.set(id, [...(m.get(id) || []), String(t)]); } } catch { /* 사전 없음 */ } return (id: string) => m.get(id) || []; })();
     const digits = (s: string) => String(s || '').replace(/\D/g, '').slice(0, 8);
@@ -2184,7 +2225,20 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
             if (popInfo.emptyDays >= 0) put(x.row_id, al ? 'PASS' : 'FAIL', `DAYS 빈 Route(${pickIdx + 1}번째) 선택 → 알림 '${al.slice(0, 80) || '없음'}' — AS-IS MSG00222(SetRoute: DAYS 없음)${al ? ' 일치' : ' — 메시지 미발생'}`);
             else put(x.row_id, 'NA', `팝업 Route ${popInfo.n}행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)${al ? ` · 알림 '${al.slice(0, 50)}'` : ''}`);
           }
-        } else for (const { x } of [...trc('G6'), ...trc('M4'), ...trc('G4')].filter(t => t.c.et === 'COND' && /^txt/.test(t.c.name || ''))) put(x.row_id, 'ERROR', `r${popRow} ROUTE_ID 더블클릭 → 팝업 열림 감지 실패(검사기 미검증)`);
+        } else {
+          // T453(2026-11-20 SCP0005 G4·M4 8행): 이 분기는 ROUTE_ID 더블클릭으로 Distribution Route 선택 팝업을 여는 화면(SCP0007 등)의 팝업 조회조건 prefill 용이다.
+          //   팝업이 안 열렸는데 같은 라벨 칸이 화면 자체 조회조건에 있으면(SCP0005 txtFromCountry 등 = 화면 조건) 조건 칸의 검색 단추로 팝업을 열어 G4(팝업 열림)·M4(선택값 반영)를 잰다.
+          //   화면 조건 칸이 없으면 종전처럼 미검증
+          for (const { x, c } of [...trc('G6'), ...trc('M4'), ...trc('G4')].filter(t => t.c.et === 'COND' && /^txt/.test(t.c.name || ''))) {
+            const cp = x.rule_id === 'G6' ? null : await condPopup(c.labels || [c.name || ''], `t453_${nrm(c.name || '')}`);
+            if (!cp) { put(x.row_id, 'ERROR', `r${popRow} ROUTE_ID 더블클릭 → 팝업 열림 감지 실패(검사기 미검증)`); continue; }
+            const ev = `화면 조회조건 ${cp.label} 검색 단추 ${cp.btn ? '클릭' : '없음'} → 대화상자 ${cp.opened ? `열림(${cp.rows}행)` : '안 열림(10초)'}${cp.opened ? ` · 첫 행 선택 후 확인 → 조건 값 '${cp.before}'→'${cp.after}'` : ''}${cp.alert ? ` · 알림 '${cp.alert.slice(0, 60)}'` : ''}`;
+            if (x.rule_id === 'G4') put(x.row_id, cp.opened ? 'PASS' : 'FAIL', `${ev} — AS-IS 조회조건 검색 단추 = 도시 팝업 열림`);
+            else if (!cp.opened) put(x.row_id, 'FAIL', `${ev} — 팝업이 열리지 않아 선택값 반영 경로 없음`);
+            else if (cp.rows <= 0) put(x.row_id, 'ERROR', `${ev} — 팝업 결과 0행이라 선택값 반영 미측정`);
+            else put(x.row_id, cp.after && cp.after !== cp.before ? 'PASS' : 'FAIL', `${ev} — AS-IS 팝업 선택값을 조회조건 칸에 채움${cp.after && cp.after !== cp.before ? '' : ' — 값 변화 없음'}`);
+          }
+        }
       }
     }
     // ── C1/C4 ROW(dtFromSiteAll/dtToSiteAll SetChangeControl 등) ← 같은 조건의 COND 실측(W4c C1·C4) 상속 — 행 유형은 데이터테이블 필터라 조건 단위 결과가 정본
@@ -2497,10 +2551,13 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     await nscm.expandSearchArea(true).catch(() => undefined);
     for (const x of btnRows) {
       const name = String((/"name":\s*"([^"]+)"/.exec(x.condition || '') || [])[1] || '');
-      const hit = pa.find(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase() && a.host_label);
-      if (!hit) { put(x.row_id, 'ERROR', `[측정 경로 없음] AS-IS ${name} 클릭 메서드가 popup_args.csv 에 없음(팝업을 여는 버튼인지 미확인)`); continue; }
+      let hit = pa.find(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase() && a.host_label);
+      // T459(2026-11-20 SCP0005 T-85f3a8bb·T-7e1a41bb): popup_args 에 클릭 메서드 행은 있는데 TO-BE 칸 라벨(host_label)이 빈 경우 — AS-IS 인자 원천 조회조건 컨트롤 이름(txtFromCity.Text → 'From City')으로 칸을 찾는다
+      let labs: string[] = hit ? [hit.host_label, ...hit.host_label.split(/\s*\/\s*/)] : [];
+      if (!hit) { const rowsM = pa.filter(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase()); if (rowsM.length) { hit = rowsM[0]; labs = [...new Set(rowsM.map(a => (/^(?:txt|cbo|cmb|clb|usr)([A-Z]\w*)\./.exec(a.asis_source || '') || [])[1] || '').filter(Boolean).map(n => n.replace(/([a-z0-9])([A-Z])/g, '$1 $2')))].reverse(); } }
+      if (!hit || !labs.length) { put(x.row_id, 'ERROR', `[측정 경로 없음] AS-IS ${name} 클릭 메서드가 popup_args.csv 에 없음(팝업을 여는 버튼인지 미확인)`); continue; }
       await nscm.expandSearchArea(true).catch(() => undefined);
-      const box = await findCond(nscm, [hit.host_label, ...hit.host_label.split(/\s*\/\s*/)], `g4btn_${name}`);
+      let box = null as Awaited<ReturnType<typeof findCond>>; for (const l of hit.host_label ? [labs] : labs.map(l => [l])) { const b0 = await findCond(nscm, l, `g4btn_${name}`); if (b0 && (!box || (await b0.root.locator('button').first().isVisible().catch(() => false)))) { box = b0; if (await b0.root.locator('button').first().isVisible().catch(() => false)) break; } }
       if (!box) { put(x.row_id, 'FAIL', `AS-IS ${name}(${hit.asis_ref}) 팝업 ${hit.asis_popup} ↔ TO-BE 조회조건 '${hit.host_label}' 칸 없음`); continue; }
       const btn = box.root.locator('button').first(); const vis = await btn.isVisible().catch(() => false); const en = vis && await btn.isEnabled().catch(() => false);
       let opened = false;

@@ -1,0 +1,123 @@
+{
+ "rule_id": "K2",
+ "hash": "97184106eeff988c",
+ "groups": [
+  {
+   "rows": [
+    "V-3d998e71",
+    "V-be81f0ae"
+   ],
+   "why": "Both check the same thing: pressing Save/OK in the column/measure setting popup with no changes must not trigger a re-search."
+  },
+  {
+   "rows": [
+    "V-1de3dc8a",
+    "V-3e40748e",
+    "V-bfe54e40",
+    "V-444f2cfc"
+   ],
+   "why": "All check that the measure setting order is saved and that search results show measures in that saved order."
+  },
+  {
+   "rows": [
+    "V-92dbbc5c",
+    "V-d2030262"
+   ],
+   "why": "Both check that a user with no saved personalization sees the selected Div's UI Category default columns and measures after switching Div."
+  },
+  {
+   "rows": [
+    "V-2bc96684"
+   ],
+   "why": "Checks required-column red marking and the warning message while switching Div 40→81→40, so the state differs from V-6a9be0b7 and it stays alone."
+  },
+  {
+   "rows": [
+    "V-6a9be0b7"
+   ],
+   "why": "Adds an extra expectation that selected columns always appear in search results and has no Div-switch condition, so it is not grouped with V-2bc96684."
+  },
+  {
+   "rows": [
+    "V-fefb4dc8"
+   ],
+   "why": "Checks that each Div's required columns stay after saving personalization in another Div, which is a different state and expectation."
+  },
+  {
+   "rows": [
+    "V-24a7e0a7"
+   ],
+   "why": "Checks several screen-wide items at once (Default restore, keeping the new tab, required-column highlight, no re-search), so it does not match any single row."
+  },
+  {
+   "rows": [
+    "V-ca51a037"
+   ],
+   "why": "Checks only that the Default button in the Column Setting popup restores the default columns."
+  },
+  {
+   "rows": [
+    "V-efd8cc61"
+   ],
+   "why": "Checks keeping the new tab after save, close and reopen, and that Default means the original default, which is a different sequence and expectation."
+  },
+  {
+   "rows": [
+    "V-b277724c"
+   ],
+   "why": "Checks that the grid columns rebuild immediately when OK is pressed in column setting."
+  },
+  {
+   "rows": [
+    "V-cb02193f"
+   ],
+   "why": "Checks that the search grid follows the column settings and that internal columns such as COL_LIST are hidden."
+  },
+  {
+   "rows": [
+    "V-de0727bd"
+   ],
+   "why": "Checks a compound expectation for a specific date range: row count matches AS-IS, Team shows the name, and the saved column popup layout is used."
+  },
+  {
+   "rows": [
+    "V-8f0aeedf"
+   ],
+   "why": "Checks that the setting popup's candidate list is re-fetched for the auto-selected Division right after entering the screen, before Search."
+  },
+  {
+   "rows": [
+    "V-a4229f4c"
+   ],
+   "why": "Expects the Measure Setting button to be removed, which is a different expectation from the other rows."
+  },
+  {
+   "rows": [
+    "V-d781a055"
+   ],
+   "why": "Checks which measures appear in the list for each Div (unused ones removed, VMI added, MKT FCST AMT removed)."
+  },
+  {
+   "rows": [
+    "V-eed4cdfd"
+   ],
+   "why": "Checks that the measure name shows as MKT FCST[R+P]."
+  },
+  {
+   "rows": [
+    "V-1b918526"
+   ],
+   "why": "Checks that VERSION is removed from the setting list and that AS FROM SITE is hidden for Div 40, both specific columns."
+  },
+  {
+   "rows": [
+    "EG-eb3ff5cd"
+   ],
+   "why": "Checks the Column button state after save under condition EG395, which is a different element and state."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:17:25",
+ "cost": 0.0906878
+}

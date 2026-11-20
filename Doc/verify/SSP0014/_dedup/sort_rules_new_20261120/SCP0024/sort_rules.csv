@@ -1,0 +1,8 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0024,SQL,SCP0024_GET_PRODUCTION_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0024_GET_PRODUCTION_PLAN_FIX.sql,164,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SCP0024,SQL,SCP0024_GET_PRODUCTION_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0024_GET_PRODUCTION_PLAN_FIX.sql,187,,"DIVISION_ID,OPERATION_GROUP,SCM_SITE_ID,OPERATION_ID,LINE_ID,ITEM_ID,MEASURE DESC","SET @mEXEC = @mEXEC+'		ORDER BY  division_id, operation_group, scm_site_id, operation_id, line_id , item_id , measure desc '+CHAR(10);",0,동적 SQL
+SCP0024,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SCP0024,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0024,SQL,SCM0001_GET_SCP_DAILY_PLAN_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAILY_PLAN_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0024,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SCP0024,SQL,PR_SCM_SYS_LOG_BATCH,Doc\asisfacts\db\modules\dbo.PR_SCM_SYS_LOG_BATCH.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

@@ -1,12 +1,20 @@
 {
  "menu_id": "SSP0014",
- "generated": "2026-11-19 16:16:16",
+ "generated": "2026-11-20 09:37:32",
  "F8": {
-  "verdict": "NOT_RUN",
-  "note": "CRUD 실제 저장 정리 기록 없음(E2E 저장 미실행)"
+  "verdict": "PASS",
+  "note": "변경 행 2건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정) · 계정 minyonglee1 · 기준 시각 2026-11-20 08:51:57"
  },
  "F7": {
-  "verdict": "NOT_RUN",
-  "note": "CRUD 실제 저장 정리 기록 없음(E2E 저장 미실행)"
+  "verdict": "PASS",
+  "note": "AS-IS SSP0014_SAVE_SHIPMENT_MODEL_PIC 대상 표 SSP_MST_MODEL_USER · TO-BE 저장이 쓴 표 SSP_MST_MODEL_USER · 대상 표 전부 기록"
+ },
+ "run": {
+  "cleanup_sql": "save_trace.json(restore_touched 키 없는 복원)",
+  "account": "minyonglee1",
+  "saved_at": "2026-11-20 08:51:57",
+  "tables": {
+   "SSP_MST_MODEL_USER": 1
+  }
  }
 }

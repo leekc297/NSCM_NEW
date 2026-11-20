@@ -1,0 +1,182 @@
+{
+ "rule_id": "G4",
+ "hash": "a4042ffb1f7c3a77",
+ "groups": [
+  {
+   "refs": [
+    "GAPPI-38",
+    "GAPPI-47",
+    "GAPSELF-34",
+    "GAPSELF-35",
+    "GAPSELF-36",
+    "GAPSELF-37",
+    "GAPSELF-38",
+    "GAPSELF-39",
+    "GAPSELF-40",
+    "GAPSELF-41",
+    "GAPSELF-42"
+   ],
+   "target": "조회조건 공통 컴포넌트(SearchCondition) 너비·정렬",
+   "condition": "화면 오픈 후 조회조건 영역의 컴포넌트 너비와 정렬 확인",
+   "expected": "조회조건 공통 컴포넌트(SearchCondition)의 너비가 디자인 기준을 따르고 겹치거나 넘치지 않는다",
+   "why": "11건 모두 같은 SearchCondition 너비·정렬 확인 동작과 같은 기대 결과이며 화면만 다르다."
+  },
+  {
+   "refs": [
+    "DM-117"
+   ],
+   "target": "Version 조회조건 폭",
+   "condition": "",
+   "expected": "Version 조회조건 폭이 축소되어 표시된다",
+   "why": "Version 조회조건 폭 단일 확인이고 DM-31은 팝업 Description 폭 확인이 더 있어 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-31"
+   ],
+   "target": "Main Version 조회조건 폭·Version 팝업 Description 폭",
+   "condition": "Version 팝업 열기",
+   "expected": "Main Version 조회조건 폭이 축소되고 Version 팝업의 Description 컬럼 폭이 확대된다",
+   "why": "조회조건 폭과 팝업 컬럼 폭을 함께 확인하는 복합 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-174"
+   ],
+   "target": "Plan Type 조회조건 위치",
+   "condition": "",
+   "expected": "Plan Type 조회조건이 Div 조회조건 오른쪽에 배치된다",
+   "why": "특정 조회조건의 배치 위치를 확인하는 항목으로 같은 대상의 항목이 없다."
+  },
+  {
+   "refs": [
+    "DM-202"
+   ],
+   "target": "Module·Sub Module 조회조건, 라벨, Active, Notice 팝업",
+   "condition": "조회와 Insert 팝업",
+   "expected": "Module 조회조건은 ALL/Common/DM/SCP/FP/SSP 다중선택(Insert 콤보는 단일선택)이고 Sub Module은 삭제된다. 라벨 제목, Active 기본값 Y, Notice Content 서식 동작, 팝업 섹션 타이틀이 테두리 밖에 있는지도 확인한다",
+   "why": "확인 대상이 여럿인 복합 항목이라 DM-203과 일부만 겹치므로 묶지 않는다."
+  },
+  {
+   "refs": [
+    "DM-203"
+   ],
+   "target": "Module·Sub Module 조회조건",
+   "condition": "",
+   "expected": "Module 조회조건이 다중선택이고 Sub Module 조회조건은 표시되지 않는다",
+   "why": "DM-202는 확인 범위가 훨씬 넓어 묶으면 검사 범위가 달라지므로 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-236"
+   ],
+   "target": "Version 조회조건 돋보기 버튼 위치",
+   "condition": "",
+   "expected": "Version 조회조건의 돋보기 버튼이 입력창 안쪽에 있다",
+   "why": "조회조건 버튼 배치 확인으로 같은 대상의 항목이 없다."
+  },
+  {
+   "refs": [
+    "DM-242"
+   ],
+   "target": "Sum 행 표기·Sum/Qty≠0 체크박스",
+   "condition": "",
+   "expected": "Sum 행 라벨이 Sum으로 표기되고 Sum/Qty≠0 체크박스는 보이지 않는다",
+   "why": "그리드 합계 행과 체크박스 노출 확인으로 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-30"
+   ],
+   "target": "Project 조회조건 표시·활성",
+   "condition": "Div 40 선택",
+   "expected": "Div 40에서도 Project 조회조건이 표시되고 비활성 상태다",
+   "why": "특정 Div에서 Project 조회조건의 표시·비활성을 확인하는 항목으로 같은 대상의 항목이 없다."
+  },
+  {
+   "refs": [
+    "DM-51"
+   ],
+   "target": "Price Batch Input 팝업 Model 조건·End Customer 병합",
+   "condition": "Div 40",
+   "expected": "팝업의 Model 조회조건에 텍스트를 입력할 수 있고 End Customer 컬럼이 셀 병합된다",
+   "why": "팝업 입력 가능 여부와 셀 병합을 확인하는 복합 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-85"
+   ],
+   "target": "Cust Group 조회조건·Div 파라미터·그리드 헤더",
+   "condition": "Div 40 조회 후 81로 전환, 조회 전 Div 변경",
+   "expected": "Div 81에서는 Cust Group이 보이지 않고, 선택한 Div가 파라미터로 전달되며, Div를 바꾸면 그리드 헤더가 다시 구성된다",
+   "why": "Div 전환에 따른 여러 동작을 확인하는 복합 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-89"
+   ],
+   "target": "Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건",
+   "condition": "팝업 열기",
+   "expected": "팝업 Period가 메인 Period와 같고, Description이 위쪽에 배치되며, Div·Type 조회조건 크기가 확대된다",
+   "why": "팝업 내부 조회조건의 여러 속성을 확인하는 복합 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-95"
+   ],
+   "target": "Version 조회조건 선택값 표시",
+   "condition": "버전 선택 후 조회조건 다시 클릭",
+   "expected": "선택 후 Version명만 표시되고 Description이 섞이거나 값이 바뀌지 않는다",
+   "why": "선택값 표시 형식 확인으로 폭이나 기본값 확인과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P37"
+   ],
+   "target": "Year 조회조건 기본값",
+   "condition": "화면 오픈",
+   "expected": "Year 조회조건의 기본 선택값이 현재 연도다",
+   "why": "Year 기본값 확인이고 DM-P55는 Ver. 기본값이 빈값이어야 해서 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-P55"
+   ],
+   "target": "Ver. 조회조건 기본값",
+   "condition": "Div 81/81_JV 포함 모든 Div",
+   "expected": "모든 Div에서 Ver. 조회조건 기본값이 빈값이다",
+   "why": "Ver. 기본값이 빈값인지 확인하는 항목으로 Year 기본값 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-P59"
+   ],
+   "target": "Plant Site 조회조건 활성",
+   "condition": "Div ESS(82) 선택",
+   "expected": "ESS(82)를 선택하면 Plant Site 조회조건이 비활성된다",
+   "why": "특정 Div에 따른 Plant Site 활성 확인으로 같은 대상의 항목이 없다."
+  },
+  {
+   "refs": [
+    "GAPSELF-1"
+   ],
+   "target": "Division 권한 자동 선택·Period 입력란 폭",
+   "condition": "화면 오픈 직후",
+   "expected": "Division 조회조건(DIVISION_ID)이 사용자 권한 기준으로 자동 선택되고 Period(PERIOD) 입력란 폭이 적절하다",
+   "why": "권한 기반 자동 선택을 확인하는 항목으로 SearchCondition 너비 묶음과 확인 동작이 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-15"
+   ],
+   "target": "조회조건 명칭·순서와 대응 컬럼명",
+   "condition": "",
+   "expected": "조회조건 명칭·순서가 표준표(search_cond)와 같고, 명칭이 바뀐 경우 대응 그리드 컬럼명도 같게 바뀐다(Model/Nickname 제외)",
+   "why": "표준표 대조로 명칭과 순서를 확인하는 항목으로 같은 대상의 항목이 없다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:39:01",
+ "cost": 0.12326859999999998
+}

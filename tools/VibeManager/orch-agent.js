@@ -10,11 +10,12 @@
 const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
+let errlog = { note() { return null; }, init() { return ''; } }; try { errlog = require('./orch-errlog'); } catch { } // 2026-11-19 자가진단 Q1: 삼키던 오류를 .vibe/orch/vm_errors.jsonl 에 남긴다
 const watch = require('./orch-watch');
 const state = require('./orch-state');
 let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
 
-const DEF = { agentEnabled: true, agentMaxPerHour: 6, agentTimeoutMin: 30, agentMaxAttempts: 2, agentRules: ['R1', 'R2', 'R3', 'R4', 'R5', 'R10', 'R11'], agentPermissionMode: 'acceptEdits', snapKeepDays: 14 };
+const DEF = { agentEnabled: true, agentMaxPerHour: 6, agentTimeoutMin: 30, agentMaxAttempts: 2, agentRules: ['R1', 'R2', 'R3', 'R4', 'R5', 'R10', 'R11', 'R13', 'R14'], agentPermissionMode: 'acceptEdits', snapKeepDays: 14 };
 const ALLOWED_TOOLS = 'Read,Edit,Write,Glob,Grep,Bash(node *),Bash(python *),Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(git status*),Bash(git diff*),Bash(git log*),Bash(netstat *),Bash(tasklist *)';
 const WRITE_ROOTS = ['tools/Harness/', 'tools/E2E/', 'tools/Docs/'];            // B 등급 수정 대상(스냅샷·되돌리기)
 const NOTE_ROOTS = ['Doc/verify/', '.vibe/'];                                    // 기록만 허용(결함 유형 문서 · 실행 기록)
@@ -32,12 +33,13 @@ const two = n => String(n).padStart(2, '0');
 const stampFile = () => { const d = new Date(); return `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())}T${two(d.getHours())}-${two(d.getMinutes())}-${two(d.getSeconds())}`; };
 const nowLocal = () => (orchEv ? orchEv.nowLocal() : new Date().toISOString());
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
-const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 2), 'utf8'); return true; } catch { return false; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 2), 'utf8'); return true; } catch (e) { errlog.note('orch-agent', 'writeJson', e); return false; } };
+function replaceFile(tmp, f) { for (let i = 0; i < 3; i++) { try { fs.renameSync(tmp, f); return; } catch (e) { if (i === 2 || !/EPERM|EBUSY|EACCES/.test(e.code || '')) { fs.copyFileSync(tmp, f); try { fs.unlinkSync(tmp); } catch { } return; } const t = Date.now() + 40 * (i + 1); while (Date.now() < t) { /* 짧게 기다림 */ } } } } // orch-selfcheck.js replaceFile 과 같은 처리: rename 이 EPERM, EBUSY, EACCES 면 재시도 뒤 복사(2026-11-19 21:27 실측)
 const P = () => getPaths();
 const orchDir = () => path.join(P().vibeDir, 'orch');
 function loadCfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); cfg = Object.assign({}, DEF, (h && h.orch) || {}); return cfg; }
 function evt(type, data) { try { if (orchEv) { orchEv.init(P().vibeDir); orchEv.emit(type, data); } } catch { } }
-function say(kind, o) { const m = Object.assign({ type: 'agent', kind, at: nowLocal() }, o || {}); feed.push(m); if (feed.length > 400) feed.shift(); for (const fn of listeners) { try { fn(m); } catch { } } }
+function say(kind, o) { const m = Object.assign({ type: 'agent', kind, at: nowLocal() }, o || {}); feed.push(m); if (feed.length > 400) feed.shift(); for (const fn of listeners) { try { fn(m); } catch (ex) { errlog.note('orch-agent', 'listener', ex); } } }
 const act = (id, patch, what, extra) => watch.update(id, patch, Object.assign({ by: 'VMO', what }, extra || {}));
 
 // ── 스냅샷(수정 전 사본) · 변경 감지 · 되돌리기 ──
@@ -90,7 +92,7 @@ function revert(incId) {
   const root = P().root; const done = [], fail = [];
   for (const rel of [...af.changed, ...af.deleted]) { try { fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true }); fs.copyFileSync(path.join(dir, 'files', rel), path.join(root, rel)); done.push(rel); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
   for (const rel of af.created) { try { fs.unlinkSync(path.join(root, rel)); done.push(`${rel}(삭제)`); } catch (e) { fail.push(`${rel}: ${e.message}`); } }
-  act(incId, { status: 'need-user', reverted: true }, `되돌리기 — ${done.length}개 파일 복원${fail.length ? ` · 실패 ${fail.length}개` : ''}`, { files: done, fail });
+  act(incId, { status: 'need-user', reverted: true }, `되돌리기. ${done.length}개 파일 복원${fail.length ? ` · 실패 ${fail.length}개` : ''}`, { files: done, fail });
   say('note', { text: `되돌리기 ${incId}: ${done.length}개 파일 복원${fail.length ? ` · 실패 ${fail.join(' / ')}` : ''}` });
   return { ok: !fail.length, done, fail };
 }
@@ -109,24 +111,24 @@ async function codeAction(inc) {
   if (inc.rule === 'R9') {
     const rel = (inc.evidence && inc.evidence.file) || ''; const f = path.join(p.root, rel); const j = readJson(f, null);
     if (!j) { act(inc.id, { status: 'resolved' }, `잠금 파일이 이미 없음: ${rel}`); return true; }
-    if (state.pidAlive(Number(j.pid))) { act(inc.id, { status: 'closed' }, `잠금 주인 PID ${j.pid} 가 살아 있음 — 삭제하지 않음`); return true; }
+    if (state.pidAlive(Number(j.pid))) { act(inc.id, { status: 'closed' }, `잠금 주인 PID ${j.pid} 가 살아 있음. 삭제하지 않음`); return true; }
     try { fs.unlinkSync(f); act(inc.id, { status: 'resolved' }, `죽은 잠금 삭제: ${rel} (PID ${j.pid} 없음 재확인)`, { grade: 'A' }); } catch (e) { act(inc.id, { status: 'need-user' }, `잠금 삭제 실패: ${e.message}`); }
     return true;
   }
   if (inc.rule === 'R6') {
-    const port = Number(inc.evidence && inc.evidence.port); if (!serverSvc || !port) { act(inc.id, { status: 'need-user' }, '서버 서비스 없음 — 조치 못 함'); return true; }
+    const port = Number(inc.evidence && inc.evidence.port); if (!serverSvc || !port) { act(inc.id, { status: 'need-user' }, '서버 서비스 없음. 조치 못 함'); return true; }
     const guard = readJson(path.join(p.root, 'Doc', 'e2e', `_server_${port}.lock`), null);
-    if (guard && state.pidAlive(Number(guard.pid))) { act(inc.id, { status: 'open' }, `server_guard.py(PID ${guard.pid})가 포트 ${port} 를 처리 중 — 기다림`); return true; }
+    if (guard && state.pidAlive(Number(guard.pid))) { act(inc.id, { status: 'open' }, `server_guard.py(PID ${guard.pid})가 포트 ${port} 를 처리 중. 기다림`); return true; }
     await serverSvc.pollOnce(); const st = serverSvc.stateList().find(x => x.port === port);
-    if (st && st.state === 'up') { act(inc.id, { status: 'resolved' }, `포트 ${port} 응답 회복 확인 — 조치 없음`); return true; }
+    if (st && st.state === 'up') { act(inc.id, { status: 'resolved' }, `포트 ${port} 응답 회복 확인. 조치 없음`); return true; }
     const items = (loadQuick ? loadQuick() : []); const startIt = items.find(x => x.kind === 'terminal' && Number(x.port) === port); const stopIt = items.find(x => x.kind === 'server-stop' && Number(x.port) === port);
     if (!startIt) { act(inc.id, { status: 'need-user' }, `포트 ${port} 기동 항목이 quick.json 에 없음`); return true; }
     const name = startIt.name || startIt.label; const cwd = String(startIt.cwd || '').replace(/\$\{root\}/g, p.root);
-    act(inc.id, { status: 'acting' }, `서버 재기동 시작 — ${name} (현재 ${st ? st.state : '미측정'})`, { grade: 'A' });
+    act(inc.id, { status: 'acting' }, `서버 재기동 시작. ${name} (현재 ${st ? st.state : '미측정'})`, { grade: 'A' });
     say('note', { text: `서버 재기동: ${name} 포트 ${port}` });
-    if (st && st.state === 'listen') { const sr = await serverSvc.stop(p, stopIt || { port, expectProc: startIt.expectProc }, name); if (!sr || !sr.ok) { act(inc.id, { status: 'need-user' }, `종료 실패(${sr ? sr.why || '포트 점유 남음' : '오류'}) — 재기동 중단`); return true; } }
+    if (st && st.state === 'listen') { const sr = await serverSvc.stop(p, stopIt || { port, expectProc: startIt.expectProc }, name); if (!sr || !sr.ok) { act(inc.id, { status: 'need-user' }, `종료 실패(${sr ? sr.why || '포트 점유 남음' : '오류'}). 재기동 중단`); return true; } }
     const r = await serverSvc.start(p, startIt, cwd, name);
-    act(inc.id, { status: r && r.ok ? 'resolved' : 'need-user' }, r && r.ok ? `서버 재기동 완료 — ${name} ${r.sec}s` : `서버 재기동 실패 — ${r ? r.msg : '오류'}`, { grade: 'A' });
+    act(inc.id, { status: r && r.ok ? 'resolved' : 'need-user' }, r && r.ok ? `서버 재기동 완료. ${name} ${r.sec}s` : `서버 재기동 실패. ${r ? r.msg : '오류'}`, { grade: 'A' });
     return true;
   }
   if (inc.rule === 'R8') {
@@ -136,14 +138,14 @@ async function codeAction(inc) {
       for (const ln of o.split(/\r?\n/)) { const m = /^\s*TCP\s+\S+\s+\S+\s+\S+\s+(\d+)\s*$/.exec(ln); if (m) cnt[m[1]] = (cnt[m[1]] || 0) + 1; }
       const rows = Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 5);
       top = rows.map(([pid, n]) => { let nm = ''; try { nm = (cp.execSync(`tasklist /FI "PID eq ${pid}" /FO CSV /NH`, { encoding: 'utf8', windowsHide: true, timeout: 8000 }).split(',')[0] || '').replace(/"/g, '').trim(); } catch { } return `${nm || 'PID'}(${pid}) ${n}`; }).join(' · ');
-    } catch { }
+    } catch (ex) { errlog.note('orch-agent', 'tcpTop', ex); }
     act(inc.id, { status: 'need-user' }, `TCP 연결 수 상위 프로세스: ${top}. 프로세스 종료는 사용자 판단(VPN·보안 프로세스 종료 금지)`, { grade: 'A' });
     return true;
   }
   if (inc.rule === 'R7') {
     const cls = (inc.evidence && inc.evidence.cls) || '';
     const how = cls === '세션 이어받기 실패' ? 'Workbench 체인이 새 세션으로 1회 다시 보냄(재시도 결과는 그 창 Console 확인)' : cls === '로그인 만료' ? '터미널에서 claude 를 실행해 다시 로그인' : cls === 'CLI 경로' ? '설정 vibeManager.claudeCommand 확인' : cls === '네트워크' ? 'VPN·프록시·PC 부하 확인 뒤 다시 실행' : `stderr 와 로그(${(inc.evidence && inc.evidence.log) || '-'}) 확인`;
-    act(inc.id, { status: cls === '세션 이어받기 실패' ? 'resolved' : 'need-user' }, `Claude 종료 분류 ${cls || '미분류'} — ${how}`, { grade: 'A' });
+    act(inc.id, { status: cls === '세션 이어받기 실패' ? 'resolved' : 'need-user' }, `Claude 종료 분류 ${cls || '미분류'}. ${how}`, { grade: 'A' });
     return true;
   }
   return false;
@@ -164,7 +166,7 @@ function buildPrompt(inc, extra) {
     '[지금 상태]', JSON.stringify(brief, null, 2),
     '',
     `[작업 모드] repairScope = ${hj.repairScope || 'DB_ONLY'} · AI 검토(llmReview) = ${hj.llmReview === true ? '켬' : '끔'}`,
-    '[참고 파일] 실행 사건 .vibe/orch/events.jsonl · 실행 로그 .vibe/logs/ · 검사기 결함 유형 Doc/verify/_checker_defects.md · 룰 tools/VibeManager/rules/10_RULES_KEEP.md · 문장 규칙 tools/VibeManager/rules/50_DOC_STYLE.md',
+    '[참고 파일] 실행 사건 .vibe/orch/events.jsonl, 실행 로그 .vibe/logs/, 검사기 결함 유형 Doc/verify/_checker_defects.md, 룰 tools/VibeManager/rules/10_RULES_KEEP.md, 문장 규칙 tools/VibeManager/rules/50_DOC_STYLE.md',
     extra ? `\n[추가 지시] ${extra}` : '',
   ].join('\n');
 }
@@ -184,17 +186,23 @@ function runClaude(prompt, opts) {
     if (opts.resume) args.push('--resume', opts.resume);
     const env = Object.assign({}, process.env, { VIBE_HARNESS: '1', NSCM_SKIP_RULE_READ: '1', VIBE_ORCH: '1' });
     let child;
-    try { child = cp.spawn(/\s/.test(p.claude) ? `"${p.claude}"` : p.claude, args, { cwd: p.root, shell: process.platform === 'win32', env }); }
+    // 2026-11-19 22:2x 정정: 셸로 띄울 때 공백 · 괄호 · 별표가 든 인자를 따옴표로 묶는다. 종전에는 '--allowedTools Read,…,Bash(node *),…' 가 공백에서 쪼개져 Bash(node *) 같은 규칙이 적용되지 않았다
+    //   (실측 22:08~22:21 자가 보완 3건: 'node tools/VibeManager/test/….js' 가 'This command requires approval' 로 거부 → 검증 미실행 → 반영 실패. 20:59 개선안 20261119205920_INC 의 '검증 실패: 미실행'도 같은 문구)
+    const viaShell = process.platform === 'win32'; const qa = x => (viaShell && /[\s()*&|<>^]/.test(String(x)) && !/^".*"$/.test(String(x)) ? `"${String(x).replace(/"/g, '\\"')}"` : x);
+    try { child = cp.spawn(/\s/.test(p.claude) ? `"${p.claude}"` : p.claude, args.map(qa), { cwd: p.root, shell: viaShell, env }); }
     catch (e) { say('note', { text: `claude 실행 실패: ${e.message}` }); return resolve({ ok: false, why: e.message, text: '', log: '' }); }
     if (ws) try { ws.write(`$ ${p.claude} ${args.join(' ')}\n--- prompt ---\n${String(prompt).slice(0, 4000)}\n--- output ---\n`); } catch { }
-    const t0 = Date.now(); let buf = '', text = '', result = null, session = '', errTail = [], killed = false; const tools = [];
-    if (current) { current.child = child;
+    // 개선안 20261120094530_REVIEW_3(사용자 승인 2026-11-20): 끝 기록에 결과 줄 수신(hasResult), 마지막 stream 줄 종류(lastType), 중지 주체(stoppedBy)를 남긴다
+    const t0 = Date.now(); let buf = '', text = '', result = null, session = '', errTail = [], killed = false, lastType = ''; const tools = [];
+    const run = { stoppedBy: '' };                                    // stop() 이 '중지 요청' 또는 'VS Code 종료' 를 넣는다
+    if (current) { current.child = child; current.run = run;
       // 진행 중인 응답에 추가 지시를 넣는다(Workbench 의 '지금 보내기'와 같은 방식 · 결과가 나온 뒤에는 넣을 수 없다)
       current.inject = t => { if (result) return false; try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text: String(t) }] } }) + '\n'); say('user', { text: `(추가 지시) ${t}` }); return true; } catch { return false; } }; }
     evt('claude.start', { wb: 0, screen: opts.screen || '', source: 'orch', label: String(opts.label || '').slice(0, 140), childPid: child.pid || null, harness: true, model: p.claudeModel || '' });
-    const timer = setTimeout(() => { killed = true; say('note', { text: `시간 초과 ${cfg.agentTimeoutMin}분 — 중지` }); try { cp.spawn('taskkill', ['/pid', String(child.pid), '/T', '/F']); } catch { } }, Math.max(1, cfg.agentTimeoutMin) * 60000);
+    const timer = setTimeout(() => { killed = true; if (!run.stoppedBy) run.stoppedBy = '시간 초과'; say('note', { text: `시간 초과 ${cfg.agentTimeoutMin}분. 중지` }); try { cp.spawn('taskkill', ['/pid', String(child.pid), '/T', '/F']); } catch { } }, Math.max(1, cfg.agentTimeoutMin) * 60000);
     const handle = line => {
       let j; try { j = JSON.parse(line); } catch { return; }
+      if (j && j.type) lastType = String(j.type) + (j.tool_name ? `:${j.tool_name}` : j.subtype ? `:${j.subtype}` : '');
       if (j.type === 'system' && j.session_id) session = j.session_id;
       else if (j.type === 'assistant' && j.message && Array.isArray(j.message.content)) {
         for (const c of j.message.content) {
@@ -212,8 +220,8 @@ function runClaude(prompt, opts) {
     child.on('close', code => {
       clearTimeout(timer); if (buf.trim()) handle(buf); if (ws) try { ws.end(`\n--- exit ${code} ---\n`); } catch { }
       const rel = path.relative(p.root, logF);
-      evt('claude.end', { childPid: child.pid || null, wb: 0, screen: opts.screen || '', source: 'orch', label: String(opts.label || '').slice(0, 140), exit: killed ? 0 : code, ms_run: Date.now() - t0, anyOutput: !!text, resultError: !!(result && result.is_error), session, stderrTail: errTail.join(' | ').slice(0, 800), log: rel, costUsd: result && result.total_cost_usd != null ? Number(result.total_cost_usd) : null, turns: result ? result.num_turns || 0 : 0, timedOut: killed });
-      resolve({ tools, ok: code === 0 && !!result && !result.is_error && !killed, code, timedOut: killed, text: text || (result && result.result) || '', result, session, log: rel, stderr: errTail.join(' | '), ms: Date.now() - t0, costUsd: result && result.total_cost_usd != null ? Number(result.total_cost_usd) : null, turns: result ? result.num_turns || 0 : 0 });
+      evt('claude.end', { childPid: child.pid || null, wb: 0, screen: opts.screen || '', source: 'orch', label: String(opts.label || '').slice(0, 140), exit: code, ms_run: Date.now() - t0, anyOutput: !!text, hasResult: !!result, lastType: lastType.slice(0, 80), stoppedBy: run.stoppedBy, resultError: !!(result && result.is_error), session, stderrTail: errTail.join(' | ').slice(0, 800), log: rel, costUsd: result && result.total_cost_usd != null ? Number(result.total_cost_usd) : null, turns: result ? result.num_turns || 0 : 0, timedOut: killed });
+      resolve({ tools, ok: code === 0 && !!result && !result.is_error && !killed, code, timedOut: killed, stoppedBy: run.stoppedBy, lastType, text: text || (result && result.result) || '', result, session, log: rel, stderr: errTail.join(' | '), ms: Date.now() - t0, costUsd: result && result.total_cost_usd != null ? Number(result.total_cost_usd) : null, turns: result ? result.num_turns || 0 : 0 });
     });
   });
 }
@@ -225,9 +233,9 @@ function noteAttempt(sig) { const h = readJson(attFile(), {}); h[sig] = (h[sig] 
 async function claudeAction(inc, extra, manual) {
   if (!manual) {
     const n = attempts(inc.sig);
-    if (n >= cfg.agentMaxAttempts) { act(inc.id, { status: 'need-user' }, `같은 서명으로 ${n}회 조치한 뒤 다시 발생 — 자동 조치 중단, 사용자 확인 필요`); return; }
+    if (n >= cfg.agentMaxAttempts) { act(inc.id, { status: 'need-user' }, `같은 서명으로 ${n}회 조치한 뒤 다시 발생. 자동 조치 중단, 사용자 확인 필요`); return; }
     const hour = runTimes.filter(t => Date.now() - t < 3600000).length;
-    if (hour >= cfg.agentMaxPerHour) { act(inc.id, { status: 'open' }, `시간당 에이전트 호출 상한 ${cfg.agentMaxPerHour}회 도달 — 자동 조치 보류(사건 탭의 에이전트 버튼으로 직접 실행)`); return; }
+    if (hour >= cfg.agentMaxPerHour) { act(inc.id, { status: 'open' }, `시간당 에이전트 호출 상한 ${cfg.agentMaxPerHour}회 도달. 자동 조치 보류(사건 탭의 에이전트 버튼으로 직접 실행)`); return; }
   }
   runTimes.push(Date.now()); noteAttempt(inc.sig);
   act(inc.id, { status: 'acting' }, 'Claude 조치 시작(원인 확인)');
@@ -240,7 +248,7 @@ async function claudeAction(inc, extra, manual) {
   // 개선안 20261119193539_REVIEW_2: exit≠0 이어도 결과 JSON 이 있으면 그 결과로 처리하고 종료 상태는 기록만 한다(결과를 낸 뒤 종료 단계에서 끊긴 경우)
   const exitNote = (!r.ok && out) ? `exit ${r.code}${r.timedOut ? '(시간 초과)' : ''}${r.result ? '' : ' · result 줄 없음'}` : '';
   if (!out) {
-    act(inc.id, { status: 'need-user', agent: out || null, snap: files.length ? inc.id : undefined }, !r.ok ? `Claude 조치 실패 — ${r.timedOut ? `시간 초과 ${cfg.agentTimeoutMin}분` : `exit ${r.code}${r.stderr ? ' · ' + r.stderr.slice(0, 200) : ''}`}` : 'Claude 가 결과 JSON 을 내지 않음 — 로그 확인', meta);
+    act(inc.id, { status: 'need-user', agent: out || null, snap: files.length ? inc.id : undefined }, !r.ok ? `Claude 조치 실패. ${r.timedOut ? `시간 초과 ${cfg.agentTimeoutMin}분` : `exit ${r.code}${r.stderr ? ' · ' + r.stderr.slice(0, 200) : ''}`}` : 'Claude 가 결과 JSON 을 내지 않음. 로그 확인', meta);
     say('end', { id: inc.id, ok: false, text: !r.ok ? '조치 실패' : '결과 JSON 없음' });
     return;
   }
@@ -265,7 +273,7 @@ async function claudeAction(inc, extra, manual) {
 }
 
 let notifier = null;
-function notify(inc, what) { try { if (notifier) notifier(inc, what); } catch { } }
+function notify(inc, what) { try { if (notifier) notifier(inc, what); } catch (ex) { errlog.note('orch-agent', 'notify', ex); } }
 
 async function drain() {
   if (busy) return; busy = true;
@@ -294,17 +302,21 @@ async function ask(text) {
   busy = true; current = { id: '대화', child: null, t0: Date.now() }; loadCfg();
   try {
     say('user', { text });
-    const r = await runClaude(`.claude/agents/vm-orchestra.md 의 조치 등급과 지킬 것을 따른다. 사건 없이 온 사용자 지시이므로 결과 JSON 은 생략하고 답만 쓴다.\n\n${text}`, { resume: chatSession || undefined, label: '에이전트 대화' });
+    // 2026-11-20: 중지 지시면 그 화면의 실행 끝을 사용자 중지로 본다(대화 동안 + 끝난 뒤 30초). 화면 ID 가 없는 지시는 표시하지 않는다(다른 화면 실패를 가리지 않게)
+    const stopScr = /중지|멈춰|멈추|멈춤|정지|중단|stop|kill/i.test(text) ? [...new Set(String(text).toUpperCase().match(/\b[A-Z]{2,4}\d{4}[A-Z]?\b/g) || [])] : [];
+    if (stopScr.length) { try { watch.markUserStop(stopScr, Date.now() + (cfg.agentTimeoutMin || 30) * 60000, '에이전트 대화'); } catch (e) { errlog.note('orch-agent', 'markUserStop', e); } }
+    const r = await runClaude(`.claude/agents/vm-orchestra.md 의 조치 등급과 지킬 것을 따른다. 사건 없이 온 사용자 지시이므로 결과 JSON 은 생략하고 답만 쓴다. 실행 중인 화면을 멈추거나 다시 실행할 때는 프로세스를 직접 끊지 말고 .vibe/orch/stop_requests/ 에 요청 파일을 쓴다(vm-orchestra.md '실행 중지와 다시 실행').\n\n${text}`, { resume: chatSession || undefined, label: '에이전트 대화' });
+    if (stopScr.length) { try { watch.markUserStop(stopScr, Date.now() + 30000, '에이전트 대화'); } catch (e) { errlog.note('orch-agent', 'markUserStop', e); } }
     if (r.session) chatSession = r.session; if (!r.ok && /No conversation found|session.*not found/i.test(r.stderr || '')) chatSession = '';
-    say('end', { ok: r.ok, text: r.ok ? `답변 완료 · ${Math.round(r.ms / 1000)}s${r.costUsd != null ? ` · ${r.costUsd.toFixed(3)} USD` : ''}` : `실패 exit ${r.code} ${r.stderr || ''}` });
+    say('end', { ok: r.ok, text: r.ok ? `답변 완료 · ${Math.round(r.ms / 1000)}s` : `실패 exit ${r.code} ${r.stderr || ''}` });
     return r;
   } finally { current = null; busy = false; setTimeout(drain, 50); setTimeout(pumpAsk, 120); }
 }
 // ── 프롬프트 대기열(에이전트 탭) ──
 const askQ = []; let askSeq = 0;
-function postQ() { const m = { type: 'agentQueue', items: askQ.map(x => ({ qid: x.qid, text: x.text })) }; for (const fn of listeners) { try { fn(m); } catch { } } }
+function postQ() { const m = { type: 'agentQueue', items: askQ.map(x => ({ qid: x.qid, text: x.text })) }; for (const fn of listeners) { try { fn(m); } catch (ex) { errlog.note('orch-agent', 'listener', ex); } } }
 function queueList() { return askQ.map(x => ({ qid: x.qid, text: x.text })); }
-function enqueueAsk(text) { askQ.push({ qid: ++askSeq, text: String(text) }); say('note', { text: `대기열에 넣음(${askQ.length}번째) — 진행 중인 작업이 끝나면 자동으로 보냅니다: ${String(text).replace(/\s+/g, ' ').slice(0, 80)}` }); postQ(); return null; }
+function enqueueAsk(text) { askQ.push({ qid: ++askSeq, text: String(text) }); say('note', { text: `대기열에 넣음(${askQ.length}번째). 진행 중인 작업이 끝나면 자동으로 보냅니다: ${String(text).replace(/\s+/g, ' ').slice(0, 80)}` }); postQ(); return null; }
 function pumpAsk() { if (busy || !askQ.length) return; const it = askQ.shift(); postQ(); say('note', { text: `대기열 전송(남은 ${askQ.length}건)` }); ask(it.text); }
 function removeQueued(qid) { const i = askQ.findIndex(x => x.qid === qid); if (i >= 0) { askQ.splice(i, 1); postQ(); } }
 /** 지금 보내기: 진행 중인 응답에 추가 지시로 넣는다. 넣을 수 없으면 대기열 맨 앞으로 옮긴다 */
@@ -312,7 +324,7 @@ function sendQueuedNow(qid) {
   const i = askQ.findIndex(x => x.qid === qid); if (i < 0) return false; const it = askQ[i];
   if (!busy) { askQ.splice(i, 1); postQ(); ask(it.text); return true; }
   if (current && current.inject && current.inject(it.text)) { askQ.splice(i, 1); postQ(); return true; }
-  askQ.splice(i, 1); askQ.unshift(it); postQ(); say('note', { text: '지금 넣을 수 없음(응답이 끝나는 중) — 대기열 맨 앞으로 옮겼습니다' }); return false;
+  askQ.splice(i, 1); askQ.unshift(it); postQ(); say('note', { text: '지금 넣을 수 없음(응답이 끝나는 중). 대기열 맨 앞으로 옮겼습니다' }); return false;
 }
 /** VMO 켜고 끄기 — tools/Harness/harness.json orch.enabled. 끄면 감시기가 사건을 만들지 않고 자동 조치·자동 분석도 하지 않는다(서버·로그·직접 지시는 그대로) */
 function setEnabled(on) {
@@ -321,8 +333,8 @@ function setEnabled(on) {
   const end = s.indexOf('}', m.index); const block = s.slice(m.index, end); let t;
   if (/"enabled"\s*:\s*(true|false)/.test(block)) t = s.slice(0, m.index) + block.replace(/("enabled"\s*:\s*)(true|false)/, `$1${v}`) + s.slice(end);
   else { const nl = s.includes('\r\n') ? '\r\n' : '\n'; t = s.slice(0, m.index + m[0].length) + `${nl}    "enabled": ${v},` + s.slice(m.index + m[0].length); }
-  try { JSON.parse(t.replace(/^\uFEFF/, '')); fs.writeFileSync(f + '.tmp_orch', t, 'utf8'); fs.renameSync(f + '.tmp_orch', f); } catch (e) { return { ok: false, why: e.message }; }
-  loadCfg(); say('note', { text: on ? 'VMO 켬 — 감시 · 자동 조치 · 자동 분석 다시 시작' : 'VMO 끔 — 감시 · 자동 조치 · 자동 분석 멈춤(서버 · 로그 · 직접 지시는 그대로)' }); evt('orch.toggle', { on: !!on });
+  try { JSON.parse(t.replace(/^\uFEFF/, '')); fs.writeFileSync(f + '.tmp_orch', t, 'utf8'); replaceFile(f + '.tmp_orch', f); } catch (e) { try { fs.unlinkSync(f + '.tmp_orch'); } catch { } errlog.note('orch-agent', 'setEnabled', e); return { ok: false, why: e.message }; }
+  loadCfg(); say('note', { text: on ? 'VMO 켬. 감시, 자동 조치, 자동 분석 다시 시작' : 'VMO 끔. 감시, 자동 조치, 자동 분석 멈춤(서버, 로그, 직접 지시는 그대로)' }); evt('orch.toggle', { on: !!on });
   return { ok: true, on: !!on };
 }
 /** 다른 모듈(orch-improve.js)이 Claude 를 쓸 때: 사건 조치와 겹치지 않게 한 번에 1건. 바쁘면 { busy: true } */
@@ -331,7 +343,7 @@ async function withLock(id, fn) {
   busy = true; current = { id, child: null, t0: Date.now() };
   try { return await fn(); } finally { current = null; busy = false; setTimeout(drain, 50); }
 }
-function stop() { if (current && current.child) { try { cp.spawn('taskkill', ['/pid', String(current.child.pid), '/T', '/F']); } catch { } say('note', { text: '중지 요청' }); return true; } return false; }
+function stop(by) { if (current && current.child) { if (current.run && !current.run.stoppedBy) current.run.stoppedBy = by || '중지 요청'; try { cp.spawn('taskkill', ['/pid', String(current.child.pid), '/T', '/F']); } catch { } say('note', { text: '중지 요청' }); return true; } return false; }
 
 function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 function feedList() { return feed.slice(); }
@@ -344,10 +356,12 @@ function init(opts) {
   loadCfg(); pruneSnaps();
   watch.on((inc, isNew) => {
     // 묶음 사건(같은 죽은 잠금 반복)은 횟수만 올라가도 그 잠금 파일은 지운다(주인 PID 없음 재확인 뒤)
-    try { if (inc.rule === 'R2' && inc.evidence && inc.evidence.deadLock && cfg.enabled !== false) { const w = removeDeadLock(inc.evidence.deadLock); if (w) watch.update(inc.id, {}, { by: 'VMO', what: w, grade: 'A' }); } } catch { }
-    if (isNew) enqueue(inc.id, false);
+    try { if (inc.rule === 'R2' && inc.evidence && inc.evidence.deadLock && cfg.enabled !== false) { const w = removeDeadLock(inc.evidence.deadLock); if (w) watch.update(inc.id, {}, { by: 'VMO', what: w, grade: 'A' }); } } catch (ex) { errlog.note('orch-agent', 'onIncident', ex); }
+    // 2026-11-20: 화면 진입 실패 반복(R13)은 자가 복구(orch-heal.js)가 먼저 코드로 처리하고, 풀지 못하면 그쪽에서 enqueue 한다
+    // 2026-11-20: 중지 뒤 계속 실행(R14)도 자가 복구가 먼저 프로세스를 끊고 체인 중지를 다시 보낸다. 재발하면 그쪽에서 enqueue(중지 경로 결함 진단)
+    if (isNew && !((inc.rule === 'R13' || inc.rule === 'R14') && !inc.notice)) enqueue(inc.id, false);
   });
 }
-function dispose() { started = false; stop(); }
+function dispose() { started = false; stop('VS Code 종료'); }
 
 module.exports = { queueList, removeQueued, sendQueuedNow, setEnabled, init, dispose, on, feedList, status, enqueue, ask, stop, revert, lastJsonBlock, buildPrompt, snapshot, diffAfter, codeAction, DEF, runClaude, withLock, say, gitDirty, loadCfg, ALLOWED_TOOLS, paths: () => P() };

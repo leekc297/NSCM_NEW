@@ -1,0 +1,227 @@
+{
+ "rule_id": "F1",
+ "hash": "93cc20a5f0abc58e",
+ "groups": [
+  {
+   "rows": [
+    "V-54419cf1",
+    "V-6bb43433"
+   ],
+   "why": "Both check the Created By/Date and Updated By/Date columns after an existing row is edited and saved, and expect the same audit-column behavior."
+  },
+  {
+   "rows": [
+    "ES-de56f621"
+   ],
+   "why": "This is the E2E crud save round trip in edit-save mode, while the authcrud row runs in no-save mode as a specific account, so it is kept on its own."
+  },
+  {
+   "rows": [
+    "ES-f2a7f563"
+   ],
+   "why": "This is the authcrud no-save round trip for a specific account, which is a different mode and user state from edit-save."
+  },
+  {
+   "rows": [
+    "V-45fe7803"
+   ],
+   "why": "This is the general check that the marker row is in the DB after the success message; it does not specify a new or existing row, so it is not grouped with the Insert-specific row."
+  },
+  {
+   "rows": [
+    "V-de448610"
+   ],
+   "why": "This is limited to inserting a new row from the bottom tab, saving and re-querying, which is a different state from the general marker-row check."
+  },
+  {
+   "rows": [
+    "V-504dee98"
+   ],
+   "why": "This checks a two-row save done with one Save, which is a different scenario."
+  },
+  {
+   "rows": [
+    "V-9bcbf1f5"
+   ],
+   "why": "This is a save round trip for every editable column, so its target is different."
+  },
+  {
+   "rows": [
+    "V-5473aa5a"
+   ],
+   "why": "This forces a server failure and checks the failure message, so the expected result is different."
+  },
+  {
+   "rows": [
+    "V-67e7e0e2"
+   ],
+   "why": "This saves an existing-row edit and a new Insert row together with one Save, which is a different scenario."
+  },
+  {
+   "rows": [
+    "V-0ca60163"
+   ],
+   "why": "This checks stored values for Biz Plan Cutoff data, so its target is different."
+  },
+  {
+   "rows": [
+    "V-17113cf6"
+   ],
+   "why": "This checks the sales-price validation when saving RTF and the sync to Waterfall."
+  },
+  {
+   "rows": [
+    "V-208f2de5"
+   ],
+   "why": "This checks the validation messages on Insert or Delete and the D flag."
+  },
+  {
+   "rows": [
+    "V-2534a66a"
+   ],
+   "why": "This checks for no SQL error when saving edited data, so its target and expected result are different."
+  },
+  {
+   "rows": [
+    "V-2cf408a8"
+   ],
+   "why": "This checks that saving is blocked when the sales price is missing, plus Plant Site ID."
+  },
+  {
+   "rows": [
+    "V-37016368"
+   ],
+   "why": "This checks the BPS I/F button and the Last Update columns."
+  },
+  {
+   "rows": [
+    "V-38aa95b8"
+   ],
+   "why": "This checks the Text required-field validation and that saving an ETC edit updates the existing row."
+  },
+  {
+   "rows": [
+    "V-497da4d8"
+   ],
+   "why": "This checks that when a sales price was entered, the false 'no sales price' validation does not appear."
+  },
+  {
+   "rows": [
+    "V-4acc985c"
+   ],
+   "why": "This checks saving after adding a user to the right-hand grid (allReceiver)."
+  },
+  {
+   "rows": [
+    "V-504f1340"
+   ],
+   "why": "This checks the Mail Setup double-click add/remove and the save that follows."
+  },
+  {
+   "rows": [
+    "V-54279798"
+   ],
+   "why": "This checks saving the JV Planner Division sheet and the duplicate message."
+  },
+  {
+   "rows": [
+    "V-62421639"
+   ],
+   "why": "This includes the new-row save plus the Sales Site cell combo candidates, so its expected result is different."
+  },
+  {
+   "rows": [
+    "V-6c9c55c9"
+   ],
+   "why": "This checks the Excel Upload Key, Period From/To and the validation messages."
+  },
+  {
+   "rows": [
+    "V-791e615d"
+   ],
+   "why": "This checks that EDI Incoterms on the Purchase tab reaches the DB."
+  },
+  {
+   "rows": [
+    "V-7c98d634"
+   ],
+   "why": "This checks Version Create in the BP Version popup."
+  },
+  {
+   "rows": [
+    "V-931203f8"
+   ],
+   "why": "This checks saving Unit Price(LOC) for weeks after week 51."
+  },
+  {
+   "rows": [
+    "V-af718c50"
+   ],
+   "why": "This checks registering multiple Owners in the bottom grid and the double-click lookup."
+  },
+  {
+   "rows": [
+    "V-b376d9cb"
+   ],
+   "why": "This checks saving the Exchange Rate popup with multiple pasted rows."
+  },
+  {
+   "rows": [
+    "V-db05e1ee"
+   ],
+   "why": "This checks the Cell Prod Site validation and the related columns after save."
+  },
+  {
+   "rows": [
+    "V-e35f5a18"
+   ],
+   "why": "This checks the sync from Unit Price(LOC) to Sales Price."
+  },
+  {
+   "rows": [
+    "V-e4357c87"
+   ],
+   "why": "This checks entering and saving the ROUTE_PATH column."
+  },
+  {
+   "rows": [
+    "V-f475877c"
+   ],
+   "why": "This checks the Sales Company/Plant combo after a Company change."
+  },
+  {
+   "rows": [
+    "V-f68d1df8"
+   ],
+   "why": "This checks the automatic Dept setting and the Use Y/N header."
+  },
+  {
+   "rows": [
+    "V-ff49b86f"
+   ],
+   "why": "This checks the RTF link to the MKT_FCST tables."
+  },
+  {
+   "rows": [
+    "V-ff577a75"
+   ],
+   "why": "This checks that a new Sales Site shows up in the search-condition combo."
+  },
+  {
+   "rows": [
+    "V-ff88b0be"
+   ],
+   "why": "This checks that no Approval Date is created at request time."
+  },
+  {
+   "rows": [
+    "V-ffa8441c"
+   ],
+   "why": "This checks the To Site combo and City when inserting before a search."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:13:57",
+ "cost": 0.1101373
+}

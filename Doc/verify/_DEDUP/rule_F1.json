@@ -1,0 +1,276 @@
+{
+ "rule_id": "F1",
+ "hash": "c662d1512acf0c6f",
+ "groups": [
+  {
+   "refs": [
+    "DM-10",
+    "DM-11",
+    "DM-12"
+   ],
+   "target": "저장 · Sales Site 조회조건 콤보",
+   "condition": "신규 Sales Site 생성 후 저장",
+   "expected": "저장이 1회로 성공하고, 저장된 신규 Sales Site 가 조회조건 콤보에 바로 보인다",
+   "why": "Div 만 다르고, 신규 Sales Site 저장 후 조회조건 콤보에 바로 나오는지 보는 확인 동작과 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-134",
+    "DM-147"
+   ],
+   "target": "수량·Unit Price(LOC) 입력 행 저장 Validation",
+   "condition": "신규 행/키에 판가(Unit Price(LOC))가 있는 주차 입력",
+   "expected": "판가를 입력했으면 판가 미입력 Validation 이 잘못 뜨지 않고 저장되며 DB 에 반영된다",
+   "why": "둘 다 판가를 입력했는데 판가 미입력 Validation 이 잘못 떠서 저장이 막히는지 보는 같은 확인이다."
+  },
+  {
+   "refs": [
+    "DM-204-4",
+    "DM-204-4S"
+   ],
+   "target": "신규 행 Insert 후 Save",
+   "condition": "Insert / 하단 탭",
+   "expected": "저장 성공 안내가 뜨면 DB 에 행이 있고, 재조회하면 표시된다",
+   "why": "화면만 다르고 확인 동작과 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-204-6",
+    "DM-204-6S"
+   ],
+   "target": "사용자 우측 그리드(allReceiver) 추가 후 Save",
+   "condition": "Insert / 하단 탭",
+   "expected": "우측 그리드(allReceiver)에 추가한 사용자가 저장 후 DB 에 반영된다",
+   "why": "화면만 다르고 확인 동작과 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-108"
+   ],
+   "target": "Excel Upload Key·Period From/To 컬럼·Validation",
+   "condition": "",
+   "expected": "Key 와 Period From/To 가 업로드되어 반영되고, 행별 Validation 원인 메시지가 맞다",
+   "why": "Excel Upload 반영과 메시지를 보는 별도 확인이다."
+  },
+  {
+   "refs": [
+    "DM-143"
+   ],
+   "target": "MKT_FCST↔Unit Price(LOC) 조건부 필수·Plant Site ID",
+   "condition": "수량 입력, 판가 미입력",
+   "expected": "판가를 넣지 않으면 저장이 막히고, Plant Site ID 값 기준으로 MSSQL↔Oracle 이 일치한다",
+   "why": "판가 미입력 때 저장이 막히는지 보는 확인으로, 잘못 뜨는 Validation 과 기대 결과가 반대다."
+  },
+  {
+   "refs": [
+    "DM-149"
+   ],
+   "target": "Text 필수 Validation·ETC 수정 저장",
+   "condition": "RTF 수정 / ETC 행 수정",
+   "expected": "Text 필수는 FCST Type=ETC 신규·ETC 테이블 변경 때만 적용하고, ETC 수정 저장은 기존 행을 갱신한다(신규 행 생성 0)",
+   "why": "조건부 필수 범위와 수정 저장 방식을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-15"
+   ],
+   "target": "하단 Purchase 탭 EDI Incoterms 저장",
+   "condition": "신규 데이터 입력",
+   "expected": "성공 메시지 후 EDI Incoterms 가 DB 에 반영된다",
+   "why": "특정 탭의 특정 컬럼 반영을 보는 확인이다."
+  },
+  {
+   "refs": [
+    "DM-171"
+   ],
+   "target": "Unit Price(LOC) 장기 주차 저장",
+   "condition": "51주차 이후 구간(조회기간 끝까지)",
+   "expected": "저장 성공 메시지 후 조회기간 전체의 값이 DB 에 반영되고 재조회에 표시된다",
+   "why": "조회기간 뒤쪽 구간 저장 누락이라는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-173"
+   ],
+   "target": "RTF 저장 판가 검증 / Sales Plan Waterfall 동기화",
+   "condition": "RTF 수정 후 저장",
+   "expected": "판가가 있으면 판가 미입력 검증이 뜨지 않고, 저장 성공 후 Sales Plan Waterfall 에 RTF 값이 반영된다",
+   "why": "Waterfall 동기화 확인이 더 붙어 있어 단순 Validation 오탐 묶음과 분리했다."
+  },
+  {
+   "refs": [
+    "DM-180"
+   ],
+   "target": "데이터 수정 저장",
+   "condition": "기존 행 수정",
+   "expected": "저장할 때 SQL Error 가 0건이고 DB 에 반영된다",
+   "why": "수정 저장 SQL Error 를 보는 단독 확인이다."
+  },
+  {
+   "refs": [
+    "DM-183"
+   ],
+   "target": "Created By/Date·Updated By/Date 컬럼",
+   "condition": "신규 Insert / 기존 행 수정 저장",
+   "expected": "Insert 때는 Created/Updated 를 세팅하고, Update 때는 Updated 만 갱신하며 Created 는 바꾸지 않는다",
+   "why": "감사 컬럼 갱신 규칙을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-189"
+   ],
+   "target": "Dept 컬럼 / Use Y/N·Active 헤더",
+   "condition": "User 선택·신규 사용자 저장",
+   "expected": "Dept 는 입력할 수 없고, User 선택 시 SSO DEPT 가 자동 세팅되며, 저장 후 DEPT ID/Name 이 표시되고 Use Y/N 헤더가 병합된다",
+   "why": "자동 세팅 컬럼과 헤더를 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-192"
+   ],
+   "target": "하위(Division) 시트 저장·중복 메시지",
+   "condition": "신규 상위 행 추가 후 하위 시트 행 추가",
+   "expected": "저장 후 Division 시트에서 조회되고, 다시 입력하면 중복 메시지의 의미가 맞다",
+   "why": "하위 시트 저장 반영과 중복 메시지를 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-196"
+   ],
+   "target": "URL-ROUTE_PATH 컬럼 입력·저장",
+   "condition": "",
+   "expected": "UI 에서 ROUTE_PATH 를 입력하고 저장할 수 있다",
+   "why": "특정 컬럼의 편집·저장 여부를 보는 확인이다."
+  },
+  {
+   "refs": [
+    "DM-209"
+   ],
+   "target": "하단 그리드 Sales Company/Sales Plant 콤보",
+   "condition": "상위 Company 변경(예: WA00→NJ00) 후",
+   "expected": "변경한 Company 의 후보가 표시되고, 키인 수정이 저장 1회로 반영된다",
+   "why": "상위 값 변경에 따라 종속 콤보 후보가 바뀌는지 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-218"
+   ],
+   "target": "Unit Price(LOC) → Sales Price 연동",
+   "condition": "MKT FCST·FCST&PRICE MGMT 저장 후",
+   "expected": "입력한 Unit Price(LOC) 가 Sales Price 테이블과 화면에 동기화된다",
+   "why": "타 테이블 연동을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-222"
+   ],
+   "target": "Insert 저장 / Delete CRUD Status",
+   "condition": "Insert·Delete",
+   "expected": "필수값이 빠지면 검증 메시지가 뜨고, 실패 시 성공 toast 는 0건이며, Delete 시 D Flag 가 표시되지 않는다",
+   "why": "실패 시 toast 와 CRUD Status 를 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-233"
+   ],
+   "target": "Approval Date 컬럼",
+   "condition": "Auth Request 시점",
+   "expected": "Request 시점에는 Approval Date 가 생성되지 않는다",
+   "why": "특정 시점의 컬럼 생성 여부를 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-234"
+   ],
+   "target": "사용자 좌/우 그리드 더블클릭 이동 저장",
+   "condition": "더블클릭 추가/제외 후 저장",
+   "expected": "더블클릭 이동이 반영되고, 저장 시 추가/삭제가 DB 에 반영되며, 중간 저장 토스트는 0건이다",
+   "why": "더블클릭 이동과 삭제 반영까지 보므로 allReceiver 추가 저장 묶음과 분리했다."
+  },
+  {
+   "refs": [
+    "DM-248"
+   ],
+   "target": "RTF[R+P] → DM_PLN_MKT_FCST / DM_PLN_MKT_FCST_C 연동",
+   "condition": "Sales Plan 저장 후",
+   "expected": "Current·최신 Cutoff 버전 테이블에 반영되고, FCST&PRICE MGMT·Demand Plan Waterfall 에 표시된다",
+   "why": "특정 테이블 연동을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-5"
+   ],
+   "target": "저장(성공 메시지) · Sales Site 셀 콤보",
+   "condition": "신규행 Insert",
+   "expected": "저장에 성공하면 DB 반영·재조회 표시가 되고, 저장은 1회이며, Sales Site 후보는 선택한 Div 것만 나온다",
+   "why": "셀 콤보 후보 필터 확인이 더 붙어 있어 단순 Insert 저장 묶음과 분리했다."
+  },
+  {
+   "refs": [
+    "DM-55"
+   ],
+   "target": "팝업 저장(Exchange Rate) 복수 행 붙여넣기",
+   "condition": "수정 후 저장 · 복사/붙여넣기 복수 행",
+   "expected": "저장 SQL Error 가 0건이고, 붙여넣은 복수 행이 모두 저장된다",
+   "why": "팝업에서 붙여넣은 복수 행이 저장되는지 보므로 단순 수정 저장과 분리했다."
+  },
+  {
+   "refs": [
+    "DM-56"
+   ],
+   "target": "BPS I/F 버튼 · Last Update Date/By 컬럼",
+   "condition": "",
+   "expected": "BPS I/F 실행 후 환율이 실제로 반영되고, 반영 대상이 없으면 \"반영할 환율 정보가 없습니다\"가 뜨며, Last Update Date/By 컬럼이 표시된다",
+   "why": "I/F 버튼 동작을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-75"
+   ],
+   "target": "Cell Prod Site 검증 · Application Gr·Country Name",
+   "condition": "Data Type ETC Data",
+   "expected": "Cell Prod Site 무효값(77)은 저장이 막히고, 저장 후 Application Gr·Country Name 이 조회되며, 저장은 3초 안에 끝난다",
+   "why": "무효값 차단과 조회 컬럼, 성능을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-79"
+   ],
+   "target": "Cutoff Data 저장 값 정합",
+   "condition": "Data Type Cutoff",
+   "expected": "입력한 값이 그대로 저장된다(Double 0)",
+   "why": "값이 두 배로 저장되는지 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-82"
+   ],
+   "target": "하단 Grid Owner 다건 · 상단 더블클릭 하단 조회",
+   "condition": "",
+   "expected": "하단에 Owner 를 2명 이상 등록할 수 있고, 상단 더블클릭 시 하단 표시 여부가 AS-IS 와 같다",
+   "why": "다건 등록과 마스터-디테일 연동을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-93"
+   ],
+   "target": "BP Version 팝업 Version Create",
+   "condition": "Version Cutoff 직후 신규 버전",
+   "expected": "신규 컷오프 버전으로 Version Create 를 하면 사전 Validation 뒤 버전이 생성되고 DB 에 반영된다",
+   "why": "버전 생성 기능을 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "SCPSSP-22"
+   ],
+   "target": "Insert 행 To Site 콤보·City",
+   "condition": "조회 전 Insert",
+   "expected": "조회 전 Insert 해도 To Site 후보가 정상이고, Site 를 고르면 City 가 매핑되며, 저장이 성공한다(또는 AS-IS 대로 막힌다)",
+   "why": "조회 전 Insert 때 콤보와 매핑을 보는 고유 확인이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:42:46",
+ "cost": 0.1632612
+}

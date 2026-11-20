@@ -1,0 +1,18 @@
+{
+ "rule_id": "I4",
+ "hash": "2a69247b3b55ecb2",
+ "groups": [
+  {
+   "refs": [
+    "DM-96"
+   ],
+   "target": "LBL/MSG/MENU 코드 사전",
+   "condition": "",
+   "expected": "동일 문구(KO/EN 동일)의 LBL/MSG/MNU 코드는 하나만 채번하고 모든 화면이 재사용한다",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:44:43"
+}

@@ -6,6 +6,7 @@ import {
   EE_UC_DIVISION_TOKEN,
   COATING_OPERATION_ID,
   MONTH_DISPLAY_COLUMNS,
+  NO_WORK_TYPE_DEFAULT,
   PRE_KEY_COLUMNS,
   PRE_KEY_DELIMITER,
   SHEETS,
@@ -83,13 +84,26 @@ export const isPersistedRow = (row: GridRow): boolean =>
   str(row.PRE_KEY_VALUES).split(PRE_KEY_DELIMITER)[0] !== '';
 
 /**
+ * No Work `NO_WORK_TYPE` 키값 정규화 — 공백은 '-' 로 본다. SAVE SP 의 `V_TYPE_KEY`
+ * (`CASE WHEN TRIM(V_TYPE) IS NULL THEN '-' ELSE V_TYPE END`, BODY:3745) / `NVL(V_TYPE,'-')`
+ * (BODY:4459) 등가다. 신규행이 Type 을 비워도 저장 시 '-' 로 들어가므로({@link buildSaveRow} #3)
+ * 중복키 대조도 '-' 로 맞춰야 저장된 '-' 행과 어긋나지 않는다.
+ */
+const toTypeKey = (value: unknown): string => {
+  const text = str(value).trim();
+  return text === '' ? NO_WORK_TYPE_DEFAULT : text;
+};
+
+/** 키 1토큰 — Type 컬럼만 '-' 정규화, 나머지는 날짜 환원({@link toStoredDateValue}). */
+const toKeyToken = (column: string, value: unknown): string =>
+  column === COLUMN.NO_WORK_TYPE ? toTypeKey(value) : toStoredDateValue(column, value);
+
+/**
  * 현재 키(저장 포맷) — 키 변경 검사(R-22)와 중복 검사가 같은 함수를 쓴다.
  * 날짜/월은 `PRE_KEY_VALUES` 와 같은 원본 포맷으로 환원해야 대조가 성립한다.
  */
 export const currentKeyOf = (sheet: GridSheet, row: GridRow): string =>
-  PRE_KEY_COLUMNS[sheet]
-    .map(column => toStoredDateValue(column, row[column]))
-    .join(PRE_KEY_DELIMITER);
+  PRE_KEY_COLUMNS[sheet].map(column => toKeyToken(column, row[column])).join(PRE_KEY_DELIMITER);
 
 /**
  * 전극(Electrode) Capa 행인가 — AS-IS `Save_DailyCapa` cs:1569
@@ -129,15 +143,19 @@ export const isElectrodeCapaRow = (row: GridRow): boolean => {
  */
 export const weekKeyOf = (row: GridRow, weekName?: string): string =>
   PRE_KEY_COLUMNS[SHEETS.NO_WORK]
-    .map(column =>
-      column === COLUMN.NO_WORK_DATE ? (weekName ?? str(row[COLUMN.WEEK_NAME])) : str(row[column])
-    )
+    .map(column => {
+      if (column === COLUMN.NO_WORK_DATE) return weekName ?? str(row[COLUMN.WEEK_NAME]);
+      if (column === COLUMN.NO_WORK_TYPE) return toTypeKey(row[column]);
+      return str(row[column]);
+    })
     .join(PRE_KEY_DELIMITER);
 
 /** 직전 키(원본 포맷) — 신규행이면 구분자만 남은 문자열이라 `currentKeyOf` 와 결코 같지 않다. */
 export const previousKeyOf = (sheet: GridSheet, row: GridRow): string => {
   const keys = parsePreKeys(sheet, row);
-  return PRE_KEY_COLUMNS[sheet].map(column => keys[column]).join(PRE_KEY_DELIMITER);
+  return PRE_KEY_COLUMNS[sheet]
+    .map(column => (column === COLUMN.NO_WORK_TYPE ? toTypeKey(keys[column]) : keys[column]))
+    .join(PRE_KEY_DELIMITER);
 };
 
 /**
@@ -250,13 +268,15 @@ const VALUE_PARAM_BY_SHEET: Record<GridSheet, readonly { param: string; column: 
   ],
 };
 
-/** `PRE_KEY_COLUMNS` 컬럼명 → `pre*` 파라미터명 (`DIVISION_ID` → `preDivisionId`). */
-const toPreParamName = (column: string): string =>
-  `pre${column
-    .toLowerCase()
-    .split('_')
-    .map(token => token.charAt(0).toUpperCase() + token.slice(1))
-    .join('')}`;
+/**
+ * 값 파라미터명 → `pre*` 파라미터명 (`divisionId` → `preDivisionId`, `type` → `preType`).
+ *
+ * 컬럼명이 아니라 **값 파라미터명**(= `SCM_ADM_PROC_M.COL_NM`)에서 유도한다 — 둘은 보통 같지만
+ * No Work `NO_WORK_TYPE` 는 값 파라미터가 `type`(pre 는 `preType`, SP arg `P_PRE_TYPE`, ora.py 실측
+ * 2026-11-19)이라 컬럼명 `preNoWorkType` 로 보내면 NULL 바인딩된다.
+ */
+const toPreParamName = (valueParam: string): string =>
+  `pre${valueParam.charAt(0).toUpperCase()}${valueParam.slice(1)}`;
 
 /**
  * Daily Capa 전용 저장 규칙 — AS-IS `Save_DailyCapa`(cs:1558-1686) 이식. 다른 7시트에는
@@ -307,9 +327,17 @@ export const buildSaveRow = (
   for (const { param, column } of VALUE_PARAM_BY_SHEET[sheet]) {
     payload[param] = toStoredDateValue(column, row[column]);
   }
+  // No Work `NO_WORK_TYPE` 공백 → '-' (AS-IS cs:1403, I/M/D 전행 공통). SAVE SP 는 보정하지 않는다.
+  if (sheet === SHEETS.NO_WORK && str(payload.type).trim() === '') {
+    payload.type = NO_WORK_TYPE_DEFAULT;
+  }
   const preKeys = parsePreKeys(sheet, row);
+  const valueParamByColumn = new Map(
+    VALUE_PARAM_BY_SHEET[sheet].map(({ column, param }) => [column, param])
+  );
   for (const column of PRE_KEY_COLUMNS[sheet]) {
-    payload[toPreParamName(column)] = preKeys[column];
+    const valueParam = valueParamByColumn.get(column);
+    if (valueParam) payload[toPreParamName(valueParam)] = preKeys[column];
   }
   if (sheet === SHEETS.DAILY_CAPA) applyDailyCapaSaveRules(row, payload);
   // 감사키 빈 문자열 금지(convert-core §2.5) — 세션 사용자를 그대로 싣는다.
@@ -374,6 +402,43 @@ const WEEK_VALUE_PARAMS: readonly { param: string; column: string }[] = [
   { param: 'desc', column: COLUMN.DESC },
 ];
 
+/**
+ * Week SAVE `pre*` 파라미터 — `PRE_KEY_VALUES` 토큰 순서대로 매핑한다(E20260929-000580).
+ * Week GET `PRE_KEY_VALUES` = `div|plant|line|op|line_type|week_name|no_work_type`(PKG_SCP0126 BODY:1115)
+ * 이고 SAVE 는 `preWeekName`·`preType` 까지 받는다(ora.py 실측 2026-11-19, 11파라미터→18파라미터로 확장).
+ *
+ * AS-IS `Save_NoWork_Week`(cs:1908-1927) 와 동일하게 **신규행(I)은 전부 공백**, 그 외는 토큰 원형이다 —
+ * `preWeekName` 은 현재 `weekName`(ISO '202640') 과 달리 **변환하지 않고** 토큰('2026-W40')을 그대로 보낸다
+ * (AS-IS 가 pre 만 `Replace` 를 안 한다). SP 의 중복키 검사는 `ATTRIBUTE1<>'Y'` 인 수동 일별행과의
+ * 충돌만 보므로(BODY:4453-4460) 이 포맷 차이는 정상 주간저장을 막지 않는다.
+ */
+const WEEK_PRE_PARAMS: readonly string[] = [
+  'preDivisionId',
+  'prePlantId',
+  'preLineId',
+  'preOperationId',
+  'preLineType',
+  'preWeekName',
+  'preType',
+];
+
+/**
+ * #5 전송 정렬키 — AS-IS `saveData.OrderByDescending(x => x.Key)`(cs:1897) 의 복합키.
+ * `division^plant^line^operation^line_type^week_name(ISO)^type('-')` 로 **내림차순** 정렬해 보낸다.
+ * 복수 Type 이 같은 주/라인의 일별 용량(86400s)을 나눠 채우는 순서를 결정하므로(SP DML BODY:4621-4643)
+ * AS-IS 와 같은 순서를 유지해야 분배 결과가 일치한다.
+ */
+const weekSortKeyOf = (payload: Record<string, string>): string =>
+  [
+    payload.divisionId,
+    payload.plantId,
+    payload.lineId,
+    payload.operationId,
+    payload.lineType,
+    payload.weekName,
+    payload.type,
+  ].join('^');
+
 export const buildWeekSavePayload = (
   rows: readonly GridRow[],
   sesUserId: string
@@ -383,11 +448,25 @@ export const buildWeekSavePayload = (
     for (const { param, column } of WEEK_VALUE_PARAMS) payload[param] = str(row[column]);
     // 셀은 표시 라벨을 들고 있으므로 저장키로 변환한다('2026-W40' → '202640').
     payload.weekName = weekNameToIsoYyyyww(payload.weekName);
+    // No Work `NO_WORK_TYPE` 공백 → '-' (AS-IS cs:1714, I/M/D 전행 공통). Week SAVE SP 도 보정하지 않는다.
+    if (str(payload.type).trim() === '') payload.type = NO_WORK_TYPE_DEFAULT;
+    // pre*: I 행은 공백, 그 외는 `PRE_KEY_VALUES` 토큰 원형(AS-IS cs:1908-1927).
+    const preTokens = str(row.PRE_KEY_VALUES).split(PRE_KEY_DELIMITER);
+    const insert = payload.activeFlag === 'I';
+    WEEK_PRE_PARAMS.forEach((param, index) => {
+      payload[param] = insert ? '' : (preTokens[index] ?? '');
+    });
     return payload;
   });
+  // #5 AS-IS OrderByDescending(x => x.Key) 등가 — 복합키 내림차순(문자열 비교).
+  const ordered = [...perRow].sort((a, b) => {
+    const keyA = weekSortKeyOf(a);
+    const keyB = weekSortKeyOf(b);
+    return keyA < keyB ? 1 : keyA > keyB ? -1 : 0;
+  });
   const flat: Record<string, string> = {};
-  for (const key of Object.keys(perRow[0] ?? {})) {
-    flat[key] = perRow.map(row => row[key] ?? '').join(SAVE_CLOB_DELIMITER);
+  for (const key of Object.keys(ordered[0] ?? {})) {
+    flat[key] = ordered.map(row => row[key] ?? '').join(SAVE_CLOB_DELIMITER);
   }
   flat.sesUserId = sesUserId;
   return flat;

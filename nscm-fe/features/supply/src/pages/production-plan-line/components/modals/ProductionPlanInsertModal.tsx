@@ -358,7 +358,9 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
       if (binding === 'ITEM_ID') {
         const itemRow = itemPlantRows.find(r => str(r.CODE) === str(row.ITEM_ID));
         row.NICK_NAME = str(itemRow?.NICK_NAME);
-        row.ITEM_TYPE = str(itemRow?.ITEM_TYPE);
+        // AS-IS: ITEM_TYPE=='Z' 는 공백 표시(cs:684/1063/1244).
+        const itemType = str(itemRow?.ITEM_TYPE);
+        row.ITEM_TYPE = itemType === 'Z' ? '' : itemType;
         row.PLANT_SITE_ID = '';
         row.LINE_ID = '';
         row.OPERATION_ID = '';
@@ -383,8 +385,13 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
       }
     };
     g.cellEditEnded.addHandler(onEdit as never);
+    // AS-IS SpdMain_ClipboardPasted→setRowForNotEE/setRowForEE(cs:810/1034/1215) — 붙여넣기 후에도
+    //   Nick Name·Item Type 파생 + plant/line 캐스케이드를 재현한다(콤보 선택과 동일 경로). pastedCell 은
+    //   cellEditEnded 와 동일 CellRangeEventArgs(row/col) 라 같은 핸들러를 재사용(SmsCategoryGrid 선례).
+    g.pastedCell.addHandler(onEdit as never);
     return () => {
       g.cellEditEnded?.removeHandler(onEdit as never);
+      g.pastedCell?.removeHandler(onEdit as never);
     };
   }, [itemPlantRows, isEe, loadLines, loadOriginDiv]);
 
@@ -429,6 +436,37 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
         return;
       }
     }
+    // AS-IS checkValidN0(cs:1402) — Item Type(P/H) 체크 + 신규행끼리 중복 체크(newCheck 前).
+    for (let i = 0; i < list.length; i++) {
+      const row = list[i];
+      const itemType = str(row.ITEM_TYPE);
+      // AS-IS: !(P||H) 가 빈값(Z/미확장)도 먼저 잡는다 → 빈값도 이 메시지(MSG00254 미확장은 死코드).
+      if (itemType !== 'P' && itemType !== 'H') {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.ITEM_TYPE_PH, '_Item Type must be Product (P) or Semi-Product (H).'),
+        });
+        return;
+      }
+      for (let j = 0; j < list.length; j++) {
+        if (i === j) continue;
+        const other = list[j];
+        if (
+          str(row.PLANT_SITE_ID) === str(other.PLANT_SITE_ID) &&
+          str(row.LINE_ID) === str(other.LINE_ID) &&
+          str(row.ITEM_ID) === str(other.ITEM_ID)
+        ) {
+          void setAlert({
+            type: 'alert',
+            content: t(
+              MSG.DUP_NEW_INPUT,
+              '_There is duplicated data among new input data.\n{0}'
+            ).replace('{0}', `${str(row.PLANT_SITE_ID)}/${str(row.LINE_ID)}/${str(row.ITEM_ID)}`),
+          });
+          return;
+        }
+      }
+    }
     setSaving(true);
     try {
       for (const row of list) {
@@ -455,8 +493,13 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
           return;
         }
         const checkRow = ((checkRes.result as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? [])[0];
-        const status = checkRow ? str(Object.values(checkRow)[0]) : '';
-        const detail = checkRow ? str(Object.values(checkRow)[1]) : `${str(row.PLANT_SITE_ID)}/${str(row.LINE_ID)}/${str(row.ITEM_ID)}`;
+        // 주의: 반드시 컬럼명으로 읽는다. SP 는 SELECT 'L' AS RESULT_CODE, V_MSG AS MSG 순이지만
+        //   BE JSON 직렬화는 컬럼을 알파벳순(MSG → RESULT_CODE)으로 돌려줘 Object.values()[0] 는 MSG 가 된다
+        //   → status 에 detail 문자열이 들어가 L/T 판정이 모두 깨지고 generic 'Failed to save' 로 샜다
+        //   (테스터 신고 2026-11-18, newCheck 응답 실측으로 확정).
+        const status = str(checkRow?.RESULT_CODE);
+        const detail =
+          str(checkRow?.MSG) || `${str(row.PLANT_SITE_ID)}/${str(row.LINE_ID)}/${str(row.ITEM_ID)}`;
         if (status !== 'S') {
           const content =
             status === 'L'
@@ -473,7 +516,11 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
           'SAVE',
           common
         );
-        if (Number(saveRes.code)) {
+        // SP 가 예외를 자체 EXCEPTION 블록에서 삼켜 RESULT_CODE='F' + envelope code='0' 로 돌려줄 수 있어
+        //   (저장 0건 false success 위험 [[scp0013-save-false-success-defect]]), envelope code 와 함께
+        //   RESULT_CODE='S' 를 확인한다. 컬럼명으로 읽는다(위 newCheck 와 동일 직렬화 순서 문제 회피).
+        const saveRow = ((saveRes.result as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? [])[0];
+        if (Number(saveRes.code) || str(saveRow?.RESULT_CODE) !== 'S') {
           void setAlert({ type: 'alert', content: t(MSG.SAVE_FAIL, '_Failed to save.') });
           return;
         }

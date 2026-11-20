@@ -288,6 +288,7 @@ export const MaterialByDivisionModal = ({
                   <FormItem
                     label={t('LBL00001', '_Div.')}
                     labelAlign='right'
+                    required
                     render={() =>
                       // multiDivision 옵트인: 콤마 결합 divisionId 를 멀티 컨트롤로 disabled 표시.
                       //   단일 모드와 동일하게 읽기전용(호출 화면 조회조건 미러) — 표시만 멀티다.
@@ -296,7 +297,6 @@ export const MaterialByDivisionModal = ({
                       multiDivision ? (
                         <CustomDropdown
                           multiple
-                          mandatory
                           disabled
                           value={searchParam?.divisionId ?? ''}
                           options={
@@ -305,7 +305,6 @@ export const MaterialByDivisionModal = ({
                         />
                       ) : (
                         <CustomDropdown
-                          mandatory
                           disabled
                           value={searchParam?.divisionId ?? ''}
                           options={
@@ -371,6 +370,13 @@ export const MaterialByDivisionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -378,13 +384,6 @@ export const MaterialByDivisionModal = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
             />
           </div>
         </div>

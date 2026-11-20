@@ -44,7 +44,7 @@ RX_NEG = re.compile(r'금지|않는다|않음|하지 않|아님|폐기|제거|�
 RX_FUNC = re.compile(r'\b(guess\w*|match_tobe|isHist|SIMILAR_\w+|GENERIC_TOKENS|RX_TOOLFAIL|RX_ABSENT|BACKSTOP\w*|feature_present)\b\s*(?:=|\(|:)')
 RX_FUNC_DEF = re.compile(r'(?:def|function|const|let|var)\s+(guess\w*|match_tobe|isHist|feature_present)\b|^\s*(SIMILAR_\w+|GENERIC_TOKENS|RX_TOOLFAIL|RX_ABSENT|BACKSTOP\w*)\s*=')
 RX_NAMERULE = re.compile(r"""(?:re\.(?:search|match|compile)\(|new RegExp\(|/)[^\n]{0,40}(?:SAVE\|[^\n]{0,30}(?:INS|UPD)|_H\$\||_HIST|\(\?i\)_?GET_)""")
-RX_LLM = re.compile(r"claude\s+-p|['\"]claude['\"]\s*,|spawn\w*\(\s*['\"]claude|_prompt\.txt")
+RX_LLM = re.compile(r"claude\s+-p|['\"]claude['\"]\s*,|spawn\w*\(\s*['\"]claude|_prompt\.txt|llm_call\.ask\(|\bask\(\s*mid\s*,\s*['\"]")   # 2026-11-20: 공용 호출기(llm_call.ask) 호출도 LLM 지점(종전 정규식이 못 잡음)
 RX_LLM_JSON = re.compile(r'"(?:prompt|claude)"\s*:\s*"')  # VM 메뉴 정의(json)의 claude 프롬프트 — 코드의 showInputBox({ prompt }) 는 LLM 호출이 아니다
 RX_COMMENT_ONLY = re.compile(r'^\s*(#|//|\*|/\*|<!--)')
 RX_RELAX = re.compile(r"판정필요[^\n]{0,30}(?:NA|해당없음)|수동 검수 대상\(작업 원장 W7\)|status\W{1,6}trial|FAIL 승격 전")

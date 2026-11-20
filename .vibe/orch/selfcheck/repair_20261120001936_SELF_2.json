@@ -1,0 +1,29 @@
+{
+ "proposal": {
+  "id": "20261120001936_SELF_2",
+  "title": "doc_style.py JS 소스 검사에서 주석과 정규식 리터럴 제외(확인 기준 정정 재제출)",
+  "evidence": "failed 20261119232523_SELF 2회 실패 사유 = 확인 기준 'tabview.js 위반 0' 불충족. 결과 기록(result.verify_result)은 extension.js 51 → 40, tabview.js 2 → 1, workbench.js 333 → 313 이고 남은 tabview.js 1건은 tabview.js:134 '파일이 큽니다(${…} MB) — 에디터로 여세요' 화면 문구의 줄표로 실제 위반임. 수정 내용은 기대대로 동작했고 확인 기준이 틀림. 원인 코드 = tools/Docs/doc_style.py:96 _STR 정규식이 // 주석과 정규식 리터럴 안의 따옴표, 백틱을 문자열로 짝지음. :107-110 은 문자열 시작 줄 머리만 봄. 지금 doc_style.py 는 복원된 원본(:96 _STR 그대로 확인). failed 20261119232524_SELF_3 의 남은 걸림 중 prompt-panel.js:164(웹뷰 JS 주석), orchestra.js L156, L168, L250, L448, L499(주석), L449(정규식)도 같은 원인.",
+  "targets": [
+   "tools/Docs/doc_style.py"
+  ],
+  "before_after": "변경 전: .js 도 _STR 정규식 1개로 문자열을 뽑아 주석 속 백틱이 다음 백틱까지를 문자열로 만듦 → 변경 후: .js 는 앞에서부터 읽으며 // 주석, /* */ 주석, 정규식 리터럴을 건너뛰고 ', \", ` 문자열만 뽑음. 템플릿 ${…} 안은 다시 읽음. 템플릿 글자 부분에서 줄 머리가 // 인 줄과 /* */ 구간은 뺌. .py, .cs, .ps1, xlsx, md 경로와 규칙 CSV 는 그대로.",
+  "verify": "python -m py_compile tools/Docs/doc_style.py 통과. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/tabview.js tools/VibeManager/orchestra.js --out <임시 폴더> --quiet 실행. 기대: tabview.js 에 L100 행 없음(L134 행은 개선안 'small modules v2' 반영 전이면 1건 남음), extension.js.style.csv 에 L348 '룰 진입', L388 '꺼진 ho', L555 '서브그룹' 행 없음, orchestra.js 에 L156, L168, L250, L448, L449, L499 행 없음. 출력 폴더는 .vibe/orch/selfcheck/doc_style 대신 임시 폴더를 씀(CHANGELOG.md:53 같은 폴더 동시 사용 기록).",
+  "sig": "docstyle js walk vn",
+  "check": "S11",
+  "selfKey": "S11|extension.js"
+ },
+ "result": null,
+ "gate": null,
+ "history": [
+  "00:33:36 VMO 자동(게이트 통과 조건): 승인",
+  "00:35:32 VMO: 반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 260, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0033",
+  "00:35:41 VMO: 반영 보류. 사건 조치 중. 다시 승인 필요",
+  "01:04:42 VMO 자동(게이트 통과 조건): 승인",
+  "01:06:27 VMO: 반영 전 게이트: 구문 검사 21개 파일 통과, 시험 20/20개 파일 통과(PASS 270, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0104",
+  "01:06:35 VMO: 반영 시작",
+  "01:06:46 VMO: 반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+ ],
+ "tries": 2,
+ "depth": 1,
+ "root": "20261119232523_SELF"
+}

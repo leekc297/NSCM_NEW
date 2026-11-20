@@ -1,0 +1,273 @@
+{
+ "rule_id": "K1",
+ "hash": "7a73d9e612a124a1",
+ "groups": [
+  {
+   "rows": [
+    "EG-08be1b0d"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER2 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-1250673f"
+   ],
+   "why": "UserInfoPopup의 PART_LEADER 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-138c252f"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER2 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-16038431"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER1 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-180f3170"
+   ],
+   "why": "UserInfoPopup의 TEAM_LEADER 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-1fe9e3ed"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup의 Model 조회조건에서 필터 후 건수를 확인하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-29cb3f40"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER2 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-2f242605"
+   ],
+   "why": "UserInfoPopup의 PART_LEADER 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-4543f990"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER1 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-484ed73d"
+   ],
+   "why": "UserInfoPopup의 USER_ID 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-4979986c"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup의 Model 조회조건에서 ITEM_ID 정렬을 확인하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-55ee8f97"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER3 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-699b9c00"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER3 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-6f829bf9"
+   ],
+   "why": "UserInfoPopup의 PART_LEADER 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-7787b986"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER4 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-79684cf4"
+   ],
+   "why": "UserInfoPopup의 TEAM_LEADER 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-7a803c2f"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER5 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-7b6c9d59"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER4 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-a906c8f9"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER4 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-ad2cc9ff"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER5 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-b3ed5187"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup의 Model 조회조건에서 F4 필터 적용과 해제를 확인하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-ba189f9d"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER5 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-bf4762c1"
+   ],
+   "why": "UserInfoPopup의 USER_ID 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-c788094d"
+   ],
+   "why": "UserInfoPopup의 USER_ID 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-e3289c95"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER3 컬럼에서 필터 후 건수를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-f5a2131e"
+   ],
+   "why": "UserInfoPopup의 TEAM_LEADER 컬럼에서 F4 필터 적용과 해제를 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-fadb0b67"
+   ],
+   "why": "UserInfoPopup의 MAIL_USER1 컬럼 정렬을 확인하는 행이며, 다른 컬럼 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-048aa3eb"
+   ],
+   "why": "팝업 Filter 텍스트 입력창에 입력이 되는지 확인하는 행이며, 같은 요소를 다루는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-06acd0c1"
+   ],
+   "why": "필터나 Sort가 걸린 상태에서 Insert한 신규행을 확인하는 행이라 상태와 기대 결과가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-4dbc99ae",
+    "V-d9706e63"
+   ],
+   "why": "결과 그리드의 동적 Bucket 컬럼에서 Sort/Filter/Hide가 똑같이 동작하는지 보는 행이며, 대상·조건·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-5248ef52"
+   ],
+   "why": "필터 편집기에 공란 1개와 고유값 전부가 함께 나오는지 보는 행이라 기대 결과가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-57dc3b54"
+   ],
+   "why": "모든 팝업의 No. 컬럼, 건수, 공통 그리드 여부를 보는 행이라 대상과 기대가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-59a60598"
+   ],
+   "why": "Cust Group→End Customer→Sales Site 연쇄 선택을 확인하는 행이라 다른 요소다."
+  },
+  {
+   "rows": [
+    "V-5d547d14",
+    "V-df7c7122"
+   ],
+   "why": "Type을 다중선택해 조회한 뒤 필터 후보에 고유값이 잘리지 않고 모두 나오는지 보는 행이며, 대상·조건·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-6e916910"
+   ],
+   "why": "재조회 때 필터가 초기화되는 것을 허용하는 행이라 필터 유지를 요구하는 행들과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-73e4e8be"
+   ],
+   "why": "Company 컬럼 공란을 하나의 Blanks 항목으로 통일했는지만 보는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-791d114f",
+    "V-9da0face"
+   ],
+   "why": "동적 컬럼을 포함한 그리드 Sort가 오름→내림→해제 3단으로 토글되는지 보는 행이며, 대상·조건·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-9f90e19c"
+   ],
+   "why": "화면 전체의 Sort/Filter를 포괄적으로 확인하는 행이라 특정 요소 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-a2bb9da9",
+    "V-f0afce9a"
+   ],
+   "why": "그리드 F4 필터를 적용했다가 해제하면 조건이 초기화되고 전체 행이 복원되는지 보는 행이며, 대상·조건·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-af57a002",
+    "V-f341af20"
+   ],
+   "why": "컬럼 필터를 건 채 재조회하고 필터 유지, 건수=실제 행 수, 해제 단계를 보는 행이며, 대상·절차·기대가 같다."
+  },
+  {
+   "rows": [
+    "V-b0c89353"
+   ],
+   "why": "Excel 붙여넣기 가능 여부까지 기대해 SSP0014 정렬 Copy·Hide 행과 기대가 완전히 같지 않으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b63a1271"
+   ],
+   "why": "정렬 뒤 정렬 유지, Copy 값 일치, Hide 동작을 보는 행이라 Excel 붙여넣기를 보는 행과 구분한다."
+  },
+  {
+   "rows": [
+    "V-b9170dce"
+   ],
+   "why": "동적 칸에서 F3·F4·Copy를 보는 행이라 Hide를 보는 동적 컬럼 행과 기대가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:17:44",
+ "cost": 0.1746207
+}

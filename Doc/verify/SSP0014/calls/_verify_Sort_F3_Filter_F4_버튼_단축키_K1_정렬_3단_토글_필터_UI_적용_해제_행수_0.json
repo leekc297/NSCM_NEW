@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8613,
+  "dur": 388,
+  "at": "2026-11-20T00:18:06.266Z",
+  "user": "minyonglee1",
+  "test": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7672,
+  "dur": 486,
+  "at": "2026-11-20T00:18:09.748Z",
+  "user": "minyonglee1",
+  "test": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수"
+ }
+]

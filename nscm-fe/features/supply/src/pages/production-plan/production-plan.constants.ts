@@ -96,6 +96,10 @@ export const BUCKET_OPTIONS: { value: BUCKET_TYPE; label: string }[] = [
   { value: BUCKET_TYPE.MONTHLY, label: 'Monthly' },
 ];
 
+// Condition(F6) 저장·복원 제외 키 — AS-IS ConditionNotUseList(cboPlanDate/cboPlanType/cboPlanSeq, cs L215~217).
+//   planStartYyyymmdds 는 끝이 's' 라 공용 EXCLUDED_DATE_PARAM 에도 안 걸리므로 화면에서 직접 뺀다.
+export const CONDITION_NOT_SAVED = ['planStartYyyymmdds', 'planTypes', 'planSeqs'] as const;
+
 // Period 프리셋 주차 (design 02 §2.8 GetDayRange — from = planDate, to = from + 52*7-1).
 export const PRESET_W26 = 26;
 export const PRESET_W52 = 52;

@@ -1,0 +1,160 @@
+{
+ "rule_id": "B1",
+ "hash": "5e8d262c28ff356f",
+ "groups": [
+  {
+   "rows": [
+    "T-f6d2e034"
+   ],
+   "why": "이 TRACE 행은 대조표 항목 UC-05(Excel 다운로드 시 Name 출력)를 추적하는 행으로 성질이 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-038abb60"
+   ],
+   "why": "조회조건 Valid 콤보만 대상으로 하는 행이라 다른 조건이나 컬럼과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-f7eee5a9"
+   ],
+   "why": "조회조건 Trans Mode 콤보만 대상으로 하는 행이라 Valid 조건과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-97f786bd"
+   ],
+   "why": "조회조건 콤보 2종을 묶어 보는 문서 자동 생성 행인데 기대가 '문구 없음'으로 다르므로 개별 조건 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-5d913304"
+   ],
+   "why": "다른 화면(SYS0006)의 API Type 조회조건 결함 유형이고, 이 화면의 대응 요소가 정해지지 않았으며 기대도 다르다."
+  },
+  {
+   "rows": [
+    "V-ed0e005e"
+   ],
+   "why": "End Customer 그리드 콤보 행이고 기대에 중복과 정렬이 더해져 있어 다른 행과 요소와 기대가 모두 다르다."
+  },
+  {
+   "rows": [
+    "V-2139b4f2"
+   ],
+   "why": "route.LT_TYPE(L/T Type)은 Distribution Route.LT_TYPE(L/T Type*)과 라벨과 필수 표시가 달라 같은 그리드 컬럼인지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-314c4269"
+   ],
+   "why": "Distribution Route.LT_TYPE(L/T Type*) 컬럼은 route.LT_TYPE와 같은 요소인지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-da23c71f"
+   ],
+   "why": "route.VALID_YN(Active)은 Distribution Route.VALID_YN(Active*)과 라벨과 필수 표시가 달라 같은 요소인지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-5fc268f1"
+   ],
+   "why": "Distribution Route.VALID_YN(Active*) 컬럼은 route.VALID_YN와 같은 요소인지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-8fc101d9"
+   ],
+   "why": "Distribution Route.TRANSPORT_MODE 그리드 컬럼으로, 조회조건 Trans Mode와는 위치(그리드 vs 조회조건)와 상태(신규행)가 다르다."
+  },
+  {
+   "rows": [
+    "V-c95fc4ef"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_MON 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-f65a331c"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_TUE 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-353cced2"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_WED 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-f79b79cb"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_THU 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-1abeb5f0"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_FRI 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-db34be87"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_SAT 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-2a5fe6dd"
+   ],
+   "why": "Distribution Route 그리드의 DAYS_SUN 컬럼만 대상이다."
+  },
+  {
+   "rows": [
+    "V-776f27a7"
+   ],
+   "why": "팝업 그리드의 DAYS_MON 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-7ab721fb"
+   ],
+   "why": "팝업 그리드의 DAYS_TUE 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-f197d44f"
+   ],
+   "why": "팝업 그리드의 DAYS_WED 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-872bdf86"
+   ],
+   "why": "팝업 그리드의 DAYS_THU 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-996c3e9b"
+   ],
+   "why": "팝업 그리드의 DAYS_FRI 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-a5fca385"
+   ],
+   "why": "팝업 그리드의 DAYS_SAT 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-0bec0fd2"
+   ],
+   "why": "팝업 그리드의 DAYS_SUN 컬럼으로, 메인 그리드의 같은 이름 컬럼과는 화면 요소가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:37:53",
+ "cost": 0.09206080000000001
+}

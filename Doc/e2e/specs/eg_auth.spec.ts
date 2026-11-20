@@ -4,9 +4,10 @@
 import { measurable } from '../../../tools/E2E/lib/precond';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { test } from '../../../tools/E2E/fixtures/test';
 import { evalRules, parseRules, type Rule } from '../../../tools/E2E/lib/condeval';
-import { GRID, accountId, buttonSnapshot, condOptions, condSnapshot, ctxOf, distinctAccounts, divState, expectState, findMerged, gridState, groupStates, isDivLabel, labelKey, loadFacts, selectDiv, sessionMenus, watchStatus, type Account, type EgRes, type Facts, type Verdict } from '../../../tools/E2E/lib/authprobe';
+import { GRID, accountId, buttonSnapshot, customLike, toolbarRe, condOptions, condSnapshot, ctxOf, distinctAccounts, divState, expectState, findMerged, gridState, groupStates, isDivLabel, labelKey, loadFacts, selectDiv, sessionMenus, watchStatus, type Account, type EgRes, type Facts, type Verdict } from '../../../tools/E2E/lib/authprobe';
 import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
 import { CFG, FE as FE_URL, type Nscm } from '../../../tools/E2E/lib/nscm';
 import { ensureRows } from '../../../tools/E2E/lib/smoke-extra';
@@ -21,7 +22,17 @@ const F: Facts | null = ID ? loadFacts(ID) : null;
 const DIV_FILTER: { note: string; keep: (d: string) => boolean } | null = (() => {
   try {
     const src = parseCsv(fs.readFileSync(path.join(__dirname, '..', '..', 'asisfacts', 'screens', ID, 'combo_src.csv'), 'utf8').replace(/^﻿/, ''));
-    const row = src.find(r => r.target_kind === 'SEARCH' && /division/i.test(`${r.target} ${r.code}`) && /ATTRIBUTE3/i.test(r.filters || ''));
+    let row = src.find(r => r.target_kind === 'SEARCH' && /division/i.test(`${r.target} ${r.code}`) && /ATTRIBUTE3/i.test(r.filters || ''));
+    // 2026-11-20 T376(SSP0014 EG-a6f6bebc 'EE 없음 판정필요'): 화면 원문에 필터가 없고 BigFilter(SSP_BIGFILTER) 결과셋을 쓰면 그 SP @Code 분기 원문의 ATTRIBUTE3 필터를 쓴다
+    //   (MyDivisionCMM = UP_FX_GetCommonDataList @Code='MyDivision' · ATTRIBUTE3 <> 'EE' · tools/Harness/verify/combo_branch_filter.py)
+    if (!row) {
+      try {
+        const bf = JSON.parse(execFileSync('python', [path.join(__dirname, '..', '..', '..', 'tools', 'Harness', 'verify', 'combo_branch_filter.py'), ID], { encoding: 'utf8', timeout: 60_000 })) as { target: string; code: string; filter: string; ref: string }[];
+        const hit = bf.find(b => /division/i.test(`${b.target} ${b.code}`));
+        const base = hit && src.find(r => r.target_kind === 'SEARCH' && r.target === hit.target);
+        if (hit && base) row = { ...base, filters: hit.filter, ref: hit.ref };
+      } catch { /* 분기 원문 없음 = 종전 */ }
+    }
     const m = row && /ATTRIBUTE3\s*(<>|!=|=)\s*'([^']*)'/i.exec(row.filters || '');
     if (!m) return null;
     const attr = new Map(parseCsv(fs.readFileSync(path.join(__dirname, '..', '..', 'tobefacts', 'db', 'division.csv'), 'utf8').replace(/^﻿/, '')).map(d => [d.division_id, d.attribute3 || '']));
@@ -164,8 +175,9 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
     if (uniq.size > 1) put('EG275', '조건 집합', Object.keys(perDiv).join(','), groups.some(g => g.prop === 'visible' && !g.isButton) ? 'PASS' : '판정필요', 'AS-IS 분기 문장으로 설명', `Div 별 칸 집합 ${uniq.size}종`, 'facts_auth');
 
     // EG369(CR-070): Div 별 공통버튼 = PR_GET_MNU_BTN_AUTH_DIV(기본 계정) — 코드 없는데 노출 = FAIL · 있는데 비노출 = 화면 기능 유무 미구분이라 판정필요
-    { const codeRe: Record<string, RegExp> = { SAVE: /^Save/i, INSERT: /^Insert/i, DELETE: /^Delete/i };
+    { // 2026-11-20 T430: 툴바 단추(Save(F7)·Insert(F8)·Delete(F9))만 공통버튼으로 센다 — 같은 이름 화면 단추(일괄삭제 'Delete' 등) 제외
       for (const d of Object.keys(perDiv)) { const codes = f.btnDiv?.__default__?.[d]; if (!codes) { put('EG369', 'CR-070 공통버튼', `Div ${d}`, 'ERROR', '권한 프로시저 결과', 'facts 에 이 Div 없음'); continue; }
+        const codeRe = toolbarRe(perDiv[d].btns.map(b => b.name));
         for (const [code, re] of Object.entries(codeRe)) { const vis = perDiv[d].btns.some(b => re.test(b.name)); const has = codes.includes(code); put('EG369', `${code} 버튼 CR-070`, `Div ${d} · 조회 전`, !has && vis ? 'FAIL' : has && !vis ? '판정필요' : 'PASS', `Div 권한 ${has ? '있음 → 기능 있으면 노출' : '없음 → 비노출'}`, vis ? '노출' : '비노출', 'PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070'); } } }
     // EG212: Div 전환 구간 401/403
     const bad401 = st.all.filter(x => x.status === 401 || x.status === 403);
@@ -313,7 +325,7 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
         prevDiv = v; prevKey = a.key;
       }
       // 조회 전 버튼 ↔ btn_auth(그룹 합집합) · CR-070: 사용자·선택 Division 권한 — 버튼 코드만 비교
-      const codeRe: Record<string, RegExp> = { SAVE: /^Save/i, INSERT: /^Insert/i, DELETE: /^Delete/i };
+      // 2026-11-20 T430: codeRe 는 judgeBtn 안에서 조회 전후 단추 목록으로 정한다(툴바 단추만 · 화면 단추 제외)
       // 2026-11-06(SCP0084 EG374·EG411 허위 FAIL 6건): Division 이 ALL·복수·빈값이면 FE 는 Division 축 없이 사용자 그룹 합집합으로 버튼을 낸다
       //   (useTabBtnPermissions.ts:31-57 — divisionId 미지정/'ALL'/'a,b' → PR_GET_MNU_BTN_AUTH_DIV 에 Division 을 보내지 않음). 종전엔 빈 Div 로 Div 별 권한을 찾아
       //   '권한 없음 → 비노출' 을 기대했다 → 그 경우 기대 = btn_auth 의 계정 그룹 합집합(USE_YN Y).
@@ -327,10 +339,12 @@ test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
       const judgeBtn = async () => {
         await mutDom(nscm, 'acct-after');
         const after = (await buttonSnapshot(p)).map(b => b.name);
+        const codeRe = toolbarRe([...before, ...after]);
         for (const [code, re] of Object.entries(codeRe)) {
           const b4 = before.some(n => re.test(n)); const af = after.some(n => re.test(n)); const has = auth.has(code); const egs = ['EG374', 'EG411'];
+          const cus = customLike([...before, ...after], code as 'SAVE' | 'INSERT' | 'DELETE');
           const res: Verdict = !has ? (b4 || af ? 'FAIL' : 'PASS') : b4 ? 'PASS' : af ? 'FAIL' : '판정필요';
-          for (const eg of egs) put(eg, `${code} 버튼 조회 전`, a.key, res, !has ? `${divAxis ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code})` : '계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions)'} ${code} 없음 → 비노출(CR-070)` : `${divAxis ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code})` : '계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions)'} ${code} 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)`, `조회 전 ${b4 ? '노출' : '비노출'} · 조회 후 ${af ? '노출' : '비노출'}`, 'PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070', res === '판정필요' ? '조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요' : '');
+          for (const eg of egs) put(eg, `${code} 버튼 조회 전`, a.key, res, !has ? `${divAxis ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code})` : '계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions)'} ${code} 없음 → 비노출(CR-070)` : `${divAxis ? `PR_GET_MNU_BTN_AUTH_DIV(Div ${ds.code})` : '계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions)'} ${code} 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)`, `툴바 단추 조회 전 ${b4 ? '노출' : '비노출'} · 조회 후 ${af ? '노출' : '비노출'}${cus.length ? ` · 같은 이름 화면 단추 ${cus.join(',')} 는 툴바 아님(제외)` : ''}`, 'PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070', res === '판정필요' ? '조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요' : '');
         }
       };
       // EG369: GROUP guard 버튼·조건(계정 그룹)

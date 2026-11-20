@@ -1,0 +1,136 @@
+{
+ "rule_id": "X-ROW",
+ "hash": "7a561ca66bd2ec3e",
+ "groups": [
+  {
+   "rows": [
+    "T-0891c714"
+   ],
+   "why": "btnInput_Click(입력 버튼) 진입점은 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-0adfea94"
+   ],
+   "why": "FindDelete(삭제 조회) 진입점은 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-22025375"
+   ],
+   "why": "btnDelete_Click(삭제 버튼) 진입점이다. btnInput_Click과 대조표 행 번호(10행)는 같지만 버튼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-2a3f808e"
+   ],
+   "why": "SaveData(저장) 진입점은 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-300ca145"
+   ],
+   "why": "SpdMain_TopChange(그리드 스크롤) 진입점이다. 같은 대조표 3행을 가리키는 다른 행과 이벤트가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-49f49db3"
+   ],
+   "why": "FindInput 5 CSV 위치조인(cs:394~429) 구간 추적이다. FindInput 진입점 행(T-73dbcb2d)과 이름이 비슷하지만 대조표 행(1행 vs 43행)과 확인 범위가 달라 확신할 수 없으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-4cec401b"
+   ],
+   "why": "checkValidSize(크기 유효성 검사)는 다른 행과 확인 대상이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-548f9655"
+   ],
+   "why": "InitControls(컨트롤 초기화)는 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-5ef43a81"
+   ],
+   "why": "InitEvent(이벤트 연결)는 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-6f683197"
+   ],
+   "why": "Form_Load(화면 로드)는 InitSpread와 같은 대조표 2행을 가리키지만 진입점이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-73dbcb2d"
+   ],
+   "why": "FindInput 진입점(대조표 43행)이다. 위치조인 구간 행과 범위가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-78a38634"
+   ],
+   "why": "FindData(메인 조회)는 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-7e1641ba"
+   ],
+   "why": "btnItemId_Click(품목 팝업 버튼)은 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-8895a9d8"
+   ],
+   "why": "ClearUsrCheckedList는 AS-IS에서 진입점이 연결되지 않은 dead 상태라 기대 결과가 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-a875dab8"
+   ],
+   "why": "SetChangedControl(변경 컨트롤 표시)은 같은 대조표 3행을 가리키는 다른 행과 확인 대상이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-b2cff1d9"
+   ],
+   "why": "InitSpread(그리드 초기화)는 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-b6b4401a"
+   ],
+   "why": "InsertButton(입력 버튼 처리)은 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-c214dae1"
+   ],
+   "why": "ClbDivision_SelectedIndexChanged(구분 콤보 선택 변경)는 다른 행과 조회조건 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-c25bebfb"
+   ],
+   "why": "CreateSpread(그리드 생성)는 InitSpread와 단계가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-c565a176"
+   ],
+   "why": "spdMain_Change(셀 값 변경)는 같은 대조표 10행을 가리키는 버튼 행들과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-f4b5cd3c"
+   ],
+   "why": "FindButton(조회 버튼 처리)은 FindData와 진입점이 달라 확신할 수 없으므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:22:50",
+ "cost": 0.0894521
+}

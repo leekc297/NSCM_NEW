@@ -1,0 +1,82 @@
+{
+ "rule_id": "B5",
+ "hash": "de4c6f2ab396f299",
+ "groups": [
+  {
+   "rows": [
+    "V-0b6ea6d5"
+   ],
+   "why": "FCST Type 콤보와 Site 유형별 입력 Measure 제한을 한 행에서 함께 확인한다. 대상이 복합이라 FCST Type만 보는 V-d4572eb5와 기대 결과가 같지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-76dd7b82"
+   ],
+   "why": "Current 버전 조건에서 Measure 5종 통제와 AS From Site 목록을 함께 확인하는 복합 행이다. 상태(Current 버전)와 기대 결과가 다른 행과 일치하지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-785ce222"
+   ],
+   "why": "Div 81에서 AS From Site 활성 여부와 SCM_FCST 비노출을 함께 확인한다. 신규 행 Measure 후보만 보는 V-78900519와 요소·기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-78900519"
+   ],
+   "why": "신규 행 Measure 콤보 후보를 Div·Sales Site 유형별로 확인하고 VMI=Y 조건을 기대한다. 다른 행은 AS From Site, 편집 구간 등 추가 요소가 섞여 있어 같지 않으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-a672de2c"
+   ],
+   "why": "조회 전에 Division이 자동 선택된 상태에서 Measure 설정 팝업 후보를 재조회하는지 확인한다. 대상 요소(팝업)와 상태(Search 전)가 고유하다."
+  },
+  {
+   "rows": [
+    "V-bddd1ce6"
+   ],
+   "why": "End Customer 셀 콤보 후보를 확인하는 행으로, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-ca8af175"
+   ],
+   "why": "Measure 콤보에 오타 Measure 'Cutomer FCST'가 남아 있는지 후보와 데이터 양쪽에서 확인하는 고유한 기대 결과다."
+  },
+  {
+   "rows": [
+    "V-cec6884d"
+   ],
+   "why": "Div별 UI Category 기준으로 Measure 항목 구성을 확인한다. 신규 행 콤보 후보나 Site 유형 기준 행과 판정 기준이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-d367dab4"
+   ],
+   "why": "신규 행의 Sales Site·Project 팝업·Model·Team 컬럼 동작을 확인하는 행으로, 대상 요소가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-d4572eb5"
+   ],
+   "why": "신규 행 FCST Type 콤보 후보를 권한그룹별로 확인하고 후보 수까지 대조한다. Measure 제한까지 포함하는 V-0b6ea6d5와는 기대 범위가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-dbdbd356"
+   ],
+   "why": "권한 신청 가능 Group 목록을 확인하는 행으로, 다른 행과 대상 요소가 완전히 다르다."
+  },
+  {
+   "rows": [
+    "V-f8babb2d"
+   ],
+   "why": "SCM/MKT_FCST의 시간대별 편집 가능 여부(편집 구간)를 확인한다. 후보 노출이 아니라 편집성을 보므로 다른 행과 성질이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:38:10",
+ "cost": 0.0721831
+}

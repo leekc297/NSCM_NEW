@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  // 모듈(검색조건 / 결과그리드 / 버튼) 사이 간격 12px.
+  gap: 12px;
 }
 
 .gridWrapper {
@@ -21,7 +23,6 @@
   display: flex;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: 5px;
 }
 
 // Period 범위(YYYYMM ~ YYYYMM) — InputField 2개 + 구분자, 36px 통일 (hook #94).

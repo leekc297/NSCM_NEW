@@ -8,6 +8,7 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 import {
   ADMIN_SHEET_NAME,
   BUCKET_TYPE,
+  CONDITION_NOT_SAVED,
   MEASURE_SHEET_NAME,
   MENU_ID,
   PRESET_W52,
@@ -110,6 +111,7 @@ const ARRAY_KEYS = new Set<string>([
   'planSeqs',
 ]);
 const BOOL_KEYS = new Set<string>(['chkSum', 'chkAll']);
+const NOT_RESTORED = new Set<string>(CONDITION_NOT_SAVED);
 
 // 다중 선택 배열 → SP 파라미터. 빈 배열(전체)은 ''(Oracle NULL 취급 → 옵션필터 off, 자매 SCP0013 규약).
 const joinOrNull = (arr: string[]): string => (arr.length === 0 ? '' : arr.join(','));
@@ -123,7 +125,7 @@ export const useProductionPlanStore = createPersistedStoreWithTab<State & Action
     // F6(Condition) 저장 조회조건 복원 — 마운트 시 1회. 저장(GridAction.personalizeCondition)이 모든 값을
     //   문자열로 coerce 하므로(배열=콤마 join / 불리언='true'/'false'), 여기서 역직렬화해 되돌린다. 저장조건
     //   미존재/조회 실패는 기본값 유지. division 은 setDivision(하위 cascade reset) 이 아니라 merge 로 넣어
-    //   저장된 하위값(opGroup/planDate/type/seq)이 보존되게 한다. from/to 는 저장 대상이 아님(Period effect 재계산).
+    //   저장된 하위값(opGroup 등)이 보존되게 한다. from/to 는 저장 대상이 아님(Period effect 재계산).
     restoreSearchConditions: async () => {
       if (get().initialized) return;
       set(state => {
@@ -140,6 +142,8 @@ export const useProductionPlanStore = createPersistedStoreWithTab<State & Action
           // 현재 SearchCondition 에 없는 키(구버전 잔재)는 버린다 — setFilter 가 조회조건을 SP payload 로
           //   옮겨 담으므로 모르는 필드가 섞이면 새어 나간다.
           if (!(paramNm in initSearch)) continue;
+          // Plan Date/Type/Seq 는 복원하지 않는다(AS-IS ConditionNotUseList) — 이전에 저장된 잔재 행도 무시.
+          if (NOT_RESTORED.has(paramNm)) continue;
           const val = paramCtn ?? '';
           if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
           else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';

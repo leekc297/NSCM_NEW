@@ -1,0 +1,25 @@
+{
+  "id": "20261120_003357_R9_SCP0005",
+  "at": "2026-11-20T00:33:57+09:00",
+  "ms": 1795102437611,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.dbwin.SCP0005.lock (PID 23408 없음)",
+  "screen": "SCP0005",
+  "sig": "R9|_run.dbwin.SCP0005.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20 00:33:31 · 인자 SCP0005 · 부모 python.exe(23624)",
+  "evidence": {
+    "file": "Doc/e2e/_run.dbwin.SCP0005.lock",
+    "pid": 23408
+  },
+  "status": "closed",
+  "actions": [
+    {
+      "at": "2026-11-20T00:39:09+09:00",
+      "by": "VMO",
+      "what": "잠금 주인 PID 21880 가 살아 있음. 삭제하지 않음"
+    }
+  ]
+}

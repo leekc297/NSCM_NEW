@@ -1,0 +1,35 @@
+{
+  "id": "20261119215147_SELF_2",
+  "at": "2026-11-19T21:51:47+09:00",
+  "ms": 1795092707511,
+  "source": "self",
+  "status": "pending",
+  "sig": "logs be bootrun delete",
+  "title": "서버 로그 2개 삭제(.vibe/logs be_bootrun, 58,885,136,326바이트)",
+  "evidence": "입력 key S10|log|be_bootrun_20261112_1031.log, S10|log|be_bootrun_20261114_0148.log. ls 실측(2026-11-19 21:50): be_bootrun_20261112_1031.log 31,049,825,205바이트 마지막 수정 11-13 17:28, be_bootrun_20261114_0148.log 27,835,311,121바이트 마지막 수정 11-16 11:34. 입력 info logsGB 56.7 중 2개가 54.8. tools, scripts, .claude 에서 'be_bootrun' 검색 0건이라 VM 코드가 만든 파일이 아님. VM 서버 로그 이름은 server-service.js:200 의 '<시각>_<이름>.log' 형식임. 두 파일을 연 프로세스가 있는지는 미확인.",
+  "targets": [
+    ".vibe/logs/be_bootrun_20261112_1031.log",
+    ".vibe/logs/be_bootrun_20261114_0148.log"
+  ],
+  "before_after": ".vibe/logs 56.7GB(파일 1,372개) → 2개 삭제 뒤 1.9GB(1,370개). 삭제 대상 1) be_bootrun_20261112_1031.log 28.9GB 2) be_bootrun_20261114_0148.log 25.9GB. 코드 변경 없음",
+  "verify": "삭제 전 두 파일의 마지막 수정 시각이 11-13 17:28, 11-16 11:34 그대로인지 확인(바뀌었으면 쓰는 프로세스가 있으므로 삭제 중단). 삭제 뒤 자가진단 S10 재실행 결과 bigFiles 0, logsGB 2 이하",
+  "rollback": "복원 불가(백업 없이 삭제). 내용이 필요하면 승인 전에 다른 드라이브로 옮김",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T23:15:47+09:00",
+      "by": "VMO",
+      "what": "자동 삭제 대기 — 7일 기준 대기 2개 · 다음 삭제 가능 2026-11-20T17:28"
+    }
+  ],
+  "self": true,
+  "check": "S10",
+  "selfKey": "S10|log|be_bootrun_20261112_1031.log",
+  "needsApproval": "",
+  "auto": true,
+  "autoMs": 1795097747670,
+  "autoWaitMs": 1795163300041.108,
+  "waitNote": "7일 기준 대기 2개 · 다음 삭제 가능 2026-11-20T17:28",
+  "lastWaitNote": "7일 기준 대기 2개 · 다음 삭제 가능 2026-11-20T17:28"
+}

@@ -114,7 +114,7 @@
         {
           "title": "@snap 스냅샷 형상 검사",
           "file": "_snap.spec.ts",
-          "line": 63,
+          "line": 64,
           "column": 6,
           "specs": [
             {
@@ -136,12 +136,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4461,
+                      "duration": 4396,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:54:08.929Z",
+                      "startTime": "2026-11-19T21:12:18.713Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -151,7 +151,7 @@
               ],
               "id": "6de4c50016f8c51fc199-74c995e979b472a2d796",
               "file": "_snap.spec.ts",
-              "line": 68,
+              "line": 69,
               "column": 7
             },
             {
@@ -173,12 +173,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5283,
+                      "duration": 5281,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:54:15.960Z",
+                      "startTime": "2026-11-19T21:12:25.613Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -188,7 +188,7 @@
               ],
               "id": "6de4c50016f8c51fc199-399ba7d6116eaaa3a887",
               "file": "_snap.spec.ts",
-              "line": 104,
+              "line": 105,
               "column": 7
             },
             {
@@ -210,12 +210,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4320,
+                      "duration": 4328,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:54:23.666Z",
+                      "startTime": "2026-11-19T21:12:33.182Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -225,7 +225,7 @@
               ],
               "id": "6de4c50016f8c51fc199-95b89906c95d0086fb4b",
               "file": "_snap.spec.ts",
-              "line": 124,
+              "line": 125,
               "column": 7
             },
             {
@@ -247,12 +247,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6983,
+                      "duration": 7396,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:54:30.334Z",
+                      "startTime": "2026-11-19T21:12:40.070Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -293,7 +293,7 @@
               ],
               "id": "6de4c50016f8c51fc199-0bf4274e8a15b8e9e175",
               "file": "_snap.spec.ts",
-              "line": 147,
+              "line": 148,
               "column": 7
             }
           ]
@@ -310,7 +310,7 @@
         {
           "title": "검증엔진 SSP0005 @trace",
           "file": "_trace.spec.ts",
-          "line": 149,
+          "line": 150,
           "column": 6,
           "specs": [
             {
@@ -331,22 +331,22 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 135789,
+                      "duration": 134076,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20241120\",\"toYyyymmdd\":\"20271114\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AA00\",\"debugMode\":\"F\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211120\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:54:39.738Z",
+                      "startTime": "2026-11-19T21:12:50.004Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -356,7 +356,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-1b7c8e98d1918dfeeac7",
               "file": "_trace.spec.ts",
-              "line": 175,
+              "line": 176,
               "column": 7
             },
             {
@@ -377,12 +377,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6438,
+                      "duration": 6433,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:56:57.902Z",
+                      "startTime": "2026-11-19T21:15:06.367Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -392,7 +392,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-a5e00686be718323ef2f",
               "file": "_trace.spec.ts",
-              "line": 249,
+              "line": 250,
               "column": 7
             },
             {
@@ -413,12 +413,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 26983,
+                      "duration": 27050,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:57:06.555Z",
+                      "startTime": "2026-11-19T21:15:15.059Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -428,7 +428,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-f9f6f250dcd165acb9f2",
               "file": "_trace.spec.ts",
-              "line": 285,
+              "line": 286,
               "column": 7
             },
             {
@@ -449,22 +449,22 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 127070,
+                      "duration": 127386,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241120\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20211119\",\"toYyyymmdd\":\"20271114\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AA00\",\"debugMode\":\"F\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20211120\",\"toYyyymmdd\":\"20271114\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AA00\",\"debugMode\":\"F\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:57:35.807Z",
+                      "startTime": "2026-11-19T21:15:44.285Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -474,7 +474,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-e19d62989f8e6f171cc9",
               "file": "_trace.spec.ts",
-              "line": 372,
+              "line": 373,
               "column": 7
             },
             {
@@ -495,12 +495,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 205,
+                      "duration": 193,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:59:45.209Z",
+                      "startTime": "2026-11-19T21:17:53.904Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -510,7 +510,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-dcf9f59260b9ea05f876",
               "file": "_trace.spec.ts",
-              "line": 677,
+              "line": 685,
               "column": 7
             },
             {
@@ -531,16 +531,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 69325,
+                      "duration": 69354,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:59:47.635Z",
+                      "startTime": "2026-11-19T21:17:56.334Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -550,7 +550,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-a94a402b95443144127b",
               "file": "_trace.spec.ts",
-              "line": 752,
+              "line": 760,
               "column": 7
             },
             {
@@ -571,16 +571,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 69720,
+                      "duration": 70134,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:00:59.242Z",
+                      "startTime": "2026-11-19T21:19:07.975Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -590,7 +590,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-4ef60b8c5a60f0199b05",
               "file": "_trace.spec.ts",
-              "line": 814,
+              "line": 822,
               "column": 7
             },
             {
@@ -611,12 +611,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 204,
+                      "duration": 247,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:02:11.618Z",
+                      "startTime": "2026-11-19T21:20:20.641Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -626,7 +626,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-4883f4ffec420ce3df48",
               "file": "_trace.spec.ts",
-              "line": 948,
+              "line": 956,
               "column": 7
             },
             {
@@ -647,16 +647,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 69490,
+                      "duration": 69387,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:02:14.082Z",
+                      "startTime": "2026-11-19T21:20:23.105Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -666,7 +666,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-468da3964fbee14491bc",
               "file": "_trace.spec.ts",
-              "line": 1020,
+              "line": 1028,
               "column": 7
             },
             {
@@ -687,16 +687,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 70182,
+                      "duration": 70222,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:03:26.018Z",
+                      "startTime": "2026-11-19T21:21:35.161Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -706,7 +706,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-a103e89fc61517f9be97",
               "file": "_trace.spec.ts",
-              "line": 1075,
+              "line": 1083,
               "column": 7
             },
             {
@@ -727,16 +727,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 69355,
+                      "duration": 69292,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:04:38.566Z",
+                      "startTime": "2026-11-19T21:22:47.843Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -746,7 +746,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-1535e01a2a401b340baa",
               "file": "_trace.spec.ts",
-              "line": 1334,
+              "line": 1342,
               "column": 7
             },
             {
@@ -767,25 +767,25 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 420024,
+                      "duration": 422715,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         },
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         },
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         },
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:05:50.294Z",
+                      "startTime": "2026-11-19T21:23:59.682Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -795,7 +795,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-e2082aa8db00f01adcad",
               "file": "_trace.spec.ts",
-              "line": 1363,
+              "line": 1371,
               "column": 7
             },
             {
@@ -816,12 +816,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 45126,
+                      "duration": 46404,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:12:52.633Z",
+                      "startTime": "2026-11-19T21:31:04.739Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -831,7 +831,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-d53c335d3df8e5753a94",
               "file": "_trace.spec.ts",
-              "line": 1858,
+              "line": 1873,
               "column": 7
             },
             {
@@ -852,12 +852,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 168,
+                      "duration": 212,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:13:40.070Z",
+                      "startTime": "2026-11-19T21:31:53.434Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -867,7 +867,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-7fe1bc4001ab6c7c31f5",
               "file": "_trace.spec.ts",
-              "line": 2223,
+              "line": 2238,
               "column": 7
             },
             {
@@ -888,12 +888,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 183,
+                      "duration": 207,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:13:42.406Z",
+                      "startTime": "2026-11-19T21:31:55.749Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -903,7 +903,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-b6cead6aa3a124b5cba3",
               "file": "_trace.spec.ts",
-              "line": 2414,
+              "line": 2429,
               "column": 7
             },
             {
@@ -924,12 +924,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4165,
+                      "duration": 4342,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:13:44.700Z",
+                      "startTime": "2026-11-19T21:31:58.344Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -939,7 +939,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-baf5be48c48ceadffb78",
               "file": "_trace.spec.ts",
-              "line": 2475,
+              "line": 2490,
               "column": 7
             },
             {
@@ -960,12 +960,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125349,
+                      "duration": 125640,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:13:51.028Z",
+                      "startTime": "2026-11-19T21:32:05.007Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -975,7 +975,7 @@
               ],
               "id": "61ae7fb993b6ecef23da-2bb8a74d2cf90e29111a",
               "file": "_trace.spec.ts",
-              "line": 2500,
+              "line": 2515,
               "column": 7
             }
           ]
@@ -992,7 +992,7 @@
         {
           "title": "정합검증 SSP0005 @verify",
           "file": "_verify.spec.ts",
-          "line": 272,
+          "line": 285,
           "column": 6,
           "specs": [
             {
@@ -1013,12 +1013,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6654,
+                      "duration": 6769,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:15:59.702Z",
+                      "startTime": "2026-11-19T21:34:13.297Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1028,7 +1028,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0b4417577fd77f72f62e",
               "file": "_verify.spec.ts",
-              "line": 300,
+              "line": 315,
               "column": 7
             },
             {
@@ -1049,67 +1049,67 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 127228,
+                      "duration": 128397,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         },
                         {
-                          "text": "[lap] 기존행 편집(D1) 125s\n"
+                          "text": "[lap] 기존행 편집(D1) 126s\n"
                         },
                         {
-                          "text": "[lap] 신규행 127s\n"
+                          "text": "[lap] 신규행 128s\n"
                         },
                         {
-                          "text": "[lap] 입력 프로브 행 127s\n"
+                          "text": "[lap] 입력 프로브 행 128s\n"
                         },
                         {
-                          "text": "[lap] 연쇄 프로브 행 127s\n"
+                          "text": "[lap] 연쇄 프로브 행 128s\n"
                         },
                         {
-                          "text": "[lap] 콤보 후보+재편집 127s\n"
+                          "text": "[lap] 콤보 후보+재편집 128s\n"
                         },
                         {
-                          "text": "[lap] E1 127s\n"
+                          "text": "[lap] E1 128s\n"
                         },
                         {
-                          "text": "[lap] H13 127s\n"
+                          "text": "[lap] H13 128s\n"
                         },
                         {
-                          "text": "[lap] E2 127s\n"
+                          "text": "[lap] E2 128s\n"
                         },
                         {
-                          "text": "[lap] C3 127s\n"
+                          "text": "[lap] C3 128s\n"
                         },
                         {
-                          "text": "[lap] D5 127s\n"
+                          "text": "[lap] D5 128s\n"
                         },
                         {
-                          "text": "[lap] K5 127s\n"
+                          "text": "[lap] K5 128s\n"
                         },
                         {
-                          "text": "[lap] H2 127s\n"
+                          "text": "[lap] H2 128s\n"
                         },
                         {
-                          "text": "[lap] A2 127s\n"
+                          "text": "[lap] A2 128s\n"
                         },
                         {
-                          "text": "[lap] C2 127s\n"
+                          "text": "[lap] C2 128s\n"
                         },
                         {
-                          "text": "[lap] C6 127s\n"
+                          "text": "[lap] C6 128s\n"
                         },
                         {
-                          "text": "[lap] E5 127s\n"
+                          "text": "[lap] E5 128s\n"
                         },
                         {
-                          "text": "[lap] E7 127s\n"
+                          "text": "[lap] E7 128s\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:16:08.470Z",
+                      "startTime": "2026-11-19T21:34:22.390Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1119,7 +1119,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-e8608a30dbccbd8b601c",
               "file": "_verify.spec.ts",
-              "line": 322,
+              "line": 337,
               "column": 65
             },
             {
@@ -1140,12 +1140,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 171,
+                      "duration": 189,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:18:17.951Z",
+                      "startTime": "2026-11-19T21:36:33.241Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1155,7 +1155,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-15d092b2c6396e577ffd",
               "file": "_verify.spec.ts",
-              "line": 867,
+              "line": 890,
               "column": 7
             },
             {
@@ -1181,19 +1181,19 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 251400,
+                      "duration": 251317,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         },
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:18:20.654Z",
+                      "startTime": "2026-11-19T21:36:35.759Z",
                       "annotations": [
                         {
                           "type": "crud",
@@ -1208,7 +1208,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-dab0f671b1990e920917",
               "file": "_verify.spec.ts",
-              "line": 932,
+              "line": 958,
               "column": 7
             },
             {
@@ -1233,12 +1233,12 @@
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.19~):0행 · 기간 5년 확대(2021.11.19~):0행 전부 0행 · 재시도 생략)\n"
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 전부 0행(이전 시도 기본 조회 0행 · 대안 기간 2년 확대(2024.11.20~):0행 · 기간 5년 확대(2021.11.20~):0행 전부 0행 · 재시도 생략)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:22:34.326Z",
+                      "startTime": "2026-11-19T21:40:49.753Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1248,7 +1248,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-5b294f0bf07e37297125",
               "file": "_verify.spec.ts",
-              "line": 1615,
+              "line": 1641,
               "column": 7
             },
             {
@@ -1269,12 +1269,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125446,
+                      "duration": 125608,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:24:41.878Z",
+                      "startTime": "2026-11-19T21:42:57.554Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1284,7 +1284,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-e11b526123e8dfe90fb1",
               "file": "_verify.spec.ts",
-              "line": 1748,
+              "line": 1774,
               "column": 7
             },
             {
@@ -1305,12 +1305,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 156856,
+                      "duration": 157340,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:26:49.690Z",
+                      "startTime": "2026-11-19T21:45:05.553Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1320,7 +1320,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b3dd090f10e0fb4fbd5d",
               "file": "_verify.spec.ts",
-              "line": 1865,
+              "line": 1891,
               "column": 7
             },
             {
@@ -1341,12 +1341,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125562,
+                      "duration": 125212,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:29:28.825Z",
+                      "startTime": "2026-11-19T21:47:45.218Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1356,7 +1356,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d03615ebe71d22c2d666",
               "file": "_verify.spec.ts",
-              "line": 2029,
+              "line": 2055,
               "column": 7
             },
             {
@@ -1377,12 +1377,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125274,
+                      "duration": 125673,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:31:36.644Z",
+                      "startTime": "2026-11-19T21:49:52.884Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1392,18 +1392,18 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-45df985977115c936e37",
               "file": "_verify.spec.ts",
-              "line": 2073,
+              "line": 2099,
               "column": 7
             },
             {
               "title": "실전송 건수(A1)",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "verify"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
+                  "timeout": 300000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -1412,422 +1412,167 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 372,
-                      "error": {
-                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n",
-                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 35,
-                          "line": 134
-                        },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n\u001b[0m \u001b[90m 132 |\u001b[39m     }\n \u001b[90m 133 |\u001b[39m     \u001b[36mif\u001b[39m (r\u001b[33m.\u001b[39mstatus \u001b[33m<\u001b[39m \u001b[35m200\u001b[39m \u001b[33m||\u001b[39m r\u001b[33m.\u001b[39mstatus \u001b[33m>=\u001b[39m \u001b[35m300\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 134 |\u001b[39m       \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 135 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mres \u001b[33m||\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m>=\u001b[39m \u001b[35m400\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 136 |\u001b[39m     }\n \u001b[90m 137 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mtp(\u001b[32m'login.retry'\u001b[39m\u001b[33m,\u001b[39m t0)\u001b[33m;\u001b[39m t0 \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 35,
-                            "line": 134
-                          },
-                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n  132 |     }\n  133 |     if (r.status < 200 || r.status >= 300) {\n> 134 |       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });\n      |                                   ^\n  135 |       if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);\n  136 |     }\n  137 |     this.tp('login.retry', t0); t0 = Date.now();\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: BE(http://localhost:8080) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 300초 대기\n"
-                        },
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: 300초 안에 BE 가 뜨지 않음\n"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 126260,
+                      "errors": [],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:33:44.478Z",
+                      "startTime": "2026-11-19T21:52:01.023Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-실전송-건수-A1--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-실전송-건수-A1--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-실전송-건수-A1--chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 35,
-                        "line": 134
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "d557cdbda6ec1bc6afb1-15e67fe5b4e5471df2fd",
               "file": "_verify.spec.ts",
-              "line": 2085,
+              "line": 2111,
               "column": 7
             },
             {
               "title": "합계 값(A3)",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "verify"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
+                  "timeout": 300000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 414,
-                      "error": {
-                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n",
-                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 35,
-                          "line": 134
-                        },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n\u001b[0m \u001b[90m 132 |\u001b[39m     }\n \u001b[90m 133 |\u001b[39m     \u001b[36mif\u001b[39m (r\u001b[33m.\u001b[39mstatus \u001b[33m<\u001b[39m \u001b[35m200\u001b[39m \u001b[33m||\u001b[39m r\u001b[33m.\u001b[39mstatus \u001b[33m>=\u001b[39m \u001b[35m300\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 134 |\u001b[39m       \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 135 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mres \u001b[33m||\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m>=\u001b[39m \u001b[35m400\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 136 |\u001b[39m     }\n \u001b[90m 137 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mtp(\u001b[32m'login.retry'\u001b[39m\u001b[33m,\u001b[39m t0)\u001b[33m;\u001b[39m t0 \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 35,
-                            "line": 134
-                          },
-                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n  132 |     }\n  133 |     if (r.status < 200 || r.status >= 300) {\n> 134 |       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });\n      |                                   ^\n  135 |       if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);\n  136 |     }\n  137 |     this.tp('login.retry', t0); t0 = Date.now();\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: BE(http://localhost:8080) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 300초 대기\n"
-                        },
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: 300초 안에 BE 가 뜨지 않음\n"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 125309,
+                      "errors": [],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:39:35.485Z",
+                      "startTime": "2026-11-19T21:54:10.082Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-합계-값-A3--chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-합계-값-A3--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-합계-값-A3--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-합계-값-A3--chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 35,
-                        "line": 134
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "d557cdbda6ec1bc6afb1-61be38bc698838baa1de",
               "file": "_verify.spec.ts",
-              "line": 2098,
+              "line": 2124,
               "column": 7
             },
             {
               "title": "Division 컬럼(A5)",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "verify"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
+                  "timeout": 1200000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 425,
-                      "error": {
-                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n",
-                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 35,
-                          "line": 134
-                        },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n\u001b[0m \u001b[90m 132 |\u001b[39m     }\n \u001b[90m 133 |\u001b[39m     \u001b[36mif\u001b[39m (r\u001b[33m.\u001b[39mstatus \u001b[33m<\u001b[39m \u001b[35m200\u001b[39m \u001b[33m||\u001b[39m r\u001b[33m.\u001b[39mstatus \u001b[33m>=\u001b[39m \u001b[35m300\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 134 |\u001b[39m       \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 135 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mres \u001b[33m||\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m>=\u001b[39m \u001b[35m400\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 136 |\u001b[39m     }\n \u001b[90m 137 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mtp(\u001b[32m'login.retry'\u001b[39m\u001b[33m,\u001b[39m t0)\u001b[33m;\u001b[39m t0 \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 35,
-                            "line": 134
-                          },
-                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n  132 |     }\n  133 |     if (r.status < 200 || r.status >= 300) {\n> 134 |       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });\n      |                                   ^\n  135 |       if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);\n  136 |     }\n  137 |     this.tp('login.retry', t0); t0 = Date.now();\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: BE(http://localhost:8080) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 300초 대기\n"
-                        },
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: 300초 안에 BE 가 뜨지 않음\n"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 22892,
+                      "errors": [],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:45:25.649Z",
+                      "startTime": "2026-11-19T21:56:17.804Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Division-컬럼-A5--chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Division-컬럼-A5--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Division-컬럼-A5--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Division-컬럼-A5--chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 35,
-                        "line": 134
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "d557cdbda6ec1bc6afb1-89a8f8d223d32050ecc0",
               "file": "_verify.spec.ts",
-              "line": 2125,
+              "line": 2151,
               "column": 7
             },
             {
               "title": "조회조건 겹침(H4)",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "verify"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
+                  "timeout": 240000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 378,
-                      "error": {
-                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n",
-                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 35,
-                          "line": 134
-                        },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n\u001b[0m \u001b[90m 132 |\u001b[39m     }\n \u001b[90m 133 |\u001b[39m     \u001b[36mif\u001b[39m (r\u001b[33m.\u001b[39mstatus \u001b[33m<\u001b[39m \u001b[35m200\u001b[39m \u001b[33m||\u001b[39m r\u001b[33m.\u001b[39mstatus \u001b[33m>=\u001b[39m \u001b[35m300\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 134 |\u001b[39m       \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 135 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mres \u001b[33m||\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m>=\u001b[39m \u001b[35m400\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 136 |\u001b[39m     }\n \u001b[90m 137 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mtp(\u001b[32m'login.retry'\u001b[39m\u001b[33m,\u001b[39m t0)\u001b[33m;\u001b[39m t0 \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 35,
-                            "line": 134
-                          },
-                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n  132 |     }\n  133 |     if (r.status < 200 || r.status >= 300) {\n> 134 |       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });\n      |                                   ^\n  135 |       if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);\n  136 |     }\n  137 |     this.tp('login.retry', t0); t0 = Date.now();\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: BE(http://localhost:8080) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 300초 대기\n"
-                        },
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: 300초 안에 BE 가 뜨지 않음\n"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 6178,
+                      "errors": [],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:51:23.860Z",
+                      "startTime": "2026-11-19T21:56:43.057Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-조회조건-겹침-H4--chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-조회조건-겹침-H4--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-조회조건-겹침-H4--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-조회조건-겹침-H4--chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 35,
-                        "line": 134
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "d557cdbda6ec1bc6afb1-6d48945c88d5b3b0723c",
               "file": "_verify.spec.ts",
-              "line": 2160,
+              "line": 2186,
               "column": 7
             },
             {
               "title": "Excel 2단계 차단(M1)",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "verify"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
+                  "timeout": 420000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 4,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 414,
-                      "error": {
-                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n",
-                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 35,
-                          "line": 134
-                        },
-                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n\u001b[0m \u001b[90m 132 |\u001b[39m     }\n \u001b[90m 133 |\u001b[39m     \u001b[36mif\u001b[39m (r\u001b[33m.\u001b[39mstatus \u001b[33m<\u001b[39m \u001b[35m200\u001b[39m \u001b[33m||\u001b[39m r\u001b[33m.\u001b[39mstatus \u001b[33m>=\u001b[39m \u001b[35m300\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 134 |\u001b[39m       \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 135 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mres \u001b[33m||\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m>=\u001b[39m \u001b[35m400\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 136 |\u001b[39m     }\n \u001b[90m 137 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mtp(\u001b[32m'login.retry'\u001b[39m\u001b[33m,\u001b[39m t0)\u001b[33m;\u001b[39m t0 \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 35,
-                            "line": 134
-                          },
-                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/sso/dev-login?id=minyonglee1\nCall log:\n\u001b[2m  - navigating to \"http://localhost:8080/sso/dev-login?id=minyonglee1\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:134\n\n  132 |     }\n  133 |     if (r.status < 200 || r.status >= 300) {\n> 134 |       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });\n      |                                   ^\n  135 |       if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);\n  136 |     }\n  137 |     this.tp('login.retry', t0); t0 = Date.now();\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:134:35)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:80:28)"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: BE(http://localhost:8080) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 300초 대기\n"
-                        },
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: 300초 안에 BE 가 뜨지 않음\n"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 4737,
+                      "errors": [],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:57:13.987Z",
+                      "startTime": "2026-11-19T21:56:51.663Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Excel-2단계-차단-M1--chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Excel-2단계-차단-M1--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Excel-2단계-차단-M1--chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\artifacts\\_verify-정합검증-SSP0005-verify-Excel-2단계-차단-M1--chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 35,
-                        "line": 134
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "d557cdbda6ec1bc6afb1-accfaa06434ccd06b742",
               "file": "_verify.spec.ts",
-              "line": 2173,
+              "line": 2199,
               "column": 7
             },
             {
@@ -1839,39 +1584,22 @@
               "tests": [
                 {
                   "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 3건 (500 user/session | 500 user/login | 500 user/session) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4204,
+                      "duration": 4507,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: BE(http://localhost:8080) 포트가 닫혀 있음(재기동 중으로 판단) — 열릴 때까지 최대 300초 대기\n"
-                        },
-                        {
-                          "text": "[BE 대기] 로그인 minyonglee1: 300초 안에 BE 가 뜨지 않음\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:03:04.466Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 3건 (500 user/session | 500 user/login | 500 user/session) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-19T21:56:59.027Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -1880,7 +1608,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-5e81380b63b8e325ae64",
               "file": "_verify.spec.ts",
-              "line": 2187,
+              "line": 2213,
               "column": 7
             },
             {
@@ -1898,15 +1626,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 161,
+                      "duration": 185,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:08:27.627Z",
+                      "startTime": "2026-11-19T21:57:05.860Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1916,7 +1644,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-21cdae0ab594ac3918cd",
               "file": "_verify.spec.ts",
-              "line": 2221,
+              "line": 2247,
               "column": 7
             },
             {
@@ -1934,15 +1662,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 173,
+                      "duration": 191,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:08:30.088Z",
+                      "startTime": "2026-11-19T21:57:08.348Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1952,7 +1680,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-812a25aa532a2b4a3be1",
               "file": "_verify.spec.ts",
-              "line": 2288,
+              "line": 2314,
               "column": 7
             },
             {
@@ -1964,36 +1692,26 @@
               "tests": [
                 {
                   "timeout": 600000,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 1건: [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\""
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 364814,
+                      "duration": 386374,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[langlock] SSP0005 I2: 다른 화면 E2E 실행 중(SCP0005,SCP0028) — 끝날 때까지 언어 전환 대기\n"
+                          "text": "[langacct] SSP0005 I2: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:08:32.756Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 1건: [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\""
-                        }
-                      ],
+                      "startTime": "2026-11-19T21:57:10.796Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2002,7 +1720,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ad62030b90941664e1c7",
               "file": "_verify.spec.ts",
-              "line": 2343,
+              "line": 2369,
               "column": 7
             },
             {
@@ -2013,43 +1731,27 @@
               ],
               "tests": [
                 {
-                  "timeout": 1335745,
-                  "annotations": [
-                    {
-                      "type": "dberr",
-                      "description": "BE 5xx 30건 (500 admin/menu/SSP0005/column | 500 SSP0005/Shipment%20Working%20Day/SEARCH/call-proc | 500 SSP0005/calendar/SEARCH/call-proc) · 같은 시간 BE 로그 DB 오류 0건: "
-                    }
-                  ],
+                  "timeout": 1046520,
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1053102,
+                      "duration": 623426,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
-                        },
-                        {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20211119\",\"toYyyymmdd\":\"20271114\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AA00\",\"debugMode\":\"F\"}\n"
-                        },
-                        {
-                          "text": "[병합 셀] SSP0005 화면 열기+조회 183초 — 테스트 제한 1336초로 늘림(T255 · 이 테스트는 화면을 최대 5번 다시 연다)\n"
+                          "text": "[병합 셀] SSP0005 화면 열기+조회 125초 — 테스트 제한 1047초로 늘림(T255 · 이 테스트는 화면을 최대 5번 다시 연다)\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:14:40.008Z",
-                      "annotations": [
-                        {
-                          "type": "dberr",
-                          "description": "BE 5xx 30건 (500 admin/menu/SSP0005/column | 500 SSP0005/Shipment%20Working%20Day/SEARCH/call-proc | 500 SSP0005/calendar/SEARCH/call-proc) · 같은 시간 BE 로그 DB 오류 0건: "
-                        }
-                      ],
+                      "startTime": "2026-11-19T22:03:39.659Z",
+                      "annotations": [],
                       "attachments": []
                     }
                   ],
@@ -2058,7 +1760,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-0c028e1e57469a02259a",
               "file": "_verify.spec.ts",
-              "line": 2370,
+              "line": 2398,
               "column": 7
             },
             {
@@ -2076,15 +1778,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125545,
+                      "duration": 125457,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:32:15.419Z",
+                      "startTime": "2026-11-19T22:14:05.459Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2094,7 +1796,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-08e93fed124fb984ecbc",
               "file": "_verify.spec.ts",
-              "line": 2412,
+              "line": 2440,
               "column": 7
             },
             {
@@ -2112,15 +1814,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 126998,
+                      "duration": 127332,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:34:23.295Z",
+                      "startTime": "2026-11-19T22:16:13.344Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2130,7 +1832,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-435a562cb1c796f8206c",
               "file": "_verify.spec.ts",
-              "line": 2426,
+              "line": 2454,
               "column": 7
             },
             {
@@ -2148,15 +1850,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 222360,
+                      "duration": 222340,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:36:32.545Z",
+                      "startTime": "2026-11-19T22:18:23.226Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2166,7 +1868,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-a5bf9d04754237b73fff",
               "file": "_verify.spec.ts",
-              "line": 2443,
+              "line": 2471,
               "column": 7
             },
             {
@@ -2184,15 +1886,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 187580,
+                      "duration": 188281,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:40:17.253Z",
+                      "startTime": "2026-11-19T22:22:08.187Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2202,7 +1904,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-dca017df2f8f5d2bc208",
               "file": "_verify.spec.ts",
-              "line": 2467,
+              "line": 2495,
               "column": 7
             },
             {
@@ -2220,15 +1922,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5816,
+                      "duration": 6412,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:43:27.276Z",
+                      "startTime": "2026-11-19T22:25:20.294Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2238,7 +1940,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-04f01aacd043ae5a929b",
               "file": "_verify.spec.ts",
-              "line": 2479,
+              "line": 2507,
               "column": 7
             },
             {
@@ -2256,15 +1958,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125564,
+                      "duration": 125438,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:43:35.483Z",
+                      "startTime": "2026-11-19T22:25:29.536Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2274,7 +1976,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-907e26a7941d341536fd",
               "file": "_verify.spec.ts",
-              "line": 2489,
+              "line": 2517,
               "column": 7
             },
             {
@@ -2292,15 +1994,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 127550,
+                      "duration": 127232,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:45:43.904Z",
+                      "startTime": "2026-11-19T22:27:37.304Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2310,7 +2012,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-90abafc998ebd7a8dd8d",
               "file": "_verify.spec.ts",
-              "line": 2494,
+              "line": 2522,
               "column": 7
             },
             {
@@ -2328,15 +2030,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 132467,
+                      "duration": 132821,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:47:53.992Z",
+                      "startTime": "2026-11-19T22:29:46.822Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2346,7 +2048,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-58868fcbc7dd38e567ee",
               "file": "_verify.spec.ts",
-              "line": 2503,
+              "line": 2531,
               "column": 7
             },
             {
@@ -2364,15 +2066,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 12310,
+                      "duration": 11825,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:50:08.911Z",
+                      "startTime": "2026-11-19T22:32:02.212Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2382,7 +2084,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-23ce7c601e5afb3db4d4",
               "file": "_verify.spec.ts",
-              "line": 2514,
+              "line": 2542,
               "column": 7
             },
             {
@@ -2400,15 +2102,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 665198,
+                      "duration": 665170,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T06:50:23.556Z",
+                      "startTime": "2026-11-19T22:32:16.437Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2418,7 +2120,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-a135e3d20a2737e6c06b",
               "file": "_verify.spec.ts",
-              "line": 2528,
+              "line": 2556,
               "column": 7
             },
             {
@@ -2436,22 +2138,22 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 235630,
+                      "duration": 150660,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 \n"
+                          "text": "[search] 조회 요청 없음 — 알림 'Bulk Update Day of the week ​ Input Value ​ OK Close' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 \n"
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\combo_runtime.json — UNKNOWN\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:01:31.669Z",
+                      "startTime": "2026-11-19T22:43:23.792Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2461,7 +2163,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-a3ff553488c7845a60e0",
               "file": "_verify.spec.ts",
-              "line": 2541,
+              "line": 2569,
               "column": 7
             },
             {
@@ -2479,15 +2181,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 134010,
+                      "duration": 134169,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:05:29.901Z",
+                      "startTime": "2026-11-19T22:45:56.611Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2497,7 +2199,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-99b9e8a275289e0afcf2",
               "file": "_verify.spec.ts",
-              "line": 2589,
+              "line": 2617,
               "column": 7
             },
             {
@@ -2515,15 +2217,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 125546,
+                      "duration": 125455,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:07:46.592Z",
+                      "startTime": "2026-11-19T22:48:13.022Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2533,7 +2235,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ac60a15377772a722894",
               "file": "_verify.spec.ts",
-              "line": 2597,
+              "line": 2625,
               "column": 7
             },
             {
@@ -2551,15 +2253,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 190,
+                      "duration": 228,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:09:54.457Z",
+                      "startTime": "2026-11-19T22:50:20.713Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2569,7 +2271,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-3133edad29cdb85d4354",
               "file": "_verify.spec.ts",
-              "line": 2613,
+              "line": 2641,
               "column": 7
             },
             {
@@ -2587,15 +2289,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 175,
+                      "duration": 214,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:09:56.943Z",
+                      "startTime": "2026-11-19T22:50:23.366Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2605,7 +2307,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-39e3767c92f1aae54553",
               "file": "_verify.spec.ts",
-              "line": 2625,
+              "line": 2653,
               "column": 7
             },
             {
@@ -2623,15 +2325,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 177,
+                      "duration": 185,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:09:59.427Z",
+                      "startTime": "2026-11-19T22:50:25.917Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2641,7 +2343,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-76de42fa7142ece71b79",
               "file": "_verify.spec.ts",
-              "line": 2637,
+              "line": 2665,
               "column": 7
             },
             {
@@ -2659,15 +2361,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 180,
+                      "duration": 226,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:10:02.241Z",
+                      "startTime": "2026-11-19T22:50:28.391Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2677,7 +2379,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ab3d25aba4900ea51058",
               "file": "_verify.spec.ts",
-              "line": 2648,
+              "line": 2676,
               "column": 7
             },
             {
@@ -2695,15 +2397,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 167,
+                      "duration": 194,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:10:04.721Z",
+                      "startTime": "2026-11-19T22:50:30.996Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2713,7 +2415,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-742fed19c5d42eb1249e",
               "file": "_verify.spec.ts",
-              "line": 2657,
+              "line": 2685,
               "column": 7
             },
             {
@@ -2731,43 +2433,49 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 908699,
+                      "duration": 841273,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[시나리오] SSP0005 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 16:10:09\n"
+                          "text": "[시나리오] SSP0005 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 07:50:36\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] CN 언어 조회 건수 총/건 표기' 시작 16:12:20\n"
+                          "text": "[langacct] SSP0005 시나리오 [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 조회 중 Loading 토스트 없음' 시작 16:14:29\n"
+                          "text": "[시나리오] SSP0005 '[자동] CN 언어 조회 건수 총/건 표기' 시작 07:52:51\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 선택 행 위로 Insert' 시작 16:14:36\n"
+                          "text": "[langacct] SSP0005 시나리오 [자동] CN 언어 조회 건수 총/건 표기: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 16:16:42\n"
+                          "text": "[시나리오] SSP0005 '[자동] 조회 중 Loading 토스트 없음' 시작 07:53:55\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙)' 시작 16:18:50\n"
+                          "text": "[시나리오] SSP0005 '[자동] 선택 행 위로 Insert' 시작 07:54:01\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 당주 구분선(rail) = 이번 주(Weekly)' 시작 16:20:58\n"
+                          "text": "[시나리오] SSP0005 '[자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 07:56:07\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 값 있는 편집 구간 수량 셀 편집' 시작 16:23:04\n"
+                          "text": "[시나리오] SSP0005 '[자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙)' 시작 07:58:13\n"
                         },
                         {
-                          "text": "[시나리오] SSP0005 '[자동] 조회조건 콤보 2종 = 콤보' 시작 16:25:12\n"
+                          "text": "[시나리오] SSP0005 '[자동] 당주 구분선(rail) = 이번 주(Weekly)' 시작 08:00:19\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 값 있는 편집 구간 수량 셀 편집' 시작 08:02:26\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 조회조건 콤보 2종 = 콤보' 시작 08:04:32\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:10:07.187Z",
+                      "startTime": "2026-11-19T22:50:33.547Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2777,7 +2485,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-953e087e750393584dd0",
               "file": "_verify.spec.ts",
-              "line": 2670,
+              "line": 2698,
               "column": 7
             },
             {
@@ -2795,15 +2503,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 314,
+                      "duration": 377,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:25:18.316Z",
+                      "startTime": "2026-11-19T23:04:37.249Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2813,7 +2521,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ab7d859e846b665d7abf",
               "file": "_verify.spec.ts",
-              "line": 2922,
+              "line": 2951,
               "column": 7
             },
             {
@@ -2831,15 +2539,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 289,
+                      "duration": 197,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:25:22.254Z",
+                      "startTime": "2026-11-19T23:04:40.159Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2849,7 +2557,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-348648d8d7b1c71fb1e2",
               "file": "_verify.spec.ts",
-              "line": 2929,
+              "line": 2958,
               "column": 7
             },
             {
@@ -2867,15 +2575,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 126477,
+                      "duration": 125340,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:25:25.718Z",
+                      "startTime": "2026-11-19T23:04:42.700Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2885,7 +2593,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b0a60c30a3af78a1e577",
               "file": "_verify.spec.ts",
-              "line": 2936,
+              "line": 2965,
               "column": 7
             },
             {
@@ -2903,15 +2611,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 283,
+                      "duration": 160,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:27:35.321Z",
+                      "startTime": "2026-11-19T23:06:50.560Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2921,7 +2629,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-20aa0ace8bbc2a4f0d9f",
               "file": "_verify.spec.ts",
-              "line": 2970,
+              "line": 3003,
               "column": 7
             },
             {
@@ -2939,15 +2647,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 262,
+                      "duration": 161,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:27:38.656Z",
+                      "startTime": "2026-11-19T23:06:53.029Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2957,7 +2665,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-223aca3773dff7b1869c",
               "file": "_verify.spec.ts",
-              "line": 2982,
+              "line": 3015,
               "column": 7
             },
             {
@@ -2975,15 +2683,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 377404,
+                      "duration": 373753,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:27:42.006Z",
+                      "startTime": "2026-11-19T23:06:55.367Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2993,7 +2701,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-b37f4f431d42c544a126",
               "file": "_verify.spec.ts",
-              "line": 3008,
+              "line": 3041,
               "column": 7
             },
             {
@@ -3011,15 +2719,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 126575,
+                      "duration": 125365,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:34:02.389Z",
+                      "startTime": "2026-11-19T23:13:11.364Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3029,7 +2737,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ccc61dfa8b5169a761fe",
               "file": "_verify.spec.ts",
-              "line": 3048,
+              "line": 3081,
               "column": 7
             },
             {
@@ -3047,15 +2755,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6507,
+                      "duration": 5131,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:36:12.338Z",
+                      "startTime": "2026-11-19T23:15:18.926Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3065,7 +2773,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-8636efe67ea371d6f4b9",
               "file": "_verify.spec.ts",
-              "line": 3059,
+              "line": 3092,
               "column": 7
             },
             {
@@ -3083,15 +2791,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 199205,
+                      "duration": 193946,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:36:22.668Z",
+                      "startTime": "2026-11-19T23:15:26.353Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3101,7 +2809,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-dfc67f6f0da27e13315e",
               "file": "_verify.spec.ts",
-              "line": 3073,
+              "line": 3106,
               "column": 7
             },
             {
@@ -3119,15 +2827,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 129585,
+                      "duration": 126473,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:39:45.307Z",
+                      "startTime": "2026-11-19T23:18:42.461Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3137,7 +2845,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-fdbea24c7e8f152b7edc",
               "file": "_verify.spec.ts",
-              "line": 3115,
+              "line": 3148,
               "column": 7
             },
             {
@@ -3155,19 +2863,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 128377,
+                      "duration": 125541,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e_results.json — UNKNOWN\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:41:58.138Z",
+                      "startTime": "2026-11-19T23:20:51.210Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3177,7 +2881,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ecad07a60b4fa6dc78ab",
               "file": "_verify.spec.ts",
-              "line": 3132,
+              "line": 3165,
               "column": 7
             },
             {
@@ -3195,19 +2899,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 74161,
+                      "duration": 72354,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e_results.json — UNKNOWN\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:44:10.329Z",
+                      "startTime": "2026-11-19T23:22:59.013Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3217,7 +2917,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-ad425db5100ab6bde9f1",
               "file": "_verify.spec.ts",
-              "line": 3164,
+              "line": 3197,
               "column": 7
             },
             {
@@ -3235,15 +2935,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 271,
+                      "duration": 174,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:45:28.897Z",
+                      "startTime": "2026-11-19T23:24:13.670Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3253,7 +2953,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-87fdce68f92738b91104",
               "file": "_verify.spec.ts",
-              "line": 3277,
+              "line": 3310,
               "column": 7
             },
             {
@@ -3271,15 +2971,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 300,
+                      "duration": 172,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:45:33.508Z",
+                      "startTime": "2026-11-19T23:24:16.106Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3289,7 +2989,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-5646e638ed54d655f4c9",
               "file": "_verify.spec.ts",
-              "line": 3346,
+              "line": 3379,
               "column": 7
             },
             {
@@ -3307,15 +3007,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 69717,
+                      "duration": 67230,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:45:38.300Z",
+                      "startTime": "2026-11-19T23:24:18.533Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3325,7 +3025,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-d952d501079c234610db",
               "file": "_verify.spec.ts",
-              "line": 3377,
+              "line": 3410,
               "column": 7
             },
             {
@@ -3343,22 +3043,22 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 133245,
+                      "duration": 123881,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241120\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211120\",\"endYyyymmdd\":\"20271114\"}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:46:52.310Z",
+                      "startTime": "2026-11-19T23:25:28.039Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3368,7 +3068,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-15af60f209a52be0b3c7",
               "file": "_verify.spec.ts",
-              "line": 3420,
+              "line": 3453,
               "column": 7
             },
             {
@@ -3386,15 +3086,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 39792,
+                      "duration": 36127,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:49:09.455Z",
+                      "startTime": "2026-11-19T23:27:34.115Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3404,7 +3104,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-756daa20b0851e91661b",
               "file": "_verify.spec.ts",
-              "line": 3585,
+              "line": 3618,
               "column": 7
             },
             {
@@ -3422,15 +3122,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 17058,
+                      "duration": 12745,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:49:54.764Z",
+                      "startTime": "2026-11-19T23:28:12.426Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3440,7 +3140,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-a8d9bf12c7d2dd24fb8b",
               "file": "_verify.spec.ts",
-              "line": 3694,
+              "line": 3727,
               "column": 7
             },
             {
@@ -3458,15 +3158,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 144815,
+                      "duration": 136120,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:50:17.052Z",
+                      "startTime": "2026-11-19T23:28:27.404Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3476,7 +3176,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-c2b06ea7308f378c42e9",
               "file": "_verify.spec.ts",
-              "line": 3746,
+              "line": 3779,
               "column": 7
             },
             {
@@ -3494,15 +3194,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 126688,
+                      "duration": 125428,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:52:46.393Z",
+                      "startTime": "2026-11-19T23:30:45.835Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3512,7 +3212,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-7b2d3194d097abca60e5",
               "file": "_verify.spec.ts",
-              "line": 3884,
+              "line": 3917,
               "column": 7
             },
             {
@@ -3530,22 +3230,22 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 183277,
+                      "duration": 183177,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241120\",\"endYyyymmdd\":\"20271114\"}\n"
                         },
                         {
-                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211119\",\"endYyyymmdd\":\"20271114\"}\n"
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211120\",\"endYyyymmdd\":\"20271114\"}\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:54:58.790Z",
+                      "startTime": "2026-11-19T23:32:53.668Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3555,7 +3255,7 @@
               ],
               "id": "d557cdbda6ec1bc6afb1-1eecdda507036bdca543",
               "file": "_verify.spec.ts",
-              "line": 3982,
+              "line": 4015,
               "column": 7
             }
           ]
@@ -3565,11 +3265,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T04:54:07.749Z",
-    "duration": 11041745.033,
-    "expected": 75,
+    "startTime": "2026-11-19T21:12:17.372Z",
+    "duration": 8624120.374,
+    "expected": 80,
     "skipped": 0,
-    "unexpected": 5,
+    "unexpected": 0,
     "flaky": 0
   }
 }

@@ -1,0 +1,104 @@
+{
+  "id": "20261119232523_SELF",
+  "at": "2026-11-19T23:25:23+09:00",
+  "ms": 1795098323989,
+  "source": "self",
+  "status": "superseded",
+  "sig": "docstyle js comment skip",
+  "title": "doc_style.py 소스 검사에서 JS 주석과 잘못 짝지은 백틱 구간 제외",
+  "evidence": "tools/Docs/doc_style.py:96 _STR 정규식이 주석과 정규식 리터럴을 가리지 않고 따옴표, 백틱을 짝지음. :107-110 은 문자열 시작 줄의 머리가 #, //, * 일 때만 제외함. .vibe/orch/selfcheck/doc_style/extension.js.style.csv L348, L382, L388, L416, L438, L507, L555 행의 '문장' 열이 코드 구간이고 걸린 표현은 tools/VibeManager/extension.js:364, 398, 537, 559 의 // 주석임. tabview.js.style.csv 2행은 tools/VibeManager/tabview.js:100 주석 1줄임. workbench.js.style.csv 는 L1282(웹뷰 템플릿 1개)에서 58행이 나옴. doc_style.py:100 설명문은 '주석 줄은 제외'로 적혀 있음.",
+  "targets": [
+    "tools/Docs/doc_style.py"
+  ],
+  "before_after": "변경 전: 정규식 1개로 문자열을 뽑아 주석 속 백틱이 다음 백틱까지를 문자열로 만들고 그 안의 주석 문구를 위반으로 셈 → 변경 후: .js 는 앞에서부터 읽으며 // 주석, /* */ 주석, 정규식 리터럴을 건너뛴 뒤 문자열만 뽑음. 템플릿 문자열 안에서 줄 머리가 // 인 줄과 /* */ 구간은 검사에서 뺌. .py, .cs, xlsx, md 경로와 검출 규칙 CSV 는 그대로.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/tabview.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 기대: tabview.js 위반 0, extension.js.style.csv 에 '룰 진입', '서브그룹', '꺼진 ho' 행 없음, L50, L51, L227 행은 남음. python -m py_compile tools/Docs/doc_style.py 통과.",
+  "rollback": "VMO 가 만든 tools/Docs/doc_style.py.bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T23:41:49+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T23:43:32+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 16/18개 파일 통과(PASS 222, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261119_self2341"
+    },
+    {
+      "at": "2026-11-19T23:43:32+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T23:45:08+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 2026-11-19 23:44:36 python -m py_compile tools/Docs/doc_style.py 통과. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/tabview.js --out .vibe/orch/selfcheck/doc_style --q · 대상 파일 1개 복원 · 대상 밖 변경 tools/Harness/harness.json, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_selfapply.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-19T23-43-32_claude_orch.log",
+      "sec": 91,
+      "costUsd": 0.7569227000000001,
+      "files": [
+        "tools/Docs/doc_style.py",
+        "tools/Harness/harness.json",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_selfapply.js"
+      ]
+    },
+    {
+      "at": "2026-11-19T23:52:10+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T23:53:53+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 17/18개 파일 통과(PASS 245, FAIL 1), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261119_self2352"
+    },
+    {
+      "at": "2026-11-19T23:53:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T23:55:28+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 2026-11-19 23:54~23:55 실행. python -m py_compile tools/Docs/doc_style.py → COMPILE_OK. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/tabview.js --out .vibe/orch/selfch · 대상 파일 1개 복원",
+      "log": ".vibe\\logs\\2026-11-19T23-53-53_claude_orch.log",
+      "sec": 89,
+      "costUsd": 0.5261620000000001,
+      "files": [
+        "tools/Docs/doc_style.py"
+      ]
+    },
+    {
+      "at": "2026-11-20T00:30:06+09:00",
+      "by": "Claude Code 세션",
+      "what": "00:19 자가진단이 이 안을 고쳐 20261120001936_SELF_2 로 다시 올림. 그 안으로 대체"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|extension.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795099930664,
+  "autoFp": "8329982a1d",
+  "result": {
+    "applied": true,
+    "verified": false,
+    "changed_files": [
+      "tools/Docs/doc_style.py"
+    ],
+    "verify_result": "2026-11-19 23:54~23:55 실행. python -m py_compile tools/Docs/doc_style.py → COMPILE_OK. python tools/Docs/doc_style.py tools/VibeManager/extension.js tools/VibeManager/tabview.js --out .vibe/orch/selfcheck/doc_style --quiet → 'extension.js | 문장 205 | 위반 40 | 수식어 2 기호 37 추상어 1', 'tabview.js | 문장 8 | 위반 1 | 기호 1', exit 1. 반영 전(23:54:03) extension.js 위반 51, tabview.js 위반 2. extension.js.style.csv 에 '룰 진입', '서브그룹', '꺼진 ho' 행 0건, L50, L51, L227 행 남음. tabview.js.style.csv 남은 1행은 L134 '파일이 큽니다(${…} MB) — 에디터로 여세요' 템플릿 문자열의 줄표임. 주석이던 L100 행은 빠짐. verify 밖: workbench.js 위반 333 → 313(23:55:00).",
+    "note": "기대값 'tabview.js 위반 0' 불충족으로 verified false. 남은 1건은 tabview.js:134 화면 안내 문구의 줄표로 실제 위반이고, 주석 행이 아님. 검사를 약하게 고치지 않음. 변경: .js 는 _js_walk 가 앞에서부터 읽으며 // 주석, /* */ 주석, 정규식 리터럴(앞 글자가 ), ], 식별자면 나눗셈, 줄 안에서 닫히지 않으면 나눗셈)을 건너뛰고 ', \", ` 문자열만 뽑음. 템플릿의 ${…} 안은 다시 읽어 그 안의 문자열도 뽑음. 템플릿 글자 부분에서 줄 머리가 // 인 줄과 /* */ 구간은 뺌. .py, .cs, .ps1 는 기존 _STR 정규식과 줄 머리 제외 그대로, xlsx, md, 검출 규칙 CSV 변경 없음. 위반 0이면 report() 가 CSV 를 새로 쓰지 않아 이전 CSV 가 남는 동작은 기존 그대로임(범위 밖). 비교용 임시 폴더 .vibe/orch/selfcheck/doc_style_tmp 는 만든 뒤 삭제함."
+  },
+  "supersededBy": "20261120001936_SELF_2"
+}

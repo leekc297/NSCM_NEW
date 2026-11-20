@@ -1,0 +1,16 @@
+{
+  "id": "SSP0014",
+  "task": "chain_checklist",
+  "scope": "none",
+  "note": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "start": "2026-11-20T05:48:31+09:00",
+  "end": null,
+  "exit": null,
+  "sources": [],
+  "source": "menu",
+  "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "text": "1. 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류)\n2. 2. 검증 보완 (미검증 처리 대상 전체 목록 → 검사엔진 일괄 신설·보완 · 처리 대상이 있을 때만)\n3. 3. CheckList 재수행 (미검증 행만 다시 잴 수 있으면 그 규칙만 · 아니면 처음부터 → 재분류)\n4. 2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)\n5. 3-2. CheckList 재수행 2회차\n6. 2-3. 검증 보완 3회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)\n7. 3-3. CheckList 재수행 3회차",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261120_054831"
+}

@@ -1,0 +1,4 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0010,SQL,SCM0010_GET_NOTICE_MASTER,Doc\asisfacts\db\modules\dbo.SCM0010_GET_NOTICE_MASTER.sql,50,,"MODULE_CODE,SUB_MODULE_CODE,NOTICE_ID,CYCLE_CLASS_CODE,DETAIL_CLASS_CODE,SEND_TIME_TEXT,VALID_YN",ORDER BY m.module_code,0,정적
+SCM0010,SQL,SCM0010_SAVE_NOTICE_MASTER,Doc\asisfacts\db\modules\dbo.SCM0010_SAVE_NOTICE_MASTER.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0010,SQL,SCM0010_GET_NOTICE_CONTENT_MASTER,Doc\asisfacts\db\modules\dbo.SCM0010_GET_NOTICE_CONTENT_MASTER.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

@@ -41,7 +41,7 @@
 | SetValue(570) | value | 신규행 기본값(defaultData — 구체값 확인 필요) | `insertDefaults` — DIVISION_ID 만 확정값, 나머지 EDITABLE_COLUMNS 공란 |
 | LockRange(572) | lock | 신규행 DIVISION_ID 잠금 | `isCellEditable`(isNewRow) — NEW_ROW_LOCKED_COLUMNS |
 | LockRange(573) | lock | 신규행 VAL_TP_CD~LAST_UPDATE_DATE 잠금(PRE_KEY_VALUES 제외) | `isCellEditable`(isNewRow) — NEW_ROW_LOCKED_COLUMNS(PRE_KEY_VALUES 미포함) |
-| SmartColMerge(929) | merge | `SpdMain_TopChange` 셀병합 재계산(대상 컬럼 확인 필요) | **미구현(확인 필요)** — 병합 대상 컬럼을 AS-IS 원본 없이 특정 불가(`grid-behavior-parity.md` 원칙상 침묵 누락 아닌 명시 미구현) |
+| SmartColMerge(929) | merge | `SpdMain_TopChange` 셀병합 재계산(Div/Plan Group/Item Group 3컬럼 계층 세로병합 — 사용자 AS-IS 확인 2026-11-19) | **구현** — `ConstraintOfShipmentQtyGrid` `MERGE_COLUMNS`(DIVISION_ID/OPMZ_PLAN_GR_ID/MDL_GR_NM)만 `allowMerging=true` + `DataGrid allowMerging={All}`. 공용 `CustomMergeManager`(좌측 누적 머지키·신규행 제외)가 Div→Plan Group→Item Group 계층 병합. 그 외 컬럼은 `allowMerging=false` 로 명시(Item/Stage 등 미병합 — AS-IS 동일) |
 | SetText(1024) | value | ITEM_ID <- 팝업 sItemId | `applyItemSelect(row, itemId)` |
 | SetText(1064) | value | VAL_TP_CD="A"(EditChange 1차) | `applyValTpCdDerivation` — SIPM_MIN_QYT/SIPM_MAX_QTY 편집 시 "A"(컬럼명 기준 추정, 확인 필요) |
 | SetText(1068) | value | VAL_TP_CD="B"(EditChange 2차) | `applyValTpCdDerivation` — SAT/SUN 쌍 편집 시 "B"(동일 추정) |
@@ -66,7 +66,8 @@
 ## 미이관/대체 정직 표기 (convert-core §4.3)
 
 - **InsertButton override 본문 사전조건 가드 미확정**(design 01 §5#3): AS-IS 원본 부재로 확정 불가. `handleInsert`는 division 확정(단일값) 조건부로 잠정 활성화했다 — 최종 확정 전까지 전환 완료로 간주하지 않는다.
-- **SmartColMerge(line929) 미구현**: 병합 대상 컬럼을 특정할 원본이 없다.
+- ~~**SmartColMerge(line929) 미구현**~~: **구현 완료(2026-11-19)** — 사용자가 AS-IS 화면에서 병합 대상이 Div/Plan Group/Item Group 3컬럼의 계층 세로병합임을 확인. `ConstraintOfShipmentQtyGrid` 에 `allowMerging={All}` + 3컬럼만 `allowMerging=true` 로 반영.
+  - **병합 셀 편집 정책(사용자 결정 2026-11-19)**: Plan Group/Item Group 은 병합 후에도 편집 가능(EDITABLE_COLUMNS 유지)으로 둔다. 병합 셀을 편집하면 wijmo 가 **병합 범위 전체 행에 값을 적용**하며(그룹 일괄 변경), 콤보 드롭다운은 병합 셀 상단에 뜬다 — 사용자가 이 동작을 수용. 신규행(CRUD_TYPE='I')은 병합 제외라 셀별 편집.
 - **붙여넣기(ClipboardPasted) OPMZ_PLAN_GR_ID 정규화 미배선**: AS-IS `codeVal` 정규화 로직 원본 미확보.
 - **PRE_KEY_VALUES 신규행 잠금 제외**(design 03 §1 #23 각주): 조회모드 전체잠금엔 포함되나 `NEW_ROW_LOCKED_COLUMNS`엔 제외 — 코드상 확인된 비대칭을 그대로 재현했다(의도 여부 확인 필요).
 - **콤보 데이터소스 확인 필요 상태 그대로 잠정 배선**(design 02 §7): Division(`Division_SCP` 1·2·4층 미확인) / Plan Group(`PlanGroup_SCP_ALL` AS-IS 공급원 불명) / From Site·To Site(TO-BE 후보 전부 화이트리스트 미재현 — 재사용 금지, 신규 등록 보류라 이번 회차는 빈 옵션) / Stage·Model Group(TO-BE 미배포 — 신규 등록 보류, 빈 옵션) / Valid(`YesOrNo` 확정 재사용).

@@ -1,0 +1,384 @@
+{
+ "rule_id": "B4",
+ "hash": "8a347a9990429e68",
+ "groups": [
+  {
+   "rows": [
+    "V-32fba2cd",
+    "V-b454a7b3"
+   ],
+   "why": "두 행은 같은 Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)을 보고, 기대도 'Active Y/N 무관 전체 후보 표시'로 같다."
+  },
+  {
+   "rows": [
+    "V-91699248",
+    "V-a95781ee"
+   ],
+   "why": "두 행은 신규행 Insert 시 같은 그리드 셀 콤보(End Customer·Sold-to Customer)를 보고, 기대도 '빈 콤보 아님·중복 0·원천 정렬'로 같다."
+  },
+  {
+   "rows": [
+    "EG-39e76742"
+   ],
+   "why": "화면 전체의 GET_ADMIN_GROUP_MEASURE 행을 보는 규칙이라 다른 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-1210de89"
+   ],
+   "why": "GetTransMode 진입점의 미연결 여부를 추적하는 행이어서, 콤보 후보 측정과 확인하는 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-51cc31c4"
+   ],
+   "why": "GetDivision 진입점만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-5e8c56ac"
+   ],
+   "why": "GetFromSitebyDivision 진입점의 미연결 여부만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-8ced34ac"
+   ],
+   "why": "GetData_Country 진입점만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-ba266397"
+   ],
+   "why": "GetToSitebyDivision 진입점의 미연결 여부만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-c3bad185"
+   ],
+   "why": "GetBodType 진입점의 미연결 여부만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-eea24770"
+   ],
+   "why": "Excel Download 출력값(Name)을 추적하는 행이라 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-052d2add"
+   ],
+   "why": "조회조건 Valid 콤보의 후보 집합을 보는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-065ec50e"
+   ],
+   "why": "신규 Sales Site 저장 후 조회조건에 바로 반영되는지 보는 행으로, 상태와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-0e672f48"
+   ],
+   "why": "조회조건 5종의 후보 원천과 Team cascade를 함께 보는 행이다. V-256566e6은 그중 Team 부분만 다뤄 기대 범위가 달라 묶지 않았다."
+  },
+  {
+   "rows": [
+    "V-256566e6"
+   ],
+   "why": "Team(DEPT) 원천을 SSPM DEPT_ID로 하는 규칙만 다뤄, 5종 전체 후보를 보는 V-0e672f48과 기대 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-0fb05cfd"
+   ],
+   "why": "Sales Site 후보의 표시 명칭('-' 일색 여부)을 보는 행으로, 후보 집합과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-12d849ec"
+   ],
+   "why": "Company 변경 후 하단 그리드 Sales Company/Plant 콤보를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-14e1a15c"
+   ],
+   "why": "Owner 팝업의 사용자 목록을 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-1c089940"
+   ],
+   "why": "신규 팀 저장 후 Team 조회조건 재바인딩을 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-2258e4bf"
+   ],
+   "why": "route.VALID_YN(Active) 컬럼은 Distribution Route.VALID_YN(Active*)과 같은 컬럼인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-2b3c6c52"
+   ],
+   "why": "Distribution Route.VALID_YN(Active*) 컬럼 신규행만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-292ba2b3"
+   ],
+   "why": "ETC 신규행의 Team·Measure 입력을 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-39f338f4"
+   ],
+   "why": "POPUP.DAYS_SAT 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-3e77aa35"
+   ],
+   "why": "Module/Sub Module 관련 SYS0016 결함 유형으로, 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-4383fa81"
+   ],
+   "why": "조회조건·그리드 콤보 전반에 대한 일반 확정 규칙이어서 특정 요소 행과 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-4746dad3"
+   ],
+   "why": "POPUP.DAYS_THU 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-48089d7b"
+   ],
+   "why": "Distribution Route.DAYS_TUE 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-4bd34313"
+   ],
+   "why": "Sales Plant 셀 콤보의 Active Plant 필터를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-4ea3e4a6"
+   ],
+   "why": "Customs Handbook 콤보의 Div별 후보를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-518210ab"
+   ],
+   "why": "Filter 콤보 6종이 상위 조건으로 하위 후보를 좁히는지(cascade) 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-55d313ac"
+   ],
+   "why": "조회 전 Insert 행의 To Site·City 매핑을 보는 행으로, 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-57072534"
+   ],
+   "why": "LOOKUP 신규 등록 후 그리드 콤보에 반영되는지 보는 행으로, 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-58c9fac5"
+   ],
+   "why": "Distribution Route.DAYS_SUN 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-5ae6da3f"
+   ],
+   "why": "Version 조회조건의 목록 표시를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-5bcb735c"
+   ],
+   "why": "Distribution Route.LT_TYPE(L/T Type*) 컬럼은 route.LT_TYPE과 같은 컬럼인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-659bbcf2"
+   ],
+   "why": "Distribution Route.DAYS_SAT 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-6b7cc552"
+   ],
+   "why": "Distribution Route.DAYS_THU 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-6bd7ad20"
+   ],
+   "why": "Team SSPM 기준과 End Customer/Sales Site 중복 0을 보는 행으로, 기대가 고유하다."
+  },
+  {
+   "rows": [
+    "V-71719720"
+   ],
+   "why": "Div 81 Team 조회조건 후보 건수를 AS-IS와 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "V-76099ea5"
+   ],
+   "why": "Distribution Route.DAYS_MON 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-774ec1df"
+   ],
+   "why": "POPUP.DAYS_TUE 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-787dac16"
+   ],
+   "why": "저장 성공 메시지와 Sales Site 셀 콤보의 Div 필터를 함께 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-82d97d20"
+   ],
+   "why": "그리드 TRANSPORT_MODE 신규행 컬럼을 보는 행으로, 조회조건 Trans Mode와 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-84b85b1f"
+   ],
+   "why": "조회조건 Active 무관 표시에 더해 그리드 셀 콤보는 사용 중인 것만 보이는지도 기대해, V-32fba2cd·V-b454a7b3보다 기대가 넓다."
+  },
+  {
+   "rows": [
+    "V-8510fd5a"
+   ],
+   "why": "Div에 데이터가 없는 후보가 노출되지 않는지 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-8dc2afe5"
+   ],
+   "why": "Distribution Route.DAYS_WED 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-95f00a49"
+   ],
+   "why": "SSPM DEPT 변경 후 Team 셀 표시값을 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-9d6c8ef5"
+   ],
+   "why": "조회조건 Trans Mode를 보는 행으로, 그리드 컬럼과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-9e845234"
+   ],
+   "why": "System 컬럼의 입력 방식을 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-a437aa1a"
+   ],
+   "why": "AS From Site 활성 여부와 Measure 후보를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-aadc4a90"
+   ],
+   "why": "FCST Type 후보를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-afc23080"
+   ],
+   "why": "route.LT_TYPE(L/T Type) 컬럼은 Distribution Route.LT_TYPE과 같은 컬럼인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-b6af88aa"
+   ],
+   "why": "POPUP.DAYS_FRI 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-b925d08d"
+   ],
+   "why": "Current 버전의 Measure 권한 통제와 AS From Site를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-be6894de"
+   ],
+   "why": "Approval Result 조회조건 4항목을 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-c140573d"
+   ],
+   "why": "POPUP.DAYS_MON 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-c5224eb6"
+   ],
+   "why": "조건 후보와 결과 컬럼값의 관계(Biz Type·Plant Site)를 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-cd3c172d"
+   ],
+   "why": "POPUP.DAYS_SUN 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-d37e5ae9"
+   ],
+   "why": "Distribution Route.DAYS_FRI 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-ef74ca6b"
+   ],
+   "why": "Div 81 신규행의 End Customer 셀 콤보가 룩업 기준을 따르는지 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-f636bed4"
+   ],
+   "why": "POPUP.DAYS_WED 컬럼만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-f892ef7f"
+   ],
+   "why": "To Site 조회조건 후보를 보는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-fc76022a"
+   ],
+   "why": "API Type 조회조건을 보는 행이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:38:36",
+ "cost": 0.2090456
+}

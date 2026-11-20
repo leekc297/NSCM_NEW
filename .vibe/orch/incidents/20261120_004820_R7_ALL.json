@@ -1,0 +1,39 @@
+{
+  "id": "20261120_004820_R7_ALL",
+  "at": "2026-11-20T00:48:20+09:00",
+  "ms": 1795103300547,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1). 미분류",
+  "screen": "",
+  "sig": "R7|미분류",
+  "count": 7,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-20T01-06-35_claude_orch.log",
+    "label": "개선안 반영 doc_style.py JS 소스 검사에서 주석과 정규식 리터럴 제외(확인 기준 정정 재제출)",
+    "source": "orch",
+    "cls": "미분류"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:48:21+09:00",
+      "by": "VMO",
+      "what": "Claude 종료 분류 미분류. stderr 와 로그(.vibe\\logs\\2026-11-19T23-04-31_claude_orch.log) 확인",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창이 닫히며 끝난 프로세스). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_004820_R7_ALL.json",
+  "lastAt": "2026-11-20T01:06:45+09:00",
+  "lastMs": 1795104405336,
+  "notice": true,
+  "reload": "shutdown",
+  "prevStatus": "need-user"
+}

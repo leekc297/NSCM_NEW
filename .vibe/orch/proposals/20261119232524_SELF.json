@@ -1,0 +1,91 @@
+{
+  "id": "20261119232524_SELF",
+  "at": "2026-11-19T23:25:24+09:00",
+  "ms": 1795098324003,
+  "source": "self",
+  "status": "applied",
+  "sig": "wb webview syntax test",
+  "title": "workbench.js 웹뷰 스크립트를 t_webview_syntax.js 구문 시험 대상에 추가",
+  "evidence": "tools/VibeManager/workbench.js:1261 function html(wb, p, state) 가 :3239 module.exports 에 없음. tools/VibeManager/test/t_webview_syntax.js:21, 24 는 orchestra, jobs 의 html 만 검사함. tools/VibeManager/CHANGELOG.md:80 'workbench.js 웹뷰 스크립트는 구문 시험 대상 밖(html 함수 비공개)'. CHANGELOG.md 2026-11-19 절 290, 296, 302, 319, 327, 335, 345, 352, 361줄에 '웹뷰 스크립트 문법 OK' 수동 확인이 9회 적힘. :79 는 node --check 를 통과한 웹뷰 const 이름 중복으로 화면이 안 그려진 사례임. workbench.js 는 repeatFiles 1위(7일 37건, 세션 수정 169건)임.",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/test/t_webview_syntax.js"
+  ],
+  "before_after": "변경 전: workbench.js 웹뷰 스크립트는 변경 때마다 수동 확인, VMO 자동 반영 게이트(test/run_all.js)는 이 스크립트의 구문 오류와 같은 이름 함수 덮어쓰기를 잡지 못함 → 변경 후: module.exports 에 시험용 html 내보내기 1줄 추가(이름 _html, 동작 변경 없음). t_webview_syntax.js 가 모의 vscode 로 workbench HTML 을 ko, en 으로 만들어 <script> 구문과 같은 이름 함수 선언을 검사함.",
+  "verify": "node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행. 기대: workbench(ko), workbench(en) 항목 PASS, FAIL 0.",
+  "rollback": "VMO 가 만든 workbench.js, test/t_webview_syntax.js 의 .bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T23:55:40+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T23:57:22+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 247, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2355"
+    },
+    {
+      "at": "2026-11-19T23:57:22+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T23:59:52+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T23:59:52+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행, 2026-11-19 23:58 직전. workbench(ko) 스크립트 1개 구문 PASS, 같은 이름 함수 선언 없음 PASS. workbench(en) 같은 2항목 PASS. 전체 18항목 PASS, FAIL 0, ALL PASS. 시각 출처 date 2026-11-19 23:58:02 · 변경 4개 파일 · 대상 목록 밖 변경 2개: tools/VibeManager/server-service.js, tools/VibeManager/test/t_server_service.js",
+      "log": ".vibe\\logs\\2026-11-19T23-57-22_claude_orch.log",
+      "sec": 49,
+      "costUsd": 0.6344274,
+      "files": [
+        "tools/VibeManager/server-service.js",
+        "tools/VibeManager/test/t_server_service.js",
+        "tools/VibeManager/workbench.js",
+        "tools/VibeManager/test/t_webview_syntax.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S9",
+  "selfKey": "S9|file|workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795100140870,
+  "autoFp": "8329982a1d",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 251, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261119_self2355",
+  "needsReload": true,
+  "appliedMs": 1795100392028,
+  "synced": [
+    "server-service.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/test/t_webview_syntax.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행, 2026-11-19 23:58 직전. workbench(ko) 스크립트 1개 구문 PASS, 같은 이름 함수 선언 없음 PASS. workbench(en) 같은 2항목 PASS. 전체 18항목 PASS, FAIL 0, ALL PASS. 시각 출처 date 2026-11-19 23:58:02",
+    "note": "workbench.js 는 module.exports 다음 줄에 _html 1줄만 Edit 로 추가함. 시험의 모의 wb 는 { claudeSession: '' } 임. html 이 읽는 wb 필드가 claudeSession 1개이고, Proxy 모의 객체는 문자열 변환 오류(Cannot convert object to primitive value)로 FAIL 2건이 나서 바꿈. repairScope DB_ONLY 의 차단 범위는 nscm-fe, nscm-be 라 이번 수정과 무관함. hook 차단 없음. .bak, 설치 폴더, CHANGELOG.md 는 건드리지 않음."
+  },
+  "snap": "prop_20261119232524_SELF"
+}

@@ -1,0 +1,47 @@
+{
+ "rule_id": "J3",
+ "hash": "9eb4b343f2a4d4d3",
+ "groups": [
+  {
+   "refs": [
+    "DM-64",
+    "DM-67"
+   ],
+   "target": "MKT_FCST·SCM_FCST Measure 편집 구간(GET_ADMIN_GROUP_MEASURE)",
+   "condition": "Div·권한(ADMIN/SCP PLANNER/DM PLANNER)별 계정, GET_ADMIN_GROUP_MEASURE 설정(SCP 편집가능) 시간대",
+   "expected": "SCM_FCST·MKT_FCST[R+P] 편집 가능 여부가 GET_ADMIN_GROUP_MEASURE 룩업의 Div·권한·시간대 기준과 일치하고, 설정 시간대에 DM PLANNER 는 MKT_FCST[R+P] 편집 불가",
+   "why": "DM-67 의 확인 대상과 기대(DM Planner 의 MKT_FCST 편집 차단)가 DM-64 의 룩업 기준 편집 구간 확인에 그대로 들어가므로 같은 확인 동작이다."
+  },
+  {
+   "refs": [
+    "DM-139"
+   ],
+   "target": "Current 버전 입력 Measure·AS From Site 콤보 권한 통제",
+   "condition": "Current 버전, Div·권한(DM Planner W/S)·Sales Site VMI 여부·고객향, FCST Type=AS",
+   "expected": "MKT_FCST/SCM_FCST 는 GET_ADMIN_GROUP_MEASURE 로 통제되고, AS_In_Req 는 해당 Div W/S 권한만, VMI_In_Req 는 VMI=Y 인 Div 만 편집 가능하며, AS From Site 콤보에는 Div 해당 목록만 나옴",
+   "why": "AS_In_Req·VMI_In_Req·AS From Site 목록까지 한 번에 확인하는 복합 항목이라 다른 항목과 확인 대상 범위가 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-153"
+   ],
+   "target": "Sales Site 유형별 AS From Site 활성·Measure 후보",
+   "condition": "DM Planner(W/S), Sales Site 비축향/고객향/미입력",
+   "expected": "비축향이면 AS From Site 비활성, 고객향이면 활성되고 콤보 동작, Measure 후보는 Sales Site 유형별로 나오고 SCM_FCST 는 보이지 않음",
+   "why": "Sales Site 유형에 따른 활성·노출 여부를 보는 항목이라 DM-139 의 콤보 목록 범위 확인과 대상이 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-148"
+   ],
+   "target": "RTF[R+P] Cutoff 상태별 편집 가능 조건",
+   "condition": "Sales Plan Cutoff·SCP Final 상태, Div별(1·2차 Cutoff)",
+   "expected": "Cutoff 미완료 시 RTF[R+P] 편집·저장이 막히고 수정불가 팝업이 뜨며, GET_ADMIN_GROUP_MEASURE 및 1·2차 Cutoff 상태 기준으로 편집 가능 여부가 정해짐",
+   "why": "편집 가능 여부를 정하는 기준이 시간대·권한이 아니라 Cutoff 진행 상태인 RTF 항목이라 다른 묶음과 확인 동작이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:20",
+ "cost": 0.0635412
+}

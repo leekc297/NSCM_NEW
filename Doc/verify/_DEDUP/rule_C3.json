@@ -1,0 +1,84 @@
+{
+ "rule_id": "C3",
+ "hash": "53c4772e1f801100",
+ "groups": [
+  {
+   "refs": [
+    "DM-23",
+    "DM-92",
+    "DM-40"
+   ],
+   "target": "Team·End Customer(·Energy(WH)) 컬럼 자동 세팅",
+   "condition": "신규 행 입력 후 조회, SSPM Team 변경 후 재조회",
+   "expected": "Team 은 Owner 소속팀이 아니라 SSPM(Sales Site+Project+Item) DEPT_ID 로 자동 세팅·표시되고 편집할 수 없다. End Customer 도 SSPM/Sales Site 기준으로 자동 매핑되고 편집할 수 없다. Energy(WH) 컬럼이 있는 화면에서는 Energy(WH)=SCM_MST_ITEM.ENERGE 로 자동 입력되고 편집할 수 없다.",
+   "why": "세 항목 모두 Team(및 End Customer)을 SSPM 기준으로 자동 세팅하고 입력을 막는지를 같은 동작으로 확인하며 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-14"
+   ],
+   "target": "Team·Owner 컬럼 입력값 유지",
+   "condition": "신규 데이터 입력 → 저장",
+   "expected": "사용자가 입력한 Team 이 저장 후에도 유지된다. Owner 를 선택하면 Team 이 비어 있을 때만 채운다.",
+   "why": "Team 을 사용자가 입력할 수 있다는 전제라서 SSPM 자동 세팅 묶음과 기대 결과가 반대이므로 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-151"
+   ],
+   "target": "신규 행 Sales Site·Project 팝업·Model 후보·Team",
+   "condition": "신규 행",
+   "expected": "Sales Site 입력이 동작한다. Project 팝업을 열면 자동 조회된다. Model 후보는 SALES_PLAN_ITEM_ID 룩업으로 나온다. Team 은 SSPM 기준 팝업으로 입력된다.",
+   "why": "확인 대상이 여러 종류이고 Team 을 팝업으로 입력하는 방식이라 자동 세팅 묶음과 같은지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "refs": [
+    "DM-189"
+   ],
+   "target": "Dept 컬럼 SSO 자동 세팅·Use Y/N 헤더",
+   "condition": "User 선택·신규 사용자 저장",
+   "expected": "Dept 는 입력할 수 없고, User 를 선택하면 SSO DEPT 가 자동 세팅된다. 저장 후 DEPT ID/Name 이 표시되고 Use Y/N 헤더가 병합된다.",
+   "why": "SSO 기준 Dept 세팅과 헤더 병합은 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-70"
+   ],
+   "target": "콤보 셀 Key-in 후보 외 값 차단",
+   "condition": "신규 행 콤보 선택 후 Key-In (예: Sales Company·Sales Plant)",
+   "expected": "콤보 셀에 Key-in 으로 후보에 없는 값을 넣으면 저장되지 않도록 차단하거나 검증한다.",
+   "why": "콤보 입력값 검증은 자동 채움 결과 확인과 대상 종류가 다르다."
+  },
+  {
+   "refs": [
+    "DM-P36"
+   ],
+   "target": "End Customer 변경 시 Sales Site 유지",
+   "condition": "신규 행 Sales Site 선택 후 End Customer 변경",
+   "expected": "End Customer 를 바꿔도 Sales Site 가 초기화되지 않는다. End Customer 가 자동 입력되는 화면은 변경할 수 없어야 한다.",
+   "why": "선행 셀이 초기화되는 연쇄 부작용을 확인하는 항목으로, 자동 세팅 값 확인과 동작이 다르다."
+  },
+  {
+   "refs": [
+    "GAP-19"
+   ],
+   "target": "공용 팝업 확정 방법별 반환값 동일성",
+   "condition": "Project·Model 등 팝업을 OK 단추와 행 더블클릭으로 각각 확정",
+   "expected": "공용 팝업(Project·Model 등)은 확정 방법과 관계없이 같은 반환값 집합(PROJECT_NAME·PROJECT_STATUS·PROJECT_OWNER·BIZ_TYPE, ITEM_TYPE, VMI_YN·VMI_STD_DIO 등)을 넘기고 자동 채움 결과가 같다.",
+   "why": "팝업 확정 방법을 바꿔 가며 비교하는 고유한 확인 동작이다."
+  },
+  {
+   "refs": [
+    "SCPSSP-22"
+   ],
+   "target": "조회 전 Insert 행 To Site 콤보·City 매핑",
+   "condition": "조회 전 Insert",
+   "expected": "조회 전에 Insert 해도 To Site 후보가 정상으로 나온다. Site 를 선택하면 City 가 매핑되고 저장된다(또는 AS-IS 대로 차단된다).",
+   "why": "조회 전 Insert 상태의 콤보 후보와 매핑을 확인하는 항목으로, 다른 항목과 조건·대상이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:06",
+ "cost": 0.0962212
+}

@@ -1,0 +1,265 @@
+{
+ "rule_id": "B4",
+ "hash": "30c0a23b87f9290d",
+ "groups": [
+  {
+   "rows": [
+    "V-0fc62872",
+    "V-a597cfb4",
+    "V-f4554768"
+   ],
+   "why": "세 행 모두 Active로 관리되는 마스터 기반 조회조건 콤보(End Customer·Sold to·Sales Site·Model/Nickname)를 확인하고, 기대 결과도 'Active Y/N과 관계없이 전체 후보 표시'로 같다."
+  },
+  {
+   "rows": [
+    "V-cc87e246",
+    "V-dc805560"
+   ],
+   "why": "두 행 모두 신규 행 Insert 때 그리드 End Customer·Sold-to Customer 셀 콤보를 확인하고, 기대 결과도 '빈 콤보 아님·중복 0·정렬'로 같다."
+  },
+  {
+   "rows": [
+    "EG-d18cf721"
+   ],
+   "why": "화면 전체에 걸친 GET_ADMIN_GROUP_MEASURE 규칙으로, 같은 대상·기대를 가진 행이 없다."
+  },
+  {
+   "rows": [
+    "T-10f2497d"
+   ],
+   "why": "대조표 4행(USER_ID 컬럼)을 추적하는 행이라 다른 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-c6892035"
+   ],
+   "why": "대조표 19행(GetUserIDChk 진입점)을 추적하는 행이라 다른 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-00bbaa9e"
+   ],
+   "why": "Filter 콤보 6종이 상위 선택값으로 하위 후보를 좁히는지(cascade)까지 확인하므로 Active 무관 묶음과 기대 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-0db2d553"
+   ],
+   "why": "조회조건 From Site 후보 집합을 확인하며, 그리드 From Site 컬럼(신규행)과는 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-13f4bf12"
+   ],
+   "why": "FCST Type=ETC 신규 행의 Team·Measure 입력 방식을 확인하는 고유 대상이다."
+  },
+  {
+   "rows": [
+    "V-16ec539a"
+   ],
+   "why": "신규 Sales Site 저장 직후 조회조건 콤보에 나타나는지 보는 저장 후 상태 검증이다."
+  },
+  {
+   "rows": [
+    "V-1f760440"
+   ],
+   "why": "To Site 조회조건 후보 원천을 확인하는 단독 대상이다."
+  },
+  {
+   "rows": [
+    "V-2706fcf0"
+   ],
+   "why": "LOOKUP 신규 등록 후 그리드 콤보에 반영되는지 보는 행이라, 등록 없이 Insert만 하는 그리드 콤보 행과 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-27bec819"
+   ],
+   "why": "조회조건 Div 후보 집합을 확인하는 단독 요소다."
+  },
+  {
+   "rows": [
+    "V-31bac514"
+   ],
+   "why": "Team 콤보·cascade 원천만 SSPM DEPT_ID로 확정하는 행이라, 나머지 콤보 원천까지 포함하는 결함 행과 기대 범위가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-32c534c7"
+   ],
+   "why": "API Type 조회조건이라 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-331571e7"
+   ],
+   "why": "그리드 From Site 컬럼(신규행) 후보를 확인하며, 조회조건 From Site와는 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-3443273d"
+   ],
+   "why": "Version 조회조건이라 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-3b3152f7"
+   ],
+   "why": "그리드 Operation Group 컬럼(신규행)이라 조회조건 Operation group과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-3f893cee"
+   ],
+   "why": "Module/Sub Module 등 여러 요소를 함께 보는 고유 결함 유형이다."
+  },
+  {
+   "rows": [
+    "V-4357d45f"
+   ],
+   "why": "저장 성공과 Div별 Sales Site 셀 콤보를 함께 보는 복합 검증이다."
+  },
+  {
+   "rows": [
+    "V-4509b151"
+   ],
+   "why": "Approval Result 조회조건의 고정 4항목을 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-4cc8a3d9"
+   ],
+   "why": "System 컬럼의 입력 방식을 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-5041f410"
+   ],
+   "why": "모든 조회조건·셀 콤보에 걸친 포괄 확정 규칙이라 특정 요소 행과 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-57a7334d"
+   ],
+   "why": "Company 변경 후 하단 그리드 Sales Company/Plant 콤보를 보는 상태 의존 검증이다."
+  },
+  {
+   "rows": [
+    "V-5c379423"
+   ],
+   "why": "Current 버전에서 Measure 권한과 AS From Site를 함께 보는 복합 검증이다."
+  },
+  {
+   "rows": [
+    "V-62f2170d"
+   ],
+   "why": "조회조건 Operation group 후보 집합으로, 그리드 컬럼과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-648cd5dc"
+   ],
+   "why": "조회조건 Team과 그리드 콤보 3종의 중복을 81_HD 신규행에서 보는 복합 검증이다."
+  },
+  {
+   "rows": [
+    "V-65fb32c3"
+   ],
+   "why": "Div 81 신규 행 End Customer 셀 콤보의 Div 필터를 확인하는 고유 기대다."
+  },
+  {
+   "rows": [
+    "V-710f745f"
+   ],
+   "why": "조회 전 Insert 상태의 To Site 콤보·City 매핑이라 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-748c1535"
+   ],
+   "why": "Div 40 Sales Site 조회조건의 표시값(명칭)을 확인하는 행이라, 후보 집합 검증과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-797550a9"
+   ],
+   "why": "Div 81 Team 조회조건의 후보 건수가 AS-IS와 같은지 보는 고유 기대다."
+  },
+  {
+   "rows": [
+    "V-882aa359"
+   ],
+   "why": "Customs Handbook 콤보의 Div별 후보를 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-a188b35d"
+   ],
+   "why": "조건 후보와 결과 컬럼값이 같은지 비교하는 행이라 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-b48b81f8"
+   ],
+   "why": "FCST Type 후보를 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-bb9af03a"
+   ],
+   "why": "조회조건 Active 후보로, 그리드 VALID_YN 컬럼과 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-bc357c4c"
+   ],
+   "why": "Owner 팝업의 사용자 목록이라 대상 요소가 팝업이다."
+  },
+  {
+   "rows": [
+    "V-c5df375e"
+   ],
+   "why": "Div에 데이터가 없는 후보가 숨겨지는지 보는 기대라 다른 Team 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-d5f17c5c"
+   ],
+   "why": "Sales Site 유형별로 AS From Site 활성 여부와 Measure 후보를 보는 복합 검증이다."
+  },
+  {
+   "rows": [
+    "V-e3d81d13"
+   ],
+   "why": "Sales Plant 셀 콤보의 Active Flag 필터를 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-e4a64d30"
+   ],
+   "why": "신규 팀 저장 후 Team 조회조건 재바인딩을 보는 저장 후 상태 검증이다."
+  },
+  {
+   "rows": [
+    "V-e64cb16c"
+   ],
+   "why": "그리드 VALID_YN 컬럼(신규행)이라 조회조건 Active와 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-ec736ab6"
+   ],
+   "why": "DEPT_ID 변경 후 Team 셀 콤보 표시값을 보는 상태 의존 검증이다."
+  },
+  {
+   "rows": [
+    "V-effdd7ff"
+   ],
+   "why": "Sales Site·End Customer·Sold to·Plant Site 원천과 Team SSPM 기준을 함께 보는 행이라 Team만 다루는 확정 규칙보다 기대 범위가 넓어 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:12:08",
+ "cost": 0.1501062
+}

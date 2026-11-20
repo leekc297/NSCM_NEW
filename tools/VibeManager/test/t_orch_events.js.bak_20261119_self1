@@ -1,0 +1,11 @@
+const os = require('os'), path = require('path'), fs = require('fs');
+const ev = require(path.join(process.argv[2], 'orch-events'));
+const d = fs.mkdtempSync(path.join(os.tmpdir(), 'orch-')); ev.init(d); let got = 0; ev.on(() => got++);
+const why = '[FAIL] files.csv current 변형 없음 — C:\\Projects\\NSCM\\Doc\\x 12건 2026-11-19 13:48';
+ev.emit('proc.end', { exit: 6, sig: ev.signature('S8.verify SCP0111', why) });
+ev.emit('x', { a: 1 });
+console.log(fs.readFileSync(ev.file(), 'utf8'));
+console.log('tail', ev.tail().length, 'listeners', got);
+const a = ev.signature('S8.verify SCP0111', '[FAIL] a SCP0111 3건'), b = ev.signature('S8.verify SSP0014', '[FAIL] a SSP0014 17건');
+console.log('same signature across screens:', a === b, '|', a);
+fs.rmSync(d, { recursive: true });

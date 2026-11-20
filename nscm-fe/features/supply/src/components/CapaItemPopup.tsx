@@ -269,6 +269,13 @@ export const CapaItemPopup = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={onClose}
+            />
+            <Button
               appearance='contained'
               buttonLabel='OK'
               iconComponent={<ControlConfirmIcon size='small' />}
@@ -276,13 +283,6 @@ export const CapaItemPopup = ({
               priority='primary'
               size='medium'
               onClick={handleSubmit}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={onClose}
             />
           </div>
         </div>

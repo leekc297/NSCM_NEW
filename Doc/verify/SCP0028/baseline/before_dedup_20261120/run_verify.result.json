@@ -1,0 +1,405 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-19T16:35:20+09:00",
+ "producer": "run_verify",
+ "id": "SCP0028",
+ "skip_e2e": false,
+ "started": "2026-11-19 13:50:23",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-be29b7a4",
+   "class": "F5",
+   "msg": "SCP0028 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b45d4015",
+   "class": "J4",
+   "msg": "SCP0028 탭 이름",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 화면 틀 @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-57fd6f09",
+   "class": "E1",
+   "msg": "SCP0028 입력검증 음수 INCREMENT",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 입력 검증 @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b4192f37",
+   "class": "E1",
+   "msg": "SCP0028 입력검증 음수 LOT_SIZE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 입력 검증 @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6259d313",
+   "class": "E1",
+   "msg": "Shipment Lot Size.LOT_SIZE (Lot Size*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-597f4433",
+   "class": "E1",
+   "msg": "Shipment Lot Size.INCREMENT (Increment*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-15f47ff2",
+   "class": "J4",
+   "msg": "그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC menu_auth_sync (그룹×메뉴·버튼 권한)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-82de05d7",
+   "class": "K4",
+   "msg": "[DMF0044 결함 유형] Delete 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3a78a613",
+   "class": "K4",
+   "msg": "[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d53e01ae",
+   "class": "F1",
+   "msg": "[SYS0008 결함 일반화] Created By/Date·Updated By/Date 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-11288dde",
+   "class": "F1",
+   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b7cb1a87",
+   "class": "F1",
+   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d3542d9a",
+   "class": "K4",
+   "msg": "[DMF0082 결함 일반화] 공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출 · Division 권한(PR_GET_MNU_BTN_AUTH_DIV)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0c53a4cd",
+   "class": "F1",
+   "msg": "[SYS0017 결함 유형] 신규 행 Insert 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c2882485",
+   "class": "F1",
+   "msg": "[SYS0017 결함 유형] 사용자 우측 그리드(allReceiver) 추가 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5aa81dd8",
+   "class": "F1",
+   "msg": "[SCM0007 결함 유형] 신규 행 Insert 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ff87442e",
+   "class": "F1",
+   "msg": "[SCM0007 결함 유형] 사용자 우측 그리드(allReceiver) 추가 후 Save",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-05282b1a",
+   "class": "F1",
+   "msg": "Created By/Date·Updated By/Date 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7d6db40c",
+   "class": "F1",
+   "msg": "공통 버튼 Save(F7) 기존행 수정 + Insert 신규행",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8e194f95",
+   "class": "F5",
+   "msg": "SCP0028 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2a3f808e",
+   "class": "X-ROW",
+   "msg": "SCP0028_Shipment_Lot_Size.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-22025375",
+   "class": "X-ROW",
+   "msg": "SCP0028_Shipment_Lot_Size.btnDelete_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0891c714",
+   "class": "X-ROW",
+   "msg": "SCP0028_Shipment_Lot_Size.btnInput_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7e1641ba",
+   "class": "X-ROW",
+   "msg": "SCP0028_Shipment_Lot_Size.btnItemId_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a0ea432d",
+   "class": "K4",
+   "msg": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/40/SCM Viewer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-e6cfb2a1",
+   "class": "K4",
+   "msg": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/81/SCM Viewer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-3e88650e",
+   "class": "K4",
+   "msg": "SCP0028 EG411 DELETE 버튼 조회 전 SCP/82/SCM Viewer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "ES-b81c0f8c",
+   "class": "F1",
+   "msg": "SCP0028 E2E authcrud 저장 왕복(no-save) zhangjiali",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @e2e-authcrud @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "ES-5b4cd8e1",
+   "class": "F1",
+   "msg": "SCP0028 E2E crud 저장 왕복(insert)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @e2e-crud @11-19 16:34"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 E3 — Doc/verify/SCP0028/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 1880,
+  "PASS": 760,
+  "FAIL": 29,
+  "판정필요": 40,
+  "미검증": 278,
+  "해당없음": 773,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1000,
+   "없음(미검증)": 278,
+   "없음(판정 대기)": 40,
+   "사람": 7,
+   "기계(상속·집계)": 544,
+   "출처 미기록": 11
+  },
+  "fail_listed": 29,
+  "coverage": {
+   "rules": 89,
+   "measured": 556,
+   "not_run_error": 195,
+   "na": 186,
+   "suspect_na100": [
+    "E3"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v12.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_ActionItemList_v12.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0028/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 E3 — Doc/verify/SCP0028/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

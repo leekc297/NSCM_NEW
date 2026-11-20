@@ -1,39 +1,6 @@
 {
- "ok": true,
+ "ok": false,
  "mode": "dry-run",
- "stamp": "20261119_172601",
- "areas_sel": "fe",
- "be_login": [],
- "tip": "b1500380a4dabd221b5ee5429eaec8bac501de4a",
- "tip_info": "b1500380a 2026-11-19 17:13 yongjun_kang fix(SCP0020): 예외행 강조색 불투명화 — 스크롤 후 고정 컬럼 글자 겹침 수정",
- "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
- "ancestor": true,
- "commits": 28,
- "changed": 0,
- "counts": {
-  "동일": 16
- },
- "actions": {
-  "none": 16,
-  "write": 0,
-  "merge": 0,
-  "delete": 0,
-  "keep": 0
- },
- "pending": 0,
- "areas": {
-  "fe": {
-   "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
-   "changed": 0,
-   "actions": {
-    "none": 16
-   },
-   "pending": 0,
-   "local_only": 0,
-   "env_keep": 0
-  }
- },
- "overwrite_local": true,
- "local_only": 0,
- "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261119_172601.md"
+ "stamp": "20261120_095755",
+ "error": "fetch"
 }

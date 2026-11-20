@@ -1,0 +1,156 @@
+{
+ "id": "SSP0005",
+ "group": "ADMIN",
+ "cellrun": true,
+ "cell_edit": false,
+ "acts": [
+  {
+   "control": "spdMain[COMPANY_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0005-S926796",
+    "SSP0005-S18dba0",
+    "SSP0005-S76dcb7"
+   ]
+  },
+  {
+   "control": "spdMain[DIVISION_ID]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0005-S926796",
+    "SSP0005-S18dba0",
+    "SSP0005-S76dcb7"
+   ]
+  },
+  {
+   "control": "spdMain[D_20261120]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0005-S926796",
+    "SSP0005-S18dba0",
+    "SSP0005-S76dcb7"
+   ]
+  },
+  {
+   "control": "spdMain[D_20261121]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0005-S926796",
+    "SSP0005-S18dba0",
+    "SSP0005-S76dcb7"
+   ]
+  },
+  {
+   "control": "spdMain[D_20261122]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0005-S926796",
+    "SSP0005-S18dba0",
+    "SSP0005-S76dcb7"
+   ]
+  },
+  {
+   "control": "spdMain[D_20261123]",
+   "kind": "cell",
+   "change": "첫 행 더블클릭",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "scenarios": [
+    "SSP0005-S926796",
+    "SSP0005-S18dba0",
+    "SSP0005-S76dcb7"
+   ]
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-20 05:05:48",
+ "data_cond": {
+  "src": "AS-IS LGCE_SCMDEV 2026-11-15 06:17 실측: SSP0005_GET_SHIPMENT_WORKING_DAY(p_company_id=HQ00, 20261115~20271114, 사업부 81,40,82,81_UC,81_HM,81_HD,81_HG) 3행 · AA00 2023-11~2026-11 36구간 0행 · 회사 목록 UP_FX_GetCommonDataList(Company) 16번=HQ00",
+  "why": "기본 조건 Company=AA00(목록 첫 항목)은 SSP_MST_SHIP_CALENDAR 에 행 없음. HQ00 은 사업부 40·81·82 에 2018-01-01~2050-12-31 데이터 있음",
+  "done": [
+   {
+    "set": {
+     "name": "cboCompany",
+     "index": "16"
+    },
+    "ok": true,
+    "applied": "combo:16:LG Energy Solution",
+    "error": null,
+    "why": null
+   }
+  ]
+ },
+ "plan": [
+  {
+   "kind": "dbl",
+   "scenarios": 3,
+   "named_cols": [],
+   "used": [
+    "COMPANY_ID",
+    "DIVISION_ID",
+    "D_20261120",
+    "D_20261121",
+    "D_20261122",
+    "D_20261123"
+   ],
+   "rule": "이름이 나온 열이 없어 앞쪽 보이는 열 6개"
+  }
+ ]
+}

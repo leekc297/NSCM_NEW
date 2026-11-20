@@ -1,0 +1,82 @@
+{
+  "id": "20261120094734_INC",
+  "at": "2026-11-20T09:47:34+09:00",
+  "ms": 1795135654516,
+  "source": "incident",
+  "status": "applied",
+  "sig": "rn 단계 지연 기준을 화면별 통계로 분리",
+  "title": "R3 단계 지연 기준을 화면별 통계로 분리",
+  "evidence": "orch-watch.js:108 key = ev.task || ev.name. step_stats.json S8.checklistRun = [5767240, 6058498, 8206788, 12908259]이고 앞 3개는 06:07:32 시작한 SCP0028, SSP0014, SCP0005 실행 시간. SSP0005 자체 종전 합계 9119~9869초 대비 이번 12408초(1.3배)",
+  "targets": [
+    "tools/VibeManager/orch-watch.js"
+  ],
+  "before_after": "108행 const key = ev.task || ev.name → const base = ev.task || ev.name; const key = ev.screen ? `${base}|${ev.screen}` : base; (sig 도 R3|key 로 화면별 분리). 기존 step_stats.json 의 화면 없는 키는 표본 3개 미만이 되어 화면별 표본이 쌓일 때까지 R3 미발생",
+  "verify": "node --check tools/VibeManager/orch-watch.js, node tools/VibeManager/test/run_all.js, noteStep 에 SSP0005 표본 3개(9119/9595/9394초)와 12408초 입력 시 R3 미발생, 20000초 입력 시 R3 발생 시험을 test/t_*.js 로 추가",
+  "rollback": "orch-watch.js 를 .bak 본으로 복원. step_stats.json 은 키만 늘어나므로 그대로 둠",
+  "incident": "20261120_094237_R3_SSP0005",
+  "screen": "SSP0005",
+  "history": [
+    {
+      "at": "2026-11-20T10:55:54+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T10:57:16+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 25개 파일 통과, 시험 36/38개 파일 통과(PASS 431, FAIL 0), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261120_self1055"
+    },
+    {
+      "at": "2026-11-20T10:57:20+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T11:02:31+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 25개 파일 통과, 시험 39/39개 파일 통과(PASS 480, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T11:02:31+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 10:58:02 node --check tools/VibeManager/orch-watch.js 통과. node tools/VibeManager/test/t_orch_step_screen.js 5건 PASS: SSP0005 표본 9119/9595/9394초 뒤 12408초 R3 0건, 20000초 R3 1건(sig R3|S8.checklistRun|SSP0005, 중앙값 9495초의 2.1배), 다른 화면 표본(SCP0028, SSP0014, SCP0005) 섞이지 않음, step_stats 키 단계|화면 4개. · 변경 5개 파일 · 대상 목록 밖 변경 4개: tools/VibeManager/orchestra.js, tools/VibeManager/design/history_concepts.html, tools/VibeManager/test/t_orch_step_screen.js, tools/VibeManager/test/t_webview_syntax.js",
+      "log": ".vibe\\logs\\2026-11-20T10-57-20_claude_orch.log",
+      "sec": 180,
+      "costUsd": 0.6172704,
+      "files": [
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/design/history_concepts.html",
+        "tools/VibeManager/test/t_orch_step_screen.js",
+        "tools/VibeManager/test/t_webview_syntax.js"
+      ]
+    }
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795139754787,
+  "autoFp": "4477d06e76",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 25개 파일 통과, 시험 39/39개 파일 통과(PASS 480, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1055",
+  "needsReload": true,
+  "appliedMs": 1795140151353,
+  "synced": [
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_step_screen.js"
+    ],
+    "verify_result": "2026-11-20 10:58:02 node --check tools/VibeManager/orch-watch.js 통과. node tools/VibeManager/test/t_orch_step_screen.js 5건 PASS: SSP0005 표본 9119/9595/9394초 뒤 12408초 R3 0건, 20000초 R3 1건(sig R3|S8.checklistRun|SSP0005, 중앙값 9495초의 2.1배), 다른 화면 표본(SCP0028, SSP0014, SCP0005) 섞이지 않음, step_stats 키 단계|화면 4개. 2026-11-20 10:58:05~11:00:09 node tools/VibeManager/test/run_all.js 결과 파일 39/39, PASS 480, FAIL 0(t_orch_agent_real.js, t_orch_agent_diag.js 는 run_all 이 건너뜀)",
+    "note": "orch-watch.js noteStep 통계 키를 base = ev.task || ev.name 에서 key = ev.screen 이 있으면 base|screen 으로 바꿈. sig 는 기존 R3|key 식 그대로라 화면별로 나뉨. step_stats.json 의 화면 없는 종전 키는 손대지 않음. 화면별 표본 3개가 쌓일 때까지 해당 화면 R3 미발생. 시험 파일 t_orch_step_screen.js 는 verify 지시에 따라 추가함. 작업 모드와 hook 차단 없음"
+  },
+  "snap": "prop_20261120094734_INC"
+}

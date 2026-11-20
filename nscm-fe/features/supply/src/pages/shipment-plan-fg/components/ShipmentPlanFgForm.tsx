@@ -152,9 +152,12 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
   const teamOptions = toOptions(teams);
   const electrodeOptions = toOptions(electrodes);
   // PlanDate 클라 필터(division), PlanType 클라 필터(division+planDate, 자동 최신행), PlanSeq(+planType)
-  const planDateOptions = toOptions(
-    (planDates ?? []).filter(r => !sc.divisionId || str(r.DIVISION_ID) === sc.divisionId)
+  //   Plan Date CODE 는 division 별로 중복될 수 있어(OVER_52W_YN 상이) over52WeekPreset 도 이 좁힌 배열을 써야
+  //   타 division 행을 집지 않는다(W{n} 프리셋 결함). planDateOptions 와 동일 필터.
+  const planDatesInDiv = (planDates ?? []).filter(
+    r => !sc.divisionId || str(r.DIVISION_ID) === sc.divisionId
   );
+  const planDateOptions = toOptions(planDatesInDiv);
   const planTypeOptions = toOptions(
     (planTypes ?? []).filter(
       r =>
@@ -491,7 +494,7 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
               required
               className={commonStyles.formItem}
               quickWeeks={[26, 52]}
-              lastWeeks={over52WeekPreset(planDates, sc.planStartYyyymmdd)}
+              lastWeeks={over52WeekPreset(planDatesInDiv, sc.planStartYyyymmdd)}
             />
           </Grid>
           {/* ALL(chkAll)은 화면에 노출하지 않는다 — 스토어 기본값(true) 고정으로 서버에 P_CHK_ALL='Y' 를 보낸다. */}

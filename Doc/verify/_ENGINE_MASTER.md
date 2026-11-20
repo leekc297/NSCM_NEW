@@ -1646,3 +1646,49 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 - 공용 엔진 보완 T360~T366: openScreen BE 정지 구분·재시도(nscm.ts) · ensureRows 대안 0건 메모 금지(smoke-extra.ts) · AS-IS Insert 빈 본문 = 신규 행 시나리오 없음(facts_lockrules.py · judge.py insert_noop_na) · 조회조건 별칭 라벨 찾기(_verify.spec.ts findSearchBox · CR-092) · 기준표 행 0 화면 H5·SC1(judge.py) · C2 연쇄 표기 대상 칸 판별(judge.py) · 버튼 다른 언어 라벨(labeltrans.ts 신규 · eg_popup.spec.ts)
 - 확인: 단위 시험(insert_noop_na 26행 · cascade_entities 6/10 · labelVariants) · tsc 0 · engine_selfcheck PASS. 실제 E2E 동작은 미측정(다음 CheckList)
 - 겹침 확인: SSP0014 세션 T354(_trace D4 Insert 비노출)와 대상 다름. T355·T357 은 SCP0028 D5·D17 과 같은 증상
+
+## 2026-11-20 08:2x SCP0028 미검증 해소(CheckList 07:38 원장 · 일괄 보완)
+- 입력: 원장 미검증 208 · 처리 대상 111(엔진 81 · 판단 30) · 집계 113. 조치 표 Doc/verify/SCP0028/_unverified_plan.md(111행 · 23묶음) · 결정 _unverified_decisions.md(D1~D11 · 22행) · 기록 _unverified_work.md · FE 가이드 FE_GUIDE_20261120_0817.md(1건)
+- 공용 엔진 보완 T430~T449: 툴바 단추 판별(nscm.ts toolbarButton · authprobe.ts toolbarRe · eg_auth EG369·EG374·EG411 · crud.ts) · crud Insert 빈 본문 = 수정 저장 경로 · 숫자 칸 입력 글자 누락 확인 · 정렬 키 원본 표 NOT NULL(sort_ci_check.py) · 기준표 표준 명칭(judge H5 · labelalias.ts stdAlias · findCond · findSearchBox) · 탭 이름 메뉴 메시지 코드 · CR-116(그룹 권한 동기화 = TO-BE 권한 설정 기준 · 사용자의견 SCP0104 V-24ff60ab) · 팝업 필수 알림 분리(G6) · facts_combosrc DataBind 바인딩·호출 없는 private 메서드 제외 · C2·C3 신규 행 결함 유형 Insert 빈 본문 · 병합 셀 Delete 툴바·AS-IS 신규 행만 · 조회 전 Delete 프로브 · G8·G9 라벨 그리드 글자 제외 · eg_chain 호출 기록(EG_CHAIN) · 시나리오 btn·iscombo 라벨 후보 · 시나리오 신규 행 문구 · 원값 복원 키보드 입력 · golden 선언 기본값 '' · SwitchLock 문장 CR-093 · 공용 권한 SP F4 = EG374·EG411 실측
+- 확인: sort_ci_check selftest 21/21 · mergecheck selftest 35/35 · insert_noop_na 단위 시험 · classify 시험 · combo_src 재생성 diff 2행 · tobe_rule_registry --check rc 0 · tsc 0 · engine_selfcheck PASS(08:23:18). 실제 E2E 동작은 미측정(다음 CheckList)
+- 겹침: SSP0014 세션 T385(멀티선택 후보 이름 환산)·T405(F4 다른 시나리오 호출 기록)는 SCP0028 V-dd4f9db4·T-f43dac0f 와 같은 증상 · judge.py 동시 수정(수정 직전 다시 읽음)
+
+## 2026-11-20 08:3x SSP0014 미검증 해소 라운드 3(일괄 보완)
+- 입력: CheckList 원장 07:33 ERROR 127(집계 77) + AI 검토 24. 행별 조치 Doc/verify/SSP0014/_unverified_plan.md · 결정 _unverified_decisions.md(8건) · 기록 _unverified_work.md · FE 가이드 FE_GUIDE_20261120_0800.md
+- 공용 엔진 보완 T370~T376(저장 전 검증 알림 읽기·검증 차단 뒤 통과 값 재시도·저장 경로 검증 호출 통과·E3·CELL_BADKEY·BigFilter 분기 필터 신규 combo_branch_filter.py) · T380~T385(b7_check SSP_BIGFILTER·judge G9·K3·sort 잘림·G1 코드↔이름) · T390~T393(사실 추출: 잠금 범위 상수·NewRow 항목·조건부 셀·여러 줄 ORDER BY) · T400~T406(mapping_trace 부록 표·구현 위치·미배치·인자 전용 조회조건·F4 호출 기록·CR-096)
+- 확인: 단위·selftest 통과 · tsc 0 · engine_selfcheck PASS(08:32:54). 실제 E2E 동작은 미측정(다음 CheckList)
+- 겹침: SCP0028 세션 T430~T432(crud.ts·nscm.ts·eg_auth.spec.ts)와 같은 파일, 다른 위치. 다른 화면 sort_rules.csv 157개 원복(상세 _unverified_work.md)
+
+## 2026-11-20 08:5x SCP0005 미검증 해소 라운드 1(CheckList 07:35 원장 · 일괄 보완)
+- 입력: 원장 미검증 308 · 처리 대상 257(엔진 153 · 판단 103 · 사람 1) · 집계 95. 조치 표 Doc/verify/SCP0005/_unverified_plan.md(257행) · 결정 _unverified_decisions.md(D1~D7 · 80행) · 기록 _unverified_work.md · FE 가이드 FE_GUIDE_20261120_0854.md(1건)
+- 공용 엔진 보완 T450~T456: 셀 규칙 시트 = 감싼 SheetName 블록 상수(facts_cellrules.py) · 컬럼 메타 조회 시트 기록(nscm.ts recordMetaSheets → meta_sheets.json) + 미조회·AS-IS 에 없는 시트 원장 제외(ledger.py) · 저장 왕복 ID 칸 보조 식별(saveprobe.ts) · 화면 조회조건 검색 단추 팝업 실측(_trace.spec.ts condPopup) · 대화상자 0·호출 0 = 팝업 열리지 않음 FAIL(_trace.spec.ts M3) · AS-IS Division 컨트롤 없는 화면 J1 NA(e2e_suite_ingest.py) · FPTextBox = 일반 텍스트 칸(ledger.py T114) · 분류표 3행
+- 화면 결함 확인: ROUTE_ID 더블클릭 이력 팝업 미구현(AS-IS cs:1093~1103 · TO-BE DB 연결 history/SEARCH → PKG_SCP0005.P_SCP0005_GET_ROUTE_HIST 있음 · 대조표 R8 '기능 부재' 기재 오류) → FE 가이드 G1
+- 확인: 필터 단위 시험 3건 · 정규식 시험 5건 · cell_rules 재생성 diff(LT 5칸 시트) · 분류 문구 시험 8종 · engine_selfcheck PASS(08:56:04 · TSC 0). 실제 E2E 동작은 미측정(다음 CheckList). T451 원장 제외는 meta_sheets.json 이 생긴 다음 CheckList 부터
+- 다른 화면 영향: Division 컨트롤 없는 AS-IS 화면 87/417(J1 NA 경로) · 컬럼 메타 시트가 여럿인 화면(meta_sheets 기록 생긴 뒤 미조회·AS-IS 에 없는 시트만 제외)
+- 백업 *.bak_20261120_scp05u
+
+## 2026-11-20 10:0x SCP0005 미검증 해소 라운드 2(재검 원장 미완료 · 재검 E2E 결과 근거)
+- 재검 08:59 시작 → 09:56:56 시나리오 실행 중 멈춤(원장 NOT_RUN 1,758/1,996). 재검 E2E 로 라운드 1 T450·T452·T453·T454 동작 확인
+- 보완 T457~T460: 저장 왕복 ID 칸 먼저·파생 칸 제외(saveprobe.ts) · 조회조건 같은 묶음 단추(_trace.spec.ts condPopup) · G4 BTN 라벨 = 인자 원천 컨트롤 이름(_trace.spec.ts) · IsNullOrEmpty(그리드 칸 변수) 조건(facts_lockrules.py)
+- 데이터: 재검 저장 시험 잔존 ROUTE_ID 7305(FROM_COUNTRY KR·FROM_CITY KRCOJ) → restore_touched 10:04 복원 · DB 확인 10:04:50
+- 확인: engine_selfcheck PASS(10:06:51) · color_rules 재생성 diff 2행. 실제 E2E 동작 미측정(다음 CheckList)
+
+## 2026-11-20 10:1x SSP0005 미검증 해소 라운드 1(CheckList 09:29 원장 · 일괄 보완)
+- 공용 엔진 보완 T470~T475: 대조표 TO-BE 칸 사유 판독(mapping_trace.py reason_claim) · 입력 시험 'Invalid Date' 호출 원장 행 생략(diff_ingest.py) · 대입 SELECT 정렬 제외(facts_sortrules.py) · 실전송 건수 호출 선택(_verify.spec.ts) · 다중 선택 Division 선택(authprobe.ts selectDiv) · ensureRows Division 칸 선택 수정 + Division 외 단일 선택 조건 후보 순회(smoke-extra.ts sweepCondCombos)
+- 실측 근거: SSP_MST_SHIP_CALENDAR Company 7종(AA00 0행) · E2E 조회 본문 AA00 153건 · 대조표 파서 사유 판독 17/17 실패
+- 확인: mapping_trace selftest 91/91 · diff_ingest 4/4 · facts_sortrules 3/3 · tsc 0 · engine_selfcheck PASS(09:4x). E2E 동작 미측정(10:07 재수행 VS Code 종료로 끊김)
+- 다른 화면 영향: 첫 조회조건이 Division 이 아닌 화면(ensureRows Division 순회) · 기본값에 데이터 없는 단일 선택 조건이 있는 화면 · 사유 칸 없는 대조표 · 피벗 대입 SELECT 가 있는 AS-IS SP · 다중 선택 Division 화면(EG022·EG271)
+- 백업 *.bak_20261120_ssp05u · 결정 목록 Doc/verify/SSP0005/_unverified_decisions.md 10건
+
+## 2026-11-20 10:35 AI 적용 지점 재배치(사용자 지시 '판단·정리가 필요한 곳에만 AI · 불필요한 AI 제거 · 기준 원장 정리부터 · UI/DB MODE 개발·보완 포함')
+- 근거(11-20 09:25~09:36 실측): 판정 검토 455행 중 348행이 미검증 행(반영 불가) · 호출 89회 중 50회 반영 0건 · 미검증 AI 전후 동일 · 재점검 3화면 모두 전체 재수행 · 기준(기대값) 저장소 없음 · 다른 문서 행이 요소에 안 붙음
+- A 호출 축소: llm_review 재측정 대상 미검증 제외(unverified_classes 분류 재사용) · 판정 대기 미검증 = 판정필요와 같이 반영(judge 반입 조건 포함) · 그 밖 미검증은 근거 확인된 NA 만 · 같은 규칙·같은 증거 행 함께 묻기(llm_solo.json) · 행 기억 키 = 행 내용 + 그 규칙 룰(종전 키도 찾음) · 답 1건마다 기억 저장 · dedup_screen 미측정 행 있는 규칙만 · 문서 1회 생성(make_verify_docs --plan-only → llm_desc → 생성) · llm_desc 동시 호출 · 종류 dedup·delta·criteria·port·repair 켜고 끔 · 종류별 effort · 효과 기록 llm_effect.csv
+- 측정(호출 없이 --dry · 기억 없는 첫 실행 가정): SCP0028 판정 검토 묶음 13 → 6 · SSP0014 5 → 2 · 중복 정리 AI 대상 규칙 SCP0028 91 → 23 · SSP0014 90 → 12. 기억된 답 반영 SCP0028 5 → 27행
+- B 기준 원장 criteria_build.py(신설): 요소 목록(코드) · 원장 행 → 요소 연결(코드) · AS-IS 실측 연결(코드) · 다른 문서 행 정리와 TO-BE 룰 결합(AI · 대상 아님 = 검색어 0건 기계 확인 · 룰 = 인용이 룰 원문에 있음) · judge 판정 끝에 반영 · CheckList '기준' 시트(사용자의견 고정)
+- SCP0028 시범(04:40 원장 사본 1,612행): 기준 항목 1,465 · 다른 문서 행 840 중 합침 147 · 대상 아님 450 · 판단 대기 69 · 룰 결합 376. AI 묶음 44개 첫 실행 뒤 같은 입력 재실행 = 호출 0(2초). 원장 사본 반영 측정: ERROR 1,314 → 914 · 적용 여부 미정 136 → 29
+- C: 판단 행 중 AI 검토로 결론 안 난 행 = 담당 '결정'(처리 대상 아님) · 재점검 = 미검증 규칙 --only + 필요한 단계(eg·suite·diff · VERIFY_DELTA_STAGES) · 🧪 프롬프트 전 행 이번 라운드 처리·하위 에이전트 묶음 분할·결정 목록 한 표 · C6(중지 = user.stop)은 다른 세션이 반영해 둔 상태 확인
+- D: port_review.py(--plan 이식 목록 · --review 개발 뒤 독립 검토 · --diag 보완 진단) · new_screen.md 이식 목록 행 단위 · 🧯 프롬프트 진단·정해진 보완 먼저·수정분 재점검
+- 공통: tools/Harness/rules/ai_points.csv(AI 지점 원장) · ai_usage.py(취합) · guess_scan LLM 탐지에 llm_call.ask 추가(원장 78건 등록)
+- 확인: engine_selfcheck PASS(10:14:23) · VM test 33파일 PASS 402 FAIL 0(10:16:40) · 실제 CheckList 동작 미측정(사용자 실행)
+- 남은 것: 행 ID 규칙 변경(승인 결정 3)은 하지 않음 — 11-20 SCP0028 ID 변동 221건의 원인이 줄 번호가 아니라 다른 문서 행 묶음 변경이라 기준 원장(내용 기반 번호)으로 대신함. UI/DB MODE 실화면 시범 미실행(현재 DB MODE)
+- 백업 *.bak_20261120_aipts · 사본·패치 tools/Harness/_verify_next/

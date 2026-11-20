@@ -1,0 +1,78 @@
+{
+ "rule_id": "A1",
+ "hash": "066110d9235b04c4",
+ "groups": [
+  {
+   "refs": [
+    "DM-121",
+    "DM-168",
+    "DM-187",
+    "DM-42",
+    "DM-48",
+    "DM-9"
+   ],
+   "target": "조회 결과 건수(행수·키 집합)",
+   "condition": "AS-IS와 같은 조회조건·같은 시점",
+   "expected": "조회 결과 건수(행수)와 키 집합이 AS-IS와 같음(원천 적재 시점 차이는 제외)",
+   "why": "모두 같은 조건으로 조회한 결과 건수가 AS-IS와 같은지 확인하는 항목이고, 키 집합 비교는 같은 확인에 더해 보는 것이라 하나로 묶었다."
+  },
+  {
+   "refs": [
+    "DM-111"
+   ],
+   "target": "Dynamic Query 실행 결과(레이아웃·조회·건수)",
+   "condition": "Role별, ALL 조건",
+   "expected": "Dynamic Query 화면 레이아웃이 정상이고, 조회가 성공하며, 결과 건수가 AS-IS와 같음",
+   "why": "Dynamic Query 화면의 레이아웃과 조회 성공 여부까지 함께 보는 복합 확인이라 건수 비교 묶음과 확인 동작이 달라 따로 두었다."
+  },
+  {
+   "refs": [
+    "DM-27"
+   ],
+   "target": "조회 건수·Team 컬럼 표시·컬럼팝업 저장 설정",
+   "condition": "컬럼팝업 설정을 저장한 뒤 조회",
+   "expected": "건수가 AS-IS와 같고, Team 컬럼에는 Name이 표시되며, 컬럼팝업에 저장한 구성대로 조회됨",
+   "why": "Team 표시 형식과 컬럼팝업 저장 반영까지 확인하는 복합 항목이라 단순 건수 비교와 묶지 않았다."
+  },
+  {
+   "refs": [
+    "DM-217"
+   ],
+   "target": "Team 정보(DEPT_ID) 변경 반영",
+   "condition": "SSPM에서 Team을 바꾼 뒤 재조회",
+   "expected": "SSPM에서 바꾼 Team(DEPT_ID)이 재조회 결과에 반영됨",
+   "why": "기준정보를 바꾼 뒤 재조회에 반영되는지 보는 확인이라 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-246"
+   ],
+   "target": "RTF[R+P] Measure 행 구성",
+   "condition": "",
+   "expected": "RTF[R+P] Measure의 실적 구간과 계획 구간이 한 행으로 표시됨",
+   "why": "특정 Measure 행의 표시 구조를 보는 확인이라 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "DM-68"
+   ],
+   "target": "Customer FCST Master 기준정보 생성",
+   "condition": "ROLLING 실행 이후",
+   "expected": "ROLLING 뒤 Customer FCST Master 기준정보가 생성되어 조회 결과가 있음",
+   "why": "배치(ROLLING)로 기준정보가 생성되는지 보는 확인이라 건수 비교와 동작이 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-10"
+   ],
+   "target": "BOM Explosion Plant Assign 정보",
+   "condition": "",
+   "expected": "BOM Explosion의 Plant Assign 정보가 AS-IS와 같고 기준정보와도 맞음",
+   "why": "BOM 전개의 Plant 배정 값이 맞는지 보는 확인이라 대상 종류가 달라 단독으로 두었다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:38:51",
+ "cost": 0.0717766
+}

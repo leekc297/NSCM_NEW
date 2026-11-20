@@ -31,6 +31,8 @@ interface Props {
   visibilityCtx: VisibilityContext;
   adminColumns?: RawFlexGridColumnConfig[];
   onFocus: () => void;
+  // 사용자가 셀을 직접 선택했는지 — Unfix 셀선택 가드(AS-IS GetSelections().Length<1)용.
+  userSelectedRef: MutableRefObject<boolean>;
 }
 
 const pivotTag = (binding: string): string => binding.slice(2).replace(/[^0-9]/g, '');
@@ -54,6 +56,7 @@ export const ProductionPlanFixGrid = ({
   visibilityCtx,
   adminColumns,
   onFocus,
+  userSelectedRef,
 }: Props) => {
   const fixedColumns = useMemo(
     () => buildFixedColumns(adminColumns, visibilityCtx),
@@ -169,6 +172,31 @@ export const ProductionPlanFixGrid = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fixedColumns, pivotColumns]);
+
+  // 사용자 셀 선택 추적 — Wijmo 는 데이터 로드 시 (0,0)을 자동 선택해 selection 이 항상 존재하지만,
+  //   AS-IS FarPoint GetSelections() 는 사용자가 셀을 고르기 전엔 0건이라 Unfix 가 MSG00134 로 막힌다(cs:1311-1316).
+  //   재조회(rows 변경)로 초기화하고, 셀 클릭·방향키 이동 시에만 선택된 것으로 본다.
+  useEffect(() => {
+    userSelectedRef.current = false;
+  }, [rows, userSelectedRef]);
+
+  useEffect(() => {
+    const g = gridRef.current;
+    const host = g?.hostElement;
+    if (!g || !host) return;
+    const onMouseDown = (ev: MouseEvent) => {
+      if (g.hitTest(ev).cellType === CellType.Cell) userSelectedRef.current = true;
+    };
+    const onKeyDown = (ev: KeyboardEvent) => {
+      if (ev.key.startsWith('Arrow')) userSelectedRef.current = true;
+    };
+    host.addEventListener('mousedown', onMouseDown);
+    host.addEventListener('keydown', onKeyDown);
+    return () => {
+      host.removeEventListener('mousedown', onMouseDown);
+      host.removeEventListener('keydown', onKeyDown);
+    };
+  }, [gridRef, userSelectedRef, fixedColumns, pivotColumns]);
 
   // 기간 헤더 병합 키 — 매니저는 1회만 생성(super 가 grid 이벤트를 바인딩)하고 ref 로 최신 맵을 전달한다.
   const headerKeyMap = useMemo(() => {

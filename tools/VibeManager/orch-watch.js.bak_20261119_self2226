@@ -1,0 +1,214 @@
+// 2026-11-19 VMO P3: 규칙 감시기 — 사건(orch-state.js)과 상태를 보고 오류·지연·반복을 '사건'으로 만든다. Claude 를 부르지 않는다.
+//   사건 파일: .vibe/orch/incidents/<yyyymmdd_hhmmss>_<규칙>_<화면>.json   { id, at, rule, title, screen, sig, count, repeat, detail, evidence, status, actions[] }
+//   규칙:
+//     R1  프로세스·단계 실패(exit≠0)            R2  같은 오류 반복(같은 화면 2회 · 전 화면 3회 — 14일 안)
+//     R3  단계 지연(같은 작업 최근 10회 중앙값의 2배 초과)   R4  대기 지연(10분 초과)
+//     R5  진행 없음(로그 10분 무출력 · 종료 기록 없이 사라진 실행)   R6  서버 이상(포트만 열림 60초 · 체인 실행 중 서버 꺼짐)
+//     R7  claude 비정상 종료                     R8  TCP 연결 수 12,000 이상
+//     R9  죽은 잠금(주인 프로세스 없음)           R10 CheckList 판정 정체(연속 2회 FAIL·미검증 행 집합 같음)
+//     R11 Claude 없이 끝난 체인에 FAIL·미검증 남음
+//   기준값: tools/Harness/harness.json 의 orch 절(없으면 아래 DEF). 같은 사건(규칙+서명+화면)은 dedupeMin 분 안에는 새로 만들지 않고 횟수만 올린다.
+'use strict';
+const fs = require('fs');
+const path = require('path');
+let errlog = { note() { return null; }, init() { return ''; } }; try { errlog = require('./orch-errlog'); } catch { } // 2026-11-19 자가진단 Q1: 삼키던 오류를 .vibe/orch/vm_errors.jsonl 에 남긴다
+const state = require('./orch-state');
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+
+const DEF = { repeatLockCount: 3, repeatLockMin: 60, repeatSameScreen: 2, repeatAllScreens: 3, repeatDays: 14, stepSlowFactor: 2, stepSlowMinSec: 60, stepSlowMinSamples: 3, waitMaxSec: 600, stallSec: 600, serverListenSec: 60, tcpWarn: 12000, dedupeMin: 30, tickSec: 30 };
+const TITLE = { R1: '실행 실패', R2: '같은 오류 반복', R3: '단계 지연', R4: '대기 지연', R5: '진행 없음', R6: '서버 이상', R7: 'Claude 비정상 종료', R8: 'TCP 연결 수 높음', R9: '죽은 잠금', R10: 'CheckList 판정 정체', R11: 'Claude 없이 끝난 체인에 오류 남음', R12: 'VM 자가진단' }; // R12 = orch-selfcheck.js 가 올린다(2026-11-19)
+
+let root = '', orchDir = '', incDir = '', started = false, timer = null, serverSvc = null;
+let cfg = Object.assign({}, DEF);
+const listeners = new Set();        // fn(incident, isNew)
+const seenOnce = new Set();         // 한 번만 알리는 키(R4·R5·R9)
+const stops = new Map();            // wb → 사용자 중지 시각(ms)
+let lastTcpInc = 0;
+let lastTickMs = 0;                // 자가진단 S7: 감시기 tick 이 도는지 확인하는 값
+
+const two = n => String(n).padStart(2, '0');
+const stamp = (ms) => { const d = new Date(ms || Date.now()); return `${d.getFullYear()}${two(d.getMonth() + 1)}${two(d.getDate())}_${two(d.getHours())}${two(d.getMinutes())}${two(d.getSeconds())}`; };
+const readJson = (f, dflt) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return dflt; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 2), 'utf8'); return true; } catch { return false; } };
+function loadCfg() { const h = readJson(path.join(root, 'tools', 'Harness', 'harness.json'), {}); cfg = Object.assign({}, DEF, (h && h.orch) || {}); return cfg; }
+
+// ── 사건 저장·조회 ──
+function list(limit) {
+  let names = []; try { names = fs.readdirSync(incDir).filter(f => f.endsWith('.json')).sort().reverse(); } catch { }
+  const out = []; for (const n of names.slice(0, limit || 200)) { const j = readJson(path.join(incDir, n), null); if (j) { j.file = path.join(incDir, n); out.push(j); } }
+  return out;
+}
+function get(id) { return readJson(path.join(incDir, `${id}.json`), null); }
+function save(inc) { return writeJson(path.join(incDir, `${inc.id}.json`), inc); }
+/** 사건에 조치 기록 추가 · 상태 변경(open | acting | resolved | need-user | closed) */
+function update(id, patch, action) {
+  const inc = get(id); if (!inc) return null;
+  Object.assign(inc, patch || {}); if (action) { inc.actions = inc.actions || []; inc.actions.push(Object.assign({ at: orchEv ? orchEv.nowLocal() : new Date().toISOString() }, action)); }
+  save(inc); for (const fn of listeners) { try { fn(inc, false); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } }
+  return inc;
+}
+
+function raise(rule, o) {
+  const now = Date.now(); const screen = String(o.screen || '').toUpperCase(); const sig = o.sig || `${rule}|${o.key || o.title || ''}`;
+  // 같은 사건이 열려 있으면 횟수만 올린다
+  const open = list(60).find(x => x.rule === rule && x.sig === sig && (x.screen || '') === screen && x.status !== 'closed' && x.status !== 'resolved' && now - (x.ms || 0) < cfg.dedupeMin * 60000);
+  if (open) { if (o.evidence) open.evidence = o.evidence; if (o.title && /반복 \d+회/.test(o.title)) open.title = o.title; open.count = (open.count || 1) + 1; open.lastAt = orchEv ? orchEv.nowLocal(now) : ''; open.lastMs = now; if (o.detail) open.detail = o.detail; save(open); for (const fn of listeners) { try { fn(open, false); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } } return open; }
+  const inc = { id: `${stamp(now)}_${rule}_${screen || 'ALL'}`, at: orchEv ? orchEv.nowLocal(now) : new Date(now).toISOString(), ms: now, rule, ruleName: TITLE[rule] || rule, title: o.title || TITLE[rule] || rule, screen, sig, count: 1, repeat: o.repeat || null, detail: o.detail || '', evidence: o.evidence || {}, status: 'open', actions: [] };
+  let n = 1; while (fs.existsSync(path.join(incDir, `${inc.id}.json`))) inc.id = `${stamp(now)}_${rule}_${screen || 'ALL'}_${++n}`;
+  save(inc);
+  if (orchEv) orchEv.emit('incident', { id: inc.id, rule, screen, title: inc.title, sig });
+  for (const fn of listeners) { try { fn(inc, true); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } }
+  return inc;
+}
+
+// ── R2: 서명 이력 ──
+const sigFile = () => path.join(orchDir, 'sig_history.json');
+function noteSig(sig, screen) {
+  if (!sig) return { same: 0, all: 0 };
+  const h = readJson(sigFile(), {}); const cut = Date.now() - cfg.repeatDays * 86400000;
+  const arr = (h[sig] || []).filter(x => x.ms >= cut); arr.push({ ms: Date.now(), screen: screen || '' }); h[sig] = arr.slice(-50);
+  for (const k of Object.keys(h)) { h[k] = h[k].filter(x => x.ms >= cut); if (!h[k].length) delete h[k]; }
+  writeJson(sigFile(), h);
+  return { same: arr.filter(x => x.screen === (screen || '')).length, all: arr.length, screens: [...new Set(arr.map(x => x.screen).filter(Boolean))] };
+}
+function failure(o) { // 실패 1건 → 반복 기준을 넘으면 R2, 아니면 R1
+  const rp = noteSig(o.sig, o.screen);
+  const repeated = rp.same >= cfg.repeatSameScreen || rp.all >= cfg.repeatAllScreens;
+  return raise(repeated ? 'R2' : 'R1', Object.assign({}, o, { repeat: rp, title: repeated ? `같은 오류 반복 ${rp.same >= cfg.repeatSameScreen ? `${o.screen || '공통'} ${rp.same}회` : `전 화면 ${rp.all}회`} — ${o.title}` : o.title }));
+}
+
+// ── 죽은 잠금 반복 이력(.vibe/orch/lock_history.json) ──
+function noteLock(l) {
+  const f = path.join(orchDir, 'lock_history.json'); const h = readJson(f, {}); const cut = Date.now() - (cfg.repeatLockMin || 60) * 60000;
+  let gap = null; try { const t = Date.parse(String(l.started || '').replace(' ', 'T')); if (Number.isFinite(t)) gap = Math.max(0, Math.round((Date.now() - t) / 1000)); } catch { }
+  const arr = (h[l.file] || []).filter(x => x.ms >= cut && x.pid !== l.pid);
+  arr.push({ ms: Date.now(), pid: l.pid, started: String(l.started || '').replace('T', ' ').slice(0, 19), gapSec: gap, args: String(l.args || '').slice(0, 200), ppid: l.ppid || null, parent: l.parent || '', chain: String(l.chain || '').slice(0, 300) });
+  h[l.file] = arr.slice(-30);
+  for (const k of Object.keys(h)) { h[k] = h[k].filter(x => x.ms >= Date.now() - 24 * 3600000); if (!h[k].length) delete h[k]; }
+  writeJson(f, h);
+  return arr;
+}
+
+// ── R3: 단계 소요 통계 ──
+const statFile = () => path.join(orchDir, 'step_stats.json');
+function median(a) { const s = [...a].sort((x, y) => x - y); const m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+function noteStep(ev) {
+  const key = ev.task || ev.name; if (!key || !ev.ms_run) return;
+  const st = readJson(statFile(), {}); const arr = st[key] || [];
+  if (arr.length >= cfg.stepSlowMinSamples) {
+    const med = median(arr);
+    if (ev.ms_run > med * cfg.stepSlowFactor && ev.ms_run / 1000 >= cfg.stepSlowMinSec)
+      raise('R3', { screen: ev.screen, key, sig: `R3|${key}`, title: `단계 지연. ${ev.name} ${Math.round(ev.ms_run / 1000)}초(최근 ${arr.length}회 중앙값 ${Math.round(med / 1000)}초의 ${(ev.ms_run / med).toFixed(1)}배)`, detail: `체인 ${ev.chainLabel || ev.chain} · 단계 ${ev.no} · 실행 주체 ${ev.actor}`, evidence: { runId: ev.runId, ms_run: ev.ms_run, median_ms: med, samples: arr.slice() } });
+  }
+  if (ev.status === 'OK' || ev.status === 'WARN') { arr.push(ev.ms_run); st[key] = arr.slice(-10); writeJson(statFile(), st); }
+}
+
+// ── R10 · R11: CheckList 결과 비교 ──
+function checklistSnap(id) {
+  const j = readJson(path.join(root, 'Doc', 'verify', id, 'run_verify.result.json'), null); if (!j) return null;
+  const tri = readJson(path.join(root, 'Doc', 'verify', id, 'unverified_triage.json'), {});
+  const s = j.summary || {};
+  return { started: j.started || '', ts: j.ts || '', fail: s.FAIL || 0, review: s['판정필요'] || 0, unverified: s['미검증'] || 0, actionable: tri.actionable != null ? tri.actionable : null, issues: (j.issues || []).map(x => `${x.id}|${x.class || ''}`).sort() };
+}
+function checkChecklist(ev) {
+  const id = String(ev.screen || '').toUpperCase(); if (!id) return;
+  const cur = checklistSnap(id); if (!cur) return;
+  const f = path.join(orchDir, 'checklist_prev', `${id}.json`); const prev = readJson(f, null);
+  if (prev && prev.started !== cur.started && cur.issues.length && prev.issues.join(',') === cur.issues.join(',') && prev.unverified === cur.unverified)
+    raise('R10', { screen: id, sig: `R10|${id}`, title: `CheckList 판정 정체. ${id} 연속 2회 FAIL ${cur.fail} · 미검증 ${cur.unverified} 행 집합 같음`, detail: `직전 실행 ${prev.started} → 이번 ${cur.started}. FAIL·미검증 행 ${cur.issues.length}개가 그대로. 처리 대상(actionable) ${prev.actionable} → ${cur.actionable}`, evidence: { result: `Doc/verify/${id}/run_verify.result.json`, fixlist: `Doc/verify/${id}/fixlist.csv`, issues: cur.issues.slice(0, 80) } });
+  if (!prev || prev.started !== cur.started) writeJson(f, cur);
+  if (ev.claudeRan === 0 && (cur.fail > 0 || cur.unverified > 0))
+    raise('R11', { screen: id, sig: `R11|${id}|${ev.chain}`, title: `Claude 없이 끝난 체인. ${id} FAIL ${cur.fail} · 미검증 ${cur.unverified} 남음`, detail: `체인 ${ev.chainLabel}: 스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md, result: `Doc/verify/${id}/run_verify.result.json` } });
+}
+
+// ── 사건 → 규칙 ──
+function userStopped(wb) { const t = stops.get(wb); return !!t && Date.now() - t < 15000; }
+function onEvent(ev) {
+  try {
+    if (cfg.enabled === false) return; // VMO 꺼짐(harness.json orch.enabled false) = 사건을 만들지 않는다
+    const t = ev.type;
+    if (t === 'user.stop') { stops.set(ev.wb, ev.ms || Date.now()); return; }
+    if (t === 'proc.end' && ev.exit !== 0 && ev.exit != null && !ev.server) {
+      if (userStopped(ev.wb)) return;
+      const inChain = state.snapshot().chains.some(c => c.wb === ev.wb && c.screen === ev.screen);
+      if (inChain) return;                               // 체인 안 실패는 step.end 가 판정(okCodes · verify 반영)
+      failure({ screen: ev.screen, sig: ev.sig || `proc|${ev.label}`, title: `${ev.label} 실패 (exit ${ev.exit})`, detail: ev.why || '', evidence: { log: ev.log, exit: ev.exit, whySrc: ev.whySrc } });
+    }
+    else if (t === 'step.end') {
+      noteStep(ev);
+      if (ev.status === 'FAIL' && !userStopped(ev.wb)) failure({ screen: ev.screen, sig: ev.sig || `step|${ev.task || ev.name}`, title: `${ev.name} 실패${ev.exit != null ? ` (exit ${ev.exit})` : ''} — ${ev.chainLabel || ''}`, detail: ev.why || ev.note || '', evidence: { runId: ev.runId, task: ev.task, actor: ev.actor, failFrom: ev.failFrom, repairs: ev.repairs } });
+    }
+    else if (t === 'chain.end') {
+      if (/^checklist$/i.test(ev.chain || '') || /CheckList/i.test(ev.chainLabel || '')) checkChecklist(ev);
+      else if (ev.claudeRan === 0 && ev.ok === false && !userStopped(ev.wb)) raise('R11', { screen: ev.screen, sig: `R11|${ev.screen}|${ev.chain}`, title: `Claude 없이 끝난 체인. ${ev.chainLabel} ${ev.failNo ? `${ev.failNo}단계에서 중단` : '미완료'}`, detail: `스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md } });
+    }
+    else if (t === 'claude.end' && ev.exit !== 0 && ev.exit != null) {
+      if (userStopped(ev.wb)) return;
+      const w = ev.stderrTail || ''; const cls = /No conversation found|session.*not found|resume/i.test(w) ? '세션 이어받기 실패' : /not logged in|authentication|401|login/i.test(w) ? '로그인 만료' : /is not recognized|ENOENT|cannot find/i.test(w) ? 'CLI 경로' : /ETIMEDOUT|ECONNRESET|fetch failed|network|EAI_AGAIN/i.test(w) ? '네트워크' : (ev.anyOutput ? '응답 중 종료' : '미분류');
+      raise('R7', { screen: ev.screen, sig: `R7|${cls}`, title: `Claude 비정상 종료 (exit ${ev.exit}). ${cls}`, detail: w || '(stderr 없음)', evidence: { log: ev.log, label: ev.label, source: ev.source, cls } });
+    }
+    else if (t === 'server.state' && ev.source === 'poll' && ev.state === 'down' && ev.prev && ev.prev !== 'down') {
+      const cs = state.snapshot().chains;
+      if (cs.length) raise('R6', { screen: '', sig: `R6|down|${ev.port}`, title: `체인 실행 중 서버 꺼짐. 포트 ${ev.port}`, detail: `실행 중 체인 ${cs.map(c => `${c.screen} ${c.label}`).join(' · ')}`, evidence: { port: ev.port, chains: cs.map(c => c.runId) } });
+    }
+  } catch (ex) { errlog.note('orch-watch', 'onEvent', ex); }
+}
+
+function tick() {
+  try {
+    lastTickMs = Date.now();
+    loadCfg();
+    // 2026-11-19 18:2x 정정: 주인 프로세스가 없어진 항목을 먼저 정리한 뒤 판정한다. 종전에는 판정 → 정리 순서라, 끝 사건 없이 종료된 run_verify 의 대기가
+    //   '대기 지연(R4)'으로 올라갔다(실제 사건 20261119_181812_R4_DMF0042: 대기 PID 28056 은 이미 없었음 · Claude 호출 1회 1.60 USD 소모)
+    const gone = state.sweep();
+    // 끝 사건 없이 사라진 대기 = wait.gone 사건으로 남긴다(집계가 센다 · 개선안 20261119193539_REVIEW_4). 측정이므로 VMO 가 꺼져 있어도 남긴다
+    for (const g of gone) if (g.what === 'wait') { try { if (orchEv) orchEv.emit('wait.gone', { kind: g.kind, screen: g.screen || '', waiter_pid: g.pid, sec_wait: Math.max(0, Math.round((Date.now() - g.t0) / 1000)), why: String(g.why || '').slice(0, 200) }); } catch { } }
+    if (cfg.enabled === false) return; // VMO 꺼짐 = 상태 정리만 하고 판정하지 않는다
+    const snap = state.snapshot();
+    for (const w of snap.waits) { const k = `R4|${w.kind}|${w.screen}`; if (w.sec > cfg.waitMaxSec) { if (!seenOnce.has(k)) { seenOnce.add(k); raise('R4', { screen: w.screen, sig: k, title: `대기 지연. ${w.screen} ${w.kind} ${Math.round(w.sec / 60)}분째`, detail: w.why || '', evidence: { kind: w.kind, sec: w.sec, max_sec: w.max_sec, blocker_pid: w.blocker_pid, locks: snap.locks.filter(l => !w.screen || l.file.includes(w.screen)) } }); } } else seenOnce.delete(k); }
+    for (const pr of snap.procs) {
+      if (pr.sec < cfg.stallSec || !pr.log) continue;
+      let quiet = null; try { quiet = (Date.now() - fs.statSync(path.join(root, pr.log)).mtimeMs) / 1000; } catch { quiet = null; }
+      const k = `R5|${pr.log}`;
+      if (quiet != null && quiet > cfg.stallSec && !seenOnce.has(k)) { seenOnce.add(k); raise('R5', { screen: pr.screen, sig: `R5|${pr.label}`, title: `진행 없음. ${pr.label} 로그 ${Math.round(quiet / 60)}분 무출력`, detail: `PID ${pr.pid} · 실행 ${Math.round(pr.sec / 60)}분째`, evidence: { log: pr.log, pid: pr.pid, quiet_sec: Math.round(quiet), waits: snap.waits.filter(w => w.screen === pr.screen) } }); }
+    }
+    for (const g of gone) {
+      if (g.what === 'wait' || g.server) continue;
+      raise('R5', { screen: g.screen, sig: `R5|gone|${g.what}|${g.label || ''}`, title: `종료 기록 없이 사라진 실행. ${g.what === 'chain' ? '체인' : g.what === 'claude' ? 'Claude' : '프로세스'} ${g.label || ''}`, detail: `시작 ${orchEv ? orchEv.nowLocal(g.t0) : g.t0} · 주인 PID ${g.owner} · 끝 사건 없음(중지, 창 다시 로드, 강제 종료)`, evidence: { log: g.log || '', pid: g.pid || null } });
+    }
+    if (serverSvc) for (const s of serverSvc.stateList()) {
+      const k = `R6|listen|${s.port}`;
+      if (s.state === 'listen' && Date.now() - s.since > cfg.serverListenSec * 1000) { if (!seenOnce.has(k)) { seenOnce.add(k); raise('R6', { screen: '', sig: k, title: `서버 응답 없음. ${s.label} 포트 ${s.port} 열림 · HTTP 응답 없음 ${Math.round((Date.now() - s.since) / 1000)}초`, detail: s.owner === 'vm' ? 'VM 이 띄운 서버' : 'VM 밖에서 띄운 서버', evidence: { port: s.port, owner: s.owner } }); } } else seenOnce.delete(k);
+    }
+    if (snap.load.tcp != null && snap.load.tcp >= cfg.tcpWarn && Date.now() - lastTcpInc > 30 * 60000) { lastTcpInc = Date.now(); raise('R8', { screen: '', sig: 'R8|tcp', title: `TCP 연결 수 ${snap.load.tcp.toLocaleString()}, 기준 ${cfg.tcpWarn.toLocaleString()} 이상(E2E 중단 기준 14,000)`, detail: '동적 포트 고갈 전 단계. 연결을 많이 쥔 프로세스 확인 필요', evidence: { tcp: snap.load.tcp } }); }
+    // 죽은 잠금: 1~2회는 R9(삭제만) · 같은 잠금 파일이 repeatLockMin(60)분 안에 repeatLockCount(3)회 이상이면 'R2 같은 오류 반복' 1건으로 묶는다
+    //   (VMO 개선안 20261119193539_REVIEW_3 · 사용자 승인 2026-11-19: DMF0042 dbwin 잠금이 32분에 8회 남았는데 매번 새 R9 로 올라가 삭제만 됨)
+    for (const l of snap.locks) {
+      const k = `R9|${l.file}|${l.pid}`; if (l.alive !== false || seenOnce.has(k)) continue; seenOnce.add(k);
+      const screen = (/\.([A-Z]{2,4}\d{4}[A-Z]?)\.lock$/.exec(l.file) || [])[1] || '';
+      const occ = noteLock(l); const ev = { file: `Doc/e2e/${l.file}`, pid: l.pid };
+      if (occ.length >= (cfg.repeatLockCount || 3)) {
+        const lines = occ.map((o, n) => `${n + 1}. 감지 ${orchEv ? orchEv.nowLocal(o.ms).slice(11, 19) : o.ms} · 잠금 시작 ${o.started || '-'}${o.gapSec != null ? ` · 시작~감지 ${o.gapSec}초` : ''} · PID ${o.pid} · 부모 ${o.parent || '미기록'}${o.ppid ? `(${o.ppid})` : ''}${o.chain ? ` · 사슬 ${o.chain}` : ''} · 인자 ${o.args || '-'}`);
+        raise('R2', { screen, sig: `R2|R9|${l.file}`, title: `같은 죽은 잠금 반복 ${occ.length}회(${cfg.repeatLockMin || 60}분 안). ${l.file}`, detail: lines.join(String.fromCharCode(10)), evidence: Object.assign({ deadLock: ev, occurrences: occ }, ev), repeat: { same: occ.length, all: occ.length, screens: screen ? [screen] : [] } });
+      } else raise('R9', { screen, sig: `R9|${l.file}`, title: `죽은 잠금. ${l.file} (PID ${l.pid} 없음)`, detail: `시작 ${l.started} · 인자 ${l.args}${l.parent ? ` · 부모 ${l.parent}(${l.ppid || ''})` : ''}`, evidence: ev });
+    }
+  } catch (ex) { errlog.note('orch-watch', 'tick', ex); }
+}
+
+/** 사건 구독 fn(incident, isNew). 반환 = 해제 함수 */
+function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
+
+function init(p, opts) {
+  if (started || !p || !p.root) return;
+  started = true; root = p.root; orchDir = path.join(p.vibeDir || path.join(p.root, '.vibe'), 'orch'); incDir = path.join(orchDir, 'incidents');
+  try { fs.mkdirSync(incDir, { recursive: true }); } catch { }
+  serverSvc = (opts && opts.serverSvc) || null;
+  errlog.init(p.vibeDir || path.join(p.root, '.vibe'));
+  loadCfg(); state.init(p); state.on(onEvent);
+  timer = setInterval(tick, Math.max(5, cfg.tickSec) * 1000);
+}
+function dispose() { if (timer) { clearInterval(timer); timer = null; } started = false; }
+
+function health() { return { started, lastTickMs, tickSec: Math.max(5, cfg.tickSec) }; }
+
+module.exports = { init, dispose, on, list, get, update, raise, tick, onEvent, health, TITLE, DEF };

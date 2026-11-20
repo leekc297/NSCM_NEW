@@ -223,7 +223,7 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
         </div>
       }
       customContentArea={
-        <div className={styles.modalContentWrapper}>
+        <div className={`${styles.modalContentWrapper} ${styles.searchModalGap}`}>
           <SearchArea
             conditions={
               <>

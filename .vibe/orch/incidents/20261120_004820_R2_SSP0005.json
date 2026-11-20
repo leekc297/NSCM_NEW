@@ -1,0 +1,85 @@
+{
+  "id": "20261120_004820_R2_SSP0005",
+  "at": "2026-11-20T00:48:20+09:00",
+  "ms": 1795103300712,
+  "rule": "R2",
+  "ruleName": "같은 오류 반복",
+  "title": "같은 오류 반복 SSP0005 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SSP0005",
+  "sig": "S8.checklistRun | [FAIL] Playwright exit code N - log tail:",
+  "count": 3,
+  "repeat": {
+    "same": 2,
+    "all": 3,
+    "screens": [
+      "SSP0005",
+      "SCP0005"
+    ]
+  },
+  "detail": "[FAIL] Playwright exit code 1 - log tail:\n[FAIL] SSP0005_GET_SHIPMENT_WORKING_DAY → PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY | AS-IS SORT_ORDER_NO | TO-BE DIVISION_ID,COMPANY_ID | 1번째 키부터 다름: AS-IS ['SORT_ORDER_NO'] ↔ TO-BE ['DIVISION_ID', 'COMPANY_ID']",
+  "evidence": {
+    "runId": "SSP0005_1795102461115",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:51:46+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T00:54:04+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 개선안 올림 · 원인 env: VS Code 종료로 job-runner.js:219 dispose() 가 실행 중인 CheckList 2건(SSP0005, SCP0005)을 00:47:34 에 멈춰 exit 1 이 났다. job.json note 'VS Code 종료로 중단됨', status interrupted. dispose() 가 user.stop 을 남기지 않아 orch-watch.js:139 가 실패로 보고 R1, R2 를 만들었고, 사건 원인 문구는 앞서 판정 반입으로 넘어간 crud FAIL(로그 76행)과 sort_check FAIL(231행) 줄 · 개선안 등록 20261120005403_INC(승인 대기)",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T00-51-52_claude_orch.log",
+      "sec": 126,
+      "turns": 28,
+      "costUsd": 1.2503473999999999,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드 뒤 지난 기록을 다시 읽어 올린 중복). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_004820_R2_SSP0005.json",
+  "lastAt": "2026-11-20T00:48:34+09:00",
+  "lastMs": 1795103314483,
+  "agent": {
+    "cause_class": "env",
+    "cause": "VS Code 종료로 job-runner.js:219 dispose() 가 실행 중인 CheckList 2건(SSP0005, SCP0005)을 00:47:34 에 멈춰 exit 1 이 났다. job.json note 'VS Code 종료로 중단됨', status interrupted. dispose() 가 user.stop 을 남기지 않아 orch-watch.js:139 가 실패로 보고 R1, R2 를 만들었고, 사건 원인 문구는 앞서 판정 반입으로 넘어간 crud FAIL(로그 76행)과 sort_check FAIL(231행) 줄을 가져온 것임",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "events.jsonl 253~300행, .vibe/jobs/J20261120_003352/job.json, SSP0005·SCP0005 CheckList 로그, job-runner.js:192~219, orch-watch.js:107~154, 개선안 20261120003909_INC 열람",
+        "result": "VS Code 종료 중단 확인. VM pid 23528 → 28312 교체(00:48:05), SSP0005 로그 00:47:22 단계 4/8 도중 끊김"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 파일 수정 없음(조치 등급 C 대상이라 개선안만 작성). 진단 시각 2026-11-20 00:53:32",
+    "status": "proposal",
+    "next_for_user": "작업 J20261120_003352 에서 '실패·중지 화면만 다시'로 SSP0005, SCP0005, SCP0028 CheckList 재실행. 개선안 20261120003909_INC 와 아래 안을 함께 반영할지 판단",
+    "proposal": {
+      "title": "VS Code 종료(dispose)로 멈춘 실행도 감시기에 중지로 알려 R1, R2, R11 사건을 만들지 않는다",
+      "evidence": "job.json J20261120_003352 note 'VS Code 종료로 중단됨' · job-runner.js:219 dispose() 에 user.stop 없음 · orch-watch.js:125 userStopped, :132, :139, :143 · events.jsonl 285~294행 두 화면 00:47:34 동시 exit 1 · 사건 20261120_004734_R1_SSP0005, 20261120_004734_R1_SCP0005, 20261120_004820_R2_SSP0005, 20261120_004820_R2_SCP0005_2 · 개선안 20261120003909_INC 는 stop() 만 다룸",
+      "targets": [
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ],
+      "before_after": "job-runner.js dispose(): 변경 전 runner 마다 r.stop() 만 호출함. 변경 후 r.stop() 앞에서 실행 중 화면마다 evt('user.stop', { wb: `${h.job.id}:${sid}`, screen: sid, job: h.job.id, why: 'vscode.dispose', ms: Date.now() }) 를 남김(20261120003909_INC 의 stop() 변경과 같은 함수 사용). orch-watch.js step.end, proc.end: 변경 전 userStopped 일 때 return 만 함. 변경 후 같음, 다만 step.end 의 why 가 중지 뒤 로그 끝 [FAIL] 줄일 때 사건을 만들지 않으므로 R2 반복 횟수에도 들어가지 않음. t_orch_watch.js 에 user.stop(why vscode.dispose) 뒤 두 화면 step.end FAIL, chain.end 를 보내 R1, R2, R11 0건을 기대하는 시험 추가",
+      "verify": "node --check tools/VibeManager/job-runner.js tools/VibeManager/orch-watch.js · node tools/VibeManager/test/t_orch_watch.js · node tools/VibeManager/test/run_all.js",
+      "rollback": "job-runner.js, orch-watch.js, t_orch_watch.js 를 반영 전 VMO 백업으로 되돌림"
+    }
+  },
+  "proposal": "20261120005403_INC",
+  "notice": true,
+  "reload": "replay",
+  "prevStatus": "need-user"
+}

@@ -1,7 +1,7 @@
 // orch-agent.js 실제 claude CLI 호출 1회(가벼운 모델) — 입력 형식·권한 모드·허용 도구·종료 처리가 실제 CLI 에서 동작하는지 본다.
 //   감시기는 시작하지 않는다(실제 저장소의 사건을 건드리지 않음). 사용: node test/t_orch_agent_real.js <VibeManager 폴더> [모델]
 const path = require('path');
-const dir = process.argv[2] || path.join(__dirname, '..'); const root = path.resolve(dir, '..', '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..')); const root = path.resolve(dir, '..', '..');
 const p = { root, vibeDir: path.join(root, '.vibe'), claude: process.env.CLAUDE_BIN || 'claude', claudeModel: process.argv[3] || 'haiku' };
 const agent = require(path.join(dir, 'orch-agent'));
 agent.init({ paths: () => p, serverSvc: null, loadQuick: () => [] });

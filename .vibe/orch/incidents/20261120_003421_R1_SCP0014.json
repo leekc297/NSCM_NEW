@@ -1,0 +1,76 @@
+{
+  "id": "20261120_003421_R1_SCP0014",
+  "at": "2026-11-20T00:34:21+09:00",
+  "ms": 1795102461085,
+  "rule": "R1",
+  "ruleName": "실행 실패",
+  "title": "1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 6) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0014",
+  "sig": "S8.checklistRun | [FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 <ID> 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님",
+  "count": 1,
+  "repeat": {
+    "same": 1,
+    "all": 1,
+    "screens": [
+      "SCP0014"
+    ]
+  },
+  "detail": "[FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 SCP0014 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님\n[FAIL] 사전 작업 미충족 — Doc/verify/SCP0014/prereq.json 확인(AS-IS Fact Pack·TO-BE 화면·E2E plan/스펙/smoke 중 생산 실패)\n[ERROR] 원장 없음: Doc\\verify\\SCP0014\\verify_ledger.csv. 🔎 CheckList 먼저 실행",
+  "evidence": {
+    "runId": "SCP0014_1795102432154",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "closed",
+  "actions": [
+    {
+      "at": "2026-11-20T00:39:09+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T00:40:19+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 — 사용자 확인 필요 · 원인 env: TO-BE에 SCP0014 화면이 없음. Doc/tobefacts/db/menu.csv(00:34:20 export, 218행)에 SCP0014 행 없음, nscm-fe 검색 0건, Doc/verify/SCP0014/screen_sync.json reason 'no page dir'. tools/Harness/verify/prereq.py:219-221 이 화면 폴더 없음으로 FAIL(rc 6) 처리했고 원장 미생성 오류는 그 결과임. · 허용 범위 밖 파일 변경 7개: Doc/e2e/results/SCP0005/_test_timing.jsonl, Doc/e2e/results/SCP0005/shots/SCP0005_common.png, Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0005/artifacts/SCP0005.smoke-SCP0005-Dist-ddf13-·Columns·Search-Area·Manual-chromium/error-context.md, Doc/e2e/results/SCP0005/artifacts/SCP0005.smoke-SCP0005-Dist-ddf13-·Columns·Search-Area·Manual-chromium/test-failed-1.png, Doc/e2e/results/SCP0028/artifacts/SCP0028.smoke-SCP0028-Ship-7dde6-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1/error-context.md, Doc/e2e/results/SCP0028/artifacts/SCP0028.smoke-SCP0028-Ship-7dde6-기준표-순서-·-Checkbox-Radio-디자인-chromium-retry1/test-failed-1.png",
+      "grade": "A",
+      "log": ".vibe\\logs\\2026-11-20T00-39-14_claude_orch.log",
+      "sec": 60,
+      "turns": 15,
+      "costUsd": 0.5328054,
+      "files": []
+    },
+    {
+      "at": "2026-11-20T05:56:49+09:00",
+      "by": "사용자",
+      "what": "닫음(일괄)"
+    }
+  ],
+  "agent": {
+    "cause_class": "env",
+    "cause": "TO-BE에 SCP0014 화면이 없음. Doc/tobefacts/db/menu.csv(00:34:20 export, 218행)에 SCP0014 행 없음, nscm-fe 검색 0건, Doc/verify/SCP0014/screen_sync.json reason 'no page dir'. tools/Harness/verify/prereq.py:219-221 이 화면 폴더 없음으로 FAIL(rc 6) 처리했고 원장 미생성 오류는 그 결과임.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "Doc/verify/SCP0014/prereq.json, screen_sync.json, .vibe/runs.log:2084-2087 확인",
+        "result": "tobe_index 1건 FAIL, 나머지 3건 OK·DONE"
+      },
+      {
+        "grade": "A",
+        "what": "nscm-fe 전체(node_modules 제외), Doc/tobefacts/db/menu.csv 에서 SCP0014 검색",
+        "result": "0건. 메뉴는 SCP0013 다음이 SCP0016"
+      },
+      {
+        "grade": "A",
+        "what": "tools/Harness/verify/prereq.py:213-229 확인",
+        "result": "화면 폴더 없음 FAIL은 의도한 분기임. 검사기 결함 아님"
+      }
+    ],
+    "changed_files": [],
+    "verify": "미실행. 바뀐 파일이 없고 CheckList 재수행은 사용자 실행 대상임. 확인 시각 2026-11-20 00:39:59",
+    "status": "need-user",
+    "next_for_user": "SCP0014가 TO-BE 미개발 화면이면 CheckList 대상에서 뺄 것. 개발할 화면이면 UI/DB MODE에서 화면 개발 뒤 CheckList 재실행",
+    "proposal": null
+  }
+}

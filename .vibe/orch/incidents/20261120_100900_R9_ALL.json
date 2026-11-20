@@ -1,0 +1,27 @@
+{
+  "id": "20261120_100900_R9_ALL",
+  "at": "2026-11-20T10:09:00+09:00",
+  "ms": 1795136940955,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.admit.lock (PID 7540 없음)",
+  "screen": "",
+  "sig": "R9|_run.admit.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20T01:04:29.351Z · 인자 SSP0005",
+  "evidence": {
+    "file": "Doc/e2e/_run.admit.lock",
+    "pid": 7540
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T10:09:01+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.admit.lock (PID 7540 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

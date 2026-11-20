@@ -1,0 +1,94 @@
+{
+  "id": "20261120001936_SELF",
+  "at": "2026-11-20T00:19:36+09:00",
+  "ms": 1795101576240,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn skip sn cumulative key",
+  "title": "S8 개선안 효과 판정에서 S9 반복 수정 key 제외",
+  "evidence": "orch-selfcheck.js:190 은 selfKey 가 지금 점검 결과에 있으면 fail 로 올림. 개선안 20261119232524_SELF 의 selfKey 는 S9|file|workbench.js 이고 orch-selfcheck.js:197 이 만드는 S9 key 는 orch-history stats 의 7일 누적 변경 건수라 개선안 1건으로 없어지지 않음(diag_in.json S9 info collectedAt 2026-11-19T22:39, workbench.js 37건). 이 개선안은 반영 기록 2026-11-19T23:59:52 에 t_webview_syntax.js workbench(ko, en) PASS, FAIL 0 으로 반영 완료됐는데 S8 이 2026-11-20T00:00 점검에서 fail 로 판정함. test/ 에 S8 selfKey 판정 시험 없음(grep 'S8|자가 보완 뒤에도' 결과 t_orch_selfcheck.js 해당 줄 없음).",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "before_after": "변경 전: s8() 이 selfKey 앞자리와 상관없이 같은 key 가 다시 나오면 fail → 변경 후: selfKey 가 'S9|' 로 시작하면 재발 판정을 건너뜀(누적 건수 key). 다른 점검 key(S5, S11 등)의 판정은 그대로. 시험 추가: selfKey S9|file|a.js 인 applied 개선안 + 같은 key 가 있는 result.json 이면 S8 items 0건, selfKey S11|a.js 이면 1건.",
+  "verify": "node tools/VibeManager/test/t_orch_selfcheck.js 실행. 기대: 추가한 S8 2건 PASS, FAIL 0.",
+  "rollback": "VMO 가 만든 orch-selfcheck.js, test/t_orch_selfcheck.js 의 .bak_<날짜>_self<시각> 로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T00:30:17+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T00:47:35+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-20T00:59:42+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T01:01:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 19/19개 파일 통과(PASS 266, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0059"
+    },
+    {
+      "at": "2026-11-20T01:01:33+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T01:04:03+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 19/19개 파일 통과(PASS 268, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T01:04:03+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 01:01:55 node tools/VibeManager/test/t_orch_selfcheck.js 실행. 출력 ALL PASS, PASS 24건, FAIL 0건. 추가한 'S8: S9 누적 건수 key(S9|file|a.js)는 같은 key 가 다시 나와도 판정 안 함' PASS, 기존 'S8: 건수형 S11 은 판정 안 함 · S1 은 남으면 판정' PASS. S8 items = [\"S8|P_S1\"] 1건 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-20T01-01-33_claude_orch.log",
+      "sec": 41,
+      "costUsd": 0.46546789999999993,
+      "files": [
+        "tools/VibeManager/test/t_orch_selfcheck.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S8",
+  "selfKey": "S8|20261119232524_SELF",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795103982241,
+  "autoFp": "e4cfd21227",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 19/19개 파일 통과(PASS 268, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0059",
+  "needsReload": false,
+  "appliedMs": 1795104243821,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/test/t_orch_selfcheck.js"
+    ],
+    "verify_result": "2026-11-20 01:01:55 node tools/VibeManager/test/t_orch_selfcheck.js 실행. 출력 ALL PASS, PASS 24건, FAIL 0건. 추가한 'S8: S9 누적 건수 key(S9|file|a.js)는 같은 key 가 다시 나와도 판정 안 함' PASS, 기존 'S8: 건수형 S11 은 판정 안 함 · S1 은 남으면 판정' PASS. S8 items = [\"S8|P_S1\"] 1건",
+    "note": "orch-selfcheck.js 수정 없음. 191행 s8() 이 2026-11-20 00:33 수정으로 selfKey 앞자리가 S1, S2, S4, S5, S12 인 개선안만 재발 판정하고 S9 는 이미 제외함. before_after 의 'selfKey S11|a.js 이면 1건' 은 현재 코드(S11 건수형 제외)와 '다른 점검 key 판정은 그대로' 조건이 맞지 않아 넣지 않음. S11 은 0건, 1건 경우는 기존 시험의 S1|bad.js 로 확인함. 시험 파일은 기존 S8 블록에 P_S9 (selfKey S9|file|a.js)와 result.json S9 항목을 추가하고 chk 1건을 추가함. 기존 S8 chk 조건은 P_S1 포함, P_S11 미포함으로 바꿈."
+  },
+  "snap": "prop_20261120001936_SELF"
+}

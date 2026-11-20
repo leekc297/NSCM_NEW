@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>업무 작업창 시안</title>
+<style>
+:root{--bg:#1b1d21;--bg2:#202329;--card:#23272e;--fg:#d7dae0;--mut:#8b93a1;--line:#2f343c;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--acc:#4c9aff;--cl:#a371f7;--run:#58a6ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 "Segoe UI","Malgun Gothic",sans-serif}
+button,select,input{font:inherit;color:var(--fg)}
+.pick{position:sticky;top:0;z-index:9;display:flex;gap:8px;align-items:center;padding:10px 16px;background:#14161a;border-bottom:1px solid var(--line)}
+.pick b{margin-right:6px}.pick button{background:#2a2f37;border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+.pick button.on{background:var(--acc);border-color:var(--acc);color:#fff}.pick .n{margin-left:auto;color:var(--mut);font-size:12px}
+.c{display:none;padding:14px 16px 24px}.c.on{display:block}
+.desc{color:var(--mut);margin:0 0 12px;max-width:1000px}.desc b{color:var(--fg)}
+.frame{border:1px solid var(--line);border-radius:10px;background:var(--bg2);overflow:hidden;height:640px;display:flex;flex-direction:column}
+.ico{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:#262a31;cursor:pointer;font-size:13px}
+.ico:hover{border-color:var(--acc)}.ico.on{background:#1f3350;border-color:var(--acc);color:#cfe3ff}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid var(--line);background:#262a31;font-size:12px;white-space:nowrap}
+.pri{background:var(--acc);border:none;color:#fff;border-radius:7px;padding:6px 16px;cursor:pointer;font-weight:600}
+.ghost{background:transparent;border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.d-run{background:var(--run);box-shadow:0 0 0 3px rgba(88,166,255,.18)}.d-ok{background:var(--ok)}.d-bad{background:var(--bad)}.d-warn{background:var(--warn)}.d-wait{background:#5b6270}
+.mut{color:var(--mut)}.sm{font-size:11.5px}.mono{font-family:Consolas,monospace}
+.bar{height:4px;border-radius:2px;background:#30353e;overflow:hidden}.bar i{display:block;height:100%;background:var(--run)}
+.claude{color:var(--cl)}
+.log{font-family:Consolas,monospace;font-size:11.5px;color:#aeb6c2;white-space:pre-wrap;line-height:1.45;overflow:auto}
+.map{margin-top:14px;max-width:1000px}.map table{border-collapse:collapse;width:100%;font-size:12px}.map td,.map th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}.map th{color:var(--mut);font-weight:600}
+/* A */
+.A-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);background:#1e2126}
+.A-job{min-width:230px;background:#262a31;border:1px solid var(--line);border-radius:7px;padding:5px 8px}
+.A-chips{flex:1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:30px;padding:2px 8px;border:1px solid var(--line);border-radius:7px;background:#1a1d21}
+.A-chips .pill{padding:2px 8px;background:#262f3c;border-color:#34445c}.A-chips .pill b{font-weight:600}.A-chips .x{color:var(--mut);cursor:pointer}
+.A-chips input{flex:1;min-width:120px;background:transparent;border:none;outline:none}
+.A-sub{display:flex;align-items:center;gap:10px;padding:6px 12px;border-bottom:1px solid var(--line);font-size:12px}
+.A-rows{flex:1;overflow:auto;padding:6px 12px}
+.A-row{display:grid;grid-template-columns:20px 90px 1fr 70px 60px 24px;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;margin-bottom:6px;background:var(--card);border:1px solid transparent;cursor:pointer}
+.A-row:hover,.A-row.sel{border-color:#3a4a62}
+.A-row .st{font-size:12px}.A-row .step{font-size:12px}.A-row .step .sm{display:block;margin-top:3px}
+.A-drawer{border-top:1px solid var(--line);height:150px;display:flex;flex-direction:column}
+.A-drawer .h{display:flex;gap:8px;align-items:center;padding:5px 12px;font-size:12px;color:var(--mut)}
+.A-drawer .log{flex:1;padding:0 12px 8px}
+/* B */
+.B{display:flex;flex:1;min-height:0}
+.B-side{width:290px;border-right:1px solid var(--line);display:flex;flex-direction:column;background:#1e2126}
+.B-sec{padding:12px;border-bottom:1px solid var(--line)}
+.B-sec h4{margin:0 0 8px;font-size:11px;letter-spacing:.06em;color:var(--mut);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}.seg span{padding:4px 10px;font-size:12px;cursor:pointer;border-right:1px solid var(--line)}.seg span:last-child{border-right:none}.seg span.on{background:#1f3350;color:#cfe3ff}
+.B-doms{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}.B-doms span{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);cursor:pointer}.B-doms span.on{border-color:var(--acc);color:#cfe3ff}
+.B-list{flex:1;overflow:auto;padding:4px 8px}.B-it{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;font-size:12px}.B-it.on{background:#1f3350}.B-it .t{color:var(--mut);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.B-go{padding:10px 12px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.B-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.B-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.B-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;padding:12px 14px;overflow:auto;flex:1;align-content:start}
+.B-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer}
+.B-card.sel{border-color:var(--acc)}
+.B-card .top{display:flex;align-items:center;gap:8px}.B-card .id{font-weight:700;font-size:14px}
+.ring{--p:40;width:44px;height:44px;border-radius:50%;background:conic-gradient(var(--run) calc(var(--p)*1%),#30353e 0);display:grid;place-items:center;margin-left:auto}
+.ring b{width:34px;height:34px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:11px}
+.B-card .stage{margin-top:8px;font-size:12px}.B-card .meta{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;color:var(--mut)}
+.B-log{height:150px;border-top:1px solid var(--line);padding:6px 14px}
+/* C */
+.C-step{display:flex;align-items:center;gap:0;padding:10px 14px;border-bottom:1px solid var(--line);background:#1e2126}
+.C-step .s{display:flex;align-items:center;gap:8px;padding:4px 12px;border-radius:7px;cursor:pointer}
+.C-step .s .k{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:#30353e}
+.C-step .s.done .k{background:var(--ok);color:#0d1117}.C-step .s.on{background:#262f3c}.C-step .arr{color:var(--mut);margin:0 4px}
+.C-sum{font-size:12px;color:var(--mut);margin-left:4px}
+.C-body{flex:1;display:flex;min-height:0}
+.C-lanes{flex:1;overflow:auto;padding:10px 14px}
+.C-lh{display:grid;grid-template-columns:110px 1fr 70px;gap:10px;font-size:11px;color:var(--mut);padding:0 0 6px}
+.C-lh .stg{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.C-lane{display:grid;grid-template-columns:110px 1fr 70px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.C-lane.sel{background:#20262f}
+.C-segs{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}.C-segs i{height:14px;border-radius:3px;background:#30353e;position:relative}
+.C-segs i.ok{background:#2b6d3a}.C-segs i.run{background:var(--run);animation:p 1.6s infinite}.C-segs i.bad{background:#8a2f2d}.C-segs i.cl{background:#5c3f99}
+@keyframes p{50%{opacity:.55}}
+.C-note{grid-column:2/3;font-size:11.5px;color:var(--mut);margin-top:4px}
+.C-side{width:330px;border-left:1px solid var(--line);display:flex;flex-direction:column}
+.C-side .h{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.C-side .log{flex:1;padding:8px 12px}
+.C-act{display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--line)}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--mut);margin-left:auto}.legend span{display:inline-flex;align-items:center;gap:4px}.legend i{width:12px;height:8px;border-radius:2px;display:inline-block}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){}}
+</style></head><body>
+<div class="pick"><b>업무 작업창 시안</b><button data-c="A" class="on">A 명령 바</button><button data-c="B">B 스튜디오</button><button data-c="C">C 파이프라인</button><span class="n">마우스를 올리면 아이콘 설명이 나옵니다 · 표본 데이터</span></div>
+
+<!-- ───────── A 명령 바 ───────── -->
+<section class="c on" id="A">
+<p class="desc"><b>A 명령 바</b> · 위 한 줄에 업무, 화면, 실행 옵션, 시작을 모읍니다. 화면은 칩으로 넣고 지웁니다. 아래는 화면별 한 줄 카드(상태 점, 진행 막대, 세부 진행)이고, 로그는 아래 서랍으로 접습니다. 글은 상태와 수치만 남기고 나머지는 아이콘과 설명 풍선으로 바꿉니다.</p>
+<div class="frame">
+ <div class="A-bar">
+  <select class="A-job" title="업무"><option>🔎 CheckList 전체기능 재점검</option><option>🔁 CheckList 수정분 재점검</option><option>📝 문서 생성</option></select>
+  <div class="A-chips" title="화면 ID 입력·붙여넣기 · Enter 로 추가">
+   <span class="pill"><b>SCP0005</b><span class="x">✕</span></span><span class="pill"><b>SCP0028</b><span class="x">✕</span></span><span class="pill"><b>SSP0005</b><span class="x">✕</span></span><span class="pill"><b>SSP0014</b><span class="x">✕</span></span>
+   <input placeholder="화면 ID…">
+  </div>
+  <span class="ico" title="화면 목록에서 고르기(도메인·검색·분석 자료 필터·AS-IS DB 목록)">☰</span>
+  <span class="ico" title="최근 선택 불러오기">⟲</span>
+  <span class="ico on" title="실행 방식: 부하가 허용하면 동시 · 최대 5화면 (누르면 순차)">⇉5</span>
+  <span class="ico on" title="실패한 화면: 표시하고 계속 (누르면 첫 실패에서 중단)">⏭</span>
+  <span class="ico" title="승인 단계 자동 답(Claude 단계)">🤖</span>
+  <button class="pri" title="시작">▶ 시작</button>
+ </div>
+ <div class="A-sub">
+  <span class="pill"><span class="dot d-run"></span>실행 중</span><span class="mut">J20261120_060728 · 4화면 · 완료 0 · 3시간 2분</span>
+  <span style="margin-left:auto;display:flex;gap:6px"><span class="ico" title="일시 중지">⏸</span><span class="ico" title="중지">⏹</span><span class="ico" title="실패분만 다시">↻</span><span class="ico" title="이어서 실행">⏵</span><span class="ico" title="요약 열기">📄</span><span class="ico" title="최근 작업">🕘</span></span>
+ </div>
+ <div class="A-rows">
+  <div class="A-row sel"><span class="dot d-run"></span><b>SCP0005</b><div class="step">단계 4/8 · E2E 검증<div class="bar" style="margin-top:5px"><i style="width:44%"></i></div><span class="sm mut">시험 35/80</span></div><span class="sm mut">스크립트</span><span class="sm mut mono">2:58</span><span class="mut" title="로그·Workbench·실행 기록">⋯</span></div>
+  <div class="A-row"><span class="dot d-run"></span><b>SCP0028</b><div class="step">단계 4/8 · E2E 검증<div class="bar" style="margin-top:5px"><i style="width:72%"></i></div><span class="sm mut">시험 58/80</span></div><span class="sm mut">스크립트</span><span class="sm mut mono">2:55</span><span class="mut">⋯</span></div>
+  <div class="A-row"><span class="dot d-run"></span><b>SSP0005</b><div class="step">단계 7/8 · 사후 판정<div class="bar" style="margin-top:5px"><i style="width:92%"></i></div><span class="sm mut">세부 41/42 · 중복 판단 22/98</span></div><span class="sm claude">Claude</span><span class="sm mut mono">2:57</span><span class="mut">⋯</span></div>
+  <div class="A-row"><span class="dot d-run"></span><b>SSP0014</b><div class="step">단계 4/8 · E2E 검증<div class="bar" style="margin-top:5px"><i style="width:49%"></i></div><span class="sm mut">시험 39/80 · 대기: 언어 계정</span></div><span class="sm mut">스크립트</span><span class="sm mut mono">2:58</span><span class="mut">⋯</span></div>
+ </div>
+ <div class="A-drawer"><div class="h"><span>▾ 로그 · SCP0005</span><span style="margin-left:auto">⤓ 최신</span></div>
+  <div class="log">[단계 4/8] E2E 검증엔진(@verify·@trace) · tier all
+  ok 34 정합검증 SCP0005 @verify › 필터 항목·연속 조회 본문(K1·G6) (5.1s)
+  ok 35 정합검증 SCP0005 @verify › 조회조건 초기값(G6) (8.7s)
+[시나리오] SCP0005 'DAYS_THU 신규 행 콤보 붙여넣기' 시작 09:12:03</div></div>
+</div>
+</section>
+
+<!-- ───────── B 스튜디오 ───────── -->
+<section class="c" id="B">
+<p class="desc"><b>B 스튜디오</b> · 왼쪽은 설정 패널(업무, 실행 방식 버튼 묶음, 화면 고르기), 오른쪽은 화면별 카드 격자입니다. 카드마다 진행 원과 지금 단계, 시간을 보여 주고 고른 카드의 로그를 아래에 띄웁니다. 화면이 많을 때 한눈에 보기 좋습니다.</p>
+<div class="frame"><div class="B">
+ <div class="B-side">
+  <div class="B-sec"><h4>업무</h4><select class="A-job" style="width:100%"><option>🔎 CheckList 전체기능 재점검</option><option>🔁 CheckList 수정분 재점검</option></select></div>
+  <div class="B-sec"><h4>실행</h4>
+   <div class="seg"><span class="on" title="부하가 허용하면 동시">⇉ 동시</span><span title="순차">→ 순차</span></div> <span class="pill" title="최대 화면 수">최대 5</span>
+   <div style="margin-top:8px" class="seg"><span class="on" title="실패해도 다음 화면 계속">⏭ 계속</span><span title="첫 실패에서 중단">⏹ 중단</span></div> <span class="pill" title="승인 단계 자동 답">🤖</span>
+  </div>
+  <div class="B-sec" style="border-bottom:none;padding-bottom:4px"><h4>화면 <span class="mut">4 / 128</span></h4>
+   <input placeholder="🔍 ID · 이름" style="width:100%;background:#1a1d21;border:1px solid var(--line);border-radius:7px;padding:5px 8px">
+   <div class="B-doms"><span class="on">SCP 52</span><span>SSP 31</span><span>DMF 38</span><span>SYS 7</span><span title="분석 자료·화면 생성 필터">⚲</span><span title="최근 선택">⟲</span><span title="AS-IS DB 목록 더하기">＋DB</span></div>
+  </div>
+  <div class="B-list">
+   <div class="B-it on">☑ <b>SCP0005</b><span class="t">Distribution Route</span></div><div class="B-it on">☑ <b>SCP0028</b><span class="t">Shipment Lot Size</span></div>
+   <div class="B-it">☐ <b>SCP0096</b><span class="t">Site Item</span></div><div class="B-it">☐ <b>SCP0104</b><span class="t">Plan Version</span></div><div class="B-it">☐ <b>SCP0111</b><span class="t">Production Plan</span></div>
+  </div>
+  <div class="B-go"><span class="mut sm">4화면</span><span style="margin-left:auto"></span><button class="pri">▶ 시작</button></div>
+ </div>
+ <div class="B-main">
+  <div class="B-head"><span class="pill"><span class="dot d-run"></span>실행 중</span><span class="mut sm">J20261120_060728 · 완료 0/4 · 3시간 2분</span>
+   <span style="margin-left:auto;display:flex;gap:6px"><span class="ico" title="일시 중지">⏸</span><span class="ico" title="중지">⏹</span><span class="ico" title="실패분만 다시">↻</span><span class="ico" title="이어서 실행">⏵</span><span class="ico" title="요약">📄</span><span class="ico" title="최근 작업">🕘</span></span></div>
+  <div class="B-grid">
+   <div class="B-card sel"><div class="top"><span class="dot d-run"></span><span class="id">SCP0005</span><div class="ring" style="--p:44"><b>44%</b></div></div><div class="stage">E2E 검증 · 시험 35/80</div><div class="meta"><span>스크립트</span><span class="mono">2:58</span></div></div>
+   <div class="B-card"><div class="top"><span class="dot d-run"></span><span class="id">SCP0028</span><div class="ring" style="--p:72"><b>72%</b></div></div><div class="stage">E2E 검증 · 시험 58/80</div><div class="meta"><span>스크립트</span><span class="mono">2:55</span></div></div>
+   <div class="B-card"><div class="top"><span class="dot d-run"></span><span class="id">SSP0005</span><div class="ring" style="--p:92"><b>92%</b></div></div><div class="stage">사후 판정 · 중복 판단 22/98</div><div class="meta"><span class="claude">Claude</span><span class="mono">2:57</span></div></div>
+   <div class="B-card"><div class="top"><span class="dot d-warn"></span><span class="id">SSP0014</span><div class="ring" style="--p:49"><b>49%</b></div></div><div class="stage">E2E 검증 · 시험 39/80</div><div class="meta"><span class="sm" style="color:var(--warn)">대기: 언어 계정</span><span class="mono">2:58</span></div></div>
+  </div>
+  <div class="B-log log">SCP0005 › ok 35 조회조건 초기값(G6) (8.7s)
+SCP0005 › [시나리오] 'DAYS_THU 신규 행 콤보 붙여넣기' 시작 09:12:03</div>
+ </div>
+</div></div>
+</section>
+
+<!-- ───────── C 파이프라인 ───────── -->
+<section class="c" id="C">
+<p class="desc"><b>C 파이프라인</b> · 위는 1 업무 → 2 화면 → 3 실행 단계 표시이고, 시작하면 접혀 한 줄 요약이 됩니다. 가운데는 화면별 줄에 8단계 칸(사전 작업 … 문서)을 색으로 칠해 어디서 오래 걸리는지 바로 보입니다. 오른쪽은 고른 화면의 로그와 조작 단추입니다.</p>
+<div class="frame">
+ <div class="C-step">
+  <span class="s done"><span class="k">✓</span>🔎 CheckList 전체기능</span><span class="arr">›</span>
+  <span class="s done"><span class="k">✓</span>4화면</span><span class="arr">›</span>
+  <span class="s on"><span class="k">3</span>실행</span>
+  <span class="C-sum">동시 ≤5 · 실패 시 계속 · 3시간 2분</span>
+  <span class="legend"><span><i style="background:#2b6d3a"></i>끝</span><span><i style="background:var(--run)"></i>진행</span><span><i style="background:#5c3f99"></i>Claude</span><span><i style="background:#8a2f2d"></i>실패</span></span>
+ </div>
+ <div class="C-body">
+  <div class="C-lanes">
+   <div class="C-lh"><span></span><div class="stg"><span>사전</span><span>사실</span><span>정적</span><span>E2E</span><span>팝업</span><span>차등</span><span>판정</span><span>문서</span></div><span style="text-align:right">시간</span></div>
+   <div class="C-lane sel"><b>SCP0005</b><div class="C-segs"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="run"></i><i></i><i></i><i></i><i></i></div><span class="mono mut" style="text-align:right">2:58</span><span class="C-note">시험 35/80</span></div>
+   <div class="C-lane"><b>SCP0028</b><div class="C-segs"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="run"></i><i></i><i></i><i></i><i></i></div><span class="mono mut" style="text-align:right">2:55</span><span class="C-note">시험 58/80</span></div>
+   <div class="C-lane"><b>SSP0005</b><div class="C-segs"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="cl"></i><i></i></div><span class="mono mut" style="text-align:right">2:57</span><span class="C-note">중복 판단 22/98</span></div>
+   <div class="C-lane"><b>SSP0014</b><div class="C-segs"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="run"></i><i></i><i></i><i></i><i></i></div><span class="mono mut" style="text-align:right">2:58</span><span class="C-note" style="color:var(--warn)">시험 39/80 · 대기: 언어 계정</span></div>
+  </div>
+  <div class="C-side">
+   <div class="h"><b>SCP0005</b><span class="mut sm">로그</span><span style="margin-left:auto" class="ico" title="Workbench 열기">↗</span><span class="ico" title="실행 기록">📄</span></div>
+   <div class="log">[단계 4/8] E2E 검증엔진
+  ok 34 필터 항목·연속 조회(K1·G6) (5.1s)
+  ok 35 조회조건 초기값(G6) (8.7s)
+[시나리오] 'DAYS_THU 신규 행 콤보 붙여넣기' 09:12:03</div>
+   <div class="C-act"><span class="ico" title="일시 중지">⏸</span><span class="ico" title="중지">⏹</span><span class="ico" title="실패분만 다시">↻</span><span class="ico" title="이어서 실행">⏵</span><span class="ico" title="요약">📄</span><span class="ico" title="최근 작업">🕘</span><span style="margin-left:auto" class="ico" title="새 작업(1·2 단계 펼침)">＋</span></div>
+  </div>
+ </div>
+</div>
+</section>
+
+<div class="map" style="padding:0 16px 24px"><table>
+<tr><th>지금 기능</th><th>A 명령 바</th><th>B 스튜디오</th><th>C 파이프라인</th></tr>
+<tr><td>업무 고르기 · 업무 설명</td><td>위 줄 선택 · 설명 풍선</td><td>설정 패널</td><td>1단계(접힘)</td></tr>
+<tr><td>실패 시 계속/중단 · 동시/순차 · 최대 화면 · 자동 답</td><td>아이콘 단추 4개</td><td>버튼 묶음</td><td>1단계 안 · 요약 한 줄</td></tr>
+<tr><td>화면 검색 · 도메인 · 분석 자료 필터 · 전체 선택/해제 · 붙여넣기 · AS-IS DB 목록 · 최근 선택</td><td>칩 입력 + ☰ 목록 창 + ⟲</td><td>왼쪽 목록</td><td>2단계(접힘)</td></tr>
+<tr><td>진행 상태 · 이어서 실행 · 실패분만 다시 · 일시 중지 · 중지 · 요약 · 최근 작업</td><td>둘째 줄 아이콘</td><td>오른쪽 머리 아이콘</td><td>오른쪽 아래 아이콘</td></tr>
+<tr><td>화면별 상태 · 단계 · 주체 · 소요 · 요약/실패 원인 · 세부 진행 · Workbench/실행 기록/로그 링크</td><td>한 줄 카드 + 진행 막대 + ⋯ 메뉴</td><td>카드 + 진행 원</td><td>8단계 칸 + 메모 + 오른쪽 링크</td></tr>
+<tr><td>로그</td><td>아래 서랍(접기)</td><td>아래 칸</td><td>오른쪽 칸</td></tr>
+</table></div>
+<script>
+document.querySelectorAll('.pick button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.pick button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.c').forEach(c=>c.classList.toggle('on',c.id===b.dataset.c));});
+document.querySelectorAll('.ico').forEach(i=>i.addEventListener('click',()=>{ if(/⇉|⏭|🤖/.test(i.textContent)) i.classList.toggle('on'); }));
+</script>
+</body></html>

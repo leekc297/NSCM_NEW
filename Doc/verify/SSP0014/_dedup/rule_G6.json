@@ -1,0 +1,112 @@
+{
+ "rule_id": "G6",
+ "hash": "0701f52f27d8b49d",
+ "groups": [
+  {
+   "rows": [
+    "T-0359e5c1"
+   ],
+   "why": "This trace row only checks that the layout control (usrLayoutControl2) in trace-table row D00-1-001 exists in the source, so no other row has the same target."
+  },
+  {
+   "rows": [
+    "T-1faa7e01"
+   ],
+   "why": "This trace row covers SetDivisionAuthCheck when the user has 0 authorized Divisions, a permission edge case that no other row matches."
+  },
+  {
+   "rows": [
+    "T-43da7b3d"
+   ],
+   "why": "This trace row checks 5 table rows for the cboDivision control, while V-92910544 also checks Year, so they are not the same check."
+  },
+  {
+   "rows": [
+    "T-48a54c07"
+   ],
+   "why": "This trace row covers comma-separated multi-value key-in search (UC-06), which is not about an initial default value and matches no other row."
+  },
+  {
+   "rows": [
+    "T-66de4d80"
+   ],
+   "why": "This trace row is for the cboOperationGroup control only, and no other row targets that control."
+  },
+  {
+   "rows": [
+    "T-83948f3e"
+   ],
+   "why": "This trace row is for the txtUser control only, and no other row targets that control."
+  },
+  {
+   "rows": [
+    "T-95ffc8aa"
+   ],
+   "why": "This trace row is for the txtItemId (Model/Nickname) control only, and no other row targets that control."
+  },
+  {
+   "rows": [
+    "T-d9435a67"
+   ],
+   "why": "This trace row is for the cboValidYN control only, and no other row targets that control."
+  },
+  {
+   "rows": [
+    "T-df59f660"
+   ],
+   "why": "This trace row is for the clbFromSite control only, and no other row targets that control."
+  },
+  {
+   "rows": [
+    "T-f40802c0"
+   ],
+   "why": "This trace row checks that the condition panel (usrConditionPanel1, HidePanel) in trace-table row D00-1-003 exists, so no other row has the same target."
+  },
+  {
+   "rows": [
+    "V-0f748287"
+   ],
+   "why": "This row expects only Year to default to the current year, while V-92910544 also checks Division, so the expected results differ and I kept them apart."
+  },
+  {
+   "rows": [
+    "V-137dee64"
+   ],
+   "why": "This row checks that the Reset Condition (F10) button restores the defaults after the conditions are changed, which is a different element and state from checking defaults on screen entry."
+  },
+  {
+   "rows": [
+    "V-5719f685"
+   ],
+   "why": "This row checks that, on a repeat search, only the changed condition changes and all other parameters stay the same, which is not an initial-value check."
+  },
+  {
+   "rows": [
+    "V-92910544"
+   ],
+   "why": "This row checks Division and Year together right after the screen opens, and no other row covers both with the same expected result."
+  },
+  {
+   "rows": [
+    "V-9d9c2893"
+   ],
+   "why": "This row expects Version to be rebuilt and not empty after Division is changed, which is a different state and expectation from the defaults on screen entry."
+  },
+  {
+   "rows": [
+    "V-d4fbcf64"
+   ],
+   "why": "This row expects the Ver. default to be empty for the Div 81/81_JV case, which is the opposite of V-9d9c2893 (not empty), so they cannot be merged."
+  },
+  {
+   "rows": [
+    "V-e76ea663"
+   ],
+   "why": "This row counts how many times the checker auto-filled a required condition, which is a different kind of check from comparing a specific condition's default value."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:40:53",
+ "cost": 0.074779
+}

@@ -167,6 +167,11 @@ export const MSG = {
   LINE_ASSIGN_ITEM: 'MSG01293', // Line Assign 체크 시 Material 필수 (AS-IS MSG00290 는 TO-BE 미등록 → 같은 문구 MSG01293, KO/EN/CN)
   SAVE_SUCCESS: 'MSG00004', // No changes to save. (변경없음 토스트로 사용 — 의미 일치, 유지)
   SAVE_FAIL: 'MSG00003', // Failed to save. (TO-BE 동일 — 유지)
+  // New 팝업 checkValidN0(AS-IS SCM0002_ProductionPlanInsertPopup cs:1402) — AS-IS 코드는 TO-BE 재번호됨.
+  //   역조회 확정(ora.py 실측 2026-11-18, USE_YN='Y'): MSG00244→MSG01254 / MSG00254→MSG01264 / MSG00260→MSG01414.
+  ITEM_TYPE_PH: 'MSG01254', // Item Type must be Product (P) or Semi-Product (H). (AS-IS MSG00244)
+  //   주의: AS-IS 는 !(P||H) 분기가 빈값도 먼저 잡아 MSG00254(미확장)는 死코드 — AS-IS 동작(빈값=P/H 메시지) 그대로 따른다.
+  DUP_NEW_INPUT: 'MSG01414', // There is duplicated data among new input data.\r\n{0} (AS-IS MSG00260, {0}=중복 site/line/item)
   PLAN_PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (구 MSG00252 미등록 — 자매 START_END_ORDER 정합)
   // SCP구간(계획구간) 초과 조회 차단 — AS-IS SCP0013 CheckPlanPeriodRange(cs:1989)/MSG00402.
   //   문구 "SCP구간 내 Plan 조회가 가능합니다\n(~계획수립주차 + {0}주 = {1})"({0}=주수, {1}=계획구간끝)는

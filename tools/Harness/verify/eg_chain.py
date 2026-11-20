@@ -28,29 +28,73 @@ def fresh(path):
             os.remove(p)
 
 
+def all_read(mid, files):
+    """2026-11-20 D1: 지난 차례 실행 기록(e2e_test_kind.jsonl · lib/writeguard.ts)에서 이 스펙들의 시험이 1개 이상 있고 전부 서버 상태를 바꾸지 않았는가"""
+    seen = {}
+    try:
+        for ln in open(os.path.join(ROOT, 'Doc', 'verify', mid, 'e2e_test_kind.jsonl'), encoding='utf-8'):
+            try:
+                x = json.loads(ln)
+            except ValueError:
+                continue
+            if x.get('file') in files and x.get('phase') == 'serial':
+                seen[(x['file'], x.get('title', ''))] = bool(x.get('write'))
+            elif x.get('file') in files and x.get('blocked'):
+                seen[(x['file'], x.get('title', ''))] = True
+    except OSError:
+        return False, '시험 종류 기록 없음'
+    got = {f for f, _ in seen}
+    if got != set(files):
+        return False, f"기록 없는 스펙 {sorted(set(files) - got)}"
+    w = [t for (f, t), v in seen.items() if v]
+    return (not w), (f'쓰기 시험 {len(w)}개: ' + ' | '.join(w[:3])) if w else f'시험 {len(seen)}개 모두 읽기'
+
+
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('menu'); ap.add_argument('--asis', default=''); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument('menu'); ap.add_argument('--asis', default=''); ap.add_argument('--serial', action='store_true'); a = ap.parse_args()
     mid = a.menu.upper(); asis = (a.asis or mid).upper(); py = sys.executable; cli = os.path.join('node_modules', '@playwright', 'test', 'cli.js')
-    base = dict(os.environ, VERIFY_ID=mid, VERIFY_NO_SAVE='1', CL_SELFTEST_BASE='1')
-    # 팝업
-    pd = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'popup'); fresh(pd)
-    run([py, '-I', os.path.join(HERE, 'facts_popup.py'), asis]); run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
-    # 2026-11-13 점검: 팝업 호출이 없는 화면은 eg_popup 스펙이 테스트를 하나도 만들지 않아 Playwright 가 'Error: No tests found.' rc 1 로 끝났다
-    #   (11-13 SCP0084·SCP0122·SSP0005 — calls 0). 오류가 아니라 '대상 없음' 이므로 --pass-with-no-tests 로 넘기고 아래에서 사유를 한 줄로 알린다.
-    rc_p = run(['node', cli, 'test', 'eg_popup', '--workers', '1', '--retries', '0', '--pass-with-no-tests', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
-               env=dict(base, EG_META='1', CL_RESULTS=os.path.join(pd, 'e2e.json'), E2E_RESULTS=pd, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(pd, 'results.json')))
-    if os.path.exists(os.path.join(pd, 'popup_rowsets.json')):
-        run([py, '-I', os.path.join(HERE, 'facts_popup_golden.py'), pd, mid])
-    # Division·권한
-    ad = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'auth'); fresh(ad)
-    run([py, '-I', os.path.join(HERE, 'facts_auth.py'), mid])
-    rc_a = run(['node', cli, 'test', 'eg_auth', '--workers', '1', '--retries', '0', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
-               env=dict(base, CL_RESULTS=os.path.join(ad, 'e2e.json'), E2E_RESULTS=ad, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(ad, 'results.json')))
-    if os.path.exists(os.path.join(ad, 'eg_combos.json')):
-        run([py, '-I', os.path.join(HERE, 'facts_auth_combo.py'), mid, ad])
+    base = dict(os.environ, VERIFY_ID=mid, VERIFY_NO_SAVE='1', CL_SELFTEST_BASE='1', EG_CHAIN='1')  # 2026-11-20 T443 EG_CHAIN: 호출 기록(calls/*.json) 남김
+    pd = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'popup'); ad = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'auth')
+    rc = {}
+
+    def popup():
+        fresh(pd)
+        run([py, '-I', os.path.join(HERE, 'facts_popup.py'), asis]); run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
+        # 2026-11-13 점검: 팝업 호출이 없는 화면은 eg_popup 스펙이 테스트를 하나도 만들지 않아 Playwright 가 'Error: No tests found.' rc 1 로 끝났다
+        #   (11-13 SCP0084·SCP0122·SSP0005 — calls 0). 오류가 아니라 '대상 없음' 이므로 --pass-with-no-tests 로 넘기고 아래에서 사유를 한 줄로 알린다.
+        rc['p'] = run(['node', cli, 'test', 'eg_popup', '--workers', '1', '--retries', '0', '--pass-with-no-tests', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
+                      env=dict(base, EG_META='1', CL_RESULTS=os.path.join(pd, 'e2e.json'), E2E_RESULTS=pd, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(pd, 'results.json')))
+        if os.path.exists(os.path.join(pd, 'popup_rowsets.json')):
+            run([py, '-I', os.path.join(HERE, 'facts_popup_golden.py'), pd, mid])
+
+    def auth():
+        fresh(ad)
+        run([py, '-I', os.path.join(HERE, 'facts_auth.py'), mid])
+        rc['a'] = run(['node', cli, 'test', 'eg_auth', '--workers', '1', '--retries', '0', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
+                      env=dict(base, CL_RESULTS=os.path.join(ad, 'e2e.json'), E2E_RESULTS=ad, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(ad, 'results.json')))
+        if os.path.exists(os.path.join(ad, 'eg_combos.json')):
+            run([py, '-I', os.path.join(HERE, 'facts_auth_combo.py'), mid, ad])
+
+    # 2026-11-20 D1(사용자 지시 '간섭이 없는 범위에서 동시 수행'): 팝업 검사기와 권한 검사기는 결과 폴더·입력 사실이 따로다. 지난 차례 실행에서 두 스펙의 시험이 모두
+    #   서버 상태를 바꾸지 않았으면(e2e_test_kind.jsonl) 동시에 돈다. 기록이 없거나 쓰기 시험이 있으면 종전처럼 차례로(이번 실행이 기록을 남김). 끄기 = --serial · harness.json e2eReadPar 1
+    try:
+        par_cfg = int(json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig')).get('e2eReadPar') or 3)
+    except (OSError, ValueError, TypeError):
+        par_cfg = 3
+    ok, why = all_read(mid, ['eg_popup.spec.ts', 'eg_auth.spec.ts']) if (par_cfg > 1 and not a.serial) else (False, '설정으로 끔')
+    import time as _t; t0 = _t.time()
+    if ok:
+        import threading
+        print(f'[eg_chain] {mid} 팝업·권한 검사기 동시 실행 — {why}', flush=True)
+        th = [threading.Thread(target=popup), threading.Thread(target=auth)]
+        for t in th: t.start()
+        for t in th: t.join()
+    else:
+        print(f'[eg_chain] {mid} 팝업·권한 검사기 차례 실행 — {why}', flush=True)
+        popup(); auth()
     if not os.path.exists(os.path.join(pd, 'popup_results.json')):
         print(f'[eg_chain] {mid} 팝업 검사 결과(popup_results.json) 없음 — 팝업 테스트가 만들어지지 않았거나(팝업 호출 0) 실행 전에 끝남 · 팝업 행은 미측정으로 남는다', flush=True)
-    print(f'[eg_chain] {mid} 팝업 rc={rc_p} · 권한 rc={rc_a}', flush=True)
+    print(f"[eg_chain] {mid} 팝업 rc={rc.get('p')} · 권한 rc={rc.get('a')} · {'동시' if ok else '차례'} {round((_t.time() - t0) / 60, 1)}분", flush=True)
     return 0
 
 

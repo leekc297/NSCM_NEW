@@ -653,6 +653,13 @@ export const VersionModal = ({
           </div>
 
           <div className={styles.modalButtonWrapper}>
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
+            />
             {selectedVersionIsReport && (
               <Button
                 appearance='contained'
@@ -662,13 +669,6 @@ export const VersionModal = ({
                 onClick={() => adopt(selectedRow ?? getGridSelectedRow())}
               />
             )}
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={modalClose}
-            />
           </div>
         </div>
       }

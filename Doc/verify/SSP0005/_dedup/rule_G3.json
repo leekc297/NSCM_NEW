@@ -1,0 +1,46 @@
+{
+ "rule_id": "G3",
+ "hash": "81ba7a31c0e7cdaa",
+ "groups": [
+  {
+   "rows": [
+    "V-26334a79"
+   ],
+   "why": "This row saves specific conditions (Div 81, End Customer) with F6 and checks they come back in a new tab, which is a different expectation from the Period-exclusion and ALL-restore rows."
+  },
+  {
+   "rows": [
+    "V-52b9bb21"
+   ],
+   "why": "It says Period must not be in the saved condition, while V-afa7c7b2 says a Period key in the saved data is not a defect, so one result (a Period key is present) would fail this row and pass that one."
+  },
+  {
+   "rows": [
+    "V-afa7c7b2"
+   ],
+   "why": "Under this confirmed rule, a Period key in the saved data is not a defect and Period is not compared on restore, so its pass/fail can differ from the general row V-52b9bb21."
+  },
+  {
+   "rows": [
+    "V-8a46793a"
+   ],
+   "why": "This row tests a different button (Reset Condition F10), expecting only the server-saved condition to be deleted while the on-screen values stay."
+  },
+  {
+   "rows": [
+    "V-d33dbbe9"
+   ],
+   "why": "This row checks that the Active=ALL condition is restored after reconnecting, a different condition and state from the other rows, and it is unconfirmed whether SSP0005 has an Active field, so it stays on its own."
+  },
+  {
+   "rows": [
+    "V-eaa49603"
+   ],
+   "why": "This screen rule bundles three expectations (new-tab restore matches, Period not saved, ALL restored), so it is not the same as any single row and is measured on its own."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:52",
+ "cost": 0.0550514
+}

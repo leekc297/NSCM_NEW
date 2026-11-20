@@ -1,0 +1,7 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0010,SQL,SSP0010_GET_SHIPMENT_PLAN_SEMI_SSP,Doc\asisfacts\db\modules\dbo.SSP0010_GET_SHIPMENT_PLAN_SEMI_SSP.sql,525,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SSP0010,SQL,SSP0010_GET_SHIPMENT_PLAN_SEMI_SSP,Doc\asisfacts\db\modules\dbo.SSP0010_GET_SHIPMENT_PLAN_SEMI_SSP.sql,593,ELSE,"DIVISION_ID,OPERATION_GROUP,ITEM_ID,FROM_SITE,TO_SITE DESC,BOD_ID,MEASURE_ORDER_NO","SET @mEXEC = @mEXEC+'	   ORDER BY division_id, operation_group, item_id, from_site, to_site desc,bod_id, measure_order_no				  '+CHAR(10);",0,동적 SQL
+SSP0010,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SSP0010,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0010,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SSP0010,SQL,SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX,Doc\asisfacts\db\modules\dbo.SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_FIX.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

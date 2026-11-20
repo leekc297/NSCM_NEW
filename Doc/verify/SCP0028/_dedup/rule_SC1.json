@@ -1,0 +1,17 @@
+{
+ "rule_id": "SC1",
+ "hash": "13632e7db4d0afa4",
+ "groups": [
+  {
+   "rows": [
+    "V-119cf5cb",
+    "V-ffeb1350"
+   ],
+   "why": "두 행 모두 SCP0028 조회영역을 Excel 조회조건 정리(search_cond.csv)와 대조하고, 같은 결과를 기대함: 사용여부(USE 누락·기준표 제외 조건 잔존)와 EDIT 형태까지만 판정하고, 조회조건 순서는 NA로 두며 실측 순서는 참고로만 남김. 출처(RULE_SCREEN/CONFIRMED)와 문장 표현만 다름."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:22:37",
+ "cost": 0.0332786
+}

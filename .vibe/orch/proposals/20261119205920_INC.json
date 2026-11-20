@@ -1,0 +1,109 @@
+{
+  "id": "20261119205920_INC",
+  "at": "2026-11-19T20:59:20+09:00",
+  "ms": 1795089560458,
+  "source": "incident",
+  "status": "applied",
+  "sig": "rn 진행 없음 판정에 ene 산출물 수정 시각 반영",
+  "title": "R5 진행 없음 판정에 E2E 산출물 수정 시각 반영",
+  "evidence": "tools/VibeManager/orch-watch.js:170 은 로그 무출력 시간만 cfg.stallSec 과 비교함. 이번 사건 quiet_sec 624. Doc/e2e/specs/_trace.spec.ts 에 상한 20~30분 테스트 3개(1371줄 W4c 1,800,000ms, 1873줄 W4d 1,800,000ms, 2238줄 W9 1,200,000ms)가 있고 list 리포터는 테스트 종료 때만 로그를 씀. 이번 실행은 로그 무출력 12분 동안 recording30.trace 가 30초에 217,619 byte 늘었음. cfg.stallSec 설정값과 E2E 단계 예외 처리 유무는 미확인.",
+  "targets": [
+    "tools/VibeManager/orch-watch.js"
+  ],
+  "before_after": "변경 전: 로그 무출력 시간 > stallSec 이면 R5. 변경 후: 화면 ID 가 있는 실행은 Doc/verify/<ID>/e2e/artifacts/.playwright-artifacts-*/traces 최신 수정 시각과 로그 수정 시각 중 늦은 쪽으로 무출력 시간을 계산함. 대안: 실행 로그 마지막 단계 줄이 'E2E 검증엔진' 이면 stallSec 대신 1,800초 + 여유 300초를 적용함.",
+  "verify": "node tools/VibeManager/test/t_orch_watch.js 에 '로그 무출력 12분, 추적 파일 30초 전 수정' 경우를 추가해 R5 가 생기지 않는지 확인. 기존 'R5 진행 없음' 경우는 그대로 통과해야 함.",
+  "rollback": "orch-watch.js 수정 전 백업본으로 되돌림",
+  "incident": "20261119_205710_R5_ALL",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T21:50:19+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T21:50:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T21:52:10+09:00",
+      "by": "VMO",
+      "what": "반영 실패 — 검증 실패: 미실행. node tools/VibeManager/test/t_orch_watch.js C:/Projects/NSCM/tools/VibeManager, node --check tools/VibeManager/orch-watch.js, node tools/VibeManager/test/run_all.js --only t_orch_watch 가 'This co · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json, Doc/verify/SCP0005/e2e_results.json, Doc/verify/SSP0014/_test_timing.jsonl, Doc/verify/SSP0014/e2e_results.json, Doc/verify/_engine_selfcheck.json 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-19T21-50-27_claude_orch.log",
+      "sec": 98,
+      "costUsd": 1.5474141000000003,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SSP0014/_test_timing.jsonl",
+        "Doc/verify/SSP0014/e2e_results.json",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ]
+    },
+    {
+      "at": "2026-11-19T23:15:47+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T23:17:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 242, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2315"
+    },
+    {
+      "at": "2026-11-19T23:17:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T23:20:18+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 244, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T23:20:18+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node --check tools/VibeManager/orch-watch.js 통과. node tools/VibeManager/test/t_orch_watch.js 결과 ALL PASS(PASS 20건, FAIL 0건). 추가한 'R5 없음: 로그 무출력 12분 · 추적 파일 30초 전 수정' PASS(R5 0건), 'R5 진행 없음: 로그 12분 · 추적 파일 13분 무변경' PASS(quiet_sec 720, log_quiet_sec 720, trace_quiet_sec 780), 기존 'R5 진행 없음' PASS. 실행 시각 · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/test/t_orch_watch.js",
+      "log": ".vibe\\logs\\2026-11-19T23-17-27_claude_orch.log",
+      "sec": 71,
+      "costUsd": 1.9403389999999998,
+      "files": [
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch.js"
+      ]
+    }
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_watch.js"
+    ],
+    "verify_result": "node --check tools/VibeManager/orch-watch.js 통과. node tools/VibeManager/test/t_orch_watch.js 결과 ALL PASS(PASS 20건, FAIL 0건). 추가한 'R5 없음: 로그 무출력 12분 · 추적 파일 30초 전 수정' PASS(R5 0건), 'R5 진행 없음: 로그 12분 · 추적 파일 13분 무변경' PASS(quiet_sec 720, log_quiet_sec 720, trace_quiet_sec 780), 기존 'R5 진행 없음' PASS. 실행 시각 2026-11-19 23:18:26.",
+    "note": "before_after 의 첫 번째 안만 반영함. 대안(E2E 단계 1,800초 + 300초)은 미반영. e2eTraceMs(screen) 함수 추가. 화면 ID 나 추적 폴더가 없으면 종전처럼 로그 수정 시각만 사용함. R5 evidence 에 log_quiet_sec, trace_quiet_sec 추가. 작업 모드 DB_ONLY 에서 hook 차단 없음. 설치 폴더와 CHANGELOG.md 는 건드리지 않음."
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795097747673,
+  "autoFp": "5f0b39459d",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 244, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261119_self2315",
+  "needsReload": true,
+  "appliedMs": 1795098018571,
+  "synced": [
+    "orch-watch.js"
+  ],
+  "snap": "prop_20261119205920_INC"
+}

@@ -1,0 +1,45 @@
+{
+ "proposal": {
+  "id": "20261120005059_INC",
+  "title": "R2 반복 집계에서 같은 실행의 실패를 한 번만 세고, VS Code 종료로 끊긴 실행은 반복 집계에서 뺀다",
+  "evidence": "sig_history.json: '$ <path> <path> <ID> --asis <ID>' SCP0005 4건(00:33:46, 00:48:20, 00:48:29, 00:48:33), 'Playwright exit code N' SCP0005·SSP0005 각 4건(00:47:34 뒤 3건이 재기동 뒤 기록). events.jsonl 에서 ms 1795102426090 step.end 는 1줄. orch-watch.js:66~77 noteSig 와 failure 에 runId 중복 확인이 없음. orch-watch.js:125·139 는 user.stop 만 중단으로 봄. jobs/J20261120_003352/job.json note 'VS Code 종료로 중단됨'",
+  "targets": [
+   "tools/VibeManager/orch-watch.js",
+   "tools/VibeManager/orch-state.js",
+   "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "변경 전: noteSig(sig, screen) 가 부를 때마다 기록을 1건 더함. 감시기가 시작하기 전 사건도 다시 읽으면 R1, R2 판정에 들어감. 변경 후: (1) noteSig 기록에 key(runId|단계 no, 없으면 ev.ms|ev.pid)를 넣고 같은 key 가 있으면 더하지 않고 기존 횟수를 돌려줌. (2) orch-watch.js onEvent 에서 ev.ms 가 감시기 init 시각보다 이르면 R1, R2, R7, R11 판정을 건너뜀(상태 반영만 함). (3) step.end 나 proc.end 를 보낸 VM pid 가 처리 시점에 살아 있지 않으면 중단 실행으로 보고 반복 집계에서 뺌",
+  "verify": "node tools/VibeManager/test/t_orch_watch.js 에 시험 2건 추가: 같은 runId step.end FAIL 을 2번 넣으면 R1 1건만 생기고 R2 가 없음, init 이전 ms 의 step.end FAIL 은 사건 0건. node tools/VibeManager/test/run_all.js 통과 확인",
+  "sig": "rn 반복 집계에서 같은 실행의 실패를 한 번만 세고 vs code 종료로 끊긴 실행은 반복 집계에서 뺀다"
+ },
+ "result": {
+  "applied": true,
+  "verified": true,
+  "changed_files": [
+   "tools/VibeManager/orch-watch.js",
+   "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "verify_result": "node tools/VibeManager/test/t_orch_watch.js: PASS 27, ALL PASS. 추가 시험 3건 PASS(같은 runId step.end FAIL 2번 = R1 1건, R2 없음 / init 이전 ms 의 step.end FAIL = 사건 0건 / 보낸 VM pid 없는 step.end FAIL = 사건 0건). node tools/VibeManager/test/run_all.js: 파일 27/27, PASS 347, FAIL 0, 110.8s, RESULT at 2026-11-19T20:53:24.327Z(2026-11-20 05:53:24 KST)",
+  "note": "orch-state.js 는 바꾸지 않음. 감시기 시작 시각 initMs 는 orch-watch.js 가 init 에서 기록하고 health() 로 공개함. pidAlive 는 orch-state.js 에 이미 공개되어 있음. noteSig 는 기록에 key 를 넣고 같은 key 가 있으면 기존 횟수와 dup:true 를 돌려줌. 이때 failure 는 사건을 만들지 않음. onEvent 는 initMs 보다 이른 step.end, proc.end, claude.end, chain.end 를 판정하지 않음. step.end 는 R3 소요 통계(noteStep)만 종전대로 기록함. step.end, proc.end 를 보낸 VM pid 가 현재 프로세스가 아니고 살아 있지 않으면 failure 를 부르지 않음. 작업 모드와 저장소 hook 의 수정 차단 없음. .bak 백업과 CHANGELOG 는 만들지 않음."
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 22개 파일 통과, 시험 26/27개 파일 통과(PASS 342, FAIL 0), 정의 정합 통과",
+  "newBad": [
+   "S2 t_job_prog.js 실패: exit 1 · PASS 0 · FAIL 0 · Node.js v24.22.2"
+  ]
+ },
+ "history": [
+  "05:51:50 VMO: 반영 전 게이트: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 344, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0549",
+  "05:51:59 VMO: 반영 시작",
+  "05:57:27 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S2 t_job_prog.js 실패: exit 1 · PASS 0 · FAIL 0 · Node.js v24.22.2 · 구문 검사 22개 파일 통과, 시험 26/27개 파일 통과(PASS 342, FAIL 0), 정의 정합 통과 · 대상 파일 3개 복원 · 대상 밖 변경 Doc/asisfacts/screens/SCP0005/combo_values.json, Doc/asisfacts/screens/SCP0028/combo_values.json, Doc/asisfacts/screens/SSP0005/combo_values.json, Doc/asisfacts/screens/SSP0014/combo_values.json, Doc/e2e/results/SCP0005/_summary.csv, Doc/e2e/results/SCP0005/_summary.md 는 그대로 남음",
+  "05:58:38 VMO: 반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 반영 구간(05:51:59~05:57:27)에 대상 밖 파일 tools/VibeManager/job-runner.js(05:54:00 수정, :103 [수정분 범위] 해석, :107 pg.delta)와 tools/VibeManager/test/t_job_prog.js(05:57:18 수정, :19~20 수정분 시험)를 다른 작업(checklist_run --delta 진행 표시)이 고침. 게이트의 t_job_prog.js 가 첫 시험 출력 전 exit 1(PASS 0, FAIL 0). 반영 전 게이트 05:51:50 27/27 통과, 반영 Claude run_all 05:53:24 27/27 PASS 347 통과. 반영 대상 orch-watch.js, t_orch_watch.js 는 t_job_prog.js 가 읽지 않음(t_job_prog.js:7 은 job-runner 만 require)",
+  "06:01:31 VMO 자동(게이트 통과 조건): 승인",
+  "06:03:30 VMO: 반영 전 게이트: 구문 검사 22개 파일 통과, 시험 27/27개 파일 통과(PASS 346, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self0601",
+  "06:03:39 VMO: 반영 시작",
+  "06:06:12 VMO: 반영 실패. 반영 도중 VMO 가 다시 시작됨(창 다시 로드). 대상 파일이 일부만 바뀌었을 수 있어 실패 원인 진단이 확인함"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120005059_INC"
+}

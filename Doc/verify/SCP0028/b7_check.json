@@ -1,10 +1,10 @@
 {
  "menu_id": "SCP0028",
  "asis_id": "SCP0028",
- "generated": "2026-11-19 13:56:02",
+ "generated": "2026-11-20 10:02:09",
  "a": {
-  "verdict": "판정필요",
-  "note": "저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control",
+  "verdict": "NA",
+  "note": "저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
   "save_tables": [
    "SCP_MST_SHIPMENT_LOT_SIZE"
   ],
@@ -45,14 +45,6 @@
    },
    {
     "kind": "SEARCH",
-    "target": "control",
-    "label": "",
-    "src": "원천 SP 없음/BigFilter",
-    "tables": null,
-    "overlap": []
-   },
-   {
-    "kind": "SEARCH",
     "target": "clbFromSite",
     "label": "From Site",
     "src": "UP_FX_GetCommonDataList @Code=FromSiteByDivision 분기",
@@ -71,6 +63,14 @@
      "SCM_MST_SITE",
      "TB_FX_USERGROUPAUTHEXTENTION"
     ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboValid",
+    "label": "Valid",
+    "src": "고정 목록",
+    "tables": null,
     "overlap": []
    },
    {

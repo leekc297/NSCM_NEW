@@ -52,8 +52,12 @@ def latest_ok(mid, max_age_h):
     try: at = dt.datetime.strptime(str(run.get('started'))[:19], '%Y-%m-%d %H:%M:%S')
     except Exception: return None, '실측 시각 없음'
     age = (dt.datetime.now() - at).total_seconds() / 3600
-    if age > max_age_h: return None, f'직전 실측 {age:.1f}시간 전(기준 {max_age_h}시간)'
-    return rd, f"{str(run.get('started'))[:16]} · {age:.1f}시간 전"
+    # 2026-11-20 사용자 지시: 나이(24시간) 대신 원장 지문 — 원장이 같으면 오래돼도 재사용(asis_fp.py). VERIFY_ASIS_LIVE_MAX_AGE_H 를 따로 지정했을 때만 나이도 본다
+    if os.environ.get('VERIFY_ASIS_LIVE_MAX_AGE_H') and age > max_age_h: return None, f'직전 실측 {age:.1f}시간 전(지정 기준 {max_age_h}시간)'
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import asis_fp
+    ok, why = asis_fp.same(mid, 'basic')
+    if not ok: return None, why
+    return rd, f"{str(run.get('started'))[:16]} · {age:.1f}시간 전 · {why}"
 
 
 def client_url():
@@ -145,6 +149,10 @@ def main():
             open(lp, 'w', encoding='utf-8').write(prev); print(f"[asis_live_auto] {mid}: 새 실측이 실패해 직전 정상 실측을 계속 씁니다({json.loads(prev).get('run_dir')})"); return 0
         except Exception: pass
     if rc == -1: return 3
+    if rc == 0:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import asis_fp; asis_fp.record(mid, 'basic', 'asis_live_run')
+        except Exception as _e: print(f'[asis_live_auto] {mid}: 원장 지문 기록 실패 {_e}')
     print(f"[asis_live_auto] {mid}: asis_live_run 종료코드 {rc} — {({0: '정상', 2: '화면 열기·조회 실패', 3: '미측정(환경 미비·잠금 대기 초과·증거 일부 없음)', 5: '로컬 서버 미기동'}).get(rc, '확인 필요')}")
     return 0 if rc == 0 else 3
 

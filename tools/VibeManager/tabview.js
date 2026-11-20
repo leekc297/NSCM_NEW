@@ -131,7 +131,7 @@ function buildTab(file, opts = {}) {
   if (kind === 'image') return Object.assign(base, { html: `<div class="imgw"><img src="${esc(opts.imgSrc || '')}" alt="${esc(base.title)}"></div>` });
   if (kind === 'binary') return Object.assign(base, { external: true });
   let st; try { st = fs.statSync(file); } catch (e) { return Object.assign(base, { html: `<div class="hint">읽기 실패: ${esc(e.message)}</div>` }); }
-  if (st.size > TEXT_MAX) return Object.assign(base, { html: `<div class="hint">파일이 큽니다(${(st.size / 1048576).toFixed(1)} MB) — 에디터로 여세요</div>` });
+  if (st.size > TEXT_MAX) return Object.assign(base, { html: `<div class="hint">파일이 큽니다(${(st.size / 1048576).toFixed(1)} MB). 에디터로 여세요</div>` });
   const text = fs.readFileSync(file, 'utf8'); const ext = path.extname(file).toLowerCase().slice(1);
   const html = kind === 'md' ? mdToHtml(text, { baseDir: path.dirname(file), root }) : kind === 'csv' ? csvToTable(text) : codeView(text, ext, opts.line);
   return Object.assign(base, { html, text, editable: true, size: st.size, mtime: st.mtime.toISOString(), line: opts.line || 0 });

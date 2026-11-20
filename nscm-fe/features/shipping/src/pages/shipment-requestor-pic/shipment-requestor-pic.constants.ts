@@ -193,7 +193,9 @@ export const MSG = {
   SAVE_SUCCESS: 'MSG00672', // "{0} data saved." (저장 성공, 건수) — AS-IS MSG00004 대응
   SAVE_FAIL: 'MSG00003', // "Failed to save." (서버 'N' 판정) — AS-IS MSG00284 대응, 구 MSG00006 은 미존재
   NO_CHANGES: 'MSG00004', // "No changes to save." (변경 없음)
-  REQUIRE_DIVISION: 'MSG00097', // "Please select Division." (조회/셀편집 전 Division 필수) — AS-IS MSG00093(Division)
+  REQUIRE_DIVISION: 'MSG00097', // "Please select Division." (셀편집 전 신규행 Division 필수) — AS-IS MSG00093(Division)
+  INSERT_AFTER_SEARCH: 'MSG00662', // "Edit mode is available after search." (조회 전 Insert 차단) — 조회해야 편집모드 진입
+
   REQUIRED_FIELD: 'MSG00429', // "{0} value is required." (셀편집 전 {0}=Plant Site 필수) — AS-IS MSG00093(Plant Site)
   USER_NOT_REGISTERED: 'MSG01261', // "This user does not have permission to the SSP Planner. User ID : {0}" — 구 MSG00251 은 미존재
 } as const;

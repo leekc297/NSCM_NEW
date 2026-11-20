@@ -1,0 +1,540 @@
+{
+ "rule_id": "H6",
+ "hash": "1f1dd7ab30d808e2",
+ "groups": [
+  {
+   "rows": [
+    "EG-01821637"
+   ],
+   "why": "UserInfoPopup(MAIL_USER3 셀) 조회 건수: 다른 셀에서 연 팝업 검사와 섞지 않고 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-0f3937cb"
+   ],
+   "why": "UserInfoPopup(TEAM_LEADER 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-1861e3b0"
+   ],
+   "why": "UserInfoPopup(MAIL_USER2 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-1ae2d46b"
+   ],
+   "why": "UserInfoPopup(MAIL_USER5 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-211b50c2"
+   ],
+   "why": "UserInfoPopup(USER_ID 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-21dea24b"
+   ],
+   "why": "UserInfoPopup(MAIL_USER3 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-25810a22"
+   ],
+   "why": "UserInfoPopup(MAIL_USER4 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-266fa4bf"
+   ],
+   "why": "UserInfoPopup(MAIL_USER4 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-26d2ff31"
+   ],
+   "why": "UserInfoPopup(TEAM_LEADER 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-2ed0d75b"
+   ],
+   "why": "UserInfoPopup(USER_ID 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-34c07cf6"
+   ],
+   "why": "UserInfoPopup(USER_ID 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-371d5661"
+   ],
+   "why": "UserInfoPopup(MAIL_USER4 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-38b19d0a"
+   ],
+   "why": "UserInfoPopup(PART_LEADER 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-3ac28ecd"
+   ],
+   "why": "UserInfoPopup(MAIL_USER1 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-3d1c057c"
+   ],
+   "why": "UserInfoPopup(MAIL_USER2 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-4129ef6d"
+   ],
+   "why": "UserInfoPopup(MAIL_USER3 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-44a30740"
+   ],
+   "why": "UserInfoPopup(MAIL_USER1 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-4707fa08"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup(Model 조건) 섹션 타이틀: 이 검사는 1건뿐이라 단독"
+  },
+  {
+   "rows": [
+    "EG-4b9ecb8b"
+   ],
+   "why": "UserInfoPopup(MAIL_USER2 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-4cdbc254"
+   ],
+   "why": "UserInfoPopup(MAIL_USER2 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-5346d2da"
+   ],
+   "why": "UserInfoPopup(MAIL_USER3 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-5543dc76"
+   ],
+   "why": "UserInfoPopup(MAIL_USER5 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-5656ef49"
+   ],
+   "why": "UserInfoPopup(PART_LEADER 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-5750b181"
+   ],
+   "why": "UserInfoPopup(MAIL_USER1 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-59c94e4a"
+   ],
+   "why": "UserInfoPopup(MAIL_USER4 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-65c901cb"
+   ],
+   "why": "UserInfoPopup(MAIL_USER1 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-7462c354"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup(Model 조건) No. 컬럼 1개: 이 검사는 1건뿐이라 단독"
+  },
+  {
+   "rows": [
+    "EG-7c132f49"
+   ],
+   "why": "UserInfoPopup(USER_ID 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-824e122a"
+   ],
+   "why": "UserInfoPopup(USER_ID 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-86b95498"
+   ],
+   "why": "UserInfoPopup(MAIL_USER1 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-87a650cc"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup(Model 조건) 상단 가로줄: 이 검사는 1건뿐이라 단독"
+  },
+  {
+   "rows": [
+    "EG-8b4e62c1"
+   ],
+   "why": "UserInfoPopup(MAIL_USER4 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-8e62ba19"
+   ],
+   "why": "UserInfoPopup(TEAM_LEADER 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-8e6ec80a"
+   ],
+   "why": "UserInfoPopup(MAIL_USER5 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-906290de"
+   ],
+   "why": "UserInfoPopup(MAIL_USER3 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-9625b347"
+   ],
+   "why": "UserInfoPopup(MAIL_USER5 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-a1d1fe2d"
+   ],
+   "why": "UserInfoPopup(MAIL_USER1 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-a885a7fa"
+   ],
+   "why": "UserInfoPopup(USER_ID 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-aeb6e25c"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup(Model 조건) No. 폭 41px/23309행: 기대 수치가 달라 단독"
+  },
+  {
+   "rows": [
+    "EG-b744185e"
+   ],
+   "why": "UserInfoPopup(MAIL_USER5 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-c6021f08"
+   ],
+   "why": "UserInfoPopup(MAIL_USER4 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-cdd5f203"
+   ],
+   "why": "UserInfoPopup(MAIL_USER2 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-d454567c"
+   ],
+   "why": "UserInfoPopup(PART_LEADER 셀) No. 폭: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-d72725ed"
+   ],
+   "why": "UserInfoPopup(MAIL_USER3 셀) 섹션 타이틀: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-d9de049b"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup(Model 조건) 조회 건수: 이 검사는 1건뿐이라 단독"
+  },
+  {
+   "rows": [
+    "EG-dc100d71"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup(Model 조건) 버튼 순서: 이 검사는 1건뿐이라 단독"
+  },
+  {
+   "rows": [
+    "EG-dca9a538"
+   ],
+   "why": "UserInfoPopup(PART_LEADER 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-dff23bec"
+   ],
+   "why": "UserInfoPopup(TEAM_LEADER 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-e1fe7010"
+   ],
+   "why": "UserInfoPopup(PART_LEADER 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-eb49a255"
+   ],
+   "why": "UserInfoPopup(TEAM_LEADER 셀) No. 컬럼 1개: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-f7021f11"
+   ],
+   "why": "UserInfoPopup(MAIL_USER5 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-fae73429"
+   ],
+   "why": "UserInfoPopup(TEAM_LEADER 셀) 상단 가로줄: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-fc6d04ac"
+   ],
+   "why": "UserInfoPopup(PART_LEADER 셀) 버튼 순서: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "EG-ff622e9b"
+   ],
+   "why": "UserInfoPopup(MAIL_USER2 셀) 조회 건수: 열어 준 셀이 달라 단독으로 둠"
+  },
+  {
+   "rows": [
+    "T-287025ff"
+   ],
+   "why": "대조표 D00-2-003 행의 구현 위치 실존을 보는 추적 행이라 단독"
+  },
+  {
+   "rows": [
+    "T-6747828e"
+   ],
+   "why": "대조표 A#3 행의 구현 위치 실존을 보는 추적 행이라 단독"
+  },
+  {
+   "rows": [
+    "T-8a93b1cd"
+   ],
+   "why": "대조표 SsoUserModal 행의 구현 위치 실존을 보는 추적 행이라 단독"
+  },
+  {
+   "rows": [
+    "T-a6a56d4a"
+   ],
+   "why": "대조표 ProgressForm 행의 구현 위치 실존을 보는 추적 행이라 단독"
+  },
+  {
+   "rows": [
+    "T-d6469639"
+   ],
+   "why": "대조표 ItemByDivisionModal 행의 구현 위치 실존을 보는 추적 행이라 단독"
+  },
+  {
+   "rows": [
+    "V-076a035a",
+    "V-44f0058d"
+   ],
+   "why": "MAIL_USER2 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대(팝업 표준 3항목)도 같음"
+  },
+  {
+   "rows": [
+    "V-0d152377",
+    "V-d39aabc2"
+   ],
+   "why": "MAIL_USER4 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-12db2bb2",
+    "V-4aa26436"
+   ],
+   "why": "MAIL_USER1 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-5b76aa66",
+    "V-ceb0b8e0"
+   ],
+   "why": "USER_ID 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-605cd346",
+    "V-9fb60038"
+   ],
+   "why": "MAIL_USER3 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-853fe327",
+    "V-b877a560"
+   ],
+   "why": "PART_LEADER 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-bb93253d",
+    "V-d914f74d"
+   ],
+   "why": "TEAM_LEADER 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-e214666a",
+    "V-f3bd4268"
+   ],
+   "why": "MAIL_USER5 셀에서 UserInfoPopup을 만들고 여는 같은 호출의 두 줄이고 기대도 같음"
+  },
+  {
+   "rows": [
+    "V-27dc9413",
+    "V-c8cc2ced",
+    "V-ddcfd35a"
+   ],
+   "why": "SCM0002_ItembyDivisionPopup을 생성·로드·표시하는 같은 호출 흐름이고 기대(팝업 표준 3항목)가 같음"
+  },
+  {
+   "rows": [
+    "V-2a405a48",
+    "V-51ecd39e"
+   ],
+   "why": "대상(팝업 No. 컬럼)과 기대(No. 컬럼 1개를 적정 폭으로)가 문구까지 같음"
+  },
+  {
+   "rows": [
+    "V-4282b00a",
+    "V-8c36c69c"
+   ],
+   "why": "대상(전체 팝업 No. 컬럼·건수, Contribution Sales Version 팝업)과 조건(필터 적용), 기대(공통 그리드로 No.·건수·단축키·Sort)가 같음"
+  },
+  {
+   "rows": [
+    "V-b173c9cf",
+    "V-f676cb6f"
+   ],
+   "why": "대상(전체 팝업 버튼 순서)과 기대(OK → CLOSE로 통일)가 같음"
+  },
+  {
+   "rows": [
+    "V-2744eb08",
+    "V-baf56b9c"
+   ],
+   "why": "대상(From City 검색 버튼)과 조건(버튼 끝 클릭), 기대(전 영역 클릭 시 팝업 호출)가 같음"
+  },
+  {
+   "rows": [
+    "V-217a451d"
+   ],
+   "why": "Version 조회조건 크기와 Description 폭을 보는 다른 화면 결함 유형이라 단독"
+  },
+  {
+   "rows": [
+    "V-3a3d885e"
+   ],
+   "why": "Model 셀 팝업이 단일 선택인지 보는 검사로, 다른 행과 기대가 달라 단독"
+  },
+  {
+   "rows": [
+    "V-5a5850d4"
+   ],
+   "why": "Ver.Cutoff 팝업 Period·조회조건 배치를 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-5b34687d"
+   ],
+   "why": "컬럼 설정 팝업 버튼 구성을 보는 확정 규칙으로, 대상 팝업이 달라 단독"
+  },
+  {
+   "rows": [
+    "V-68bc24f1"
+   ],
+   "why": "TO-BE 메타 공통 팝업에서 제목·건수·↓ 키가 없어도 통과로 보는 예외 규칙이라 기대가 달라 단독"
+  },
+  {
+   "rows": [
+    "V-a34e476b"
+   ],
+   "why": "팝업 레이아웃 전반이 디자인 가이드를 따르는지 보는 포괄 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-aa0bfbee"
+   ],
+   "why": "팝업을 줄였을 때 조회조건과 버튼이 겹치는지 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-d1c044ec"
+   ],
+   "why": "Project 팝업의 Search 버튼과 검색 방식을 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-d77700f3"
+   ],
+   "why": "팝업 상단 선을 보는 일반 유형으로, 셀별 TOPLINE 행과 대상 범위가 달라 단독"
+  },
+  {
+   "rows": [
+    "V-dbd99100"
+   ],
+   "why": "팝업 리사이즈·드래그가 뷰포트 안에 머무는지 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-e01905de"
+   ],
+   "why": "팝업 제목에 '_' 폴백이 나오지 않는지 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-e66dace6"
+   ],
+   "why": "팝업이 스크롤바 없이 한 화면에 다 보이는지 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-f1b11296"
+   ],
+   "why": "Team 팝업 조건 하나로 ID·Name을 모두 찾는지 보는 검사라 단독"
+  },
+  {
+   "rows": [
+    "V-fca239ca"
+   ],
+   "why": "SYS0016 여러 항목을 한데 묶은 결함 유형이라 다른 행과 대상·기대가 같지 않아 단독"
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:42:27",
+ "cost": 0.2958003
+}

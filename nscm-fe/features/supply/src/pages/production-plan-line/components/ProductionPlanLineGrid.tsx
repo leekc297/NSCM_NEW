@@ -23,7 +23,12 @@ import {
 } from '../production-plan-line.constants';
 import type { MainRow } from '../production-plan-line.types';
 import { buildFixedColumns, buildPivotColumns } from '../utils/productionPlanLineColumns';
-import { isoWeek, sumValues, toNum } from '../utils/productionPlanLineDerive';
+import {
+  distributeWeeklyToDaily,
+  isoWeek,
+  sumValues,
+  toNum,
+} from '../utils/productionPlanLineDerive';
 import {
   type DrilldownState,
   EMPTY_DRILLDOWN,
@@ -276,9 +281,9 @@ export const ProductionPlanLineGrid = ({
     // 붙여넣기 게이트 — 공용 pastingCell(cancel=!isEditableCell)도 편집가능 pivot 셀을 막으므로 동일 판정으로 되돌린다.
     g.pastingCell.addHandler(beginningEditHandler);
 
-    // pivot Auto-Sync (design 03 §3 #7~#9) — D_ 편집 시 상위 W_·M_ 재집계. W_ 편집(Weekly 버킷)은 하위 D_ 를
-    //   건드리지 않고 월(M_)합계만 재집계한다(AS-IS Weekly 버킷 거동 — 아래 kind==='W' 주석). LINE_TOTAL%
-    //   measure 는 평균이라 재분배 제외(단순 표시).
+    // pivot Auto-Sync (design 03 §3 #7~#9) — D_ 편집 시 상위 W_·M_ 재집계. W_ 편집 시 하위 D_ 를 균등분배
+    //   하고 M_ 를 재집계한다(TO-BE 상시 chkAll='Y' → AS-IS CalculateDailyQty 분배 — 아래 kind==='W' 주석).
+    //   LINE_TOTAL% measure 는 평균이라 재분배 제외(단순 표시).
     const cellEditEndedHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
@@ -296,15 +301,30 @@ export const ProductionPlanLineGrid = ({
       const rowKeys = Object.keys(row);
 
       if (kind === 'W') {
-        // AS-IS Weekly 버킷(cboBucketType=WEEKLY): 주SUM(W_) 편집 시 하위 일(D_) 셀을 분배하지 않는다.
-        //   AS-IS 는 W→D 분배(CalculateDailyQty)를 bucket==Daily||chkAll 일 때만 호출하고(cs:3818~3826),
-        //   정상 Weekly 버킷에선 D_ 를 건드리지 않는다 — 일 분배는 저장 SP(P_SCP0013_SAVE_LINE_ROW_JSON
-        //   의 WEEKLY 분기)가 서버에서 담당한다. FE 가 D_ 를 균등분배로 덮어쓰면 SP 버킷판정(값이 DB와 다른
-        //   D_ 가 있으면 DAILY, PKG body 5927~5954)이 DAILY 로 뒤집혀 서버 비율분배 대신 FE 균등분배가
-        //   저장되는 결함이 됐다(테스터 신고: Weekly 입력 후 Daily 전환 시 일분배 기준 상이, 2026-11-18).
-        //   W_ 는 편집셀로 자동 추적되어 그대로 저장되고(저장 시 WEEKLY 로 판정→서버 분배), 월(M_)합계만
-        //   그 달 W_ 합으로 재집계한다(AS-IS CalculateSum weekly 분기 cs:1400~1425 — M_ 은 SP 저장대상
-        //   아니라 regex 5865 에서 제외, 표시용 재집계).
+        // AS-IS: 주SUM(W_) 편집 시 하위 일(D_) 를 균등분배한다(CalculateDailyQty cs:1558~1650).
+        //   게이트 `bucket==Daily || chkAll`(SpdMain_Changed cs:3818~3826) — TO-BE 는 조회가 상시
+        //   chkAll='Y'(전체보기 고정, store L220~223)라 항상 분배한다(사용자 확정 2026-11-19 "AS-IS ALL
+        //   체크 상태와 동일"). 분배식: W/일수 균등, 나머지 마지막 날 가산(distributeWeeklyToDaily =
+        //   AS-IS nWeek/nDayCnt + nDivDayMod). 음수면 분배하지 않고 W_ 를 현재 일합계로 원복(cs:1627~1634).
+        //   분배된 D_ 변경으로 저장 시 SP 가 DAILY 로 판정해 그 값을 저장 → AS-IS 클라 분배 저장과 동일.
+        //   정정 경위: 2026-11-18 에 저 게이트를 "정상 Weekly 에선 분배 안 함"으로 오독해 분배를 제거했으나,
+        //   TO-BE 상시 chkAll='Y' 라 게이트 항상 참 → 분배가 맞다(테스터 재확인).
+        const weekTotal = toNum(row[binding]) ?? 0; // AS-IS Int64.Parse 실패 시 nWeek=0 (cs:1573~1581)
+        // 날짜(yyyymmdd) 오름차순 정렬 — AS-IS 는 D_ 를 컬럼(=날짜) 순으로 돌며 **마지막 날(그 주 최종일=일요일)**
+        //   에 나머지를 가산한다(cs:1621~1650). rowKeys(객체 키) 순서는 시간순 보장이 없어(예: 나머지가 금요일에
+        //   붙던 결함, 테스터 2026-11-19) 반드시 날짜로 정렬해 마지막 원소를 그 주 최종일로 맞춘다.
+        const dayKeys = dailyKeysOfWeek(rowKeys, binding).sort((a, b) =>
+          pivotTag(a) < pivotTag(b) ? -1 : pivotTag(a) > pivotTag(b) ? 1 : 0
+        );
+        if (dayKeys.length > 0) {
+          if (weekTotal < 0) {
+            // 음수 입력 → 분배하지 않고 W_ 를 현재 일합계로 되돌린다(AS-IS SetValue(nRow,nCol,nDaySum)).
+            setCell(binding, sumValues(dayKeys.map(k => row[k])));
+          } else {
+            const dist = distributeWeeklyToDaily(weekTotal, dayKeys.length);
+            dayKeys.forEach((k, i) => setCell(k, dist[i]));
+          }
+        }
         const ym = pivotTag(binding).slice(0, 6);
         const monthKey = rowKeys.find(k => pivotKind(k) === 'M' && pivotTag(k).slice(0, 6) === ym);
         if (monthKey) {

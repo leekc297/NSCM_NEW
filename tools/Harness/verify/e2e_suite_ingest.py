@@ -58,6 +58,14 @@ def main():
     mid = sys.argv[1].upper()
     import e2e_paths
     vd = os.path.join(ROOT, 'Doc', 'verify', mid)
+    # T455: AS-IS 화면 컨트롤 수(Division 조건이 하나도 없을 때만 값 · 있으면 0 = 종전 경로)
+    _ctl = []
+    try:
+        with open(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', mid, 'controls.csv'), encoding='utf-8-sig') as _f:
+            _ctl = [r.get('name') or '' for r in csv.DictReader(_f)]
+    except OSError:
+        _ctl = []
+    no_div = len(_ctl) if _ctl and not any(re.search(r'(?i)div(?!ider)', n) for n in _ctl) else 0
     lp = os.path.join(vd, 'verify_ledger.csv')
     if not os.path.exists(lp):
         print(f'[e2e_suite_ingest] {mid}: 원장 없음, 생략'); return 0
@@ -101,7 +109,10 @@ def main():
                 if not m:
                     continue
                 div, setv, n, alert = m.groups()
-                if setv != 'true':
+                if setv != 'true' and no_div:
+                    # T455(2026-11-20 SCP0005 ES-0967e6d0·ES-fe8e48bc): AS-IS 화면 컨트롤에 Division 조건이 없으면(controls.csv 이름에 Div 0건) TO-BE 도 고를 Division 이 없다 — 측정 대상 없음
+                    res, ev = 'NA', f'AS-IS 화면 컨트롤 {no_div} 중 Division 조회조건 0건(controls.csv) · TO-BE Division 선택 칸 없음(set=false) — Division 별 조회 대상 아님 · {desc[:160]}'
+                elif setv != 'true':
                     res, ev = 'ERROR', f'[측정 전제 미충족] Division {div} 선택 못 함 · {desc[:200]}'
                 elif n in ('0', '?'):
                     res, ev = 'ERROR', f'[측정 전제 미충족: 조회 0행] Division {div} 데이터 없음, 범위 판정 못 함' + (f' · 알림 {alert[:120]}' if alert.strip() else '')

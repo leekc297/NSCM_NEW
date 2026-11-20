@@ -1,0 +1,18 @@
+{
+ "rule_id": "K5",
+ "hash": "cb0745e65db2bfab",
+ "groups": [
+  {
+   "refs": [
+    "DM-202"
+   ],
+   "target": "Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 팝업 타이틀",
+   "condition": "Insert",
+   "expected": "Module=ALL/Common/DM/SCP/FP/SSP 다중선택(Insert 단일)·Sub Module 삭제·라벨 제목·Active 기본 Y·서식 동작·팝업 섹션 타이틀 테두리 밖",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:45:35"
+}

@@ -1,23 +1,23 @@
 {
  "menu_id": "SCP0005",
- "at": "2026-11-19 16:55:03",
+ "at": "2026-11-20 07:26:49",
  "windows": [
   [
-   6641437,
-   6685294,
-   "2026-11-19 12:33",
-   "2026-11-19 16:01"
+   6771293,
+   6816761,
+   "2026-11-20 04:49",
+   "2026-11-20 07:18"
   ]
  ],
- "rows_scanned": 43858,
+ "rows_scanned": 45469,
  "pkgs": [
   "PKG_SCP0005"
  ],
  "user": "",
  "calls": [
   {
-   "seq": 6641743,
-   "at": "2026-11-19 12:38:31",
+   "seq": 6773318,
+   "at": "2026-11-20 05:49:35",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -37,8 +37,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6648730,
-   "at": "2026-11-19 13:49:30",
+   "seq": 6773523,
+   "at": "2026-11-20 05:49:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -58,29 +58,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6648769,
-   "at": "2026-11-19 13:49:39",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6648774,
-   "at": "2026-11-19 13:49:43",
+   "seq": 6773585,
+   "at": "2026-11-20 05:49:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -100,8 +79,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6648779,
-   "at": "2026-11-19 13:49:47",
+   "seq": 6773613,
+   "at": "2026-11-20 05:49:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -121,8 +100,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6648784,
-   "at": "2026-11-19 13:49:49",
+   "seq": 6773628,
+   "at": "2026-11-20 05:49:56",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -142,8 +121,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6648798,
-   "at": "2026-11-19 13:49:55",
+   "seq": 6773656,
+   "at": "2026-11-20 05:50:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -163,8 +142,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649090,
-   "at": "2026-11-19 13:50:07",
+   "seq": 6773774,
+   "at": "2026-11-20 05:50:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -184,8 +163,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649144,
-   "at": "2026-11-19 13:50:14",
+   "seq": 6773905,
+   "at": "2026-11-20 05:50:22",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -205,8 +184,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6649860,
-   "at": "2026-11-19 13:50:47",
+   "seq": 6775007,
+   "at": "2026-11-20 05:51:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -226,8 +205,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6652431,
-   "at": "2026-11-19 13:53:23",
+   "seq": 6775978,
+   "at": "2026-11-20 05:51:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -247,8 +226,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6654468,
-   "at": "2026-11-19 13:56:14",
+   "seq": 6776691,
+   "at": "2026-11-20 05:52:35",
    "by": "jooyong026",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -268,8 +247,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6654604,
-   "at": "2026-11-19 13:56:23",
+   "seq": 6776817,
+   "at": "2026-11-20 05:52:44",
    "by": "dana.robot",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -289,8 +268,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6655031,
-   "at": "2026-11-19 13:56:44",
+   "seq": 6777343,
+   "at": "2026-11-20 05:53:06",
    "by": "jooyong026",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -310,8 +289,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6656335,
-   "at": "2026-11-19 13:59:20",
+   "seq": 6778002,
+   "at": "2026-11-20 05:53:45",
    "by": "jooyong026",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -331,8 +310,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6657734,
-   "at": "2026-11-19 14:01:56",
+   "seq": 6778550,
+   "at": "2026-11-20 05:54:25",
    "by": "dana.robot",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -352,8 +331,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6658888,
-   "at": "2026-11-19 14:03:48",
+   "seq": 6779705,
+   "at": "2026-11-20 05:57:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -373,8 +352,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659161,
-   "at": "2026-11-19 14:04:11",
+   "seq": 6779907,
+   "at": "2026-11-20 05:57:50",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -394,8 +373,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659205,
-   "at": "2026-11-19 14:04:24",
+   "seq": 6780008,
+   "at": "2026-11-20 05:58:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -415,8 +394,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659404,
-   "at": "2026-11-19 14:05:07",
+   "seq": 6780327,
+   "at": "2026-11-20 05:58:46",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -436,8 +415,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659506,
-   "at": "2026-11-19 14:05:21",
+   "seq": 6780419,
+   "at": "2026-11-20 05:59:00",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -457,8 +436,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659522,
-   "at": "2026-11-19 14:05:27",
+   "seq": 6780428,
+   "at": "2026-11-20 05:59:06",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -475,8 +454,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659811,
-   "at": "2026-11-19 14:06:55",
+   "seq": 6781006,
+   "at": "2026-11-20 06:00:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -496,8 +475,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659922,
-   "at": "2026-11-19 14:07:06",
+   "seq": 6781158,
+   "at": "2026-11-20 06:00:19",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -517,8 +496,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6659975,
-   "at": "2026-11-19 14:07:27",
+   "seq": 6781446,
+   "at": "2026-11-20 06:00:41",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -538,8 +517,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660108,
-   "at": "2026-11-19 14:08:04",
+   "seq": 6781688,
+   "at": "2026-11-20 06:01:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -559,8 +538,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660165,
-   "at": "2026-11-19 14:08:15",
+   "seq": 6781799,
+   "at": "2026-11-20 06:01:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -580,8 +559,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660291,
-   "at": "2026-11-19 14:08:41",
+   "seq": 6781986,
+   "at": "2026-11-20 06:01:54",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -601,8 +580,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660390,
-   "at": "2026-11-19 14:08:54",
+   "seq": 6782189,
+   "at": "2026-11-20 06:02:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -622,8 +601,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660763,
-   "at": "2026-11-19 14:09:24",
+   "seq": 6782438,
+   "at": "2026-11-20 06:02:36",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -643,8 +622,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6660777,
-   "at": "2026-11-19 14:09:27",
+   "seq": 6782445,
+   "at": "2026-11-20 06:02:39",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -664,8 +643,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661226,
-   "at": "2026-11-19 14:10:34",
+   "seq": 6782904,
+   "at": "2026-11-20 06:03:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -685,8 +664,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6661795,
-   "at": "2026-11-19 14:11:40",
+   "seq": 6783211,
+   "at": "2026-11-20 06:04:52",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -706,8 +685,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662149,
-   "at": "2026-11-19 14:12:50",
+   "seq": 6783688,
+   "at": "2026-11-20 06:06:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -727,8 +706,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6662154,
-   "at": "2026-11-19 14:12:53",
+   "seq": 6785083,
+   "at": "2026-11-20 06:09:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -736,7 +715,7 @@
     "fromCountry": "",
     "toCity": "",
     "toCountry": "",
-    "transportMode": "RAI",
+    "transportMode": "",
     "validYn": "",
     "fromCity": ""
    },
@@ -748,8 +727,698 @@
    "params_parsed": true
   },
   {
-   "seq": 6662540,
-   "at": "2026-11-19 14:14:00",
+   "seq": 6785250,
+   "at": "2026-11-20 06:09:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6785276,
+   "at": "2026-11-20 06:09:27",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "Y",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6785324,
+   "at": "2026-11-20 06:09:31",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "AIR",
+    "validYn": "Y",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6785352,
+   "at": "2026-11-20 06:09:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "E2E_ZZZ",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "AIR",
+    "validYn": "Y",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6785574,
+   "at": "2026-11-20 06:09:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "E2E_ZZZ",
+    "transportMode": "AIR",
+    "validYn": "Y",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6785701,
+   "at": "2026-11-20 06:10:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6785857,
+   "at": "2026-11-20 06:10:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6787024,
+   "at": "2026-11-20 06:11:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6787796,
+   "at": "2026-11-20 06:11:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6788652,
+   "at": "2026-11-20 06:12:37",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6788797,
+   "at": "2026-11-20 06:12:45",
+   "by": "dana.robot",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "dana.robot"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6789417,
+   "at": "2026-11-20 06:13:05",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6790115,
+   "at": "2026-11-20 06:13:45",
+   "by": "jooyong026",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "jooyong026"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6790272,
+   "at": "2026-11-20 06:14:25",
+   "by": "dana.robot",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "dana.robot"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6792660,
+   "at": "2026-11-20 06:19:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6792912,
+   "at": "2026-11-20 06:19:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6793069,
+   "at": "2026-11-20 06:20:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6793643,
+   "at": "2026-11-20 06:20:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6793828,
+   "at": "2026-11-20 06:21:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6793848,
+   "at": "2026-11-20 06:21:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6794349,
+   "at": "2026-11-20 06:22:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6794533,
+   "at": "2026-11-20 06:22:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6794817,
+   "at": "2026-11-20 06:22:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6795204,
+   "at": "2026-11-20 06:23:26",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6795329,
+   "at": "2026-11-20 06:23:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6795578,
+   "at": "2026-11-20 06:24:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6795674,
+   "at": "2026-11-20 06:24:15",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6795806,
+   "at": "2026-11-20 06:24:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6795815,
+   "at": "2026-11-20 06:24:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6796120,
+   "at": "2026-11-20 06:25:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "Y",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6796328,
+   "at": "2026-11-20 06:27:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "N",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6796550,
+   "at": "2026-11-20 06:28:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6796602,
+   "at": "2026-11-20 06:28:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "AIR",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6796752,
+   "at": "2026-11-20 06:29:23",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -769,8 +1438,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6663174,
-   "at": "2026-11-19 14:15:10",
+   "seq": 6797343,
+   "at": "2026-11-20 06:30:34",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -790,8 +1459,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6663308,
-   "at": "2026-11-19 14:15:33",
+   "seq": 6797707,
+   "at": "2026-11-20 06:30:58",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -811,8 +1480,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6663738,
-   "at": "2026-11-19 14:16:49",
+   "seq": 6798438,
+   "at": "2026-11-20 06:32:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -832,8 +1501,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6663806,
-   "at": "2026-11-19 14:17:10",
+   "seq": 6798693,
+   "at": "2026-11-20 06:32:35",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -853,8 +1522,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664202,
-   "at": "2026-11-19 14:17:36",
+   "seq": 6798935,
+   "at": "2026-11-20 06:33:01",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -874,8 +1543,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664296,
-   "at": "2026-11-19 14:17:41",
+   "seq": 6799008,
+   "at": "2026-11-20 06:33:06",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -895,8 +1564,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664362,
-   "at": "2026-11-19 14:17:47",
+   "seq": 6799083,
+   "at": "2026-11-20 06:33:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -916,8 +1585,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664441,
-   "at": "2026-11-19 14:17:53",
+   "seq": 6799184,
+   "at": "2026-11-20 06:33:19",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -937,8 +1606,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664516,
-   "at": "2026-11-19 14:17:59",
+   "seq": 6799246,
+   "at": "2026-11-20 06:33:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -958,8 +1627,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664546,
-   "at": "2026-11-19 14:18:06",
+   "seq": 6799324,
+   "at": "2026-11-20 06:33:31",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -979,8 +1648,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664641,
-   "at": "2026-11-19 14:18:12",
+   "seq": 6799364,
+   "at": "2026-11-20 06:33:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1000,8 +1669,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664693,
-   "at": "2026-11-19 14:18:18",
+   "seq": 6799431,
+   "at": "2026-11-20 06:33:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1021,8 +1690,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6664842,
-   "at": "2026-11-19 14:18:24",
+   "seq": 6799502,
+   "at": "2026-11-20 06:33:51",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1042,8 +1711,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665058,
-   "at": "2026-11-19 14:18:40",
+   "seq": 6799647,
+   "at": "2026-11-20 06:34:06",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1063,8 +1732,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665164,
-   "at": "2026-11-19 14:18:58",
+   "seq": 6799939,
+   "at": "2026-11-20 06:34:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1084,8 +1753,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665228,
-   "at": "2026-11-19 14:18:59",
+   "seq": 6799972,
+   "at": "2026-11-20 06:34:27",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1102,8 +1771,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665237,
-   "at": "2026-11-19 14:19:01",
+   "seq": 6799976,
+   "at": "2026-11-20 06:34:29",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1120,8 +1789,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665241,
-   "at": "2026-11-19 14:19:04",
+   "seq": 6799989,
+   "at": "2026-11-20 06:34:33",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1138,8 +1807,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6665245,
-   "at": "2026-11-19 14:19:05",
+   "seq": 6800004,
+   "at": "2026-11-20 06:34:34",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1156,8 +1825,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666479,
-   "at": "2026-11-19 14:21:33",
+   "seq": 6800709,
+   "at": "2026-11-20 06:37:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1174,8 +1843,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666484,
-   "at": "2026-11-19 14:21:33",
+   "seq": 6800713,
+   "at": "2026-11-20 06:37:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1192,8 +1861,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666499,
-   "at": "2026-11-19 14:21:34",
+   "seq": 6800725,
+   "at": "2026-11-20 06:37:03",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1210,8 +1879,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666510,
-   "at": "2026-11-19 14:21:34",
+   "seq": 6800732,
+   "at": "2026-11-20 06:37:03",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1228,8 +1897,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666514,
-   "at": "2026-11-19 14:21:35",
+   "seq": 6800738,
+   "at": "2026-11-20 06:37:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1246,8 +1915,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666555,
-   "at": "2026-11-19 14:21:36",
+   "seq": 6800742,
+   "at": "2026-11-20 06:37:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1264,8 +1933,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666693,
-   "at": "2026-11-19 14:21:43",
+   "seq": 6800818,
+   "at": "2026-11-20 06:37:12",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1285,8 +1954,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666824,
-   "at": "2026-11-19 14:21:54",
+   "seq": 6800945,
+   "at": "2026-11-20 06:37:23",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1303,8 +1972,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6666856,
-   "at": "2026-11-19 14:21:58",
+   "seq": 6801005,
+   "at": "2026-11-20 06:37:27",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1321,50 +1990,437 @@
    "params_parsed": true
   },
   {
-   "seq": 6666910,
-   "at": "2026-11-19 14:21:50",
-   "by": "jaeuk.shin",
+   "seq": 6801114,
+   "at": "2026-11-20 06:37:35",
+   "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
    "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801162,
+   "at": "2026-11-20 06:37:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801241,
+   "at": "2026-11-20 06:37:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801245,
+   "at": "2026-11-20 06:37:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801251,
+   "at": "2026-11-20 06:37:57",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801280,
+   "at": "2026-11-20 06:38:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801289,
+   "at": "2026-11-20 06:38:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_SAVE_ROUTE",
+   "kind": "SAVE",
+   "fe": {
+    "ltLayOffClearance": "0",
+    "shippingCompany": "-",
+    "aPortName": "-",
+    "ltWaitShipping": "0",
+    "dPortName": "-",
+    "routeId": "9917",
+    "aCountry": "-",
+    "daysFri": "Y",
+    "dCountry": "-",
+    "fromCityName": "WINDSOR, CANADA",
+    "daysSat": "Y",
+    "activeFlag": "M",
+    "ltVoyage": "0",
+    "toCityName": "WINDSOR, CANADA",
+    "fromCountry": "CN",
+    "shipDocPreparationDate": "",
+    "aPortCode": "-",
+    "daysMon": "Y",
+    "daysSun": "Y",
+    "toCity": "CAWND",
+    "dPortCode": "-",
+    "priority": "1",
+    "daysWed": "Y",
+    "userId": "minyonglee1",
+    "toCountry": "CA",
+    "ltType": "AVERAGE",
+    "twoSegmentCost": "",
+    "transportMode": "TRK",
+    "daysThu": "Y",
+    "ltArrivalInland": "0",
+    "validYn": "Y",
+    "oneSegmentCost": "",
+    "ltDepartureInland": "0",
+    "fromCity": "CAWND",
+    "daysTue": "Y",
+    "threeSegmentCost": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801293,
+   "at": "2026-11-20 06:38:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801298,
+   "at": "2026-11-20 06:38:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801306,
+   "at": "2026-11-20 06:38:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_SAVE_ROUTE",
+   "kind": "SAVE",
+   "fe": {
+    "ltLayOffClearance": "0",
+    "shippingCompany": "-",
+    "aPortName": "-",
+    "ltWaitShipping": "0",
+    "dPortName": "-",
+    "routeId": "9917",
+    "aCountry": "-",
+    "daysFri": "Y",
+    "dCountry": "-",
+    "fromCityName": "",
+    "daysSat": "Y",
+    "activeFlag": "M",
+    "ltVoyage": "0",
+    "toCityName": "WINDSOR, CANADA",
+    "fromCountry": "CA",
+    "shipDocPreparationDate": "",
+    "aPortCode": "-",
+    "daysMon": "Y",
+    "daysSun": "Y",
+    "toCity": "CAWND",
+    "dPortCode": "-",
+    "priority": "1",
+    "daysWed": "Y",
+    "userId": "minyonglee1",
+    "toCountry": "CA",
+    "ltType": "AVERAGE",
+    "twoSegmentCost": "",
+    "transportMode": "TRK",
+    "daysThu": "Y",
+    "ltArrivalInland": "0",
+    "validYn": "Y",
+    "oneSegmentCost": "",
+    "ltDepartureInland": "0",
+    "fromCity": "CAWND",
+    "daysTue": "Y",
+    "threeSegmentCost": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801310,
+   "at": "2026-11-20 06:38:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801315,
+   "at": "2026-11-20 06:38:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801354,
+   "at": "2026-11-20 06:38:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801358,
+   "at": "2026-11-20 06:38:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801387,
+   "at": "2026-11-20 06:38:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801574,
+   "at": "2026-11-20 06:39:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801587,
+   "at": "2026-11-20 06:39:29",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_SAVE_ROUTE",
+   "kind": "SAVE",
+   "fe": {
+    "ltLayOffClearance": "5",
+    "shippingCompany": "AIR",
+    "aPortName": "SANTIAGO",
+    "ltWaitShipping": "1",
+    "dPortName": "SHANGHAI",
+    "routeId": "7305",
+    "aCountry": "CL",
+    "daysFri": "Y",
+    "dCountry": "CN",
+    "fromCityName": "NANJING",
+    "daysSat": "Y",
+    "activeFlag": "M",
+    "ltVoyage": "5",
+    "toCityName": "ANTOFAGASTA",
     "fromCountry": "KR",
-    "toCity": "CNCZX",
-    "toCountry": "CN",
-    "transportMode": "",
+    "shipDocPreparationDate": "1",
+    "aPortCode": "CLSCL",
+    "daysMon": "Y",
+    "daysSun": "Y",
+    "toCity": "CLANF",
+    "dPortCode": "CNPVG",
+    "priority": "4",
+    "daysWed": "Y",
+    "userId": "minyonglee1",
+    "toCountry": "CL",
+    "ltType": "MAX",
+    "twoSegmentCost": "",
+    "transportMode": "AIR",
+    "daysThu": "Y",
+    "ltArrivalInland": "5",
     "validYn": "Y",
-    "fromCity": "KRCOJ"
+    "oneSegmentCost": "",
+    "ltDepartureInland": "1",
+    "fromCity": "CNNKG",
+    "daysTue": "Y",
+    "threeSegmentCost": ""
    },
    "ses": {
     "sesLangCd": "KO",
-    "sesUserId": "jaeuk.shin"
+    "sesUserId": "minyonglee1"
    },
    "rows": 0,
    "params_parsed": true
   },
   {
-   "seq": 6666947,
-   "at": "2026-11-19 14:21:51",
-   "by": "jaeuk.shin",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "Y",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "jaeuk.shin"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6667026,
-   "at": "2026-11-19 14:22:06",
+   "seq": 6801591,
+   "at": "2026-11-20 06:39:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -1384,44 +2440,50 @@
    "params_parsed": true
   },
   {
-   "seq": 6667049,
-   "at": "2026-11-19 14:22:16",
+   "seq": 6801596,
+   "at": "2026-11-20 06:39:32",
    "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
    "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CAWND"
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
    },
    "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
    },
    "rows": 0,
    "params_parsed": true
   },
   {
-   "seq": 6667136,
-   "at": "2026-11-19 14:22:24",
+   "seq": 6801635,
+   "at": "2026-11-20 06:39:42",
    "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
    "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CAWND"
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
    },
    "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
    },
    "rows": 0,
    "params_parsed": true
   },
   {
-   "seq": 6667140,
-   "at": "2026-11-19 14:22:25",
+   "seq": 6801639,
+   "at": "2026-11-20 06:39:50",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1438,8 +2500,260 @@
    "params_parsed": true
   },
   {
-   "seq": 6667149,
-   "at": "2026-11-19 14:22:26",
+   "seq": 6801644,
+   "at": "2026-11-20 06:39:51",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801649,
+   "at": "2026-11-20 06:40:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801653,
+   "at": "2026-11-20 06:40:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801690,
+   "at": "2026-11-20 06:40:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801808,
+   "at": "2026-11-20 06:40:10",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801847,
+   "at": "2026-11-20 06:40:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801860,
+   "at": "2026-11-20 06:40:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801901,
+   "at": "2026-11-20 06:40:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801941,
+   "at": "2026-11-20 06:40:21",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801953,
+   "at": "2026-11-20 06:40:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6801973,
+   "at": "2026-11-20 06:40:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802129,
+   "at": "2026-11-20 06:40:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802255,
+   "at": "2026-11-20 06:40:44",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1456,50 +2770,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6667183,
-   "at": "2026-11-19 14:22:34",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6668464,
-   "at": "2026-11-19 14:26:38",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6668476,
-   "at": "2026-11-19 14:26:46",
+   "seq": 6802446,
+   "at": "2026-11-20 06:40:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1516,8 +2788,1457 @@
    "params_parsed": true
   },
   {
-   "seq": 6668522,
-   "at": "2026-11-19 14:26:54",
+   "seq": 6802516,
+   "at": "2026-11-20 06:41:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802523,
+   "at": "2026-11-20 06:41:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802538,
+   "at": "2026-11-20 06:41:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802630,
+   "at": "2026-11-20 06:41:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802788,
+   "at": "2026-11-20 06:41:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802802,
+   "at": "2026-11-20 06:41:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802807,
+   "at": "2026-11-20 06:41:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802812,
+   "at": "2026-11-20 06:41:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802821,
+   "at": "2026-11-20 06:41:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802826,
+   "at": "2026-11-20 06:41:55",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802865,
+   "at": "2026-11-20 06:42:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802908,
+   "at": "2026-11-20 06:42:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802918,
+   "at": "2026-11-20 06:42:12",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6802985,
+   "at": "2026-11-20 06:42:25",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803030,
+   "at": "2026-11-20 06:42:28",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803035,
+   "at": "2026-11-20 06:42:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803099,
+   "at": "2026-11-20 06:42:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803108,
+   "at": "2026-11-20 06:42:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803113,
+   "at": "2026-11-20 06:42:47",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803199,
+   "at": "2026-11-20 06:42:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803238,
+   "at": "2026-11-20 06:43:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803259,
+   "at": "2026-11-20 06:43:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803311,
+   "at": "2026-11-20 06:43:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803348,
+   "at": "2026-11-20 06:43:20",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803355,
+   "at": "2026-11-20 06:43:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803418,
+   "at": "2026-11-20 06:43:32",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803432,
+   "at": "2026-11-20 06:43:33",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803436,
+   "at": "2026-11-20 06:43:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803445,
+   "at": "2026-11-20 06:43:38",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803460,
+   "at": "2026-11-20 06:43:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803503,
+   "at": "2026-11-20 06:43:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803544,
+   "at": "2026-11-20 06:43:56",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803627,
+   "at": "2026-11-20 06:44:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803668,
+   "at": "2026-11-20 06:44:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803673,
+   "at": "2026-11-20 06:44:13",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803716,
+   "at": "2026-11-20 06:44:16",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803724,
+   "at": "2026-11-20 06:44:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803838,
+   "at": "2026-11-20 06:44:30",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803889,
+   "at": "2026-11-20 06:44:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803896,
+   "at": "2026-11-20 06:44:36",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803951,
+   "at": "2026-11-20 06:44:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6803956,
+   "at": "2026-11-20 06:45:00",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804001,
+   "at": "2026-11-20 06:45:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804064,
+   "at": "2026-11-20 06:45:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804069,
+   "at": "2026-11-20 06:45:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804124,
+   "at": "2026-11-20 06:45:35",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804163,
+   "at": "2026-11-20 06:45:45",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804769,
+   "at": "2026-11-20 06:47:28",
+   "by": "bindy122678",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804788,
+   "at": "2026-11-20 06:47:33",
+   "by": "bindy122678",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "EN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6804814,
+   "at": "2026-11-20 06:47:37",
+   "by": "bindy122678",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "CN",
+    "sesUserId": "bindy122678"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805041,
+   "at": "2026-11-20 06:47:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805089,
+   "at": "2026-11-20 06:47:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805121,
+   "at": "2026-11-20 06:48:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805192,
+   "at": "2026-11-20 06:48:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805226,
+   "at": "2026-11-20 06:48:14",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805265,
+   "at": "2026-11-20 06:48:23",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805324,
+   "at": "2026-11-20 06:48:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805416,
+   "at": "2026-11-20 06:48:48",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805649,
+   "at": "2026-11-20 06:49:02",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805685,
+   "at": "2026-11-20 06:49:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6805695,
+   "at": "2026-11-20 06:49:07",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "E2E",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6806440,
+   "at": "2026-11-20 06:50:39",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6806656,
+   "at": "2026-11-20 06:51:01",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6806746,
+   "at": "2026-11-20 06:51:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6806871,
+   "at": "2026-11-20 06:51:18",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6807105,
+   "at": "2026-11-20 06:51:42",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6807162,
+   "at": "2026-11-20 06:51:50",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6807266,
+   "at": "2026-11-20 06:51:59",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6807440,
+   "at": "2026-11-20 06:52:09",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6807449,
+   "at": "2026-11-20 06:52:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1534,86 +4255,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6668918,
-   "at": "2026-11-19 14:29:27",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6668971,
-   "at": "2026-11-19 14:29:33",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
-   "kind": "GET",
-   "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CNNKG"
-   },
-   "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6668984,
-   "at": "2026-11-19 14:29:36",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
-   "kind": "GET",
-   "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CNNKG"
-   },
-   "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669062,
-   "at": "2026-11-19 14:29:53",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669066,
-   "at": "2026-11-19 14:30:01",
+   "seq": 6807490,
+   "at": "2026-11-20 06:52:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
    "kind": "GET",
@@ -1630,969 +4273,9 @@
    "params_parsed": true
   },
   {
-   "seq": 6669071,
-   "at": "2026-11-19 14:30:02",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669232,
-   "at": "2026-11-19 14:30:19",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669280,
-   "at": "2026-11-19 14:30:23",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669322,
-   "at": "2026-11-19 14:30:24",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669334,
-   "at": "2026-11-19 14:30:28",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669350,
-   "at": "2026-11-19 14:30:30",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669365,
-   "at": "2026-11-19 14:30:33",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669427,
-   "at": "2026-11-19 14:30:36",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669454,
-   "at": "2026-11-19 14:30:39",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669463,
-   "at": "2026-11-19 14:30:41",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669513,
-   "at": "2026-11-19 14:30:43",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669636,
-   "at": "2026-11-19 14:30:53",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669710,
-   "at": "2026-11-19 14:31:03",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
-   "kind": "GET",
-   "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CAWND"
-   },
-   "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6669810,
-   "at": "2026-11-19 14:31:12",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
-   "kind": "GET",
-   "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CAWND"
-   },
-   "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670079,
-   "at": "2026-11-19 14:31:38",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670265,
-   "at": "2026-11-19 14:31:55",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670274,
-   "at": "2026-11-19 14:31:58",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670279,
-   "at": "2026-11-19 14:32:00",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670299,
-   "at": "2026-11-19 14:32:12",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670303,
-   "at": "2026-11-19 14:32:15",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670308,
-   "at": "2026-11-19 14:32:17",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670417,
-   "at": "2026-11-19 14:32:29",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670426,
-   "at": "2026-11-19 14:32:32",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670442,
-   "at": "2026-11-19 14:32:34",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670573,
-   "at": "2026-11-19 14:32:46",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670582,
-   "at": "2026-11-19 14:32:50",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670587,
-   "at": "2026-11-19 14:32:51",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670651,
-   "at": "2026-11-19 14:33:04",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670655,
-   "at": "2026-11-19 14:33:07",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670661,
-   "at": "2026-11-19 14:33:08",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670742,
-   "at": "2026-11-19 14:33:20",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6670757,
-   "at": "2026-11-19 14:33:24",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674714,
-   "at": "2026-11-19 15:15:58",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674738,
-   "at": "2026-11-19 15:16:04",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674762,
-   "at": "2026-11-19 15:16:09",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674786,
-   "at": "2026-11-19 15:16:14",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674810,
-   "at": "2026-11-19 15:16:18",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674849,
-   "at": "2026-11-19 15:16:28",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674909,
-   "at": "2026-11-19 15:16:39",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6674957,
-   "at": "2026-11-19 15:16:54",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676243,
-   "at": "2026-11-19 15:27:45",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676311,
-   "at": "2026-11-19 15:27:54",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676427,
-   "at": "2026-11-19 15:28:03",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676620,
-   "at": "2026-11-19 15:28:28",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676710,
-   "at": "2026-11-19 15:28:37",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676844,
-   "at": "2026-11-19 15:28:47",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
-   "kind": "GET",
-   "fe": {
-    "fromCountry": "",
-    "toCity": "",
-    "toCountry": "",
-    "transportMode": "",
-    "validYn": "",
-    "fromCity": ""
-   },
-   "ses": {
-    "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676919,
-   "at": "2026-11-19 15:28:56",
-   "by": "minyonglee1",
+   "seq": 6807804,
+   "at": "2026-11-20 06:52:46",
+   "by": "bindy122678",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
    "fe": {
@@ -2605,50 +4288,14 @@
    },
    "ses": {
     "sesLangCd": "KO",
-    "sesUserId": "minyonglee1"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676923,
-   "at": "2026-11-19 15:28:58",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
-   "kind": "GET",
-   "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CAWND"
-   },
-   "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
-   },
-   "rows": 0,
-   "params_parsed": true
-  },
-  {
-   "seq": 6676927,
-   "at": "2026-11-19 15:29:00",
-   "by": "minyonglee1",
-   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
-   "kind": "GET",
-   "fe": {
-    "country": "",
-    "cityName": "",
-    "city": "CAWND"
-   },
-   "ses": {
-    "sesUserId": "minyonglee1",
-    "sesLangCd": "KO"
+    "sesUserId": "bindy122678"
    },
    "rows": 0,
    "params_parsed": true
   },
   {
-   "seq": 6678535,
-   "at": "2026-11-19 15:37:54",
+   "seq": 6808929,
+   "at": "2026-11-20 06:55:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2668,8 +4315,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6678615,
-   "at": "2026-11-19 15:38:08",
+   "seq": 6809061,
+   "at": "2026-11-20 06:55:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2689,8 +4336,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6678691,
-   "at": "2026-11-19 15:38:17",
+   "seq": 6809168,
+   "at": "2026-11-20 06:55:38",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2710,8 +4357,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6678835,
-   "at": "2026-11-19 15:38:29",
+   "seq": 6809239,
+   "at": "2026-11-20 06:55:49",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2731,8 +4378,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6678919,
-   "at": "2026-11-19 15:38:41",
+   "seq": 6809295,
+   "at": "2026-11-20 06:56:01",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2752,8 +4399,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679002,
-   "at": "2026-11-19 15:38:52",
+   "seq": 6809376,
+   "at": "2026-11-20 06:56:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2773,8 +4420,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679039,
-   "at": "2026-11-19 15:39:03",
+   "seq": 6809506,
+   "at": "2026-11-20 06:56:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2794,8 +4441,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679064,
-   "at": "2026-11-19 15:39:15",
+   "seq": 6809591,
+   "at": "2026-11-20 06:56:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2815,8 +4462,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679093,
-   "at": "2026-11-19 15:39:30",
+   "seq": 6809815,
+   "at": "2026-11-20 06:56:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2836,8 +4483,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679117,
-   "at": "2026-11-19 15:39:41",
+   "seq": 6810031,
+   "at": "2026-11-20 06:57:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2857,8 +4504,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679141,
-   "at": "2026-11-19 15:39:53",
+   "seq": 6810184,
+   "at": "2026-11-20 06:57:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2878,8 +4525,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679172,
-   "at": "2026-11-19 15:40:05",
+   "seq": 6810271,
+   "at": "2026-11-20 06:57:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2899,8 +4546,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679203,
-   "at": "2026-11-19 15:40:16",
+   "seq": 6810407,
+   "at": "2026-11-20 06:57:41",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2920,8 +4567,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679283,
-   "at": "2026-11-19 15:40:28",
+   "seq": 6810612,
+   "at": "2026-11-20 06:57:54",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2941,8 +4588,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679355,
-   "at": "2026-11-19 15:40:38",
+   "seq": 6810714,
+   "at": "2026-11-20 06:58:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2962,8 +4609,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679400,
-   "at": "2026-11-19 15:40:49",
+   "seq": 6810952,
+   "at": "2026-11-20 06:58:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -2983,8 +4630,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679424,
-   "at": "2026-11-19 15:41:01",
+   "seq": 6811231,
+   "at": "2026-11-20 06:58:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3004,8 +4651,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679449,
-   "at": "2026-11-19 15:41:14",
+   "seq": 6811363,
+   "at": "2026-11-20 06:58:40",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3025,8 +4672,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679473,
-   "at": "2026-11-19 15:41:26",
+   "seq": 6811574,
+   "at": "2026-11-20 06:58:51",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3046,8 +4693,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679497,
-   "at": "2026-11-19 15:41:38",
+   "seq": 6811742,
+   "at": "2026-11-20 06:59:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3067,8 +4714,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679521,
-   "at": "2026-11-19 15:41:49",
+   "seq": 6811820,
+   "at": "2026-11-20 06:59:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3088,8 +4735,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679554,
-   "at": "2026-11-19 15:42:00",
+   "seq": 6811937,
+   "at": "2026-11-20 06:59:26",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3109,8 +4756,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679582,
-   "at": "2026-11-19 15:42:13",
+   "seq": 6812047,
+   "at": "2026-11-20 06:59:39",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3130,8 +4777,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679610,
-   "at": "2026-11-19 15:42:25",
+   "seq": 6812087,
+   "at": "2026-11-20 06:59:51",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3151,8 +4798,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679634,
-   "at": "2026-11-19 15:42:37",
+   "seq": 6812127,
+   "at": "2026-11-20 07:00:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3172,8 +4819,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679658,
-   "at": "2026-11-19 15:42:49",
+   "seq": 6812171,
+   "at": "2026-11-20 07:00:15",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3193,8 +4840,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679682,
-   "at": "2026-11-19 15:43:00",
+   "seq": 6812242,
+   "at": "2026-11-20 07:00:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3214,8 +4861,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679706,
-   "at": "2026-11-19 15:43:11",
+   "seq": 6812287,
+   "at": "2026-11-20 07:00:36",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3235,8 +4882,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679730,
-   "at": "2026-11-19 15:43:23",
+   "seq": 6812311,
+   "at": "2026-11-20 07:00:48",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3256,8 +4903,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679795,
-   "at": "2026-11-19 15:43:35",
+   "seq": 6812335,
+   "at": "2026-11-20 07:01:00",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3277,8 +4924,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679956,
-   "at": "2026-11-19 15:43:47",
+   "seq": 6812411,
+   "at": "2026-11-20 07:01:11",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3298,8 +4945,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6679980,
-   "at": "2026-11-19 15:43:58",
+   "seq": 6812443,
+   "at": "2026-11-20 07:01:24",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3319,8 +4966,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680028,
-   "at": "2026-11-19 15:44:08",
+   "seq": 6812502,
+   "at": "2026-11-20 07:01:33",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3340,8 +4987,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680220,
-   "at": "2026-11-19 15:44:19",
+   "seq": 6812575,
+   "at": "2026-11-20 07:01:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3361,8 +5008,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680296,
-   "at": "2026-11-19 15:44:31",
+   "seq": 6812613,
+   "at": "2026-11-20 07:01:57",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3382,8 +5029,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680325,
-   "at": "2026-11-19 15:44:44",
+   "seq": 6812637,
+   "at": "2026-11-20 07:02:08",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3403,8 +5050,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680357,
-   "at": "2026-11-19 15:44:56",
+   "seq": 6812661,
+   "at": "2026-11-20 07:02:20",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3424,8 +5071,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680381,
-   "at": "2026-11-19 15:45:07",
+   "seq": 6812685,
+   "at": "2026-11-20 07:02:32",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3445,8 +5092,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680405,
-   "at": "2026-11-19 15:45:17",
+   "seq": 6812718,
+   "at": "2026-11-20 07:02:42",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3466,8 +5113,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680437,
-   "at": "2026-11-19 15:45:30",
+   "seq": 6812742,
+   "at": "2026-11-20 07:02:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3487,8 +5134,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680461,
-   "at": "2026-11-19 15:45:42",
+   "seq": 6812832,
+   "at": "2026-11-20 07:03:06",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3508,8 +5155,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680536,
-   "at": "2026-11-19 15:45:54",
+   "seq": 6812888,
+   "at": "2026-11-20 07:03:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3529,8 +5176,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680560,
-   "at": "2026-11-19 15:46:07",
+   "seq": 6812957,
+   "at": "2026-11-20 07:03:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3550,8 +5197,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680588,
-   "at": "2026-11-19 15:46:19",
+   "seq": 6813124,
+   "at": "2026-11-20 07:03:43",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3571,8 +5218,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680612,
-   "at": "2026-11-19 15:46:29",
+   "seq": 6813217,
+   "at": "2026-11-20 07:03:53",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3592,8 +5239,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680643,
-   "at": "2026-11-19 15:46:40",
+   "seq": 6813307,
+   "at": "2026-11-20 07:04:04",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3613,8 +5260,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680841,
-   "at": "2026-11-19 15:46:53",
+   "seq": 6813471,
+   "at": "2026-11-20 07:04:17",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3634,8 +5281,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680871,
-   "at": "2026-11-19 15:47:05",
+   "seq": 6813657,
+   "at": "2026-11-20 07:04:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3655,8 +5302,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680901,
-   "at": "2026-11-19 15:47:16",
+   "seq": 6813791,
+   "at": "2026-11-20 07:04:41",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3676,8 +5323,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6680947,
-   "at": "2026-11-19 15:47:29",
+   "seq": 6813927,
+   "at": "2026-11-20 07:04:54",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3697,8 +5344,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681003,
-   "at": "2026-11-19 15:47:39",
+   "seq": 6814059,
+   "at": "2026-11-20 07:05:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3718,8 +5365,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681027,
-   "at": "2026-11-19 15:47:51",
+   "seq": 6814194,
+   "at": "2026-11-20 07:05:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3739,8 +5386,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681100,
-   "at": "2026-11-19 15:48:03",
+   "seq": 6814334,
+   "at": "2026-11-20 07:05:28",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3760,8 +5407,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681128,
-   "at": "2026-11-19 15:48:15",
+   "seq": 6814433,
+   "at": "2026-11-20 07:05:40",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3781,8 +5428,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681350,
-   "at": "2026-11-19 15:48:27",
+   "seq": 6814496,
+   "at": "2026-11-20 07:05:51",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3802,8 +5449,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681374,
-   "at": "2026-11-19 15:48:40",
+   "seq": 6814557,
+   "at": "2026-11-20 07:06:03",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3823,8 +5470,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681401,
-   "at": "2026-11-19 15:48:51",
+   "seq": 6814581,
+   "at": "2026-11-20 07:06:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3844,8 +5491,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681525,
-   "at": "2026-11-19 15:49:03",
+   "seq": 6814663,
+   "at": "2026-11-20 07:06:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3865,8 +5512,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681555,
-   "at": "2026-11-19 15:49:15",
+   "seq": 6814750,
+   "at": "2026-11-20 07:06:37",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3886,8 +5533,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681579,
-   "at": "2026-11-19 15:49:27",
+   "seq": 6814809,
+   "at": "2026-11-20 07:06:50",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3907,8 +5554,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681603,
-   "at": "2026-11-19 15:49:39",
+   "seq": 6814833,
+   "at": "2026-11-20 07:07:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3928,8 +5575,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681627,
-   "at": "2026-11-19 15:49:50",
+   "seq": 6814857,
+   "at": "2026-11-20 07:07:14",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3949,8 +5596,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681826,
-   "at": "2026-11-19 15:50:00",
+   "seq": 6814882,
+   "at": "2026-11-20 07:07:24",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3970,8 +5617,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6681877,
-   "at": "2026-11-19 15:50:12",
+   "seq": 6814906,
+   "at": "2026-11-20 07:07:36",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -3991,8 +5638,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682060,
-   "at": "2026-11-19 15:50:44",
+   "seq": 6815002,
+   "at": "2026-11-20 07:08:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4012,8 +5659,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682373,
-   "at": "2026-11-19 15:51:01",
+   "seq": 6815026,
+   "at": "2026-11-20 07:08:23",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4033,8 +5680,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682421,
-   "at": "2026-11-19 15:51:22",
+   "seq": 6815063,
+   "at": "2026-11-20 07:08:45",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4054,8 +5701,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682457,
-   "at": "2026-11-19 15:51:42",
+   "seq": 6815100,
+   "at": "2026-11-20 07:09:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4075,8 +5722,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682534,
-   "at": "2026-11-19 15:52:08",
+   "seq": 6815174,
+   "at": "2026-11-20 07:09:30",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4096,8 +5743,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682595,
-   "at": "2026-11-19 15:52:31",
+   "seq": 6815235,
+   "at": "2026-11-20 07:09:52",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4117,8 +5764,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682628,
-   "at": "2026-11-19 15:52:43",
+   "seq": 6815293,
+   "at": "2026-11-20 07:10:05",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4138,8 +5785,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682652,
-   "at": "2026-11-19 15:52:51",
+   "seq": 6815318,
+   "at": "2026-11-20 07:10:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4159,8 +5806,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682702,
-   "at": "2026-11-19 15:53:03",
+   "seq": 6815357,
+   "at": "2026-11-20 07:10:25",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4180,8 +5827,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682823,
-   "at": "2026-11-19 15:53:20",
+   "seq": 6815430,
+   "at": "2026-11-20 07:10:42",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4201,8 +5848,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682855,
-   "at": "2026-11-19 15:53:25",
+   "seq": 6815454,
+   "at": "2026-11-20 07:10:47",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4222,8 +5869,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6682910,
-   "at": "2026-11-19 15:53:34",
+   "seq": 6815493,
+   "at": "2026-11-20 07:10:56",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4243,8 +5890,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683019,
-   "at": "2026-11-19 15:53:48",
+   "seq": 6815532,
+   "at": "2026-11-20 07:11:09",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4264,8 +5911,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683026,
-   "at": "2026-11-19 15:53:52",
+   "seq": 6815537,
+   "at": "2026-11-20 07:11:13",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4285,8 +5932,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683125,
-   "at": "2026-11-19 15:54:02",
+   "seq": 6815576,
+   "at": "2026-11-20 07:11:23",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4306,8 +5953,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683249,
-   "at": "2026-11-19 15:54:21",
+   "seq": 6815637,
+   "at": "2026-11-20 07:11:43",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4327,8 +5974,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683300,
-   "at": "2026-11-19 15:54:30",
+   "seq": 6815676,
+   "at": "2026-11-20 07:11:52",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4348,8 +5995,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683580,
-   "at": "2026-11-19 15:54:45",
+   "seq": 6815735,
+   "at": "2026-11-20 07:12:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4369,8 +6016,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683587,
-   "at": "2026-11-19 15:54:48",
+   "seq": 6815740,
+   "at": "2026-11-20 07:12:10",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4390,8 +6037,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683649,
-   "at": "2026-11-19 15:54:56",
+   "seq": 6815779,
+   "at": "2026-11-20 07:12:18",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4411,8 +6058,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683809,
-   "at": "2026-11-19 15:55:21",
+   "seq": 6815818,
+   "at": "2026-11-20 07:12:44",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4432,8 +6079,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683898,
-   "at": "2026-11-19 15:55:40",
+   "seq": 6815887,
+   "at": "2026-11-20 07:13:02",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4453,8 +6100,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683926,
-   "at": "2026-11-19 15:55:45",
+   "seq": 6815911,
+   "at": "2026-11-20 07:13:07",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4474,8 +6121,8 @@
    "params_parsed": true
   },
   {
-   "seq": 6683938,
-   "at": "2026-11-19 15:55:48",
+   "seq": 6815916,
+   "at": "2026-11-20 07:13:10",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",
@@ -4495,8 +6142,344 @@
    "params_parsed": true
   },
   {
-   "seq": 6684053,
-   "at": "2026-11-19 15:56:00",
+   "seq": 6815966,
+   "at": "2026-11-20 07:13:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816156,
+   "at": "2026-11-20 07:14:22",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816240,
+   "at": "2026-11-20 07:15:17",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816288,
+   "at": "2026-11-20 07:15:37",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816327,
+   "at": "2026-11-20 07:15:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816366,
+   "at": "2026-11-20 07:16:11",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816454,
+   "at": "2026-11-20 07:16:34",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816493,
+   "at": "2026-11-20 07:16:49",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816502,
+   "at": "2026-11-20 07:16:54",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816582,
+   "at": "2026-11-20 07:17:44",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816595,
+   "at": "2026-11-20 07:17:53",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816634,
+   "at": "2026-11-20 07:18:03",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+   "kind": "GET",
+   "fe": {
+    "fromCountry": "",
+    "toCity": "",
+    "toCountry": "",
+    "transportMode": "",
+    "validYn": "",
+    "fromCity": ""
+   },
+   "ses": {
+    "sesLangCd": "KO",
+    "sesUserId": "minyonglee1"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816638,
+   "at": "2026-11-20 07:18:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816642,
+   "at": "2026-11-20 07:18:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816646,
+   "at": "2026-11-20 07:18:04",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CAWND"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816650,
+   "at": "2026-11-20 07:18:05",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "CNCKG"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816654,
+   "at": "2026-11-20 07:18:06",
+   "by": "minyonglee1",
+   "proc": "PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY",
+   "kind": "GET",
+   "fe": {
+    "country": "",
+    "cityName": "",
+    "city": "ZZ_E2"
+   },
+   "ses": {
+    "sesUserId": "minyonglee1",
+    "sesLangCd": "KO"
+   },
+   "rows": 0,
+   "params_parsed": true
+  },
+  {
+   "seq": 6816693,
+   "at": "2026-11-20 07:18:16",
    "by": "minyonglee1",
    "proc": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE",
    "kind": "GET",

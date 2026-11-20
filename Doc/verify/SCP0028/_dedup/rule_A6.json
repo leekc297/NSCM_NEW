@@ -1,0 +1,310 @@
+{
+ "rule_id": "A6",
+ "hash": "ca55749498784fb3",
+ "groups": [
+  {
+   "rows": [
+    "AD-03fd5b01"
+   ],
+   "why": "Main search call #12 (transMode=AIR) uses different search conditions from every other call, so it is a separate result set."
+  },
+  {
+   "rows": [
+    "AD-072c6abe"
+   ],
+   "why": "Main search call #1 (division 81 only) uses different search conditions from every other call, so it is a separate result set."
+  },
+  {
+   "rows": [
+    "AD-12510a26"
+   ],
+   "why": "Main search call #3 (divisionId=40) uses a different division condition, so it is a separate result set."
+  },
+  {
+   "rows": [
+    "AD-125dcd3f"
+   ],
+   "why": "Popup search call #34 has a truncated fromSite, so it cannot be confirmed as the same condition as #32 or #33 and stays on its own."
+  },
+  {
+   "rows": [
+    "AD-18433a5d"
+   ],
+   "why": "Main search call #22 (itemId=ACEP2065I-B1) uses a different item condition, so it is a separate result set."
+  },
+  {
+   "rows": [
+    "AD-244b08bb"
+   ],
+   "why": "Popup search call #4 (no conditions, D) uses different conditions from the other popup calls."
+  },
+  {
+   "rows": [
+    "AD-2af1bd7e"
+   ],
+   "why": "Main search call #9 (operationGroup=A) uses a different operation group condition."
+  },
+  {
+   "rows": [
+    "AD-305c8e11"
+   ],
+   "why": "Popup search call #35 (operationGroup=P plus fromSite) uses different conditions from the other popup calls."
+  },
+  {
+   "rows": [
+    "AD-31b656ab"
+   ],
+   "why": "Main search call #40 (itemId=AAEF1001I-A1-000) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-34e30c64"
+   ],
+   "why": "Main search call #7 (divisionId=82) uses a different division condition."
+  },
+  {
+   "rows": [
+    "AD-4c7a11a9"
+   ],
+   "why": "Main search call #11 (multiple fromSite values) uses a different site condition."
+  },
+  {
+   "rows": [
+    "AD-5220bfed"
+   ],
+   "why": "Main search call #25 (two itemIds) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-62e23a4b"
+   ],
+   "why": "Main search call #6 (valid=N) uses a different validity condition."
+  },
+  {
+   "rows": [
+    "AD-638f7dd3"
+   ],
+   "why": "Main search call #23 (lowercase itemId) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-65516749"
+   ],
+   "why": "Popup search call #27 (itemId=APVCC517H-A4) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-6e5cd70c"
+   ],
+   "why": "Popup search call #33 has a truncated fromSite, so it cannot be confirmed as the same condition as #32 or #34 and stays on its own."
+  },
+  {
+   "rows": [
+    "AD-7307a8c7"
+   ],
+   "why": "Main search call #18 (81_ST) uses a different division condition."
+  },
+  {
+   "rows": [
+    "AD-7abad1a0"
+   ],
+   "why": "Main search call #19 (81_HD) uses a different division condition."
+  },
+  {
+   "rows": [
+    "AD-8ee9253d"
+   ],
+   "why": "Main search call #17 (81_HM) uses a different division condition."
+  },
+  {
+   "rows": [
+    "AD-9abf4233"
+   ],
+   "why": "Main search call #16 (81_UC) uses a different division condition."
+  },
+  {
+   "rows": [
+    "AD-a44b9f91"
+   ],
+   "why": "Main search call #13 (all five transport modes) uses a different transport mode condition."
+  },
+  {
+   "rows": [
+    "AD-a75595d7"
+   ],
+   "why": "Popup search call #31 (single fromSite) uses a different site condition."
+  },
+  {
+   "rows": [
+    "AD-afab4d83"
+   ],
+   "why": "Popup search call #32 has a truncated fromSite, so it cannot be confirmed as the same condition as #33 or #34 and stays on its own."
+  },
+  {
+   "rows": [
+    "AD-b6390373"
+   ],
+   "why": "Main search call #10 (single fromSite) uses a different site condition."
+  },
+  {
+   "rows": [
+    "AD-b6e03e8a"
+   ],
+   "why": "Main search call #5 (valid=Y) uses a different validity condition."
+  },
+  {
+   "rows": [
+    "AD-bbcfd07e"
+   ],
+   "why": "Main search call #14 (single toSite) uses a different destination condition."
+  },
+  {
+   "rows": [
+    "AD-bf0f8fdd"
+   ],
+   "why": "Popup search call #29 (lowercase itemId) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-c14d317b"
+   ],
+   "why": "Popup search call #28 (partial itemId) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-cde75381"
+   ],
+   "why": "Main search call #15 (multiple toSite values) uses a different destination condition."
+  },
+  {
+   "rows": [
+    "AD-d4749e15"
+   ],
+   "why": "Popup search call #30 (two itemIds) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-d8bd10b2"
+   ],
+   "why": "Main search call #8 (operationGroup=P) uses a different operation group condition."
+  },
+  {
+   "rows": [
+    "AD-e50c244e"
+   ],
+   "why": "Main search call #24 (partial itemId) uses a different item condition."
+  },
+  {
+   "rows": [
+    "AD-e8b7b67e"
+   ],
+   "why": "Main search call #21 (AIR,FRY) uses a different transport mode condition."
+  },
+  {
+   "rows": [
+    "AD-eb77d44f"
+   ],
+   "why": "Main search call #20 (81_HG) uses a different division condition."
+  },
+  {
+   "rows": [
+    "AD-f0d1102c"
+   ],
+   "why": "Main search call #26 (itemId=E2E) uses a different item condition."
+  },
+  {
+   "rows": [
+    "EG-3da46b0f"
+   ],
+   "why": "Checks whether an account pair with and without TITLESET_USER is available, which is a different property from row sort order."
+  },
+  {
+   "rows": [
+    "EG-78281d4c"
+   ],
+   "why": "Checks character-key collation (case-insensitive, NULL first) on the main search procedure, which differs from the INPUT procedure."
+  },
+  {
+   "rows": [
+    "EG-c77e3290"
+   ],
+   "why": "Checks character-key collation on the INPUT procedure, which is a different procedure from the main search one."
+  },
+  {
+   "rows": [
+    "T-073acab9"
+   ],
+   "why": "Trace row checking that the INPUT procedure exists as mapped in the source (row 1), which is a different property from measured sort order."
+  },
+  {
+   "rows": [
+    "T-2c20a3fc"
+   ],
+   "why": "Trace row for the ITEM_BY_DIVISION_POPUP procedure, a different object."
+  },
+  {
+   "rows": [
+    "T-427c462f"
+   ],
+   "why": "Trace row for the main search procedure (row 41), which checks that the implementation exists rather than the measured sort order."
+  },
+  {
+   "rows": [
+    "T-653f1a5d"
+   ],
+   "why": "Trace row for the MATERIAL_BY_DIVISION procedure, a different object."
+  },
+  {
+   "rows": [
+    "T-6dc0e2d5"
+   ],
+   "why": "Trace row for the button-permission procedure PR_GET_MNU_BTN_AUTH, a different object."
+  },
+  {
+   "rows": [
+    "T-c6aefa56"
+   ],
+   "why": "Trace row for the popup search procedure, which checks that the implementation exists."
+  },
+  {
+   "rows": [
+    "T-e57376d2"
+   ],
+   "why": "Trace row for the popup Form_Load automatic search on entry ('D' only), a different element."
+  },
+  {
+   "rows": [
+    "T-f4dca6bb"
+   ],
+   "why": "Trace row for the FindData query binding (o_rc1), a different element."
+  },
+  {
+   "rows": [
+    "V-83cc240e"
+   ],
+   "why": "Checks main grid sort order in a specific state (81_HG, after an input popup selection), which differs from the search result state."
+  },
+  {
+   "rows": [
+    "V-871ad348"
+   ],
+   "why": "Checks that no arbitrary ORDER BY was added to the INPUT procedure, which is a different expectation from collation or key order."
+  },
+  {
+   "rows": [
+    "V-cb9cf45f"
+   ],
+   "why": "Checks the main search procedure's ORDER BY key order (static check plus live measurement), which is a different expectation from the collation rule or per-call order checks."
+  },
+  {
+   "rows": [
+    "V-d99d54fc"
+   ],
+   "why": "Confirmed rule that every grid search procedure must have a deterministic ORDER BY, which applies across procedures and has a different expectation."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:37:20",
+ "cost": 0.2094045
+}

@@ -84,7 +84,9 @@ export const OP_GROUP_ELECTRODE = 'E';
 //   AS-IS: MSG00003(실패)/00004(성공)/00006(성공후속)/00016(confirm)/00046(삭제)/00096(권한)/00109(편집가드)/00134(셀선택).
 export const MSG = {
   NO_PERMISSION: 'MSG00096', // No permission. (TO-BE 동일 — 유지)
-  SELECT_CELL: 'MSG00014', // No row/cell selected. (AS-IS MSG00134 selCells<1 — 자매 SELECT_TARGET 정합)
+  // 날짜 선택 후 입력하세요. — AS-IS MSG00134 selCells<1(cs:1314). TO-BE 동일 문구 MSG01153(KO/EN, ora.py 2026-11-19).
+  //   종전 MSG00014("행이 선택되지 않았습니다")는 AS-IS 문구와 불일치.
+  SELECT_CELL: 'MSG01153',
   // {0} value is required. — AS-IS 프레임워크 checkRequiredOfSearch(DataUtil.cs:427-553, 라벨 '*' 컨트롤 빈값/'ALL' 차단
   //   MSG00002) 재현. Designer 실측 라벨 Division*/Operation Group*/Period*(Designer.cs:723/734/898).
   //   구 MSG00002 는 TO-BE 에서 "Saved successfully." 오표시 — 자매 SCP0013/SCP0020 과 동일하게 MSG00429 재매핑(ora.py 2026-09-25).

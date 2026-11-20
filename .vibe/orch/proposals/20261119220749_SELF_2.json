@@ -1,0 +1,121 @@
+{
+  "id": "20261119220749_SELF_2",
+  "at": "2026-11-19T22:07:49+09:00",
+  "ms": 1795093669862,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn ledger false positive reload regex",
+  "title": "S6 미확인 원장: 기능 설명 줄 제외, '미확인:' 줄 문장 단위 분리, 'VS Code 화면' 항목을 창 로드 기록과 연결",
+  "evidence": "입력 key S6|CL:2026-11-19:1dt58td#173850d3ab, #5db5f5186f, #83dd6e11b0 = tools/VibeManager/CHANGELOG.md 12, 13, 15줄(Q3, Q4, Q5 기능 설명). 낱말 '미확인'이 화면 항목 이름으로 들어 있음. unverifiedOpen 의 CL:2026-11-19:2wha2k '검증 미실행이면 대상 파일을 복원' 도 동작 설명. tools/VibeManager/orch-history.js:92-94 가 낱말 포함만으로 미확인 항목에 넣음. :93 은 '미확인:' 줄을 가운뎃점으로만 나눠 CHANGELOG.md 23줄의 5개 문장이 1건(#063a3fe3c4)이 됨. tools/VibeManager/orch-selfcheck.js:151 판별식 /창 다시 로드|실화면|재시작|Reload/ 에 'VS Code 화면'이 없어 unverifiedOpen 40건 중 10건(1o3sljj, q197jk, 1wmxsm7, 12cr5k4, 12j8avv, fxktyj, ypj32d, okb4hc, 1hx3ld0, 6ktmmj)이 loaded 빈 값. worklog.jsonl 에 'VS Code 화면' 11회.",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "before_after": "orch-history.js:94 변경 전: 문장에 미확인, 미실행, 미측정 낱말이 있으면 등록 → 변경 후: 낱말 바로 뒤가 '원장', '이면', 가운뎃점, 쉼표이거나 바로 앞이 가운뎃점인 문장은 제외. orch-history.js:93 변경 전: '미확인:' 줄을 가운뎃점으로만 분리 → 변경 후: 마침표 뒤 공백으로도 분리. orch-selfcheck.js:151 변경 전: /창 다시 로드|실화면|재시작|Reload/ → 변경 후: 'VS Code 화면' 추가. 원장 key 는 문장 해시라 나뉜 문장은 새 key 가 됨. unverified.json 파일이 없어 옮길 확인 기록 0건.",
+  "verify": "t_orch_history.js 에 시험 추가: CHANGELOG.md 12, 13, 15줄 원문과 '검증 미실행이면 대상 파일을 복원' 4개 문장 → unverified 0건. 23줄 원문 → 5건. 'VS Code 실화면 미확인(창 다시 로드 필요).' → 1건. t_orch_selfcheck.js: 'VS Code 화면 미확인.' 항목의 reload 값 true. 반영 뒤 이력 수집과 S6 재실행 결과 reloadOpen 이 44 보다 큼.",
+  "rollback": "VMO 백업본으로 4개 파일 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T22:18:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:19:59+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 223, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2218"
+    },
+    {
+      "at": "2026-11-19T22:19:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:21:37+09:00",
+      "by": "VMO",
+      "what": "반영 실패 — 검증 실패: 미실행. node tools/VibeManager/test/t_orch_history.js tools/VibeManager, node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager 실행이 권한 승인 필요로 차단됨(Bash 2회, PowerShell 2회, 2026-11-19 22:21:10 확인 · 대상 파일 4개 복원",
+      "log": ".vibe\\logs\\2026-11-19T22-19-59_claude_orch.log",
+      "sec": 95,
+      "costUsd": 1.9907985999999998,
+      "files": [
+        "tools/VibeManager/orch-history.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_history.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-19T22:26:20+09:00",
+      "by": "Claude Code 세션",
+      "what": "다시 대기로 돌림 — 반영 실패 원인이 개선안이 아닌 VMO 결함(허용 도구 인자가 셸에서 쪼개져 node 명령 거부)이었고 orch-agent.js 를 고침"
+    },
+    {
+      "at": "2026-11-19T22:35:26+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:37:06+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 231, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2235"
+    },
+    {
+      "at": "2026-11-19T22:37:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:40:58+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 236, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T22:40:58+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. ① node tools/VibeManager/test/t_orch_history.js tools/VibeManager → ALL PASS(2026-11-19 22:38). 추가 4건 PASS: CHANGELOG.md Q3, Q4, Q5 줄과 '검증 미실행이면 대상 파일을 복원' 줄 4개 문장 = unverified 0건, 21:1x~21:5x 절 '미확인:' 줄 = 5건, 'VS Code 실화면 미확인(창 다시 로드 필요).' = 1건, 제외 자리와 미확인이 함께 있는 문장 = 미확인. ② node tools/VibeManager/ · 변경 4개 파일",
+      "log": ".vibe\\logs\\2026-11-19T22-37-06_claude_orch.log",
+      "sec": 133,
+      "costUsd": 2.3905284000000004,
+      "files": [
+        "tools/VibeManager/orch-history.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_history.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S6",
+  "selfKey": "S6|CL:2026-11-19:1dt58td#5db5f5186f",
+  "auto": true,
+  "autoTried": true,
+  "autoMs": 1795095326327,
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-history.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_history.js",
+      "tools/VibeManager/test/t_orch_selfcheck.js"
+    ],
+    "verify_result": "① node tools/VibeManager/test/t_orch_history.js tools/VibeManager → ALL PASS(2026-11-19 22:38). 추가 4건 PASS: CHANGELOG.md Q3, Q4, Q5 줄과 '검증 미실행이면 대상 파일을 복원' 줄 4개 문장 = unverified 0건, 21:1x~21:5x 절 '미확인:' 줄 = 5건, 'VS Code 실화면 미확인(창 다시 로드 필요).' = 1건, 제외 자리와 미확인이 함께 있는 문장 = 미확인. ② node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager → ALL PASS(22:38). 'VS Code 화면 미확인.' 항목 reload true PASS, S6 미확인 3건 중 reload 2건 PASS. ③ 실제 저장소에서 hist.collect(writeMd:false) 뒤 sc.ledger() 에 S6 집계식 적용(22:39:00): total 107, open 107, reloadOpen 58(기준 44 초과), reloadLoaded 55, 기능 설명 줄 잔존 0건, 'VS Code 화면' 항목 11건 중 reload true 11건. node --check 2개 파일 통과.",
+    "note": "hook 차단 없음(repairScope DB_ONLY, 대상 tools/VibeManager). 낱말 단위 판정: 한 문장에 제외 자리와 제외 아닌 낱말이 함께 있으면 미확인으로 남김. '미확인:' 줄의 마침표 분리로 CHANGELOG.md 139줄 '재현되면 추가 조사.' 같은 후속 문장도 1건이 됨. S6 는 sc.run(['S6']) 대신 sc.ledger() 로 계산해 .vibe/orch/selfcheck/result.json 의 S6 값은 다음 정기 점검 때 갱신됨. .vibe/orch/history/worklog.jsonl, stats.json 은 22:39 수집으로 갱신됨. WORKLOG.md, CHANGELOG.md, 설치 폴더는 건드리지 않음."
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 236, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261119_self2235",
+  "needsReload": true,
+  "appliedMs": 1795095658798,
+  "synced": [
+    "orch-history.js",
+    "orch-selfcheck.js"
+  ],
+  "snap": "prop_20261119220749_SELF_2"
+}

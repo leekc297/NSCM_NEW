@@ -286,6 +286,13 @@ export const BodDistributionRoutePopup = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', '_Close')}
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -294,13 +301,6 @@ export const BodDistributionRoutePopup = ({
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', '_Close')}
-              onClick={modalClose}
             />
           </div>
 

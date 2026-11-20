@@ -56,19 +56,19 @@ export const FixReasonModal = ({ open, onClose, onConfirm }: Props) => {
           />
           <Stack direction='row' spacing={1} justifyContent='flex-end' marginTop={1}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t(LBL.CLOSE, '_Close')}
+              onClick={onClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
               disabled={trimmed === ''}
               buttonLabel='OK'
               onClick={() => onConfirm(trimmed)}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t(LBL.CLOSE, '_Close')}
-              onClick={onClose}
             />
           </Stack>
         </div>

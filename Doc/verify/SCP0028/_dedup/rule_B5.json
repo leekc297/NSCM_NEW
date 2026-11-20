@@ -1,0 +1,82 @@
+{
+ "rule_id": "B5",
+ "hash": "9cabb32ed9ffe6f3",
+ "groups": [
+  {
+   "rows": [
+    "V-1299b199"
+   ],
+   "why": "Measure 콤보 후보에 오타 Measure \"Cutomer FCST\"가 없고 데이터가 0건인지 확인하는 행으로, 같은 기대를 가진 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-183b82fa"
+   ],
+   "why": "대상이 End Customer 셀 콤보 후보이고, 기대는 Div 81 신규 행에서 END_CUSTOMER 룩업 목록만 나오는 것이다. 다른 행과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-397418b2"
+   ],
+   "why": "대상이 권한 신청 가능 Group 목록이고 기대는 REQ_NO_DISPLAY 등록 Group 비표시다. 다른 행과 요소도 기대도 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-61539508"
+   ],
+   "why": "SCM_FCST·MKT_FCST의 편집 가능 여부를 Div·권한·SCP 시간대별로 확인하는 행이다. 후보 목록이 아니라 편집 통제를 보므로 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-70fa9c70"
+   ],
+   "why": "Div별 UI Category 기준으로 Measure 항목 구성을 확인하는 행이다. 신규 행 입력 Measure 후보 행들과 상태도 기대도 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-82dabbfd"
+   ],
+   "why": "FCST Type 콤보 후보가 SALES_TYPE_CODE 기준인지, 권한별 후보 수가 기준과 같은지를 Div·권한그룹 전반에서 본다. V-fa87028b는 Div 82와 Site 유형별 Measure 제한까지 포함해 조건과 기대가 다르므로 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-8619a6ff"
+   ],
+   "why": "Div 81 DM Planner(W/S)에서 Sales Site 유형에 따른 AS From Site 활성 여부와 Measure 후보(SCM_FCST 비노출)를 확인한다. 요소와 기대가 섞여 있어 다른 행과 같지 않으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-a6e45cb3"
+   ],
+   "why": "Search 전 Division 자동 선택 상태에서 Measure 설정 팝업 후보를 Division 기준으로 재조회하는지 확인한다. 팝업이라는 요소도 조회 전이라는 상태도 다른 행과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-c151e0f7"
+   ],
+   "why": "Current 버전에서 입력 Measure 5종의 Div·권한·VMI별 통제와 AS From Site 목록을 함께 본다. 조건과 기대 범위가 V-fa558d3c, V-8619a6ff와 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ef07a9ca"
+   ],
+   "why": "신규 행의 Sales Site·Project 팝업·Model 후보·Team 컬럼 동작을 확인하는 행으로, 대상 요소가 다른 행과 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-fa558d3c"
+   ],
+   "why": "신규 행 Measure 콤보 후보를 Div와 Sales Site 유형(VMI=Y/비축용/고객향)별로 확인한다. V-c151e0f7(Current 버전·권한 조건·AS From Site 포함), V-8619a6ff(Div 81 W/S·AS From Site 활성)와 조건과 기대가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-fa87028b"
+   ],
+   "why": "Div 82 DM Planner(W/S)에서 FCST Type 노출과 Site 유형별 입력 Measure 제한을 함께 본다. V-82dabbfd와는 조건과 기대 범위가 달라 확신할 수 없으므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:16:52",
+ "cost": 0.077224
+}

@@ -520,7 +520,10 @@ def main():
                 continue
             hit = next((tparams[c] for c in it['cands'] if c in tparams), None)
             if not hit:
-                rows.append(base(**common, verdict='NA', note=f"AS-IS 는 {it['source'] or it['arg']} 를 팝업 인자 {it['param']} 로 전달 · TO-BE {u['modal']} 사용처에 같은 개념 인자 미전달(팝업 교체·조건 축소 여부 사람 확인 W7)"))
+                # 2026-11-20 T406(SSP0014 T-3a730d4a · 결정 D7): TO-BE 모달이 이 화면 폴더 밖 공용 모달이면 '모달이 받는 인자만 연동'은 확정 TO-BE 룰 CR-096
+                #   (AS-IS SCM_SITE_ID 필터 등 그 밖 인자 미전달은 오류 아님 · 사용자 결정 2026-11-06). 화면 폴더 안 모달은 종전대로 사람 확인
+                shared_ = not any(re.search(r'\b(?:function|const|class)\s+' + re.escape(u['modal']) + r'\b', s) for s in srcs.values())
+                rows.append(base(**common, verdict='NA', note=(f"TO-BE 룰 CR-096 — AS-IS 는 {it['source'] or it['arg']} 를 팝업 인자 {it['param']} 로 전달 · TO-BE 공용 모달 {u['modal']}(화면 폴더 밖 정의)은 모달이 받는 인자만 연동 · 그 밖 AS-IS 인자 미전달은 오류 아님(사용자 결정 2026-11-06)" if shared_ else f"AS-IS 는 {it['source'] or it['arg']} 를 팝업 인자 {it['param']} 로 전달 · TO-BE {u['modal']} 사용처에 같은 개념 인자 미전달(팝업 교체·조건 축소 여부 사람 확인 W7)")))
                 continue
             k, v = hit
             cls_, bound = classify(v)

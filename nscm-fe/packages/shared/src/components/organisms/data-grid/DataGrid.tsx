@@ -10,6 +10,7 @@ import {
   AllowResizing,
   AllowSorting,
   CellRange,
+  CellType,
   Column,
   DataMap,
   _EditHandler,
@@ -486,6 +487,42 @@ const installComboCaseInsensitiveSearch = () => {
     if (!cancel) restoreCanonicalComboText(this);
     return originalFinishEditing.call(this, cancel);
   };
+};
+
+/**
+ * 콤보(dataMap) 셀은 한 번 클릭으로 바로 편집에 들어가 드롭다운을 연다(사용자 지시 2026-11-19).
+ *
+ * wijmo 기본은 첫 클릭 = 셀 선택, 재클릭/더블클릭/F2 = 편집 진입이고 목록은 그 뒤 삼각형을 눌러야
+ * 열려 콤보 하나 고르는 데 클릭이 2~3번 들었다. 클릭(mouseup 뒤)에 걸어 wijmo 의 mousedown 선택
+ * 처리가 끝난 다음 동작한다.
+ *
+ * 편집 가능 판정은 따로 하지 않는다 — startEditing 이 beginningEdit(setEditableColumns 의
+ * isEditableCell·MODAL 가드, 화면별 핸들러)을 거쳐 막히면 false 를 돌려주므로 그때는 아무것도 안 한다.
+ *
+ * 제외: 왼쪽 버튼이 아닌 클릭, 수식키 클릭(Ctrl/Shift 범위 선택), 드래그로 범위가 잡힌 경우,
+ *   드롭다운 버튼 자체 클릭(wijmo 가 직접 연다), 이미 목록이 열린 상태(토글이라 다시 부르면 닫힌다).
+ */
+const openComboDropDownOnClick = (grid: TFlexGrid, event: MouseEvent) => {
+  if (event.button !== 0 || event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) return;
+  if (grid.isReadOnly) return;
+  const target = event.target instanceof Element ? event.target : null;
+  if (target?.closest('.wj-elem-dropdown')) return;
+
+  const hit = grid.hitTest(event);
+  if (hit.cellType !== CellType.Cell || hit.row < 0 || hit.col < 0) return;
+  if (!grid.columns[hit.col]?.dataMap) return;
+
+  const selection = grid.selection;
+  if (!selection.isSingleCell || selection.row !== hit.row || selection.col !== hit.col) return;
+
+  const editRange = grid.editRange;
+  const isEditingThisCell = !!editRange && editRange.row === hit.row && editRange.col === hit.col;
+  if (isEditingThisCell) {
+    if (grid._edtHdl._lbx) return;
+  } else if (!grid.startEditing(true, hit.row, hit.col)) {
+    return;
+  }
+  grid.toggleDropDownList();
 };
 
 interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridProps {
@@ -1778,6 +1815,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
      */
     grid.hostElement.addEventListener('dblclick', e => dblClickRef.current?.(e));
     grid.hostElement.addEventListener('click', e => clickRef.current?.(e));
+    grid.hostElement.addEventListener('click', e => openComboDropDownOnClick(grid as TFlexGrid, e));
 
     // 셀 선택 상태(편집기 없음)의 붙여넣기. wijmo 는 Ctrl+V 를 Clipboard.paste 로 처리하는데
     //   그 구현이 숨은 textarea + document.execCommand('paste') 라 Chromium 이 차단한다

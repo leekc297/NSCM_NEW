@@ -1,0 +1,467 @@
+# -*- coding: utf-8 -*-
+"""AS-IS SP ↔ TO-BE PROC 짝(sp_pair.csv)·인자 번역표(param_map.csv) 생성 — 차등 검증(diff_verify.py)의 데이터 원천(2026-11-06 플랜 2-2)
+
+  python tools/Harness/verify/gen_param_map.py <ID> [<ID> …]     # 그 화면 행만 다시 만들고 다른 화면 행·manual 행은 보존(생산자 잠금)
+
+원칙: 추측으로 채우지 않는다 — 1:1 로 이어지지 않는 인자는 UNRESOLVED 행으로 남기고 후보를 note 에 적는다. 짝이 없는 SP 도 행으로 남긴다(tobe_proc 공란).
+출력 1 tools/Harness/rules/sp_pair.csv  : menu_id, asis_sp, tobe_proc, kind, rs_map, source, note
+   짝 = ① TO-BE PKG 명세에 적힌 AS-IS SP 이름(pkg_asis_map · source=pkgsrc · 2026-11-11) ② 없으면 gen_golden_cases.match_tobe 와 같은 알고리즘(같은 메뉴 proc_meta 우선 · 이름 토큰 동일(P_ 제거) exact > contains > none) + sp_replaced.csv(통합 구현 · SKIP 사유) + 기존 manual 행 보존
+   kind = AS-IS SP 본문(Doc/asisfacts/db/modules/dbo.<SP>.sql)으로 판정: 주석 제거 후 INSERT/UPDATE/DELETE/MERGE 대상이 임시(#·@) 아니면 SAVE · 대상이 _LOG|SYS_LOG|HIST 뿐이면 LOG · 그 외 GET · EXEC 피호출 SP 재귀(깊이 3) · 본문 없음 = 미확인
+   rs_map = 'ordinal'(결과셋 i ↔ O_RC{i}) — 사람이 바꾸면 '1:O_RC2;2:O_RC1' 형식
+출력 2 tools/Harness/rules/param_map.csv : tobe_proc, tobe_param, fe_key, asis_sp, asis_param, all_semantics, list_format, default, status, note
+   TO-BE 측 = Doc/tobefacts/db/proc_params.csv(col_tp_cd IN · col_nm 은 FE camelCase) · AS-IS 측 = Doc/asisfacts/db/db_params.csv(type P · is_output 0)
+   이음 = popup_args_check.concept()(접두 제거·단복수·동의어) 가 1:1 일 때만 OK · 0 또는 다중 = UNRESOLVED(후보 note) · 한쪽에만 = ASIS_ONLY / TOBE_ONLY
+   all_semantics = a1_live.norm_all 과 같은 정규식을 SP 본문에 적용: @p_x = '' 만 → '' · 'ALL' 만 → ALL · 둘 다/없음 → 공란(note AMBIG|NONE)
+   list_format = SP 본문에 String_Split/STRING_SPLIT/fn_Split(@p_x) 있으면 csv · TO-BE data_tp_cd JVARCHAR/CLOB 면 json · 그 외 공란
+   default = golden_cases.csv params(값 있는 것) > param_defaults.json(키 = AS-IS 인자명, @·p_ 무시)
+"""
+import csv, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+P = lambda *a: os.path.join(ROOT, *a)
+sys.path.insert(0, HERE)
+from popup_args_check import concept as _concept  # 개념 이음(접두 제거·단복수·SYN)
+
+
+def concept(name):
+    """popup_args_check.concept + 세션 접두 제거(2026-11-06 SCP0016 실측: TO-BE sesUserId ↔ AS-IS @p_user_id 가 'sesuser'≠'user' 로 안 이어짐)"""
+    return _concept(re.sub(r'^(ses|session)(?=[A-Z_])', '', (name or '').strip()))
+from a1_live import norm_all  # '' / 'ALL' 판독 정규식
+import prereq  # producer_lock
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
+RULES = P('tools', 'Harness', 'rules')
+import glob as _glob  # 2026-11-18 미검증 해소: 프레임워크 경유 SP·SP 선언 기본값
+
+
+from asis_sp_src import sp_declared_defaults  # noqa: E402  2026-11-18 공용 모듈로 이동(golden.py 와 같이 씀)
+
+
+_FW = None
+
+
+def _fw_texts():
+    global _FW
+    if _FW is None:
+        _FW = []
+        try:
+            src = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or P('GSCM')
+        except (OSError, ValueError):
+            src = P('GSCM')
+        for f in _glob.glob(os.path.join(src, '01.Framework', '**', '*.cs'), recursive=True):
+            try:
+                _FW.append((os.path.relpath(f, ROOT), open(f, encoding='utf-8', errors='replace').read()))
+            except OSError:
+                pass
+    return _FW
+
+
+def asis_result_unused(mid, sp):
+    """2026-11-18 미검증 해소(SCP0096 DM0003_GET_BUCKET_TYPE_CODE): AS-IS 화면이 SP 를 부르는 메서드 결과를 필드에 대입만 하고 읽지 않으면
+    그 SP 는 화면 동작에 쓰이지 않는다 → TO-BE 대응이 없어도 비교 대상 아님. 근거 문자열('파일:행 …') 또는 ''"""
+    try:
+        src = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or P('GSCM')
+    except (OSError, ValueError):
+        src = P('GSCM')
+    ev = []
+    for r in rd(P('Doc', 'asisfacts', 'screens', mid, 'endpoints.csv')):
+        if not re.match(r'^SP\s+(?:\w+\.)?' + re.escape(sp) + r'\b', r.get('sp_or_sql', '') or '') or not is_main(r, P('Doc', 'asisfacts', 'screens', mid)):
+            continue
+        member = (r.get('member') or '').strip()
+        f = os.path.join(src, r.get('file') or '')
+        if not re.fullmatch(r'[A-Za-z_]\w*', member) or not os.path.exists(f):
+            return ''
+        lines = open(f, encoding='utf-8', errors='replace').read().splitlines()
+        code = [(i + 1, re.sub(r'//.*', '', t)) for i, t in enumerate(lines)]
+        calls = [(n, t) for n, t in code if re.search(r'\b' + member + r'\s*\(', t) and not re.search(r'\b(private|public|protected|internal)\b[^=]*\b' + member + r'\s*\(', t)]
+        if not calls:
+            return ''
+        for n, t in calls:
+            m = re.match(r'^\s*(?:this\.)?(\w+)\s*=\s*' + member + r'\s*\(\s*\)\s*;\s*$', t)
+            if not m:
+                return ''  # 대입 밖 사용(인자·반환·식 안) = 쓰임
+            var = m.group(1)
+            reads = [k for k, u in code if re.search(r'\b' + var + r'\b', u) and not re.match(r'^\s*(?:this\.)?' + var + r'\s*=', u)
+                     and not re.search(r'\b(private|public|protected|internal)?\s*[\w<>\[\]]+\s+' + var + r'\s*(=\s*null)?\s*;', u)]
+            if reads:
+                return ''
+            ev.append(f"{os.path.basename(f)}:{n} {var} = {member}() · {var} 를 읽는 곳 없음")
+    return ' · '.join(ev)
+
+
+def framework_sps(mid, sps):
+    try:
+        calls = json.load(open(P('Doc', 'verify', mid, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or []
+    except (OSError, ValueError):
+        return []
+    have = {s.upper() for s in sps}; out = []
+    for proc in sorted({str(c.get('proc') or '') for c in calls if c.get('proc')}):
+        name = re.sub(r'^P_', '', proc.split('.')[-1], flags=re.I)
+        if not name or name.upper() in have:
+            continue
+        if not _glob.glob(P('Doc', 'asisfacts', 'db', 'modules', f'*.{name}.sql')):
+            continue
+        rx = re.compile(r'FoxDataRequest\(\s*"(?:\w+\.)?' + re.escape(name) + r'"', re.I)
+        for rel, t in _fw_texts():
+            m = rx.search(t)
+            if m:
+                out.append((name, f"{rel}:{t[:m.start()].count(chr(10)) + 1}")); have.add(name.upper()); break
+    return out
+
+
+SP_PAIR = os.path.join(RULES, 'sp_pair.csv'); PARAM_MAP = os.path.join(RULES, 'param_map.csv')
+PAIR_COLS = ['menu_id', 'asis_sp', 'tobe_proc', 'kind', 'rs_map', 'source', 'note']
+PM_COLS = ['tobe_proc', 'tobe_param', 'fe_key', 'asis_sp', 'asis_param', 'all_semantics', 'list_format', 'default', 'status', 'note']
+MODULES = P('Doc', 'asisfacts', 'db', 'modules')
+csv.field_size_limit(10 ** 8)
+
+
+def rd(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def wr(p, cols, rows):
+    tmp = f'{p}.{os.getpid()}.tmp'
+    with open(tmp, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=cols); w.writeheader(); w.writerows([{k: r.get(k, '') for k in cols} for r in rows])
+    os.replace(tmp, p)
+
+
+def norm(s): return re.sub(r'[^A-Z0-9]', '', (s or '').upper())
+
+
+def exact_key(name):
+    """인자 이름 정규화 키 — '@p_item_id' · 'p_item_id' · 'itemId' · 'sesItemId' → 'ITEMID'"""
+    s = (name or '').strip().lstrip('@')
+    s = re.sub(r'^(ses|session)(?=[A-Z_])', '', s)
+    s = re.sub(r'^[pP]_', '', s)
+    return re.sub(r'[^A-Z0-9]', '', s.upper())
+
+
+_SRC_CACHE = {}
+
+
+def asis_session_lang(mid, asis_param):
+    """화면 AS-IS 소스에서 `<인자> = UserInfoContext.Current[UserInfoProperites.Language]` 대입을 찾는다 → '파일:행' 또는 ''"""
+    pn = re.escape((asis_param or '').lstrip('@'))
+    if not pn:
+        return ''
+    rx = re.compile(r'(?:\b' + pn + r'|Parameters\[\"' + pn + r'\"\])\s*=\s*UserInfoContext\.Current\[\s*UserInfoProperites\.Language\s*\]')
+    files = []
+    for r in rd(P('Doc', 'asisfacts', 'screens', mid, 'endpoints.csv')):
+        f = (r.get('file') or '').replace(chr(92), '/')
+        if f and f not in files:
+            files.append(f)
+    for f in files:
+        full = P('GSCM', *f.split('/'))
+        if full not in _SRC_CACHE:
+            txt = ''
+            if os.path.exists(full):
+                raw = open(full, 'rb').read()
+                for enc in ('utf-8-sig', 'cp949', 'latin-1'):
+                    try:
+                        txt = raw.decode(enc)
+                        break
+                    except UnicodeDecodeError:
+                        continue
+            _SRC_CACHE[full] = txt.splitlines()
+        for i, line in enumerate(_SRC_CACHE[full]):
+            if rx.search(line):
+                return f"{os.path.basename(f)}:{i + 1}"
+    return ''
+
+
+def sp_text(sp):
+    p = os.path.join(MODULES, f'dbo.{sp}.sql')
+    if not os.path.exists(p):
+        return None
+    with open(p, encoding='utf-8-sig', errors='replace') as f:
+        return f.read()
+
+
+def strip_comments(t):
+    t = re.sub(r'/\*.*?\*/', ' ', t, flags=re.S)
+    return re.sub(r'--[^\n]*', ' ', t)
+
+
+def classify_kind(sp, depth=0, seen=None):
+    """(kind, 근거) — GET / SAVE / LOG / 미확인"""
+    seen = seen or set()
+    if sp in seen or depth > 3:
+        return 'GET', '재귀 한도'
+    seen.add(sp)
+    t = sp_text(sp)
+    if t is None:
+        return '미확인', f'본문 없음(modules/dbo.{sp}.sql)'
+    body = strip_comments(t)
+    tg = []
+    for m in re.finditer(r'\b(INSERT\s+INTO|UPDATE|DELETE\s+FROM|DELETE|MERGE\s+INTO|MERGE)\s+([#@]?[\w\[\]\.]+)', body, re.I):
+        name = m.group(2).strip('[]')
+        if name.upper() in ('TOP', 'FROM') or name.startswith('#') or name.startswith('@'):
+            continue
+        tg.append(name.split('.')[-1].upper())
+    callees = [m.group(1).split('.')[-1].strip('[]') for m in re.finditer(r'\bEXEC(?:UTE)?\s+(?!\()((?:\[?dbo\]?\.)?\[?[A-Za-z_][\w]*\]?)', body, re.I)]
+    callees = [c for c in callees if c.upper() not in ('SP_EXECUTESQL',) and not c.startswith('@')]
+    kinds = []
+    for c in callees:
+        k, _ = classify_kind(c, depth + 1, seen)
+        kinds.append((c, k))
+    if tg:
+        if all(re.search(r'_LOG$|SYS_LOG|HIST', x) for x in tg):
+            kind = 'LOG'
+        else:
+            kind = 'SAVE'
+        why = f"DML 대상 {sorted(set(tg))[:4]}"
+    else:
+        kind, why = 'GET', 'DML 없음(SELECT/임시 테이블만)'
+    if kind == 'GET' and any(k == 'SAVE' for _, k in kinds):
+        kind, why = 'SAVE', f"피호출 SP SAVE {[c for c, k in kinds if k == 'SAVE'][:3]}"
+    elif kind == 'GET' and any(k == 'LOG' for _, k in kinds):
+        why += f" · 피호출 LOG {[c for c, k in kinds if k == 'LOG'][:3]}"
+    return kind, why
+
+
+def all_semantics(sp, pname):
+    """a1_live.norm_all 과 같은 판독: ('' | 'ALL' | '', note)"""
+    t = sp_text(sp)
+    if t is None:
+        return '', 'NONE(본문 없음)'
+    k = '@' + pname.lstrip('@')
+    n = re.escape(k.lstrip('@'))
+    # 2026-11-06 실측(SCP0127): SP 가 `DECLARE @v_x … = @p_x` 로 복사한 지역변수로 비교한다 → 별칭 변수의 비교문까지 본다(a1_live.norm_all 은 @p_ 만 봐서 NONE 이 나왔다)
+    names = [n] + [re.escape(m.group(1)) for m in re.finditer(rf"(?i)DECLARE\s+@(\w+)[^;\n]*?=\s*@{n}\b", t)]
+    names += [re.escape(m.group(1)) for m in re.finditer(rf"(?i)\bSET\s+@(\w+)\s*=\s*@{n}\b", t)]
+    blank = any(re.search(rf"(?i)@{x}\s*(=|<>|!=)\s*N?''", t) for x in names); al = any(re.search(rf"(?i)@{x}\s*(=|<>|!=)\s*N?'ALL'", t) for x in names)
+    if blank and not al:
+        return '', ''
+    if al and not blank:
+        return 'ALL', ''
+    if blank and al:
+        return '', 'AMBIG(본문에 \'\' 와 \'ALL\' 비교가 모두 있음)'
+    return '', 'NONE(전체 비교 없음)'
+
+
+def list_format(sp, pname, tobe_dt):
+    t = sp_text(sp) or ''
+    n = re.escape(pname.lstrip('@'))
+    if re.search(rf"(?i)(STRING_SPLIT|fn_?Split\w*|SplitString)\s*\(\s*@{n}\b", t):
+        return 'csv'
+    if (tobe_dt or '').upper() in ('JVARCHAR', 'CLOB'):
+        return 'json'
+    return ''
+
+
+def build(mids):
+    mids = [m.upper() for m in mids]
+    pp = rd(P('Doc', 'tobefacts', 'db', 'proc_params.csv'))
+    dp = rd(P('Doc', 'asisfacts', 'db', 'db_params.csv'))
+    pm = rd(P('Doc', 'tobefacts', 'db', 'proc_meta.csv'))
+    gc = {r['case_id']: r for r in rd(P('Doc', 'golden', 'golden_cases.csv'))}
+    rep = rd(os.path.join(RULES, 'sp_replaced.csv'))
+    try:
+        with open(P('tools', 'DbConn', 'param_defaults.json'), encoding='utf-8-sig') as f:
+            DEF = {re.sub(r'^@?p_', '', k.lower()): v for k, v in json.load(f).items() if not k.startswith('_')}
+    except (OSError, ValueError):
+        DEF = {}
+    tobe_by_menu, tobe_all = {}, set()
+    for r in pm:
+        if r.get('proc'):
+            tobe_by_menu.setdefault((r.get('menu_id') or '').upper(), set()).add(r['proc']); tobe_all.add(r['proc'])
+    asis_params = {}
+    for r in dp:
+        if (r.get('type') or '').strip() == 'P' and r.get('is_output') == '0':
+            asis_params.setdefault(r['object_name'].upper(), []).append((int(r['parameter_id'] or 0), r['param_name'], r.get('data_type') or ''))
+    tobe_in = {}
+    for r in pp:
+        if (r.get('col_tp_cd') or '').upper() in ('IN', 'I'):
+            tobe_in.setdefault(r['proc'].upper(), []).append((int(r.get('sort_ord') or 0), r['col_nm'], r.get('data_tp_cd') or ''))
+
+    def match_tobe(sp, menu):  # gen_golden_cases.py:44-53 과 같은 알고리즘(그 파일은 import 하면 생성이 실행되어 재구현)
+        n = norm(sp)
+        pool = list(tobe_by_menu.get(menu, [])) + sorted(tobe_all)
+        for p in pool:
+            if norm(re.sub(r'^P_', '', p.split('.')[-1])) == n:
+                return p, 'exact'
+        for p in pool:
+            if n in norm(p):
+                return p, 'contains'
+        return '', 'none'
+
+    # 2026-11-11 EN-02 ②: 짝 1순위 = TO-BE PKG 명세에 적힌 AS-IS SP 이름(pkg_asis_map — 사내 ALL_SOURCE 실측). 이름 일치는 그다음.
+    #   실측: 차등 검증 SKIP 183 중 141 이 '짝 없음' — 이름을 줄여 옮긴 PROC·AS-IS 호출이 정적으로 안 풀린 화면이 이름 일치에서 빠졌다.
+    rec_by_sp, rec_note = {}, []
+    try:
+        import pkg_asis_map
+        want = sorted({p.split('.')[0] for mid in mids for p in tobe_by_menu.get(mid, []) if '.' in p})
+        rec, rec_note = pkg_asis_map.live_map(want) if want else ({}, [])
+        for proc, (sp, why) in rec.items():
+            rec_by_sp.setdefault(sp.upper(), []).append((proc, sp, why))
+    except Exception as e:  # 접속 실패 = 기록 미측정(이름 일치만으로 진행) — 숨기지 않고 출력
+        rec_note = [f'[미측정] PKG 원문 기록을 읽지 못함({type(e).__name__}: {str(e)[:120]}) — 이름 일치만 사용']
+    for n in rec_note:
+        print('   ~ ' + n)
+
+    pairs, pmap, stats = [], [], {}
+    for mid in mids:
+        sps = []
+        for r in rd(P('Doc', 'asisfacts', 'screens', mid, 'endpoints.csv')):
+            m = re.match(r'^SP\s+(\S+)', r.get('sp_or_sql', '') or '')
+            if m and r.get('status') == 'MATCH' and is_main(r, P('Doc', 'asisfacts', 'screens', mid)):
+                sp = m.group(1).split('.')[-1]
+                if sp not in sps:
+                    sps.append(sp)
+        # 2026-11-18 미검증 해소(SCP0096 차등 32행 '짝 없음'): AS-IS 화면이 공통 프레임워크(DateUtil.GetDayRange·SpreadInfo 등)를 거쳐 부르는 SP 는
+        #   화면 호출 추출(endpoints.csv)에 없다 → TO-BE 가 이 화면에서 실제 호출한 PROC(sqllog_calls.json) 중 이름이 같은 AS-IS 모듈이 있고
+        #   AS-IS 프레임워크 원문에 그 SP 를 부르는 FoxDataRequest 가 있을 때만 대상에 넣는다(근거 파일:행을 note 에 남김)
+        fw_ev = {}
+        for sp_fw, ev in framework_sps(mid, sps):
+            sps.append(sp_fw); fw_ev[sp_fw.upper()] = ev
+        # PKG 명세에 기록된 AS-IS SP 중 화면 호출 추출(endpoints.csv)에 안 잡힌 것도 대상에 넣는다(그 화면 PKG 의 PROC 에 한함)
+        mine = {p.upper() for p in tobe_by_menu.get(mid, [])}
+        for spu, lst in sorted(rec_by_sp.items()):
+            for proc, sp, why in lst:
+                if proc.upper() in mine and sp not in sps and sp.upper() not in {s.upper() for s in sps}:
+                    sps.append(sp)
+        reps = {x['asis_sp'].upper(): x for x in rep if (x.get('menu_id') or '').upper() == mid}
+        for sp in sps:
+            kind, why = classify_kind(sp)
+            if sp.upper() in reps:
+                x = reps[sp.upper()]
+                pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': '', 'kind': kind, 'rs_map': '', 'source': 'sp_replaced',
+                              'note': f"통합 구현(SKIP) — TO-BE 호출 {x.get('tobe_calls')} · {x.get('reason', '')[:120]} · kind 근거: {why}"})
+                continue
+            recs = rec_by_sp.get(sp.upper(), [])
+            recs = [x for x in recs if x[0].upper() in mine] or recs
+            if len(recs) == 1:
+                tobe, how, rwhy = recs[0][0], 'pkgsrc', recs[0][2]
+            else:
+                tobe, how = match_tobe(sp, mid); rwhy = (f"PKG 명세 기록이 PROC {len(recs)}개를 가리킴({[x[0] for x in recs]}) — 이름 일치로 대체" if recs else '')
+            unused = '' if tobe else asis_result_unused(mid, sp)
+            if unused:  # 2026-11-18: AS-IS 결과 미사용 SP = TO-BE 대응 없음(근거 원문 위치) — judge A6·A7 이 '비교 대상 아님'으로 판정
+                pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': '', 'kind': kind, 'rs_map': '', 'source': 'unused',
+                              'note': f"TO-BE 대응 없음 — AS-IS 결과 미사용({unused}) · kind 근거: {why}"})
+                continue
+            pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': tobe, 'kind': kind, 'rs_map': 'ordinal' if tobe else '', 'source': how,
+                          'note': ('' if tobe else 'TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual)') + (f" · 짝 근거: {rwhy}" if rwhy else '') + f" · kind 근거: {why}"
+                                  + (f" · AS-IS 프레임워크 경유 호출 {fw_ev[sp.upper()]}(화면 소스 직접 호출 없음)" if sp.upper() in fw_ev else '')})
+            if not tobe:
+                continue
+            aps = sorted(asis_params.get(sp.upper(), []))
+            tps = sorted(tobe_in.get(tobe.upper(), []))
+            ac = {}
+            for _, an, adt in aps:
+                ac.setdefault(concept(re.sub(r'^@?p_', '', an)), []).append((an, adt))
+            tc = {}
+            for _, fk, tdt in tps:
+                tc.setdefault(concept(fk), []).append((fk, tdt))
+            gparams = {}
+            try:
+                gparams = json.loads((gc.get(f'{mid}:{sp}') or {}).get('params') or '{}')
+            except ValueError:
+                gparams = {}
+            used_a = set()
+            # 2026-11-11 T233: 1순위 = 이름 정규화 완전 일치(접두 @·p_·ses 제거 · 밑줄·대소문자 무시). 실측: SSP0025 itemId·nickName·modelId 가 동의어 개념 하나로
+            #   묶여 '후보 다중' UNRESOLVED(화면 전체 SKIP 20) · SCP0033 TO-BE 인자명이 p_division_id 형태라 개념 'pdivision'≠'division' 으로 안 이어짐(SKIP 11)
+            a_exact = {}
+            for _, an, adt in aps:
+                a_exact.setdefault(exact_key(an), []).append((an, adt))
+            exact_of = {}
+            for _, fk, tdt in tps:
+                hit = a_exact.get(exact_key(fk), [])
+                if len(hit) == 1 and sum(1 for _, f2, _ in tps if exact_key(f2) == exact_key(fk)) == 1:
+                    exact_of[fk] = hit[0]
+            exact_a = {v[0] for v in exact_of.values()}
+            for _, fk, tdt in tps:
+                c = concept(fk)
+                cand = [exact_of[fk]] if fk in exact_of else [x for x in ac.get(c, []) if x[0] not in exact_a]
+                tparam = 'P_' + re.sub(r'(?<!^)(?=[A-Z])', '_', fk).upper()
+                if len(cand) == 1:
+                    an, adt = cand[0]; used_a.add(an)
+                    sem, note = all_semantics(sp, an)
+                    dflt = gparams.get(an.lstrip('@')) or DEF.get(re.sub(r'^@?p_', '', an.lower()), '')
+                    pmap.append({'tobe_proc': tobe, 'tobe_param': tparam, 'fe_key': fk, 'asis_sp': sp, 'asis_param': an, 'all_semantics': sem,
+                                 'list_format': list_format(sp, an, tdt), 'default': dflt, 'status': 'OK', 'note': note})
+                elif len(cand) > 1:
+                    pmap.append({'tobe_proc': tobe, 'tobe_param': tparam, 'fe_key': fk, 'asis_sp': sp, 'asis_param': '', 'all_semantics': '', 'list_format': list_format(sp, '', tdt),
+                                 'default': '', 'status': 'UNRESOLVED', 'note': f"AS-IS 후보 다중 {[a for a, _ in cand]} — 사람이 asis_param 지정"})
+                else:
+                    pmap.append({'tobe_proc': tobe, 'tobe_param': tparam, 'fe_key': fk, 'asis_sp': sp, 'asis_param': '', 'all_semantics': '', 'list_format': list_format(sp, '', tdt),
+                                 'default': gparams.get(fk, ''), 'status': 'TOBE_ONLY', 'note': f"AS-IS 에 개념 '{c}' 인자 없음(TO-BE 전용 — FE 값 그대로 전달)"})
+            sp_def = sp_declared_defaults(sp)
+            for _, an, adt in aps:
+                if an in used_a:
+                    continue
+                sem, note = all_semantics(sp, an)
+                dflt = gparams.get(an.lstrip('@')) or DEF.get(re.sub(r'^@?p_', '', an.lower()), '')
+                # 2026-11-18 미검증 해소(SCP0096 등 @debug_mode 'default 없음' → 차등 SKIP 33): 값이 없으면 AS-IS SP 선언 기본값(원문 파일:행)
+                if not dflt and an.lstrip('@').lower() in sp_def and sp_def[an.lstrip('@').lower()][0] is not None:
+                    dflt, dloc = sp_def[an.lstrip('@').lower()]
+                    note = (note + ' · ' if note else '') + f"default = AS-IS SP 선언 기본값 {dloc}"
+                c = concept(re.sub(r'^@?p_', '', an))
+                multi = [x for x in tc.get(c, []) if x[0] not in exact_of]
+                pmap.append({'tobe_proc': tobe, 'tobe_param': '', 'fe_key': '', 'asis_sp': sp, 'asis_param': an, 'all_semantics': sem, 'list_format': list_format(sp, an, ''),
+                             'default': dflt, 'status': 'UNRESOLVED' if multi else 'ASIS_ONLY',
+                             'note': (f"TO-BE 후보 다중 {[f for f, _ in multi]} — 사람이 fe_key 지정" if multi else f"TO-BE 에 개념 '{c}' 인자 없음(AS-IS 전용 — default 로 전달" + ('' if dflt else ' · default 없음=UNRESOLVED 값') + ')') + (f' · {note}' if note else '')})
+        # 2026-11-11 T235: AS-IS 전용 인자 중 화면 호출 지점에서 세션 언어를 대입하는 것 ↔ TO-BE 세션 인자 sesLangCd (근거 = AS-IS 원문 파일:행)
+        for tobe in sorted({p['tobe_proc'] for p in pairs if p['menu_id'] == mid and p['tobe_proc']}):
+            mine_rows = [m for m in pmap if m['tobe_proc'] == tobe]
+            ses_row = next((m for m in mine_rows if m['status'] == 'TOBE_ONLY' and m['fe_key'] == 'sesLangCd'), None)
+            if not ses_row:
+                continue
+            for m in mine_rows:
+                if m['status'] != 'ASIS_ONLY' or m['default']:
+                    continue
+                ev = asis_session_lang(mid, m['asis_param'])
+                if ev:
+                    m.update(status='OK', fe_key='sesLangCd', tobe_param=ses_row['tobe_param'], note=f"세션 언어 — AS-IS 호출 지점 {ev} 이 UserInfoContext Language 를 대입 ↔ TO-BE 세션 sesLangCd")
+                    pmap.remove(ses_row)
+                    break
+        stats[mid] = {'sp': len(sps), 'pairs': sum(1 for p in pairs if p['menu_id'] == mid and p['tobe_proc']), 'none': sum(1 for p in pairs if p['menu_id'] == mid and not p['tobe_proc'] and p['source'] == 'none'),
+                      'replaced': sum(1 for p in pairs if p['menu_id'] == mid and p['source'] == 'sp_replaced')}
+    return pairs, pmap, stats
+
+
+def main():
+    mids = [a.upper().strip('/').strip(chr(92)) for a in sys.argv[1:] if not a.startswith('--')]
+    if not mids:
+        print(__doc__); return 2
+    bad = [m for m in mids if not re.fullmatch(r'[A-Z0-9_]+', m)]
+    if bad:  # 2026-11-11: 'SSP0003/' 처럼 경로 조각이 들어오면 메뉴 대조가 전부 빗나가 잘못된 행이 쌓였다(173행 실측) — 실행 거부
+        print(f'[gen_param_map] 화면 ID 형식 아님: {bad} — 실행하지 않음'); return 2
+    pairs, pmap, stats = build(mids)
+
+    def work():
+        old_p = rd(SP_PAIR); old_m = rd(PARAM_MAP)
+        keep_p = [r for r in old_p if (r.get('menu_id') or '').upper() not in mids or (r.get('source') or '') == 'manual']
+        manual_keys = {(r['menu_id'].upper(), r['asis_sp'].upper()) for r in keep_p if (r.get('source') or '') == 'manual'}
+        new_p = [p for p in pairs if (p['menu_id'], p['asis_sp'].upper()) not in manual_keys]
+        wr(SP_PAIR, PAIR_COLS, keep_p + new_p)
+        my_procs = {p['tobe_proc'].upper() for p in pairs if p['tobe_proc']}
+        keep_m = [r for r in old_m if (r.get('tobe_proc') or '').upper() not in my_procs or (r.get('status') or '').startswith('MANUAL')]
+        manual_m = {(r['tobe_proc'].upper(), r['fe_key'], r['asis_param']) for r in keep_m if (r.get('status') or '').startswith('MANUAL')}
+        new_m = [m for m in pmap if (m['tobe_proc'].upper(), m['fe_key'], m['asis_param']) not in manual_m]
+        wr(PARAM_MAP, PM_COLS, keep_m + new_m)
+        return 0, ''
+
+    rc = prereq.producer_lock('param_map', work, skip_if_waited=False)
+    for mid, s in stats.items():
+        pm_mid = [m for m in pmap if m['asis_sp'] in {p['asis_sp'] for p in pairs if p['menu_id'] == mid}]
+        st = {}
+        for m in pm_mid:
+            st[m['status']] = st.get(m['status'], 0) + 1
+        print(f"[gen_param_map] {mid}: SP {s['sp']} · 짝 {s['pairs']} · 미매칭 {s['none']} · 통합구현 {s['replaced']} · 인자 {len(pm_mid)}행 " + ' · '.join(f'{k} {v}' for k, v in sorted(st.items())))
+        for p in pairs:
+            if p['menu_id'] == mid:
+                print(f"   {p['asis_sp']:<48} → {p['tobe_proc'] or '(없음)':<52} {p['kind']:<6} {p['source']}")
+        for m in pm_mid:
+            if m['status'] != 'OK':
+                print(f"   ! {m['asis_sp']} {m['fe_key'] or m['asis_param']}: {m['status']} — {m['note'][:100]}")
+    print(f"  → {os.path.relpath(SP_PAIR, ROOT)} · {os.path.relpath(PARAM_MAP, ROOT)} (잠금 결과 {rc})")
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1,0 +1,210 @@
+"""AS-IS 셀 입력 규칙 추출 — Doc/asisfacts/screens/<AS-IS ID>/cell_rules.csv
+
+  python tools/Harness/verify/facts_cellrules.py <AS-IS ID>
+
+원천(우선순위 낮음 → 높음, 뒤가 덮어쓴다 = AS-IS 실행 순서):
+  1) SCM_MST_SHEET_COLUMNS(AS-IS) — dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv
+     프레임워크 SpreadInfo.cs:1433-1439 — DATA_SCALE_NUMBER 가 NULL/0 이면 소수 0자리, >0 이면 그 자리수
+     SpreadInfo.cs:1497-1500 — FPNumber = AddNumColumn(…, decimalPlaces, 천단위 구분 true)
+  2) 화면 .cs 의 AddNumColumn / AddNumColumnEx / AddDateTimeColumn / AddDateColumn (코드 컬럼)
+  3) 화면 .cs 의 SetReNumerCellType(si, col[, min[, decimals[, max]]]) — SpreadInfo.cs:13772-13856
+     인자 2개: 소수0·min0·max9999999999 / 3개: 소수0·min=인자 / 4개: 소수=인자 / 5개: max=인자 (천단위·음수 빨강 공통)
+산출 열: column, cell_type(NUMBER|DATE|DATETIME|TEXT|COMBO|CHECK|…), decimals, min, max, separator, max_length, uppercase, source, ref
+"""
+import csv
+import json
+import os
+import re
+import sys
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+SRC = os.path.join(ROOT, 'GSCM')
+COLS = ['sheet', 'column', 'cell_type', 'decimals', 'min', 'max', 'separator', 'max_length', 'uppercase', 'negative_red', 'fixed_point', 'source', 'ref', 'cond_cells']
+RX_DEFCOL = r'Def\w+\.'  # 화면마다 Def 클래스 이름이 다르다(DefColumns·DefMain …) — 2026-10-30 SCP0111
+
+
+def framework_defaults():
+    """Doc/asisfacts/framework/spreadinfo_defaults.csv(facts_gridcols 가 원문 인용으로 기록) — 코드에 하드코딩하지 않는다"""
+    p = os.path.join(ROOT, 'Doc', 'asisfacts', 'framework', 'spreadinfo_defaults.csv')
+    return {r['rule']: r for r in read_csv(p)} if os.path.exists(p) else {}
+META_TYPE = {'FPNumber': 'NUMBER', 'FPNumberText': 'NUMBER_TEXT', 'FPDate': 'DATE', 'FPDateTime': 'DATETIME', 'FPComboBox': 'COMBO',
+             'FPCheckBox': 'CHECK', 'FPText': 'TEXT', 'FPTextUpper': 'TEXT', 'FPButton': 'BUTTON'}
+MAXV = '9999999999'
+
+
+def read_csv(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def read_text(p):
+    for enc in ('utf-8-sig', 'cp949', 'utf-8'):
+        try:
+            with open(p, encoding=enc) as f:
+                return f.read()
+        except UnicodeDecodeError:
+            continue
+    return ''
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__)
+        return 2
+    sid = sys.argv[1].upper()
+    sdir = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', sid)
+    rules = {}
+    D = framework_defaults()
+    neg_default = 'Y' if (D.get('number_negative_red', {}).get('value') or '').lower() == 'true' else ''
+    neg_ref = D.get('number_negative_red', {}).get('ref', 'SpreadInfo.cs NumberCellType')
+    mm = re.findall(r'-?\d+', D.get('number_min_max', {}).get('value') or '')
+    fw_min, fw_max = (mm[0], mm[1]) if len(mm) == 2 else ('', '')
+
+    def guard_sheets(text):
+        """T450(2026-11-20 SCP0005 FACT-4087be3b 외 4건): 같은 컬럼이 화면 시트와 팝업 시트(POPUP) 메타에 함께 있으면 컬럼 단위 규칙의 시트가
+        마지막 메타 행(POPUP)으로 남고 코드 규칙(SetReNumerCellType)은 시트를 바꾸지 않았다. 코드 줄을 감싼 `if (x.SheetName == SpdSheet.shtX) { }`
+        블록의 상수를 그 파일의 SpdSheet 구조체 값으로 풀어 시트를 정한다(파일마다 따로 · 상수를 못 풀면 종전대로 빈 값)"""
+        consts = {}
+        for ms in re.finditer(r'\b(?:struct|class)\s+(SpdSheet\w*)\s*\{', text):
+            depth, j = 1, ms.end()
+            while j < len(text) and depth:
+                depth += {'{': 1, '}': -1}.get(text[j], 0)
+                j += 1
+            for k, v in re.findall(r'\bstring\s+(\w+)\s*=\s*"([^"]*)"', text[ms.end():j]):
+                consts.setdefault((ms.group(1), k), v)
+        out = {}
+        if not consts:
+            return out
+        for mg in re.finditer(r'\bif\s*\(\s*\w+\.SheetName\s*==\s*(SpdSheet\w*)\.(\w+)\s*\)', text):
+            v = consts.get((mg.group(1), mg.group(2)))
+            k = text.find('{', mg.end())
+            if v is None or k < 0 or text[mg.end():k].strip():
+                continue
+            depth, j = 1, k + 1
+            while j < len(text) and depth:
+                depth += {'{': 1, '}': -1}.get(text[j], 0)
+                j += 1
+            for ln in range(text.count('\n', 0, k) + 1, text.count('\n', 0, j) + 2):
+                out[ln] = v
+        return out
+
+    def put(sheet, col, **kw):
+        key = col.upper()
+        r = rules.get(key, {c: '' for c in COLS})
+        r.update({k: str(v) for k, v in kw.items() if v is not None})
+        r['column'] = key
+        if sheet:
+            r['sheet'] = sheet
+        rules[key] = r
+
+    for m in read_csv(os.path.join(sdir, 'dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv')):
+        if (m.get('PROGRAM_ID') or '').upper() != sid or m.get('VALID_YN', 'Y') == 'N':
+            continue
+        ctl = (m.get('CELL_CONTROL_OBJECT_TYPE_CODE') or '').strip()
+        scale = (m.get('DATA_SCALE_NUMBER') or '').strip()
+        typ = META_TYPE.get(ctl, ctl or 'TEXT')
+        dec = (scale if scale and scale.isdigit() and int(scale) > 0 else '0') if typ == 'NUMBER' else ''
+        put(m.get('SHEET_NAME'), m['COLUMN_NAME'], cell_type=typ, decimals=dec, separator='Y' if typ == 'NUMBER' else '',
+            max_length=(m.get('DATA_MAX_LENGTH') or '').strip(), uppercase=(m.get('UPPERCASE_APPLY_FLAG') or '').strip(),
+            negative_red=neg_default if typ == 'NUMBER' else '', fixed_point=('Y' if dec == '0' else 'N') if typ == 'NUMBER' else '',
+            min=fw_min if typ == 'NUMBER' else '', max=fw_max if typ == 'NUMBER' else '',
+            source='META', ref=f"SHEET_COLUMNS {m.get('SHEET_NAME')}.{m['COLUMN_NAME']} CELL={ctl or '-'} SCALE={scale or 'NULL'} · SpreadInfo.cs:1433-1439/1497" + (f" · {neg_ref}" if typ == 'NUMBER' else ''))
+
+    def cond_cells(text, base, rel):
+        """2026-11-20 T392(SSP0014 FACT-32d6dd69): 행 값 조건 셀 단위 형식 — `if (si.GetValue(i, …GetColumnIndex(Def*.C)).ToString() == "W") { si.SetCellTypeText(i, …Y); si.SetValue(i, …Y, "Warranty"); si.SetHAlign(i, …Y, …, Center); }`
+        (SSP0014_ShipmentModelPIC.cs:355~360). 종전엔 컬럼 단위 규칙만 읽어 조건부 셀 형식이 빠졌다. 컬럼 행은 그대로 두고 cond_cells(JSON 목록)에 조건·셀 형식·대입 값·정렬을 덧붙인다"""
+        try:
+            from facts_cellclear import const_map
+            cm = const_map(rel.replace(chr(92), '/'))
+        except Exception:  # noqa: BLE001 — 상수 표 없으면 이름 그대로
+            cm = {}
+        col = lambda n: (cm.get(n) or n).upper()  # noqa: E731
+        lines = text.splitlines()
+        rx_if = re.compile(r'\bif\s*\(\s*\w+\.Get(?:Value|Text)\(\s*(\w+)\s*,\s*\w+\.GetColumnIndex\(\s*' + RX_DEFCOL + r'(\w+)\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"\s*\)')
+        for i, line in enumerate(lines, 1):
+            if line.strip().startswith('//'):
+                continue
+            m = rx_if.search(line)
+            if not m:
+                continue
+            rv, ccol, op, lit = m.group(1), col(m.group(2)), m.group(3), m.group(4)
+            # 조건 뒤 첫 { … } 블록(한 문장 if 는 다음 ; 까지)
+            rest = '\n'.join([line[m.end():]] + lines[i:])
+            k = 0
+            while k < len(rest) and rest[k] in ' \t\r\n':
+                k += 1
+            if k < len(rest) and rest[k] == '{':
+                depth, j = 1, k + 1
+                while j < len(rest) and depth:
+                    depth += {'{': 1, '}': -1}.get(rest[j], 0)
+                    j += 1
+                body = rest[k + 1:j - 1]
+            else:
+                body = rest[k:rest.find(';', k) + 1]
+            body = '\n'.join(x for x in body.splitlines() if not x.strip().startswith('//'))
+            acc = {}
+            for mt in re.finditer(r'SetCellType(\w*)\(\s*' + re.escape(rv) + r'\s*,\s*\w+\.GetColumnIndex\(\s*' + RX_DEFCOL + r'(\w+)\s*\)', body):
+                acc.setdefault(col(mt.group(2)), {})['cell_type'] = (mt.group(1) or 'TEXT').upper()
+            for mt in re.finditer(r'SetValue\(\s*' + re.escape(rv) + r'\s*,\s*\w+\.GetColumnIndex\(\s*' + RX_DEFCOL + r'(\w+)\s*\)\s*,\s*"([^"]*)"\s*\)', body):
+                acc.setdefault(col(mt.group(1)), {})['value'] = mt.group(2)
+            for mt in re.finditer(r'SetHAlign\(\s*' + re.escape(rv) + r'\s*,\s*\w+\.GetColumnIndex\(\s*' + RX_DEFCOL + r'(\w+)\s*\).*?CellHorizontalAlignment\.(\w+)', body):
+                acc.setdefault(col(mt.group(1)), {})['halign'] = mt.group(2)
+            for tcol, a in acc.items():
+                if 'cell_type' not in a:
+                    continue  # 셀 형식을 바꾸는 조건 블록만(값·정렬만 바꾸는 블록은 다른 사실 파일 몫)
+                key = tcol
+                r = rules.get(key)
+                if r is None:
+                    put('', key, source='CODE_COND')
+                    r = rules[key]
+                lst = json.loads(r.get('cond_cells') or '[]')
+                lst.append({'cond': f'COL({ccol}){op}"{lit}"', **a, 'ref': f'{base}:{i}'})
+                r['cond_cells'] = json.dumps(lst, ensure_ascii=False)
+
+    files = [f['file'] for f in read_csv(os.path.join(sdir, 'files.csv')) if f.get('variant') != 'legacy' and f['file'].endswith('.cs') and not f['file'].endswith('.Designer.cs')]
+    for rel in files:
+        path = os.path.join(SRC, rel.replace('\\', os.sep))
+        text = read_text(path)
+        base = os.path.basename(rel)
+        guard_of = guard_sheets(text)  # T450: 줄 번호 → 그 줄을 감싼 'SheetName == SpdSheet.X' 블록의 시트 이름(이 파일 상수 값)
+        for i, line in enumerate(text.splitlines(), 1):
+            s = line.strip()
+            if s.startswith('//'):
+                continue
+            m = re.search(r'SetReNumerCellType\(\s*\w+\s*,\s*\w+\.GetColumnIndex\(\s*' + RX_DEFCOL + r'(\w+)\s*\)\s*((?:,\s*-?\d+\s*)*)\)', s)
+            if m:
+                args = [x.strip() for x in m.group(2).split(',') if x.strip()]
+                mn = args[0] if len(args) >= 1 else '0'
+                dec = args[1] if len(args) >= 2 else '0'
+                mx = args[2] if len(args) >= 3 else MAXV
+                put(guard_of.get(i, ''), m.group(1), cell_type='NUMBER', decimals=dec, min=mn, max=mx, separator='Y', negative_red=neg_default, fixed_point='Y' if dec == '0' else 'N',
+                    source='CODE_SetReNumerCellType', ref=f'{base}:{i} · SpreadInfo.cs:13772-13856')
+                continue
+            m = re.search(r'AddNumColumn(?:Ex)?\(\s*"[^"]*"\s*,\s*' + RX_DEFCOL + r'(\w+)\s*,(.*)\)\s*;', s)
+            if m:
+                tail = [x.strip() for x in m.group(2).split(',')]
+                ints = [x for x in tail[4:] if re.fullmatch(r'\d+', x)]  # merge,width,visible,align… 뒤의 정수 = 소수자리
+                # 5-인자 AddNumColumn(header, field, merge, width, visible) = blFixedPoint true(정수) — 기본값 CSV 인용
+                five = len(tail) <= 3 and (D.get('addnumcolumn_5arg_fixedpoint', {}).get('value') or '').lower() == 'true'
+                dec = ints[-1] if ints else '0'
+                put('', m.group(1), cell_type='NUMBER', decimals=dec, min=fw_min, max=fw_max, separator='Y' if 'true' in tail[-1:] else '', negative_red=neg_default,
+                    fixed_point='Y' if (five or dec == '0') else 'N', source='CODE_AddNumColumn', ref=f'{base}:{i}' + (f" · {D.get('addnumcolumn_5arg_fixedpoint', {}).get('ref', '')}" if five else ''))
+                continue
+            m = re.search(r'Add(DateTime|Date)Column\(\s*"[^"]*"\s*,\s*' + RX_DEFCOL + r'(\w+)', s)
+            if m:
+                put('', m.group(2), cell_type='DATETIME' if m.group(1) == 'DateTime' else 'DATE', source=f'CODE_Add{m.group(1)}Column', ref=f'{base}:{i}')
+        cond_cells(text, base, rel)
+    out = os.path.join(sdir, 'cell_rules.csv')
+    with open(out, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=COLS)
+        w.writeheader()
+        for k in sorted(rules):
+            w.writerow(rules[k])
+    print(f'{sid}: {len(rules)}컬럼 → {out}')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

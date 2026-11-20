@@ -1,0 +1,22 @@
+{
+ "rule_id": "G10",
+ "hash": "7ae270e12e8c92d1",
+ "groups": [
+  {
+   "rows": [
+    "V-00fc049d"
+   ],
+   "why": "Project·Model/Nickname 칸에서 Enter를 누르면 팝업이 열리는지만 확인하는 행(81 bpark416, Div 81)이다. 다른 행은 같은 요소를 다루지만 Item Popup과 activeFlag 미전달 사전 조건을 함께 보고, 다른 사용자(82 wonqthanq / 81 jiwon.park) 사이에서 팝업 목록 품목 수(사용 중지 모델 포함 여부)도 비교하므로 확인 방법과 성질이 달라 묶지 않았다."
+  },
+  {
+   "rows": [
+    "V-2d033aab"
+   ],
+   "why": "Enter로 팝업이 열리는지에 더해 Model 팝업에 activeFlag가 전달되지 않는지와 계정 간 팝업 목록 품목 수 차이까지 확인하는 행이다. 이 추가 검사가 빠질 수 있어 단독으로 두었다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:41:42",
+ "cost": 0.0380519
+}

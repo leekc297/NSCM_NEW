@@ -1,0 +1,168 @@
+{
+ "rule_id": "H8",
+ "hash": "0deca4e321eb7e32",
+ "groups": [
+  {
+   "rows": [
+    "V-574f6e98",
+    "V-82f2fbc5",
+    "V-a2137b7c"
+   ],
+   "why": "세 행 모두 같은 요소(조회 결과 총 건수 표시)에 같은 기대(천단위 구분 포맷 적용)를 확인하고 출처와 문장만 다르다."
+  },
+  {
+   "rows": [
+    "V-3844dbeb"
+   ],
+   "why": "총 건수 영역이 있는지, 숫자가 그리드 행 수와 같은지를 보는 행이라 천단위 포맷 행과 기대가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-35adb0d0"
+   ],
+   "why": "화면 그리드가 아니라 Excel 다운로드 파일의 셀 서식을 보는 행이라 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-bb86725c"
+   ],
+   "why": "다른 화면의 Request Date 결함을 옮긴 행이고 기대 포맷(YYYYMMDD HH:MM:SS)도 컬럼 메타의 yyyy-MM-dd HH:mm:ss 와 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-07234df6"
+   ],
+   "why": "Distribution Route.CREATION_DATE 날짜 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-8967e0de"
+   ],
+   "why": "Distribution Route.LAST_UPDATE_DATE 날짜 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-5cdb38d4"
+   ],
+   "why": "POPUP 그리드의 LAST_UPDATE_DATE 라서 메인 그리드 컬럼과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-20276f3d"
+   ],
+   "why": "메타의 route 시트는 Distribution Route 와 시트명·라벨·순번이 따로 정의돼 있어 같은 그리드라고 확신할 수 없으므로 route.LT_WAIT_SHIPPING 은 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-206d3dbe"
+   ],
+   "why": "Distribution Route.LT_WAIT_SHIPPING 숫자 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-b87f4e1f"
+   ],
+   "why": "POPUP.LT_WAIT_SHIPPING 은 팝업 그리드라서 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-3361c237"
+   ],
+   "why": "route 시트가 Distribution Route 와 같은 그리드인지 확인이 안 돼 route.LT_DEPARTURE_INLAND 는 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-3aac1feb"
+   ],
+   "why": "Distribution Route.LT_DEPARTURE_INLAND 숫자 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-f008f278"
+   ],
+   "why": "POPUP.LT_DEPARTURE_INLAND 은 팝업 그리드라서 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-8312d939"
+   ],
+   "why": "route.LT_VOYAGE 는 라벨(Sea/Air Ferry)이 Distribution Route 쪽(Voyage)과 달라 같은 요소라고 확신할 수 없으므로 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-3e5c8087"
+   ],
+   "why": "Distribution Route.LT_VOYAGE 숫자 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-9078b8fc"
+   ],
+   "why": "POPUP.LT_VOYAGE 는 팝업 그리드라서 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-52467b95"
+   ],
+   "why": "route 시트가 Distribution Route 와 같은 그리드인지 확인이 안 돼 route.LT_LAY_OFF_CLEARANCE 는 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-79b52c48"
+   ],
+   "why": "Distribution Route.LT_LAY_OFF_CLEARANCE 숫자 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-a7b86611"
+   ],
+   "why": "POPUP.LT_LAY_OFF_CLEARANCE 는 팝업 그리드라서 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-c3acfaf4"
+   ],
+   "why": "route 시트가 Distribution Route 와 같은 그리드인지 확인이 안 돼 route.LT_ARRIVAL_INLAND 는 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-eddff092"
+   ],
+   "why": "Distribution Route.LT_ARRIVAL_INLAND 숫자 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-68691825"
+   ],
+   "why": "POPUP.LT_ARRIVAL_INLAND 는 팝업 그리드라서 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-4785e827"
+   ],
+   "why": "route 시트가 Distribution Route 와 같은 그리드인지 확인이 안 돼 route.PRIORITY 는 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-fe461bb3"
+   ],
+   "why": "Distribution Route.PRIORITY 숫자 표시만 보는 행이다."
+  },
+  {
+   "rows": [
+    "V-4a7c126e"
+   ],
+   "why": "route 시트가 Distribution Route 와 같은 그리드인지 확인이 안 돼 route.SHIP_DOC_PREPARATION_DATE 는 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-633874a0"
+   ],
+   "why": "Distribution Route.SHIP_DOC_PREPARATION_DATE 숫자 표시만 보는 행이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:44:16",
+ "cost": 0.1821921
+}

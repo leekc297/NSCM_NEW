@@ -1,0 +1,85 @@
+{
+ "rule_id": "D2",
+ "hash": "5d80124e35a62af5",
+ "groups": [
+  {
+   "refs": [
+    "DM-64",
+    "DM-67"
+   ],
+   "target": "MKT_FCST·SCM_FCST 편집 권한(GET_ADMIN_GROUP_MEASURE)",
+   "condition": "Div·권한(ADMIN/SCP PLANNER/DM PLANNER)·룩업 설정 시간대",
+   "expected": "SCM_FCST·MKT_FCST[R+P] 편집 가능 여부가 GET_ADMIN_GROUP_MEASURE 룩업의 Div·권한·시간대 기준과 같다. 설정 시간(SCP 시간)에는 DM Planner 가 MKT_FCST[R+P]를 편집할 수 없다.",
+   "why": "둘 다 GET_ADMIN_GROUP_MEASURE 룩업으로 권한·시간대별 MKT_FCST 편집 통제를 확인하므로, 확인 동작과 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-141",
+    "DM-142",
+    "DM-144"
+   ],
+   "target": "Bucket 유형별 Measure 편집 구간",
+   "condition": "Bucket=Daily/Weekly/Monthly 전환",
+   "expected": "Daily 에서는 MKT_FCST·SCM_FCST 가 W+0 월요일부터 편집 가능하고 Unit Price(LOC)는 편집할 수 없다. Weekly 에서는 W+0부터 편집 가능하다. Monthly 에서는 Unit Price(LOC)가 M+0부터, MKT_FCST·SCM_FCST 가 M+4부터 편집 가능하다.",
+   "why": "모두 Bucket 유형을 바꿔 가며 Measure별 편집 시작 구간을 확인하는 항목이다. DM-141·142는 DM-144의 일부다."
+  },
+  {
+   "refs": [
+    "DM-139"
+   ],
+   "target": "Current 버전 입력 Measure 통제·AS From Site 콤보",
+   "condition": "Current 버전, Div·DM Planner(W/S)·Sales Site VMI=Y·FCST Type=AS",
+   "expected": "MKT/SCM_FCST 는 GET_ADMIN_GROUP_MEASURE 로 통제된다. AS_In_Req 는 81/81_JV/82의 W/S 권한만 편집할 수 있다. VMI_In_Req 는 40/82에서 VMI=Y 일 때만 편집할 수 있다. AS From Site 콤보에는 해당 Div 목록만 나온다.",
+   "why": "AS_In_Req·VMI_In_Req·콤보 목록까지 함께 확인하므로 확인 범위가 다른 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-133"
+   ],
+   "target": "Partial 주차 편집 구간·실적 구분선",
+   "condition": "Partial 주차(월 경계가 걸친 주)",
+   "expected": "M-1·M 파셜 구간이 모두 편집 가능하다. 실적 구분선은 당주 월요일 기준으로 M-1 파셜의 왼쪽에 있다.",
+   "why": "Partial 주차의 분할 구간과 구분선 위치를 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-148"
+   ],
+   "target": "RTF[R+P] 편집 가능 조건(Cutoff 상태)",
+   "condition": "Sales Plan Cutoff·SCP Final·1·2차 Cutoff 상태",
+   "expected": "Cutoff 가 끝나지 않았으면 RTF[R+P]의 편집·저장이 막히고 수정불가 팝업이 뜬다. Div 81은 GET_ADMIN_GROUP_MEASURE 와 1·2차 Cutoff 상태를 기준으로 판단한다.",
+   "why": "Cutoff 진행 상태로 편집을 막는지 확인하는 항목이라 권한·Bucket 기준 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-25"
+   ],
+   "target": "Monthly 입력·저장값·셀 더블클릭 팝업",
+   "condition": "Bucket=Monthly, 행 추가 후 더블클릭",
+   "expected": "Monthly 입력이 가능하고 당월은 비활성이다. 입력값이 그대로 저장된다(소수 자릿수 유지). Current 버전은 대소문자와 상관없이 인식된다. 셀을 더블클릭하면 Project Code/Model 팝업이 열린다.",
+   "why": "저장값 보존과 팝업 열림까지 함께 확인하므로 확인 대상이 다른 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-38"
+   ],
+   "target": "실적 구간 셀 배경색",
+   "condition": "실적(편집 불가 과거) 구간",
+   "expected": "실적 구간 셀이 표준 구간색(회색)으로 표시된다.",
+   "why": "편집 가능 여부가 아니라 표시 색상을 확인하는 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-80"
+   ],
+   "target": "입력 가능 Measure 목록(Business Plan·Unit Price(LOC))",
+   "condition": "Biz Plan·Cutoff Data, 실적/계획 구간",
+   "expected": "Business Plan·Unit Price(LOC) 2개만 실적 구간과 계획 구간 모두에서 편집 가능하고, 나머지 Measure 는 잠겨 있다.",
+   "why": "실적 구간까지 편집을 허용하는 Measure 목록을 확인하는 항목이라 구간 잠금 기준이 다른 항목과 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:32",
+ "cost": 0.0854012
+}

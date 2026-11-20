@@ -1,0 +1,28 @@
+{
+ "rule_id": "G6",
+ "hash": "d3d36f3fb86739a2",
+ "groups": [
+  {
+   "refs": [
+    "DM-P37"
+   ],
+   "target": "Year 조회조건 초기 기본값",
+   "condition": "화면 최초 진입 시(Form_Load 직후)",
+   "expected": "Year 조회조건 기본 선택값이 AS-IS Form_Load와 같이 현재연도로 설정됨",
+   "why": "연도 조회조건의 기본값이 현재연도인지 확인하는 항목으로, 기대 결과가 다른 항목과 달라 따로 둠"
+  },
+  {
+   "refs": [
+    "DM-P55"
+   ],
+   "target": "Ver. 조회조건 초기 기본값",
+   "condition": "화면 최초 진입 시, 모든 Div(사업부)에서",
+   "expected": "Ver. 조회조건 기본값이 AS-IS Form_Load와 같이 빈값이며, Div와 상관없이 같게 동작함",
+   "why": "Ver. 조회조건의 기본값이 빈값이고 Div마다 같은지 확인하는 항목으로, 대상과 기대값이 Year 항목과 달라 따로 둠"
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:28",
+ "cost": 0.0342212
+}

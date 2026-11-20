@@ -1,0 +1,112 @@
+# -*- coding: utf-8 -*-
+"""AS-IS 실구동 결과 ↔ TO-BE 결과 건수·데이터 대조 → A1 판정 행 (사용자 2026-11-13)
+
+  python tools/Harness/verify/asis_live_rows.py <ID>
+사용자 지시(11-13): "실구동 값의 경우에 건수 차이가 소량 날 때는 판단필요 항목으로, 아예 데이터가 다르거나 없으면 조치필요 항목으로 분류"
+입력  tools/AsisLive/asis_live_cond.one(ID) — AS-IS 런처가 실제로 조회한 주 그리드의 SP·건수(asis_rows) 와, 같은 조건으로 차등 검증이 잰 TO-BE 건수(tobe_rows)·조건 일치 여부
+      Doc/verify/<ID>/diff/diff_summary.csv — 같은 조건의 키 대조(공통·AS-IS 만·TO-BE 만)
+판정  조건이 같을 때만 판정한다(조건이 다르면 건수가 달라도 오류가 아니므로 행을 만들지 않고 사유만 남긴다)
+      같음(건수 같고 키도 같음)                         → PASS
+      TO-BE 0건 · AS-IS 1건 이상                        → FAIL  (데이터 없음)
+      양쪽 다 있는데 공통 키 0                          → FAIL  (아예 다른 데이터)
+      건수 차이가 소량 = |차이| ≤ max(ABS, PCT × 큰 쪽)  → REVIEW(판정필요)
+      그보다 큰 차이                                    → FAIL
+      건수는 같은데 키 일부가 다름                       → REVIEW
+      소량 기준 기본값 ABS=10건 · PCT=5%  (환경변수 VERIFY_LIVE_ROWS_ABS · VERIFY_LIVE_ROWS_PCT 로 바꾼다)
+산출  Doc/verify/<ID>/a1_live.csv 에 '<시트> · AS-IS 실구동' 행 추가(eg_ingest 가 A1 행으로 반입 · 다시 돌리면 그 행만 교체)
+      Doc/verify/<ID>/asis_live/live_rows.csv  판정·사유 기록(행을 만들지 않은 경우 포함)
+종료코드: 0 판정 행 기록 · 3 미측정(실측 없음·조건 다름·TO-BE 건수 없음) · 2 인자 오류
+"""
+import csv, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+P = lambda *a: os.path.join(ROOT, *a)
+for _s in (sys.stdout, sys.stderr):
+    try: _s.reconfigure(encoding='utf-8', errors='replace')
+    except Exception: pass
+ABS = int(os.environ.get('VERIFY_LIVE_ROWS_ABS', '10')); PCT = float(os.environ.get('VERIFY_LIVE_ROWS_PCT', '5')) / 100.0
+TAG = ' · AS-IS 실구동'
+FIELDS = ['menu_id', 'sheet', 'asis_sp', 'verdict', 'asis_rows', 'tobe_rows', 'detail', 'note']
+
+
+def to_int(v):
+    try: return int(float(str(v).replace(',', '').strip()))
+    except Exception: return None
+
+
+def classify(a, t, common=None, asis_only=None, tobe_only=None):
+    """(verdict, 사람이 읽는 설명). a = AS-IS 실구동 건수 · t = 같은 조건 TO-BE 건수"""
+    lim = max(ABS, int(round(PCT * max(a, t))))
+    base = f'AS-IS 를 실제로 띄워 조회한 결과 {a:,}건 ↔ TO-BE 같은 조건 조회 결과 {t:,}건'
+    keys = '' if common is None else f' · 키 대조: 공통 {common:,} · AS-IS 에만 {asis_only or 0:,} · TO-BE 에만 {tobe_only or 0:,}'
+    if a == t and (common is None or (not asis_only and not tobe_only)): return 'PASS', base + ' — 같음' + keys
+    if t == 0 and a > 0: return 'FAIL', base + ' — TO-BE 에 데이터가 없음(조치 필요)' + keys
+    if common is not None and common == 0 and a > 0 and t > 0: return 'FAIL', base + ' — 양쪽 모두 데이터가 있지만 같은 키가 하나도 없음(아예 다른 데이터 · 조치 필요)' + keys
+    d = abs(a - t)
+    if a == t: return 'REVIEW', base + ' — 건수는 같지만 일부 키가 다름(판정필요)' + keys
+    if d <= lim: return 'REVIEW', base + f' — 건수 차이 {d:,}건(소량 기준 {lim:,}건 이하 = max({ABS}건, {PCT * 100:g}%) · 판정필요: 두 DB 의 데이터 시점 차이일 수 있음)' + keys
+    return 'FAIL', base + f' — 건수 차이 {d:,}건(소량 기준 {lim:,}건 초과 · 조치 필요)' + keys
+
+
+def key_counts(mid, sheet, a, t):
+    """diff_summary.csv 에서 같은 시트·같은 건수의 대조 행 → (공통, AS-IS 만, TO-BE 만) · 없으면 (None, None, None)"""
+    p = P('Doc', 'verify', mid, 'diff', 'diff_summary.csv')
+    if not os.path.exists(p): return None, None, None
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        for r in csv.DictReader(f):
+            if r.get('sheet') == sheet and to_int(r.get('tobe_rows')) == t and to_int(r.get('asis_rows')) is not None and to_int(r.get('common')) is not None:
+                return to_int(r.get('common')), to_int(r.get('asis_only')) or 0, to_int(r.get('tobe_only')) or 0
+    return None, None, None
+
+
+def main():
+    if len(sys.argv) < 2: print(__doc__); return 2
+    mid = sys.argv[1].upper(); vd = P('Doc', 'verify', mid); od = os.path.join(vd, 'asis_live'); os.makedirs(od, exist_ok=True)
+    rec = {'menu_id': mid, 'sheet': '', 'asis_sp': '', 'verdict': '', 'asis_rows': '', 'tobe_rows': '', 'detail': '', 'note': ''}
+
+    def save(rc):
+        with open(os.path.join(od, 'live_rows.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=FIELDS); w.writeheader(); w.writerow(rec)
+        print(f"[asis_live_rows] {mid}: {rec['verdict'] or '판정 안 함'} — {rec['detail'] or rec['note']}")
+        return rc
+    if not os.path.exists(P('Doc', 'asislive', mid, 'latest.json')): rec['note'] = 'AS-IS 실구동 기록 없음(미측정)'; return save(3)
+    sys.path.insert(0, P('tools', 'AsisLive'))
+    try:
+        import asis_live_cond as C
+        s = C.one(mid, False)
+    except Exception as e:
+        rec['note'] = f'조건 대조 실패: {str(e)[:160]}'; return save(3)
+    rec['sheet'] = s.get('main_sheet') or ''; rec['asis_sp'] = s.get('main_asis_sp') or ''; rec['asis_rows'] = s.get('asis_rows'); rec['tobe_rows'] = s.get('tobe_rows')
+    if s.get('cond') != '같은 조건':
+        rec['note'] = f"판정 안 함 — AS-IS 실구동 조건과 TO-BE 시험 조건이 같지 않음({s.get('cond')}){': ' + s['diff_params'][:300] if s.get('diff_params') else ''}"; return save(3)
+    a, t = to_int(s.get('asis_rows')), to_int(s.get('tobe_rows'))
+    if a is None or t is None:
+        rec['note'] = f"판정 안 함 — 조건은 같지만 건수가 한쪽에 없음(AS-IS {s.get('asis_rows')!r} · TO-BE {s.get('tobe_rows')!r} — TO-BE 건수는 차등 검증이 같은 조건으로 잰 값만 쓴다)"; return save(3)
+    c, ao, to_ = key_counts(mid, rec['sheet'], a, t)
+    rec['verdict'], rec['detail'] = classify(a, t, c, ao, to_)
+    # 2026-11-16(SSP0020 EG-52f23308 허위 FAIL 'TO-BE 에 데이터가 없음'): 조회 SP 의 입력 인자가 전부 세션·언어류면 결과는 로그인 계정에 달려 있다.
+    #   AS-IS 실구동 계정과 TO-BE 시험 계정은 다르므로 건수가 달라도 같은 조건의 차이가 아니다 → 판정에서 뺀다(해당없음 · 근거 = 인자 목록). 건수가 같으면 종전대로 PASS
+    if rec['verdict'] != 'PASS' and rec['asis_sp']:
+        try:
+            _nz = lambda s_: re.sub(r'[^a-z0-9]', '', re.sub(r'^(@p_|@|p_)', '', str(s_ or ''), flags=re.I).lower())
+            _SES = {'userid', 'language', 'langcd', 'lang', 'debugmode', 'programid', 'sheetname', 'mnuid', 'menuid'}
+            with open(P('Doc', 'asisfacts', 'db', 'db_params.csv'), encoding='utf-8-sig', newline='') as f:
+                _ps = [r['param_name'] for r in csv.DictReader(f) if r['object_name'].upper() == rec['asis_sp'].upper() and r['type'].strip() == 'P' and r['is_output'] == '0']
+            if _ps and not [x for x in _ps if _nz(x) not in _SES]:
+                rec['verdict'] = 'NA'; rec['detail'] = f"판정 제외 — {rec['asis_sp']} 의 입력 인자가 전부 세션·언어류({', '.join(_ps)})라 조회 결과가 로그인 계정에 달려 있음. AS-IS 실구동 계정과 TO-BE 시험 계정이 달라 같은 조건이 아님 · 원 대조: {rec['detail'][:200]}"
+        except Exception as _e:
+            rec['note'] = f'세션 인자 판별 실패: {str(_e)[:80]}'
+    rec['note'] = f"AS-IS 실구동 {os.path.basename(str(s.get('asis_run') or ''))} · SP {rec['asis_sp']} · 조건 같음(인자 {s.get('same')}개 일치)"
+    # a1_live.csv 에 반입(eg_ingest 가 A1 행으로 읽는다)
+    p = os.path.join(vd, 'a1_live.csv'); rows = []
+    if os.path.exists(p):
+        with open(p, encoding='utf-8-sig', newline='') as f: rows = [r for r in csv.DictReader(f) if not str(r.get('sheet') or '').endswith(TAG)]
+    rows.append(dict(rec, sheet=rec['sheet'] + TAG))
+    with open(p + '.tmp', 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=FIELDS, extrasaction='ignore'); w.writeheader(); w.writerows(rows)
+    os.replace(p + '.tmp', p)
+    return save(0)
+
+
+if __name__ == '__main__':
+    sys.exit(main())

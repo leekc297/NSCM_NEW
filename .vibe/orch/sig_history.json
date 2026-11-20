@@ -1,0 +1,90 @@
+{
+  "S8.checklistRun | $ <path> <path> <ID> --asis <ID>": [
+    {
+      "ms": 1795102426091,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795103300642,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795103309771,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795103313944,
+      "screen": "SCP0005"
+    }
+  ],
+  "S8.checklistRun | [FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 <ID> 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님": [
+    {
+      "ms": 1795102461084,
+      "screen": "SCP0014"
+    },
+    {
+      "ms": 1795103300688,
+      "screen": "SCP0014"
+    },
+    {
+      "ms": 1795103309808,
+      "screen": "SCP0014"
+    },
+    {
+      "ms": 1795103314280,
+      "screen": "SCP0014"
+    }
+  ],
+  "S8.checklistRun | [FAIL] Playwright exit code N - log tail:": [
+    {
+      "ms": 1795103254225,
+      "screen": "SSP0005"
+    },
+    {
+      "ms": 1795103254376,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795103300711,
+      "screen": "SSP0005"
+    },
+    {
+      "ms": 1795103300755,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795103309832,
+      "screen": "SSP0005"
+    },
+    {
+      "ms": 1795103309866,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795103314480,
+      "screen": "SSP0005"
+    },
+    {
+      "ms": 1795103314836,
+      "screen": "SCP0005"
+    },
+    {
+      "ms": 1795115707424,
+      "screen": "SCP0028"
+    },
+    {
+      "ms": 1795119254629,
+      "screen": "SSP0005"
+    },
+    {
+      "ms": 1795119254795,
+      "screen": "SCP0005"
+    }
+  ],
+  "S8.checklistRun | [FAIL] <path> SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N": [
+    {
+      "ms": 1795115708282,
+      "screen": "SSP0014"
+    }
+  ]
+}

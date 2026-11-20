@@ -95,7 +95,8 @@ body .shortLabel {
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 8px;
+  // 모듈(검색조건 / 결과그리드 / 버튼) 사이 간격 12px.
+  gap: 12px;
 }
 
 .modalGridWrapper {
@@ -114,7 +115,6 @@ body .shortLabel {
   display: flex;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: 5px;
 }
 .modalErrorBox {
   flex-shrink: 0;

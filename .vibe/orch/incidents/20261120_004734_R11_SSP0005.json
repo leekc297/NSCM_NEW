@@ -1,0 +1,31 @@
+{
+  "id": "20261120_004734_R11_SSP0005",
+  "at": "2026-11-20T00:47:34+09:00",
+  "ms": 1795103254254,
+  "rule": "R11",
+  "ruleName": "Claude 없이 끝난 체인에 오류 남음",
+  "title": "Claude 없이 끝난 체인. SSP0005 FAIL 3 · 미검증 434 남음",
+  "screen": "SSP0005",
+  "sig": "R11|SSP0005|checklist",
+  "count": 4,
+  "repeat": null,
+  "detail": "체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList): 스크립트 단계 1개 실행, Claude 단계 실행 0, 건너뜀 3",
+  "evidence": {
+    "md": "Doc\\gen\\SSP0005\\FULLRUN.md",
+    "result": "Doc/verify/SSP0005/run_verify.result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T05:05:24+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창 로드 뒤 지난 기록을 다시 읽어 올린 중복). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_004734_R11_SSP0005.json",
+  "lastAt": "2026-11-20T00:48:34+09:00",
+  "lastMs": 1795103314670,
+  "notice": true,
+  "reload": "replay",
+  "prevStatus": "open"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "20261119215147_SELF",
+  "at": "2026-11-19T21:51:47+09:00",
+  "ms": 1795092707505,
+  "source": "self",
+  "status": "applied",
+  "sig": "gate scope commonsync",
+  "title": "변경 게이트 감시 대상에 tools/CommonSync 추가",
+  "evidence": "입력 key S4|inv|GATE_SCOPE. tools/Harness/verify/run_verify.py:393 이 tools/CommonSync/screen_sync.py 를 subprocess 로 실행함. tools/Harness/verify/engine_selfcheck.py:36-37 PY_GLOBS 는 Harness/verify, DbConn, Harness, AsisLive, Docs 5개 폴더이고 CommonSync 없음. scripts/rules/inventory_check.py:225-232 가 이 차이를 GATE_SCOPE 로 보고함. tools/CommonSync/*.py 2개 파일 메모리 내 compile 오류 0건(2026-11-19 21:50 실행). 미정의 이름 검사는 미실행.",
+  "targets": [
+    "tools/Harness/verify/engine_selfcheck.py"
+  ],
+  "before_after": "PY_GLOBS 5개 폴더 → 'tools/CommonSync/*.py' 를 더한 6개 폴더. 36-37줄 목록에 항목 1개 추가, 주석에 추가 일자와 근거(run_verify.py:393) 기록",
+  "verify": "python scripts/rules/inventory_check.py 출력에 '[OK] GATE_SCOPE' 와 '감시 밖 0'. python tools/Harness/verify/engine_selfcheck.py 출력에 tools/CommonSync 파일의 컴파일 오류 0, 미정의 이름 0. 미정의 이름이 나오면 PY_GLOBS 를 되돌리고 해당 줄을 보고",
+  "rollback": "engine_selfcheck.py 36-37줄 PY_GLOBS 에서 'tools/CommonSync/*.py' 삭제(VMO 백업본 복원)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T21:59:22+09:00",
+      "by": "사용자",
+      "what": "승인(Claude Code 세션에서 \"개선안 1번 승인할게요, 반영해주세요.\")"
+    },
+    {
+      "at": "2026-11-19T21:59:22+09:00",
+      "by": "Claude Code 세션",
+      "what": "반영 완료 · 검증 통과 — engine_selfcheck.py 전체 실행 PASS(21:58~21:59, PY_COMPILE 0, PY_UNDEF 0), inventory_check.py PASS, GATE_SCOPE 감시 밖 0 · 변경 1개 파일 · 백업 engine_selfcheck.py.bak_20261119_self2"
+    }
+  ],
+  "self": true,
+  "check": "S4",
+  "selfKey": "S4|inv|GATE_SCOPE",
+  "appliedMs": 1795093162458,
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/Harness/verify/engine_selfcheck.py"
+    ]
+  }
+}

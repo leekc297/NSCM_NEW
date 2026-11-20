@@ -45,6 +45,19 @@ interface Props {
   divisionId: string;
   verId: string;
   verSeq: string;
+  /**
+   * 팝업 조회조건 시드 — 메인 화면의 **현재(라이브) 조회조건 선택값**이다. AS-IS
+   * `ShowSopAssignModel`(cs:5884-5928)이 메인 live Site/Plant/Building/Line/Operation/Line Type 을
+   * 생성자로 넘기고 `SetDefConditions`(..._Model.cs:505-512)로 세팅한다. 조회(Search) 무관하게 고른
+   * 즉시 반영된다(`_ori_*`=`clb*.ControlValues`). Operation·Line Type 은 ELTR 모드에서 숨는 축이라
+   * 그 모드에선 시드하지 않는다(아래 재시드 effect).
+   */
+  initialSiteIds: string[];
+  initialPlantIds: string[];
+  initialFactoryIds: string[];
+  initialLineIds: string[];
+  initialOperationIds: string[];
+  initialElectrodeTypes: string[];
   onClose: () => void;
   onConfirm: (rows: GridRow[]) => void;
 }
@@ -81,6 +94,12 @@ export const CapaLineAssignModelModal = ({
   divisionId,
   verId,
   verSeq,
+  initialSiteIds,
+  initialPlantIds,
+  initialFactoryIds,
+  initialLineIds,
+  initialOperationIds,
+  initialElectrodeTypes,
   onClose,
   onConfirm,
 }: Props) => {
@@ -126,20 +145,25 @@ export const CapaLineAssignModelModal = ({
     electrodeTypes: isEltr ? [] : [ALL],
   }));
 
-  // 재오픈 시 부모 값으로 재시드 — 메인에서 Division/모드를 바꾼 뒤 다시 열면 그 값에서 시작한다.
+  // 오픈 시 **메인 화면의 현재(라이브) 조회조건**을 상속해 시드한다 — AS-IS `ShowSopAssignModel`
+  //   (cs:5884-5928)이 메인 live Site/Plant/Building/Line/Operation/Line Type 을 생성자로 넘기고
+  //   `SetDefConditions`(..._Model.cs:505-512)로 조건 컨트롤에 세팅한다. 조회(Search) 무관하게 메인
+  //   에서 고른 즉시 반영된다(P03 CapaLineModal 과 동일 규약). Operation·Line Type 은 ELTR 모드에서
+  //   숨는 축이라(조회조건 §주석) 그 모드에선 시드하지 않고 전체([])로 둔다.
   useEffect(() => {
     if (!open) return;
-    const hiddenAxis = divisionTypeOfSheet(sheet) === DIVISION_TYPE.ELTR ? [] : [ALL];
+    const isEltrMode = divisionTypeOfSheet(sheet) === DIVISION_TYPE.ELTR;
     setSel({
       divisionId,
-      siteIds: [ALL],
-      plantIds: [ALL],
-      factoryIds: [ALL],
-      lineIds: [ALL],
-      operationIds: hiddenAxis,
-      electrodeTypes: hiddenAxis,
+      siteIds: initialSiteIds,
+      plantIds: initialPlantIds,
+      factoryIds: initialFactoryIds,
+      lineIds: initialLineIds,
+      operationIds: isEltrMode ? [] : initialOperationIds,
+      electrodeTypes: isEltrMode ? [] : initialElectrodeTypes,
     });
     setApplied(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, sheet, divisionId]);
 
   const cascade = useSopModelCascade(sel, divisionType);
@@ -438,6 +462,13 @@ export const CapaLineAssignModelModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={onClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -445,13 +476,6 @@ export const CapaLineAssignModelModal = ({
               iconComponent={<ControlConfirmIcon size='small' />}
               iconPosition='leading'
               onClick={handleSubmit}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Close'
-              onClick={onClose}
             />
           </div>
         </div>

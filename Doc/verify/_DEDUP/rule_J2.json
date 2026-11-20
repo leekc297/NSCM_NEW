@@ -1,0 +1,67 @@
+{
+ "rule_id": "J2",
+ "hash": "625c01ecc3718e90",
+ "groups": [
+  {
+   "refs": [
+    "GAP-124",
+    "GAP-87",
+    "GAPSELF-17",
+    "GAPSELF-18"
+   ],
+   "target": "공통 버튼(Insert·Save·Delete 등) 노출의 권한 판정",
+   "condition": "버튼 권한이 없는 계정·Division과 있는 계정으로 같은 화면을 열고 조회한 뒤 버튼 영역을 비교 (예: DM Viewer 단독 vs DM ADMIN/Planner)",
+   "expected": "Insert·Save·Delete 등 공통 버튼은 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M, btn_auth·PR_GET_MNU_BTN_AUTH_DIV)에 등록된 버튼만 노출·동작한다. 권한이 없는 버튼(예: DM Viewer의 SAVE·INSERT·DELETE)이 보이면 결함이다.",
+   "why": "넷 다 권한이 다른 계정을 대조해 공통 버튼 노출이 버튼 권한 메타(btn_auth)를 따르는지 보는 같은 확인이라 묶었다."
+  },
+  {
+   "refs": [
+    "GAPPI-15"
+   ],
+   "target": "화면 OPEN 직후(조회 전) 공통 버튼 노출 시점",
+   "condition": "화면 OPEN 직후, 조회 전, 자동 선택된 Division 기준",
+   "expected": "공통 버튼(Insert/Save/Delete 등 SubTitle 버튼) 노출은 OPEN 시 선택된 Division 권한(PR_GET_MNU_BTN_AUTH_DIV)으로 바로 결정되고, 조회(Search) 실행 여부와 상관없다.",
+   "why": "권한 판정 자체보다 조회 전 OPEN 시점에 버튼 노출이 정해지는지를 따로 보는 확인이라 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "DM-28"
+   ],
+   "target": "Price Batch Input 버튼 Division별 노출",
+   "condition": "Division 40/81/81_JV 선택",
+   "expected": "해당 Division에서는 Price Batch Input 버튼이 보이지 않는다.",
+   "why": "특정 버튼(Price Batch Input)을 Division 조건으로 숨기는 고유 규칙이라 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "DM-66"
+   ],
+   "target": "SCP Planner의 Insert·Save 가능 여부",
+   "condition": "SCP Planner 계정, SCP 편집 가능 시간 기준",
+   "expected": "SCP Planner는 신규 Insert·Save(저장)를 할 수 없다.",
+   "why": "특정 역할(SCP Planner)과 편집 가능 시간 조건이 붙은 기능 제한이라 일반 버튼 권한 판정과 섞지 않고 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "DM-78"
+   ],
+   "target": "Data Type별 Delete 버튼 노출",
+   "condition": "Division 40, Data Type=Cutoff Data(Sales Plan·Biz Plan)",
+   "expected": "Data Type이 Cutoff Data이면 Delete 버튼이 보이지 않는다.",
+   "why": "데이터 유형(Cutoff Data)에 따라 Delete 버튼을 숨기는 고유 조건이라 단독으로 두었다."
+  },
+  {
+   "refs": [
+    "DM-P58"
+   ],
+   "target": "Measure Setting 버튼 존재 여부",
+   "condition": "",
+   "expected": "Measure Setting 버튼이 제거되어 화면에 하나도 보이지 않는다.",
+   "why": "특정 버튼(Measure Setting)을 권한과 상관없이 없애는 확인이라 단독으로 두었다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:45:21",
+ "cost": 0.0734452
+}

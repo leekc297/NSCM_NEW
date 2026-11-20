@@ -630,7 +630,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -646,7 +646,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -662,7 +662,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -678,7 +678,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -694,7 +694,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -710,7 +710,7 @@
   "ctx": "SSP/40/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -806,7 +806,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -822,7 +822,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -838,7 +838,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -854,7 +854,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -870,7 +870,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -886,7 +886,7 @@
   "ctx": "SSP/40/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -998,7 +998,7 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1014,7 +1014,7 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1030,7 +1030,7 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1046,7 +1046,7 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1062,7 +1062,7 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1078,7 +1078,7 @@
   "ctx": "SSP/81/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1108,11 +1108,11 @@
   "screen": "SSP0014",
   "target": "Division 후보",
   "ctx": "SSP/81/SSP Viewer",
-  "result": "판정필요",
-  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,82,EE",
-  "actual": "후보 40,81,82 · 권한 있는데 없음 EE",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,82 · AS-IS 필터 ATTRIBUTE3 <> 'EE'(Doc/asisfacts/db/modules/dbo.UP_FX_GetCommonDataList.sql:342 @Code=MyDivision) 로 EE 제외",
+  "actual": "후보 40,81,82",
   "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
-  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "note": "",
   "mctx": {
    "calls": 1,
    "rows": 8613,
@@ -1190,7 +1190,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1206,7 +1206,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1222,7 +1222,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1238,7 +1238,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1254,7 +1254,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1270,7 +1270,7 @@
   "ctx": "SSP/81/SSP Viewer",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1382,7 +1382,7 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1398,7 +1398,7 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
-  "actual": "조회 전 노출 · 조회 후 노출",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1414,7 +1414,7 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1430,7 +1430,7 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1446,7 +1446,7 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {
@@ -1462,7 +1462,7 @@
   "ctx": "SSP/82/SSP Planner",
   "result": "PASS",
   "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
-  "actual": "조회 전 비노출 · 조회 후 비노출",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
   "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
   "note": "",
   "mctx": {

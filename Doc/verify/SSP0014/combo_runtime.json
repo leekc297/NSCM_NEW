@@ -1,5 +1,5 @@
 {
- "at": "2026-11-19T06:01:27.319Z",
+ "at": "2026-11-19T23:49:19.159Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -86,7 +86,29 @@
   }
  },
  "grid": {},
+ "rr": {
+  "search": "20261120084325",
+  "combos": "20261120084325"
+ },
  "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"''\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "minyonglee1"
+  },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\"}",
@@ -110,24 +132,6 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": [],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"''\",\"mnuId\":\"SSP0014\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": [],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
    "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 2,
@@ -143,51 +147,6 @@
     {
      "c": "N",
      "v": "N"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0014\"}",
-   "status": 200,
-   "n": 8,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "81",
-     "v": "81 Automotive Battery"
-    },
-    {
-     "c": "40",
-     "v": "40 Mobility & IT Battery"
-    },
-    {
-     "c": "82",
-     "v": "82 ESS Battery"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
     }
    ],
    "user": "minyonglee1"
@@ -263,7 +222,52 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'40'\",\"mnuId\":\"SSP0014\"}",
+   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0014\"}",
+   "status": 200,
+   "n": 8,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 32,
    "keys": [
@@ -403,8 +407,8 @@
    "user": "minyonglee1"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'40'\",\"mnuId\":\"SSP0014\"}",
    "status": 200,
    "n": 32,
    "keys": [

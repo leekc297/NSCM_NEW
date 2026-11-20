@@ -760,7 +760,7 @@ export const MktFcst01 = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (missingPrdn) {
       const label =
         missingPrdn === 'PRDN_CTRY'
-          ? t('LBL01232', 'Prod. Country')
+          ? t('LBL01278', 'Prod. Country')
           : 'Prod. Country Option'; // 라벨 코드 미채번 — 칸 이름 그대로
       void setAlert({
         type: 'alert',

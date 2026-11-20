@@ -1,0 +1,25 @@
+{
+ "proposal": {
+  "id": "20261120094531_REVIEW",
+  "title": "중지 직후 남은 잠금은 사건 없이 지우고 처리 기록만 남긴다",
+  "evidence": "incidents byRule R9 28. 2026-11-20 06:06:42~06:06:44 R9 사건 9건(_ALL 1, SCP0005 2, SCP0028 2, SSP0005 2, SSP0014 2)은 06:06:04~05 user.stop 4건(by 'VS Code 종료') 뒤 38~40초 안에 올라옴. 05:15:30 R9_ALL 1건은 05:14:14 job.end status interrupted 뒤 76초. 예: incidents/20261120_060642_R9_SCP0005.json 은 잠금 _run.dbwin.SCP0005.lock 의 PID 5080, 시작 05:48:44(같은 체인 실행), 조치 A 등급 삭제만. orch-watch.js:283~292 는 user.stop 여부를 보지 않음",
+  "targets": [
+   "tools/VibeManager/orch-watch.js",
+   "tools/VibeManager/test/t_orch_lock_repeat.js"
+  ],
+  "before_after": "변경 전: 주인 PID 가 없는 잠금마다 R9 사건 1건 → 변경 후: 잠금의 화면(또는 인자 화면 ID)에 최근 10분 안 user.stop 이나 job.end interrupted/stopped 가 있으면 잠금을 지우고 errlog 와 activations 에 '중지 뒤 잠금 정리' 1줄만 남김. 그 밖은 종전대로 R9, 3회부터 R2 묶음",
+  "verify": "node tools/VibeManager/test/t_orch_lock_repeat.js 에 시험 2건 추가(user.stop 뒤 죽은 잠금 → 사건 0건, 잠금 파일 삭제. user.stop 없는 죽은 잠금 → R9 1건). node tools/VibeManager/test/run_all.js 통과",
+  "sig": "rn skip after user stop"
+ },
+ "result": null,
+ "gate": null,
+ "history": [
+  "10:37:29 VMO 자동(게이트 통과 조건): 승인",
+  "10:39:36 VMO: 반영 전 게이트: 구문 검사 25개 파일 통과, 시험 37/37개 파일 통과(PASS 468, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1037",
+  "10:39:40 VMO: 반영 시작",
+  "10:42:40 VMO: 반영 실패. Claude exit 1 · 대상 파일 2개 복원 · 대상 밖 변경 tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md 는 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120094531_REVIEW"
+}

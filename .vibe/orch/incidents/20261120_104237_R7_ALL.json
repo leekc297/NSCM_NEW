@@ -1,0 +1,29 @@
+{
+  "id": "20261120_104237_R7_ALL",
+  "at": "2026-11-20T10:42:37+09:00",
+  "ms": 1795138957792,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
+  "screen": "",
+  "sig": "R7|응답 중 종료",
+  "count": 1,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-20T10-39-40_claude_orch.log",
+    "label": "개선안 반영 중지 직후 남은 잠금은 사건 없이 지우고 처리 기록만 남긴다",
+    "source": "orch",
+    "cls": "응답 중 종료"
+  },
+  "status": "need-user",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T10:42:40+09:00",
+      "by": "VMO",
+      "what": "Claude 종료 분류 응답 중 종료. stderr 와 로그(.vibe\\logs\\2026-11-20T10-39-40_claude_orch.log) 확인",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "20261120_051414_R2_SCP0005",
+  "at": "2026-11-20T05:14:14+09:00",
+  "ms": 1795119254796,
+  "rule": "R2",
+  "ruleName": "같은 오류 반복",
+  "title": "같은 오류 반복 SCP0005 5회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0005",
+  "sig": "S8.checklistRun | [FAIL] Playwright exit code N - log tail:",
+  "count": 1,
+  "repeat": {
+    "same": 5,
+    "all": 11,
+    "screens": [
+      "SSP0005",
+      "SCP0005",
+      "SCP0028"
+    ]
+  },
+  "detail": "[FAIL] Playwright exit code 1 - log tail:\nTimeoutError: locator.click: Timeout 10000ms exceeded.\n✖ 버튼_Div_40: 누락 [UPLOAD_SAVE;UPLOAD;SEARCH_ROUTEID;SEARCH_CITY] 순서 []\n✖ 버튼_Div_40: 검증 MISMATCH(누락 UPLOAD_SAVE;UPLOAD;SEARCH_ROUTEID;SEARCH_CITY · 순서 ) — --force 와 --opinion 사유 없이는 승인 불가\n[restore_touched] SCP_MST_DISTRIBUTION_ROUTE ['9917']: flashback 불가 ORA-01555: snapshot too old: rollback segment number 29 with · 시험 생성 행 삭제 0 · ERROR 시험 계정 수정 행 1 — 이전 값 미상·수동 복원 필요",
+  "evidence": {
+    "runId": "SCP0005_1795104646252",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "closed",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T05:56:49+09:00",
+      "by": "사용자",
+      "what": "닫음(일괄)"
+    }
+  ]
+}

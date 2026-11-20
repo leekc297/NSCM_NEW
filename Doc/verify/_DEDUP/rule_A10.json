@@ -1,0 +1,18 @@
+{
+ "rule_id": "A10",
+ "hash": "628b56185b7f9e6a",
+ "groups": [
+  {
+   "refs": [
+    "DM-170"
+   ],
+   "target": "Sum 행",
+   "condition": "화면 오픈·조회 전",
+   "expected": "조회 전 빈 그리드에는 Sum/Subtotal 행을 표시하지 않는다",
+   "why": "단독"
+  }
+ ],
+ "why": "항목 1건",
+ "by": "코드",
+ "at": "2026-11-20 04:39:09"
+}

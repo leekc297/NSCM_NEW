@@ -1,0 +1,10 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0025,SQL,SCP0025_GET_SHIPMENT_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0025_GET_SHIPMENT_PLAN_FIX.sql,286,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SCP0025,SQL,SCP0025_GET_SHIPMENT_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0025_GET_SHIPMENT_PLAN_FIX.sql,321,ELSE,"DIVISION_ID,BIZ_TYPE,ITEM_ID,TO_SITE,FROM_SITE,TRANSPORT_MODE,INCOTERMS,PROJECT_CODE,BOD_ID,MEASURE DESC","SET @mEXEC = @mEXEC+'		ORDER BY  division_id, biz_type, item_id, to_site, from_site, transport_mode, incoterms, project_code,BOD_ID, measure desc '+CHAR(10);",0,동적 SQL
+SCP0025,SQL,SCP0025_GET_SHIPMENT_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0025_GET_SHIPMENT_PLAN_FIX.sql,373,,"DIVISION_ID,BIZ_TYPE,ITEM_ID,TO_SITE,FROM_SITE,MEASURE DESC","ORDER BY  division_id, biz_type, item_id, to_site, from_site, measure desc",0,정적
+SCP0025,SQL,SCP0025_GET_SHIPMENT_PLAN_FIX,Doc\asisfacts\db\modules\dbo.SCP0025_GET_SHIPMENT_PLAN_FIX.sql,404,,"DIVISION_ID,BIZ_TYPE,ITEM_ID,TO_SITE,FROM_SITE,MEASURE DESC","ORDER BY  division_id, biz_type, item_id, to_site, from_site, measure desc",0,정적
+SCP0025,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SCP0025,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0025,SQL,SCM0001_GET_SCP_DAILY_PLAN_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAILY_PLAN_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0025,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SCP0025,SQL,PR_SCM_SYS_LOG_BATCH,Doc\asisfacts\db\modules\dbo.PR_SCM_SYS_LOG_BATCH.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

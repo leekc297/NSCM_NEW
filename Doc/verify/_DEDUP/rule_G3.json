@@ -1,0 +1,37 @@
+{
+ "rule_id": "G3",
+ "hash": "ced91e90e2f2f807",
+ "groups": [
+  {
+   "refs": [
+    "DM-74"
+   ],
+   "target": "Condition(F6) 조회조건 저장 시 Period 포함 여부",
+   "condition": "Period 등 조회조건 입력 후 Condition(F6) 저장→복원",
+   "expected": "Condition(F6) 저장 항목에 Period 가 포함되지 않아, 복원해도 Period 는 저장 당시 값으로 바뀌지 않는다.",
+   "why": "Period 를 저장 대상에서 빼야 한다는 규칙을 확인하는 항목이라, 일반 저장·복원이나 특정 값 복원을 확인하는 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-P25"
+   ],
+   "target": "Condition(F6) 조회조건 저장 후 새 탭 복원",
+   "condition": "Div, End Customer 등 조회조건 선택 후 F6 저장, 새 탭에서 화면 열기",
+   "expected": "새 탭에서 F6 로 저장한 조회조건(Div, End Customer 등)이 그대로 복원된다.",
+   "why": "새 탭에서 F6 저장 조건 전체가 복원되는지 보는 일반 저장·복원 검사라서, Period 제외나 ALL 값 복원과 같은 특정 대상 검사와 묶지 않았다."
+  },
+  {
+   "refs": [
+    "SCPSSP-21"
+   ],
+   "target": "Active 조회조건 ALL 값 저장·복원",
+   "condition": "Active=ALL 로 저장한 뒤 재접속",
+   "expected": "재접속하면 Active 조회조건이 ALL 로 복원되고, 기본값으로 바뀌지 않는다.",
+   "why": "Active 조건의 ALL(전체) 값이 재접속 후에도 남는지 보는 특정 값 복원 검사여서, 확인 대상과 기대 결과가 다른 항목과 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:43:17",
+ "cost": 0.0433332
+}

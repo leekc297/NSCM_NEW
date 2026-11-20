@@ -12,7 +12,7 @@ const servers = {};              // name → terminal
 
 function loadQuick(extDir, root) {
   const cands = [path.join(root, '.vibe', 'quick.json'), path.join(root, 'tools', 'VibeManager', 'quick.json'), path.join(extDir, 'quick.json')];
-  for (const f of cands) if (fs.existsSync(f)) { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch (e) { vscode.window.showWarningMessage(`quick.json 파싱 실패: ${f} — ${e.message}`); } }
+  for (const f of cands) if (fs.existsSync(f)) { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch (e) { vscode.window.showWarningMessage(`quick.json 파싱 실패: ${f}. ${e.message}`); } }
   return { groups: [] };
 }
 const subst = (s, vars) => String(s == null ? '' : s).replace(/\$\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));
@@ -57,7 +57,7 @@ async function gitAction(p, item) {
   const t = gitTerm(p, cwd);
   if (item.kind === 'git-status') { t.sendText('git status -s && git log --oneline -5'); return; }
   if (item.kind === 'git-upload') {
-    const msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push) — 규칙: 핵심 작업 1~2줄, 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, placeHolder: 'chore: Vibe_Manager 1.3 + DMF0052 파이프라인 산출물', ignoreFocusOut: true });
+    const msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push). 규칙: 핵심 작업 1~2줄, 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, placeHolder: 'chore: Vibe_Manager 1.3 + DMF0052 파이프라인 산출물', ignoreFocusOut: true });
     if (!msg) return;
     const ok = await vscode.window.showWarningMessage(`${cwd}\n전체 stage(.gitignore 적용) → commit → push ${item.remote} ${item.branch}. 비밀번호/회사 자산은 .gitignore 로 제외되는지 'git status -s' 로 먼저 확인하세요.`, { modal: true }, 'push 실행', 'status 만');
     if (ok === 'status 만') { t.sendText('git status -s'); return; }
@@ -69,7 +69,7 @@ async function gitAction(p, item) {
   if (item.kind === 'git-fetch') { t.sendText(`git fetch ${item.remote} && git branch -r --list "${item.remote}/*" && git log --oneline HEAD..${item.remote}/main -20`); return; }
   if (item.kind === 'git-merge') {
     const br = await vscode.window.showInputBox({ prompt: `${item.remote} 의 어느 브랜치를 현재 브랜치에 병합할까요?`, value: item.branch || 'main', ignoreFocusOut: true }); if (!br) return;
-    const ok = await vscode.window.showWarningMessage(`git merge ${item.remote}/${br} — 충돌 시 터미널에서 해결(공용 패키지 foundation/shared 는 Hard Boundary: 로컬 수정분이 있으면 되돌아볼 것).`, { modal: true }, '병합');
+    const ok = await vscode.window.showWarningMessage(`git merge ${item.remote}/${br}. 충돌 시 터미널에서 해결(공용 패키지 foundation/shared 는 Hard Boundary: 로컬 수정분이 있으면 되돌아볼 것).`, { modal: true }, '병합');
     if (ok !== '병합') return;
     t.sendText(`git fetch ${item.remote} && git merge --no-ff ${item.remote}/${br}`);
   }
@@ -119,7 +119,7 @@ class _LegacyPromptViewProvider {
         case 'saveState': this.ctx.workspaceState.update('vibe.prompt.state', { id: m.id, ctx: m.ctx, harness: m.harness }); break;
         case 'newScreen': {
           const cur = id || this.ctx.workspaceState.get('vibeManager.lastId', '');
-          const nid = await vscode.window.showInputBox({ prompt: '새 화면ID (예: DMF0052, SCP0096) — 비우면 현재 화면ID 를 해제합니다', value: cur, placeHolder: 'DMF0052', ignoreFocusOut: true, validateInput: v => v && !/^[A-Z]{2,4}[0-9]{2,6}$/i.test(v.trim()) ? '형식: 2~4자 영문 + 2~6자리 숫자 (예: DMF0052)' : null });
+          const nid = await vscode.window.showInputBox({ prompt: '새 화면ID (예: DMF0052, SCP0096). 비우면 현재 화면ID 를 해제합니다', value: cur, placeHolder: 'DMF0052', ignoreFocusOut: true, validateInput: v => v && !/^[A-Z]{2,4}[0-9]{2,6}$/i.test(v.trim()) ? '형식: 2~4자 영문 + 2~6자리 숫자 (예: DMF0052)' : null });
           if (nid === undefined) break;
           const NID = (nid || '').trim().toUpperCase();
           this.ctx.workspaceState.update('vibe.prompt.state', { id: NID, ctx: m.ctx, harness: m.harness });
@@ -149,10 +149,10 @@ button.sec{background:var(--vscode-button-secondaryBackground);color:var(--vscod
 .qb.nid::after{content:' ·ID';opacity:.5}
 label{user-select:none}.hint{opacity:.6;font-size:11px;margin-top:4px}
 </style></head><body>
-<div class="row"><b>Vibe_Manager</b><span class="hint">입력은 워크벤치(에디터) 패널로 전달됩니다 — 터미널 없음</span></div>
-<textarea id="t" placeholder="프롬프트 입력 — Enter 전송 · Shift+Enter 줄바꿈"></textarea>
+<div class="row"><b>Vibe_Manager</b><span class="hint">입력은 워크벤치(에디터) 패널로 전달됩니다. 터미널 없음</span></div>
+<textarea id="t" placeholder="프롬프트 입력. Enter 전송, Shift+Enter 줄바꿈"></textarea>
 <div class="row"><button id="send">전송 (Enter)</button><button class="sec" id="new">워크벤치 열기</button><button class="sec" id="newScr" title="화면ID 를 새로 입력합니다. 이전 화면 컨텍스트가 자동 prefix 로 섞이지 않도록 리셋합니다.">새 화면</button><button class="sec" id="cont" style="display:none"></button></div>
-<div class="row">화면ID <input id="id" type="text" value="${esc(st.id || '')}" placeholder="DMF0052"><label title="화면ID 가 있으면 자동으로 컨텍스트 prefix 가 붙습니다. 체크를 꺼도 ID 가 있으면 자동 적용 — 체크는 ID 없이 강제할 때."><input id="ctx" type="checkbox" ${st.ctx ? 'checked' : ''}> 컨텍스트(자동)</label><label title="신규 UI 생성·GAP 분석/보완 작업은 자동으로 하네스 모드가 됩니다. 체크 안 해도 자동 — 체크는 다른 Claude 지시에도 강제할 때."><input id="harness" type="checkbox" ${st.harness ? 'checked' : ''}> 하네스(자동)</label></div>
+<div class="row">화면ID <input id="id" type="text" value="${esc(st.id || '')}" placeholder="DMF0052"><label title="화면ID 가 있으면 자동으로 컨텍스트 prefix 가 붙습니다. 체크를 꺼도 ID 가 있으면 자동 적용. 체크는 ID 없이 강제할 때."><input id="ctx" type="checkbox" ${st.ctx ? 'checked' : ''}> 컨텍스트(자동)</label><label title="신규 UI 생성·GAP 분석/보완 작업은 자동으로 하네스 모드가 됩니다. 체크 안 해도 자동. 체크는 다른 Claude 지시에도 강제할 때."><input id="harness" type="checkbox" ${st.harness ? 'checked' : ''}> 하네스(자동)</label></div>
 ${groups}
 <div class="row"><button class="sec" id="editq">메뉴 편집 (quick.json)</button></div>
 <script>

@@ -44,9 +44,17 @@ export const PersonalSettingModal = ({ open, onClose }: PersonalSettingModalProp
 
   const handleSave = async () => {
     if (isSaving) return;
+    const changed = selected !== (session.tmzCd ?? '');
     try {
       setIsSaving(true);
       await changeTimeZone(selected);
+      // 타임존이 실제로 바뀌면 전체 새로고침 — 이미 열린 화면의 서버 계산 Period 기본값(FN_MULTY_TIME)·그리드는
+      //   session.tmzCd 반응만으로는 재조회되지 않으므로, 새 타임존으로 전면 재계산되게 한다(사용자 지시 2026-11-19).
+      //   리로드가 곧 피드백이라 저장 토스트는 바뀐 경우 생략(리로드 중 사라짐).
+      if (changed) {
+        globalThis.window.location.reload();
+        return;
+      }
       setToast({ type: 'success', message: t(CRUD_MSG.SAVED.id, CRUD_MSG.SAVED.fallback) });
       onClose();
     } catch {

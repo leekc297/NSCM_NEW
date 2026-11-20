@@ -1,0 +1,215 @@
+{
+ "rule_id": "M3",
+ "hash": "d4cfc31bd6fe36f2",
+ "groups": [
+  {
+   "rows": [
+    "V-52b4ae2b",
+    "V-580c06b3"
+   ],
+   "why": "Both rows check that closing the Exchange Rate popup discards unsaved edits and that reopening it re-queries the source data, under the same condition (first screen access, close after editing); only the source differs (GENERAL vs CONFIRMED)."
+  },
+  {
+   "rows": [
+    "EG-6a0f18bc"
+   ],
+   "why": "Standalone: checks that the Upload button opens the ExcelUploadForm2 popup."
+  },
+  {
+   "rows": [
+    "EG-74f00125"
+   ],
+   "why": "Standalone: checks query results for the TO_COUNTRY cell popup; the other DATA rows are different cells."
+  },
+  {
+   "rows": [
+    "EG-75f112d6"
+   ],
+   "why": "Standalone: checks that the btnToSrch button opens its popup; it is a different button from btnFromSrch."
+  },
+  {
+   "rows": [
+    "EG-7e3f2ada"
+   ],
+   "why": "Standalone: checks query results for the FROM_COUNTRY cell in the SCM0002_CitybyCountry popup."
+  },
+  {
+   "rows": [
+    "EG-a1c25099"
+   ],
+   "why": "Standalone: checks that double-clicking ROUTE_ID opens the popup; V-a46588cb expects matching list contents and row count, so the expected result differs."
+  },
+  {
+   "rows": [
+    "EG-ad8287af"
+   ],
+   "why": "Standalone: checks query results for the FROM_CITY cell popup; the other DATA rows are different cells."
+  },
+  {
+   "rows": [
+    "EG-e32df808"
+   ],
+   "why": "Standalone: checks query results for the TO_CITY cell popup; the other DATA rows are different cells."
+  },
+  {
+   "rows": [
+    "EG-f670f773"
+   ],
+   "why": "Standalone: checks that the btnFromSrch button opens its popup; it is a different button from btnToSrch."
+  },
+  {
+   "rows": [
+    "T-6d14c72c"
+   ],
+   "why": "Standalone: a TRACE row that confirms the comparison-table trace, which is a different kind of check."
+  },
+  {
+   "rows": [
+    "V-a46588cb"
+   ],
+   "why": "Standalone: checks that the DistributionRoutePopup list matches AS-IS (at least 1 row) even after the query conditions change; this differs from the popup-open check."
+  },
+  {
+   "rows": [
+    "V-05df2c2f"
+   ],
+   "why": "Standalone: checks the full result when re-querying Price Batch Input's Sales Site condition with ALL."
+  },
+  {
+   "rows": [
+    "V-0bf28258"
+   ],
+   "why": "Standalone: checks that the Version query condition shows the version list."
+  },
+  {
+   "rows": [
+    "V-1c0294ad"
+   ],
+   "why": "Standalone: checks the Replace popup's default Period and its query."
+  },
+  {
+   "rows": [
+    "V-341ed428"
+   ],
+   "why": "Standalone: checks several popups and columns in the new-row state."
+  },
+  {
+   "rows": [
+    "V-4c74b045"
+   ],
+   "why": "Standalone: checks that popup results are filtered by the entered query conditions."
+  },
+  {
+   "rows": [
+    "V-4e3c1e1f"
+   ],
+   "why": "Standalone: checks the Project popup's Search button and Like/comma multi-value search."
+  },
+  {
+   "rows": [
+    "V-54145920"
+   ],
+   "why": "Standalone: checks the scope of the Owner popup's user list."
+  },
+  {
+   "rows": [
+    "V-54509735"
+   ],
+   "why": "Standalone: checks Version Create in the BP Version popup."
+  },
+  {
+   "rows": [
+    "V-5c157841"
+   ],
+   "why": "Standalone: checks the scope of the User popup per screen."
+  },
+  {
+   "rows": [
+    "V-5d966bd4"
+   ],
+   "why": "Standalone: checks text input in the Price Batch Input Model condition and the End Customer cell merge."
+  },
+  {
+   "rows": [
+    "V-69a4da4a"
+   ],
+   "why": "Standalone: checks query saving in the SQL popup."
+  },
+  {
+   "rows": [
+    "V-84442ca7"
+   ],
+   "why": "Standalone: checks Monthly Bucket input/save and opening the popup by double-click."
+  },
+  {
+   "rows": [
+    "V-8bedc406"
+   ],
+   "why": "Standalone: checks main grid row order after the popup selection is applied."
+  },
+  {
+   "rows": [
+    "V-969bc40e"
+   ],
+   "why": "Standalone: checks how popup Save results are judged by RESULT_CODE."
+  },
+  {
+   "rows": [
+    "V-ac2d4c9c"
+   ],
+   "why": "Standalone: checks that the Capa New Model popup's Group/Plant conditions are passed through."
+  },
+  {
+   "rows": [
+    "V-b36ee21b"
+   ],
+   "why": "Standalone: checks the Search query in the Excel Form popup."
+  },
+  {
+   "rows": [
+    "V-bbee6db0"
+   ],
+   "why": "Standalone: checks month-column generation for the Period range in the popup."
+  },
+  {
+   "rows": [
+    "V-d9425b22"
+   ],
+   "why": "Standalone: checks the popup Filter text box."
+  },
+  {
+   "rows": [
+    "V-e7a4ea02"
+   ],
+   "why": "Standalone: checks saving multiple pasted rows in the Exchange Rate popup; the expected result differs from the Close/reopen check."
+  },
+  {
+   "rows": [
+    "V-e815614e"
+   ],
+   "why": "Standalone: checks the DESC sort order of the version popup list."
+  },
+  {
+   "rows": [
+    "V-e9efddfd"
+   ],
+   "why": "Standalone: checks that MDM-inactive codes are excluded from the Model popup."
+  },
+  {
+   "rows": [
+    "V-eed4f97f"
+   ],
+   "why": "Standalone: checks the full DEPT query in the Team popup."
+  },
+  {
+   "rows": [
+    "V-f561f801"
+   ],
+   "why": "Standalone: checks the multi-column Like search for popup text query conditions."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:45:24",
+ "cost": 0.1101979
+}

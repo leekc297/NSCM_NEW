@@ -1,0 +1,28 @@
+{
+  "id": "20261119_225004_R12_ALL",
+  "at": "2026-11-19T22:50:04+09:00",
+  "ms": 1795096204513,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_server_service.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_server_service.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 12 · FAIL 1 · FAIL 종료 뒤 상태 down {\"port\":5599,\"label\":\"포트 5599\",\"state\":\"up\",\"since\":1795096198438,\"owner\":\"vm\",\"name\":\"TEST SRV\",\"bootSec\":null} / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_server_service.js",
+    "file": "t_server_service.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-19T23:00:09+09:00",
+      "by": "Claude Code 세션",
+      "what": "원인 = t_server_service.js 고정 포트 5599. 시험 2개 동시 실행에서 재현(22:57). 실행마다 빈 포트를 받도록 수정, 3개 동시 2회와 run_all 2개 동시 통과(22:58~22:59)",
+      "grade": "B"
+    }
+  ]
+}

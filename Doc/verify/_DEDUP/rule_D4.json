@@ -1,0 +1,65 @@
+{
+ "rule_id": "D4",
+ "hash": "f60664b96ec22981",
+ "groups": [
+  {
+   "refs": [
+    "DM-204-5",
+    "DM-204-5S"
+   ],
+   "target": "하단 메시지설정 탭의 Insert(행추가)",
+   "condition": "하단 메시지설정 탭 선택 후 Insert",
+   "expected": "하단 메시지설정 탭에서 Insert 시 행추가가 가능하다.",
+   "why": "두 항목 모두 하단 메시지설정 탭의 Insert 행추가 가능 여부를 같은 동작으로 확인하고 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-110"
+   ],
+   "target": "FCST Type=ETC 신규행의 Team·Measure 컬럼",
+   "condition": "FCST Type=ETC 신규행 추가, 전 Div",
+   "expected": "ETC 신규행에서 Team 은 SSPM 기준 콤보로 입력하고 필수이며, Measure 는 Sales AMT(LOC)로 고정되어 입력할 수 없다(Div 공통).",
+   "why": "ETC 유형 신규행의 Team·Measure 자동세팅과 입력 제어만 확인하므로 다른 항목과 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-202"
+   ],
+   "target": "Module·Sub Module·Active·Notice Content·팝업 타이틀",
+   "condition": "Insert 팝업",
+   "expected": "Module 조회조건은 ALL/Common/DM/SCP/FP/SSP 다중선택이고 Insert Module 콤보는 단일선택이다. Sub Module 은 삭제되고 라벨 제목이 맞으며, Active 기본값은 Y이다. Notice Content 서식이 동작하고 팝업 섹션 타이틀은 테두리 밖에 있다.",
+   "why": "Insert 팝업의 Module·Sub Module·Active 기본값 등 여러 요소를 묶은 복합 확인이라 다른 항목과 확인 대상이 겹치지 않는다."
+  },
+  {
+   "refs": [
+    "DM-32"
+   ],
+   "target": "필터·Sort 적용 중 Insert 행 위치·Project 편집",
+   "condition": "필터/Sort 적용 상태에서 Insert",
+   "expected": "필터·Sort 적용 여부와 관계없이 Insert 는 선택행 위에 추가된다. Sort/Filter 상태는 유지되고, 신규행의 Project 컬럼은 편집할 수 있다.",
+   "why": "필터·Sort 상태에서 신규행 위치와 편집 가능 여부를 확인하므로 기본값을 확인하는 다른 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-71"
+   ],
+   "target": "신규행 Div 기본값·Div 변경 시 그리드 초기화",
+   "condition": "조회 전 Insert, 조회조건 Div 변경",
+   "expected": "신규행의 Div 기본값은 조회조건 Div 이다. 조회조건 Div 를 바꾸면 그리드가 초기화되어 이전 Div 행이 남지 않는다.",
+   "why": "조회 전 Insert 라는 조건은 SCPSSP-22 와 같지만, 확인 대상이 Div 기본값과 그리드 초기화여서 콤보 후보를 보는 항목과 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-22"
+   ],
+   "target": "조회 전 Insert 행의 To Site 콤보·City 매핑",
+   "condition": "조회 전 Insert",
+   "expected": "조회 전 Insert 시 To Site 콤보 후보가 정상으로 나온다. Site 를 선택하면 City 가 매핑되고, 저장이 성공한다(또는 AS-IS 와 같이 차단된다).",
+   "why": "신규행 To Site 콤보 후보와 City 연동 매핑을 확인하는 항목이라 Div 기본값을 보는 DM-71 과는 묶지 않았다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:27",
+ "cost": 0.0603092
+}

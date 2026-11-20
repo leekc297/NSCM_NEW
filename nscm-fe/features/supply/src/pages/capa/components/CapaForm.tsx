@@ -127,7 +127,6 @@ export const CapaForm = ({ onSearch }: CapaFormProps) => {
             allOption
             useClearIcon
             limitTags={1}
-            sortBy='label'
             value={value.join(',')}
             options={options}
             // 'ALL' sentinel 은 빈 배열(필터 없음)로 저장한다. 그대로 저장하면 cascade 콤보 파라미터에 'ALL' 문자열이

@@ -1,0 +1,254 @@
+{
+ "rule_id": "A5",
+ "hash": "5d3e4fd9ddba569d",
+ "groups": [
+  {
+   "refs": [
+    "DM-204-1",
+    "DM-204-1S"
+   ],
+   "target": "Main 그리드 Sub Module 컬럼(SUB_MODULE_CODE)",
+   "condition": "Insert / 하단 탭",
+   "expected": "Main 그리드에 Sub Module 컬럼(SUB_MODULE_CODE)이 없다(삭제)",
+   "why": "두 항목은 같은 컬럼이 없는지 확인하며 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-204-2",
+    "DM-204-2S"
+   ],
+   "target": "Category 코드 컬럼(CATEGORY_ID) 숨김",
+   "condition": "Insert / 하단 탭",
+   "expected": "Category 코드 컬럼(CATEGORY_ID)은 화면에 보이지 않고 CATEGORY_DESC만 표시된다",
+   "why": "두 항목은 같은 코드 컬럼이 숨겨졌는지 확인하며 기대 결과도 같다."
+  },
+  {
+   "refs": [
+    "DM-132",
+    "DM-138"
+   ],
+   "target": "조회 그리드 컬럼 구성 = 컬럼셋팅 설정",
+   "condition": "Div별",
+   "expected": "조회 그리드 컬럼이 컬럼셋팅 설정값대로 그려지고, COL_LIST는 표시되지 않는다",
+   "why": "둘 다 Div별 그리드 컬럼이 컬럼셋팅 설정과 같은지 확인한다(COL_LIST 비노출은 expected에 함께 남김)."
+  },
+  {
+   "refs": [
+    "DM-26",
+    "DM-C1"
+   ],
+   "target": "개인화 없을 때 컬럼셋팅 팝업·그리드 Default",
+   "condition": "개인화 미저장 · Div 전환",
+   "expected": "개인화 정보가 없으면 컬럼셋팅 팝업과 그리드를 선택 Div의 UI Category Default 컬럼·Measure로 구성하고, Div를 바꾸면 다시 구성한다",
+   "why": "둘 다 개인화가 없을 때 선택 Div의 Default 컬럼으로 구성되는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-61",
+    "GAPPI-18"
+   ],
+   "target": "Div 전환 후 필수 컬럼 표시(개인화 보유)",
+   "condition": "한 Div에서 다른 Div 필수 컬럼을 빼고 개인화 저장 → Div 전환 조회",
+   "expected": "개인화 저장이 다른 Div의 필수 컬럼(Project Code·Plant Site·End Customer(END_CUSTOMER_ID) 등)을 지우지 않고, 개인화에 없으면 자동으로 추가해 Div 전환 후에도 항상 표시한다",
+   "why": "둘 다 개인화를 저장한 뒤 Div를 바꿨을 때 그 Div의 필수 컬럼이 표시되는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-155",
+    "DM-167",
+    "DM-172"
+   ],
+   "target": "Div별 표시 컬럼·Measure 집합 = AS-IS",
+   "condition": "Div 40/81 등",
+   "expected": "Div별 표시 컬럼·Measure 집합이 AS-IS(End Cust(Report)·Project(S Report)·Cust FCST 등)와 같다. 추가 컬럼이 없고 SSPM 제외 컬럼은 표시되지 않으며 필수 컬럼 배치가 정상이다",
+   "why": "셋 다 Div별 화면 컬럼·Measure 집합 전체가 AS-IS와 같은지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-230",
+    "DM-232"
+   ],
+   "target": "Div별 Project 계열 제외 컬럼 비노출",
+   "condition": "Div=82/81/81_JV/40",
+   "expected": "Div별로 제외하도록 지정된 컬럼(Project Name·Project Status·Owner·Department 등)이 표시되지 않는다",
+   "why": "둘 다 특정 Div에서 제외 지정된 Project 계열 컬럼이 표시되지 않는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-238",
+    "DM-239"
+   ],
+   "target": "Plan Type별 제외 컬럼(Cust Group Dtl 등)",
+   "condition": "Div=40, Plan Type=BIZ PLAN / Sales Plan",
+   "expected": "Plan Type별 제외 지정 컬럼(Cust Group Dtl 등 7개)이 표시되지 않는다",
+   "why": "둘 다 Plan Type에 따라 제외 지정된 컬럼(Cust Group Dtl 포함)이 표시되지 않는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-208",
+    "DM-221"
+   ],
+   "target": "Div 40 Report 컬럼 표시",
+   "condition": "Div=40",
+   "expected": "Div 40에서 Cell Prod. Site (S&OP Report)와 Sold-to Cust(Report) 컬럼이 Visible로 표시된다",
+   "why": "둘 다 Div 40에서 Report 계열 컬럼이 표시되는지 확인한다."
+  },
+  {
+   "refs": [
+    "DM-136"
+   ],
+   "target": "필수 Measure 컬럼 항상 표시",
+   "condition": "",
+   "expected": "필수 컬럼(Measure, USER_SELECTED_FLAG=N)이 항상 표시된다",
+   "why": "필수 Measure가 항상 표시되는지 따로 확인하는 항목이다."
+  },
+  {
+   "refs": [
+    "DM-152"
+   ],
+   "target": "컬럼셋팅 OK 후 그리드 즉시 재구성",
+   "condition": "Div 전환 후 컬럼셋팅 OK",
+   "expected": "컬럼셋팅에서 OK를 누르면 팝업이 닫히면서 그리드 컬럼(End Customer/Company ID/Cell Prod Site 등)이 바로 다시 구성된다",
+   "why": "OK를 눌렀을 때 바로 반영되는지 보는 동작이라 다른 항목과 다르다."
+  },
+  {
+   "refs": [
+    "DM-162"
+   ],
+   "target": "콤보 입력 컬럼·COL_LIST·Measure 위치",
+   "condition": "",
+   "expected": "콤보로 설정된 컬럼은 콤보 편집기로 표시되고, VISIBLE=N 컬럼과 COL_LIST는 표시되지 않으며, Measure 위치는 UI Category 설정을 따른다",
+   "why": "편집기 종류와 Measure 위치까지 함께 확인해서 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-185"
+   ],
+   "target": "컬럼셋팅 필수 컬럼 Invisible 이동 불가",
+   "condition": "",
+   "expected": "컬럼셋팅에서 필수 컬럼(Company ID 등)은 Invisible 영역으로 옮길 수 없고, 사용자가 선택한 컬럼은 조회 결과에 반드시 표시된다",
+   "why": "이동이 막히는지와 선택 컬럼이 표시되는지를 함께 보며, 기대 결과가 P60과 달라서 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P60"
+   ],
+   "target": "컬럼셋팅 필수 컬럼 빨간 표시·메시지",
+   "condition": "Div 전환(40→81→40)",
+   "expected": "컬럼셋팅 팝업의 필수 컬럼(USER_SELECTED_FLAG=N, End Customer 등)은 빨간색으로 표시되고, 해제하거나 옮기려 하면 다국어 메시지가 표시된다",
+   "why": "빨간색 표시와 다국어 메시지가 기대 결과라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-190"
+   ],
+   "target": "Email 컬럼 비노출",
+   "condition": "",
+   "expected": "Email 컬럼이 표시되지 않는다",
+   "why": "특정 컬럼 하나를 따로 확인한다."
+  },
+  {
+   "refs": [
+    "DM-196"
+   ],
+   "target": "ROUTE_PATH 컬럼 입력·저장",
+   "condition": "",
+   "expected": "URL ROUTE_PATH 컬럼을 UI에서 입력하고 저장할 수 있다",
+   "why": "표시가 아니라 입력·저장 가능 여부를 확인한다."
+  },
+  {
+   "refs": [
+    "DM-219"
+   ],
+   "target": "하단 그리드 CRUD Status 컬럼",
+   "condition": "",
+   "expected": "하단 그리드에 CRUD Status 컬럼이 표시되지 않는다",
+   "why": "시스템 컬럼 하나가 표시되지 않는지 따로 확인한다."
+  },
+  {
+   "refs": [
+    "DM-243"
+   ],
+   "target": "Version 컬럼 표시",
+   "condition": "Plan Type=Biz Plan",
+   "expected": "Version 컬럼이 표시된다",
+   "why": "Plan Type에 따른 Version 표시를 따로 확인한다."
+  },
+  {
+   "refs": [
+    "DM-47"
+   ],
+   "target": "컬럼셋팅 VERSION 제외·AS FROM SITE",
+   "condition": "Div 40",
+   "expected": "VERSION은 셋팅 목록에서 빠지고 항상 표시되며, Div 40에서 AS FROM SITE는 표시되지 않는다",
+   "why": "셋팅 목록 구성과 특정 컬럼 비노출을 함께 보는 복합 항목이다."
+  },
+  {
+   "refs": [
+    "DM-56"
+   ],
+   "target": "BPS I/F 버튼·Last Update Date/By 컬럼",
+   "condition": "Div 40",
+   "expected": "BPS I/F를 실행하면 환율이 실제로 반영되고, 반영할 대상이 없으면 \"반영할 환율 정보가 없습니다\"가 표시되며, Last Update Date/By 컬럼이 표시된다",
+   "why": "버튼 동작과 컬럼 표시가 섞인 고유 항목이다."
+  },
+  {
+   "refs": [
+    "DM-62"
+   ],
+   "target": "Div별 Measure 셋팅 구성",
+   "condition": "Div 40 / 81·81_JV",
+   "expected": "사용하지 않는 Measure는 빠지고, Div 40에는 VMI In Request/Plan/Inv가 추가되며, 81·81_JV에서는 MKT FCST AMT(KRW/LOC)가 빠진다",
+   "why": "특정 Measure를 추가하고 빼는 것이 기대 결과라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-71"
+   ],
+   "target": "Insert 행 Div 기본값·Div 변경 시 초기화",
+   "condition": "조회 전 Insert · 조회조건 Div 변경",
+   "expected": "새 행의 Div 기본값은 조회조건 Div이고, 조회조건 Div를 바꾸면 그리드가 초기화되어 이전 Div 행이 남지 않는다",
+   "why": "행 기본값과 초기화를 보는 동작으로 컬럼 구성과 다르다."
+  },
+  {
+   "refs": [
+    "DM-85"
+   ],
+   "target": "Cust Group 조건·Div 파라미터·헤더 재구성",
+   "condition": "Div 40 조회 후 81로 전환",
+   "expected": "Div 81에서는 Cust Group이 표시되지 않고, 선택한 Div가 파라미터로 전달되며, Div를 바꾸면 헤더가 다시 구성된다",
+   "why": "조회조건, 파라미터, 헤더를 함께 보는 복합 항목이다."
+  },
+  {
+   "refs": [
+    "DM-C3"
+   ],
+   "target": "User 화면 Group 컬럼",
+   "condition": "",
+   "expected": "AS-IS Group 컬럼이 빠진 것은 검출하되, 확정 결정(Web에는 Default Group 개념이 없음)에 따라 추가하지 않은 상태가 정답이다",
+   "why": "확정 결정에 따른 예외 항목이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P38"
+   ],
+   "target": "Div별 Measure 항목 구성",
+   "condition": "Div별",
+   "expected": "Div별로 UI Category 기준 Measure만 표시된다(AS-IS가 필터하지 않았더라도 확정 기준을 따름)",
+   "why": "AS-IS 동일이 아니라 UI Category 확정 기준을 따르므로 AS-IS 그룹과 분리한다."
+  },
+  {
+   "refs": [
+    "DM-P54"
+   ],
+   "target": "Column Setting 저장·Default 복원",
+   "condition": "저장 → Close → 다시 열기",
+   "expected": "저장한 뒤 새 탭에서도 설정이 유지되고, Default는 최초 Default 기준으로 복원된다",
+   "why": "저장 유지와 Default 복원 동작을 확인하는 고유 항목이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:40:15",
+ "cost": 0.2002932
+}

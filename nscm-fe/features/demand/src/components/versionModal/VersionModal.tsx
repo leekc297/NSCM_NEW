@@ -634,6 +634,14 @@ export const VersionModal = ({
 
           {/* OK / Close 는 그리드 아래 우측 (기존 VersionModal .modalButtonWrapper 와 동일 배치) */}
           <div className={styles.buttonWrapper}>
+            {/* 주의: Close = LBL00627 (LBL00062 는 'From Date' — 2026-07-30 오배정 실측 정정) */}
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
+            />
             {mode === VERSION_MODE.COPY ? (
               <Button
                 appearance='contained'
@@ -643,14 +651,6 @@ export const VersionModal = ({
                 onClick={() => adopt(getSelectedRow())}
               />
             ) : null}
-            {/* 주의: Close = LBL00627 (LBL00062 는 'From Date' — 2026-07-30 오배정 실측 정정) */}
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
-            />
           </div>
         </div>
       }

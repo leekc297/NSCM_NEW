@@ -11,7 +11,7 @@ const vs = new Proxy({}, { get: (t, k) => {
   return function () { };
 } });
 const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
-const dir = process.argv[2] || path.join(__dirname, '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'chain-')); const vibeDir = path.join(root, '.vibe');
 const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
 W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', llmReview: false }));

@@ -298,6 +298,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
           {/* Action — 표준 buttonWrapper (하단 우측 정렬, @shared/lges Button) */}
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -306,13 +313,6 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
             />
           </div>
         </div>

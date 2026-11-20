@@ -1,0 +1,349 @@
+{
+ "rule_id": "D1",
+ "hash": "8cb993955b7c5d50",
+ "groups": [
+  {
+   "rows": [
+    "V-57e71a21",
+    "V-d3546632"
+   ],
+   "why": "Both ASIS rows check the same thing: in the try block, siMain.LockColumn(0, GetMaxColumnIndex(), true) locks every column. The target, condition and expected result are all identical."
+  },
+  {
+   "rows": [
+    "V-b2261d9f",
+    "V-e31dedc9"
+   ],
+   "why": "Both check the same element (input into a merged cell) by the same method (double-click the merged cell) and expect the same result (input works while the merge stays)."
+  },
+  {
+   "rows": [
+    "V-7159dbe5",
+    "V-c70d377f"
+   ],
+   "why": "Both check changing the Div cell on a new row added with Insert. They expect the same result: Div can be changed and the lower-level candidate list is rebuilt."
+  },
+  {
+   "rows": [
+    "EG-522b370f"
+   ],
+   "why": "Only row for the EG109 Insert GROUP branch."
+  },
+  {
+   "rows": [
+    "EG-ca021fdb"
+   ],
+   "why": "EG124 is a separate rule ID, and it is not certain that it covers the same locking point as EG123, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-d0d41ac4"
+   ],
+   "why": "Only row for the EG113 GET_ADMIN_GROUP_MEASURE row."
+  },
+  {
+   "rows": [
+    "EG-dee51b04"
+   ],
+   "why": "EG123 is a separate rule ID, and it is not certain that it covers the same locking point as EG124, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-160db64c"
+   ],
+   "why": "Trace row confirming DIVISION_ID is in the comparison table. It checks a different property from the COLUMN row's actual lock check."
+  },
+  {
+   "rows": [
+    "T-2fc8f7fa"
+   ],
+   "why": "Trace of the EditButton SwitchLock (cs:229~236) entry. It is a separate table entry from the SwitchLock (cs:232) trace, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-65b3b9a4"
+   ],
+   "why": "Trace row confirming INCREMENT is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-66509489"
+   ],
+   "why": "Trace row confirming LAST_UPDATE_DATE is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-6d291f78"
+   ],
+   "why": "Trace row confirming checkRequiredOfSpread is implemented."
+  },
+  {
+   "rows": [
+    "T-6e99ed5e"
+   ],
+   "why": "Trace row confirming VALID_YN is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-7d548c04"
+   ],
+   "why": "Trace row confirming the isDefaultRevertRow implementation."
+  },
+  {
+   "rows": [
+    "T-80f32076"
+   ],
+   "why": "Trace row confirming the checkValidSize implementation."
+  },
+  {
+   "rows": [
+    "T-8d05f663"
+   ],
+   "why": "Trace row confirming the btnInput bulk-input popup implementation."
+  },
+  {
+   "rows": [
+    "T-971dcca1"
+   ],
+   "why": "Trace row confirming that only edited rows are saved."
+  },
+  {
+   "rows": [
+    "T-ae055a5d"
+   ],
+   "why": "Trace row confirming the LockColumn implementation (beginningEdit cancel)."
+  },
+  {
+   "rows": [
+    "T-b5cc58c6"
+   ],
+   "why": "Trace row confirming CREATED_BY is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-b9e88ced"
+   ],
+   "why": "Trace row confirming LOT_SIZE is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-c43e7f9d"
+   ],
+   "why": "Trace row confirming SPLIT_YN is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-c8e08503"
+   ],
+   "why": "Trace of the SwitchLock (cs:232) entry. It is a separate table entry from the EditButton trace, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-e7ce6f3a"
+   ],
+   "why": "Trace row confirming TRANS_MODE_NAME is in the comparison table, which differs from checking actual editability."
+  },
+  {
+   "rows": [
+    "T-edd3021f"
+   ],
+   "why": "Trace row confirming the Query FindData binding implementation."
+  },
+  {
+   "rows": [
+    "T-f0abe67a"
+   ],
+   "why": "Trace row confirming the SmartColMerge implementation."
+  },
+  {
+   "rows": [
+    "T-fd6b3949"
+   ],
+   "why": "Trace row confirming the Delete (new rows only) implementation."
+  },
+  {
+   "rows": [
+    "V-02c488ee"
+   ],
+   "why": "Only row checking the lock on the LAST_UPDATE_DATE column in an existing row."
+  },
+  {
+   "rows": [
+    "V-09ba5f25"
+   ],
+   "why": "Only row checking that the SPLIT_YN column is editable in an existing row."
+  },
+  {
+   "rows": [
+    "V-0df72e27"
+   ],
+   "why": "Only row checking that new-row editability is kept when Insert is used while a filter or Sort is applied."
+  },
+  {
+   "rows": [
+    "V-11c3c17f"
+   ],
+   "why": "AS-IS lock over the CREATED_BY to LAST_UPDATE_DATE column range. This is a range check, unlike the per-column lock rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-16b386a8"
+   ],
+   "why": "Only row checking the lock on the DIVISION_ID column in an existing row."
+  },
+  {
+   "rows": [
+    "V-195d71d7"
+   ],
+   "why": "Only row for the ETC Team/Measure input rules."
+  },
+  {
+   "rows": [
+    "V-2309cd6b"
+   ],
+   "why": "Only row for the Dept column / Use Y/N header defect type."
+  },
+  {
+   "rows": [
+    "V-24fe12e1"
+   ],
+   "why": "AS-IS lock over the DIVISION_ID to TRANS_MODE_NAME column range. This is a range check, unlike the per-column lock rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-2807290e"
+   ],
+   "why": "Only row for the combined Currency fixed value, duplicate Keyset, Insert position and Delete button checks."
+  },
+  {
+   "rows": [
+    "V-30e6e0fb"
+   ],
+   "why": "Only row for the Sales Site, Project popup and Model candidates on new rows."
+  },
+  {
+   "rows": [
+    "V-3292e595"
+   ],
+   "why": "Only row checking that Sales Site resets when End Customer changes."
+  },
+  {
+   "rows": [
+    "V-414f880f"
+   ],
+   "why": "Only row checking that column editability matches the UI Category."
+  },
+  {
+   "rows": [
+    "V-595ebd82"
+   ],
+   "why": "Only row checking the lock on the TRANS_MODE_NAME column in an existing row."
+  },
+  {
+   "rows": [
+    "V-6e29ea53"
+   ],
+   "why": "Only row checking the lock on the CREATION_DATE column in an existing row."
+  },
+  {
+   "rows": [
+    "V-776e9f00"
+   ],
+   "why": "Only row checking the lock on the FROM_SITE_DESCRIPTION column in an existing row."
+  },
+  {
+   "rows": [
+    "V-7d751e3b"
+   ],
+   "why": "Only row checking the lock on the ITEM_ID column in an existing row."
+  },
+  {
+   "rows": [
+    "V-814f0e63"
+   ],
+   "why": "Only row checking the lock on the OPERATION_GROUP_ID column in an existing row."
+  },
+  {
+   "rows": [
+    "V-881e5200"
+   ],
+   "why": "Only row checking that the LOT_SIZE column is editable in an existing row."
+  },
+  {
+   "rows": [
+    "V-8e87064c"
+   ],
+   "why": "Only row checking that auto-mapped columns on new rows are auto-filled and cannot be edited."
+  },
+  {
+   "rows": [
+    "V-977fb42b"
+   ],
+   "why": "Only row checking the lock on the NICK_NAME column in an existing row."
+  },
+  {
+   "rows": [
+    "V-b080570d"
+   ],
+   "why": "Only row checking Team paste and required-field validation."
+  },
+  {
+   "rows": [
+    "V-b1aa0c11"
+   ],
+   "why": "Only row checking the AS-IS SwitchLock lock."
+  },
+  {
+   "rows": [
+    "V-bec5bf16"
+   ],
+   "why": "Only row checking the lock on the TO_SITE_DESCRIPTION column in an existing row."
+  },
+  {
+   "rows": [
+    "V-cc417ba9"
+   ],
+   "why": "Expects existing rows right after a query to be uneditable without Save. That is the opposite of V-efeb7084's expectation, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-d8f7b6b6"
+   ],
+   "why": "Only row checking that the VALID_YN column is editable in an existing row."
+  },
+  {
+   "rows": [
+    "V-e2bb1721"
+   ],
+   "why": "Only row checking the lock on the CREATED_BY column in an existing row."
+  },
+  {
+   "rows": [
+    "V-e742cfe3"
+   ],
+   "why": "Only row checking that the INCREMENT column is editable in an existing row."
+  },
+  {
+   "rows": [
+    "V-ec84849d"
+   ],
+   "why": "Only row checking that the ROUTE_PATH column accepts input."
+  },
+  {
+   "rows": [
+    "V-efeb7084"
+   ],
+   "why": "Expects F2-mode columns to be editable right after a query. That differs from V-cc417ba9's expectation, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-f33e2f4d"
+   ],
+   "why": "Only row checking the lock on the LAST_UPDATED_BY column in an existing row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:17:50",
+ "cost": 0.18125529999999998
+}

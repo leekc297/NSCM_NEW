@@ -158,7 +158,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 152151,
+                      "duration": 37007,
                       "error": {
                         "message": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:120",
@@ -187,10 +187,14 @@
                           "message": "Error: [jooyong026] 재조회 후 신규 행 존재\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                                                                                          ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:186"
                         }
                       ],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T04:56:35.279Z",
+                      "startTime": "2026-11-20T00:02:21.985Z",
                       "annotations": [
                         {
                           "type": "authcrud",
@@ -236,7 +240,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 151652,
+                      "duration": 37342,
                       "error": {
                         "message": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                         "stack": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:120",
@@ -265,10 +269,14 @@
                           "message": "Error: [jooyong026] 재조회 후 신규 행 존재\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                                                                                          ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:186"
                         }
                       ],
-                      "stdout": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-11-19T04:59:12.385Z",
+                      "startTime": "2026-11-20T00:03:03.003Z",
                       "annotations": [
                         {
                           "type": "authcrud",
@@ -362,12 +370,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6988,
+                      "duration": 6892,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T05:01:48.415Z",
+                      "startTime": "2026-11-20T00:03:45.115Z",
                       "annotations": [
                         {
                           "type": "authcrud",
@@ -404,8 +412,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T04:56:34.878Z",
-    "duration": 323281.539,
+    "startTime": "2026-11-20T00:02:21.546Z",
+    "duration": 93481.08799999999,
     "expected": 1,
     "skipped": 0,
     "unexpected": 1,

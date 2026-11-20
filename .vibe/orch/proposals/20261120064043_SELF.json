@@ -1,0 +1,100 @@
+{
+  "id": "20261120064043_SELF",
+  "at": "2026-11-20T06:40:43+09:00",
+  "ms": 1795124443848,
+  "source": "self",
+  "status": "applied",
+  "sig": "vm 작업 로그 이름에 화면 id와 실행 번호를 넣어 같은 초 실행 로그 공유 방지 검증은 시험만 rn",
+  "title": "VM 작업 로그 이름에 화면 ID와 실행 번호를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함(검증 = 시험만)",
+  "evidence": "events.jsonl:263~265 SCP0005, SCP0014, SCP0028 proc.start 3건의 log 값이 같음(.vibe/logs/2026-11-20T00-33-54_CheckList...log). 지금 workbench.js:499 logF = 초 단위 시각 + label 치환이고 화면 ID와 498행 id(++seq)가 없음. 직전 반영(06:35~06:39)에서 같은 수정으로 node test/t_wb_logname.js PASS 10, run_all 파일 30개 PASS 369 FAIL 0 실측함 (반영 실패한 20261120005819_INC 를 고친 안 · 원인 검증 3번째 항목이 CheckList 동시 실행을 요구함. vm-orchestra.md:35 에 따라 반영한 Claude 가 실행하지 않고 verified=false 를 냄(result.verify_result 06:37~06:39). orch-improve.js:208 이 verified!==true 를 실패로 보고 workbench.js 를 되돌림(history 06:39:33). 시험 파일 tools/VibeManager/test/t_wb_logname.js 는 targets 에 없어 되돌려지지 않고 남음. 지금 workbench.js:499 로그 이름에 화면 ID 가 없어 이 시험 24행 검사가 FAIL 나는 구조임(실행은 안 함))",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/test/t_wb_logname.js"
+  ],
+  "before_after": "workbench.js:499 변경 전 `${ts}_${label 치환}.log` → 변경 후 `${ts}_${화면ID}_${id}_${label 치환}.log`. 화면ID = opts.screen, 없으면 this.titleId, \\w.- 밖 문자는 _. id = 498행 ++seq. 필요한 줄만 Edit. test/t_wb_logname.js 는 이미 있는 파일(같은 초 3화면 spawnStream 로그 이름 다름, 로그에 화면 ID, 같은 창 같은 라벨 2건 이름 다름)을 그대로 쓰고, 없으면 같은 내용으로 만듦",
+  "verify": "node --check tools/VibeManager/workbench.js 출력 확인. node tools/VibeManager/test/t_wb_logname.js 가 ALL PASS(PASS 10)인지 확인. CheckList 실행 확인은 넣지 않음(사용자 실행 대상, 반영 뒤 CHANGELOG 미확인 항목으로 둠)",
+  "rollback": "VMO 백업 사본으로 workbench.js 499행 복원, test/t_wb_logname.js 를 반영 전 상태로 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T07:34:45+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T07:36:54+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 22개 파일 통과, 시험 31/32개 파일 통과(PASS 382, FAIL 5), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261120_self0734"
+    },
+    {
+      "at": "2026-11-20T07:37:08+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T07:40:00+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 22개 파일 통과, 시험 31/32개 파일 통과(PASS 382, FAIL 5), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T07:40:00+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 07:37 실행. node --check tools/VibeManager/workbench.js 출력 CHECK_OK. node tools/VibeManager/test/t_wb_logname.js 출력 PASS 10, FAIL 0, ALL PASS. 같은 초 07-37-41 에 시작한 3화면 로그 이름: 2026-11-20T07-37-41_SCP0005_1_CheckList__________.log, ..._SCP0014_2_..., ..._SCP0028_3_... 서로 다르고 내용은 각 화면 출력만 있음. 같 · 변경 17개 파일 · 대상 목록 밖 변경 16개: Doc/verify/_llm_usage.csv, Doc/verify/SCP0005/_dedup/rule_A1.json, Doc/verify/SCP0005/_dedup/rule_A10.json, Doc/verify/SCP0005/_dedup/rule_A2.json, Doc/verify/SCP0005/_dedup/rule_A3.json, Doc/verify/SCP0005/_dedup/rule_A4.json",
+      "log": ".vibe\\logs\\2026-11-20T07-37-08_claude_orch.log",
+      "sec": 43,
+      "costUsd": 0.5155849,
+      "files": [
+        "Doc/verify/_llm_usage.csv",
+        "tools/VibeManager/workbench.js",
+        "Doc/verify/SCP0005/_dedup/rule_A1.json",
+        "Doc/verify/SCP0005/_dedup/rule_A10.json",
+        "Doc/verify/SCP0005/_dedup/rule_A2.json",
+        "Doc/verify/SCP0005/_dedup/rule_A3.json",
+        "Doc/verify/SCP0005/_dedup/rule_A4.json",
+        "Doc/verify/SCP0005/_dedup/rule_A5.json",
+        "Doc/verify/SCP0005/_dedup/rule_A6.json",
+        "Doc/verify/SCP0005/_dedup/rule_A7.json",
+        "Doc/verify/SCP0005/_dedup/rule_A8.json",
+        "Doc/verify/SCP0005/_dedup/rule_A9.json",
+        "Doc/verify/SCP0005/_dedup/rule_B1.json",
+        "Doc/verify/SCP0005/_dedup/rule_B2.json",
+        "Doc/verify/SCP0005/llm_usage.csv",
+        "Doc/verify/SCP0028/llm_cache.json",
+        "Doc/verify/SCP0028/llm_usage.csv"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261120005819_INC",
+  "repairRoot": "20261120005819_INC",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795127685201,
+  "autoFp": "27d9193c8c",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 22개 파일 통과, 시험 31/32개 파일 통과(PASS 382, FAIL 5), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self0734",
+  "needsReload": true,
+  "appliedMs": 1795128000779,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-20 07:37 실행. node --check tools/VibeManager/workbench.js 출력 CHECK_OK. node tools/VibeManager/test/t_wb_logname.js 출력 PASS 10, FAIL 0, ALL PASS. 같은 초 07-37-41 에 시작한 3화면 로그 이름: 2026-11-20T07-37-41_SCP0005_1_CheckList__________.log, ..._SCP0014_2_..., ..._SCP0028_3_... 서로 다르고 내용은 각 화면 출력만 있음. 같은 창 같은 라벨 2건 이름: SSP0014_4_same, SSP0014_5_same",
+    "note": "화면ID_실행번호 로그 이름은 앞선 개선안 20261120042237_INC 가 workbench.js 523~525행에 이미 넣어 두었음(개선안의 499행은 지금 줄 번호와 다름). 이번에는 524행 logOwner 가 opts.screen 을 먼저 쓰도록 고치고 근거 주석 1줄을 넣음. test/t_wb_logname.js 는 이미 있던 파일을 고치지 않고 그대로 실행함. CheckList 동시 실행 확인은 사용자 실행 대상이라 실행하지 않았고 미확인으로 둠."
+  },
+  "snap": "prop_20261120064043_SELF"
+}

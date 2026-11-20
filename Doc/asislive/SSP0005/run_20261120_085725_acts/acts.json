@@ -1,0 +1,173 @@
+{
+ "id": "SSP0005",
+ "group": "ADMIN",
+ "edit": false,
+ "division": "",
+ "sheet": "",
+ "acts": [
+  {
+   "control": "BtnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  },
+  {
+   "control": "btnInput",
+   "ok": true,
+   "error": null,
+   "popups": [],
+   "dialogs": [
+    {
+     "text": "수정모드가 아니므로 입력할 수 없습니다.",
+     "action": "default_button(id=1)"
+    }
+   ],
+   "calls": [],
+   "scenarios": [
+    "SSP0005-S04b664",
+    "SSP0005-S619784",
+    "SSP0005-Sae2550",
+    "SSP0005-Sbfb208",
+    "SSP0005-S74dcc7",
+    "SSP0005-Sb8a5f3",
+    "SSP0005-S6de7dc",
+    "SSP0005-Scdfefb",
+    "SSP0005-Sdd5213"
+   ],
+   "retried": false,
+   "asis_timeout": [],
+   "grid_changes": [],
+   "excel": [],
+   "excel_left": [],
+   "excel_error": null
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-20 08:56:11.292",
+ "fills": 0,
+ "fill_left": [],
+ "data_find": {
+  "at": "2026-11-20 08:56:23",
+  "rows0": 0,
+  "tries": [
+   {
+    "cond": "기간 1개월 앞",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20261020"
+      },
+      "ok": true,
+      "applied": "prop:Value1",
+      "error": null
+     },
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20271014"
+      },
+      "ok": true,
+      "applied": "prop:Value2",
+      "error": null
+     }
+    ],
+    "at": "2026-11-20 08:56:31"
+   },
+   {
+    "cond": "기간 3개월 앞",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20260820"
+      },
+      "ok": true,
+      "applied": "prop:Value1",
+      "error": null
+     },
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20270814"
+      },
+      "ok": true,
+      "applied": "prop:Value2",
+      "error": null
+     }
+    ],
+    "at": "2026-11-20 08:56:38"
+   },
+   {
+    "cond": "기간 6개월 앞",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value1",
+       "value": "20260520"
+      },
+      "ok": true,
+      "applied": "prop:Value1",
+      "error": null
+     },
+     {
+      "op": {
+       "name": "drpPeriod",
+       "prop": "Value2",
+       "value": "20270514"
+      },
+      "ok": true,
+      "applied": "prop:Value2",
+      "error": null
+     }
+    ],
+    "at": "2026-11-20 08:56:45"
+   }
+  ],
+  "find_sp": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0005_GET_SHIPMENT_WORKING_DAY"
+  ],
+  "sheets": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0005_GET_SHIPMENT_WORKING_DAY"
+  ],
+  "none": "후보 기간 1개월 앞 / 기간 3개월 앞 / 기간 6개월 앞 전부 0행(미측정)"
+ },
+ "close": {
+  "open_screens": 0,
+  "dialogs": []
+ }
+}

@@ -1,0 +1,96 @@
+{
+ "rule_id": "I2",
+ "hash": "2efeffe02c619099",
+ "groups": [
+  {
+   "rows": [
+    "V-89bb637a",
+    "V-dc48cc81"
+   ],
+   "why": "Both rows check the result-count (total/item) label in search results with the language set to CN and expect it in the CN resource, so they are the same element, state and result."
+  },
+  {
+   "rows": [
+    "V-51b65f71",
+    "V-d04571f1"
+   ],
+   "why": "Both rows switch the screen language and check that popup and notice message/label codes such as MSG00445 are registered and shown in every language, so they share the same element, method and expected result."
+  },
+  {
+   "rows": [
+    "EG-0894db38"
+   ],
+   "why": "This row checks screen labels with the account language set to CN, which differs from the other language conditions, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-4431808c"
+   ],
+   "why": "This row checks screen labels with the account language set to EN, which differs from the other language conditions, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-928e0116"
+   ],
+   "why": "This row checks screen labels with the account language set to KO, which differs from the other language conditions, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-2037a747"
+   ],
+   "why": "The target is 'EN data', and it is unclear whether that is the same as the plain EN label check, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-60363cec"
+   ],
+   "why": "The target is 'CN data', and it is unclear whether that is the same as the plain CN label check, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-f99f796d"
+   ],
+   "why": "The target is the Search button, which is a different element from the per-language whole-screen checks, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-10713721"
+   ],
+   "why": "This row checks labels, messages and combo items together across KO/EN/CN, which is broader than any other row, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-41d182e2"
+   ],
+   "why": "This row checks the multilingual message (MSG00701) for clicking OK without a selection in the Version popup, which is a different popup and condition, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-684afc1f"
+   ],
+   "why": "This row checks that Team names in the search condition and the result column show in English when logged in as ENG, which is a different element, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-d0643ed2"
+   ],
+   "why": "This row checks the four items of the Approval Result search-condition combo and that their language is not mixed, which is a different element, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-e09e1313"
+   ],
+   "why": "This row checks the KO 'no changes' notice when saving without changes, which is a different action and message, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-f0a5e96f"
+   ],
+   "why": "This row checks the KO validation message when Lot Size is less than Increment, which is a different condition and message, so it stays alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:44:09",
+ "cost": 0.0678738
+}

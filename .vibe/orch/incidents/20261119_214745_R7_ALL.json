@@ -1,0 +1,33 @@
+{
+  "id": "20261119_214745_R7_ALL",
+  "at": "2026-11-19T21:47:45+09:00",
+  "ms": 1795092465517,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1) — 미분류",
+  "screen": "",
+  "sig": "R7|미분류",
+  "count": 1,
+  "repeat": null,
+  "detail": "error: unknown option '--check'",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-19T21-47-44_claude_orch.log",
+    "label": "VM 자가진단",
+    "source": "orch",
+    "cls": "미분류"
+  },
+  "status": "closed",
+  "actions": [
+    {
+      "at": "2026-11-19T21:47:45+09:00",
+      "by": "VMO",
+      "what": "Claude 종료 분류 미분류 — stderr 와 로그(.vibe\\logs\\2026-11-19T21-47-44_claude_orch.log) 확인",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-20T05:56:49+09:00",
+      "by": "사용자",
+      "what": "닫음(일괄)"
+    }
+  ]
+}

@@ -335,6 +335,13 @@ export const VersionSelectModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -343,13 +350,6 @@ export const VersionSelectModal = ({
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
             />
           </div>
         </div>

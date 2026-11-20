@@ -135,17 +135,31 @@ def run(mid, dry=False, from_file=None):
     review = {x['row_id']: x for x in llm_review.read_csv(os.path.join(d, 'llm_review.csv'))}
     from_data = llm_call.parse_json(open(from_file, encoding='utf-8-sig').read()) if from_file else None
     new, skipped, cost = [], [], 0.0
-    for i, g in enumerate(ch, 1):
+    # 2026-11-20 A6: 묶음을 동시에 부른다(harness.json llmReviewPar · 종전 순서 호출 묶음 5개 약 11분). 결과 처리는 묶음 번호 순
+    import concurrent.futures as _cf
+    try:
+        par = max(1, int(c.get('llmReviewPar') or 4))
+    except (TypeError, ValueError):
+        par = 4
+
+    def _one(ig):
+        i, g = ig
         if from_data is not None:
-            res = {'ok': True, 'data': from_data, 'cost': 0.0, 'why': ''}
-        else:
-            print(f'  · 설명 문장 작성 묶음 {i}/{len(ch)} — {len(g)}행', flush=True)
-            res = llm_call.ask(mid, 'desc', build_prompt(mid, ctx, g, review), rows=len(g))
+            return i, g, {'ok': True, 'data': from_data, 'cost': 0.0, 'why': ''}
+        print(f'  · 설명 문장 작성 묶음 {i}/{len(ch)} — {len(g)}행', flush=True)
+        return i, g, llm_call.ask(mid, 'desc', build_prompt(mid, ctx, g, review), rows=len(g))
+    with _cf.ThreadPoolExecutor(max_workers=par if from_data is None else 1) as ex:
+        answers = list(ex.map(_one, list(enumerate(ch, 1))))
+    calls = cached = nochange = 0
+    for i, g, res in answers:
+        if res.get('ok'):
+            calls += 0 if res.get('cached') else 1; cached += 1 if res.get('cached') else 0
         if not res['ok']:
             print(f"[WARN] 설명 문장 묶음 {i} 결과 없음 — {res['why']} · 생성기 임시 문장 유지", flush=True)
             skipped += [(r['row_id'], res['why'][:80]) for r, _ in g]; continue
         cost += float(res.get('cost') or 0)
         items = {str(it.get('row_id') or ''): it for it in ((res['data'] or {}).get('items') or []) if isinstance(it, dict)}
+        _n0 = len(new)
         for r, _ in g:
             it = items.get(r['row_id'])
             row, why = accept(it) if it else (None, '답에 이 행이 없음')
@@ -153,6 +167,8 @@ def run(mid, dry=False, from_file=None):
                 row['row_id'] = r['row_id']; new.append(row)
             else:
                 skipped.append((r['row_id'], why))
+        if len(new) == _n0 and not res.get('cached'):
+            nochange += 1
     # 같은 group 의 문장 있는 행이 하나도 없으면(대표 행이 버려짐) 그 group 의 빈 행도 버린다
     titled = {x['group'] for x in new if x['title'] and x['group']} | {(x.get('group') or '') for x in have.values() if (x.get('title') or '').strip()}
     keep = [x for x in new if x['title'] or x['group'] in titled]
@@ -167,6 +183,10 @@ def run(mid, dry=False, from_file=None):
     for rid, why in skipped:
         print(f'  [설명 미작성] {rid} — {why}', flush=True)
     print(f'[설명 문장] 작성 {len(keep)}행 · 미작성 {len(skipped)}행 · 비용 ${cost:.4f}', flush=True)
+    if from_data is None:
+        w_ = llm_call.log_effect(mid, 'desc', calls=calls, cached=cached, applied=len(keep), nochange_calls=nochange, note=f'미작성 {len(skipped)}행')
+        if w_:
+            print(w_, flush=True)
     print(f'DESC_WRITTEN {len(keep)}', flush=True)
     return 0
 

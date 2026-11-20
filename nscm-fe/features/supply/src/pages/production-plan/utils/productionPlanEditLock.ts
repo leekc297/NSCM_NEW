@@ -99,8 +99,8 @@ export interface EditInfoEntry {
 //   measure=PROD_PLAN_AMEND 행만. (a)마지막 PlanType 아님 N / (b)FN 존재 N / (c)PlanType=TE N.
 export interface EditContext {
   canEdit: boolean; // mount 시 hasButton('SAVE') 1회 (editMode state 금지 — convert-core §2.4)
-  lastPlanType: string; // 조회결과의 최종 PlanType
-  hasFn: boolean; // 조회결과에 PlanType='FN' 존재
+  lastPlanType: string; // 조회한 Plan Date 의 Plan Type 목록 마지막 CODE
+  hasFn: boolean; // 조회한 Plan Date 의 Plan Type 목록에 'FN' 존재
 }
 export const isRowEditable = (row: Row, ctx: EditContext, editInfo: EditInfoEntry | null): boolean => {
   if (!ctx.canEdit) return false; // 편집 권한 없음
@@ -108,7 +108,8 @@ export const isRowEditable = (row: Row, ctx: EditContext, editInfo: EditInfoEntr
   if (!editInfo) return false; // EDIT_INFO 미반환 = 편집불가(서버 편집컨텍스트 원천 없음, 안전측)
   let editable = editInfo.isEditable === 'Y';
   const planType = s(row.PLAN_TYPE);
-  if (ctx.lastPlanType && planType !== ctx.lastPlanType) editable = false; // (a)
+  // (a) AS-IS 는 목록이 비면 마지막 값이 "" 라 선택값과 달라 잠근다(L693-701) — 빈 값도 잠금으로 둔다.
+  if (planType !== ctx.lastPlanType) editable = false; // (a)
   if (ctx.hasFn) editable = false; // (b)
   if ((PLAN_TYPE_EXCLUDE_EDIT as readonly string[]).includes(planType)) editable = false; // (c) FN/TE
   return editable;
@@ -136,14 +137,12 @@ export const isPivotCellEditable = (
 export const isFixedColumnVisible = (eeOnly: boolean | undefined, division: string): boolean =>
   eeOnly ? isEeDivision(division) : true;
 
-// ===== 조회결과에서 편집 컨텍스트 파생 (design 01 R2 / 03 §2.5) =====
-export const deriveEditContext = (rows: Row[], canEdit: boolean): EditContext => {
-  let lastPlanType = '';
-  let hasFn = false;
-  for (const r of rows) {
-    const pt = s(r.PLAN_TYPE);
-    if (pt) lastPlanType = pt;
-    if (pt === 'FN') hasFn = true;
-  }
-  return { canEdit, lastPlanType, hasFn };
-};
+// ===== Plan Type 목록에서 편집 컨텍스트 파생 (design 01 R2 / 03 §2.5) =====
+//   AS-IS dtPlanType = 사업부 + 선택 Plan Date 로 거른 Plan Type 콤보 목록(SCP0011.cs L1092).
+//   EditButton L693-709: 목록 마지막 CODE 가 아니면 잠금, 목록에 FN 이 하나라도 있으면 전체 잠금.
+//   조회결과 행은 선택 Plan Type 하나뿐이라 기준이 될 수 없다 — 반드시 목록 CODE 를 넘긴다.
+export const deriveEditContext = (planTypeCodes: string[], canEdit: boolean): EditContext => ({
+  canEdit,
+  lastPlanType: planTypeCodes[planTypeCodes.length - 1] ?? '',
+  hasFn: planTypeCodes.includes('FN'),
+});

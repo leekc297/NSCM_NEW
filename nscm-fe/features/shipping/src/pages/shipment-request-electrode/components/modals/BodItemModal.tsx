@@ -267,18 +267,18 @@ export const BodItemModal = ({ open, modalClose, row, planDate, onSelect }: Prop
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
             <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel='OK'
-              onClick={handleOk}
-            />
-            <Button
               appearance='outlined'
               priority='normal'
               size='medium'
               buttonLabel='Close'
               onClick={modalClose}
+            />
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              buttonLabel='OK'
+              onClick={handleOk}
             />
           </div>
         </div>

@@ -1,0 +1,30 @@
+{
+  "id": "20261120_060606_R7_ALL",
+  "at": "2026-11-20T06:06:06+09:00",
+  "ms": 1795122366569,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
+  "screen": "",
+  "sig": "R7|응답 중 종료",
+  "count": 1,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-20T06-03-39_claude_orch.log",
+    "label": "개선안 반영 R2 반복 집계에서 같은 실행의 실패를 한 번만 세고, VS Code 종료로 끊긴 실행은 반복 집계에서 뺀다",
+    "source": "orch",
+    "cls": "응답 중 종료"
+  },
+  "status": "resolved",
+  "notice": true,
+  "actions": [
+    {
+      "at": "2026-11-20T06:06:30+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창이 닫히며 끝난 프로세스). 사용자 확인 대상에서 뺌"
+    }
+  ],
+  "reload": "shutdown",
+  "prevStatus": "open"
+}

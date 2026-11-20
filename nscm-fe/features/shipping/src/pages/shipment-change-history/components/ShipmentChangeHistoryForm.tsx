@@ -8,6 +8,7 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { useMessageStore } from '@shared/stores';
 
 import {
@@ -311,6 +312,12 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
+                    ),
+                  }}
                   onChange={e => set({ itemId: e.target.value })}
                 />
               )}
@@ -328,6 +335,12 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
                   fullWidth
                   disabled={noDivisionAuth}
                   value={sc.soNo}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.soNo,
+                      next => set({ soNo: next }),
+                    ),
+                  }}
                   onChange={e => set({ soNo: e.target.value })}
                 />
               )}
@@ -348,6 +361,12 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
                   fullWidth
                   disabled={noDivisionAuth}
                   value={sc.confirmId}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.confirmId,
+                      next => set({ confirmId: next }),
+                    ),
+                  }}
                   onChange={e => set({ confirmId: e.target.value })}
                 />
               )}

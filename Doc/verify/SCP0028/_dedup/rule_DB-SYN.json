@@ -1,0 +1,100 @@
+{
+ "rule_id": "DB-SYN",
+ "hash": "1288b8c04b277660",
+ "groups": [
+  {
+   "rows": [
+    "EG-52095341"
+   ],
+   "why": "PKG_SCP0028에 TB_FX_* 참조가 없는지와 ATTRIBUTE9 콤보 SQL_ID가 실존하는지 함께 보는 정적 점검이다. V-ce7c2f44와 TB_FX_* 기대는 겹치지만 대상 PKG가 다르고(DMF 계열) ATTRIBUTE9 검사가 더 있어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-03160f3d"
+   ],
+   "why": "팝업 Form_Load의 'D'/'I' 진입별 자동조회 여부를 추적하는 유일한 행이다. 다른 행과 요소도 기대도 다르다."
+  },
+  {
+   "rows": [
+    "T-0ddc815b"
+   ],
+   "why": "저장 SP인 P_SCP0028_SAVE_SHIPMENT_LOT_SIZE 하나를 대상으로 하는 대조표 7행 추적이다. 다른 SP와 대상 객체가 다르다."
+  },
+  {
+   "rows": [
+    "T-161e01f5"
+   ],
+   "why": "FindData 조회의 useTabProcQuery o_rc1 바인딩을 추적하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "T-25c746d3"
+   ],
+   "why": "저장 버튼 hotkeyConfig.save에서 handleSave로 가는 연결을 추적하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "T-32d12bd8"
+   ],
+   "why": "입력용 조회 SP인 GET_SHIPMENT_LOT_SIZE_INPUT 하나를 대상으로 한다(대조표 4행). 다른 SP와 객체가 다르다."
+  },
+  {
+   "rows": [
+    "T-45dbcbc1"
+   ],
+   "why": "메인 조회 SP인 GET_SHIPMENT_LOT_SIZE 하나를 대상으로 한다(대조표 8행). INPUT·POPUP SP와는 다른 객체다."
+  },
+  {
+   "rows": [
+    "T-52d45748"
+   ],
+   "why": "PKG_SCM0002의 GET_MATERIAL_BY_DIVISION SP 하나를 대상으로 하는 추적이다. 다른 SP와 객체가 다르다."
+  },
+  {
+   "rows": [
+    "T-52d59336"
+   ],
+   "why": "메뉴 버튼 권한 SP인 PR_GET_MNU_BTN_AUTH 하나를 대상으로 하는 추적이다. 다른 SP와 객체가 다르다."
+  },
+  {
+   "rows": [
+    "T-5587aff6"
+   ],
+   "why": "팝업 OK(handleConfirm)의 메시지 분기(MSG01091/MSG00014/MSG00683)와 체크행 반환을 추적하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "T-8429c58d"
+   ],
+   "why": "팝업 조회 SP인 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 하나를 대상으로 한다. 다른 SP와 객체가 다르다."
+  },
+  {
+   "rows": [
+    "T-b8cce406"
+   ],
+   "why": "PKG_SCM0002의 GET_ITEM_BY_DIVISION_POPUP SP 하나를 대상으로 한다(대조표 2행). MATERIAL SP와는 다른 객체다."
+  },
+  {
+   "rows": [
+    "V-62df918f"
+   ],
+   "why": "SCMP_APP 객체·메타가 있고 VALID한지 보고, 없거나 오류면 테스트를 차단하고 재작성을 요청하는 규칙이다. V-b8794c85와 대상은 겹치지만 그 행은 결함이 아닌 'DB 객체/메타 오류'로 분류하라는 기대가 더 있어, 확신이 없으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b8794c85"
+   ],
+   "why": "객체·메타·시노님·권한 오류(ORA-00942 등)를 결함이 아닌 'DB 객체/메타 오류'로 분류하고 조치 필요 1번에 올리라는 확정 규칙이다. V-62df918f와 기대가 같다고 단정할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ce7c2f44"
+   ],
+   "why": "DMF 계열 PKG 6개의 TB_FX_* 사용자 테이블 참조를 보고 SCM_ADM_* 테이블 사용 여부도 확인하는 결함 행이다. PKG_SCP0028 대상인 EG-52095341과는 대상 객체와 기대가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:18:08",
+ "cost": 0.09636239999999999
+}

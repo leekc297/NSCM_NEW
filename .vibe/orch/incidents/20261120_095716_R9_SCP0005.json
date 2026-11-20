@@ -1,0 +1,27 @@
+{
+  "id": "20261120_095716_R9_SCP0005",
+  "at": "2026-11-20T09:57:16+09:00",
+  "ms": 1795136236660,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.dbwin.SCP0005.lock (PID 42752 없음)",
+  "screen": "SCP0005",
+  "sig": "R9|_run.dbwin.SCP0005.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20 08:59:27 · 인자 SCP0005 · 부모 python.exe(21980)",
+  "evidence": {
+    "file": "Doc/e2e/_run.dbwin.SCP0005.lock",
+    "pid": 42752
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T09:58:58+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.dbwin.SCP0005.lock (PID 42752 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+DM0004,SQL,DM0004_GET_SALES_SITE_DATA,Doc\asisfacts\db\modules\dbo.DM0004_GET_SALES_SITE_DATA.sql,75,,"DIVISION_ID,DEPT_ID,END_CUSTOMER,SITE_DESCRIPTION,SCM_SITE_ID","ORDER BY S.DIVISION_ID, S.DEPT_ID, S.END_CUSTOMER, S.SITE_DESCRIPTION, S.SCM_SITE_ID",0,정적
+DM0004,SQL,DM0004_GET_SALES_SITE_BUCKET_DATA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_GET_SALES_SITE_CUSTOMER_DATA,Doc\asisfacts\db\modules\dbo.DM0004_GET_SALES_SITE_CUSTOMER_DATA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+DM0004,SQL,DM0004_GET_SALES_SITE_LOCATION_DATA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_SAVE_SALES_SITE_DATA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_SAVE_SALES_SITE_BUCKET_DATA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_SAVE_SALES_SITE_CUSTOMER_DATA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_SAVE_SALES_SITE_LOCATION_DATA,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_GET_SALES_SITE_DATA_40,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DM0004,SQL,DM0004_GET_SALES_SITE_CUSTOMER_DATA_40,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)

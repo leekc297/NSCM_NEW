@@ -1,0 +1,169 @@
+{
+ "rule_id": "H3",
+ "hash": "001fb9afe05bb1cb",
+ "groups": [
+  {
+   "rows": [
+    "V-114b9cdc",
+    "V-324a37c6"
+   ],
+   "why": "Both rows check grid cell merging while a new row is being entered, with the same condition and the same expected result (merging is released during editing and applies only to query results)."
+  },
+  {
+   "rows": [
+    "V-4edb4ebc"
+   ],
+   "why": "Same element as the group above, but this row covers only typing a new row with the same value as the next row, not pasting. Kept alone because sharing one measurement could skip a check."
+  },
+  {
+   "rows": [
+    "V-b9a57636",
+    "V-c56ce1ba",
+    "V-67a5a89e"
+   ],
+   "why": "All three check hierarchical merging of key columns in the query result, and expect that when a leading key column is merged, matching later key columns are also merged with no unmerged cells in between."
+  },
+  {
+   "rows": [
+    "V-55ebd9e6"
+   ],
+   "why": "Expects vertical merging only on the key columns the screen defines, with value columns not merged, which differs from expecting every merge-target column to be merged."
+  },
+  {
+   "rows": [
+    "V-cdf1f6b4"
+   ],
+   "why": "Expects every merge-target column in the query result to be merged with none missing, a different expected result from merging key columns only."
+  },
+  {
+   "rows": [
+    "T-20086a97"
+   ],
+   "why": "A trace row confirming that SmartColMerge maps to CustomMergeManager/MERGE_COLUMNS 6 in the source, which is a different kind of check."
+  },
+  {
+   "rows": [
+    "EG-463c3695"
+   ],
+   "why": "Targets only the Delete button in ShipmentLotSizePopup."
+  },
+  {
+   "rows": [
+    "EG-ecbeac21"
+   ],
+   "why": "Targets only the Input button in ShipmentLotSizePopup."
+  },
+  {
+   "rows": [
+    "EG-85b2e975"
+   ],
+   "why": "Targets only the Model query condition in a different popup (ItembyDivisionPopup)."
+  },
+  {
+   "rows": [
+    "T-17c8c606"
+   ],
+   "why": "A trace row for Delete() limited to new rows."
+  },
+  {
+   "rows": [
+    "T-209578c9"
+   ],
+   "why": "A trace row for the checkValidSize validation."
+  },
+  {
+   "rows": [
+    "T-221f692b"
+   ],
+   "why": "A trace row for SwitchLock (not ported)."
+  },
+  {
+   "rows": [
+    "T-25cc3aa5"
+   ],
+   "why": "A trace row for the checkRequiredOfSpread required-field check."
+  },
+  {
+   "rows": [
+    "T-344ba82a"
+   ],
+   "why": "A trace row for clearing the CRUD status when a value reverts to its default."
+  },
+  {
+   "rows": [
+    "T-3ca38a7a"
+   ],
+   "why": "Targets only the SPLIT_YN column."
+  },
+  {
+   "rows": [
+    "T-620b63d8"
+   ],
+   "why": "Targets only the VALID_YN column."
+  },
+  {
+   "rows": [
+    "T-6f328fe9"
+   ],
+   "why": "Targets only the LOT_SIZE column."
+  },
+  {
+   "rows": [
+    "T-7ded8582"
+   ],
+   "why": "Targets only the INCREMENT column."
+  },
+  {
+   "rows": [
+    "T-8f5bdd5a"
+   ],
+   "why": "A trace row for binding the query result (FindData)."
+  },
+  {
+   "rows": [
+    "T-a49f8dfc"
+   ],
+   "why": "A trace row for LockColumn editing restrictions."
+  },
+  {
+   "rows": [
+    "V-0d3f36ac"
+   ],
+   "why": "Checks typing in the popup's Model condition and merging of the End Customer column, a different combination of elements."
+  },
+  {
+   "rows": [
+    "V-34c883a3"
+   ],
+   "why": "Checks where Insert places a row when the selected row is inside a merged group, which is a different action and expectation."
+  },
+  {
+   "rows": [
+    "V-806c2c9a"
+   ],
+   "why": "Checks Dept entry and auto-fill plus the header merge, which are different elements."
+  },
+  {
+   "rows": [
+    "V-82b37e2b"
+   ],
+   "why": "Checks Delete response time and the D status on a merged cell, which is a different action."
+  },
+  {
+   "rows": [
+    "V-c8707aab"
+   ],
+   "why": "Checks combo input after double-clicking an existing merged cell, a different state and action."
+  },
+  {
+   "rows": [
+    "V-e52eea83"
+   ],
+   "why": "Checks copy/paste, Korean input and autocomplete in a new row, a combined input-feature check with a different expectation."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:20:34",
+ "cost": 0.11290539999999999
+}

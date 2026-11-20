@@ -170,6 +170,13 @@ export const COATING_OPERATION_ID = 'E2000';
 export const LINE_TYPE_DEFAULT = '-';
 /** 신규행 `VALID_YN` 기본값(cs:999·1022·1039·1049). */
 export const VALID_YN_DEFAULT = 'Y';
+/**
+ * No Work `NO_WORK_TYPE` 공백 기본값 — AS-IS `Save_NoWork`(cs:1403)·`Save_NoWork_Week`(cs:1714)
+ * `if (string.IsNullOrWhiteSpace(type)) type = "-";`. Day/Week 저장 직전 I/M/D 전행에 적용한다.
+ * AS-IS·TO-BE SAVE SP 모두 `V_TYPE`(ATTRIBUTE2)를 보정 없이 그대로 INSERT 하므로(PKG BODY:3828·4452)
+ * FE 가 넣지 않으면 공백이 저장된다 — AS-IS 는 항상 '-' 로 저장한다.
+ */
+export const NO_WORK_TYPE_DEFAULT = '-';
 
 /**
  * Daily Capa **저장 시** 강제주입 기본값 — AS-IS `Save_DailyCapa` 리터럴 그대로
@@ -306,6 +313,12 @@ export const PRE_KEY_COLUMNS: Record<GridSheet, readonly string[]> = {
     COLUMN.OPERATION_ID,
     COLUMN.LINE_TYPE,
     COLUMN.NO_WORK_DATE,
+    // E20260929-000580 복수 Type(멀티타입) 비조업 — GET SP 가 `PRE_KEY_VALUES` 끝에 Type 을 7번째로
+    //   덧붙이고(Day `A.TYPE` BODY:913 / Week `NO_WORK_TYPE` BODY:1115) SAVE 중복키도 Type 을 포함한다
+    //   (Day `AND TYPE = V_TYPE_KEY` BODY:3759 / Week `AND TYPE = NVL(V_TYPE,'-')` BODY:4459, ora.py 2026-11-19).
+    //   그래서 같은 날짜/라인이라도 Type 이 다르면 허용, 같으면 차단이다. 공백 Type 은 '-' 로 본다
+    //   (SP `V_TYPE_KEY` 등가 — 키 함수에서 정규화).
+    COLUMN.NO_WORK_TYPE,
   ],
   [SHEETS.DAILY_CAPA]: [
     COLUMN.DIVISION_ID,
@@ -622,6 +635,20 @@ export const MSG = {
    */
   UTIL_RT_NEGATIVE: 'MSG01190',
 } as const;
+
+/**
+ * No Work **Week** — 라인·주 단위 Off Time 합계 상한(일). AS-IS `Save_NoWork_Week`(cs:1748) `> 7`.
+ * 한 주(7일)를 초과하는 비조업은 성립하지 않는다.
+ */
+export const WEEK_OFF_TIME_LIMIT = 7;
+/**
+ * No Work Week Off Time 7 초과 알럿 — **하드코딩 리터럴**(AS-IS `Save_NoWork_Week` cs:1751).
+ * AS-IS 가 MSG 코드 없이 한글 리터럴로 띄우며, TO-BE `SCM_ADM_MSG_M`(KO 1717건)에도 등가 코드가
+ * **없음을 ora.py 실측 확인**(2026-11-17, "일주일/Off Time/7 초과" 매칭 0건) → 사용자 지시로 AS-IS
+ * 문구 그대로 하드코딩한다. 등가 MSG 코드가 등록되면 `MSG` 블록으로 이관할 것.
+ */
+export const WEEK_OFF_TIME_EXCEEDS_LITERAL =
+  '신규 입력 데이터의 Off Time이 일주일(7)을 초과합니다.';
 
 /** 조회조건·버튼 라벨 — design 02 §5 / 01 §1.2 실측(전건 존재, 신규 0건). */
 export const LBL = {

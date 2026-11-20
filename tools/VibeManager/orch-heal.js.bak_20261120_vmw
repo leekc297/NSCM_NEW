@@ -1,0 +1,92 @@
+// 2026-11-20 VMO 자가 복구(사용자 지시): "2개 화면이 열리지 않았을 때, 이를 캐치해서 원인을 찾고, 해결을 해서, 해결한 후에 정상적으로 기동이 되도록 하는 것을
+//   사람이 확인해서 따로 하기 전에 자가진단을 통해서 진행하는 것이 가장 큰 목적중에 하나"
+//
+// 흐름(Claude 없이 코드로 하는 부분 · 풀지 못하면 에이전트에 넘김)
+//   ① 감시기 사건 R13 화면 진입 실패 반복(orch-watch.js)을 받음
+//   ② 원인 분류: FE 개발 서버 변환 오류가 '없는 import @shared/<이름>' 이면 공용 파일 빠짐
+//   ③ 해결: python tools/CommonSync/screen_sync.py <ID> --deps-only(로컬에 없는 공용 파일만 공통 원문으로 받음 · 있는 파일은 건드리지 않음)
+//   ④ 확인: 화면 파일을 FE 개발 서버에 다시 변환 요청해 오류 0
+//   ⑤ 다시 기동: 그 화면 실행을 멈추고 같은 업무 작업에서 다시 실행(job-runner.requeueScreen · 같은 작업에서 2번까지)
+//   ⑥ 사건 해결 처리 · 알림. ②의 분류가 아니거나 ③④가 실패하면 에이전트(Claude) 조치로 넘김
+const path = require('path'); const cp = require('child_process');
+let errlog = { note() { return null; } }; try { errlog = require('./orch-errlog'); } catch { /* 오류 기록 모듈 없음 */ }
+let getPaths = null; let started = false; let notifier = null; const busy = new Set(); const feed = [];
+const P = () => getPaths();
+const RESOLVE = /Failed to resolve import "@shared\/([A-Za-z0-9_-]+)"/;
+
+function say(text, o) { feed.unshift(Object.assign({ at: new Date().toISOString(), text }, o || {})); if (feed.length > 100) feed.length = 100; try { require('./orch-events').emit('heal', Object.assign({ text }, o || {})); } catch { /* 사건 기록 실패는 무시 */ } }
+/** 사건을 이 모듈이 맡는가(에이전트는 맡지 않은 사건만 바로 처리) */
+function claims(inc) { return !!inc && (inc.rule === 'R13' || inc.rule === 'R14') && !inc.notice; }
+function py() { return process.env.VM_PYTHON || 'python'; }
+function runSync(screen) {
+  return new Promise(res => {
+    const t0 = Date.now(); let out = '';
+    const ch = cp.spawn(py(), [path.join(P().root, 'tools', 'CommonSync', 'screen_sync.py'), screen, '--deps-only'], { cwd: P().root, env: Object.assign({}, process.env, { PYTHONIOENCODING: 'utf-8', GIT_TERMINAL_PROMPT: '0' }), windowsHide: true });
+    ch.stdout.on('data', d => { out += d.toString('utf8'); }); ch.stderr.on('data', d => { out += d.toString('utf8'); });
+    const tm = setTimeout(() => { try { ch.kill(); } catch { /* 이미 끝남 */ } }, 600000);
+    ch.on('close', code => { clearTimeout(tm); res({ code, out: out.slice(-3000), ms: Date.now() - t0 }); });
+    ch.on('error', e => { clearTimeout(tm); res({ code: -1, out: String(e.message), ms: Date.now() - t0 }); });
+  });
+}
+
+// ── R14 중지 뒤 계속 실행(2026-11-20 사용자 지적: 업무 작업 중지 09:57 뒤에도 4화면이 다음 단계를 띄움) ──
+//   ① 그 창(wb)의 살아 있는 프로세스, Claude 를 종료(taskkill /T) ② 업무 작업이면 job-runner.stopScreen, Workbench 창이면 workbench.stopInst 로 체인 중지 표시를 다시 보냄
+//   ③ recheckMs(30초) 뒤 같은 체인이 아직 살아 있거나 새 실행이 또 나왔으면 '중지 경로 결함'으로 에이전트(Claude) 진단에 넘김. 아니면 해결
+function killTree(pid) { return new Promise(res => { if (!pid) return res(false); try { const ch = process.platform === 'win32' ? cp.spawn('taskkill', ['/pid', String(pid), '/T', '/F'], { windowsHide: true }) : cp.spawn('kill', ['-TERM', String(pid)]); ch.on('close', c => res(c === 0)); ch.on('error', () => res(false)); } catch { res(false); } }); }
+async function handleStop(inc, deps) {
+  const watch = deps.watch || require('./orch-watch'); const state = deps.state || require('./orch-state'); const agent = deps.agent || require('./orch-agent');
+  const ev = inc.evidence || {}; const wb = ev.wb; const key = `R14|${wb}`; if (wb == null || busy.has(key)) return { healed: false, why: wb == null ? '창 정보 없음' : '같은 창 처리 중' };
+  busy.add(key);
+  const give = why => { watch.update(inc.id, {}, { by: 'VMO 자가 복구', grade: 'A', what: `${why}. 에이전트 진단으로 넘김(중지 경로 결함)` }); say(`${inc.screen} 중지 뒤 계속 실행 자가 복구 못 함: ${why}`, { screen: inc.screen, inc: inc.id }); try { agent.enqueue(inc.id, false); } catch (e) { errlog.note('orch-heal', 'enqueueStop', e); } return { healed: false, why }; };
+  try {
+    const snap = state.snapshot(); const pids = [...snap.procs.filter(p => p.wb === wb).map(p => p.pid), ...(snap.claudes || []).filter(c => c.wb === wb).map(c => c.pid)].filter(Boolean);
+    watch.update(inc.id, { status: 'acting' }, { by: 'VMO 자가 복구', grade: 'A', what: `중지된 체인이 계속 실행 중. 프로세스 ${pids.length}개 종료(PID ${pids.join(', ') || '없음'}) · 체인 중지 다시 요청` });
+    const killed = []; for (const pid of pids) if (await (deps.kill || killTree)(pid)) killed.push(pid);
+    let how = '';
+    if (ev.job) { try { const jr = deps.jobRunner || require('./job-runner'); const r = jr.stopScreen(inc.screen, 'VMO 자가 복구', `R14 ${inc.id}`); how = `업무 작업 ${ev.job} 화면 중지 ${r && r.none ? '대상 없음' : '요청'}`; } catch (e) { how = `업무 작업 중지 실패 ${e.message}`; } }
+    else if (typeof wb === 'number') { try { const ok = (deps.stopInst || require('./workbench').stopInst)(wb); how = ok ? `VM#${wb} 창 중지 요청` : `VM#${wb} 창 없음`; } catch (e) { how = `창 중지 실패 ${e.message}`; } }
+    const count0 = inc.count || 1;
+    await new Promise(r => setTimeout(r, deps.recheckMs != null ? deps.recheckMs : 30000));
+    const after = watch.get(inc.id) || inc; const alive = state.snapshot().chains.some(c => c.runId === ev.runId);
+    if ((after.count || 1) > count0 || alive) return give(`종료 ${killed.length}/${pids.length} · ${how} 뒤에도 ${alive ? '체인이 살아 있음' : `새 실행 ${(after.count || 1) - count0}건`}`);
+    const what = `해결: 프로세스 ${killed.length}/${pids.length} 종료 · ${how || '체인 중지 확인'} · ${Math.round((deps.recheckMs != null ? deps.recheckMs : 30000) / 1000)}초 뒤 체인 없음`;
+    watch.update(inc.id, { status: 'resolved', resolvedBy: 'VMO 자가 복구' }, { by: 'VMO 자가 복구', grade: 'A', what });
+    say(`${inc.screen} ${what}`, { screen: inc.screen, inc: inc.id, ok: true }); if (notifier) try { notifier(inc, what); } catch (e) { errlog.note('orch-heal', 'notifyStop', e); }
+    return { healed: true, why: what, killed };
+  } catch (e) { errlog.note('orch-heal', 'handleStop', e); return give(`자가 복구 중 오류 ${e.message}`); }
+  finally { busy.delete(key); }
+}
+
+/** 사건 1건 처리. 반환 { healed, why, requeue } */
+async function handle(inc, deps) {
+  if (inc && inc.rule === 'R14') return handleStop(inc, deps || {});
+  const watch = deps.watch || require('./orch-watch'); const jr = deps.jobRunner || require('./job-runner'); const agent = deps.agent || require('./orch-agent');
+  const scr = inc.screen; if (!scr || busy.has(scr)) return { healed: false, why: busy.has(scr) ? '같은 화면 처리 중' : '화면 없음' };
+  busy.add(scr);
+  const give = why => { watch.update(inc.id, {}, { by: 'VMO 자가 복구', grade: 'A', what: `코드로 풀지 못함: ${why}. 에이전트 조치로 넘김` }); say(`${scr} 자가 복구 못 함: ${why}`, { screen: scr, inc: inc.id }); try { agent.enqueue(inc.id, false); } catch (e) { errlog.note('orch-heal', 'enqueue', e); } return { healed: false, why }; };
+  try {
+    const fe = inc.evidence && inc.evidence.fe; const m = fe && RESOLVE.exec(fe.msg || '');
+    if (!m) return give(fe ? `FE 변환 오류가 공용 파일 빠짐이 아님(${String(fe.msg).slice(0, 120)})` : 'FE 변환 오류 없음. 메뉴 권한, BE, 계정 확인 필요');
+    say(`${scr} 화면 진입 실패 원인 = 공용 파일 @shared/${m[1]} 없음(${fe.file}). 공통 저장소에서 받기 시작`, { screen: scr, inc: inc.id });
+    watch.update(inc.id, { status: 'acting' }, { by: 'VMO 자가 복구', grade: 'A', what: `원인 = 공용 파일 @shared/${m[1]} 없음(${fe.file}). screen_sync.py ${scr} --deps-only 실행` });
+    const r = await (deps.runSync || runSync)(scr);
+    if (r.code !== 0) return give(`공용 파일 받기 실패(exit ${r.code}): ${r.out.split(/\r?\n/).filter(l => /ERROR|⛔/.test(l)).slice(-2).join(' / ').slice(0, 300)}`);
+    const again = await (deps.feCheck || watch.feCompileError)(scr);
+    if (again) return give(`받은 뒤에도 FE 변환 오류: ${again.file} ${String(again.msg).slice(0, 160)}`);
+    const rq = jr.requeueScreen(scr, `공용 파일 @shared/${m[1]} 받음(R13 ${inc.id})`);
+    const what = `해결: @shared/${m[1]} 받음 · 화면 파일 변환 오류 0 확인 · ${rq.none ? `다시 실행 안 함(${rq.none})` : `업무 작업 ${rq.job} 에서 ${scr} 다시 실행(${rq.how === 'stop-requeue' ? '진행 중 실행을 멈추고 다시' : '대기로 돌림'})`}`;
+    watch.update(inc.id, { status: 'resolved', resolvedBy: 'VMO 자가 복구' }, { by: 'VMO 자가 복구', grade: 'A', what });
+    say(`${scr} ${what}`, { screen: scr, inc: inc.id, ok: true }); if (notifier) try { notifier(inc, what); } catch (e) { errlog.note('orch-heal', 'notify', e); }
+    return { healed: true, why: what, requeue: rq };
+  } catch (e) { errlog.note('orch-heal', 'handle', e); return give(`자가 복구 중 오류 ${e.message}`); }
+  finally { busy.delete(scr); }
+}
+
+function init(o) {
+  if (started) return; started = true; getPaths = o.paths; notifier = o.notify || null;
+  const watch = o.watch || require('./orch-watch');
+  watch.on((inc, isNew) => { if (isNew && claims(inc)) handle(inc, o).catch(e => errlog.note('orch-heal', 'on', e)); });
+}
+function dispose() { started = false; }
+function feedList() { return feed.slice(); }
+module.exports = { init, dispose, claims, handle, handleStop, feedList, RESOLVE };

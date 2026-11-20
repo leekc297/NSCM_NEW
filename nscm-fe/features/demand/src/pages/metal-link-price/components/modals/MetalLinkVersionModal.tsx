@@ -276,6 +276,13 @@ export const MetalLinkVersionModal = ({
           </div>
           <div className={styles.buttonWrapper}>
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -284,13 +291,6 @@ export const MetalLinkVersionModal = ({
               iconPosition='leading'
               disabled={loading}
               onClick={handleApply}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={modalClose}
             />
           </div>
         </div>

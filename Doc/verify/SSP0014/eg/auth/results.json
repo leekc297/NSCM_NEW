@@ -112,7 +112,7 @@
         {
           "title": "E03 Division·권한 SSP0014 @eg-auth",
           "file": "eg_auth.spec.ts",
-          "line": 85,
+          "line": 96,
           "column": 6,
           "specs": [
             {
@@ -133,7 +133,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13935,
+                      "duration": 18470,
                       "errors": [],
                       "stdout": [
                         {
@@ -142,7 +142,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:04:23.772Z",
+                      "startTime": "2026-11-20T00:30:52.550Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -152,7 +152,7 @@
               ],
               "id": "fce9d8edbd378244cae8-3e9b619eb4718a7ebe1b",
               "file": "eg_auth.spec.ts",
-              "line": 92,
+              "line": 103,
               "column": 7
             },
             {
@@ -173,35 +173,35 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 48965,
+                      "duration": 74513,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SSP/40/SSP Planner 10s\n"
+                          "text": "[eg_auth] SSP/40/SSP Planner 16s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/40/SSP Viewer 9s\n"
+                          "text": "[eg_auth] SSP/40/SSP Viewer 14s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/81/SSP Planner 9s\n"
+                          "text": "[eg_auth] SSP/81/SSP Planner 13s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/81/SSP Viewer 9s\n"
+                          "text": "[eg_auth] SSP/81/SSP Viewer 14s\n"
                         },
                         {
-                          "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                          "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/82/SSP Planner 10s\n"
+                          "text": "[eg_auth] SSP/82/SSP Planner 17s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -212,7 +212,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:04:40.513Z",
+                      "startTime": "2026-11-20T00:31:14.944Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -222,7 +222,7 @@
               ],
               "id": "fce9d8edbd378244cae8-62c2023ff4a5ed8b95c0",
               "file": "eg_auth.spec.ts",
-              "line": 249,
+              "line": 261,
               "column": 7
             },
             {
@@ -243,7 +243,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9167,
+                      "duration": 11832,
                       "errors": [],
                       "stdout": [
                         {
@@ -252,7 +252,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:05:32.311Z",
+                      "startTime": "2026-11-20T00:32:33.977Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -262,7 +262,7 @@
               ],
               "id": "fce9d8edbd378244cae8-5199637f719e54cdf374",
               "file": "eg_auth.spec.ts",
-              "line": 380,
+              "line": 394,
               "column": 7
             },
             {
@@ -283,7 +283,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6261,
+                      "duration": 8212,
                       "errors": [],
                       "stdout": [
                         {
@@ -292,7 +292,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:05:44.477Z",
+                      "startTime": "2026-11-20T00:32:50.025Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -302,7 +302,7 @@
               ],
               "id": "fce9d8edbd378244cae8-ad57482c572b53ca06cf",
               "file": "eg_auth.spec.ts",
-              "line": 431,
+              "line": 445,
               "column": 7
             },
             {
@@ -323,7 +323,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 188,
+                      "duration": 271,
                       "errors": [],
                       "stdout": [
                         {
@@ -332,7 +332,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:05:53.721Z",
+                      "startTime": "2026-11-20T00:33:03.105Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -342,7 +342,7 @@
               ],
               "id": "fce9d8edbd378244cae8-8c01621384b98ce01757",
               "file": "eg_auth.spec.ts",
-              "line": 513,
+              "line": 527,
               "column": 7
             },
             {
@@ -363,7 +363,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5542,
+                      "duration": 7812,
                       "errors": [],
                       "stdout": [
                         {
@@ -372,7 +372,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:05:56.820Z",
+                      "startTime": "2026-11-20T00:33:07.620Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -382,7 +382,7 @@
               ],
               "id": "fce9d8edbd378244cae8-8f8e8a488106620924b4",
               "file": "eg_auth.spec.ts",
-              "line": 583,
+              "line": 597,
               "column": 7
             },
             {
@@ -403,7 +403,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 168,
+                      "duration": 247,
                       "errors": [],
                       "stdout": [
                         {
@@ -412,7 +412,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:06:05.308Z",
+                      "startTime": "2026-11-20T00:33:19.619Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -422,7 +422,7 @@
               ],
               "id": "fce9d8edbd378244cae8-446da154b44f04830651",
               "file": "eg_auth.spec.ts",
-              "line": 599,
+              "line": 613,
               "column": 7
             },
             {
@@ -443,7 +443,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5694,
+                      "duration": 7431,
                       "errors": [],
                       "stdout": [
                         {
@@ -452,7 +452,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:06:08.121Z",
+                      "startTime": "2026-11-20T00:33:26.058Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -462,7 +462,7 @@
               ],
               "id": "fce9d8edbd378244cae8-74f21c9d5389338b1940",
               "file": "eg_auth.spec.ts",
-              "line": 642,
+              "line": 656,
               "column": 7
             },
             {
@@ -483,7 +483,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7816,
+                      "duration": 10932,
                       "errors": [],
                       "stdout": [
                         {
@@ -495,7 +495,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T07:06:16.572Z",
+                      "startTime": "2026-11-20T00:33:38.969Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -505,7 +505,7 @@
               ],
               "id": "fce9d8edbd378244cae8-bd2b328e94fd35723a9f",
               "file": "eg_auth.spec.ts",
-              "line": 667,
+              "line": 681,
               "column": 7
             }
           ]
@@ -515,8 +515,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T07:04:23.127Z",
-    "duration": 124474.614,
+    "startTime": "2026-11-20T00:30:51.952Z",
+    "duration": 183866.239,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

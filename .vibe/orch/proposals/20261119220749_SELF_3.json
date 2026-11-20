@@ -1,0 +1,115 @@
+{
+  "id": "20261119220749_SELF_3",
+  "at": "2026-11-19T22:07:49+09:00",
+  "ms": 1795093669878,
+  "source": "self",
+  "status": "applied",
+  "sig": "doc style job runner server service dash",
+  "title": "job-runner.js, server-service.js 고정 문구에서 줄표 제거(29건)",
+  "evidence": "입력 key S11|job-runner.js(기호 12), S11|server-service.js(기호 34). .vibe/orch/selfcheck/doc_style/job-runner.js.style.csv 12행이 줄표(L47, L60, L73 2건, L127, L128, L144, L151, L191, L195, L201, L202). server-service.js.style.csv 기호 34행 중 줄표 17행(L124, L155, L224, L225, L240, L242, L258, L259, L260, L269, L274, L287, L288, L295, L301, L302, L303), 나머지 17행은 상태 표시 기호. tools/VibeManager/test/t_job_par.js:57 이 /부하 기준 초과 — CPU/ 로 job-runner.js:128 문구를 검사함. tools 폴더의 js, py, ps1, json 에서 6개 문구('중단됨 —', '기동 실패 —', '일시 중지 —', '조치 완료 —', '부하 기준 초과 —', 'DB MODE — 화면')를 검색한 결과 다른 사용처 0건. 나머지 줄표 문구와 상태 표시 기호(✖ ✅ ⚠ ⛔)를 읽는 코드가 있는지는 미확인이라 기호는 이 안에서 제외함.",
+  "targets": [
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/server-service.js",
+    "tools/VibeManager/test/t_job_par.js"
+  ],
+  "before_after": "예 '일시 중지 — 실행 중 화면이 끝나면 멈춤' → '일시 중지. 실행 중 화면이 끝나면 멈춤'. 예 '기동 실패 — 포트 ${it.port} 사용 중' → '기동 실패: 포트 ${it.port} 사용 중'. 예 '부하 기준 초과 — CPU …' → '부하 기준 초과: CPU …' 와 t_job_par.js:57 정규식 /부하 기준 초과: CPU/. 낱말, 주석, 상태 표시 기호는 그대로 둠.",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/job-runner.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet 출력에서 job-runner.js 위반 0, server-service.js 위반 18(기호 17, 틀 1).",
+  "rollback": "VMO 백업본으로 3개 파일 복원",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-19T22:40:58+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T22:42:38+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 236, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2241"
+    },
+    {
+      "at": "2026-11-19T22:42:38+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T22:45:23+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 게이트에서 새로 어긋난 항목 1건: S2 t_server_service.js 실패: exit 1 · PASS 12 · FAIL 1 · FAIL 종료 뒤 상태 down {\"port\":5599,\"label\":\"포트 5599\",\"state\":\"up\",\"since\":1795095917934,\"owner\":\"vm\",\"name\":\"TEST SRV\",\"bootSec\":null} / SOME FAIL · 구문 검사 21개 파일 통과, 시험 17/18개 파일 통과(PASS 235, FAIL 1), 정의 정합 통과 · 대상 파일 3개 복원",
+      "log": ".vibe\\logs\\2026-11-19T22-42-38_claude_orch.log",
+      "sec": 65,
+      "costUsd": 1.3014356,
+      "files": [
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/server-service.js",
+        "tools/VibeManager/test/t_job_par.js"
+      ]
+    },
+    {
+      "at": "2026-11-19T23:20:18+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-19T23:22:30+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 244, FAIL 0), 정의 정합 통과 · 백업 태그 20261119_self2320"
+    },
+    {
+      "at": "2026-11-19T23:22:30+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-19T23:25:19+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 244, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-19T23:25:19+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. python tools/Docs/doc_style.py tools/VibeManager/job-runner.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 출력: 'job-runner.js | 문장 30 | 위반 0', 'server-service.js | 문장 36 | 위반 18 | 기호 17 틀 1'. 종료 코드 1(남은 위반 18건). 기대값과 일치. 시각 2026-11-19 23:23:26 · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-19T23-22-30_claude_orch.log",
+      "sec": 70,
+      "costUsd": 1.2935156,
+      "files": [
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/server-service.js",
+        "tools/VibeManager/test/t_job_par.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|job-runner.js",
+  "auto": true,
+  "autoTried": true,
+  "autoMs": 1795098018581,
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/server-service.js",
+      "tools/VibeManager/test/t_job_par.js"
+    ],
+    "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/job-runner.js tools/VibeManager/server-service.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 출력: 'job-runner.js | 문장 30 | 위반 0', 'server-service.js | 문장 36 | 위반 18 | 기호 17 틀 1'. 종료 코드 1(남은 위반 18건). 기대값과 일치. 시각 2026-11-19 23:23:26",
+    "note": "치환 29건과 t_job_par.js:57 정규식 1건. 주석, 상태 표시 기호, 검사기가 잡지 않은 줄표(server-service.js L213, L266, L273)는 수정하지 않음. tools 폴더 js, py, ps1, json 검색 결과 처음 80건에서 대상 문구를 읽는 코드 없음, 80건 이후는 미확인. node --check 와 test/run_all.js 는 미실행(VMO 가 실행)."
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 21개 파일 통과, 시험 18/18개 파일 통과(PASS 244, FAIL 0), 정의 정합 통과"
+  },
+  "gated": true,
+  "autoTries": 2,
+  "autoFp": "de149d8b9f",
+  "selfTag": "20261119_self2320",
+  "needsReload": true,
+  "appliedMs": 1795098319841,
+  "synced": [
+    "job-runner.js",
+    "server-service.js"
+  ],
+  "snap": "prop_20261119220749_SELF_3"
+}

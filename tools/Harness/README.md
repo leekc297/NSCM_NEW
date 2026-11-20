@@ -147,7 +147,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 ### 도구 등록부
 
 <!-- TOOL-REGISTRY:BEGIN -->
-> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-19 17:09 · 도구 242개 · 손 실행 35개). 직접 고치지 말고 다시 생성한다.
+> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-20 10:12 · 도구 254개 · 손 실행 38개). 직접 고치지 말고 다시 생성한다.
 > 진입 열: `체인 <단계>` = `run_verify.py`(CheckList) 가 그 단계에서 실행 · `VM <작업 id>` = `tools/VibeManager/steps.json` 작업 · `다른 도구가 사용` = import·호출만 · `손 실행` = 어떤 진입점에도 연결 없음(명령줄에서 직접).
 
 
@@ -156,7 +156,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `build_router.py` | 다른 도구가 사용: inventory_check.py, verify_hooks.ps1 | build_router.py — RULESET_MASTER.md 에서 '경량 진입 문서' 2종을 추출 생성한다. |
-| `inventory_check.py` | 다른 도구가 사용: extension.js | 룰·hook·하네스 등록 정합 점검 (2026-11-13 전수 점검에서 상시 도구로 — 읽기 전용) |
+| `inventory_check.py` | 다른 도구가 사용: extension.js, orch-selfcheck.js | 룰·hook·하네스 등록 정합 점검 (2026-11-13 전수 점검에서 상시 도구로 — 읽기 전용) |
 | `scan_labelless_toggle.py` | 다른 도구가 사용: check-ui-gates.ps1 | hook #154 search-condition-labelless-toggle-input-column — 전수 스캔기 (v2 2026-10-23). |
 | `verify_hooks.ps1` | 손 실행(진입점 연결 없음) | verify_hooks.ps1 — 2026-10-12 재구성 검증 (Windows PowerShell 에서 실행) |
 
@@ -215,11 +215,11 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `bucket_day.py` | 다른 도구가 사용: _verify.spec.ts | 사업부 기본 Bucket 요일 — AS-IS UP_FX_GetCommonDataList 'DefaultBucketDay'(SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='DEFAULT_BUCKET_DAY' SEGMENT1=Division SE |
-| `dbconn.py` | 다른 도구가 사용: a1_live.py, all_cols_check.py, asis_batch_facts.py 외 66 | dbconn — NSCM DB 접속정보 레지스트리 (비밀번호는 절대 출력/저장하지 않는다) |
+| `dbconn.py` | 다른 도구가 사용: a1_live.py, all_cols_check.py, asis_batch_facts.py 외 67 | dbconn — NSCM DB 접속정보 레지스트리 (비밀번호는 절대 출력/저장하지 않는다) |
 | `export_tobe_meta.py` | 체인 pre(prereq 안) / VM S2.export | export_tobe_meta — To-Be Oracle 메타를 CSV 로 내려 Doc        obefacts\db\ 에 둔다 (gap.js / gen.js / E2E 생성기가 읽는다). |
 | `gen_golden_cases.py` | 체인 pre(prereq 안) / VM S4.goldgen | gen_golden_cases — 화면별 골든 케이스 초안 생성 (As-is SP ↔ To-Be PKG.PROC 짝 + 파라미터) |
 | `golden.py` | 체인 static / VM S4.golden | golden — As-is SP(MSSQL) 와 To-Be PKG.PROC(Oracle) 를 같은 파라미터로 실행해 결과셋을 대조한다. |
-| `list_asis_programs.py` | 다른 도구가 사용: workbench.js | list_asis_programs — AS-IS DB(.env.asis MSSQL) 접속해서 사용 중(UseYN='Y')인 프로그램 목록을 JSON stdout 으로 반환. |
+| `list_asis_programs.py` | 다른 도구가 사용: jobs.js, workbench.js | list_asis_programs — AS-IS DB(.env.asis MSSQL) 접속해서 사용 중(UseYN='Y')인 프로그램 목록을 JSON stdout 으로 반환. |
 | `meta_apply.py` | VM S5.regrun·S5.regcommit | meta_apply — Vibe_Manager 👀 META 미리보기 / ✅ META 커밋 (사용자 지시 2026-10-22: 사내 META 작업 때 PROCEDURE 도 같이) |
 | `probe.py` | 체인 pre(prereq 안) / VM S2.probe | probe — 등록된 모든 DB 접속을 시험하고 리포트(Doc\db\probe_<날짜>.md)를 남긴다. 비밀번호는 기록하지 않는다. |
 | `run_sql.py` | VM S5.revert·S5.revertcommit | run_sql — 하네스가 생성한 SQL*Plus 스타일 스크립트(<ID>_PKG.sql, <ID>_registration.sql)를 python-oracledb 로 실행한다 (SQL*Plus/SQLcl 불필요) |
@@ -229,7 +229,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `doc_archive.py` | 다른 도구가 사용: make_docs.py, make_test_report.py, make_testcases.py 외 1 | 버전 문서 공용 — 다음 버전 번호 · 이전 버전 old/ 이동 (2026-10-28 사용자 요청) |
-| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 5 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
+| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 6 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
 | `make_docs.py` | VM S3.xlsx | make_docs — 화면 ID 하나로 사람이 보는 Excel 문서 4종을 팀 양식(hook #105 · TestCases4)으로 생성한다. |
 | `make_testcases.py` | 다른 도구가 사용: doc_archive.py, make_docs.py | make_testcases — 단위테스트(TestCases4) 를 '실제 사용자 흐름' 으로 재구성해 생성한다 (2026-10-27 사용자 지시). |
 | `md2xlsx.py` | 다른 도구가 사용: agent.ps1 | md2xlsx — 화면 문서(MD) + Fact Pack CSV + GAP CSV 를 사용자가 보는 Excel 1권으로 묶는다. |
@@ -274,12 +274,15 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
+| `_tmp_new_sort.py` | 손 실행(진입점 연결 없음) | AS-IS 결과 정렬 사실 추출 — SQL(SP ORDER BY) 인지 그리드/코드 정렬인지 (2026-10-26 사용자 지시: "AS-IS 에서 정렬을 어떻게 수행하는지 확인해서 동일하게 SORT 적용") |
 | `a1_live.py` | 체인 post | 화면 실전송 인자로 AS-IS 조회 SP 실행 → 건수·키 대조(2026-11-01 엔진 갭 EG006) |
 | `active_policy.py` | 다른 도구가 사용: combo_oracle.py | 콤보 후보의 Active 정책 판정(2026-11-02 엔진 갭 EG055) |
+| `ai_usage.py` | 손 실행(진입점 연결 없음) | AI 사용량·효과 취합 — AI 적용 지점(tools/Harness/rules/ai_points.csv)별 호출 수·시간·토큰·반영 건수 (2026-11-20 사용자 지시 '불필요한 AI 사용 제거') |
 | `align_check.py` | 체인 static | H1 가로 정렬 정적 검사 — AS-IS 그리드 컬럼 정렬 ↔ TO-BE 컬럼 메타(HORIZONTAL_ALIGN_CODE) + 화면 FE 정렬 덮어쓰기 (2026-10-27) |
 | `all_cols_check.py` | 체인 post | 전 컬럼 선택 조회 SQL 오류(2026-11-03 엔진 갭 EG213 · GAP-340 Forecast Info All ORA-01722 유형) |
 | `applicability.py` | 다른 도구가 사용: e2e_suite_ingest.py, judge.py | GENERAL(타 화면 결함 일반화)·DEFECT·CONFIRMED·RULE_SCREEN 행의 '이 화면 적용 여부'(2026-11-06 플랜 1-4) |
 | `asis_delete.py` | 다른 도구가 사용: _trace.spec.ts, asisdelete.selftest.js, gen_expect.py 외 1 | AS-IS Delete 동작 판정 단일 원천(2026-11-09 T173 — SSP0025 2·4번 허위 FAIL) |
+| `asis_fp.py` | 다른 도구가 사용: asis_live_auto.py, asis_live_screen.py, source_snap.py | AS-IS 실측 재사용 기준 = 원장 지문 (2026-11-20 사용자 지시) |
 | `asis_layout.py` | 다른 도구가 사용: judge.py | AS-IS 조회조건 패널 배치 순서 — 디자이너 LayoutControl 좌표(그룹 오프셋 누적) 기준 위→아래 줄, 줄 안 왼→오른 (2026-10-30 SCP0100 조치 필요 6번 계기 · 검사기 결함 T11) |
 | `asis_live.py` | 다른 도구가 사용: b7_check.py, facts_auth.py, facts_cellclear.py 외 1 | AS-IS 실행되지 않는 코드(진입점 미연결 메서드) 판정 — 검사기 공통 (2026-10-30 SCP0041 조치 필요 3번 계기 · 검사기 결함 T4) |
 | `asis_live_auto.py` | 체인 diff | CheckList 실행 중 AS-IS 런처 자동 구동 (사용자 2026-11-13: "VM CHECKLIST 실행 시 AS-IS 실구동 런처 자동구동해서 필요한 데이터 취합") |
@@ -292,19 +295,24 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `backlog_types.py` | 손 실행(진입점 연결 없음) | 전수 목록의 '아직 증명 안 됨' 을 보완 유형으로 묶는다 (2026-11-12 주기 방식 — 일괄 보완의 작업 단위) |
 | `bg_style_check.py` | 체인 post | AS-IS 조건부 셀 스타일(SetBGColor/SetFontColor/SetForeColor) ↔ TO-BE 화면 스타일 코드 존재(H2 정적 · EG312 · SCPSSP-14) — Doc/verify/<ID>/bg_style.csv (2026-11-03) |
 | `checker_regress.py` | 체인 docs | 검사기 자체 회귀(P3 · 2026-11-06 근본 보완 · W8 플랜 1-6 확장) — 골든 화면의 원장 판정 스냅숏을 기준으로, 검사기·공용 컴포넌트를 고친 뒤 판정이 어떻게 바뀌었는지 대조한다. |
-| `checklist_run.py` | VM S8.checklistRecheck·S8.checklistRun | VM 🔎 CheckList 체인의 1단계·3단계 실행기 (2026-11-18 사용자 지시) |
+| `checklist_run.py` | VM S8.checklistRecheck·S8.checklistRun·S8.checklistDelta | VM 🔎 CheckList 체인의 1단계·3단계 실행기 (2026-11-18 사용자 지시) |
 | `checklist_selftest.py` | 다른 도구가 사용: mutate.ts | CheckList 자기검증(변이 시험) — 검사기가 오류를 실제로 잡는지 화면마다 기계적으로 증명 (2026-10-28) |
 | `cleanup_marker.py` | 체인 post | 정합검증 CRUD 실제 저장 마커 행 정리 — 사내 DB(tobe)에서 E2E 마커 행과 그 저장이 연쇄로 만든 행을 백업 후 삭제(2026-10-24) |
+| `combo_branch_filter.py` | 다른 도구가 사용: eg_auth.spec.ts | AS-IS 조회조건 콤보가 BigFilter(SSP_BIGFILTER)를 거칠 때, 그 결과셋을 만드는 SP @Code 분기 본문의 ATTRIBUTE3 필터를 찾는다. |
 | `combo_live_check.py` | 체인 post | 콤보 응답 ↔ DB 최신 후보 대조(B7 · EG075 · DM-P1/DM-216) — Doc/verify/<ID>/combo_live.csv (2026-11-03) |
 | `combo_oracle.py` | 체인 post | 콤보 후보 AS-IS 원천 비교(W1 · B4 집합 / B3 순서) — Doc/verify/<ID>/combo_oracle.json (2026-10-24) |
 | `coverage.py` | 체인 post | 검사 커버리지 집계 — Doc/verify/<ID>/coverage.csv + 봉투 summary.coverage (2026-10-30 WP8-b · 검사기 결함 T13 "Playwright passed ≠ 판정") |
+| `criteria_build.py` | 다른 도구가 사용: judge.py, make_verify_docs.py, port_review.py 외 1 | 기준 원장(대조표 원장의 기준) 정리 — AS-IS 파싱 목록 · AS-IS 실측 목록 · TO-BE RULE 을 화면 요소에 묶는다 (2026-11-20 사용자 지시) |
 | `db_orphan_sessions.py` | 체인 pre·post | 검증 실행이 사내 Oracle 에 남긴 장시간 세션 찾기·종료 (2026-11-12 T250) |
 | `db_ref_check.py` | 체인 post | DB 참조 정합(2026-11-02 엔진 갭 EG142·EG143) |
 | `db_snapshot.py` | 다른 도구가 사용: _verify.spec.ts | 저장 전후 DB 스냅샷(2026-10-31 E05) — 저장 대상 테이블에서 화면 행과 같은 키의 행을 읽는다. 저장 세부 판정(행 수 불변·감사 컬럼·연계 테이블)의 원천 |
 | `dbq.py` | 다른 도구가 사용: _verify.spec.ts | E2E 시나리오용 단건 DB 조회 — 결과를 JSON 으로 출력(2026-11-03 · dbcell 단계 EG129/EG103) |
 | `decisions.py` | 손 실행(진입점 연결 없음) | 결정표 — 기계로 PASS/FAIL 을 못 정한 항목(판정필요·WARN)을 사람이 한 번에 답할 수 있는 표로 만들고, 답을 원장에 '수동' 판정으로 반영한다 (2026-10-26) |
+| `dedup_general.py` | 다른 도구가 사용: ledger.py | 결함 유형 행 중복 정리 — AI 판단 (2026-11-20 사용자 지시) |
+| `dedup_screen.py` | 다른 도구가 사용: judge.py, llm_review.py, make_verify_docs.py 외 1 | 화면 안 중복 정리 — AI 판단 (2026-11-20 사용자 지시 G2) |
 | `defects_import.py` | VM S8.defects | 결함 원장(사람이 수행한 단위테스트 결과) → Doc/verify/defects_baseline.csv |
 | `defects_sources_merge.py` | VM S8.merge | 원천 CSV(Doc/verify/sources/*.csv · sources_extract.py 산출) → 결함 원장 확장 (2026-10-30 2단계) |
+| `delta_scope.py` | 다른 도구가 사용: checklist_run.py, run_verify.py, source_snap.py | 수정분 재점검 범위 결정 — 코드 규칙 + AI 판단 (2026-11-20 사용자 지시) |
 | `diagnose_layer.py` | VM S8.diagnose | 보완 전 원인 계층 확정(EN-24 · 2026-11-11) — 조치 필요 행마다 원인이 메타·DB 객체·FE 중 어디인지를 '재서' 정한다. |
 | `dict_sweep.py` | 손 실행(진입점 연결 없음) | LBL·MSG·MNU 코드 사전 중복 스윕(2026-11-02 엔진 갭 EG358·EG461 · 문서 DM-96 '동일 문구는 하나의 ID 만') |
 | `diff_ingest.py` | 체인 diff | 차등 검증 결과(Doc/verify/<ID>/diff/diff_summary.csv) → 원장 행(source=ASIS_DIFF · row_id AD-…) + e2e_results.json 반입(2026-11-06 플랜 2-4) |
@@ -313,6 +321,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `doc_patterns.py` | 다른 도구가 사용: gen_expect.py, pattern_coverage.py | doc_patterns.py — 문서 행 → 결함 패턴 연결표(W8-3, 2026-11-05) |
 | `doc_proof.py` | 다른 도구가 사용: doc_patterns.py, engine_audit.py, run_docs_batch.py | 3개 문서(defects_classified.csv) 기준 검증엔진 입증 현황 — 진행율의 단일 출처(2026-10-31 사용자: 감·예측 금지, 3개 문서 전체 확인 가능해야 함) |
 | `e2e_paths.py` | 다른 도구가 사용: e2e_suite.py, e2e_suite_ingest.py, judge.py 외 4 | e2e_paths — 화면별 E2E 결과·로그 위치 찾기 (2026-11-06 사용자 지시: 화면 ID 중간 폴더) |
+| `e2e_shard.py` | 다른 도구가 사용: run_verify.py | 한 화면 E2E 나눠 동시 실행 (2026-11-20 D1 · 사용자 지시) |
 | `e2e_suite.py` | 다른 도구가 사용: e2e_suite_ingest.py, run_verify.py, unverified_resolve.py | CheckList 안에서 E2E 테스트 4종 실행 (2026-11-18 사용자 지시) |
 | `e2e_suite_ingest.py` | 다른 도구가 사용: e2e_suite.py, run_verify.py | E2E 테스트 결과 중 CheckList 판정에 들어가지 않던 기능 시험 → 원장 ES- 행 (2026-11-18 사용자 지시 |
 | `eg_chain.py` | 체인 eg | 엔진 갭 전용 검사기 실행(2026-11-01) — 팝업(eg_popup)·Division·권한(eg_auth). run_verify 가 화면 잠금을 쥔 채로 부른다(--tier all/slow) |
@@ -362,15 +371,16 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `judge_popup_selftest.py` | 손 실행(진입점 연결 없음) | judge.py 의 팝업 문장 → 팝업 클래스 해석(T269) 변이 입증 |
 | `keyset_guard.py` | 손 실행(진입점 연결 없음) | 키 범위 스냅샷·복원 — 자동 복원기(restore_touched)가 못 되살리는 '지우고 다시 넣기·삭제' 저장 시험용 (2026-11-04 · GAP-175) |
 | `ledger.py` | 체인 facts | 화면 검증 항목 원장 생성 — Doc/verify/<ID>/verify_ledger.csv |
+| `ledger_diff.py` | 손 실행(진입점 연결 없음) | 원장 전후 대조 (2026-11-20 CheckList 속도 개선 플랜 R0) |
 | `ledger_guard.py` | 다른 도구가 사용: _verify.spec.ts, cleanup_marker.py | 정합검증 CRUD 실제 저장 안전장치 — 저장 직전 빈 키 확인 · 공유 마스터 스냅샷 기록(2026-10-24) |
-| `llm_call.py` | 다른 도구가 사용: llm_desc.py, llm_facts.py, llm_review.py 외 2 | AI 검토 공용 호출기 — 검증 체인(Python)에서 Claude Code 를 읽기 전용으로 불러 JSON 답을 받는다 (2026-11-19 사용자 지시) |
+| `llm_call.py` | 다른 도구가 사용: criteria_build.py, dedup_general.py, dedup_screen.py 외 8 | AI 검토 공용 호출기 — 검증 체인(Python)에서 Claude Code 를 읽기 전용으로 불러 JSON 답을 받는다 (2026-11-19 사용자 지시) |
 | `llm_desc.py` | 다른 도구가 사용: make_verify_docs.py, run_verify.py | CheckList 설명 문장 작성 — '조치 필요'·'판정 필요' 시트의 설명 칸 정리 문장을 Claude 가 쓴다 (2026-11-19 사용자 지시 · 적용 단계 '설명 문장 작성') |
 | `llm_facts.py` | 다른 도구가 사용: judge.py, run_verify.py | AS-IS 사실 추출 검토 — 검사엔진이 기대값으로 쓰는 AS-IS 사실 추출본을 Claude 가 화면 원문과 대조해 누락·오추출을 찾는다 (2026-11-19 사용자 지시 · 적용 단계 'AS-IS 사실 추출 검토') |
-| `llm_review.py` | 다른 도구가 사용: judge.py, llm_desc.py, llm_facts.py 외 4 | AI 판정 검토 — 검사엔진이 FAIL·판정필요·미검증으로 남긴 행을 Claude 가 원문과 대조해 가린다 (2026-11-19 사용자 지시) |
+| `llm_review.py` | 다른 도구가 사용: criteria_build.py, dedup_screen.py, judge.py 외 7 | AI 판정 검토 — 검사엔진이 FAIL·판정필요·미검증으로 남긴 행을 Claude 가 원문과 대조해 가린다 (2026-11-19 사용자 지시) |
 | `lookup_check.py` | 체인 post | Lookup 기반 셀 편집 후보 판정(2026-11-01 엔진 갭 EG066) |
 | `make_test_report.py` | VM S8.report | 테스트결과서 — UI CheckList(run_verify) 결과를 사용자가 읽는 '테스트 내역 · 결과' Excel 로 (2026-10-30 사용자 요청) |
 | `make_ui_test_sheet.py` | VM S8.uitest | UI 테스트 Sheet — CheckList '조치 필요' 시트를 Doc/UI_TEST(SCP&SSP) 의 화면별 테스트 Excel 로 옮긴다 |
-| `make_verify_docs.py` | 다른 도구가 사용: decisions.py, doc_archive.py, llm_desc.py 외 6 | 화면 정합검증서 + 보완대상목록 xlsx 생성 |
+| `make_verify_docs.py` | 다른 도구가 사용: decisions.py, dedup_screen.py, doc_archive.py 외 7 | 화면 정합검증서 + 보완대상목록 xlsx 생성 |
 | `mapping_trace.py` | 체인 static·post | 대조표 ↔ 검증 추적표 v2 — 대조표의 모든 행을 '검증 대상'으로 보고, 행마다 해야 할 검사를 카탈로그로 정해 결과를 단다 (2026-10-26) |
 | `master_sweep.py` | 체인 post | 기준정보 존재·활성 스윕(2026-11-02 엔진 갭 EG455) |
 | `measure_by_site_check.py` | 체인 post | Sales Site 유형별 입력 Measure 허용 목록(B5 · EG068 · DM-37/DM-135/DM-139/DM-153) — Doc/verify/<ID>/measure_by_site.csv (2026-11-03) |
@@ -388,11 +398,12 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `plain_detail.py` | 손 실행(진입점 연결 없음) | plain_detail — CheckList '설명' 열을 처음 보는 사람도 읽을 수 있게 다시 쓴다 (사용자 2026-11-13). |
 | `popup_args_check.py` | 체인 static | G5 팝업 조건 연동 정적 검사 — AS-IS 팝업 호출 인자 ↔ TO-BE 모달 전달값 + 화면 조회조건 연동 (2026-10-29) |
 | `popup_data_check.py` | 체인 static | M3 팝업 데이터 조회 정적+DB 검사 — AS-IS 개인화(TitleSet) 팝업 목록 ↔ TO-BE 메타 조회를 '화면이 보낼 수 있는 Division 값'마다 실행 (2026-10-30) |
+| `port_review.py` | 손 실행(진입점 연결 없음) | UI 개발·보완 AI 지점(UI/DB MODE · 2026-11-20 사용자 지시 'UI 개발, UI 보완의 전반적인 과정에 AI 적용 고민') — 구간 D1·D3·D4 |
 | `precision.py` | 체인 docs | 조치필요 정밀도(2026-11-06 플랜 G1) — 판(version)마다 '조치 필요' 시트 행 수 ÷ 사용자 확인 실결함 수를 기록한다. |
 | `prereq.py` | 체인 pre / VM S3.prep | 정합검증 사전 작업 점검·선수행 — run_verify.py 1단계 앞에서 실행 (2026-10-28) |
 | `proof_backlog.py` | 다른 도구가 사용: asis_live_proof_targets.py, backlog_types.py | proof_backlog.py — "AS-IS 기능 100% 구현 증명"까지 남은 일의 전수 목록 (2026-11-11 사용자 지시: "누락하지 말고 … 순차적으로 하나씩 · 해야 할 일을 누락하고 완료되었다고 보고하지 말 것") |
 | `regress.py` | 체인 docs | 검사기 회귀 게이트(2026-10-29 사용자: "검사기 오류로 인한 조치 필요 항목 — 재발하지 않도록") — 사용자 판정을 회귀 오라클로 쓴다. |
-| `repair_apply.py` | 손 실행(진입점 연결 없음) | 레시피 자동 적용기(보완실행 단계 · 2026-11-08 사용자 결정 '남은 것 진행' ③) — fixlist.csv × fix_recipes.csv 중 auto_apply=Y 이고 sql_template 이 있는 DB 레시피만 |
+| `repair_apply.py` | 다른 도구가 사용: port_review.py | 레시피 자동 적용기(보완실행 단계 · 2026-11-08 사용자 결정 '남은 것 진행' ③) — fixlist.csv × fix_recipes.csv 중 auto_apply=Y 이고 sql_template 이 있는 DB 레시피만 |
 | `repair_close.py` | VM S8.repairSnapshot·S8.repairClose·S8.repairCompare | 보완 증명 루프(EN-01 · 2026-11-11) — 보완한 항목이 실제로 고쳐졌는지를 '고친 규칙만 다시 측정'해서 증명하고, 다른 항목이 나빠지지 않았는지 확인한다. |
 | `repair_plan.py` | 손 실행(진입점 연결 없음) | 보완 계획 — fixlist.csv(조치 필요·판정 필요 행) × fix_recipes.csv(규칙별 보정 레시피) → Doc/verify/<ID>/repair_plan.md (2026-11-08 · 사용자 결정 '순차 진행' (c)) |
 | `repair_scope.py` | 다른 도구가 사용: repair_close.py | 보완 영향 범위 산출(EN-23 · 2026-11-11) — 직전 정합검증 뒤에 '실제로 바뀐 것'을 측정하고, 그 변경이 걸리는 원장 행·검사 규칙을 사실로 계산한다. |
@@ -405,7 +416,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `save_diff_targets.py` | 다른 도구가 사용: save_diff.py, sqllog_calls.py | save_diff_targets.py — EN-02 ③ 저장 SP 실행 대조의 대상·제외 목록 (2026-11-11 · 플랜 '추측 대신 실행' M1) |
 | `save_residue.py` | 다른 도구가 사용: cleanup_marker.py, gen_cleanup_spec.py, run_docs_batch.py | 실저장 잔존 변경 실측(2026-10-31) — 저장 대상 테이블에서 E2E 계정이 --since 이후 만들거나 고친 행 수를 DB 에서 센다. 정리가 끝났다는 주장의 증거. |
 | `scenario_env.py` | 체인 facts | scenario_env.py <ID> [...] — 화면별 데이터 전제 프로필(W8-5, 2026-11-05) → Doc/verify/<ID>/scenario_env.json |
-| `server_guard.py` | 다른 도구가 사용: nscm.ts, run-e2e.cmd, run_verify.py 외 1 | CheckList 서버 확인·자동 기동 (2026-11-19 사용자 지시) |
+| `server_guard.py` | 다른 도구가 사용: nscm.ts, orch-agent.js, run-e2e.cmd 외 2 | CheckList 서버 확인·자동 기동 (2026-11-19 사용자 지시) |
 | `set_llm_review.py` | VM S8.llmReview | AI 검토 켜고 끄기 — tools/Harness/harness.json 의 llmReview 를 읽고 쓴다(단일 원천 · 2026-11-19 사용자 지시 'VM 환경설정에 AI 검토 켜고 끄는 항목') |
 | `set_scope.py` | VM S8.scope | 보완 범위 환경설정 — tools/Harness/harness.json 의 repairScope 를 읽고 쓴다(단일 원천) |
 | `sheet_data_cond.py` | 다른 도구가 사용: asis_live_scen_run.py, smoke-extra.ts | 시트별 데이터 조건 탐색(2026-11-17 SCP0104 SOP 탭 0행 미측정 대응). |
@@ -415,6 +426,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `snap_validate.py` | 체인 post | 수신 스냅샷(snap/received) ↔ AS-IS 유래 기대(snap/expected) 대조 — 골든 승인 전 기계 검증(2026-11-06 플랜 3-4) |
 | `sort_check.py` | 체인 static | 결과 정렬(A6) 정적 대조 — AS-IS SP ORDER BY(sort_rules.csv) ↔ TO-BE PKG 프로시저 ORDER BY(사내오라클 ALL_SOURCE 새로 조회) (2026-10-26) |
 | `sort_ci_check.py` | 체인 post | 문자 정렬 키의 대소문자 무시·NULL 먼저 점검(2026-11-02 엔진 갭 EG034) |
+| `source_snap.py` | 다른 도구가 사용: delta_scope.py, run_verify.py | 화면 소스 기준선(지문) — 수정분 재점검의 바탕 (2026-11-20 사용자 지시) |
 | `sources_extract.py` | VM S8.sources | 검증 지식 원천 xlsx 3개 → MD + 기계판독 CSV + 이미지 (누락 0 증명 포함) — Doc/verify/sources/ |
 | `sp_branch_check.py` | 체인 post | 저장 SP 검증 분기 대조(2026-11-01 엔진 갭 EG161) — AS-IS 저장 SP 의 오류 문구 ↔ TO-BE 저장 PROC·화면 코드 |
 | `sp_dml_check.py` | 체인 post | 저장 SP 쓰기 컬럼 대조(2026-11-01 엔진 갭 EG238·EG230·EG223) — AS-IS 저장 SP 가 쓰는 표·컬럼 ↔ TO-BE 저장 PROC |

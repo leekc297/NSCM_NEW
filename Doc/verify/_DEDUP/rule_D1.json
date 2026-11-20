@@ -1,0 +1,120 @@
+{
+ "rule_id": "D1",
+ "hash": "d340eab6f4f4bbc4",
+ "groups": [
+  {
+   "refs": [
+    "DM-23",
+    "DM-92"
+   ],
+   "target": "신규 행 Team·End Customer 등 자동 매핑 컬럼",
+   "condition": "신규 행 입력",
+   "expected": "Team·End Customer 는 SSPM(Sales Site+Project+Item) 또는 Sales Site 기준으로 자동 입력되고 편집할 수 없다. Energy(WH) 같은 마스터 파생 컬럼도 자동 입력되고 편집할 수 없다.",
+   "why": "두 항목 모두 신규 행에서 Team·End Customer 가 자동으로 들어가고 편집이 막히는지 확인하므로 확인 동작과 기대 결과가 같다."
+  },
+  {
+   "refs": [
+    "DM-24",
+    "DM-97"
+   ],
+   "target": "컬럼 편집 가능 여부와 UI Category 일치",
+   "condition": "",
+   "expected": "UI Category 가 S 인 컬럼(예: Price Exist)은 편집할 수 없고, INPUT=O 인 컬럼(예: Cell Model·Cell Model Info)은 편집할 수 있다.",
+   "why": "두 항목 모두 컬럼의 편집 가능 여부가 UI Category 정의와 맞는지 대조하는 같은 확인이다."
+  },
+  {
+   "refs": [
+    "DM-110"
+   ],
+   "target": "ETC 신규 행 Team·Measure 컬럼",
+   "condition": "FCST Type=ETC 신규 행",
+   "expected": "Team 은 SSPM 기준 콤보로 입력하는 필수 컬럼이다. Measure 는 Sales AMT(LOC)로 고정되어 입력할 수 없다.",
+   "why": "Team 을 입력·필수로 두고 Measure 를 고정하는 조합이라 자동 매핑 묶음과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-151"
+   ],
+   "target": "신규 행 Sales Site·Project·Model·Team 입력",
+   "condition": "신규 행",
+   "expected": "Sales Site 를 입력할 수 있다. Project 팝업은 열릴 때 자동 조회된다. Model 후보는 SALES_PLAN_ITEM_ID 룩업 결과다. Team 은 SSPM 기준 팝업으로 입력한다.",
+   "why": "여러 컬럼의 입력 방식을 함께 확인하는 항목이라 다른 항목과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "DM-18"
+   ],
+   "target": "Team 팝업 컬럼 붙여넣기·필수 Validation",
+   "condition": "복사/붙여넣기로 Team·Project 입력 후 저장",
+   "expected": "Team 을 붙여넣으면 코드가 함께 들어간다. 입력된 필수 컬럼을 미입력으로 오판하지 않는다. Team 은 직접 편집할 수 없고 삭제·붙여넣기·팝업으로만 바꿀 수 있다.",
+   "why": "붙여넣기와 필수 Validation 동작을 보는 확인이라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-189"
+   ],
+   "target": "Dept 컬럼 자동 세팅·Use Y/N 헤더",
+   "condition": "User 선택·신규 사용자 저장",
+   "expected": "Dept 는 입력할 수 없고 User 를 선택하면 SSO DEPT 가 자동으로 세팅된다. 저장 후 DEPT ID/Name 이 표시되고 Use Y/N 헤더는 병합된다.",
+   "why": "사용자 관리 특유의 Dept 자동 세팅과 헤더 병합을 확인하므로 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-196"
+   ],
+   "target": "URL-ROUTE_PATH 컬럼 입력",
+   "condition": "",
+   "expected": "UI 에서 ROUTE_PATH 를 입력하고 저장할 수 있다.",
+   "why": "특정 컬럼을 입력·저장할 수 있는지 보는 고유 확인이다."
+  },
+  {
+   "refs": [
+    "DM-245"
+   ],
+   "target": "병합 셀 콤보 입력",
+   "condition": "병합 셀 더블클릭",
+   "expected": "병합 상태가 유지된 채로 콤보 입력이 가능하다.",
+   "why": "병합 셀에서의 편집 동작이라 다른 항목과 확인 대상이 다르다."
+  },
+  {
+   "refs": [
+    "DM-32"
+   ],
+   "target": "필터/Sort 상태 Insert 위치·편집",
+   "condition": "필터·Sort 적용 상태에서 Insert",
+   "expected": "필터·Sort 적용 여부와 상관없이 Insert 한 행이 선택행 위에 추가된다. Sort/Filter 상태와 신규행(Project 등) 편집 가능 여부도 그대로 유지된다.",
+   "why": "필터·Sort 조건에서의 Insert 동작은 단독 확인 대상이다."
+  },
+  {
+   "refs": [
+    "DM-84"
+   ],
+   "target": "Currency 고정·중복 Keyset·Insert 위치·Delete",
+   "condition": "신규행 Insert",
+   "expected": "Currency 는 KRW 로 고정되어 편집할 수 없다. Keyset 이 중복되면 \"중복된 데이터가 있습니다\" 메시지가 나온다. Insert 한 행은 선택 위치 위에 추가되고 Delete 버튼이 있다.",
+   "why": "여러 확인이 한데 묶인 복합 항목이라 일부만 겹치는 다른 항목과 합치면 검사가 빠질 수 있어 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-P36"
+   ],
+   "target": "Sales Site·End Customer 셀 연동",
+   "condition": "신규 행 Sales Site 선택 후 End Customer 변경",
+   "expected": "End Customer 를 바꿔도 이미 고른 Sales Site 가 초기화되지 않는다(End Customer 를 자동 입력하면 해소됨).",
+   "why": "셀 사이 연동 때문에 값이 초기화되는지 보는 확인이라 자동 매핑 묶음과 기대 결과가 다르다."
+  },
+  {
+   "refs": [
+    "SCPSSP-18"
+   ],
+   "target": "Insert 행 Div 셀·하위 Site 후보",
+   "condition": "Insert 신규행",
+   "expected": "Div 를 변경할 수 있고, 변경하면 하위 Site 후보가 다시 구성된다.",
+   "why": "상위 셀 변경에 따른 하위 후보 재구성을 확인하는 고유 항목이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:23",
+ "cost": 0.0975972
+}

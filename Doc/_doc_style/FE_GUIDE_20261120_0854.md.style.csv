@@ -1,0 +1,2 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장
+,L53,기호,/SEARCH · PKG_SCP0005.P_SCP0005_GET_ROUTE_HIST · 구현 위치 D,가운뎃점 나열 → 쉼표,- 변경 후: `| R8 ROUTE_ID | 더블클릭 → 이력 창(SCP0005_DistributionRoutePopup cs:1093~1103 · SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID(p_route_id)) → TO-BE history/SEARCH · PKG_SCP0005.P_SCP0005_GET_ROUTE_HIST · 구현 위치 DistributionRouteGrid.tsx 더블클릭 처리 |`

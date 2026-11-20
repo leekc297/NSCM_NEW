@@ -1,0 +1,163 @@
+{
+ "menu_id": "SSP0005",
+ "asis_id": "SSP0005",
+ "at": "2026-11-20 09:02:19",
+ "result": "FAIL",
+ "fails": [
+  "SSP ADMIN U→EDIT: AS-IS 허용 ↔ TO-BE 불가"
+ ],
+ "gaps": [],
+ "notes": [
+  "TO-BE 전용 버튼 ['EXCEL', 'GET_SCP_PERIOD'](AS-IS ACL 대응 없음 · 비교 제외)"
+ ],
+ "asis_groups": {
+  "ADMIN": "CRUD",
+  "CAPA Planner": "R",
+  "DM ADMIN": "R",
+  "DM Planner": "R",
+  "DM Viewer": "R",
+  "FP Planner": "R",
+  "FP Viewer": "R",
+  "SCM PI Admin": "CRUD",
+  "SCM Viewer": "R",
+  "SCP Planner": "R",
+  "SCP Tester": "R",
+  "SSP ADMIN": "CRUD",
+  "SSP Planner": "CRUD",
+  "SSP Viewer": "R"
+ },
+ "tobe_groups": [
+  "ADMIN",
+  "CAPA Planner",
+  "DM ADMIN",
+  "DM Planner",
+  "DM Viewer",
+  "FP Planner",
+  "FP Viewer",
+  "SCM PI Admin",
+  "SCM Viewer",
+  "SCP Planner",
+  "SCP Tester",
+  "SSP ADMIN",
+  "SSP Planner",
+  "SSP Viewer"
+ ],
+ "tobe_buttons": {
+  "ADMIN": [
+   "DELETE",
+   "EDIT",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "CAPA Planner": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "DM ADMIN": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "DM Planner": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "DM Viewer": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "FP Planner": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "FP Viewer": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SCM PI Admin": [
+   "DELETE",
+   "EDIT",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SCM Viewer": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SCP Planner": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SCP Tester": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ],
+  "SSP ADMIN": [
+   "DELETE",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SSP Planner": [
+   "DELETE",
+   "EDIT",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "SSP Viewer": [
+   "DELETE(N)",
+   "EXCEL",
+   "GET_SCP_PERIOD",
+   "INSERT(N)",
+   "SAVE(N)",
+   "SEARCH"
+  ]
+ },
+ "why": "그룹 14↔14 · SSP ADMIN U→EDIT: AS-IS 허용 ↔ TO-BE 불가"
+}

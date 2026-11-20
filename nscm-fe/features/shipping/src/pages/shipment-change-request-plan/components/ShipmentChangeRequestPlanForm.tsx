@@ -8,6 +8,7 @@ import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
+import { createMultilinePasteHandler } from '@shared/paste';
 import { confirmIfDirtyKey, tabDirtyKey, useSessionStore, useTabid } from '@shared/stores';
 
 import {
@@ -247,6 +248,12 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
                       />
                     ),
                   }}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.itemId,
+                      next => set({ itemId: next }),
+                    ),
+                  }}
                   onChange={e => set({ itemId: e.target.value })}
                 />
               )}
@@ -264,6 +271,12 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
                   fullWidth
                   disabled={noDivisionAuth}
                   value={sc.erpSoNo}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.erpSoNo,
+                      next => set({ erpSoNo: next }),
+                    ),
+                  }}
                   onChange={e => set({ erpSoNo: e.target.value })}
                 />
               )}
@@ -281,6 +294,12 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
                   fullWidth
                   disabled={noDivisionAuth}
                   value={sc.confirmId}
+                  inputProps={{
+                    onPaste: createMultilinePasteHandler(
+                      () => sc.confirmId,
+                      next => set({ confirmId: next }),
+                    ),
+                  }}
                   onChange={e => set({ confirmId: e.target.value })}
                 />
               )}

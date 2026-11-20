@@ -9,7 +9,7 @@ const vs = new Proxy({}, { get: (t, k) => {
   return function () { };
 } });
 const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
-const dir = process.argv[2] || path.join(__dirname, '..');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'jobpar-')); const vibeDir = path.join(root, '.vibe');
 const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
 const setCfg = (scope, orch) => W('tools/Harness/harness.json', JSON.stringify({ repairScope: scope, llmReview: false, orch: Object.assign({ jobPollMs: 200, jobBusyPollMs: 300, jobMaxPar: 3 }, orch) }));
@@ -54,7 +54,7 @@ const stt = j => j.screens.map(s => `${s.id}:${s.status}`).join(' ');
   reset('times.txt'); setCfg('DB_FE', { jobLoadCpuMax: 0, jobLoadMemFreeMinMB: 0, jobRampSec: 0 });
   let sawAdmit = ''; const un = jr.on((id, kind, d) => { if (kind === 'job') { const s = d.screens.find(x => x.status === 'admit'); if (s) sawAdmit = s.summary; } });
   t0 = Date.now(); j = jr.create({ itemLabel: '느린 업무', screens: ['TST0011', 'TST0012', 'TST0013'], mode: 'par', maxPar: 3 }); jr.start(j.id); a = await waitEnd(j.id); const seqMs = Date.now() - t0; un();
-  chk('부하 기준 초과 = 순차(겹침 1) · 입장 대기 사유 표시', a.status === 'done' && maxOverlap('times.txt') === 1 && /부하 기준 초과 — CPU/.test(sawAdmit), `겹침 ${maxOverlap('times.txt')} · ${seqMs}ms · ${sawAdmit}`);
+  chk('부하 기준 초과 = 순차(겹침 1) · 입장 대기 사유 표시', a.status === 'done' && maxOverlap('times.txt') === 1 && /부하 기준 초과: CPU/.test(sawAdmit), `겹침 ${maxOverlap('times.txt')} · ${seqMs}ms · ${sawAdmit}`);
   // 3) 입장 간격: 방금 시작한 화면이 있으면 그 간격 동안 다음 화면을 들이지 않는다
   reset('times.txt'); setCfg('DB_FE', { jobLoadCpuMax: 101, jobLoadMemFreeMinMB: 0, jobRampSec: 60 });
   let sawRamp = ''; const un2 = jr.on((id, kind, d) => { if (kind === 'job') { const s = d.screens.find(x => x.status === 'admit'); if (s) sawRamp = s.summary; } });
@@ -79,7 +79,7 @@ const stt = j => j.screens.map(s => `${s.id}:${s.status}`).join(' ');
   j = jr.create({ itemLabel: '느린 업무', screens: ['TST0061', 'TST0062', 'TST0063'], mode: 'seq' }); jr.start(j.id); await sleep(400);
   const inc = watch.raise('R6', { sig: 'R6|listen|8080', title: '서버 응답 없음 — BE 포트 8080', evidence: { port: 8080 } });
   await sleep(200); const mid = jr.get(j.id);
-  chk('서버 이상 사건 → 작업 일시 중지 요청', mid.status === 'pausing' && mid.pausedBy === 'orch' && /VMO 일시 중지/.test(mid.note) && (watch.get(inc.id).actions || []).some(x => /업무 작업 1건 일시 중지/.test(x.what)), mid.status + ' ' + mid.note);
+  chk('서버 이상 사건 → 작업 일시 중지 요청', mid.status === 'pausing' && mid.pausedBy === 'orch' && /VMO 일시 중지/.test(mid.note) && (watch.get(inc.id).actions || []).some(x => /VMW 작업 1건 일시 중지/.test(x.what)), mid.status + ' ' + mid.note);
   a = await waitEnd(j.id); chk('실행 중 화면은 끝까지 · 새 화면 시작 안 함', a.status === 'paused' && stt(a) === 'TST0061:done TST0062:wait TST0063:wait', stt(a));
   watch.update(inc.id, { status: 'resolved' }, { by: 'VMO', what: '서버 재기동 완료' });
   await sleep(300); chk('사건 해결 → 작업 다시 진행', jr.get(j.id).status === 'running', jr.get(j.id).status);

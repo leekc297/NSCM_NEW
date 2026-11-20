@@ -1,0 +1,102 @@
+{
+ "rule_id": "J4",
+ "hash": "6efdb6c5fc8db036",
+ "groups": [
+  {
+   "rows": [
+    "EG-26655e03"
+   ],
+   "why": "Checks only the SCP/40/SCP Planner role group in the menu tree. A different role group is a different element, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-3b82fdc6"
+   ],
+   "why": "Checks only the SCP/81/SCM PI Admin role group. The expected text matches other rows, but the group being checked is different."
+  },
+  {
+   "rows": [
+    "EG-3dfff694"
+   ],
+   "why": "Checks only the SCP/81/SCP Planner role group, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-613f00a8"
+   ],
+   "why": "Checks only the SCP/81/SCM Viewer role group, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-61bb436c"
+   ],
+   "why": "Checks the SCP/40/ADMIN role group, which expects 2 of 3 groups to have menu permission. Both the element and the expected result differ, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-8a6f6660"
+   ],
+   "why": "Checks only the SCP/40/SCM PI Admin role group, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-b343fb79"
+   ],
+   "why": "Checks only the SCP/40/SCM Viewer role group, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-fac3f7e5"
+   ],
+   "why": "Checks only the SCP/82/SCM Viewer role group, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-ffd49731"
+   ],
+   "why": "Checks the SCP/40/SCP Tester role group, which expects 7 of 8 groups to have menu permission. Both the element and the expected result differ, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-9610f4d1",
+    "V-289d5d81"
+   ],
+   "why": "Both log in with an account that has no permission and expect the Auth Request screen to show as the main screen. Same element, same method, same expected result."
+  },
+  {
+   "rows": [
+    "V-acd1b960",
+    "V-3504e487"
+   ],
+   "why": "Both open the SCP0028 screen from its menu and expect it to display with no 404 or request failure. Same element, same method, same expected result."
+  },
+  {
+   "rows": [
+    "V-4b19e25c"
+   ],
+   "why": "This applies the DMF0082 defect to this screen. It checks the Division default value as well as menu-tree permission filtering and 404s, under a single SCP Planner permission. That scope is different from the other rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-15f47ff2"
+   ],
+   "why": "Expects the menu and button permissions to match the AS-IS production data."
+  },
+  {
+   "rows": [
+    "V-6f906fa2"
+   ],
+   "why": "Uses the TO-BE permission settings as the standard and counts differences from AS-IS as a PASS. That is the opposite of V-15f47ff2's expected result, so the two stay separate."
+  },
+  {
+   "rows": [
+    "V-b45d4015"
+   ],
+   "why": "Checks that the tab name at the top equals the registered menu name. No other row checks this element or expects this result."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:38:03",
+ "cost": 0.06698029999999999
+}

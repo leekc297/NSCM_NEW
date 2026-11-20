@@ -1,8 +1,8 @@
 {
- "at": "2026-11-19 18:48:51",
- "mode": "quick",
- "seconds": 3.7,
- "fingerprint": "f960ae56db1d97fff1538114b01d94084f367179",
+ "at": "2026-11-20 10:16:03",
+ "mode": "full",
+ "seconds": 29.2,
+ "fingerprint": "d554550746e7a7ae6474fe8ef5fb66e8bcfbe36c",
  "result": "PASS",
  "counts": {
   "PY_COMPILE": {
@@ -24,6 +24,22 @@
   "SPEC_SIZE": {
    "found": 0,
    "new": 0
+  },
+  "TSC": {
+   "found": 0,
+   "new": 0
+  },
+  "SELFTEST_JS": {
+   "found": 0,
+   "new": 0
+  },
+  "SELFTEST_PY": {
+   "found": 0,
+   "new": 0
+  },
+  "RULE_REGISTRY": {
+   "found": 0,
+   "new": 0
   }
  },
  "new": {
@@ -31,19 +47,30 @@
   "PY_UNDEF": [],
   "CTRL_CHARS": [],
   "JS_SYNTAX": [],
-  "SPEC_SIZE": []
+  "SPEC_SIZE": [],
+  "TSC": [],
+  "SELFTEST_JS": [],
+  "SELFTEST_PY": [],
+  "RULE_REGISTRY": []
  },
- "meta": {},
+ "meta": {
+  "selftest_js_ran": 32,
+  "selftest_py_ran": 63,
+  "selftest_py_skipped_db": [
+   "orch_event.py",
+   "safe_io.py"
+  ]
+ },
  "sizes": {
-  "Doc/e2e/specs/_verify.spec.ts": 737537,
-  "Doc/e2e/specs/_trace.spec.ts": 377070,
-  "Doc/e2e/specs/_snap.spec.ts": 20372,
-  "Doc/e2e/specs/eg_popup.spec.ts": 113687,
-  "tools/Harness/verify/judge.py": 309011,
-  "tools/Harness/verify/run_verify.py": 92892,
-  "tools/Harness/verify/mapping_trace.py": 170627,
-  "tools/E2E/lib/nscm.ts": 94942,
-  "tools/E2E/lib/probe.ts": 50397
+  "Doc/e2e/specs/_verify.spec.ts": 747824,
+  "Doc/e2e/specs/_trace.spec.ts": 386585,
+  "Doc/e2e/specs/_snap.spec.ts": 20536,
+  "Doc/e2e/specs/eg_popup.spec.ts": 114664,
+  "tools/Harness/verify/judge.py": 322530,
+  "tools/Harness/verify/run_verify.py": 105872,
+  "tools/Harness/verify/mapping_trace.py": 190839,
+  "tools/E2E/lib/nscm.ts": 105632,
+  "tools/E2E/lib/probe.ts": 51842
  },
- "full_pass_fingerprint": "f960ae56db1d97fff1538114b01d94084f367179"
+ "full_pass_fingerprint": "d554550746e7a7ae6474fe8ef5fb66e8bcfbe36c"
 }

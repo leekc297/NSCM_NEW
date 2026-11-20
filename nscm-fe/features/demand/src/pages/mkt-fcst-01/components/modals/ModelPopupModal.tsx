@@ -140,7 +140,7 @@ export const ModelPopupModal = ({ open, modalClose, preSearchParams, onSelect }:
         </div>
       }
       customContentArea={
-        <div className={styles.modalContentWrapper}>
+        <div className={`${styles.modalContentWrapper} ${styles.searchModalGap}`}>
           <SearchArea
             searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleSearch}
@@ -167,7 +167,7 @@ export const ModelPopupModal = ({ open, modalClose, preSearchParams, onSelect }:
                     )}
                   />
                 </Grid>
-                {readOnlyField(t('LBL01232', 'Prod. Country'), searchParam?.prdnCtry)}
+                {readOnlyField(t('LBL01278', 'Prod. Country'), searchParam?.prdnCtry)}
               </>
             }
           />
@@ -190,6 +190,7 @@ export const ModelPopupModal = ({ open, modalClose, preSearchParams, onSelect }:
             </ResultArea>
           </div>
           <div className={styles.modalButtonWrapper}>
+            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Close' onClick={modalClose} />
             <Button
               appearance='contained'
               priority='primary'
@@ -199,7 +200,6 @@ export const ModelPopupModal = ({ open, modalClose, preSearchParams, onSelect }:
               iconPosition='leading'
               onClick={handleOk}
             />
-            <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Close' onClick={modalClose} />
           </div>
         </div>
       }

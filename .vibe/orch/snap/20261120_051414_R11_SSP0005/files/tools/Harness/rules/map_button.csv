@@ -1,0 +1,15 @@
+name_pattern,kind,tobe,modal,note
+^btnColumn$,subtitle-custom,COLUMN_SETUP,ColumnLayoutModal,컬럼 설정 — SubTitle customButtons + IcGridColumnSetup
+^btnMeasure$,subtitle-custom,MEASURE_SELECT,MeasureSelectModal,Measure 선택
+^btn(Item|Model|Material)(Id)?$,field-popup,FunctionSearchIcon,ItemByDivisionModal,짝 텍스트필드(txtItemId 등) 와 합쳐 ItemField 류 팝업 필드
+^btnProject$,field-popup,FunctionSearchIcon,ProjectByDivisionModal,
+^btnOwner$,field-popup,FunctionSearchIcon,OwnerByDivisionModal,
+^btnCustomer$,field-popup,FunctionSearchIcon,CustomerModal,
+^btn(Search|Find|Inquiry|Retrieve)$,search,SearchArea.onSearch,,SearchArea 내장 조회 버튼 — 별도 생성 안 함
+^(FindButton|btnQuery)$,search,SearchArea.onSearch,,
+^btn(Save|Apply)$,hotkey,hotkeyConfig.save,,SubTitle 저장(단축키) — 생성 시 onSave 스텁
+^btn(Add|Insert|New)(Row)?$,hotkey,hotkeyConfig.insert,,
+^btn(Del|Delete|Remove)(Row)?$,hotkey,hotkeyConfig.delete,,
+^btnExcel(Down|Download|Export)?$,hotkey,SubTitle.excel,,SubTitle 내장 엑셀 다운로드 — 생성 안 함
+^btnExcelUpload$,subtitle-custom,EXCEL_UPLOAD,FcstUploadModal,엑셀 업로드 모달 — 화면별 매퍼 확인
+^btn(Close|Cancel|Exit)$,n/a,,,팝업 닫기 — CustomDialog 내장

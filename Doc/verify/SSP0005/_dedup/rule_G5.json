@@ -1,0 +1,115 @@
+{
+ "rule_id": "G5",
+ "hash": "e10c6f6a54077fa7",
+ "groups": [
+  {
+   "rows": [
+    "V-1ec80e2d",
+    "V-8ce4396c",
+    "V-581f95f1"
+   ],
+   "why": "All three check the same thing: type text into a popup-linked search condition or grid column, open the popup, and confirm the typed text is passed as the popup condition so the results show already filtered."
+  },
+  {
+   "rows": [
+    "V-00476254",
+    "V-592d3f51"
+   ],
+   "why": "Both check the same Excel form input bucket in the same state (no query run yet) and expect it to follow the main period."
+  },
+  {
+   "rows": [
+    "T-638b3727"
+   ],
+   "why": "A TRACE row for where U02 is implemented (ProgressForm in SaveData_Main, cs:438), which is a different kind of check from the screen behavior rows."
+  },
+  {
+   "rows": [
+    "T-b2e5d1f9"
+   ],
+   "why": "A TRACE row for the SpdMain_CellDoubleClick entry point, which checks where the code is implemented, not screen behavior."
+  },
+  {
+   "rows": [
+    "T-c5d89f45"
+   ],
+   "why": "A TRACE row for where U01 is implemented (ProgressForm in FindData_Main, cs:372), which is a different location from U02."
+  },
+  {
+   "rows": [
+    "V-147d47d7"
+   ],
+   "why": "This is the only row that checks whether sMdmActive_Sw is passed to the model popup so stopped MDM codes are left out."
+  },
+  {
+   "rows": [
+    "V-4033b15d"
+   ],
+   "why": "This is the only row that checks the popup Div condition is fixed to the main Div and cannot be edited."
+  },
+  {
+   "rows": [
+    "V-4350a118"
+   ],
+   "why": "Only this row checks the Group/Plant condition passed by the Capa New Model popup opened from a double-click."
+  },
+  {
+   "rows": [
+    "V-855d985d"
+   ],
+   "why": "This row expects the popup Period default to follow the main Period, which is a different expectation from Spread column generation (V-9f10e927), so it stays alone."
+  },
+  {
+   "rows": [
+    "V-9f10e927"
+   ],
+   "why": "This row checks that the popup Spread builds one YYYYMM column per month in the period and has no invalid period columns, which is a different expectation from the period default value."
+  },
+  {
+   "rows": [
+    "V-8aa550e1"
+   ],
+   "why": "This row checks the From City search button itself: clicking anywhere on the button, including its edge, should open the popup."
+  },
+  {
+   "rows": [
+    "V-b25b0db3"
+   ],
+   "why": "This row checks that pressing Enter in a search condition box opens the popup, which is a different trigger from passing typed text as the condition."
+  },
+  {
+   "rows": [
+    "V-b8d12394"
+   ],
+   "why": "This row checks that the Model popup filters by its own search conditions, which is not the same as passing the main screen's typed text, so it stays alone because the match is uncertain."
+  },
+  {
+   "rows": [
+    "V-d72e0c94"
+   ],
+   "why": "This row checks several things at once on the Ver.Cutoff popup (Period link, Description position, larger condition boxes), so it stays alone."
+  },
+  {
+   "rows": [
+    "V-dcba0b33"
+   ],
+   "why": "This confirmed rule decides which AS-IS popup arguments are not defects, so its target and expectation differ from every other row."
+  },
+  {
+   "rows": [
+    "V-e70d5da8"
+   ],
+   "why": "This row checks several popups and columns in the new-row state, so its state and expectation differ from the other rows."
+  },
+  {
+   "rows": [
+    "V-e7df7ddd"
+   ],
+   "why": "Only this row checks the Team popup's department scope (all of SSO_DEPT) for a non-ADMIN user with empty search conditions."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:08:07",
+ "cost": 0.0795079
+}

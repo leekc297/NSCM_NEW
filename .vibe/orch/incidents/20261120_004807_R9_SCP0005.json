@@ -1,0 +1,26 @@
+{
+  "id": "20261120_004807_R9_SCP0005",
+  "at": "2026-11-20T00:48:07+09:00",
+  "ms": 1795103287254,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.e2e.SCP0005.lock (PID 9632 없음)",
+  "screen": "SCP0005",
+  "sig": "R9|_run.e2e.SCP0005.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-19T15:47:16.321Z · 인자 auth SCP0005 --mode admin",
+  "evidence": {
+    "file": "Doc/e2e/_run.e2e.SCP0005.lock",
+    "pid": 9632
+  },
+  "status": "resolved",
+  "actions": [
+    {
+      "at": "2026-11-20T00:48:11+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.e2e.SCP0005.lock (PID 9632 없음 재확인)",
+      "grade": "A"
+    }
+  ]
+}

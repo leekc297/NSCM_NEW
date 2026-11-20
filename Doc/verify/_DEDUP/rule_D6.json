@@ -1,0 +1,37 @@
+{
+ "rule_id": "D6",
+ "hash": "96be6a0a78c2588b",
+ "groups": [
+  {
+   "refs": [
+    "DM-32"
+   ],
+   "target": "필터·Sort 적용 중 Insert 행 위치·상태 유지",
+   "condition": "그리드에 필터 또는 Sort(예: Project 컬럼)를 적용한 상태에서 행 선택 후 Insert",
+   "expected": "필터·Sort 적용 여부와 관계없이 Insert 는 선택행 위에 추가되고, Project 컬럼 등의 Sort/Filter 상태가 유지되며 신규행은 편집 가능하다.",
+   "why": "필터·Sort 상태가 유지되는지와 신규행 편집 가능 여부를 함께 보는 항목으로, 다른 항목과 확인 조건과 기대 결과가 달라 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "DM-84"
+   ],
+   "target": "Insert 신규행의 Currency·중복 Keyset·위치·Delete",
+   "condition": "신규행 Insert 후 저장(중복 Keyset 포함)",
+   "expected": "Insert 시 선택 위치 위로 행이 추가되고, Exchange Rate 화면의 Currency=KRW 는 고정되어 편집할 수 없으며, 중복 Keyset 저장 시 \"중복된 데이터가 있습니다\" 메시지가 뜨고 Delete 버튼이 있다.",
+   "why": "Insert 위치 외에 Currency 고정, 중복 Keyset 메시지, Delete 버튼 존재까지 확인하는 복합 항목이라 다른 항목과 묶으면 일부 검사가 빠지므로 단독으로 둔다."
+  },
+  {
+   "refs": [
+    "GAPSELF-15"
+   ],
+   "target": "셀 병합(FPMerge) 그리드 Insert 행 위치",
+   "condition": "병합된 행 그룹의 중간 행을 선택한 뒤 Insert",
+   "expected": "FPMerge 병합 그룹이 있는 그리드에서 Insert 는 병합 그룹 위에 삽입되고 병합 중간에 끼지 않는다.",
+   "why": "병합 그룹 중간 행을 선택하는 특수 조건과 병합 경계를 지키는지가 기대 결과라서 단순 선택행 위 삽입 항목과 다르므로 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 04:41:44",
+ "cost": 0.0479092
+}

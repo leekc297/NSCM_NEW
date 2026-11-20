@@ -17,11 +17,7 @@ import { MENU_ID, MSG, SHEETS } from './sales-site-priority.constants';
 import type { SalesSitePriorityRow } from './sales-site-priority.types';
 import { useSalesSitePriorityStore } from './useSalesSitePriorityStore';
 import { insertDefaults, s } from './utils/sales-site-priority.editLock';
-import { submitMainSave } from './utils/salesSitePriority.saveRequest';
-
-// "2025-04-21 00:00:00" -> "2025-04-21" (시간부 제거). 날짜만/빈값은 그대로(날짜 문자열은 최대 10자).
-const dateOnly = (v: unknown): string =>
-  (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '').slice(0, 10);
+import { submitMainSave, toGridDate } from './utils/salesSitePriority.saveRequest';
 
 // AS-IS GSCM.SCP.Master.UIL SCP0131_SalesSitePriority — 단일 그리드 마스터 CRUD(pivot 없음).
 //   설계: .atlas/gscm-design/SCP0131/design/00~03. 상세 매핑: __asis-mapping__.md.
@@ -55,6 +51,14 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
   const initialized = useSalesSitePriorityStore(st => st.initialized);
   const searchCondition = useSalesSitePriorityStore(st => st.searchCondition);
 
+  // Condition(F6) 저장에서 period(fromDate/toDate) 는 제외한다(사용자 지시 2026-11-19 — 기간은 저장 안 함).
+  //   공통 personalizeCondition 의 EXCLUDED_DATE_PARAM 정규식이 fromDate/toDate 네이밍을 걸러내지 못해
+  //   그대로 저장되던 것을 이 화면에서 제거한다. 복원(restoreSearchCondition)에서도 period 는 미복원.
+  const conditionParam = useMemo(() => {
+    const { fromDate: _fromDate, toDate: _toDate, ...rest } = searchCondition;
+    return rest;
+  }, [searchCondition]);
+
   const { data } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
@@ -62,15 +66,21 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.MAIN],
     enabled: !!filters[SHEETS.MAIN],
   });
-  // FROM/TO 는 GET 이 "YYYY-MM-DD 00:00:00"(Oracle DATE 직렬화) 문자열로 내려, FPDate 컬럼 포맷
-  //   (yyyy.MM.dd)이 문자열엔 적용되지 않아 시간까지 노출된다(AS-IS 는 날짜만, SpdMain .ToString
-  //   ("yyyy-MM-dd")). 표시·편집·저장 모두 날짜만 쓰므로 시간부를 떼어 날짜(앞 10자)만 남긴다 —
-  //   저장 payload 는 ymd8(숫자만 8자리) 로 환원하므로 영향 없음.
+  // FROM/TO 는 GET 이 "YYYY-MM-DD 00:00:00"(Oracle DATE 직렬화) 문자열로 내려온다. 문자열 그대로 두면
+  //   FPDate(InputDate 달력) 에디터가 Date 에 못 묶여, 특히 빈 셀(신규행)을 열 때 직전에 편집한 다른
+  //   행의 Date 가 에디터에 남아 입력 없이 Tab 해도 그 날짜가 새어든다(No.9). 행을 Date 로 들면 빈값은
+  //   ''(null 등가)이라 에디터가 비어 열리고, SalesSitePriorityGrid 의 dataType=Date+format 으로
+  //   'yyyy-MM-dd' 표시·달력 편집이 성립한다(형제 demand-exception/SCP0127/0128 동형). 저장·검증은
+  //   ymd8 이 Date/문자열 모두 'YYYYMMDD' 로 환원한다.
   const rows = useMemo<SalesSitePriorityRow[]>(() => {
     const list = data?.o_rc1 ?? [];
     return list.map(r => {
       const o = r as Record<string, unknown>;
-      return { ...o, FROM_YYYYMMDD: dateOnly(o.FROM_YYYYMMDD), TO_YYYYMMDD: dateOnly(o.TO_YYYYMMDD) };
+      return {
+        ...o,
+        FROM_YYYYMMDD: toGridDate(o.FROM_YYYYMMDD) as unknown as string,
+        TO_YYYYMMDD: toGridDate(o.TO_YYYYMMDD) as unknown as string,
+      };
     }) as unknown as SalesSitePriorityRow[];
   }, [data]);
 
@@ -186,7 +196,7 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='SalesSitePriority'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        searchParam={searchCondition}
+        searchParam={conditionParam}
       />
       <SalesSitePriorityGrid
         rows={rows}

@@ -244,6 +244,13 @@ export const MeasureSelectModal = ({
               onClick={handleDefault}
             />
             <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Cancel'
+              onClick={modalClose}
+            />
+            <Button
               appearance='contained'
               priority='primary'
               size='medium'
@@ -251,13 +258,6 @@ export const MeasureSelectModal = ({
               iconComponent={<ControlConfirmIcon size='small' />}
               iconPosition='leading'
               onClick={handleOk}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel='Cancel'
-              onClick={modalClose}
             />
           </div>
         </div>

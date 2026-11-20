@@ -1,0 +1,136 @@
+{
+ "rule_id": "H5",
+ "hash": "1b93106a4b3d631b",
+ "groups": [
+  {
+   "rows": [
+    "T-2d08ec7c"
+   ],
+   "why": "Checks trace row B04 (`Data.Common(YesOrNo)` cs:48), which is a source-location property; no other row shares it."
+  },
+  {
+   "rows": [
+    "T-59e48f9c"
+   ],
+   "why": "Checks trace row Δ11 (edit gate on paste), a separate implementation item that doesn't match any other row."
+  },
+  {
+   "rows": [
+    "T-61437017"
+   ],
+   "why": "Checks trace row C18 (spdMain FpSpread object), a separate source-object item."
+  },
+  {
+   "rows": [
+    "T-718b53b5"
+   ],
+   "why": "Checks the CreateSpread entry trace (4 table rows), a property no other row checks."
+  },
+  {
+   "rows": [
+    "T-73a0f0ac"
+   ],
+   "why": "Checks trace row C19 (spdMain_Sheet1 SheetView object), a separate source-object item."
+  },
+  {
+   "rows": [
+    "T-b968750e"
+   ],
+   "why": "Checks trace row A17 (spdInfo and siMain are the same sheet), a separate implementation item."
+  },
+  {
+   "rows": [
+    "T-d21982ea"
+   ],
+   "why": "Checks the DIVISION_ID column label (meta 'Divison'), and no other row targets this column."
+  },
+  {
+   "rows": [
+    "V-44025a26"
+   ],
+   "why": "Dept column and Use Y/N header defect type from SYS0002; its element and expectation match no other row."
+  },
+  {
+   "rows": [
+    "V-4726ae2f"
+   ],
+   "why": "Checks the across-the-board Valid→Active rename for grid, popup-grid and search-condition labels, a broader scope with a different expectation from the other rows."
+  },
+  {
+   "rows": [
+    "V-48825558"
+   ],
+   "why": "Checks multilingual registration of the Search button label code LBL00112 (KO/CN), which no other row checks."
+  },
+  {
+   "rows": [
+    "V-54709642"
+   ],
+   "why": "Checks the Plant Site search-condition label against the reference table, a different condition from Div and Period."
+  },
+  {
+   "rows": [
+    "V-557a1e98"
+   ],
+   "why": "Checks the Measure name MKT FCST[R+P], and no other row targets this element."
+  },
+  {
+   "rows": [
+    "V-5bc47d60"
+   ],
+   "why": "Checks the Module/Sub Module conditions and popup title from SYS0016, a different element and expectation from the other rows."
+  },
+  {
+   "rows": [
+    "V-63e06a44"
+   ],
+   "why": "Checks usage and labels for all search conditions against the reference table with order excluded, which differs from V-9aea5de7 (includes order and grid column names) and from the single-condition rows."
+  },
+  {
+   "rows": [
+    "V-7b9788d9"
+   ],
+   "why": "Checks the Measure names Version(A)/(B), a different element from the other rows."
+  },
+  {
+   "rows": [
+    "V-8580de0f"
+   ],
+   "why": "Checks the Div search-condition label against the reference table, a different condition from Plant Site and Period."
+  },
+  {
+   "rows": [
+    "V-9550d251"
+   ],
+   "why": "Checks the Version and Plan Type labels (Ver.→Version, Waterfall Type→Plan Type), and its expected result differs from the other rows."
+  },
+  {
+   "rows": [
+    "V-9aea5de7"
+   ],
+   "why": "Checks search-condition names and order plus the matching grid column names, a different expectation from V-63e06a44, which excludes order and covers search conditions only."
+  },
+  {
+   "rows": [
+    "V-9b2ae4d5"
+   ],
+   "why": "Checks the search popup title text, a popup element no other row targets."
+  },
+  {
+   "rows": [
+    "V-b89ceb1b"
+   ],
+   "why": "Checks the Period search-condition label against the reference table, a different condition from Div and Plant Site."
+  },
+  {
+   "rows": [
+    "V-deb3b162"
+   ],
+   "why": "Checks the Sum row label and the Sum/Qty≠0 checkbox, an element no other row targets."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:08:44",
+ "cost": 0.0843857
+}

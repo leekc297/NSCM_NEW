@@ -1,0 +1,11 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0006,SQL,SCM0006_GET_USERINFO_LIST,Doc\asisfacts\db\modules\dbo.SCM0006_GET_USERINFO_LIST.sql,48,,"DEPT_ID,USERID","ORDER BY A.Dept_ID, A.UserID",0,정적
+SCM0006,SQL,SCM0006_GET_RECIPIENT_MASTER,Doc\asisfacts\db\modules\dbo.SCM0006_GET_RECIPIENT_MASTER.sql,55,,"USE_TYPE_CODE,MODULE_CODE,SUB_MODULE_CODE,CATEGORY_DESC,CYCLE_CLASS_CODE,DETAIL_CLASS_CODE,SEND_TIME_TEXT,SEND_MIN_TIME_TEXT,VALID_YN",ORDER BY m.use_type_code,0,정적
+SCM0006,SQL,SCM0006_SAVE_RECIPIENT_MASTER,Doc\asisfacts\db\modules\dbo.SCM0006_SAVE_RECIPIENT_MASTER.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0006,SQL,SCM0006_SAVE_RECIPIENT_MESSAGE,Doc\asisfacts\db\modules\dbo.SCM0006_SAVE_RECIPIENT_MESSAGE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0006,SQL,SCM0006_SAVE_RECIPIENT_ASSIGN,Doc\asisfacts\db\modules\dbo.SCM0006_SAVE_RECIPIENT_ASSIGN.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0006,SQL,SCM0006_GET_RECIPIENT_MESSAGE,Doc\asisfacts\db\modules\dbo.SCM0006_GET_RECIPIENT_MESSAGE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0006,SQL,SCM0006_GET_RECIPIENT_ASSIGN,Doc\asisfacts\db\modules\dbo.SCM0006_GET_RECIPIENT_ASSIGN.sql,41,,"DEPT_ID,USER_ID","ORDER BY C.Dept_ID, A.USER_ID",0,정적
+SCM0006,SQL,SCM0006_GET_SQL_LONG_TEXT,Doc\asisfacts\db\modules\dbo.SCM0006_GET_SQL_LONG_TEXT.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0006,SQL,SCM0006_SAVE_RECIPIENT_MASTER_U,Doc\asisfacts\db\modules\dbo.SCM0006_SAVE_RECIPIENT_MASTER_U.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0006,CODE,,06.UIL\GSCM.SCM.Master.UIL\SCM0006_Mail_Setup.cs,1624,,,foreach (int iRow in siAllreciverDellist.OrderByDescending(c => c.ToString())),0,화면 코드 정렬

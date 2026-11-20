@@ -1,0 +1,76 @@
+{
+ "rule_id": "B7",
+ "hash": "69ec172f0afadb9a",
+ "groups": [
+  {
+   "rows": [
+    "EG-2363c1ed"
+   ],
+   "why": "Checks whether the TransportModeCode combo candidates match a fresh DB run with validYn='Y'. EG-ab3d9749 sends a request without validYn, so its candidate set may differ and the two are kept apart."
+  },
+  {
+   "rows": [
+    "EG-ab3d9749"
+   ],
+   "why": "Checks whether the TransportModeCode combo candidates match a fresh DB run without validYn. Its request differs from EG-2363c1ed's, so it is kept alone."
+  },
+  {
+   "rows": [
+    "EG-4ecd4a9c"
+   ],
+   "why": "Checks whether the LtType combo candidates match a fresh DB run. No other row targets this combo."
+  },
+  {
+   "rows": [
+    "EG-938f5178"
+   ],
+   "why": "Checks whether the YesOrNo combo candidates match a fresh DB run. No other row targets this combo."
+  },
+  {
+   "rows": [
+    "V-ef8755e4"
+   ],
+   "why": "Checks on screen that the Trans Mode search condition updates right after a master save and keeps the selected value. This differs in method and expected result from the DB re-run check in the EG rows, so it is not grouped with them."
+  },
+  {
+   "rows": [
+    "V-520bb259"
+   ],
+   "why": "Checks that the Valid search condition updates right after a master change. No other row targets this element."
+  },
+  {
+   "rows": [
+    "V-1086d7de"
+   ],
+   "why": "Checks that Team (DEPT_ID) changes made in SSPM appear when the data is fetched again. It differs from the other Team rows in condition (re-fetch after an SSPM change) and expected result, so it is kept alone."
+  },
+  {
+   "rows": [
+    "V-e0cf7685"
+   ],
+   "why": "Checks that the Team cell combo shows the team name for a changed DEPT_ID. This is a cell combo display check, not a search condition check, so its element and expected result differ from the others."
+  },
+  {
+   "rows": [
+    "V-c6014302"
+   ],
+   "why": "Checks that the Team search condition is re-bound right after a new team is saved, keeps the selected value, and still includes the team after the screen is reopened. Its expected result is broader than the other rows', so it is kept alone."
+  },
+  {
+   "rows": [
+    "V-488e4db4"
+   ],
+   "why": "Checks that new End Customer and Sold to Customer entries registered in LOOKUP appear in the grid combo. It targets a grid combo, so its element differs from the rest."
+  },
+  {
+   "rows": [
+    "V-9a27a352"
+   ],
+   "why": "Checks that a new master saves in one attempt and the new item appears in the search condition combo right away. Its expected result differs from the other rows, and it is unclear which element on this screen it maps to, so it is kept alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:38:18",
+ "cost": 0.0583411
+}

@@ -1,0 +1,166 @@
+{
+ "rule_id": "X-REASON",
+ "hash": "97280651734269e5",
+ "groups": [
+  {
+   "rows": [
+    "T-0d2cf255"
+   ],
+   "why": "C21 usrButton1 대조표 행의 제외 사유와 근거를 확인한다. 다른 행과 요소가 겹치지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-1ea37b47"
+   ],
+   "why": "G15 GetModelColumnFromViewColumn(cRow) 행이다. cCol을 다루는 G16과 인자가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-28ecf992"
+   ],
+   "why": "P08 SpdMain_CellDoubleClick cs:834 행이다. E03과 핸들러는 같지만 대조표 행이 다르고 사유와 근거도 따로 확인해야 해서 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-2c52b78f"
+   ],
+   "why": "G12 조회 직후 전열 잠금(LockColumn) 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-2f480fc2"
+   ],
+   "why": "G09 SwitchLock(EditButton) 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-3cba11de"
+   ],
+   "why": "C20 components(Container) 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-3e1a8559"
+   ],
+   "why": "G24 W_→D_ 토글 행이다. G22, G23과 토글 대상이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-3f48cc71"
+   ],
+   "why": "D10 Changed 안의 ds==null 행이다. D08과 위치(문맥)가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-42a775ce"
+   ],
+   "why": "D08 ds==null 행이다. D10의 Changed 문맥과 위치가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-5517ef41"
+   ],
+   "why": "A06 저장 대상 조건(action AND 글자색 Red) 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-6fdb34a4"
+   ],
+   "why": "G16 GetModelColumnFromViewColumn(cCol) 행이다. cRow를 다루는 G15와 인자가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-7ea79ab6"
+   ],
+   "why": "B05 CallBizCommonData(PERIOD_) 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-916fbc3b"
+   ],
+   "why": "E04 SpdMain_Changed 이벤트 행이다. P09와 대조표 행이 달라 사유와 근거를 따로 확인해야 해서 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-a0874f0d"
+   ],
+   "why": "V07 MSG00050 숫자 형식 검증 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-af31c210"
+   ],
+   "why": "G22 M_→W_ 토글 행이다. G23, G24와 토글 대상이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-af8fd3fa"
+   ],
+   "why": "A08 dead 메서드 3건 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-ba42a5a9"
+   ],
+   "why": "C11 emptySpaceItem2 행이다. C10의 emptySpaceItem1과 요소가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-bce780ad"
+   ],
+   "why": "P09 SpdMain_Changed cs:872 행이다. E04와 대조표 행이 달라 사유와 근거를 따로 확인해야 해서 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-bf54ef48"
+   ],
+   "why": "C10 emptySpaceItem1 행이다. C11의 emptySpaceItem2와 요소가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-c4b14de7"
+   ],
+   "why": "A09 DefineProperty() 빈 본문 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-c4d5e42e"
+   ],
+   "why": "A12 B_ 컬럼 분기 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-d232213e"
+   ],
+   "why": "D09 Changed 안의 !CanModelChange 조건 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-d5086b80"
+   ],
+   "why": "E03 헤더 드릴다운 더블클릭 행이다. P08과 대조표 행과 관점이 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-f47d7b61"
+   ],
+   "why": "A07 iCount==0일 때의 첫/끝 행 플래그 행으로, 대상 요소가 이 행에만 있다."
+  },
+  {
+   "rows": [
+    "T-fb78b761"
+   ],
+   "why": "G23 M_→D_ 숨김 행이다. G22, G24와 토글 대상이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-ff77fdcd"
+   ],
+   "why": "A05 UnFilterInsertRow=true 행으로, 대상 요소가 이 행에만 있다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:10:47",
+ "cost": 0.1027193
+}
